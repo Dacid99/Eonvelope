@@ -21,15 +21,19 @@ class POP3Fetcher(poplib.POP3):
         return methodWithLogin
     
     @withLogin
-    def fetchAndPrintAll(self, mailbox = 'INBOX'):
-        self.select(mailbox)
-        typ, data = self.search(None, 'ALL')
+    def fetchAndPrintAll(self):
         messageNumber = len(self.list()[1])
         for number in range(messageNumber):
-            typ, messageData = self.retr(number + 1)
-            fullMessage = bytes()
-            for messageLine in messageData:
-                fullMessage += messageLine
-            print('Message %s\n%s\n' % (number, MailParser.parseTo(fullMessage))) 
+            messageData = self.retr(number + 1)[1]
+            
+            fullMessage = b'\n'.join(messageData)
+            mailParser = MailParser(fullMessage)
+            print(mailParser.parseFrom())
+            print(mailParser.parseTo())
+            print(mailParser.parseSubject())
+            print(mailParser.parseBody())
+            print(mailParser.parseDate())
+            print(mailParser.parseCc())
+            print(mailParser.parseBcc())
 
 

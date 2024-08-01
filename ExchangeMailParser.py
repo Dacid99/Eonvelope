@@ -1,33 +1,36 @@
 import exchangelib
+import email
+import email.header
+
+from MailParser import MailParser
 
 class ExchangeMailParser:
-    def parseFrom(mail):
-        if isinstance(mail, exchangelib.Message):
-            return mail.sender.email_address
-    
-    def parseTo(mail):
-        if isinstance(mail, exchangelib.Message):
-            recipients = [recipient.email_address for recipient in mail.to_recipients]
-            return recipients
+
+    def __init__(self, mailToParse):
+        if isinstance(mailToParse, exchangelib.Message):
+            self.mailMessage = mailToParse
+        else: raise TypeError('Mail is no in Message format!')
+
+    def parseFrom(self):    
+        decodedSender = self.mailMessage.sender
+        return (decodedSender.name, decodedSender.email_address)
+
+    def parseTo(self):
+        return [(recipient.name, recipient.email_address) for recipient in self.mailMessage.to_recipients]
         
-    def parseBcc(mail):
-        if isinstance(mail, exchangelib.Message):
-            recipients = [recipient.email_address for recipient in mail.bcc_recipients]
-            return recipients
+    def parseBcc(self):
+        recipients = [(recipient.name, recipient.email_address) for recipient in self.mailMessage.bcc_recipients]
+        return recipients
     
-    def parseCc(mail):
-        if isinstance(mail, exchangelib.Message):
-            recipients = [recipient.email_address for recipient in mail.cc_recipients]
-            return recipients
+    def parseCc(self):
+        recipients = [(recipient.name, recipient.email_address) for recipient in self.mailMessage.cc_recipients]
+        return recipients
     
-    def parseDate(mail):
-        if isinstance(mail, exchangelib.Message):
-            return mail.datetime_received
+    def parseDate(self):
+        return str(self.mailMessage.datetime_received)
         
-    def parseBody(mail):
-        if isinstance(mail, exchangelib.Message):
-            return mail.text_body
+    def parseBody(self):
+        return str(self.mailMessage.text_body)
         
-    def parseSubject(mail):
-        if isinstance(mail, exchangelib.Message):
-            return mail.subject
+    def parseSubject(self):
+        return self.decodeHeader(self.mailMessage.subject)

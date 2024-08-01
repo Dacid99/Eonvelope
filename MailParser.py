@@ -26,7 +26,7 @@ class MailParser:
 
     def decodeText(self, text):
         charset = text.get_content_charset()
-        if charset == None:
+        if charset is None:
             charset = MailParser.__charsetDefault
         decodedText = text.get_payload(decode=True).decode(charset, errors='replace')
         return decodedText

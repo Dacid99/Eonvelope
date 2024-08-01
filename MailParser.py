@@ -39,15 +39,21 @@ class MailParser:
     
     def parseTo(self):
         mailText = self.parseToText()
-        return self.decodeHeader(mailText.get(MailParser.__toString))
+        recipients = mailText.get_all(MailParser.__toString)
+        decodedRecipients = [self.decodeHeader(recipient) for recipient in recipients]
+        return decodedRecipients
     
     def parseBcc(self):
         mailText = self.parseToText()
-        return self.decodeHeader(mailText.get(MailParser.__bccString))
+        recipients = mailText.get_all(MailParser.__bccString)
+        decodedRecipients = [self.decodeHeader(recipient) for recipient in recipients]
+        return decodedRecipients
     
     def parseCc(self):
         mailText = self.parseToText()
-        return self.decodeHeader(mailText.get(MailParser.__ccString))
+        recipients = mailText.get_all(MailParser.__ccString)
+        decodedRecipients = [self.decodeHeader(recipient) for recipient in recipients]
+        return decodedRecipients
 
     def parseDate(self):
         mailText = self.parseToText()

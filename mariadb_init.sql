@@ -2,6 +2,15 @@ CREATE DATABASE IF NOT EXISTS email_archive;
 
 USE email_archive;
 
+CREATE TABLE IF NOT EXISTS accounts (
+    id int AUTO_INCREMENT PRIMARY KEY,
+    email_address VARCHAR(255) UNIQUE NOT NULL,
+    email_password VARCHAR(255) NOT NULL,
+    email_server VARCHAR(255) NOT NULL,
+    email_server_port int,
+    email_protocol ENUM('IMAP', 'POP', 'EXCHANGE') NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS emails (
     id int AUTO_INCREMENT PRIMARY KEY,
     sender VARCHAR(255), 

@@ -1,36 +1,23 @@
 import poplib
 import os
 
-from MailParser import MailParser
+from POP3Fetcher import POP3Fetcher
 
-class POP3_SSL_Fetcher: 
+class POP3_SSL_Fetcher(POP3Fetcher): 
+
+    protocol = "POP3_SSL"
 
     def __init__(self, username, password, host: str = "", port: int = 995, keyfile= None, certfile = None, ssl_context = None, timeout= None):
+        self.host = host
+        self.port = port
+        self.keyfile = keyfile
+        self.certfile = certfile
+        self.ssl_context = ssl_context
+        self.timeout = timeout
         self.__mailhost = poplib.POP3_SSL(host, port, keyfile, certfile, timeout, ssl_context)
-        self.__username = username
-        self.__password = password
+        self.username = username
+        self.password = password
+        self.login()
 
-    
-    def withLogin(method):
-        def methodWithLogin(self, *args, **kwargs):
-            #maybe with apop or rpop?
-            self.__mailhost.user(self.__username)
-            self.__mailhost.pass_( self.__password)
-            method(self, *args, **kwargs)
-            self.__mailhost.quit()
-        return methodWithLogin
-    
-
-    def fetchLatest(self):
-        self.__mailhost.user(self.__username)
-        self.__mailhost.pass_( self.__password)
-        
-        messageNumber = len(self.__mailhost.list()[1])
-        number=messageNumber-1
-        messageData = self.__mailhost.retr(number + 1)[1]
-        fullMessage = b'\n'.join(messageData)
-        mailParser = MailParser(fullMessage)
-        self.__mailhost.quit()
-        return mailParser
         
 

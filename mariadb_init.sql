@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS accounts (
 
 CREATE TABLE IF NOT EXISTS emails (
     id int AUTO_INCREMENT PRIMARY KEY,
+    message_id VARCHAR(255) UNIQUE NOT NULL, 
     sender VARCHAR(255) NOT NULL, 
     date_received DATETIME NOT NULL,
     bodytext TEXT NOT NULL

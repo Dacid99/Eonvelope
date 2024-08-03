@@ -4,8 +4,8 @@ import traceback
 
 class EMailDBFeeder:
     __INSERT_EMAIL_SQL = '''
-        INSERT INTO emails (sender, date_received, bodytext)
-        VALUES (%s, %s, %s)
+        INSERT IGNORE INTO emails (message_id, sender, date_received, bodytext)
+        VALUES (%s, %s, %s, %s)
     '''
 
     __INSERT_CORRESPONDENT_SQL = '''
@@ -13,7 +13,6 @@ class EMailDBFeeder:
         VALUES (%s, %s)
         ON DUPLICATE KEY UPDATE
             email_name = IF(email_name = '' OR email_name IS NULL, VALUES(email_name), email_name);
-
     '''
 
     __SELECT_CORRESPONDENTS_ID_SQL = '''
@@ -21,7 +20,7 @@ class EMailDBFeeder:
     '''
 
     __INSERT_EMAIL_CORRESPONDENT_CONNECTION_SQL = '''
-        INSERT INTO email_correspondents (email_id, correspondent_id, mention)
+        INSERT IGNORE INTO email_correspondents (email_id, correspondent_id, mention)
         VALUES (%s, %s, %s)
     '''
 
@@ -50,6 +49,7 @@ class EMailDBFeeder:
     def insertEmail(self, parsedEMail):
         if self.__isHealthy:
             emailData = []
+            emailData.append(parsedEMail.parseMessageID())
             emailData.append(parsedEMail.parseFrom()[1])
             emailData.append(parsedEMail.parseDate())
             emailData.append(parsedEMail.parseBody())

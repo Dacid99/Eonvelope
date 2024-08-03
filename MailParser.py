@@ -3,6 +3,7 @@ import email.header
 import email.utils
 
 class MailParser:
+    __messageIDString = "Message-ID"
     __fromString = "From"
     __toString = "To"
     __bccString = "Bcc"
@@ -38,6 +39,14 @@ class MailParser:
         if mailAddress.find("@") == -1:
             mailAddress = mailer
         return (mailName, mailAddress)
+    
+    def parseMessageID(self):
+        messageID = self.mailMessage.get(MailParser.__messageIDString)
+        print(messageID)
+        print(hash(self.mailMessage))
+        if messageID is None:
+            return hash(self.mailMessage)
+        return messageID
 
     def parseFrom(self):
         sender = self.mailMessage.get(MailParser.__fromString)

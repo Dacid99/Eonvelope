@@ -84,12 +84,12 @@ class DBManager:
                 time.sleep(DBManager.__reconnectWaitTime)
 
     def __enter__(self):
-        logging.debug("__enter__")
+        logging.debug("DBManager.__enter__")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.close()
-        logging.debug("__exit__")
+        logging.debug("DBManager.__exit__")
 
 
         

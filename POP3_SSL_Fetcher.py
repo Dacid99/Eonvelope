@@ -14,7 +14,7 @@ class POP3_SSL_Fetcher(POP3Fetcher):
         self.certfile = certfile
         self.ssl_context = ssl_context
         self.timeout = timeout
-        self.__mailhost = poplib.POP3_SSL(host, port, keyfile, certfile, timeout, ssl_context)
+        self._mailhost = poplib.POP3_SSL(host, port, keyfile, certfile, timeout, ssl_context)
         self.username = username
         self.password = password
         self.login()

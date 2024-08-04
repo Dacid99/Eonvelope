@@ -1,5 +1,5 @@
 import poplib
-import os
+import logging
 
 from MailParser import MailParser
 
@@ -11,7 +11,7 @@ class POP3Fetcher:
         self.host = host
         self.port = port
         self.timeout = timeout
-        self.__mailhost = poplib.POP3(host, port, timeout)
+        self._mailhost = poplib.POP3(host, port, timeout)
         self.username = username
         self.password = password
         self.login()
@@ -20,39 +20,42 @@ class POP3Fetcher:
     def login(self):
         logging.debug(f"Logging in to {self.host} on port {self.port} with username {self.username} and password {self.password} via {self.protocol} ...")
         try:
-            self.__mailhost.user(self.username)
-            self.__mailhost.pass_(self.password)
+            self._mailhost.user(self.username)
+            self._mailhost.pass_(self.password)
             logging.debug(f"Successfully logged in to {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
         except poplib.error_proto as e:
-            logging.error(f"Failed connecting via {self.protocol} to {self.host} on port {self.port} with username {self.username} and password {self.password}!")
+            logging.error(f"Failed connecting via {self.protocol} to {self.host} on port {self.port} with username {self.username} and password {self.password}!", exc_info=True)
 
     def close(self):
         logging.debug(f"Closing connection to {self.host} on port {self.port} with username {self.username} via {self.protocol} ...")
-        if self.__mailhost:
+        if self._mailhost:
             try:
-                self.__mailhost.quit()
+                self._mailhost.quit()
                 logging.debug(f"Gracefully closed connection to {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
             except imaplib.IMAP4.error:
-                logging.error(f"Failed to close connection to {self.host} on port {self.port} with username {self.username} via {self.protocol}!")
+                logging.error(f"Failed to close connection to {self.host} on port {self.port} with username {self.username} via {self.protocol}!", exc_info=True)
 
-    def fetchLatest(self):
-        logging.debug(f"Fetching from {mailbox} at {self.host} on port {self.port} with username {self.username} via {self.protocol} ...")
+    def fetchAll(self):
+        logging.debug(f"Fetching all messages at {self.host} on port {self.port} with username {self.username} via {self.protocol} ...")
         try:
-            messageNumber = len(self.__mailhost.list()[1])
-            number=messageNumber-1
-            messageData = self.__mailhost.retr(number + 1)[1]
-            fullMessage = b'\n'.join(messageData)
-            mailParser = MailParser(fullMessage)
-            logging.debug(f"Successfully fetched from {mailbox} at {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
-            return mailParser
+            messageCount = len(self._mailhost.list()[1])
+            logging.debug(f"Found {messageCount} messages at {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
+            parsedMails = []
+            for number in range(messageCount):
+                messageData = self._mailhost.retr(number + 1)[1]
+                fullMessage = b'\n'.join(messageData)
+                mailParser = MailParser(fullMessage)
+                parsedMails.append(mailParser)
+            logging.debug(f"Successfully fetched all messages at {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
+            return parsedMails
         except poplib.error_proto as e:
-            logging.error(f"Failed to fetch data via {self.protocol} from {self.host} on port {self.port} with username {self.username}!")
-            return None
+            logging.error(f"Failed to fetch all messages from {self.host} on port {self.port} with username {self.username} via {self.protocol}!", exc_info=True)
+            return []
 
     def __enter__(self):
-        logging.debug("POP3Fetcher.__enter__")
+        logging.debug("POP3Fetcher._enter_")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        logging.debug("POP3Fetcher.__exit__")
+        logging.debug("POP3Fetcher._exit_")
         self.close()

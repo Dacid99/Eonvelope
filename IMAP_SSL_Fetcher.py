@@ -14,7 +14,7 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
         self.certfile = certfile
         self.ssl_context = ssl_context
         self.timeout = timeout
-        self.__mailhost = imaplib.IMAP4_SSL(host, port, keyfile, certfile, ssl_context, timeout)
+        self._mailhost = imaplib.IMAP4_SSL(host, port, keyfile, certfile, ssl_context, timeout)
         self.username = username
         self.password = password
         self.login()

@@ -3,6 +3,12 @@ import time
 import logging
 
 class DBManager:
+    INSERT_EMAIL_PROCEDURE = "safe_insert_email"
+
+    INSERT_CORRESPONDENT_PROCEDURE = "safe_insert_correspondent"
+    
+    INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE = "safe_insert_email_correspondent"
+
     reconnectWaitTime = 15  #seconds
 
     def __init__(self, host, user, password, database, charset, collation):
@@ -31,7 +37,7 @@ class DBManager:
             collation=self.collation
         )
         self.__dbCursor = self.__dbConnection.cursor()
-        logging.debug(f"Succesfully connected to database {self.database} at {self.host} with user {self.user} and password {self.password}.")
+        logging.debug(f"Successfully connected to database {self.database} at {self.host} with user {self.user} and password {self.password}.")
 
 
     def close(self):
@@ -69,9 +75,17 @@ class DBManager:
 
     @withHeal
     def execute(self, sqlStatement, values=None):
+        logging.debug(f"Executing SQL Statement {sqlStatement} with values {values} ...")
         self.__dbCursor.execute(sqlStatement, values)
-        logging.debug(f"Executed SQL Statement {sqlStatement} with values {values}")
-        return self.__dbCursor.lastrowid
+        logging.debug("Success")
+
+    @withHeal
+    def callproc(self, procedure, values):
+        logging.debug(f"Executing SQL Procedure {procedure} with values {values} ...")
+        self.__dbCursor.callproc(procedure, values)
+        logging.debug("Success")
+
+
 
     @withHeal
     def fetchall(self):
@@ -80,19 +94,22 @@ class DBManager:
 
     @withHeal
     def startTransaction(self):
+        logging.debug("Starting database transaction ...")
         self.__dbConnection.start_transaction()
-        logging.debug("Database transaction started")
+        logging.debug("Success")
 
 
     @withHeal
     def commit(self):
+        logging.debug("Commiting transaction to database ...")
         self.__dbConnection.commit()
-        logging.debug("Commited transaction to database")
+        logging.debug("Success")
 
     @withHeal
     def rollback(self):
+        logging.debug("Rolling back uncommitted changes to database ...")
         self.__dbConnection.rollback()
-        logging.debug("Uncommitted changes to database rolled back")
+        logging.debug("Success")
     
 
 

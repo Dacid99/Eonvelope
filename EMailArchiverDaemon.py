@@ -2,6 +2,7 @@ import logging
 import time
 
 from DBManager import DBManager
+from EMailDBFeeder import EMailDBFeeder
 from IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 
 class EMailArchiverDaemon:
@@ -14,12 +15,12 @@ class EMailArchiverDaemon:
     def start(self):
         try:
             while True:
-                cycle()
+                self.cycle()
                 time.sleep(EMailArchiverDaemon.cyclePeriod)
         except Exception as e:
             logging.error("EMailArchiverDaemon crashed! Attempting to restart ...", exc_info=True)
             time.sleep(EMailArchiverDaemon.__restartTime)
-            start()
+            self.start()
 
     def cycle(self):
         try:
@@ -27,7 +28,7 @@ class EMailArchiverDaemon:
                 
                 dbfeeder = EMailDBFeeder(db)
                 
-                with IMAP_SSL_Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="pop.ionos.de") as popMail:
+                with IMAP_SSL_Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="pop.ionos.de") as imapMail:
 
                     parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 

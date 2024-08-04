@@ -3,7 +3,7 @@ import time
 import logging
 
 class DBManager:
-    __reconnectWaitTime = 15  #seconds
+    reconnectWaitTime = 15  #seconds
 
     def __init__(self, host, user, password, database, charset, collation):
         self.host = host
@@ -40,48 +40,63 @@ class DBManager:
             self.__dbCursor.close()
             self.__dbConnection.close()
             logging.info("Connection to database closed gracefully")
-        logging.debug("Connection to database is already closed")
+        else:
+            logging.debug("Connection to database is already closed")
 
     def isHealthy(self):
         return self.__dbConnection.is_connected()
 
-    def execute(self, sqlStatement, values=None):
-        try:
-            self.__dbCursor.execute(sqlStatement, values)
-            logging.debug(f"Executed SQL Statement {sqlStatement} with values {values}")
-            return self.__dbCursor.lastrowid
-        except mysql.connector.Error as e:
-            traceback.print_exc()
-            self.heal()
-            return self.execute(sqlStatement, values)
+    def withHeal(method):
+        def methodWithHeal(self, *args, **kwargs):
+            try:
+                return method(self, *args, **kwargs)
+            except mysql.connector.Error as e:
+                logging.error("Database connection error!", exc_info=True)
+                self.heal()
+                return method(self, *args, **kwargs)
+        return methodWithHeal
 
-    def fetchall(self):
-        try:
-            return self.__dbCursor.fetchall()
-        except mysql.connector.Error as e:
-            traceback.print_exc()
-            self.heal()
-            return self.fetchall()
-
-    def commit(self):
-        try:
-            self.__dbConnection.commit()
-            logging.debug("Commited changes to database")
-        except mysql.connector.Error as e:
-            traceback.print_exc()
-            self.heal()
-            self.commit()
-                
 
     def heal(self):
         while not self.__dbConnection.is_connected():
+            time.sleep(DBManager.__reconnectWaitTime)
             logging.error("No connection to database! Attempting reconnect ...")
             try:
                 self.connect()
                 logging.info("Reconnected to database")
             except sql.connector.Error as e:
                 logging.error("Reconnect attempt failed!")
-                time.sleep(DBManager.__reconnectWaitTime)
+
+    @withHeal
+    def execute(self, sqlStatement, values=None):
+        self.__dbCursor.execute(sqlStatement, values)
+        logging.debug(f"Executed SQL Statement {sqlStatement} with values {values}")
+        return self.__dbCursor.lastrowid
+
+    @withHeal
+    def fetchall(self):
+        return self.__dbCursor.fetchall()
+
+
+    @withHeal
+    def startTransaction(self):
+        self.__dbConnection.start_transaction()
+        logging.debug("Database transaction started")
+
+
+    @withHeal
+    def commit(self):
+        self.__dbConnection.commit()
+        logging.debug("Commited transaction to database")
+
+    @withHeal
+    def rollback(self):
+        self.__dbConnection.rollback()
+        logging.debug("Uncommitted changes to database rolled back")
+    
+
+
+                
 
     def __enter__(self):
         logging.debug("DBManager.__enter__")

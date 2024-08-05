@@ -18,7 +18,7 @@ class MailParser:
     __charsetDefault = "utf-8"
     __dateFormat = '%Y-%m-%d %H:%M:%S'
     __dateDefault = "1971-01-01 00:00:00"  #must fit dateFormat
-    __emlDirectoryPath = "/mnt/eml/"
+    emlDirectoryPath = "/mnt/eml/"
 
     @staticmethod
     def parse(mailToParse):
@@ -108,31 +108,35 @@ class MailParser:
                 for text in mailMessage.walk():
                     if text.get_content_type() in ['text/plain', 'text/html']:
                         mailBodyText += decodeText(text)
-                else:
-                    mailBodyText = decodeText(mailMessage)
-            if not mailBodyText:
+            else:
+                mailBodyText = decodeText(mailMessage)
+            if mailBodyText == "":
                 logging.warn("Mail has no Bodytext!")
             return mailBodyText
 
         def generateEML():
             logging.debug("Storing mail in .eml file ...")
-            emlFilePath = os.path.join(MailParser.__emlDirectoryPath, parseMessageID() + ".eml")
+            emlFilePath = os.path.join(MailParser.emlDirectoryPath, parseSubject() + ".eml")
             try:
-                if os.path.getsize(emlFilePath):
-                    logging.debug(f"{emlFilePath} already exists is not empty!")
+                if os.path.exists(emlFilePath):
+                    if os.path.getsize(emlFilePath) > 0:
+                        logging.debug(f"{emlFilePath} already exists and is not empty!")
+                        return emlFilePath
+                    else:
+                        logging.debug(f"Writing to empty .eml file {emlFilePath}...")
+                        with open(emlFilePath, "wb") as emlFile:
+                            emlGenerator = email.generator.BytesGenerator(emlFile)
+                            emlGenerator.flatten(mailMessage)
+                        logging.debug("Success")
                 else:
-                    logging.debug(f"Writing to empty .eml file {emlFilePath}...")
-                    with open(emlFilePath, "w") as emlFile:
-                        emlGenerator = email.generator.Generator(emlFile)
-                        emlGenerator.flatten(mailToParse)
+                    logging.debug(f"Creating new .eml file {emlFilePath}...")
+                    with open(emlFilePath, "wb") as emlFile:
+                        emlGenerator = email.generator.BytesGenerator(emlFile)
+                        emlGenerator.flatten(mailMessage)
                     logging.debug("Success")
 
-            except os.OSError as e:
-                logging.debug(f"Creating new .eml file {emlFilePath}...")
-                with open(emlFilePath, "w") as emlFile:
-                    emlGenerator = email.generator.Generator(emlFile)
-                    emlGenerator.flatten(mailToParse)
-                logging.debug("Success")
+            except OSError as e:
+               logging.error(f"Failed to write .eml file for message\n{mailMessage}!", exc_info=True)
 
             return emlFilePath
 

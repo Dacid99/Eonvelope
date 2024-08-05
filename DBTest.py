@@ -7,6 +7,8 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
+MailParser.emlDirectoryPath = "C:\\Users\\phili\\Desktop\\emltest\\"
+
 with DBManager("192.168.178.109", "root", "example", "email_archive", "utf8mb4", "utf8mb4_bin") as db:
 
     with IMAP_SSL_Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="imap.ionos.de", port=993) as imapMail:
@@ -18,5 +20,4 @@ with DBManager("192.168.178.109", "root", "example", "email_archive", "utf8mb4",
         dbfeeder = EMailDBFeeder(db)
       
         for mail in parsedNewMails:
-            print(mail)
             dbfeeder.insert(mail)

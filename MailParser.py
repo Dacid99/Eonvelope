@@ -1,6 +1,7 @@
 import email 
 import email.header
 import email.utils
+import logging
 
 from ParsedEMail import ParsedEMail
 
@@ -14,13 +15,13 @@ class MailParser:
     __subjectString = "Subject"
     __charsetDefault = "utf-8"
     __dateFormat = '%Y-%m-%d %H:%M:%S'
-    __dateDefault = "1971-01-01 00:00:00"
+    __dateDefault = "1971-01-01 00:00:00"  #must fit dateFormat
 
     @staticmethod
     def parse(mailToParse):
 
         mailMessage = email.message_from_bytes(mailToParse)
-
+        logging.debug(f"Parsing email with content\n{mailMessage}\n ...")
 
         def decodeHeader(header):
             decodedFragments = email.header.decode_header(header)
@@ -54,12 +55,14 @@ class MailParser:
         def parseFrom():
             sender = mailMessage.get(MailParser.__fromString)
             if sender is None:
+                logging.warn("Mail has no From!")
                 return None
             return separateMailNameAndAdress(decodeHeader(sender))
 
         def parseTo():
             recipients = mailMessage.get_all(MailParser.__toString)
             if recipients is None:
+                logging.warn("Mail has no To!")
                 return []
             decodedAndSeparatedRecipients = [separateMailNameAndAdress(decodeHeader(recipient)) for recipient in recipients]
             return decodedAndSeparatedRecipients
@@ -67,6 +70,7 @@ class MailParser:
         def parseBcc():
             recipients = mailMessage.get_all(MailParser.__bccString)
             if recipients is None:
+                logging.debug("Mail has no Bcc!")
                 return []
             decodedAndSeparatedRecipients = [separateMailNameAndAdress(decodeHeader(recipient)) for recipient in recipients]
             return decodedAndSeparatedRecipients
@@ -74,6 +78,7 @@ class MailParser:
         def parseCc():
             recipients = mailMessage.get_all(MailParser.__ccString)
             if recipients is None:
+                logging.debug("Mail has no Cc!")
                 return []
             decodedAndSeparatedRecipients = [separateMailNameAndAdress(decodeHeader(recipient)) for recipient in recipients]
             return decodedAndSeparatedRecipients
@@ -81,6 +86,7 @@ class MailParser:
         def parseDate():
             date = mailMessage.get(MailParser.__dateString)
             if date is None:
+                logging.warn("Mail has no Date!")
                 return MailParser.__dateDefault
             decodedDate = decodeHeader(date)
             decodedConvertedDate = email.utils.parsedate_to_datetime(decodedDate).strftime(MailParser.__dateFormat)
@@ -89,13 +95,20 @@ class MailParser:
         def parseSubject():
             if (subject := mailMessage.get(MailParser.__subjectString)):
                 return decodeHeader(subject)
-            else: return None
+            else: 
+                logging.warn("Mail has no Subject!")
+                return ""
         
         def parseBody():
             mailBodyText = ""
-            for text in mailMessage.walk():
-                if text.get_content_type() == 'text/plain':
-                    mailBodyText += decodeText(text)
+            if mailMessage.is_multipart():
+                for text in mailMessage.walk():
+                    if text.get_content_type() in ['text/plain', 'text/html']:
+                        mailBodyText += decodeText(text)
+                else:
+                    mailBodyText = decodeText(mailMessage)
+            if not mailBodyText:
+                logging.warn("Mail has no Bodytext!")
             return mailBodyText
 
 
@@ -109,4 +122,6 @@ class MailParser:
         parsedEMail.emailBcc = parseBcc()
         parsedEMail.dateReceived = parseDate()
         parsedEMail.bodyText = parseBody()
+
+        logging.debug("Success")
         return parsedEMail

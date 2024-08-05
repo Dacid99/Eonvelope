@@ -22,8 +22,10 @@ CREATE TABLE IF NOT EXISTS mailboxes (
 CREATE TABLE IF NOT EXISTS emails (
     id int AUTO_INCREMENT PRIMARY KEY,
     message_id VARCHAR(255) UNIQUE NOT NULL, 
+    account_id int,
     date_received DATETIME NOT NULL,
     bodytext TEXT NOT NULL
+    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS correspondents (
@@ -41,13 +43,6 @@ CREATE TABLE IF NOT EXISTS email_correspondents (
     PRIMARY KEY (email_id, correspondent_id, mention)
 );
 
-CREATE TABLE IF NOT EXISTS account_emails (
-    email_id int, 
-    account_id int, 
-    FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE,
-    FOREIGN KEY (email_id) REFERENCES emails(id) ON DELETE CASCADE,
-    PRIMARY KEY (account_id, email_id) 
-);
 
 
 DELIMITER //

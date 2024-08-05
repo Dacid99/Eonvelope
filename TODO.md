@@ -7,3 +7,4 @@ fix bodytext in outgoing
 methods for imap infos like mailbox names
 account db manager
 daemon with cli args
+fallbacks for missing metadata in email

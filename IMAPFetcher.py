@@ -43,8 +43,8 @@ class IMAPFetcher:
             parsedMails = []
             for number in messageNumbers[0].split():
                 typ, messageData = self._mailhost.fetch(number, '(RFC822)')
-                mailParser = MailParser(messageData[0][1]) 
-                parsedMails.append(mailParser)
+                parsedMail = MailParser.parse(messageData[0][1]) 
+                parsedMails.append(parsedMail)
             logging.debug(f"Successfully fetched {searchCriterion} messages from {mailbox} at {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
             return parsedMails
         except imaplib.IMAP4.error as e:

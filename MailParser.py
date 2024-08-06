@@ -140,12 +140,16 @@ class MailParser:
                         logger.debug(f"Not writing to {emlFilePath}, it already exists and is not empty")
                         return emlFilePath
                     else:
-                        logger.debug(f"Writing to empty .eml file {emlFilePath}...")
+                        logger.debug(f"Writing to empty .eml file {emlFilePath} ...")
                         with open(emlFilePath, "wb") as emlFile:
                             emlGenerator = email.generator.BytesGenerator(emlFile)
                             emlGenerator.flatten(mailMessage)
                         logger.debug("Success")
                 else:
+                    if not os.path.exists(MailParser.emlDirectoryPath):
+                            logger.debug(f"Creating directory {MailParser.emlDirectoryPath} ...")
+                            os.makedirs(MailParser.emlDirectoryPath)
+                            logger.debug("Success")
                     logger.debug(f"Creating new .eml file {emlFilePath}...")
                     with open(emlFilePath, "wb") as emlFile:
                         emlGenerator = email.generator.BytesGenerator(emlFile)
@@ -173,7 +177,8 @@ class MailParser:
                 for part in mailMessage.walk():
                     if part.get_content_disposition() == "attachment":
                         fileName = part.get_filename()
-                        filePath = os.path.join(MailParser.attachmentDirectoryPath, parseSubject() + fileName)
+                        dirPath = os.path.join(MailParser.attachmentDirectoryPath, parseSubject())
+                        filePath = os.path.join(dirPath, fileName)
                         attachmentFiles.append( (fileName,filePath) )
                         try:
                             if os.path.exists(filePath):
@@ -181,12 +186,16 @@ class MailParser:
                                     logger.debug(f"Not writing to {filePath}, it already exists and is not empty")
                                     continue
                                 else:
-                                    logger.debug(f"Writing to empty file {filePath}...")
+                                    logger.debug(f"Writing to empty file {filePath} ...")
                                     with open(filePath, "wb") as file:
                                         file.write(part.get_payload(decode=True))
                                     logger.debug("Success")
                             else:
-                                logger.debug(f"Creating new file {filePath}...")
+                                if not os.path.exists(dirPath):
+                                    logger.debug(f"Creating directory {dirPath} ...")
+                                    os.makedirs(dirPath)
+                                    logger.debug("Success")
+                                logger.debug(f"Creating new file {filePath} ...")
                                 with open(filePath, "wb") as file:
                                     file.write(part.get_payload(decode=True))
                                 logger.debug("Success")

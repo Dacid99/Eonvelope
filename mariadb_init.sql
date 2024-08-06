@@ -69,16 +69,20 @@ BEGIN
     END IF;
 END //
 
-CREATE PROCEDURE safe_insert_email_correspondent(IN new_email_message_id VARCHAR(255), IN new_correspondent_id int, IN new_mention ENUM('FROM','TO', 'CC', 'BCC'))
+CREATE PROCEDURE safe_insert_email_correspondent(IN new_email_message_id VARCHAR(255), IN new_email_address VARCHAR(255), IN new_mention ENUM('FROM','TO', 'CC', 'BCC'))
 BEGIN
     DECLARE new_email_id int;
+    DECLARE new_correspondent_id int;
 
     SELECT id INTO new_email_id FROM emails WHERE message_id = new_email_message_id LIMIT 1;
+    SELECT id INTO new_correspondent_id FROM correspondents WHERE email_address = new_email_address LIMIT 1;
 
-    IF new_email_id IS NOT NULL THEN 
+    IF new_email_id IS NOT NULL AND new_correspondent_id IS NOT NULL THEN 
+
         IF NOT EXISTS (SELECT 1 FROM email_correspondents WHERE email_id = new_email_id AND correspondent_id = new_correspondent_id) THEN
             INSERT INTO email_correspondents (email_id, correspondent_id, mention) VALUES (new_email_id, new_correspondent_id, new_mention);
         END IF;
+
     ELSE
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'MessageID not found';
     END IF;

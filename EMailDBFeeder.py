@@ -81,13 +81,9 @@ class EMailDBFeeder:
 
             self.logger.debug("Inserting FROM correspondents of this mail into email_correspondents table ...")
 
-            self.__dbManager.execute(EMailDBFeeder.__SELECT_CORRESPONDENTS_ID_SQL, [fromCorrespondentAddress])
-            fromCorrespondentID = self.__dbManager.fetchall()
-
-            self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, fromCorrespondentID[0][0], EMailDBFeeder.MENTION_FROM])
+            self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, fromCorrespondentAddress, EMailDBFeeder.MENTION_FROM])
             
             self.logger.debug("Success")
-
         else:
             self.logger.warn("No FROM correspondents for mail to insert into email_correspondents table!")
 
@@ -98,16 +94,9 @@ class EMailDBFeeder:
             self.logger.debug("Inserting FROM correspondents of this mail into email_correspondents table ...")
 
             for toCorrespondent in parsedEMail.emailTo:
-                toCorrespondentsAddresses.append(toCorrespondent[1])
+                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, toCorrespondent[1], EMailDBFeeder.MENTION_TO])
 
-            self.__dbManager.execute(EMailDBFeeder.__SELECT_CORRESPONDENTS_ID_SQL % ', '.join(['%s']*len(toCorrespondentsAddresses)), toCorrespondentsAddresses)
-            toCorrespondentsIDs = self.__dbManager.fetchall()
-
-            for toCorrespondentId in toCorrespondentsIDs:
-                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, toCorrespondentId[0], EMailDBFeeder.MENTION_TO])
-            
             self.logger.debug("Success")
-
         else:
             self.logger.warn("No FROM correspondents for mail to insert into email_correspondents table!")
 
@@ -117,16 +106,9 @@ class EMailDBFeeder:
             self.logger.debug("Inserting CC correspondents of this mail into email_correspondents table ...")
 
             for ccCorrespondent in parsedEMail.emailCc:
-                ccCorrespondentsAddresses.append(ccCorrespondent[1])
-
-            self.__dbManager.execute(EMailDBFeeder.__SELECT_CORRESPONDENTS_ID_SQL % ', '.join(['%s']*len(ccCorrespondentsAddresses)), ccCorrespondentsAddresses)
-            ccCorrespondentsIDs = self.__dbManager.fetchall()
-            
-            for ccCorrespondentId in ccCorrespondentsIDs:
-                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, ccCorrespondentId[0], EMailDBFeeder.MENTION_CC))
+                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, ccCorrespondent[1], EMailDBFeeder.MENTION_CC))
 
             self.logger.debug("Success")
-            
         else:
             self.logger.debug("No CC correspondents for this mail to insert into email_correspondents table")
 
@@ -136,16 +118,9 @@ class EMailDBFeeder:
             self.logger.debug("Inserting BCC correspondents of this mail into email_correspondents table ...")
 
             for bccCorrespondent in parsedEMail.emailBcc:
-                bccCorrespondentsAddresses.append(bccCorrespondent[1])
-
-            self.__dbManager.execute(EMailDBFeeder.__SELECT_CORRESPONDENTS_ID_SQL % ', '.join(['%s']*len(bccCorrespondentsAddresses)), bccCorrespondentsAddresses)
-            bccCorrespondentsIDs = self.__dbManager.fetchall()
-
-            for bccCorrespondentId in bccCorrespondentsIDs:
-                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, bccCorrespondentId[0], EMailDBFeeder.MENTION_BCC))
+                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, bccCorrespondent[1], EMailDBFeeder.MENTION_BCC))
 
             self.logger.debug("Success")
-            
         else:
             self.logger.debug("No BCC correspondents for this mail to insert into email_correspondents table")
 

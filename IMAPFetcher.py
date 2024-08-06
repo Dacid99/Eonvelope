@@ -57,10 +57,10 @@ class IMAPFetcher:
             return []
 
     def __enter__(self):
-        self.logger.debug("IMAPFetcher._enter_")
+        self.logger.debug(str(self.__class__.__name__) + "._enter_")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.logger.debug("IMAPFetcher._exit_")
+        self.logger.debug(str(self.__class__.__name__) + "._exit_")
         self.close()
 

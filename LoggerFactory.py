@@ -5,7 +5,7 @@ class LoggerFactory:
     loggerName = "EMailArchiverDaemon"
     logfilePath = f"/var/log/{loggerName}.log"
     logLevel = logging.INFO
-    logfileMaxSize = 1024 * 1024 # 1 MB
+    logfileMaxSize = 10 * 1024 * 1024 # 1 MB
     logfileBackupCount = 3 
 
     @staticmethod
@@ -22,6 +22,6 @@ class LoggerFactory:
     
     @staticmethod
     def getChildLogger(instanceName):
-        logger = logging.getLogger(LoggerFactory.loggerName + "." + instanceName)
+        logger = logging.getLogger(LoggerFactory.loggerName + "." + str(instanceName))
 
         return logger

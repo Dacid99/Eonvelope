@@ -57,9 +57,9 @@ class POP3Fetcher:
             return []
 
     def __enter__(self):
-        self.logger.debug("POP3Fetcher._enter_")
+        self.logger.debug(str(self.__class__.__name__) + "._enter_")
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.logger.debug("POP3Fetcher._exit_")
+        self.logger.debug(str(self.__class__.__name__) + "._exit_")
         self.close()

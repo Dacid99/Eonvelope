@@ -27,7 +27,7 @@ class MailParser:
         logger = LoggerFactory.getChildLogger(MailParser.__name__)
 
         mailMessage = email.message_from_bytes(mailToParse)
-        logger.debug(f"Parsing email with content\n{mailMessage}\n ...")
+        logger.debug(f"Parsing email with content ...")
 
         def decodeHeader(header):
             logger.debug("Decoding header ...")
@@ -68,21 +68,21 @@ class MailParser:
         def parseMessageID():
             messageID = mailMessage.get(MailParser.__messageIDString)
             if messageID is None:
-                logger.warn(f"No messageID found in mail\n{mailMessage}\n\nresorting to hash!")
+                logger.warn(f"No messageID found in mail, resorting to hash!")
                 return str(hash(mailMessage))  #fallback for unique identifier if no messageID found
             return messageID
 
         def parseFrom():
             sender = mailMessage.get(MailParser.__fromString)
             if sender is None:
-                logger.warn(f"No FROM correspondent found in mail\n{mailMessage}!")
+                logger.warn(f"No FROM correspondent found in mail!")
                 return None
             return separateMailNameAndAdress(decodeHeader(sender))
 
         def parseTo():
             recipients = mailMessage.get_all(MailParser.__toString)
             if recipients is None:
-                logger.warn(f"No TO correspondents found in mail\n{mailMessage}!")
+                logger.warn(f"No TO correspondents found in mail!")
                 return []
             decodedAndSeparatedRecipients = [separateMailNameAndAdress(decodeHeader(recipient)) for recipient in recipients]
             return decodedAndSeparatedRecipients
@@ -106,7 +106,7 @@ class MailParser:
         def parseDate():
             date = mailMessage.get(MailParser.__dateString)
             if date is None:
-                logger.warn(f"No DATE found in mail\n{mailMessage}\n\nresorting to default!")
+                logger.warn(f"No DATE found in mail, resorting to default!")
                 return MailParser.__dateDefault
             decodedDate = decodeHeader(date)
             decodedConvertedDate = email.utils.parsedate_to_datetime(decodedDate).strftime(MailParser.__dateFormat)
@@ -116,7 +116,7 @@ class MailParser:
             if (subject := mailMessage.get(MailParser.__subjectString)):
                 return decodeHeader(subject)
             else: 
-                logger.warn(f"No SUBJECT found in mail\n{mailMessage}!")
+                logger.warn(f"No SUBJECT found in mail!")
                 return ""
         
         def parseBody():
@@ -128,7 +128,7 @@ class MailParser:
             else:
                 mailBodyText = decodeText(mailMessage)
             if mailBodyText == "":
-                logger.warn(f"No BODYTEXT found in mail\n{mailMessage}!")
+                logger.warn(f"No BODYTEXT found in mail!")
             return mailBodyText
 
         def generateEML():
@@ -153,7 +153,7 @@ class MailParser:
                     logger.debug("Success")
 
             except OSError as e:
-                logger.error(f"Failed to write .eml file for message\n{mailMessage}!", exc_info=True)
+                logger.error(f"Failed to write .eml file for message!", exc_info=True)
                 if os.path.exists(emlFilePath):
                     logger.debug("Clearing incomplete file ...")
                     try: 
@@ -173,7 +173,7 @@ class MailParser:
                 for part in mailMessage.walk():
                     if part.get_content_disposition() == "attachment":
                         fileName = part.get_filename()
-                        filePath = os.path.join(MailParser.attachmentDirectoryPath, parseSubject(), filename)
+                        filePath = os.path.join(MailParser.attachmentDirectoryPath, parseSubject() + fileName)
                         attachmentFiles.append( (fileName,filePath) )
                         try:
                             if os.path.exists(filePath):

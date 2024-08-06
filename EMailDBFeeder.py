@@ -19,7 +19,7 @@ class EMailDBFeeder:
 
     def __init__(self, dbManager):
         self.__dbManager = dbManager
-        self.logger = LoggerFactory.getChildLogger(self)
+        self.logger = LoggerFactory.getChildLogger(self.__class__.__name__)
 
     def insertEmail(self, parsedEMail):
         emailData = []
@@ -155,8 +155,9 @@ class EMailDBFeeder:
         if parsedEMail.hasAttachments():
             self.logger.debug("Inserting attachments into attachments table ...")
             for attachment in parsedEMail.attachments:
-                attachmentsInput = list(attachment).append(parsedEMail.messageID)
-                self.__dbManager.callproc(DBManager.INSERT_ATTACHMENTS_PROCEDURE, attachmentInput)
+                attachmentInput = list(attachment)
+                attachmentInput.append(parsedEMail.messageID)
+                self.__dbManager.callproc(DBManager.INSERT_ATTACHMENT_PROCEDURE, attachmentInput)
             self.logger.debug("Success")
         else:
             self.logger.debug(f"No attachments for this mail to insert into attachments table!")
@@ -171,6 +172,7 @@ class EMailDBFeeder:
             emailID = self.insertEmail(parsedEMail)
             self.insertCorrespondents(parsedEMail)
             self.insertEmailCorrespondentsConnection(parsedEMail, emailID)
+            self.insertAttachments(parsedEMail)
             self.__dbManager.commit()
 
             self.logger.debug("Success")

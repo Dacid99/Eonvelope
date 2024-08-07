@@ -22,7 +22,7 @@ class POP3Fetcher:
 
 
     def login(self):
-        self.logger.debug(f"Logging in to {self.host} on port {self.port} with username {self.username} and password {self.password} via {self.protocol} ...")
+        self.logger.debug(f"Logging in to {self.host} on port {self.port} with username {self.username} via {self.protocol} ...")
         try:
             self._mailhost.user(self.username)
             self._mailhost.pass_(self.password)

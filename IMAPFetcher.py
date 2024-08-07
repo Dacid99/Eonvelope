@@ -24,7 +24,7 @@ class IMAPFetcher:
         
 
     def login(self):
-        self.logger.debug(f"Logging in to {self.host} on port {self.port} with username {self.username} and password {self.password} via {self.protocol} ...")
+        self.logger.debug(f"Logging in to {self.host} on port {self.port} with username {self.username} via {self.protocol} ...")
         try:
             self._mailhost.login(self.username, self.password)
             self.logger.info(f"Successfully logged into {self.host} via {self.protocol}.")

@@ -26,7 +26,7 @@ class POP3Fetcher:
         try:
             self._mailhost.user(self.username)
             self._mailhost.pass_(self.password)
-            self.logger.debug(f"Successfully logged in to {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
+            self.logger.info(f"Successfully logged in to {self.host} via {self.protocol}.")
         except poplib.error_proto as e:
             self.logger.error(f"Failed connecting via {self.protocol} to {self.host} on port {self.port} with username {self.username} and password {self.password}!", exc_info=True)
 
@@ -35,7 +35,7 @@ class POP3Fetcher:
         if self._mailhost:
             try:
                 self._mailhost.quit()
-                self.logger.debug(f"Gracefully closed connection to {self.host} on port {self.port} with username {self.username} via {self.protocol}.")
+                self.logger.info(f"Gracefully closed connection to {self.host} on port {self.port} via {self.protocol}.")
             except imaplib.IMAP4.error:
                 self.logger.error(f"Failed to close connection to {self.host} on port {self.port} with username {self.username} via {self.protocol}!", exc_info=True)
 

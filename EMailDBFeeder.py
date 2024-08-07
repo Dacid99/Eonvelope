@@ -7,10 +7,10 @@ from DBManager import DBManager
 
 class EMailDBFeeder:
 
-    MENTION_FROM = "FROM"
-    MENTION_TO = "TO"
-    MENTION_CC = "CC"
-    MENTION_BCC = "BCC"
+    __MENTION_FROM = "FROM"
+    __MENTION_TO = "TO"
+    __MENTION_CC = "CC"
+    __MENTION_BCC = "BCC"
 
 
     def __init__(self, dbManager):
@@ -77,7 +77,7 @@ class EMailDBFeeder:
 
             self.logger.debug("Inserting FROM correspondents of this mail into email_correspondents table ...")
 
-            self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, fromCorrespondentAddress, EMailDBFeeder.MENTION_FROM])
+            self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, fromCorrespondentAddress, EMailDBFeeder.__MENTION_FROM])
             
             self.logger.debug("Success")
         else:
@@ -90,7 +90,7 @@ class EMailDBFeeder:
             self.logger.debug("Inserting FROM correspondents of this mail into email_correspondents table ...")
 
             for toCorrespondent in parsedEMail.emailTo:
-                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, toCorrespondent[1], EMailDBFeeder.MENTION_TO])
+                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, toCorrespondent[1], EMailDBFeeder.__MENTION_TO])
 
             self.logger.debug("Success")
         else:
@@ -102,7 +102,7 @@ class EMailDBFeeder:
             self.logger.debug("Inserting CC correspondents of this mail into email_correspondents table ...")
 
             for ccCorrespondent in parsedEMail.emailCc:
-                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, ccCorrespondent[1], EMailDBFeeder.MENTION_CC))
+                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, ccCorrespondent[1], EMailDBFeeder.__MENTION_CC))
 
             self.logger.debug("Success")
         else:
@@ -114,7 +114,7 @@ class EMailDBFeeder:
             self.logger.debug("Inserting BCC correspondents of this mail into email_correspondents table ...")
 
             for bccCorrespondent in parsedEMail.emailBcc:
-                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, bccCorrespondent[1], EMailDBFeeder.MENTION_BCC))
+                self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, (emailMessageID, bccCorrespondent[1], EMailDBFeeder.__MENTION_BCC))
 
             self.logger.debug("Success")
         else:

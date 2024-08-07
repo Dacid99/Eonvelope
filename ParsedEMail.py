@@ -1,6 +1,9 @@
+from FileManager import FileManager
+
 
 class ParsedEMail:
     def __init__(self):
+        self.mailMessage = None
         self.messageID = None
         self.subject = None
         self.emailFrom = None
@@ -10,10 +13,11 @@ class ParsedEMail:
         self.dateReceived = None
         self.bodyText = None
         self.emlFilePath = None
-        self.attachments = []
+        self.attachmentsData = []
+        self.attachmentsFiles = []
 
     def __str__(self):
-        return "MessageID: " + self.messageID + "\nSubject: " + self.subject + "\nDate: " + self.dateReceived + "\nFrom: " + str(self.emailFrom) + "\nTo: " + str(self.emailTo) + "\nCc: " + str(self.emailCc) + "\nBcc: " + str(self.emailBcc) + "\nContent: " + self.bodyText
+        return "MessageID: " + self.messageID + "\nSubject: " + self.subject + "\nDate: " + self.dateReceived + "\nFrom: " + str(self.emailFrom) + "\nTo: " + str(self.emailTo) + "\nCc: " + str(self.emailCc) + "\nBcc: " + str(self.emailBcc)
 
     def hasMessageID(self):
         return bool(self.messageID)
@@ -43,4 +47,14 @@ class ParsedEMail:
         return bool(self.emlFilePath)
 
     def hasAttachments(self):
-        return bool(self.attachments) 
+        return bool(self.attachmentsFiles) 
+
+    def saveToEML(self):
+        emlFile = FileManager.writeMessageToEML(self.mailMessage, self.subject)
+        self.emlFilePath = emlFile
+
+    def saveAttachments(self):
+        for attachment in self.attachmentsData:
+            attachmentFile = FileManager.writeAttachment(attachment, self.subject)
+            self.attachmentsFiles.append(attachmentFile)
+

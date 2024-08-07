@@ -125,7 +125,7 @@ class EMailDBFeeder:
 
         if parsedEMail.hasAttachments():
             self.logger.debug("Inserting attachments into attachments table ...")
-            for attachment in parsedEMail.attachments:
+            for attachment in parsedEMail.attachmentsFiles:
                 attachmentInput = list(attachment)
                 attachmentInput.append(parsedEMail.messageID)
                 self.__dbManager.callproc(DBManager.INSERT_ATTACHMENT_PROCEDURE, attachmentInput)

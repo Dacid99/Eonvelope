@@ -20,7 +20,7 @@ class DBManager:
         self.database = database
         self.charset = charset
         self.collation = collation
-        self.logger = LoggerFactory.getChildLogger(DBManager.__class__.__name__)
+        self.logger = LoggerFactory.getChildLogger(self.__class__.__name__)
         self.logger.info("Initial connecting to database ...")
         try:
             self.connect()
@@ -68,12 +68,12 @@ class DBManager:
 
     def heal(self):
         while not self.__dbConnection.is_connected():
-            time.sleep(DBManager.__reconnectWaitTime)
+            time.sleep(DBManager.reconnectWaitTime)
             self.logger.error("No connection to database! Attempting reconnect ...")
             try:
                 self.connect()
                 self.logger.info("Reconnected to database")
-            except sql.connector.Error as e:
+            except mysql.connector.Error as e:
                 self.logger.error("Reconnect attempt failed!")
 
     @withHeal

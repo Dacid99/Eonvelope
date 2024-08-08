@@ -21,6 +21,7 @@ class EMailDBFeeder:
         emailData = []
         emailData.append(parsedEMail.messageID)
         emailData.append(parsedEMail.dateReceived)
+        emailData.append(parsedEMail.subject)
         emailData.append(parsedEMail.bodyText)
         emailData.append(parsedEMail.emlFilePath)
 
@@ -85,9 +86,8 @@ class EMailDBFeeder:
 
 
         if parsedEMail.hasTo():
-            toCorrespondentsAddresses = []
 
-            self.logger.debug("Inserting FROM correspondents of this mail into email_correspondents table ...")
+            self.logger.debug("Inserting TO correspondents of this mail into email_correspondents table ...")
 
             for toCorrespondent in parsedEMail.emailTo:
                 self.__dbManager.callproc(DBManager.INSERT_EMAIL_CORRESPONDENT_CONNECTION_PROCEDURE, [emailMessageID, toCorrespondent[1], EMailDBFeeder.__MENTION_TO])
@@ -97,7 +97,6 @@ class EMailDBFeeder:
             self.logger.warn("No FROM correspondents for mail to insert into email_correspondents table!")
 
         if parsedEMail.hasCc():   
-            ccCorrespondentsAddresses = []
 
             self.logger.debug("Inserting CC correspondents of this mail into email_correspondents table ...")
 
@@ -109,7 +108,6 @@ class EMailDBFeeder:
             self.logger.debug("No CC correspondents for this mail to insert into email_correspondents table")
 
         if parsedEMail.hasBcc():
-            bccCorrespondentsAddresses = []
 
             self.logger.debug("Inserting BCC correspondents of this mail into email_correspondents table ...")
 

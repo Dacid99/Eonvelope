@@ -3,7 +3,13 @@ from EMailModel import EMailModel
 from CorrespondentModel import CorrespondentModel
 
 class EMailCorrespondentsModel(models.Model):
-    emailID = models.ForeignKey(EMailModel, related_name="emails", on_delete=models.CASCADE)
-    correspondentID = models.ForeignKey(CorrespondentModel, related_name="correspondents", on_delete=models.CASCADE)
+    email_id = models.ForeignKey(EMailModel, related_name="emails", on_delete=models.CASCADE)
+    correspondent_id = models.ForeignKey(CorrespondentModel, related_name="correspondents", on_delete=models.CASCADE)
     mention = models.TextChoices("TO", "FROM", "CC", "BCC", non_null=True)
-    models.UniqueConstraint(emailID, correspondentID, mention)
+
+    def __str__(self):
+        return f"EMail-Correspondent connection from email {self.email_id} to correspondent {self.correspondent_id} with mention {self.mention}"
+    
+    class Meta:
+        unique_together = ('email_id', 'correspondent_id', 'mention')
+        db_table = "correspondents"

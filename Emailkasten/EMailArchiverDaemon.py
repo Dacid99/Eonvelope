@@ -55,27 +55,27 @@ class EMailArchiverDaemon:
                 dbfeeder = EMailDBFeeder(db)
 
                 if self.mailAccount.protocol == IMAPFetcher.PROTOCOL:
-                    with IMAPFetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
+                    with IMAPFetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
                 elif self.mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-                    with IMAP_SSL_Fetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
+                    with IMAP_SSL_Fetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
                 elif self.mailAccount.protocol == POP3Fetcher.PROTOCOL:
-                    with POP3Fetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
+                    with POP3Fetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
                 elif self.mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
-                    with POP3_SSL_Fetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
+                    with POP3_SSL_Fetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
                 elif self.mailAccount.protocol == ExchangeFetcher.PROTOCOL:
-                    with ExchangeFetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as exchangeMail:
+                    with ExchangeFetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as exchangeMail:
 
                         parsedNewMails = exchangeMail.fetchBySearch()
 

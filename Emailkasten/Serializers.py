@@ -7,7 +7,7 @@ from EMailCorrespondentsModel import EMailCorrespondentsModel
 from AttachmentModel import AttachmentModel
 
 class AccountSerializer(serializers.ModelSerializer):
-    user_password = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = AccountModel

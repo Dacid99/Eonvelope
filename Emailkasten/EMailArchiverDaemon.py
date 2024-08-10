@@ -1,5 +1,6 @@
 import time
 import signal
+import threading
 
 from LoggerFactory import LoggerFactory
 from DBManager import DBManager
@@ -23,20 +24,31 @@ class EMailArchiverDaemon:
 
     def __init__(self):
         self.logger = LoggerFactory.getMainLogger()
-        self.registerSignals()
-        self.isRunning = True
+        self.thread = None
+        self.isRunning = False
 
     def start(self):
+        self.isRunning = True
         self.logger.info("Starting EMailArchiverDaemon")
+        self.thread = threading.Thread(target = self.run)
+        self.thread.start()
+
+    def stop(self):
+        self.logger.info("Stopping EMailArchiverDaemon")
+        self.isRunning = False
+        if self.thread:
+            self.thread.join()
+        self.logger.info("Gracefully stopped EMailArchiverDaemon")
+
+    def run(self):
         try:
             while self.isRunning:
                 self.cycle()
                 time.sleep(EMailArchiverDaemon.cyclePeriod)
-            self.logger.info("Stopped EMailArchiverDaemon")
         except Exception as e:
             self.logger.critical("EMailArchiverDaemon crashed! Attempting to restart ...", exc_info=True)
             time.sleep(EMailArchiverDaemon.__restartTime)
-            self.start()
+            self.run()
 
     def cycle(self):
         self.logger.debug("---------------------------------------\nNew cycle")
@@ -93,16 +105,4 @@ class EMailArchiverDaemon:
         except Exception as e:
             self.logger.error("Error during daemon cycle execution!", exc_info=True)
             raise
-
-
-    def registerSignals(self):
-        self.logger.debug("Registering signal handlers ...")
-        signal.signal(signal.SIGTERM, self.handleStopSignal)
-        signal.signal(signal.SIGINT, self.handleStopSignal)
-        self.logger.debug("Success")
-
-
-    def handleStopSignal(self, signal, frame):
-        self.isRunning = False
-        self.logger.info(f"EMailArchiverDaemon stopped by system signal {signal}.")
 

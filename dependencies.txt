@@ -1,1 +1,1 @@
-pip install django mysql-connector
+pip install django mysql-connector mysqlclient

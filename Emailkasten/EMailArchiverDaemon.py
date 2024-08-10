@@ -13,19 +13,15 @@ from ExchangeFetcher import ExchangeFetcher
 
 
 class EMailArchiverDaemon:
-    cyclePeriod = 60  #seconds
-    __restartTime = 10
-    dbHost = "192.168.178.109"
-    dbUser = "root"
-    dbPassword = "example"
-    PROTOCOL = "IMAP_SSL"
-    saveAttachments = True
-    saveToEML= True
+    restartTime = 10
 
-    def __init__(self):
+    def __init__(self, account):
         self.logger = LoggerFactory.getMainLogger()
         self.thread = None
         self.isRunning = False
+
+        self.mailAccount = account
+
 
     def start(self):
         self.isRunning = True
@@ -44,10 +40,10 @@ class EMailArchiverDaemon:
         try:
             while self.isRunning:
                 self.cycle()
-                time.sleep(EMailArchiverDaemon.cyclePeriod)
+                time.sleep(self.mailAccount.cycle_interval)
         except Exception as e:
             self.logger.critical("EMailArchiverDaemon crashed! Attempting to restart ...", exc_info=True)
-            time.sleep(EMailArchiverDaemon.__restartTime)
+            time.sleep(EMailArchiverDaemon.restartTime)
             self.run()
 
     def cycle(self):
@@ -58,28 +54,28 @@ class EMailArchiverDaemon:
                 
                 dbfeeder = EMailDBFeeder(db)
 
-                if EMailArchiverDaemon.PROTOCOL == IMAPFetcher.PROTOCOL:
-                    with IMAPFetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="imap.ionos.de") as imapMail:
+                if self.mailAccount.protocol == IMAPFetcher.PROTOCOL:
+                    with IMAPFetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.PROTOCOL == IMAP_SSL_Fetcher.PROTOCOL:
-                    with IMAP_SSL_Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="imap.ionos.de") as imapMail:
+                elif self.mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+                    with IMAP_SSL_Fetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.PROTOCOL == POP3Fetcher.PROTOCOL:
-                    with POP3Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="pop.ionos.de") as imapMail:
+                elif self.mailAccount.protocol == POP3Fetcher.PROTOCOL:
+                    with POP3Fetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.PROTOCOL == POP3_SSL_Fetcher.PROTOCOL:
-                    with POP3_SSL_Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="pop.ionos.de") as imapMail:
+                elif self.mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
+                    with POP3_SSL_Fetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.PROTOCOL == ExchangeFetcher.PROTOCOL:
-                    with ExchangeFetcher() as exchangeMail:
+                elif self.mailAccount.protocol == ExchangeFetcher.PROTOCOL:
+                    with ExchangeFetcher(username=self.mailAccount.user_name, password=self.mailAccount.user_password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as exchangeMail:
 
                         parsedNewMails = exchangeMail.fetchBySearch()
 
@@ -87,11 +83,11 @@ class EMailArchiverDaemon:
                     self.logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
                     parsedNewMails = []
 
-                if EMailArchiverDaemon.saveToEML:
+                if self.mailAccount.save_toEML:
                     for mail in parsedNewMails:
                         mail.saveToEML()
 
-                if EMailArchiverDaemon.saveAttachments:
+                if self.mailAccount.save_attachments:
                     for mail in parsedNewMails:
                         mail.saveAttachments()
 

@@ -17,7 +17,7 @@ class EMailArchiverDaemon:
     dbHost = "192.168.178.109"
     dbUser = "root"
     dbPassword = "example"
-    protocol = "IMAP_SSL"
+    PROTOCOL = "IMAP_SSL"
     saveAttachments = True
     saveToEML= True
 
@@ -46,27 +46,27 @@ class EMailArchiverDaemon:
                 
                 dbfeeder = EMailDBFeeder(db)
 
-                if EMailArchiverDaemon.protocol == IMAPFetcher.protocol:
+                if EMailArchiverDaemon.PROTOCOL == IMAPFetcher.PROTOCOL:
                     with IMAPFetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="imap.ionos.de") as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.protocol == IMAP_SSL_Fetcher.protocol:
+                elif EMailArchiverDaemon.PROTOCOL == IMAP_SSL_Fetcher.PROTOCOL:
                     with IMAP_SSL_Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="imap.ionos.de") as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.protocol == POP3Fetcher.protocol:
+                elif EMailArchiverDaemon.PROTOCOL == POP3Fetcher.PROTOCOL:
                     with POP3Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="pop.ionos.de") as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.protocol == POP3_SSL_Fetcher.protocol:
+                elif EMailArchiverDaemon.PROTOCOL == POP3_SSL_Fetcher.PROTOCOL:
                     with POP3_SSL_Fetcher(username="archiv@aderbauer.org", password="nxF154j9879ZZsW", host="pop.ionos.de") as imapMail:
 
                         parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
 
-                elif EMailArchiverDaemon.protocol == ExchangeFetcher.protocol:
+                elif EMailArchiverDaemon.PROTOCOL == ExchangeFetcher.PROTOCOL:
                     with ExchangeFetcher() as exchangeMail:
 
                         parsedNewMails = exchangeMail.fetchBySearch()

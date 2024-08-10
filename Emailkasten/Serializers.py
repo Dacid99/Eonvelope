@@ -1,9 +1,18 @@
 from rest_framework import serializers
 
+from AccountModel import AccountModel
 from EmailModel import EmailModel
 from CorrespondentModel import CorrespondentModel
 from EMailCorrespondentsModel import EMailCorrespondentsModel
 from AttachmentModel import AttachmentModel
+
+class AccountSerializer(serializers.ModelSerializer):
+    user_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = AccountModel
+        fields = '__all__'
+
 
 class EMailSerializer(serializers.ModelSerializer):
     class Meta:

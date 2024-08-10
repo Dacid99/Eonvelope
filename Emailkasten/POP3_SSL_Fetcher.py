@@ -6,7 +6,7 @@ from POP3Fetcher import POP3Fetcher
 
 class POP3_SSL_Fetcher(POP3Fetcher): 
 
-    protocol = "POP3_SSL"
+    PROTOCOL = "POP3_SSL"
 
     def __init__(self, username, password, host: str = "", port: int = 995, keyfile= None, certfile = None, ssl_context = None, timeout= None):
         self.host = host

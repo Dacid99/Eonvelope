@@ -2,7 +2,7 @@ import exchangelib
 from ExchangeMailParser import ExchangeMailParser
 
 class ExchangeFetcher:
-    protocol = "EXCHANGE"
+    PROTOCOL = "EXCHANGE"
     
     def __init__(self, username, password, primary_smtp_address=None, server='outlook.office365.com', fullname=None, access_type=exchangelib.DELEGATE, autodiscover=True, locale=None, default_timezone=None):
         self.__credentials = exchangelib.Credentials(username, password)

@@ -1,10 +1,5 @@
 import logging
 
-from EMailDBFeeder import EMailDBFeeder
-from IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
-from POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from MailParser import MailParser
-from DBManager import DBManager
 from LoggerFactory import LoggerFactory
 from EMailArchiverDaemon import EMailArchiverDaemon
 from FileManager import FileManager

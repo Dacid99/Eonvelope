@@ -54,46 +54,10 @@ class EMailArchiverDaemon:
                 
                 dbfeeder = EMailDBFeeder(db)
 
-                if self.mailAccount.protocol == IMAPFetcher.PROTOCOL:
-                    with IMAPFetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
-
-                        parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
-
-                elif self.mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-                    with IMAP_SSL_Fetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
-
-                        parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
-
-                elif self.mailAccount.protocol == POP3Fetcher.PROTOCOL:
-                    with POP3Fetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
-
-                        parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
-
-                elif self.mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
-                    with POP3_SSL_Fetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as imapMail:
-
-                        parsedNewMails = imapMail.fetchBySearch(searchCriterion="RECENT")
-
-                elif self.mailAccount.protocol == ExchangeFetcher.PROTOCOL:
-                    with ExchangeFetcher(username=self.mailAccount.mail_address, password=self.mailAccount.password, host=self.mailAccount.mail_host, port=self.mailAccount.mail_host_port) as exchangeMail:
-
-                        parsedNewMails = exchangeMail.fetchBySearch()
-
-                else:
-                    self.logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
-                    parsedNewMails = []
-
-                if self.mailAccount.save_toEML:
-                    for mail in parsedNewMails:
-                        mail.saveToEML()
-
-                if self.mailAccount.save_attachments:
-                    for mail in parsedNewMails:
-                        mail.saveAttachments()
+                parsedNewMails = MailProcessor.fetch(self.account, MailFetcher.RECENT)
 
                 for mail in parsedNewMails:
                     dbfeeder.insert(mail)
-
 
             endtime = time.time()
             self.logger.debug(f"Cycle complete after {endtime - startTime} seconds\n-------------------------------------------")

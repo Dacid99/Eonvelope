@@ -31,3 +31,20 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response({'status': 'Daemon stopped', 'account': account.mail_address})
         else:
             return Response({'status': 'Daemon not running', 'account': account.mail_address})
+
+    @action(detail=True, methods=['post'])
+    def fetch_all(self, request, pk=None):
+        account = self.get_object() 
+        try:
+            with DBManager(EMailArchiverDaemon.dbHost, EMailArchiverDaemon.dbUser, EMailArchiverDaemon.dbPassword, "email_archive", "utf8mb4", "utf8mb4_bin") as db:
+                dbfeeder = EMailDBFeeder(db)
+
+                parsedMails = MailFetcher.fetch(account, MailFetcher.ALL)
+
+                for mail in parsedNewMails:
+                    dbfeeder.insert(mail)
+                        
+        except Exception as e:
+            raise
+
+        return Response({'status': 'All mails fetched', 'account': account.mail_address})

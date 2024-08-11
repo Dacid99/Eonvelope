@@ -1,1 +1,5 @@
-pip install django mysql-connector mysqlclient
+django 
+djangorestframework
+mysqlclient
+exchangelib
+pytz

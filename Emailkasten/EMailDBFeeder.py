@@ -2,8 +2,13 @@ import mysql.connector
 import logging
 import traceback
 
-from LoggerFactory import LoggerFactory
-from DBManager import DBManager
+from .LoggerFactory import LoggerFactory
+from .DBManager import DBManager
+from Models.EMailModel import EMailModel
+from Models.AttachmentModel import AttachmentModel
+from Models.CorrespondentModel import CorrespondentModel
+from Models.EMailCorrespondentsModel import EMailCorrespondentsModel
+
 
 class EMailDBFeeder:
 
@@ -18,15 +23,8 @@ class EMailDBFeeder:
         self.logger = LoggerFactory.getChildLogger(self.__class__.__name__)
 
     def insertEmail(self, parsedEMail):
-        emailData = []
-        emailData.append(parsedEMail.messageID)
-        emailData.append(parsedEMail.dateReceived)
-        emailData.append(parsedEMail.subject)
-        emailData.append(parsedEMail.bodyText)
-        emailData.append(parsedEMail.emlFilePath)
-
         self.logger.debug("Inserting mail data into emails table ...")
-        self.__dbManager.callproc(DBManager.INSERT_EMAIL_PROCEDURE, emailData)
+        EMailModel.objects.get_or_create()
         self.logger.debug("Success")
 
 
@@ -134,22 +132,75 @@ class EMailDBFeeder:
 
     def insert(self, parsedEMail):
         try:
-            self.__dbManager.startTransaction()
+            with transaction.atomic():
+                emailEntry = EMailModel.get_or_create(
+                    message_id = mail.messageID,
+                    defaults = {
+                        'date_received' : mail.dateReceived,
+                        'email_subject' : mail.subject,
+                        'bodytext' : mail.bodyText,
+                        'datasize' :  mail.dataSize,
+                        'eml_filepath' : mail.emlFilePath
+                    }
+                )
 
-            self.logger.debug(f"Inserting mail\n{str(parsedEMail)}\n into database ...")
+                for attachmentFile in mail.attachmentsFiles:
+                    attachmentEntry = AttachmentModel.objects.get_or_create(
+                        file_name = attachmentsFiles[0],
+                        file_path = attachmentsFiles[1],
+                        datasize = attachmentFile[2],
+                        email = emailEntry
+                    )
 
-            emailID = self.insertEmail(parsedEMail)
-            self.insertCorrespondents(parsedEMail)
-            self.insertEmailCorrespondentsConnection(parsedEMail, emailID)
-            self.insertAttachments(parsedEMail)
-            self.__dbManager.commit()
+                for correspondent in mail.emailFrom():
+                    correspondentEntry = CorrespondentModel.objects.get_or_create(
+                        email_address = correspondent[1], 
+                        defaults = {'email_name': correspondent[0]}
+                    )
 
-            self.logger.debug("Success")
+                    EMailCorrespondent.get_or_create(
+                        email = emailEntry, 
+                        correspondent = correspondentEntry,
+                        mention = EMailDBFeeder.MENTION_FROM
+                    )
 
-        except Exception as e:
-            self.logger.error(f"Error while writing mail\n{str(parsedEMail)}\n to database! Rolling back uncommitted changes!", exc_info=True)
-            self.__dbManager.rollback()
+                for correspondent in mail.emailTo():
+                    correspondentEntry = CorrespondentModel.objects.get_or_create(
+                        email_address = correspondent[1], 
+                        defaults = {'email_name': correspondent[0]}
+                    )
+
+                    EMailCorrespondent.get_or_create(
+                        email = emailEntry, 
+                        correspondent = correspondentEntry,
+                        mention = EMailDBFeeder.MENTION_TO
+                    )
+                
+                for correspondent in mail.emailCc():
+                    correspondentEntry = CorrespondentModel.objects.get_or_create(
+                        email_address = correspondent[1], 
+                        defaults = {'email_name': correspondent[0]}
+                    )
+
+                    EMailCorrespondent.get_or_create(
+                        email = emailEntry, 
+                        correspondent = correspondentEntry,
+                        mention = EMailDBFeeder.MENTION_CC
+                    )
+
+                for correspondent in mail.emailBcc():
+                    correspondentEntry = CorrespondentModel.objects.get_or_create(
+                        email_address = correspondent[1], 
+                        defaults = {'email_name': correspondent[0]}
+                    )
+
+                    EMailCorrespondent.get_or_create(
+                        email = emailEntry, 
+                        correspondent = correspondentEntry,
+                        mention = EMailDBFeeder.MENTION_BCC
+                    )
+
+        except django.db.IntegrityError as e:
+            self.logger.error("Error while writing to database, rollback to last state", exc_info=True)
 
 
-
-        

@@ -22,9 +22,9 @@ services:
   web:
     build: .
     volumes:
-      - /root/Emailkasten/test/code:/code
-      - /root/Emailkasten/test/attachments:/mnt/attachments
-      - /root/Emailkasten/test/eml:/mnt/eml
+      - /main/Emailkasten/test/mnt:/code
+      - /main/Emailkasten/test/attachments:/mnt/attachments
+      - /main/Emailkasten/test/eml:/mnt/eml
     ports:
       - 1122:8000
     environment:

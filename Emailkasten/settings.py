@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import logging
+import logging.handlers
+from .LoggerFactory import LoggerFactory
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -103,6 +107,51 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+
+# logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False, 
+    'formatters': {
+        "default": {
+            'format': LoggerFactory.logFormat,
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.Streamhandler',
+            'formatter': 'default',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LoggerFactory.logfilePath,
+            'maxBytes': LoggerFactory.logfileMaxSize,
+            'backupCount': LoggerFactory.logfileBackupCount,
+            'formatter': 'default',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        LoggerFactory.loggerName: {
+            'handlers': ['console', 'file'],
+            'level': LoggerFactory.logLevel,
+            'propagate': True,
+        },
+    },
+}
 
 
 # Internationalization

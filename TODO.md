@@ -3,4 +3,3 @@ account email connection
 solve ext4 maximum filespace problem
 
 get rid of obsolete stuff
-define loggers in django settings

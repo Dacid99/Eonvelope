@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from ..Models.AccountModel import AccountModel
 from ..Serializers import AccountSerializer
+from ..EMailArchiverDaemon import EMailArchiverDaemon 
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = AccountModel.objects.all()

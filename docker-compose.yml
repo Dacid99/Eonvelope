@@ -31,5 +31,6 @@ services:
       - DB_NAME=email_archive_django
       - DB_USER=user
       - DB_PASSWORD=passwd
+    restart: unless-stopped
     depends_on:
       - db

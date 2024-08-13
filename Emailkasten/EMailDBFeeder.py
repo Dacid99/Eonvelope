@@ -37,14 +37,12 @@ class EMailDBFeeder:
                     logger.debug("EmailEntry already exists")
 
                 for attachmentFile in parsedEMail.attachmentsFiles:
-                    print(type(emailEntry))
-                    print(attachmentFile)
                     attachmentEntry, created  = AttachmentModel.objects.get_or_create(
                         file_path = attachmentFile[1],
-			email = emailEntry,
+			            email = emailEntry,
                         defaults = {
-      			   'file_name' : attachmentFile[0],
-                           'datasize' : attachmentFile[2]
+      			            'file_name' : attachmentFile[0],
+                            'datasize' : attachmentFile[2]
                         }
                     )
                     if created:
@@ -52,26 +50,27 @@ class EMailDBFeeder:
                     else:
                         logger.debug("AttachmentEntry already exists")
 
-                for correspondent in parsedEMail.emailFrom:
-                    correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
-                        email_address = correspondent[1], 
-                        defaults = {'email_name': correspondent[0]}
-                    )
-                    if created:
-                        logger.debug("CorrespondentEntry created")
-                    else:
-                        logger.debug("CorrespondentEntry already exists")
-                   
+                correspondent = parsedEMail.emailFrom
+                correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
+                    email_address = correspondent[1], 
+                    defaults = {'email_name': correspondent[0]}
+                )
+                if created:
+                    logger.debug("CorrespondentEntry created")
+                else:
+                    logger.debug("CorrespondentEntry already exists")
+                
 
-                    EMailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
-                        email = emailEntry, 
-                        correspondent = correspondentEntry,
-                        mention = EMailDBFeeder.MENTION_FROM
-                    )
-                    if created:
-                        logger.debug("EmailCorrespondentEntry with FROM created")
-                    else:
-                        logger.debug("EmailCorrespondentEntry with FROM already exists")
+                EMailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
+                    email = emailEntry, 
+                    correspondent = correspondentEntry,
+                    mention = EMailDBFeeder.MENTION_FROM
+                )
+                if created:
+                    logger.debug("EmailCorrespondentEntry with FROM created")
+                else:
+                    logger.debug("EmailCorrespondentEntry with FROM already exists")
+
 
                 for correspondent in parsedEMail.emailTo:
                     correspondentEntry, created  = CorrespondentModel.objects.get_or_create(

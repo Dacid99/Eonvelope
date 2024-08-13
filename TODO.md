@@ -1,7 +1,6 @@
 test exchange
 account email connection
 solve ext4 maximum filespace problem
-correspondentsnames screwed
 mail&attachmentsizes are all the same
 daemon autostart on container up
 download api for eml and attachments

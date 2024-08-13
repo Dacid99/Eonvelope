@@ -10,7 +10,7 @@ class AttachmentModel(models.Model):
         unique=True,
         null=True)
     datasize = models.IntegerField()
-    email_id = models.ForeignKey(EMailModel, related_name="email", on_delete=models.CASCADE)
+    email = models.ForeignKey(EMailModel, related_name="email", on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Attachment {self.file_name}"

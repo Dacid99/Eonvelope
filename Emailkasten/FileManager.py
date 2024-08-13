@@ -57,13 +57,14 @@ class FileManager:
         fileName = attachmentData.get_filename()
         dirPath = os.path.join(FileManager.attachmentDirectoryPath, subdirectory)
         filePath = os.path.join(dirPath, fileName)
+        fileSize = sys.getsizeof(attachmentData)
         logger = LoggerFactory.getChildLogger(FileManager.__class__.__name__)
         logger.debug(f"Storing attachment {fileName} in {filePath} ...")
         try:
             if os.path.exists(filePath):
                 if os.path.getsize(filePath) > 0:
                     logger.debug(f"Not writing to {filePath}, it already exists and is not empty")
-                    return (fileName, filePath)
+                    return (fileName, filePath, fileSize)
                 else:
                     logger.debug(f"Writing to empty file {filePath} ...")
                     with open(filePath, "wb") as file:
@@ -93,6 +94,6 @@ class FileManager:
                 logger.debug("File was not created")
             filePath = None
         
-        return (fileName, filePath, sys.getsizeof(attachmentData))
+        return (fileName, filePath, fileSize)
         
             

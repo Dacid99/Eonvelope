@@ -37,11 +37,15 @@ class EMailDBFeeder:
                     logger.debug("EmailEntry already exists")
 
                 for attachmentFile in parsedEMail.attachmentsFiles:
+                    print(type(emailEntry))
+                    print(attachmentFile)
                     attachmentEntry, created  = AttachmentModel.objects.get_or_create(
-                        file_name = attachmentsFiles[0],
-                        file_path = attachmentsFiles[1],
-                        datasize = attachmentFile[2],
-                        email = emailEntry
+                        file_path = attachmentFile[1],
+			email = emailEntry,
+                        defaults = {
+      			   'filename' : attachmentFile[0],
+                           'datasize' : attachmentFile[2]
+                        }
                     )
                     if created:
                         logger.debug("AttachmentEntry created")

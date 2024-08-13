@@ -9,8 +9,8 @@ class EMailCorrespondentsModel(models.Model):
     mention = models.CharField(choices=mentionTypes, max_length=10)
 
     def __str__(self):
-        return f"EMail-Correspondent connection from email {self.email_id} to correspondent {self.correspondent_id} with mention {self.mention}"
+        return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"
     
     class Meta:
-        unique_together = ('email_id', 'correspondent_id', 'mention')
+        unique_together = ('email', 'correspondent', 'mention')
         db_table = "email_correspondents"

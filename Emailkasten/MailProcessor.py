@@ -3,6 +3,7 @@ from .IMAPFetcher import IMAPFetcher
 from .POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from .POP3Fetcher import POP3Fetcher
 from .ExchangeFetcher import ExchangeFetcher
+from .FileManager import FileManager
 
 class MailProcessor:
     UNSEEN = "UNSEEN"
@@ -41,11 +42,21 @@ class MailProcessor:
             parsedMails = []
 
         if mailAccount.save_toEML:
+            logger.debug("Saving mail to eml file ...")
             for mail in parsedMails:
-                mail.saveToEML()
+                FileManager.writeMessageToEML(mail)
+            logger.debug("Success")
+        else:
+            logger.debug("Not saving to eml, it is toggled off")
+
 
         if mailAccount.save_attachments:
+            logger.debug("Saving attachments ...")
             for mail in parsedMails:
-                mail.saveAttachments()
+                FileManager.writeAttachments(mail)
+            logger.debug("Success")
+        else:
+            logger.debug("Not saving attachments, it is toggled off")
+
 
         return parsedMails

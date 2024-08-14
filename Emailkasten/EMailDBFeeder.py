@@ -24,113 +24,135 @@ class EMailDBFeeder:
                 emailEntry, created = EMailModel.objects.get_or_create(
                     message_id = parsedEMail.messageID,
                     defaults = {
-                        'date_received' : parsedEMail.dateReceived,
-                        'email_subject' : parsedEMail.subject,
-                        'bodytext' : parsedEMail.bodyText,
-                        'datasize' :  parsedEMail.dataSize,
-                        'eml_filepath' : parsedEMail.emlFilePath
+                        'date_received' : parsedEMail[MailParser.dateString],
+                        'email_subject' : parsedEMail[MailParser.subjectString],
+                        'bodytext' : parsedEMail[MailParser.bodyTextString],
+                        'datasize' :  parsedEMail[MailParser.sizeString],
+                        'eml_filepath' : parsedEMail[MailParser.emlFilePathString]
                     }
                 )
                 if created:
-                    logger.debug("EmailEntry created")
+                    logger.debug(f"Entry for {str(emailEntry)} created")
                 else:
-                    logger.debug("EmailEntry already exists")
+                    logger.debug(f"Entry for {str(emailEntry)} already exists")
+                
 
-                for attachmentFile in parsedEMail.attachmentsFiles:
+                
+                for attachment in parsedEMail[MailParser.attachmentsString]:
                     attachmentEntry, created  = AttachmentModel.objects.get_or_create(
-                        file_path = attachmentFile[1],
-			            email = emailEntry,
+                        file_path = attachment[MailParser.attachment_filePathString],
+                        email = emailEntry,
                         defaults = {
-      			            'file_name' : attachmentFile[0],
-                            'datasize' : attachmentFile[2]
+                            'file_name' : attachment[MailParser.attachment_fileNameString],
+                            'datasize' : attachment[MailParser.attachment_sizeString]
                         }
                     )
                     if created:
-                        logger.debug("AttachmentEntry created")
+                        logger.debug(f"Entry for {str(attachmentEntry)} created")
                     else:
-                        logger.debug("AttachmentEntry already exists")
+                        logger.debug(f"Entry for {str(attachmentEntry)} already exists")
 
-                correspondent = parsedEMail.emailFrom
-                correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
-                    email_address = correspondent[1], 
-                    defaults = {'email_name': correspondent[0]}
-                )
-                if created:
-                    logger.debug("CorrespondentEntry created")
-                else:
-                    logger.debug("CorrespondentEntry already exists")
+                if not parsedEMail[MailParser.attachmentsString]: 
+                    logger.debug("No attachment files found in mail, not writing to DB")
+
+
                 
-
-                EMailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
-                    email = emailEntry, 
-                    correspondent = correspondentEntry,
-                    mention = EMailDBFeeder.MENTION_FROM
-                )
-                if created:
-                    logger.debug("EmailCorrespondentEntry with FROM created")
-                else:
-                    logger.debug("EmailCorrespondentEntry with FROM already exists")
-
-
-                for correspondent in parsedEMail.emailTo:
+                correspondent = parsedEMail[MailParser.fromString]
+                if correspondent:
                     correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
                         email_address = correspondent[1], 
                         defaults = {'email_name': correspondent[0]}
                     )
                     if created:
-                        logger.debug("CorrespondentEntry created")
+                        logger.debug(f"Entry for {str(correspondentEntry)} created")
                     else:
-                        logger.debug("CorrespondentEntry already exists")
+                        logger.debug(f"Entry for {str(correspondentEntry)} already exists")
+                
 
-                    EMailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
+                    emailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
+                        email = emailEntry, 
+                        correspondent = correspondentEntry,
+                        mention = EMailDBFeeder.MENTION_FROM
+                    )
+                    if created:
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} with FROM created")
+                    else:
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} with FROM already exists")
+                
+                else:
+                    logger.warn("No FROM Correspondent found in mail, not writing to DB!")
+
+                
+                for correspondent in parsedEMail[MailParser.toString]:
+                    correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
+                        email_address = correspondent[1], 
+                        defaults = {'email_name': correspondent[0]}
+                    )
+                    if created:
+                        logger.debug(f"Entry for {str(correspondentEntry)} created")
+                    else:
+                        logger.debug(f"Entry for {str(correspondentEntry)} already exists")
+
+                    emailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
                         email = emailEntry, 
                         correspondent = correspondentEntry,
                         mention = EMailDBFeeder.MENTION_TO
                     )
                     if created:
-                        logger.debug("EmailCorrespondentEntry with TO created")
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} created")
                     else:
-                        logger.debug("EmailCorrespondentEntry with TO already exists")
-                
-                for correspondent in parsedEMail.emailCc:
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} already exists")
+
+                if not parsedEMail[MailParser.toString]:
+                    logger.warn("No TO Correspondent found in mail, not writing to DB!")
+
+
+                for correspondent in parsedEMail[MailParser.ccString]:
                     correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
                         email_address = correspondent[1], 
                         defaults = {'email_name': correspondent[0]}
                     )
                     if created:
-                        logger.debug("CorrespondentEntry created")
+                        logger.debug(f"Entry for {str(correspondentEntry)} created")
                     else:
-                        logger.debug("CorrespondentEntry already exists")
+                        logger.debug(f"Entry for {str(correspondentEntry)} already exists")
 
-                    EMailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
+                    emailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
                         email = emailEntry, 
                         correspondent = correspondentEntry,
                         mention = EMailDBFeeder.MENTION_CC
                     )
                     if created:
-                        logger.debug("EmailCorrespondentEntry with CC created")
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} created")
                     else:
-                        logger.debug("EmailCorrespondentEntry with CC already exists")
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} already exists")
 
-                for correspondent in parsedEMail.emailBcc:
+                if not parsedEMail[MailParser.ccString]:
+                    logger.debug("No CC Correspondent found in mail, not writing to DB")
+
+
+                for correspondent in parsedEMail[MailParser.bccString]:
                     correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
                         email_address = correspondent[1], 
                         defaults = {'email_name': correspondent[0]}
                     )
                     if created:
-                        logger.debug("CorrespondentEntry created")
+                        logger.debug(f"Entry for {str(correspondentEntry)} created")
                     else:
-                        logger.debug("CorrespondentEntry already exists")
+                        logger.debug(f"Entry for {str(correspondentEntry)} already exists")
 
-                    EMailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
+                    emailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
                         email = emailEntry, 
                         correspondent = correspondentEntry,
                         mention = EMailDBFeeder.MENTION_BCC
                     )
                     if created:
-                        logger.debug("EmailCorrespondentEntry with BCC created")
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} created")
                     else:
-                        logger.debug("EmailCorrespondentEntry with BCC already exists")
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} already exists")
+
+                if not parsedEMail[MailParser.ccString]:
+                    logger.debug("No BCC Correspondent found in mail, not writing to DB")
 
 
         except django.db.IntegrityError as e:

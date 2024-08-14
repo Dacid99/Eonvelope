@@ -6,16 +6,31 @@ import datetime
 import pytz
 import sys
 from .LoggerFactory import LoggerFactory
-from .ParsedEMail import ParsedEMail
 
 class MailParser:
-    __messageIDString = "Message-ID"
-    __fromString = "From"
-    __toString = "To"
-    __bccString = "Bcc"
-    __ccString = "Cc"
-    __dateString = "Date"
-    __subjectString = "Subject"
+    #Keys to the dict
+    dataString = "Raw"
+    fullMessageString = "Full"
+    sizeString = "Size"
+    emlFilePathString = "EmlFilePath"
+    attachmentsString = "Attachments"
+    #Keys to the xml and the dict
+    messageIDString = "Message-ID"
+    fromString = "From"
+    toString = "To"
+    bccString = "Bcc"
+    ccString = "Cc"
+    dateString = "Date"
+    subjectString = "Subject"
+    bodyTextString = "Bodytext"
+
+    #attachment keys
+    attachment_dataString = "AttachmentData"
+    attachment_sizeString= "AttachmentSize"
+    attachment_fileNameString = "AttachmentFileName"
+    attachment_filePathString= "AttachmentFilePath" 
+
+    #Defaults
     __charsetDefault = "utf-8"
     __dateFormat = '%Y-%m-%d %H:%M:%S'
     __dateDefault = "1971-01-01 00:00:00"  #must fit dateFormat
@@ -169,35 +184,46 @@ class MailParser:
 
         def parseAttachments():
             logger.debug("Parsing attachments ...")
-            attachmentsData = []
+            attachments = []
             if mailMessage.is_multipart():
                 for part in mailMessage.walk():
                     if part.get_content_disposition() == "attachment":
-                        attachmentsData.append(part)
+                        attachmentDict = {}
+                        attachmentDict[MailParser.attachment_dataString] = part
+                        attachmentDict[MailParser.attachment_sizeString] = sys.getsizeof(part)
+                        attachmentDict[MailParser.attachment_fileNameString] = part.get_filename()
+                        attachmentDict[MailParser.attachment_filePathString] = None 
 
-            if not attachmentsData:
+                        attachments.append(attachmentDict)
+
+            if not attachments:
                 logger.debug("No attachments found in mail")
             else:
                 logger.debug("Success")
 
-
-            return attachmentsData
+            return attachments
 
 
         logger.debug(f"Parsing email with subject {parseSubject()} ...")
 
-        parsedEMail = ParsedEMail()
-        parsedEMail.mailMessage = mailMessage
-        parsedEMail.messageID = parseMessageID()
-        parsedEMail.subject = parseSubject()
-        parsedEMail.emailFrom = parseFrom()
-        parsedEMail.emailTo = parseTo()
-        parsedEMail.emailCc = parseCc()
-        parsedEMail.emailBcc = parseBcc()
-        parsedEMail.dateReceived = parseDate()
-        parsedEMail.bodyText = parseBody()
-        parsedEMail.dataSize = sys.getsizeof(mailToParse)
-        parsedEMail.attachmentsData = parseAttachments()
+
+        parsedEMail = {}
+        parsedEMail[dataString] = mailToParse
+        parsedEMail[fullMessageString] = mailMessage
+        parsedEMail[sizeString] = sys.getsizeof(mailToParse)
+        parsedEMail[messageIDString] = parseMessageID()
+        parsedEMail[subjectString] = parseSubject()
+        parsedEMail[bodyTextString] = parseBody()
+        parsedEMail[fromString] = parseFrom()
+        parsedEMail[toString] = parseTo()
+        parsedEMail[ccString] = parseCc()
+        parsedEMail[bccString] = parseBcc()
+        parsedEMail[dateString] = parseDate()
+        parsedEMail[attachmentsString] = parseAttachments()
+        parsedEMail[MailParser.emlFilePath] = None
+
+
+
 
         logger.debug("Successfully parsed mail")
         return parsedEMail

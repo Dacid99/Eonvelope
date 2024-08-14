@@ -8,7 +8,8 @@ class EMailModel(models.Model):
     bodytext = models.TextField()
     datasize = models.IntegerField()
     eml_filepath = models.FilePathField(
-        path=FileManager.STORAGE_PATH, 
+        path=FileManager.STORAGE_PATH,
+        max_length=255, 
         recursive=True, 
         match=r".*\.eml$", 
         null=True

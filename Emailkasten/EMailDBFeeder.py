@@ -3,6 +3,7 @@ import traceback
 import django.db
 from .LoggerFactory import LoggerFactory
 from .Models.EMailModel import EMailModel
+from .Models.MailboxModel import MailboxModel
 from .Models.AttachmentModel import AttachmentModel
 from .Models.CorrespondentModel import CorrespondentModel
 from .Models.EMailCorrespondentsModel import EMailCorrespondentsModel
@@ -16,12 +17,32 @@ class EMailDBFeeder:
     MENTION_BCC = "BCC"
 
     @staticmethod
-    def insert(parsedEMail):
+    def insertMailboxes(mailboxesList, account):
         logger = LoggerFactory.getChildLogger(EMailDBFeeder.__name__)
 
         try:
             with django.db.transaction.atomic():
-                logger.debug(parsedEMail[MailParser.emlFilePathString])
+                for mailbox in mailboxesList:
+                    mailboxEntry, created = MailboxModel.objects.get_or_create(
+                        name = mailbox,
+                        account = account
+                    )
+                    if created:
+                        logger.debug(f"Entry for {str(mailboxEntry)} created")
+                    else:
+                        logger.debug(f"Entry for {str(mailboxEntry)} already exists")
+
+        except django.db.IntegrityError as e:
+            logger.error("Error while writing to database, rollback to last state", exc_info=True)
+
+
+
+    @staticmethod
+    def insertEMail(parsedEMail):
+        logger = LoggerFactory.getChildLogger(EMailDBFeeder.__name__)
+
+        try:
+            with django.db.transaction.atomic():
                 emailEntry, created = EMailModel.objects.get_or_create(
                     message_id = parsedEMail[MailParser.messageIDString],
                     defaults = {

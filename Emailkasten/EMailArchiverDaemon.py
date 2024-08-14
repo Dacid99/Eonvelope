@@ -10,17 +10,18 @@ class EMailArchiverDaemon:
     restartTime = 10
     cyclePeriod = 60
 
-    def __init__(self, account):
+    def __init__(self, mailbox):
         self.logger = LoggerFactory.getMainLogger()
         self.thread = None
         self.isRunning = False
 
-        self.account = account
+        self.mailbox = mailbox
+        self.account = mailbox.account
 
 
     def start(self):
-        self.isRunning = True
         self.logger.info("Starting EMailArchiverDaemon")
+        self.isRunning = True
         self.thread = threading.Thread(target = self.run)
         self.thread.start()
 
@@ -32,7 +33,7 @@ class EMailArchiverDaemon:
         try:
             while self.isRunning:
                 self.cycle()
-                time.sleep(self.account.cycle_interval)
+                time.sleep(self.mailbox.cycle_interval)
             self.logger.info("EMailArchiverDaemon finished")
         except Exception as e:
             self.logger.critical("EMailArchiverDaemon crashed! Attempting to restart ...", exc_info=True)
@@ -43,10 +44,10 @@ class EMailArchiverDaemon:
         self.logger.debug("---------------------------------------\nNew cycle")
         startTime = time.time()
         try:
-            parsedNewMails = MailProcessor.fetch(self.account, MailProcessor.RECENT)
+            parsedNewMails = MailProcessor.fetch(self.mailbox, self.account, self.mailbox.fetching_criterion)
 
             for mail in parsedNewMails:
-                EMailDBFeeder.insert(mail)
+                EMailDBFeeder.insertEMail(mail)
 
             endtime = time.time()
             self.logger.debug(f"Cycle complete after {endtime - startTime} seconds\n-------------------------------------------")

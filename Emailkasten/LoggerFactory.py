@@ -4,7 +4,7 @@ import os
 
 class LoggerFactory:
     loggerName = "EMailkasten"
-    logfilePath = f"/var/log/{loggerName}.log"
+    logfilePath = "C:\\Users\\phili\\Desktop\\log.log" #f"/var/log/{loggerName}.log"
     logLevel = os.environ.get('LOG_LEVEL', 'INFO')
     logfileMaxSize = 10 * 1024 * 1024 # 10 MB
     logfileBackupCount = 3 

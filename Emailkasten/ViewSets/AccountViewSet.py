@@ -3,7 +3,6 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from ..Models.AccountModel import AccountModel
 from ..Serializers import AccountSerializer
-from ..EMailArchiverDaemon import EMailArchiverDaemon 
 from ..MailProcessor import MailProcessor
 from ..EMailDBFeeder import EMailDBFeeder
 
@@ -11,44 +10,12 @@ class AccountViewSet(viewsets.ModelViewSet):
     queryset = AccountModel.objects.all()
     serializer_class = AccountSerializer
 
-    activeEmailArchiverDaemons = {}
-
     @action(detail=True, methods=['post'])
-    def start(self, request, pk=None):
+    def scan_mailboxes(self, request, pk=None):
         account = self.get_object()
-        if account.mail_address not in self.activeEmailArchiverDaemons:
-            daemon = EMailArchiverDaemon(account)
-            daemon.start()
-            self.activeEmailArchiverDaemons[account.mail_address] = daemon
-            account.is_fetched = True
-            account.save()
-            return Response({'status': 'Daemon started', 'account': account.mail_address})
-        else:
-            return Response({'status': 'Daemon already running', 'account': account.mail_address})
-
-    @action(detail=True, methods=['post'])
-    def stop(self, request, pk=None):
-        account = self.get_object() 
-        if account.mail_address in self.activeEmailArchiverDaemons:
-            daemon = self.activeEmailArchiverDaemons.pop(account.mail_address)
-            daemon.stop()
-            account.is_fetched = False
-            account.save()
-            return Response({'status': 'Daemon stopped', 'account': account.mail_address})
-        else:
-            return Response({'status': 'Daemon not running', 'account': account.mail_address})
-
-    @action(detail=True, methods=['post'])
-    def fetch_all(self, request, pk=None):
-        account = self.get_object() 
+        mailboxesList = MailProcessor.scanMailboxes(account)
         
-        try:
-            parsedNewMails = MailProcessor.fetch(account, MailProcessor.ALL)
+        EMailDBFeeder.insertMailboxes(mailboxesList, account)
+        
+        return Response({'status': 'Scanned for mailboxes', 'account': mailbox.account.mail_address, 'found mailboxes': mailboxesList})
 
-            for mail in parsedNewMails:
-                EMailDBFeeder.insert(mail)
-
-        except Exception as e:
-            raise
-
-        return Response({'status': 'All mails fetched', 'account': account.mail_address})

@@ -40,4 +40,4 @@ with DBManager("192.168.178.109", "root", "example", "email_archive", "utf8mb4",
         for mail in parsedNewMails:
             mail.saveAttachments()
             mail.saveToEML()
-            dbfeeder.insert(mail)
+            dbfeeder.insertEMail(mail)

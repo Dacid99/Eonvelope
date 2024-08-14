@@ -13,6 +13,10 @@ class AccountSerializer(serializers.ModelSerializer):
         model = AccountModel
         fields = '__all__'
 
+class MailboxSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MailboxModel
+        fields = '__all__'
 
 class EMailSerializer(serializers.ModelSerializer):
     class Meta:

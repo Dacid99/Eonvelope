@@ -12,28 +12,60 @@ class MailProcessor:
     RECENT = "RECENT"
 
     @staticmethod
-    def fetch(mailAccount, criterion):
+    def scanMailboxes(mailAccount):
         logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
 
         if mailAccount.protocol == IMAPFetcher.PROTOCOL:
             with IMAPFetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
 
-                parsedMails = imapMail.fetchBySearch(searchCriterion=criterion)
+                mailboxes = imapMail.fetchMailboxes()
 
         elif mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
             with IMAP_SSL_Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
 
-                parsedMails = imapMail.fetchBySearch(searchCriterion=criterion)
+                mailboxes = imapMail.fetchMailboxes()
 
         elif mailAccount.protocol == POP3Fetcher.PROTOCOL:
-            with POP3Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
-
-                parsedMails = imapMail.fetchBySearch(searchCriterion=criterion)
+            mailboxes = ['INBOX']
 
         elif mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
-            with POP3_SSL_Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
+            mailboxes = ['INBOX']
 
-                parsedMails = imapMail.fetchBySearch(searchCriterion=criterion)
+        elif mailAccount.protocol == ExchangeFetcher.PROTOCOL:
+            with ExchangeFetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as exchangeMail:
+
+                mailboxes = exchangeMail.fetchMailboxes()
+
+        else:
+            logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
+            mailboxes = []
+
+        return mailboxes
+
+        
+    @staticmethod
+    def fetch(mailbox, mailAccount, criterion):
+        logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
+
+        if mailAccount.protocol == IMAPFetcher.PROTOCOL:
+            with IMAPFetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
+
+                parsedMails = imapMail.fetchBySearch(mailbox=mailbox.name, searchCriterion=criterion)
+
+        elif mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+            with IMAP_SSL_Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
+
+                parsedMails = imapMail.fetchBySearch(mailbox=mailbox.name, searchCriterion=criterion)
+
+        elif mailAccount.protocol == POP3Fetcher.PROTOCOL:
+            with POP3Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as popMail:
+
+                parsedMails = popMail.fetchBySearch(searchCriterion=criterion)
+
+        elif mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
+            with POP3_SSL_Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as popMail:
+
+                parsedMails = popMail.fetchBySearch(searchCriterion=criterion)
 
         elif mailAccount.protocol == ExchangeFetcher.PROTOCOL:
             with ExchangeFetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as exchangeMail:
@@ -44,7 +76,7 @@ class MailProcessor:
             logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
             parsedMails = []
 
-        if mailAccount.save_toEML:
+        if mailbox.save_toEML:
             logger.debug("Saving mails to eml files ...")
             for mail in parsedMails:
                 FileManager.writeMessageToEML(mail)
@@ -53,7 +85,7 @@ class MailProcessor:
             logger.debug("Not saving to eml, it is toggled off")
 
 
-        if mailAccount.save_attachments:
+        if mailbox.save_attachments:
             logger.debug("Saving attachments ...")
             for mail in parsedMails:
                 FileManager.writeAttachments(mail)

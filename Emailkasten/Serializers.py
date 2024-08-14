@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .Models.AccountModel import AccountModel
+from .Models.MailboxModel import MailboxModel
 from .Models.EMailModel import EMailModel
 from .Models.CorrespondentModel import CorrespondentModel
 from .Models.EMailCorrespondentsModel import EMailCorrespondentsModel

@@ -4,7 +4,6 @@ from ..IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from ..POP3Fetcher import POP3Fetcher
 from ..POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from ..ExchangeFetcher import ExchangeFetcher
-from ..EMailArchiverDaemon import EMailArchiverDaemon
 
 
 class AccountModel(models.Model):
@@ -20,10 +19,6 @@ class AccountModel(models.Model):
         ExchangeFetcher.PROTOCOL : "Exchange"
     }
     protocol = models.CharField(choices=protocolChoices, max_length=10)
-    cycle_interval = models.IntegerField(default=EMailArchiverDaemon.cyclePeriod)
-    save_attachments = models.BooleanField(default=True)
-    save_toEML = models.BooleanField(default=True)
-    is_fetched = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Account {self.mail_address} with protocol {self.protocol}"

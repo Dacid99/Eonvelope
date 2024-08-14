@@ -17,5 +17,5 @@ class AccountViewSet(viewsets.ModelViewSet):
         
         EMailDBFeeder.insertMailboxes(mailboxesList, account)
         
-        return Response({'status': 'Scanned for mailboxes', 'account': mailbox.account.mail_address, 'found mailboxes': mailboxesList})
+        return Response({'status': 'Scanned for mailboxes', 'account': account.mail_address, 'found mailboxes': mailboxesList})
 

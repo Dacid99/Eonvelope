@@ -51,7 +51,7 @@ class ParsedEMail:
         return bool(self.attachmentsFiles) 
 
     def saveToEML(self):
-        emlFile = FileManager.writeMessageToEML(self.mailMessage, self.messageID)
+        emlFile = FileManager.writeMessageToEML(self.mailMessage, self.messageID, self.messageID)
         self.emlFilePath = emlFile
 
     def saveAttachments(self):

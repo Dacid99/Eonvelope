@@ -5,7 +5,7 @@ from ..FileManager import FileManager
 class AttachmentModel(models.Model):
     file_name = models.CharField(max_length=255)
     file_path = models.FilePathField(
-        path=FileManager.attachmentDirectoryPath,
+        path=FileManager.STORAGE_PATH,
         recursive=True,
         unique=True,
         null=True)

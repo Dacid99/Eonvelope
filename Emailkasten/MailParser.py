@@ -82,7 +82,7 @@ class MailParser:
 
         def parseMessageID():
             logger.debug("Parsing MessageID ...")
-            messageID = mailMessage.get(MailParser.__messageIDString)
+            messageID = mailMessage.get(MailParser.messageIDString)
             if messageID is None:
                 logger.warn(f"No messageID found in mail, resorting to hash!")
                 return str(hash(mailMessage))  #fallback for unique identifier if no messageID found
@@ -93,7 +93,7 @@ class MailParser:
 
         def parseFrom():
             logger.debug("Parsing From ...")
-            sender = mailMessage.get(MailParser.__fromString)
+            sender = mailMessage.get(MailParser.fromString)
             if sender is None:
                 logger.warn(f"No FROM correspondent found in mail!")
                 return None
@@ -104,7 +104,7 @@ class MailParser:
 
         def parseTo():
             logger.debug("Parsing To ...")
-            recipients = mailMessage.get_all(MailParser.__toString)
+            recipients = mailMessage.get_all(MailParser.toString)
             if recipients is None:
                 logger.warn(f"No TO correspondents found in mail!")
                 return []
@@ -116,7 +116,7 @@ class MailParser:
 
         def parseBcc():
             logger.debug("Parsing Bcc ...")
-            recipients = mailMessage.get_all(MailParser.__bccString)
+            recipients = mailMessage.get_all(MailParser.bccString)
             if recipients is None:
                 logger.debug("No BCC correspondents found in mail")
                 return []
@@ -128,7 +128,7 @@ class MailParser:
 
         def parseCc():
             logger.debug("Parsing Cc ...")
-            recipients = mailMessage.get_all(MailParser.__ccString)
+            recipients = mailMessage.get_all(MailParser.ccString)
             if recipients is None:
                 logger.debug("No CC correspondents found in mail")
                 return []
@@ -140,7 +140,7 @@ class MailParser:
 
         def parseDate():
             logger.debug("Parsing date ...")
-            date = mailMessage.get(MailParser.__dateString)
+            date = mailMessage.get(MailParser.dateString)
             if date is None:
                 logger.warn("No DATE found in mail, resorting to default!")
                 return datetime.strptime(MailParser.__dateDefault, MailParser.__dateFormat)
@@ -151,7 +151,7 @@ class MailParser:
 
         def parseSubject():
             logger.debug("Parsing attachments ...")
-            if (subject := mailMessage.get(MailParser.__subjectString)):
+            if (subject := mailMessage.get(MailParser.subjectString)):
                 logger.debug("Success")
                 return decodeHeader(subject)
             else: 

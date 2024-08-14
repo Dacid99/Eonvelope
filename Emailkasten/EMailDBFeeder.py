@@ -76,9 +76,9 @@ class EMailDBFeeder:
                         mention = EMailDBFeeder.MENTION_FROM
                     )
                     if created:
-                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} with FROM created")
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} created")
                     else:
-                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} with FROM already exists")
+                        logger.debug(f"Entry for {str(emailCorrespondentsEntry)} already exists")
                 
                 else:
                     logger.warn("No FROM Correspondent found in mail, not writing to DB!")

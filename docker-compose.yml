@@ -4,7 +4,7 @@ services:
   db:
     image: mariadb:latest
     volumes:
-      - /root/Emailkasten/test/mysql:/var/lib/mysql
+      - /main/Emailkasten/test/mysql:/var/lib/mysql
     environment:
       - MARIADB_DATABASE=email_archive_django
       - MARIADB_USER=user

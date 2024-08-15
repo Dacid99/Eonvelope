@@ -5,11 +5,23 @@ from .POP3Fetcher import POP3Fetcher
 from .ExchangeFetcher import ExchangeFetcher
 from .FileManager import FileManager
 from .LoggerFactory import LoggerFactory
+import datetime
 
 class MailProcessor:
     UNSEEN = "UNSEEN"
     ALL = "ALL"
     RECENT = "RECENT"
+    SINCE = "SINCE"
+    NEW = "NEW"
+    DAILY = "DAILY"
+
+    @staticmethod
+    def getFilter(flag):
+        if flag == MailProcessor.DAILY:
+            return "SINCE {date}".format(date=datetime.date.today().strftime("%d-%b-%Y"))
+        else: 
+            return flag
+
 
     @staticmethod
     def scanMailboxes(mailAccount):
@@ -50,12 +62,12 @@ class MailProcessor:
         if mailAccount.protocol == IMAPFetcher.PROTOCOL:
             with IMAPFetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
 
-                parsedMails = imapMail.fetchBySearch(mailbox=mailbox.name, searchCriterion=criterion)
+                parsedMails = imapMail.fetchBySearch(mailbox=mailbox.name, searchCriterion=MailProcessor.getFilter(mailbox.fetching_criterion))
 
         elif mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
             with IMAP_SSL_Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as imapMail:
 
-                parsedMails = imapMail.fetchBySearch(mailbox=mailbox.name, searchCriterion=criterion)
+                parsedMails = imapMail.fetchBySearch(mailbox=mailbox.name, searchCriterion=MailProcessor.getFilter(mailbox.fetching_criterion))
 
         elif mailAccount.protocol == POP3Fetcher.PROTOCOL:
             with POP3Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as popMail:

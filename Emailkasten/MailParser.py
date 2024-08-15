@@ -74,7 +74,7 @@ class MailParser:
         def separateMailNameAndAdress(mailer):
             mailName, mailAddress = email.utils.parseaddr(mailer)
             if mailAddress.find("@") == -1:
-                logger.warn(f"Separation of mailname and address failed for {mailer}!")
+                logger.warning(f"Separation of mailname and address failed for {mailer}!")
                 mailAddress = mailer
             
             return (mailName, mailAddress)
@@ -84,7 +84,7 @@ class MailParser:
             logger.debug("Parsing MessageID ...")
             messageID = mailMessage.get(MailParser.messageIDString)
             if messageID is None:
-                logger.warn(f"No messageID found in mail, resorting to hash!")
+                logger.warning(f"No messageID found in mail, resorting to hash!")
                 return str(hash(mailMessage))  #fallback for unique identifier if no messageID found
             else:
                 logger.debug("Success")
@@ -95,7 +95,7 @@ class MailParser:
             logger.debug("Parsing From ...")
             sender = mailMessage.get(MailParser.fromString)
             if sender is None:
-                logger.warn(f"No FROM correspondent found in mail!")
+                logger.warning(f"No FROM correspondent found in mail!")
                 return None
             else:
                 logger.debug("Success")
@@ -106,7 +106,7 @@ class MailParser:
             logger.debug("Parsing To ...")
             recipients = mailMessage.get_all(MailParser.toString)
             if recipients is None:
-                logger.warn(f"No TO correspondents found in mail!")
+                logger.warning(f"No TO correspondents found in mail!")
                 return []
             else:
                 logger.debug("Success")
@@ -142,7 +142,7 @@ class MailParser:
             logger.debug("Parsing date ...")
             date = mailMessage.get(MailParser.dateString)
             if date is None:
-                logger.warn("No DATE found in mail, resorting to default!")
+                logger.warning("No DATE found in mail, resorting to default!")
                 return datetime.datetime.strptime(MailParser.__dateDefault, MailParser.__dateFormat)
      
             decodedDate = email.utils.parsedate_to_datetime(decodeHeader(date))
@@ -155,7 +155,7 @@ class MailParser:
                 logger.debug("Success")
                 return decodeHeader(subject)
             else: 
-                logger.warn("No SUBJECT found in mail!")
+                logger.warning("No SUBJECT found in mail!")
                 return ""
         
 
@@ -169,7 +169,7 @@ class MailParser:
             else:
                 mailBodyText = decodeText(mailMessage)
             if mailBodyText == "":
-                logger.warn("No BODYTEXT found in mail!")
+                logger.warning("No BODYTEXT found in mail!")
             else:
                 logger.debug("Success")
 

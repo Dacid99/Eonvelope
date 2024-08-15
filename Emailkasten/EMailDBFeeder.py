@@ -102,7 +102,7 @@ class EMailDBFeeder:
                         logger.debug(f"Entry for {str(emailCorrespondentsEntry)} already exists")
                 
                 else:
-                    logger.warn("No FROM Correspondent found in mail, not writing to DB!")
+                    logger.warning("No FROM Correspondent found in mail, not writing to DB!")
 
                 
                 for correspondent in parsedEMail[MailParser.toString]:
@@ -126,7 +126,7 @@ class EMailDBFeeder:
                         logger.debug(f"Entry for {str(emailCorrespondentsEntry)} already exists")
 
                 if not parsedEMail[MailParser.toString]:
-                    logger.warn("No TO Correspondent found in mail, not writing to DB!")
+                    logger.warning("No TO Correspondent found in mail, not writing to DB!")
 
 
                 for correspondent in parsedEMail[MailParser.ccString]:

@@ -9,7 +9,8 @@ class MailboxModel(models.Model):
     cycle_interval = models.IntegerField(default=60)
     fetchingChoices = {
         MailProcessor.RECENT : "recent", 
-        MailProcessor.UNSEEN : "unseen"
+        MailProcessor.UNSEEN : "unseen",
+        MailProcessor.ALL : "all"
     }
     fetching_criterion = models.CharField(choices=fetchingChoices, default=MailProcessor.RECENT, max_length=10)
     save_attachments = models.BooleanField(default=True)

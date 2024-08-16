@@ -3,8 +3,8 @@ import logging
 import email
 import email.policy
 
-from .LoggerFactory import LoggerFactory
-from .MailParser import MailParser
+from ..LoggerFactory import LoggerFactory
+from ..MailParser import MailParser
 
 class IMAPFetcher: 
     

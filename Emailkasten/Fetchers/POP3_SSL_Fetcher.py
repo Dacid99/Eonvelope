@@ -1,7 +1,7 @@
 import poplib
 import os
 
-from .LoggerFactory import LoggerFactory
+from ..LoggerFactory import LoggerFactory
 from .POP3Fetcher import POP3Fetcher
 
 class POP3_SSL_Fetcher(POP3Fetcher): 
@@ -13,7 +13,7 @@ class POP3_SSL_Fetcher(POP3Fetcher):
         self.port = port
         self.ssl_context = ssl_context
         self.timeout = timeout
-        self._mailhost = poplib.POP3_SSL(host=host, port=port, ssl_context=ssl_context, timeout=timeout)
+        self._mailhost = poplib.POP3_SSL(host=host, port=port, timeout=timeout, context=ssl_context)
         self.username = username
         self.password = password
 

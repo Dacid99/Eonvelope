@@ -1,8 +1,8 @@
 import poplib
 import logging
 
-from .LoggerFactory import LoggerFactory
-from .MailParser import MailParser
+from ..LoggerFactory import LoggerFactory
+from ..MailParser import MailParser
 
 class POP3Fetcher: 
 
@@ -42,17 +42,17 @@ class POP3Fetcher:
     def fetchAll(self):
         self.logger.debug(f"Fetching all messages at {self.host} on port {self.port} with username {self.username} via {self.PROTOCOL} ...")
         try:
-            status, messageList = self._mailhost.list()
-            if status != "OK":
+            status, messageNumbersList, _ = self._mailhost.list()
+            if status != b'+OK':
                 self.logger.error(f"Bad response trying to fetch mails, response {status}")
                 return []
 
-            messageCount = len(messageList)
+            messageCount = len(messageNumbersList)
             self.logger.debug(f"Found {messageCount} messages at {self.host} on port {self.port} with username {self.username} via {self.PROTOCOL}.")
             mailDataList = []
             for number in range(messageCount):
-                status, messageData = self._mailhost.retr(number + 1)
-                if status != "OK":
+                status, messageData, _ = self._mailhost.retr(number + 1)
+                if status != b'+OK':
                     self.logger.error(f"Bad response trying to fetch mail {number}, response {status}")
                     continue
                     

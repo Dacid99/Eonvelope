@@ -1,8 +1,8 @@
-from .IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
-from .IMAPFetcher import IMAPFetcher
-from .POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from .POP3Fetcher import POP3Fetcher
-from .ExchangeFetcher import ExchangeFetcher
+from .Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+from .Fetchers.IMAPFetcher import IMAPFetcher
+from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
+from .Fetchers.POP3Fetcher import POP3Fetcher
+from .Fetchers.ExchangeFetcher import ExchangeFetcher
 from .FileManager import FileManager
 from .LoggerFactory import LoggerFactory
 import datetime
@@ -77,12 +77,12 @@ class MailProcessor:
         elif mailAccount.protocol == POP3Fetcher.PROTOCOL:
             with POP3Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as popMail:
 
-                mailDataList = popMail.fetchBySearch(searchCriterion=criterion)
+                mailDataList = popMail.fetchAll()
 
         elif mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
             with POP3_SSL_Fetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as popMail:
 
-                mailDataList = popMail.fetchBySearch(searchCriterion=criterion)
+                mailDataList = popMail.fetchAll()
 
         elif mailAccount.protocol == ExchangeFetcher.PROTOCOL:
             with ExchangeFetcher(username=mailAccount.mail_address, password=mailAccount.password, host=mailAccount.mail_host, port=mailAccount.mail_host_port) as exchangeMail:

@@ -1,6 +1,6 @@
 import imaplib
 
-from .LoggerFactory import LoggerFactory
+from ..LoggerFactory import LoggerFactory
 from .IMAPFetcher import IMAPFetcher
 
 class IMAP_SSL_Fetcher(IMAPFetcher): 

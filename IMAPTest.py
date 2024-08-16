@@ -1,4 +1,4 @@
-from Emailkasten.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+from Emailkasten.Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from Emailkasten.MailParser import MailParser
 from Emailkasten.MailProcessor import MailProcessor
 import datetime

@@ -1,5 +1,5 @@
 import exchangelib
-from .ExchangeMailParser import ExchangeMailParser
+from ..ExchangeMailParser import ExchangeMailParser
 
 class ExchangeFetcher:
     PROTOCOL = "EXCHANGE"

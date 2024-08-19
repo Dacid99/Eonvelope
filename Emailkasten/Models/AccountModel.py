@@ -1,9 +1,10 @@
 from django.db import models
-from ..IMAPFetcher import IMAPFetcher
-from ..IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
-from ..POP3Fetcher import POP3Fetcher
-from ..POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from ..ExchangeFetcher import ExchangeFetcher
+from ..Fetchers.IMAPFetcher import IMAPFetcher
+from ..Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+from ..Fetchers.POP3Fetcher import POP3Fetcher
+from ..Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
+from ..Fetchers.ExchangeFetcher import ExchangeFetcher
+from .UserModel import UserModel
 
 
 class AccountModel(models.Model):
@@ -19,6 +20,7 @@ class AccountModel(models.Model):
         ExchangeFetcher.PROTOCOL : "Exchange"
     }
     protocol = models.CharField(choices=protocolChoices, max_length=10)
+    user = models.ForeignKey(UserModel, related_name='user' ,on_delete=models.CASCADE)
 
     def __str__(self):
         return f"Account {self.mail_address} with protocol {self.protocol}"

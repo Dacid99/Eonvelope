@@ -11,3 +11,4 @@ authentication
 
 # tests
 download api
+logging fixed?

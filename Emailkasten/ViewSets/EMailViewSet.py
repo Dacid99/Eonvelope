@@ -3,6 +3,7 @@ from django.http import FileResponse, Http404
 from rest_framework.decorators import action
 from ..Models.EMailModel import EMailModel
 from ..Serializers import EMailSerializer
+import os
 
 class EMailViewSet(viewsets.ModelViewSet):
     queryset = EMailModel.objects.all()

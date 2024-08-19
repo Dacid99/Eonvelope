@@ -11,7 +11,7 @@ class EMailArchiverDaemon:
     cyclePeriod = 60
 
     def __init__(self, mailbox):
-        self.logger = LoggerFactory.getMainLogger()
+        self.logger = LoggerFactory.getChildLogger(self.__class__.__name__)
         self.thread = None
         self.isRunning = False
 

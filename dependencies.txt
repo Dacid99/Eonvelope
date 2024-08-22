@@ -1,4 +1,5 @@
 django 
 djangorestframework
+django-health-check
 mysqlclient
 exchangelib

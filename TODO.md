@@ -3,7 +3,6 @@ emaildbfeeder and mailparser should be factories or something more maintainable 
 attachmentdatasize kinda small
 daemon autostart/stop on container up/down
 api for queries by filter
-double logging fix, child loggers unnecesary due to module
 different choices for fetching depending on protocol
 custom fetching filters
 authentication

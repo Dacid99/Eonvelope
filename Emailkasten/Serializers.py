@@ -45,6 +45,12 @@ class AccountSerializer(serializers.ModelSerializer):
     
 
 class SimpleCorrespondentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CorrespondentModel
+        fields = '__all__'
+
+
+class CorrespondentSerializer(serializers.ModelSerializer):
     emails = serializers.SerializerMethodField()
 
     class Meta:
@@ -54,7 +60,7 @@ class SimpleCorrespondentSerializer(serializers.ModelSerializer):
     def get_emails(self, object):
         emails = EMailModel.objects.filter(emailcorrespondents__correspondents=object)
         return SimpleEmailSerializer(emails, many=True, read_only=True)
-
+    
 
 class EMailCorrespondentsSerializer(serializers.ModelSerializer):
     class Meta:

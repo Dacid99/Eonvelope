@@ -22,17 +22,6 @@ class UserSerializer(serializers.ModelSerializer):
             )
             return user
 
-class AccountSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(max_length=255, write_only=True)
-    email = serializers.EmailField()
-
-    class Meta:
-        model = AccountModel
-        fields = '__all__'
-        read_only_fields = ['is_healthy']
-
-    def validate_email(self, value):
-        return value.lower()
 
 class MailboxSerializer(serializers.ModelSerializer):
     class Meta:
@@ -41,16 +30,30 @@ class MailboxSerializer(serializers.ModelSerializer):
         read_only_fields = ['name', 'account' ,'is_fetched']
 
 
-class EMailSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=255, write_only=True)
+    email = serializers.EmailField()
+    mailboxes = MailboxSerializer(many=True, read_only=True)
+
     class Meta:
-        model = EMailModel
+        model = AccountModel
         fields = '__all__'
+        read_only_fields = ['is_healthy']
 
+    def validate_email(self, value):
+        return value.lower()
+    
 
-class CorrespondentSerializer(serializers.ModelSerializer):
+class SimpleCorrespondentSerializer(serializers.ModelSerializer):
+    emails = serializers.SerializerMethodField()
+
     class Meta:
         model = CorrespondentModel
         fields = '__all__'
+
+    def get_emails(self, object):
+        emails = EMailModel.objects.filter(emailcorrespondents__correspondents=object)
+        return SimpleEmailSerializer(emails, many=True, read_only=True)
 
 
 class EMailCorrespondentsSerializer(serializers.ModelSerializer):
@@ -58,8 +61,28 @@ class EMailCorrespondentsSerializer(serializers.ModelSerializer):
         model = EMailCorrespondentsModel
         fields = '__all__'
 
+
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttachmentModel
         fields = '__all__'
         read_only_fields = []
+
+
+class SimpleEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EMailModel
+        fields = '__all__'
+
+
+class EMailSerializer(serializers.ModelSerializer):
+    attachments = AttachmentSerializer(many=True, read_only=True)
+    correspondents = serializers.SerializerMethodField()
+
+    class Meta:
+        model = EMailModel
+        fields = '__all__'
+
+    def get_correspondents(self, object):
+        correspondents = CorrespondentModel.objects.filter(correspondentemails__email=object)
+        return SimpleCorrespondentSerializer(correspondents, many=True, read_only=True).data

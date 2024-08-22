@@ -5,7 +5,7 @@ from .AccountModel import AccountModel
 
 class MailboxModel(models.Model):
     name = models.CharField(max_length=255)
-    account = models.ForeignKey(AccountModel, related_name="account", on_delete=models.CASCADE)
+    account = models.ForeignKey(AccountModel, related_name="mailboxes", on_delete=models.CASCADE)
     cycle_interval = models.IntegerField(default=60)
     fetchingChoices = {
         constants.MailFetchingCriteria.RECENT : "recent",

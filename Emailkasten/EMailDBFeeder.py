@@ -1,5 +1,3 @@
-import logging
-import traceback
 import django.db
 from .LoggerFactory import LoggerFactory
 from .Models.EMailModel import EMailModel

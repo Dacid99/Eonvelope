@@ -44,7 +44,7 @@ class EMailArchiverDaemon:
         self.logger.debug("---------------------------------------\nNew cycle")
         startTime = time.time()
         try:
-            parsedNewMails = MailProcessor.fetch(self.mailbox, self.account, self.mailbox.fetching_criterion)
+            MailProcessor.fetch(self.mailbox, self.account, self.mailbox.fetching_criterion)
 
             endtime = time.time()
             self.logger.debug(f"Cycle complete after {endtime - startTime} seconds\n-------------------------------------------")

@@ -42,6 +42,6 @@ class MailboxViewSet(viewsets.ModelViewSet):
     def fetch_all(self, request, pk=None):
         mailbox = self.get_object() 
         
-        parsedNewMails = MailProcessor.fetch(mailbox, mailbox.account, MailProcessor.ALL)
+        MailProcessor.fetch(mailbox, mailbox.account, MailProcessor.ALL)
 
         return Response({'status': 'All mails fetched', 'account': mailbox.account.mail_address, 'mailbox': mailbox.name})

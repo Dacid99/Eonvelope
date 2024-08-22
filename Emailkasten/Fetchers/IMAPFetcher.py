@@ -36,8 +36,11 @@ class IMAPFetcher:
         self.logger.debug(f"Closing connection to {str(self.account)} ...")
         if self._mailhost:
             try:
-                self._mailhost.logout()
-                self.logger.info(f"Gracefully closed connection to {str(self.account)}.")
+                status, _ = self._mailhost.logout()
+                if status == "BYE":
+                    self.logger.info(f"Gracefully closed connection to {str(self.account)}.")
+                else:
+                    self.logger.info(f"Closed connection to {str(self.account)} with response {status}.")
 
             except imaplib.IMAP4.error:
                 self.logger.error(f"Failed to close connection to {str(self.account)}!", exc_info=True)
@@ -52,15 +55,16 @@ class IMAPFetcher:
     def fetchBySearch(self, mailbox = 'INBOX', searchCriterion='RECENT'):    #for criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
         if not self._mailhost:
             self.logger.error(f"No connection to {str(self.account)}!")   
-            return
+            return []
         
         self.logger.debug(f"Searching and fetching {searchCriterion} messages in {mailbox} of {str(self.account)} ...")
         try:
+            self.logger.debug(f"Opening {mailbox} of {str(self.account)} ...")
             self._mailhost.select(mailbox, readonly=True)
+            self.logger.debug("Success")
             status, messageNumbers = self._mailhost.search(None, searchCriterion)
             if status != "OK":
                 self.logger.error(f"Bad response searching for mails, response {status}")
-                self._mailhost.close()
                 return []
             
             self.logger.info(f"Found {searchCriterion} messages with numbers {messageNumbers} in {mailbox} of {str(self.account)}.")
@@ -69,15 +73,16 @@ class IMAPFetcher:
             for number in messageNumbers[0].split():
                 status, messageData = self._mailhost.fetch(number, '(RFC822)')
                 if status != "OK":
-                    self.logger.error(f"Bad response trying to fetch mail {number}, response {status}")
-                    self._mailhost.close()
+                    self.logger.error(f"Bad response fetching mail {number}, response {status}")
                     continue
 
                 mailDataList.append(messageData[0][1])
                 
-            self.logger.info(f"Successfully fetched {searchCriterion} messages from {mailbox} of {str(self.account)}.")
+            self.logger.info(f"Finished fetching {searchCriterion} messages from {mailbox} of {str(self.account)}.")
+            self.logger.debug(f"Closing {mailbox} of {str(self.account)} ...")
             self._mailhost.close()
-
+            self.logger.debug("Success")
+    
             return mailDataList
 
         except imaplib.IMAP4.error as e:

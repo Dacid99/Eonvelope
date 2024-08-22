@@ -44,10 +44,35 @@ class AccountSerializer(serializers.ModelSerializer):
         return value.lower()
     
 
+
+
+
 class SimpleCorrespondentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CorrespondentModel
         fields = '__all__'
+
+
+class SimpleEmailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EMailModel
+        fields = '__all__'
+
+
+class EMailCorrespondentSerializer(serializers.ModelSerializer):
+    correspondent = SimpleCorrespondentSerializer()
+    
+    class Meta:
+        model = EMailCorrespondentsModel
+        fields = ['correspondent', 'mention']
+
+
+class CorrespondentEMailSerializer(serializers.ModelSerializer):
+    email = SimpleEmailSerializer()
+
+    class Meta:
+        model = EMailCorrespondentsModel
+        fields = ['email', 'mention']
 
 
 class CorrespondentSerializer(serializers.ModelSerializer):
@@ -58,27 +83,15 @@ class CorrespondentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_emails(self, object):
-        emails = EMailModel.objects.filter(emailcorrespondents__correspondents=object)
-        return SimpleEmailSerializer(emails, many=True, read_only=True)
+        correspondentemails = EMailCorrespondentsModel.objects.filter(correspondent=object)
+        return CorrespondentEMailSerializer(correspondentemails, many=True, read_only=True).data
     
-
-class EMailCorrespondentsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EMailCorrespondentsModel
-        fields = '__all__'
-
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttachmentModel
         fields = '__all__'
         read_only_fields = []
-
-
-class SimpleEmailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = EMailModel
-        fields = '__all__'
 
 
 class EMailSerializer(serializers.ModelSerializer):
@@ -90,5 +103,5 @@ class EMailSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_correspondents(self, object):
-        correspondents = CorrespondentModel.objects.filter(correspondentemails__email=object)
-        return SimpleCorrespondentSerializer(correspondents, many=True, read_only=True).data
+        emailcorrespondents = CorrespondentModel.objects.filter(correspondentemails__email=object)
+        return EMailCorrespondentSerializer(emailcorrespondents, many=True, read_only=True).data

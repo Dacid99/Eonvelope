@@ -6,7 +6,7 @@ from ..Serializers import AccountSerializer
 from ..MailProcessor import MailProcessor
 from ..EMailDBFeeder import EMailDBFeeder
 
-class AccountViewSet(viewsets.ReadOnlyModelViewSet):
+class AccountViewSet(viewsets.ModelViewSet):
     queryset = AccountModel.objects.all()
     serializer_class = AccountSerializer
 

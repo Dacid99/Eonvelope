@@ -19,6 +19,7 @@ class IMAPFetcher:
             self.logger.error(f"Failed logging into {str(self.account)}!", exc_info=True)
             self._mailhost = None
             self.account.is_healthy = False
+            self.account.save()
 
     def connectToHost(self):
         self.logger.debug(f"Connecting to {str(self.account)} ...")

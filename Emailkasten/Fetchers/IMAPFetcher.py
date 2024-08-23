@@ -20,6 +20,7 @@ class IMAPFetcher:
             self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
+            self.logger.info(f"Marked {str(self.account)} as unhealthy")
 
     def connectToHost(self):
         self.logger.debug(f"Connecting to {str(self.account)} ...")
@@ -47,13 +48,15 @@ class IMAPFetcher:
                 self.logger.error(f"Failed to close connection to {str(self.account)}!", exc_info=True)
 
     def __bool__(self):
-        self.logger.info("getting bool")
+        self.logger.debug(f"Testing connection to {str(self.account)}")
         return self._mailhost is not None
 
     @staticmethod
     def test(account):
         with IMAPFetcher(account) as imapFetcher:
-            return bool(imapFetcher)
+            result = bool(imapFetcher)
+            print(result)
+            return result
         
         
     def fetchBySearch(self, mailbox = 'INBOX', searchCriterion='RECENT'):    #for criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4

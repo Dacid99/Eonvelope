@@ -20,6 +20,8 @@ class POP3Fetcher:
             self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
+            self.logger.info(f"Marked {str(self.account)} as unhealthy")
+
 
     def connectToHost(self):
         self.logger.debug(f"Connecting to {str(self.account)} ...")
@@ -42,6 +44,7 @@ class POP3Fetcher:
                 self.logger.error(f"Failed to close connection to {str(self.account)}!", exc_info=True)
 
     def __bool__(self):
+        self.logger.debug(f"Testing connection to {str(self.account)}")
         return self._mailhost is not None
     
     @staticmethod

@@ -15,5 +15,5 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
 
     @staticmethod
     def test(account):
-        imapsslFetcher = IMAP_SSL_Fetcher(account)
-        return imapsslFetcher is not None
+        with IMAP_SSL_Fetcher(account) as imapsslFetcher:
+            return bool(imapsslFetcher) 

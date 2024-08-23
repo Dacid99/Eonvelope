@@ -16,6 +16,6 @@ class POP3_SSL_Fetcher(POP3Fetcher):
     
     @staticmethod
     def test(account):
-        pop3sslFetcher = POP3_SSL_Fetcher(account)
-        return pop3sslFetcher is not None
+        with POP3_SSL_Fetcher(account) as pop3sslFetcher:
+            return bool(pop3sslFetcher)
 

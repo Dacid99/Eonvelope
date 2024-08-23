@@ -25,29 +25,19 @@ class MailProcessor:
 
         logger.debug(f"Testing {str(account)} ...")
         if account.protocol == IMAPFetcher.PROTOCOL:
-            with IMAPFetcher(account) as imapMail:
-
-                result = imapMail.test(account)
+                result = IMAPFetcher.test(account)
 
         elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-            with IMAP_SSL_Fetcher(account) as imapMail:
-
-                result = imapMail.test(account)
+                result = IMAP_SSL_Fetcher.test(account)
 
         elif account.protocol == POP3Fetcher.PROTOCOL:
-            with POP3Fetcher(account) as popMail:
-
-                result = popMail.test(account)
+                result = POP3Fetcher.test(account)
 
         elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
-            with POP3_SSL_Fetcher(account) as popMail:
-
-                result = popMail.test(account)
+                result = POP3_SSL_Fetcher.test(account)
 
         elif account.protocol == ExchangeFetcher.PROTOCOL:
-            with ExchangeFetcher(account) as exchangeMail:
-
-                result = exchangeMail.fetchBySearch()
+                result = ExchangeFetcher.test(account)
 
         else:
             logger.error("Can not fetch mails, protocol is not or incorrectly specified!")

@@ -46,8 +46,8 @@ class POP3Fetcher:
     
     @staticmethod
     def test(account):
-        pop3Fetcher = POP3Fetcher(account)
-        return bool(pop3Fetcher)
+        with POP3Fetcher(account) as pop3Fetcher:
+            return bool(pop3Fetcher)
 
 
     def fetchAll(self):

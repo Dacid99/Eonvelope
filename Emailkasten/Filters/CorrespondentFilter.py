@@ -6,5 +6,6 @@ class CorrespondentFilter(django_filters.FilterSet):
         model = CorrespondentModel
         fields = {
             'email_name': ['icontains', 'exact'],
-            'email_address': ['icontains', 'exact']
+            'email_address': ['icontains', 'exact'],
+            'correspondentemails__mention': ['exact']
         }

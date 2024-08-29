@@ -11,6 +11,8 @@ storageModel
 distinguish configs by env, db and user-immutables
 autostart daemons on restart
 test filters, add more
+pagination
+db stats
 
 # remember
 logpath is misconfigured to work on windows

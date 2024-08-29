@@ -10,9 +10,9 @@ configurationModel
 storageModel
 distinguish configs by env, db and user-immutables
 autostart daemons on restart
-test filters, add more
-pagination
+test filters
 db stats
+static variables for field names
 
 # remember
 logpath is misconfigured to work on windows

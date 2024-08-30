@@ -10,9 +10,10 @@ configurationModel
 storageModel
 distinguish configs by env, db and user-immutables
 autostart daemons on restart
+simple request for correspondents
+filter for attachments
 static variables for field names
-paginations next pages weird with custom page size
-icontains doesnt work
+strip bodytext and subject before db insertation
 
 # remember
 logpath is misconfigured to work on windows

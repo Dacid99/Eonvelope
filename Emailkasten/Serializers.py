@@ -6,6 +6,7 @@ from .Models.EMailModel import EMailModel
 from .Models.CorrespondentModel import CorrespondentModel
 from .Models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from .Models.AttachmentModel import AttachmentModel
+from .Models.ConfigurationModel import ConfigurationModel
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -22,6 +23,10 @@ class UserSerializer(serializers.ModelSerializer):
             )
             return user
 
+class ConfigurationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConfigurationModel
+        fields = '__all__'
 
 class MailboxSerializer(serializers.ModelSerializer):
     class Meta:

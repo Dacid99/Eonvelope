@@ -39,3 +39,4 @@ class LoggerConfiguration:
 
 class ParsingConfiguration:
     CHARSET_DEFAULT = 'utf-8'
+    STRIP_TEXTS = True

@@ -12,7 +12,6 @@ distinguish configs by env, db and user-immutables
 autostart daemons on restart
 simple request for correspondents
 static variables for field names
-strip bodytext and subject before db insertation
 
 # remember
 logpath is misconfigured to work on windows

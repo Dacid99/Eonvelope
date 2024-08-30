@@ -151,10 +151,15 @@ class MailParser:
             logger.debug("Parsing attachments ...")
             if (subject := mailMessage.get(MailParser.subjectString)):
                 logger.debug("Success")
-                return decodeHeader(subject)
+                decodedSubject = decodeHeader(subject)
+                if constants.ParsingConfiguration.STRIP_TEXTS:
+                    parsedSubject = decodedSubject.strip()
+                else:
+                    parsedSubject = decodedSubject
             else: 
                 logger.warning("No SUBJECT found in mail!")
-                return ""
+                parsedSubject = ""
+            return parsedSubject
         
 
         def parseBody():
@@ -171,7 +176,12 @@ class MailParser:
             else:
                 logger.debug("Success")
 
-            return mailBodyText
+            if constants.ParsingConfiguration.STRIP_TEXTS:
+                parsedBodyText = mailBodyText.strip()
+            else:
+                parsedBodyText = mailBodyText
+
+            return parsedBodyText
 
 
         def parseAttachments():

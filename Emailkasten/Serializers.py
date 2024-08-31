@@ -58,7 +58,7 @@ class SimpleCorrespondentSerializer(serializers.ModelSerializer):
 class SimpleEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = EMailModel
-        fields = '__all__'
+        exclude = ['eml_filepath']
 
 
 class EMailCorrespondentSerializer(serializers.ModelSerializer):
@@ -101,7 +101,7 @@ class EMailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EMailModel
-        fields = '__all__'
+        exclude = ['eml_filepath']
         
     def get_correspondents(self, object):
         emailcorrespondents = EMailCorrespondentsModel.objects.filter(email=object)

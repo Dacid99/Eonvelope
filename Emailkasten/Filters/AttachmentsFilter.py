@@ -8,7 +8,7 @@ class AttachmentFilter(django_filters.FilterSet):
     class Meta:
         model = AttachmentModel
         fields = {
-            'file_name': ['icontains', 'contains', 'exact'],
-            'datasize': ['lte', 'gte'],
+            'file_name': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
+            'datasize': ['lte', 'gte', 'lt', 'gt', 'exact', 'in'],
             'created': ['lte', 'gte']
         }

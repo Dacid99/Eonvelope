@@ -11,5 +11,5 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CorrespondentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = CorrespondentFilter
-    ordering_fields = ['email_name', 'email_address']
+    ordering_fields = ['email_name', 'email_address', 'created']
     ordering = ['id']

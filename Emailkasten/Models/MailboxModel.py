@@ -18,6 +18,8 @@ class MailboxModel(models.Model):
     save_attachments = models.BooleanField(default=True)
     save_toEML = models.BooleanField(default=True)
     is_fetched = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Mailbox {self.name} of {self.account}"

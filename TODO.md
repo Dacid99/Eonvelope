@@ -9,8 +9,11 @@ storageModel
 distinguish configs by env, db and user-immutables
 autostart daemons on restart
 simple request for correspondents
+makemigrations overdue, with defaults for settings
 
 # to test
+new orderings
+autoincrementation if row already exists?
 
 # at next db reset
 use manytomanyfield thorugh the bridge table

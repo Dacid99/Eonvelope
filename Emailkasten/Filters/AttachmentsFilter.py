@@ -9,5 +9,6 @@ class AttachmentFilter(django_filters.FilterSet):
         model = AttachmentModel
         fields = {
             'file_name': ['icontains', 'contains', 'exact'],
-            'datasize': ['lte', 'gte']
+            'datasize': ['lte', 'gte'],
+            'created': ['lte', 'gte']
         }

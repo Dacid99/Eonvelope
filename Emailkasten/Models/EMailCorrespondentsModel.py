@@ -8,6 +8,8 @@ class EMailCorrespondentsModel(models.Model):
     correspondent = models.ForeignKey(CorrespondentModel, related_name="correspondentemails", on_delete=models.CASCADE)
     mentionTypes = {constants.MENTIONS.TO : "To", constants.MENTIONS.FROM : "From", constants.MENTIONS.CC : "Cc", constants.MENTIONS.BCC : "Bcc"}
     mention = models.CharField(choices=mentionTypes, max_length=10)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"

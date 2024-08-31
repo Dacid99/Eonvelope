@@ -17,6 +17,8 @@ class EMailModel(models.Model):
     )
     is_favorite = models.BooleanField(default=False)
     account = models.ForeignKey(AccountModel, related_name="in_account", on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Email with ID {self.message_id}, received on {self.datetime} with subject {self.email_subject}"

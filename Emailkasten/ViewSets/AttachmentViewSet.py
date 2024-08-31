@@ -9,12 +9,12 @@ from ..Serializers import AttachmentSerializer
 from ..Filters.AttachmentsFilter import AttachmentFilter
 import os
 
-class AttachmentViewSet(viewsets.ModelViewSet):
+class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AttachmentModel.objects.all()
     serializer_class = AttachmentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AttachmentFilter
-    ordering_fields = ['file_name', 'datasize']
+    ordering_fields = ['file_name', 'datasize', 'email__datetime', 'created']
     ordering = ['id']
 
     @action(detail=True, methods=['get'], url_path='download')

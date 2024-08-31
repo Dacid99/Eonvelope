@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from ..Models.AccountModel import AccountModel
@@ -9,6 +10,10 @@ from ..EMailDBFeeder import EMailDBFeeder
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = AccountModel.objects.all()
     serializer_class = AccountSerializer
+    filter_backends = [OrderingFilter]
+    
+    ordering_fields = ['mail_address', 'mail_host', 'protocol', 'created', 'updated']
+    ordering = ['id']
 
     @action(detail=True, methods=['post'])
     def scan_mailboxes(self, request, pk=None):

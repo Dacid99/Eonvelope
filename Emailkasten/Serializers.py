@@ -32,7 +32,7 @@ class MailboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = MailboxModel
         fields = '__all__'
-        read_only_fields = ['name', 'account' ,'is_fetched']
+        read_only_fields = ['name', 'account' ,'is_fetched', 'created', 'updated']
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -43,7 +43,7 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = AccountModel
         fields = '__all__'
-        read_only_fields = ['is_healthy']
+        read_only_fields = ['is_healthy', 'created', 'updated']
 
     def validate_mail_address(self, value):
         return value.lower()
@@ -53,12 +53,14 @@ class SimpleCorrespondentSerializer(serializers.ModelSerializer):
     class Meta:
         model = CorrespondentModel
         fields = '__all__'
+        read_only_fields = ['created', 'updated']
 
 
 class SimpleEmailSerializer(serializers.ModelSerializer):
     class Meta:
         model = EMailModel
         fields = '__all__'
+        read_only_fields = ['created', 'updated']
 
 
 class EMailCorrespondentSerializer(serializers.ModelSerializer):
@@ -92,8 +94,7 @@ class CorrespondentSerializer(serializers.ModelSerializer):
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = AttachmentModel
-        fields = '__all__'
-        read_only_fields = []
+        exclude = ['file_path']
 
 
 class EMailSerializer(serializers.ModelSerializer):
@@ -103,7 +104,7 @@ class EMailSerializer(serializers.ModelSerializer):
     class Meta:
         model = EMailModel
         fields = '__all__'
-
+        
     def get_correspondents(self, object):
         emailcorrespondents = EMailCorrespondentsModel.objects.filter(email=object)
         return EMailCorrespondentSerializer(emailcorrespondents, many=True, read_only=True).data

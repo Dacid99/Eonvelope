@@ -17,6 +17,8 @@ class AccountModel(models.Model):
     protocol = models.CharField(choices=protocolChoices, max_length=10)
     is_healthy = models.BooleanField(default=True)
     user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Account {self.mail_address} at host {self.mail_host}:{self.mail_host_port} with protocol {self.protocol}"

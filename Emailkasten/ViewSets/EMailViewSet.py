@@ -15,7 +15,7 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EMailSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = EMailFilter
-    ordering_fields = ['datetime', 'email_subject', 'datasize']
+    ordering_fields = ['datetime', 'email_subject', 'datasize', 'created']
     ordering = ['id']
     
     @action(detail=True, methods=['get'], url_path='download')

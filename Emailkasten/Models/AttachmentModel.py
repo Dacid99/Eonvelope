@@ -12,6 +12,8 @@ class AttachmentModel(models.Model):
         null=True)
     datasize = models.IntegerField()
     email = models.ForeignKey(EMailModel, related_name="attachments", on_delete=models.CASCADE)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"Attachment {self.file_name}"

@@ -13,6 +13,8 @@ class ConfigurationModel(models.Model):
     value_int = models.IntegerField(null=True, blank=True)
     value_char = models.CharField(null=True, blank=True)
     description = models.CharField(max_length=255)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = "config"

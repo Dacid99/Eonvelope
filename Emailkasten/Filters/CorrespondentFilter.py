@@ -8,5 +8,6 @@ class CorrespondentFilter(django_filters.FilterSet):
         model = CorrespondentModel
         fields = {
             'email_name': ['icontains', 'contains', 'exact'],
-            'email_address': ['icontains', 'contains', 'exact']
+            'email_address': ['icontains', 'contains', 'exact'],
+            'created': ['lte', 'gte']
         }

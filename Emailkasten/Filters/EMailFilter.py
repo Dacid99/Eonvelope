@@ -26,5 +26,6 @@ class EMailFilter(django_filters.FilterSet):
             'datetime': ['gte', 'lte'],
             'email_subject': ['icontains', 'contains', 'exact'],
             'bodytext': ['icontains', 'contains'],
-            'datasize': ['gte', 'lte']
+            'datasize': ['gte', 'lte'],
+            'created': ['lte', 'gte']
         }

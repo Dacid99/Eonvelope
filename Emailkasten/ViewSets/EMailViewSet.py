@@ -1,4 +1,5 @@
 from rest_framework import viewsets
+from rest_framework.filters import OrderingFilter
 from rest_framework.exceptions import ValidationError
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -12,31 +13,11 @@ import os
 class EMailViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = EMailModel.objects.all()
     serializer_class = EMailSerializer
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = EMailFilter
-
-    ALLOWED_SORT_FIELDS = ['datetime', 'email_subject', 'datasize']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        sort_by = self.request.query_params.get('sort', None)
-        if sort_by:
-            sort_fields = sort_by.split(',')
-            for field in sort_fields:
-                    if field.startswith('-'):
-                        field_name = field[1:]  # Remove the leading '-'
-                        if field_name in self.ALLOWED_SORT_FIELDS:
-                            queryset = queryset.order_by(field)  # Descending order
-                        else:
-                            raise ValidationError(f"Invalid sort field: {field_name}")
-                    else:
-                        if field in self.ALLOWED_SORT_FIELDS:
-                            queryset = queryset.order_by(field)  # Ascending order
-                        else:
-                            raise ValidationError(f"Invalid sort field: {field}")
-
-        return queryset
-
+    ordering_fields = ['datetime', 'email_subject', 'datasize']
+    ordering = ['id']
+    
     @action(detail=True, methods=['get'], url_path='download')
     def download(self, request, pk=None):
         email = self.get_object()

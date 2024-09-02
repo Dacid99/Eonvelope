@@ -11,8 +11,7 @@ autostart daemons on restart
 simple request for correspondents
 
 # to test
-new orderings
-filters for account and mailbox
+auth and user creation
 autoincrementation if row already exists?
 
 # at next db reset

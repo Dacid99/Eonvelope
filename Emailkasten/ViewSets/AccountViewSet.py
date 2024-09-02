@@ -16,6 +16,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     filterset_class = AccountFilter
     ordering_fields = ['mail_address', 'mail_host', 'protocol', 'created', 'updated']
     ordering = ['id']
+    permission_classes = [IsA]
 
     @action(detail=True, methods=['post'])
     def scan_mailboxes(self, request, pk=None):

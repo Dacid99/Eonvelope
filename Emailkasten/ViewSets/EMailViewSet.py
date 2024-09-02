@@ -17,6 +17,9 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_class = EMailFilter
     ordering_fields = ['datetime', 'email_subject', 'datasize', 'created']
     ordering = ['id']
+
+    def get_queryset(self):
+        return EMailModel.objects.filter(account__user = self.request.user)
     
     @action(detail=True, methods=['get'], url_path='download')
     def download(self, request, pk=None):

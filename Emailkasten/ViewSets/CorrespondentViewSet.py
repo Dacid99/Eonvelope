@@ -13,3 +13,6 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_class = CorrespondentFilter
     ordering_fields = ['email_name', 'email_address', 'created']
     ordering = ['id']
+
+    def get_queryset(self):
+        return CorrespondentModel.objects.filter(correspondentemails__email__account__user = self.request.user)

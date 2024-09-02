@@ -21,6 +21,9 @@ class MailboxViewSet(viewsets.ModelViewSet):
 
     activeEmailArchiverDaemons = {}
 
+    def get_queryset(self):
+        return MailboxModel.objects.filter(account__user = self.request.user)
+
     @action(detail=True, methods=['post'])
     def start(self, request, pk=None):
         mailbox = self.get_object()

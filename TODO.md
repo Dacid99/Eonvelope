@@ -7,7 +7,6 @@ storageModel
 distinguish configs by env, db and user-immutables, migrate db settings to initial settings
 autostart daemons on restart
 custom additional healthchecks
-simple request for correspondents
 
 # to test
 auth and user creation
@@ -15,6 +14,7 @@ request restriction and permissions
 stats only for user
 daemons still working?
 autmatic addition/creation of user/daemon 
+list response of correspondents, interference with filtering?
 autoincrementation if row already exists?
 
 # at next db reset

@@ -62,7 +62,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AccountModel
-        fields = '__all__'
+        exclude = ['user']
         read_only_fields = ['is_healthy', 'created', 'updated']
 
     def validate_mail_address(self, value):

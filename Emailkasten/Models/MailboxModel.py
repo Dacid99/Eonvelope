@@ -6,7 +6,6 @@ from .DaemonModel import DaemonModel
 class MailboxModel(models.Model):
     name = models.CharField(max_length=255)
     account = models.ForeignKey(AccountModel, related_name="mailboxes", on_delete=models.CASCADE)
-    daemon = models.OneToOneField(DaemonModel, related_name='mailbox', on_delete=models.CASCADE)
     fetchingChoices = {
         constants.MailFetchingCriteria.RECENT : "recent",
         constants.MailFetchingCriteria.UNSEEN : "unseen",

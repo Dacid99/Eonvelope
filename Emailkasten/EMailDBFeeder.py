@@ -1,6 +1,7 @@
 import django.db
 from .LoggerFactory import LoggerFactory
 from .Models.EMailModel import EMailModel
+from .Models.DaemonModel import DaemonModel
 from .Models.MailboxModel import MailboxModel
 from .Models.AttachmentModel import AttachmentModel
 from .Models.CorrespondentModel import CorrespondentModel
@@ -25,6 +26,9 @@ class EMailDBFeeder:
                     )
                     if created:
                         logger.debug(f"Entry for {str(mailboxEntry)} created")
+                        logger.debug("Attaching daemon ...")
+                        newDaemon = DaemonModel.objects.create(mailbox = mailboxEntry)
+                        logger.debug("Success")
                     else:
                         logger.debug(f"Entry for {str(mailboxEntry)} already exists")
 

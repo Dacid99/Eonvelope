@@ -35,7 +35,7 @@ class ConfigurationSerializer(serializers.ModelSerializer):
 class DaemonSerializer(serializers.ModelSerializer):
     class Meta:
         model = DaemonModel
-        fields = '__all__'
+        exclude = ['mailbox']
         read_only_fields = ['is_running', 'created', 'updated']
 
 

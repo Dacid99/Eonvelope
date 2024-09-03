@@ -2,9 +2,10 @@ from django.db import models
 from rest_framework.response import Response
 from .. import constants
 from ..EMailArchiverDaemon import EMailArchiverDaemon 
-
+from .MailboxModel import MailboxModel
 
 class DaemonModel(models.Model):
+    mailbox = models.OneToOneField(MailboxModel, related_name='daemon', on_delete=models.CASCADE)
     cycle_interval = models.IntegerField(default=constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT)
     is_running = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)

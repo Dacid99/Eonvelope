@@ -115,9 +115,13 @@ class CorrespondentSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_emails(self, object):
-        correspondentemails = EMailCorrespondentsModel.objects.filter(correspondent=object)
-        return CorrespondentEMailSerializer(correspondentemails, many=True, read_only=True).data
-    
+        request = self.context.get('request')
+        user = request.user if request else None
+        if user:
+            correspondentemails = EMailCorrespondentsModel.objects.filter(correspondent=object, email__account__user=user).distinct()
+            return CorrespondentEMailSerializer(correspondentemails, many=True, read_only=True).data
+        else:
+            return None
 
 class AttachmentSerializer(serializers.ModelSerializer):
     class Meta:
@@ -134,5 +138,10 @@ class EMailSerializer(serializers.ModelSerializer):
         exclude = ['eml_filepath']
         
     def get_correspondents(self, object):
-        emailcorrespondents = EMailCorrespondentsModel.objects.filter(email=object)
-        return EMailCorrespondentSerializer(emailcorrespondents, many=True, read_only=True).data
+        request = self.context.get('request')
+        user = request.user if request else None
+        if user:
+            emailcorrespondents = EMailCorrespondentsModel.objects.filter(email=object, email__account__user=user).distinct()
+            return EMailCorrespondentSerializer(emailcorrespondents, many=True, read_only=True).data
+        else:
+            return None

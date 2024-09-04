@@ -15,7 +15,7 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
     ordering = ['id']
 
     def get_queryset(self):
-        return CorrespondentModel.objects.filter(correspondentemails__email__account__user = self.request.user)
+        return CorrespondentModel.objects.filter(correspondentemails__email__account__user = self.request.user).distinct()
     
     def get_serializer_class(self):
         if self.action == 'list':

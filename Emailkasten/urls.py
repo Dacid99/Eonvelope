@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
-from .loginout import login_view, logout_view
+from django.contrib.auth import views as auth_views
 from .ViewSets.AccountViewSet import AccountViewSet
 from .ViewSets.EMailViewSet import EMailViewSet
 from .ViewSets.CorrespondentViewSet import CorrespondentViewSet
@@ -39,12 +39,13 @@ router.register(r'stats', DatabaseStatsViewSet, basename='stats')
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('login/', login_view, name = 'login'),
-    path('logout/', logout_view, name = 'logout'),
+    path('login/', auth_views.LoginView.as_view(), name = 'login'),
+    path('logout/', auth_views.LogoutView.as_view(), name = 'logout'),
     path("api/schema/", SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('register/', UserCreateView.as_view(), name = 'user-register'),
     path("health/", include('health_check.urls')),
     path('', include(router.urls)),
+    path("api-auth/", include('rest_framework.urls', namespace='rest_framework')), 
 ]

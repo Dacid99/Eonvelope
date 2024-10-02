@@ -15,6 +15,7 @@ dbstats can be apiview
 # to test
 
 # to fix
+permission inheritance is misleading
 
 # at next db reset
 start to use configurationmodel

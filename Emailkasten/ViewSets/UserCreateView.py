@@ -18,11 +18,11 @@ class UserViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST']:
             #use if here to allow blocking of the registration
             return [AllowAny()]
-        elif self.request.method in ['PUT','PATCH','DELETE']:
+        elif self.request.method in ['PUT','PATCH','DELETE','GET']:
             return [IsAdminOrSelf(), IsAuthenticated()]
-        elif self.request.method in ['GET']:
-            return [IsAuthenticated()]
+#        elif self.request.method in ['GET']:
+#            return [IsAuthenticated()]
         return super().get_permissions()
     
     def get_queryset(self):
-        return User.objects.filter(username=self.request.username)
+        return User.objects.filter(username=self.request.user.username)

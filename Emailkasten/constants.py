@@ -30,7 +30,7 @@ class StorageConfiguration:
 
 class LoggerConfiguration:
     LOGGER_NAME = "EMailkasten"
-    LOGFILE_PATH = "C:\\Users\\phili\\Desktop\\log.log"  #f"/var/log/{LOGGER_NAME}.log" 
+    LOGFILE_PATH = f"/var/log/{LOGGER_NAME}.log" 
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
     LOGFILE_MAXSIZE = 10 * 1024 * 1024 # 10 MB
     LOGFILE_BACKUP_NUMBER = 3 

@@ -4,8 +4,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.middleware.csrf import get_token
 from django.conf import settings
+from rest_framework.permissions import AllowAny
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -20,7 +22,7 @@ class LoginView(APIView):
             login(request, user)
             
             if remember:
-                request.session.set_expiry(settings.SESSION_EXPIRY_AGE)
+                request.session.set_expiry(settings.SESSION_COOKIE_AGE)
             else:
                 request.session.set_expiry(0)
             

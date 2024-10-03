@@ -27,6 +27,7 @@ from .ViewSets.MailboxViewSet import MailboxViewSet
 from .ViewSets.DatabaseStatsViewSet import DatabaseStatsViewSet
 from .ViewSets.UserCreateView import UserViewSet
 from .ViewSets.ConfigurationViewSet import ConfigurationViewSet
+from .ViewSets.LoginOut import LoginView, LogoutView
 
 router = DefaultRouter()
 router.register(r'accounts', AccountViewSet)
@@ -40,8 +41,8 @@ router.register(r'users', UserViewSet)
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(), name = 'login'),
-    path('logout/', auth_views.LogoutView.as_view(), name = 'logout'),
+    path('login/', LoginView.as_view(), name = 'login'),
+    path('logout/', LogoutView.as_view(), name = 'logout'),
     path("api/schema/", SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),

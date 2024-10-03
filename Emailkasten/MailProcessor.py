@@ -178,6 +178,12 @@ class MailProcessor:
         logger.debug("Successfully wrote emails to database")
 
 
+    ''' 
+    The following code is a modified version of code from xme's emlrender project https://github.com/xme/emlrender.
+    Original code by Xavier Mertens, licensed under the GNU General Public License version 3 (GPLv3).
+    Modifications by David & Philipp Aderbauer, licensed under the GNU Affero General Public License version 3 (AGPLv3).
+    This modified code is part of an AGPLv3 project. See the LICENSE file for details.
+    '''
 
     @staticmethod
     def processEml(data):

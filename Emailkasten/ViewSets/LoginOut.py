@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.middleware.csrf import get_token
 from django.conf import settings
+from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.permissions import AllowAny
 
 class LoginView(APIView):
@@ -46,3 +47,14 @@ class LogoutView(APIView):
         return Response({
             'detail': 'Logout successful'
         }, status=status.HTTP_200_OK)
+        
+        
+class CSRFCookieView(APIView):
+    permission_classes = [AllowAny]
+    
+    @ensure_csrf_cookie
+    def get(self, request):
+        csrf_token = get_token(request)
+        return Response({
+            'csrf_token': csrf_token
+        })

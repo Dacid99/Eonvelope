@@ -45,28 +45,32 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
     def download(self, request, pk=None):
         email = self.get_object()
         filePath = email.eml_filepath
-        fileName = os.path.basename(filePath)
-
-        if not os.path.exists(filePath):
-            raise Http404("EML file not found")
-        
-        response = FileResponse(open(filePath, 'rb'), as_attachment=True, filename=fileName)
-        return response
+        if filePath:
+            if os.path.exists(filePath):
+                fileName = os.path.basename(filePath)
+                response = FileResponse(open(filePath, 'rb'), as_attachment=True, filename=fileName)
+                return response
+            else:
+                raise Http404("EMl file not found")
+        else:
+            raise Http404("No EML file available")            
     
     
     @action(detail=True, methods=['get'], url_path='prerender')
     def prerender(self, request, pk=None):
         email = self.get_object()
         filePath = email.prerender_filepath
-        fileName = os.path.basename(filePath)
-
-        if not os.path.exists(filePath):
-            raise Http404("Prerender image file not found")
+        if filePath:
+            if os.path.exists(filePath):
+                fileName = os.path.basename(filePath)
+                response = FileResponse(open(filePath, 'rb'), as_attachment=True, filename=fileName)
+                return response
+            else:
+                raise Http404("Prerender image file not found")
+        else:
+            raise Http404("No prerender image file available")
         
-        response = FileResponse(open(filePath, 'rb'), as_attachment=True, filename=fileName)
-        return response
     
-
     @action(detail=True, methods=['post'], url_path='toggle_favorite')
     def toggle_favorite(self, request, pk=None):
         email = self.get_object()

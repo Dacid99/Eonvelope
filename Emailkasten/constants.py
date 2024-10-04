@@ -45,6 +45,7 @@ class EMailArchiverDaemonConfiguration:
 class StorageConfiguration:
     MAX_SUBDIRS_PER_DIR = 10000
     STORAGE_PATH = "/mnt/archive"
+    PRERENDER_IMAGETYPE = 'jpg'
 
 class LoggerConfiguration:
     LOGGER_NAME = "EMailkasten"
@@ -58,6 +59,9 @@ class LoggerConfiguration:
 class ParsingConfiguration:
     CHARSET_DEFAULT = 'utf-8'
     STRIP_TEXTS = True
+    
+class ProcessingCOnfiguration:
+    DUMP_DIRECTORY = '/tmp/images'
     
 class FetchingConfiguration:
     SAVE_TO_EML_DEFAULT = True

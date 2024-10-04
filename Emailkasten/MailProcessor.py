@@ -159,6 +159,7 @@ class MailProcessor:
             logger.debug("Saving mails to eml files ...")
             for parsedMail in parsedMailsList:
                 FileManager.writeMessageToEML(parsedMail)
+                MailProcessor.prerender(parsedMail)
             logger.debug("Successfully saved mails to eml files")
         else:
             logger.debug(f"Not saving to eml for mailbox {mailbox.name}")
@@ -186,7 +187,7 @@ class MailProcessor:
     '''
 
     @staticmethod
-    def processEml(data):
+    def prerender(parsedMail):
         
         def appendImages(images):
             bgColor=(255,255,255)
@@ -205,12 +206,13 @@ class MailProcessor:
         
         
         logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
+        dumpDir = constants.ProcessingCOnfiguration.DUMP_DIRECTORY
         # Create the dump directory if not existing yet
         if not os.path.isdir(dumpDir):
             os.makedirs(dumpDir)
             logger.debug("Created dump directory %s" % dumpDir)
 
-        msg = email.message_from_bytes(data)
+        msg = email.message_from_bytes(parsedMail[MailParser.dataString])
             
         textTypes  = [ 'text/plain', 'text/html' ]
         imageTypes = [ 'image/gif', 'image/jpeg', 'image/png' ]
@@ -281,12 +283,12 @@ class MailProcessor:
             imagePath = m.hexdigest() + '.png'
             try:
                 imgkit.from_string(footer, dumpDir + '/' + imagePath, options = imgkitOptions)
-                logger.debug('[INFO] Created footer %s' % imagePath)
+                logger.debug('Created footer %s' % imagePath)
                 imagesList.append(dumpDir + '/' + imagePath)
             except:
                 logger.error('Creation of footer failed')
 
-        resultImage = dumpDir + '/' + 'new.png'
+        resultImage = FileManager.getPrerenderImageStoragePath(parsedMail)
         if len(imagesList) > 0:
             images = list(map(Image.open, imagesList))
             combo = appendImages(images)
@@ -294,6 +296,3 @@ class MailProcessor:
             # Clean up temporary images
             for i in imagesList:
                 os.remove(i)
-            return(resultImage)
-        else:
-            return(False)

@@ -48,7 +48,20 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         fileName = os.path.basename(filePath)
 
         if not os.path.exists(filePath):
-            raise Http404("Attachment file not found")
+            raise Http404("EML file not found")
+        
+        response = FileResponse(open(filePath, 'rb'), as_attachment=True, filename=fileName)
+        return response
+    
+    
+    @action(detail=True, methods=['get'], url_path='prerender')
+    def prerender(self, request, pk=None):
+        email = self.get_object()
+        filePath = email.prerender_filepath
+        fileName = os.path.basename(filePath)
+
+        if not os.path.exists(filePath):
+            raise Http404("Prerender image file not found")
         
         response = FileResponse(open(filePath, 'rb'), as_attachment=True, filename=fileName)
         return response

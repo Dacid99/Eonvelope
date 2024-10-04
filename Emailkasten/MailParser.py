@@ -30,6 +30,7 @@ class MailParser:
     fullMessageString = "Full"
     sizeString = "Size"
     emlFilePathString = "EmlFilePath"
+    prerenderFilePathString = "PrerenderFilePath"
     attachmentsString = "Attachments"
     #Keys to the xml and the dict
     messageIDString = "Message-ID"
@@ -241,6 +242,7 @@ class MailParser:
         parsedEMail[MailParser.dateString] = parseDate()
         parsedEMail[MailParser.attachmentsString] = parseAttachments()
         parsedEMail[MailParser.emlFilePathString] = None
+        parsedEMail[MailParser.prerenderFilePathString] = None
 
 
 

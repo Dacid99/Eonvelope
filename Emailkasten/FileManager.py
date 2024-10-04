@@ -120,6 +120,13 @@ class FileManager:
         
             attachmentData[MailParser.attachment_filePathString] = filePath
 
+    @staticmethod
+    def getPrerenderImageStoragePath(parsedMail):
+        dirPath = FileManager.getStoragePath(parsedMail[MailParser.messageIDString])
+
+        filePath = os.path.join(dirPath, f"{parsedMail[MailParser.messageIDString]}.{constants.StorageConfiguration.PRERENDER_IMAGETYPE}")
+        parsedMail[MailParser.prerenderFilePathString] = filePath
+        return filePath
 
     @staticmethod
     def getStoragePath(filename):

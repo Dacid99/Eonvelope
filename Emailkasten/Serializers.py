@@ -170,7 +170,7 @@ class EMailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = EMailModel
-        exclude = ['eml_filepath']
+        exclude = ['eml_filepath', 'prerender_filepath']
         
     def get_correspondents(self, object):
         request = self.context.get('request')

@@ -69,6 +69,7 @@ class EMailDBFeeder:
                         'bodytext' : parsedEMail[MailParser.bodyTextString],
                         'datasize' :  parsedEMail[MailParser.sizeString],
                         'eml_filepath' : parsedEMail[MailParser.emlFilePathString],
+                        'prerender_filepath': parsedEMail[MailParser.prerenderFilePathString],
                         'account' : account
                     }
                 )

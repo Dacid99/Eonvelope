@@ -34,6 +34,13 @@ class EMailModel(models.Model):
         match=r".*\.eml$", 
         null=True
     )
+    prerender_filepath = models.FilePathField(
+        path=constants.StorageConfiguration.STORAGE_PATH,
+        max_length=255, 
+        recursive=True, 
+        match=rf".*{constants.StorageConfiguration.PRERENDER_BASENAME}\.{constants.StorageConfiguration.PRERENDER_IMAGETYPE}$", 
+        null=True
+    )
     is_favorite = models.BooleanField(default=False)
     correspondents = models.ManyToManyField('CorrespondentModel', through='EMailCorrespondentsModel', related_name='emails')
     account = models.ForeignKey(AccountModel, related_name="emails", on_delete=models.CASCADE)

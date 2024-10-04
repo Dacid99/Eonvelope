@@ -206,7 +206,7 @@ class MailProcessor:
         
         
         logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
-        dumpDir = constants.ProcessingCOnfiguration.DUMP_DIRECTORY
+        dumpDir = constants.ProcessingConfiguration.DUMP_DIRECTORY
         # Create the dump directory if not existing yet
         if not os.path.isdir(dumpDir):
             os.makedirs(dumpDir)
@@ -226,14 +226,19 @@ class MailProcessor:
         #
         for part in msg.walk():
             mimeType = part.get_content_type()
+            charset = part.get_content_charset()
+            if charset is None:
+                    charset = constants.ParsingConfiguration.CHARSET_DEFAULT
+            
             if part.is_multipart():
                 logger.debug('Multipart found, continue')
                 continue
 
             logger.debug('Found MIME part: %s' % mimeType)
             if mimeType in textTypes:
+                
                 try:
-                    payload = quopri.decodestring(part.get_payload(decode=True)).decode('utf-8')
+                    payload = quopri.decodestring(part.get_payload(decode=True)).decode(charset, errors='replace')
                 except:
                     payload = str(quopri.decodestring(part.get_payload(decode=True)))[2:-1]
                 
@@ -244,7 +249,7 @@ class MailProcessor:
                 
                 # Generate MD5 hash of the payload
                 m = hashlib.md5()
-                m.update(payload.encode('utf-8'))
+                m.update(payload.encode(charset))
                 imagePath = m.hexdigest() + '.png'
                 try:
                     imgkit.from_string(payload, dumpDir + '/' + imagePath, options = imgkitOptions)
@@ -257,7 +262,7 @@ class MailProcessor:
                 imgdata = base64.b64decode(payload)
                 # Generate MD5 hash of the payload
                 m = hashlib.md5()
-                m.update(payload.encode('utf-8'))
+                m.update(payload.encode(charset, errors='replace'))
                 imagePath = m.hexdigest() + '.' + mimeType.split('/')[1]
                 try:
                     with open(dumpDir + '/' + imagePath, 'wb') as f:
@@ -293,6 +298,7 @@ class MailProcessor:
             images = list(map(Image.open, imagesList))
             combo = appendImages(images)
             combo.save(resultImage)
+            logger.debug(f"Successfully saved prerender image at {resultImage}.")
             # Clean up temporary images
             for i in imagesList:
                 os.remove(i)

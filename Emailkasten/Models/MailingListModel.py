@@ -17,6 +17,7 @@
 '''
 
 from django.db import models
+from .CorrespondentModel import CorrespondentModel
 
 class MailingListModel(models.Model):
     list_id = models.CharField(max_length=255, unique=True)
@@ -26,6 +27,7 @@ class MailingListModel(models.Model):
     list_post = models.CharField(max_length=255, null=True)
     list_help = models.CharField(max_length=255, null=True)
     list_archive = models.CharField(max_length=255, null=True)
+    correspondent = models.ForeignKey(CorrespondentModel, related_name='mailinglist', on_delete=models.CASCADE)
     
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

@@ -16,7 +16,8 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
@@ -30,8 +31,16 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailingListFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['list_id', 'list_owner', 'list_subscribe', 'list_unsubscribe', 'list_post', 'list_help', 'list_archive', 'created', 'updated']
+    ordering_fields = ['list_id', 'list_owner', 'list_subscribe', 'list_unsubscribe', 'list_post', 'list_help', 'list_archive', 'correspondent__email_name', 'correspondent__email_address', 'created', 'updated']
     ordering = ['id']
 
-    # def get_queryset(self):
-    #     return MailingListModel.objects.filter(email__account__user = self.request.user)
+    def get_queryset(self):
+        return MailingListModel.objects.filter(correspondent__emails__account__user = self.request.user).distinct()
+    
+    def destroy(self, request, pk=None):
+        try:
+            instance = self.get_object()
+            instance.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except MailingListModel.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)

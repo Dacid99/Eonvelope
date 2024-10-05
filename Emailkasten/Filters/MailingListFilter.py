@@ -21,6 +21,30 @@ from ..Models.EMailModel import EMailModel
 
 class MailingListFilter(django_filters.FilterSet):
     
+    correspondent_name__icontains = django_filters.CharFilter(field_name="correspondent__email_name", lookup_expr='icontains')
+    correspondent_name__contains = django_filters.CharFilter(field_name="correspondent__email_name", lookup_expr='contains')
+    correspondent_name__exact = django_filters.CharFilter(field_name="correspondent__email_name", lookup_expr='exact')
+    correspondent_name__iexact = django_filters.CharFilter(field_name='correspondent__email_name', lookup_expr='iexact')
+    correspondent_name__startswith = django_filters.CharFilter(field_name='correspondent__email_name', lookup_expr='startswith')
+    correspondent_name__istartswith = django_filters.CharFilter(field_name='correspondent__email_name', lookup_expr='istartswith')
+    correspondent_name__endswith = django_filters.CharFilter(field_name='correspondent__email_name', lookup_expr='endswith')
+    correspondent_name__iendswith = django_filters.CharFilter(field_name='correspondent__email_name', lookup_expr='iendswith')
+    correspondent_name__regex = django_filters.CharFilter(field_name='correspondent__email_name', lookup_expr='regex')
+    correspondent_name__iregex = django_filters.CharFilter(field_name='correspondent__email_name', lookup_expr='iregex')
+    correspondent_name__in = django_filters.BaseInFilter(field_name='correspondent__email_name', lookup_expr='in')
+    
+    correspondent_address__icontains = django_filters.CharFilter(field_name="correspondent__email_address", lookup_expr='icontains')
+    correspondent_address__contains = django_filters.CharFilter(field_name="correspondent__email_address", lookup_expr='contains')
+    correspondent_address__exact = django_filters.CharFilter(field_name="correspondent__email_address", lookup_expr='exact')
+    correspondent_address__iexact = django_filters.CharFilter(field_name='correspondent__email_address', lookup_expr='iexact')
+    correspondent_address__startswith = django_filters.CharFilter(field_name='correspondent__email_address', lookup_expr='startswith')
+    correspondent_address__istartswith = django_filters.CharFilter(field_name='correspondent__email_address', lookup_expr='istartswith')
+    correspondent_address__endswith = django_filters.CharFilter(field_name='correspondent__email_address', lookup_expr='endswith')
+    correspondent_address__iendswith = django_filters.CharFilter(field_name='correspondent__email_address', lookup_expr='iendswith')
+    correspondent_address__regex = django_filters.CharFilter(field_name='correspondent__email_address', lookup_expr='regex')
+    correspondent_address__iregex = django_filters.CharFilter(field_name='correspondent__email_address', lookup_expr='iregex')
+    correspondent_address__in = django_filters.BaseInFilter(field_name='correspondent__email_address', lookup_expr='in')
+
     class Meta:
         model = EMailModel
         fields = {

@@ -49,7 +49,7 @@ class StorageConfiguration:
 
 class LoggerConfiguration:
     LOGGER_NAME = "EMailkasten"
-    LOGFILE_PATH = f"/var/log/log.log"     #"helperlog.log" #
+    LOGFILE_PATH = "helperlog.log" #
     LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
     LOGFILE_MAXSIZE = 10 * 1024 * 1024 # 10 MB
     LOGFILE_BACKUP_NUMBER = 3 

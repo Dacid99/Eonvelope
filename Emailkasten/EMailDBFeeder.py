@@ -63,6 +63,21 @@ class EMailDBFeeder:
         try:
             with django.db.transaction.atomic():
                 
+                fromCorrespondent = parsedEMail[MailParser.fromHeader]
+                if fromCorrespondent:
+                    fromCorrespondentEntry, created  = CorrespondentModel.objects.get_or_create(
+                        email_address = fromCorrespondent[1], 
+                        defaults = {'email_name': fromCorrespondent[0]}
+                    )
+                    if created:
+                        logger.debug(f"Entry for {str(fromCorrespondentEntry)} created")
+                    else:
+                        logger.debug(f"Entry for {str(fromCorrespondentEntry)} already exists")
+                        
+                else:
+                    logger.warning("No FROM Correspondent found in mail, not writing to DB!")
+                    
+                
                 if parsedEMail[MailParser.listIDHeader]:
                     mailinglistData = parsedEMail[MailParser.listIDHeader]
                     
@@ -75,7 +90,8 @@ class EMailDBFeeder:
                                 'list_unsubscribe': mailinglistData[MailParser.listUnsubscribeHeader],
                                 'list_post': mailinglistData[MailParser.listPostHeader],
                                 'list_help': mailinglistData[MailParser.listHelpHeader],
-                                'list_owner': mailinglistData[MailParser.listArchiveHeader]
+                                'list_owner': mailinglistData[MailParser.listArchiveHeader],
+                                'correspondent': fromCorrespondent
                             }
                         )
                     if created:
@@ -177,21 +193,10 @@ class EMailDBFeeder:
                 
                 logger.debug("Creating entry for FROM correspondents in db...")
                 
-                correspondent = parsedEMail[MailParser.fromHeader]
-                if correspondent:
-                    correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
-                        email_address = correspondent[1], 
-                        defaults = {'email_name': correspondent[0]}
-                    )
-                    if created:
-                        logger.debug(f"Entry for {str(correspondentEntry)} created")
-                    else:
-                        logger.debug(f"Entry for {str(correspondentEntry)} already exists")
-                
-
+                if fromCorrespondent:
                     emailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
                         email = emailEntry, 
-                        correspondent = correspondentEntry,
+                        correspondent = fromCorrespondentEntry,
                         mention = constants.MENTIONS.FROM
                     )
                     if created:

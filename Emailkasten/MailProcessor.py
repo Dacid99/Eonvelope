@@ -189,19 +189,19 @@ class MailProcessor:
     @staticmethod
     def prerender(parsedMail):
         
-        def appendImages(images):
-            bgColor=(255,255,255)
-            widths, heights = zip(*(i.size for i in images))
+        def combineImages(imagesList):
+            backgroundColor=(255,255,255)
+            widths, heights = zip(*(i.size for i in imagesList))
 
             new_width = max(widths)
             new_height = sum(heights)
-            new_im = Image.new('RGB', (new_width, new_height), color = bgColor)
+            new_im = Image.new('RGB', (new_width, new_height), color = backgroundColor)
             offset = 0
-            for im in images:
+            for images in imagesList:
                 # x = int((new_width - im.size[0])/2)
                 x = 0
-                new_im.paste(im, (x, offset))
-                offset += im.size[1]
+                new_im.paste(images, (x, offset))
+                offset += images.size[1]
             return new_im
         
         
@@ -210,9 +210,9 @@ class MailProcessor:
         # Create the dump directory if not existing yet
         if not os.path.isdir(dumpDir):
             os.makedirs(dumpDir)
-            logger.debug("Created dump directory %s" % dumpDir)
+            logger.debug(f"Created dump directory {dumpDir}")
 
-        msg = email.message_from_bytes(parsedMail[MailParser.dataString])
+        message = email.message_from_bytes(parsedMail[MailParser.dataString])
             
         textTypes  = [ 'text/plain', 'text/html' ]
         imageTypes = [ 'image/gif', 'image/jpeg', 'image/png' ]
@@ -226,7 +226,7 @@ class MailProcessor:
         #
         # Main loop - process the MIME parts
         #
-        for part in msg.walk():
+        for part in message.walk():
             if part.is_multipart():
                 logger.debug('Multipart found, continue')
                 continue
@@ -254,10 +254,10 @@ class MailProcessor:
                 imagePath = m.hexdigest() + '.png'
                 try:
                     imgkit.from_string(payload, dumpDir + '/' + imagePath, options = imgkitOptions)
-                    logger.debug('Decoded %s' % imagePath)
-                    imagesList.append(dumpDir + '/' + imagePath)
+                    logger.debug(f'Decoded {imagePath}')
+                    imagesList.append(os.path.join(dumpDir, imagePath))
                 except Exception as e:
-                    logger.warn(f'Decoding this MIME part of type {mimeType} returned error {e}')
+                    logger.warning(f'Decoding this MIME part of type {mimeType} returned error {e}')
                     
             elif mimeType in imageTypes:
                 payload = part.get_payload(decode=False)
@@ -270,15 +270,15 @@ class MailProcessor:
                     with open(dumpDir + '/' + imagePath, 'wb') as f:
                         f.write(imgdata)
                     logger.debug(f'Decoded {imagePath}')
-                    imagesList.append(dumpDir + '/' + imagePath)
+                    imagesList.append(os.path.join(dumpDir, imagePath))
                 except Exception as e:
-                    logger.warn(f'Decoding this MIME part of type {mimeType} returned error {e}')
+                    logger.warning(f'Decoding this MIME part of type {mimeType} returned error {e}')
                     
             else:
                 fileName = part.get_filename()
                 if not fileName:
                     fileName = "Unknown"
-                attachments.append("%s (%s)" % (fileName, mimeType))
+                attachments.append(f"{fileName} ({mimeType})")
                 logger.debug(f'Added attachment {fileName} of MIME type {mimeType}')
 
         if attachments:
@@ -290,23 +290,23 @@ class MailProcessor:
             imagePath = m.hexdigest() + '.png'
             try:
                 imgkit.from_string(footer, dumpDir + '/' + imagePath, options = imgkitOptions)
-                logger.debug('Created footer %s' % imagePath)
-                imagesList.append(dumpDir + '/' + imagePath)
+                logger.debug(f'Created footer {imagePath}')
+                imagesList.append(os.path.join(dumpDir, imagePath))
             except Exception as e:
-                logger.warn(f'Creation of footer failed with error {e}')
+                logger.warning(f'Creation of footer failed with error {e}')
         else:
             logger.debug("No attachments found for rendering.")
 
         if imagesList:
-            resultImage = FileManager.getPrerenderImageStoragePath(parsedMail)
-            logger.debug(f"Combining and saving prerender image at {resultImage} ...")
+            renderImageFilePath = FileManager.getPrerenderImageStoragePath(parsedMail)
+            logger.debug(f"Combining and saving prerender image at {renderImageFilePath} ...")
             images = list(map(Image.open, imagesList))
-            combo = appendImages(images)
-            combo.save(resultImage)
-            logger.debug(f"Successfully saved prerender image at {resultImage}.")
+            combinedImage = combineImages(images)
+            combinedImage.save(renderImageFilePath)
+            logger.debug(f"Successfully saved prerender image at {renderImageFilePath}.")
             # Clean up temporary images
-            for i in imagesList:
-                os.remove(i)
+            for image in imagesList:
+                os.remove(image)
         else:
             logger.debug("No images rendered.")
             

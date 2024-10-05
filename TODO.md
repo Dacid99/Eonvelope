@@ -18,7 +18,6 @@ parse images and links and conversation structures as well
 
 # to fix
 'Decoding this mime part returned error' for paypal mail 
-how to deal with emojis
 newline characters missing (1), doubled content (13)
 
 # at next db reset

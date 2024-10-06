@@ -3,13 +3,13 @@ import logging
 from Emailkasten.EMailDBFeeding import insertEmail, insertMailbox
 from Emailkasten.Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from Emailkasten.Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from Emailkasten.MailParser import MailParser
+from Emailkasten.MailParsing import ParsedMailKeys
 from Emailkasten.LoggerFactory import LoggerFactory
 from Emailkasten.FileManager import FileManager
 
 # on Windows
-MailParser.emlDirectoryPath = "C:\\Users\\phili\\Desktop\\emltest\\"
-MailParser.attachmentDirectoryPath = "C:\\Users\\phili\\Desktop\\attachmenttest\\"
+ParsedMailKeys.EML_FILE_PATH = "C:\\Users\\phili\\Desktop\\emltest\\"
+ParsedMailKeys.Attachment.FILE_PATH = "C:\\Users\\phili\\Desktop\\attachmenttest\\"
 LoggerFactory.logfilePath = "C:\\Users\\phili\\Desktop\\log.log\\"
 
 # #on Linux

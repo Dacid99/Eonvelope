@@ -26,7 +26,7 @@ from .Models.AttachmentModel import AttachmentModel
 from .Models.ImageModel import ImageModel
 from .Models.CorrespondentModel import CorrespondentModel
 from .Models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from .MailParser import MailParser
+from .MailParsing import ParsedMailKeys
 from . import constants
 
 logger = logging.getLogger(__name__)
@@ -65,11 +65,11 @@ def _insertEMailCorrespondent(emailEntry, correspondentEntry, mention):
         
 def _insertAttachment(attachmentData, emailEntry):
     attachmentEntry, created  = AttachmentModel.objects.get_or_create(
-        file_path = attachmentData[MailParser.attachment_filePathString],
+        file_path = attachmentData[ParsedMailKeys.Attachment.FILE_PATH],
         email = emailEntry,
         defaults = {
-            'file_name' : attachmentData[MailParser.attachment_fileNameString],
-            'datasize' : attachmentData[MailParser.attachment_sizeString]
+            'file_name' : attachmentData[ParsedMailKeys.Attachment.FILE_NAME],
+            'datasize' : attachmentData[ParsedMailKeys.Attachment.SIZE]
         }
     )
     if created:
@@ -81,11 +81,11 @@ def _insertAttachment(attachmentData, emailEntry):
 
 def _insertImage(imageData, emailEntry):
     imageEntry, created  = ImageModel.objects.get_or_create(
-        file_path = imageData[MailParser.images_filePathString],
+        file_path = imageData[ParsedMailKeys.Image.FILE_PATH],
         email = emailEntry,
         defaults = {
-            'file_name' : imageData[MailParser.images_fileNameString],
-            'datasize' : imageData[MailParser.images_sizeString]
+            'file_name' : imageData[ParsedMailKeys.Image.FILE_NAME],
+            'datasize' : imageData[ParsedMailKeys.Image.SIZE]
         }
     )
     if created:
@@ -97,18 +97,18 @@ def _insertImage(imageData, emailEntry):
         
 def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
     mailinglistEntry = None
-    if mailinglistData[MailParser.listIDHeader]:
+    if mailinglistData[ParsedMailKeys.MailingList.ID]:
                 
         logger.debug("Creating entry for mailinglist in DB...")
         mailinglistEntry, created = MailingListModel.objects.get_or_create(
-                list_id = mailinglistData[MailParser.listIDHeader],
+                list_id = mailinglistData[ParsedMailKeys.MailingList.ID],
                 defaults= {
-                    'list_owner': mailinglistData[MailParser.listOwnerHeader],
-                    'list_subscribe': mailinglistData[MailParser.listSubscribeHeader],
-                    'list_unsubscribe': mailinglistData[MailParser.listUnsubscribeHeader],
-                    'list_post': mailinglistData[MailParser.listPostHeader],
-                    'list_help': mailinglistData[MailParser.listHelpHeader],
-                    'list_owner': mailinglistData[MailParser.listArchiveHeader],
+                    'list_owner': mailinglistData[ParsedMailKeys.MailingList.OWNER],
+                    'list_subscribe': mailinglistData[ParsedMailKeys.MailingList.SUBSCRIBE],
+                    'list_unsubscribe': mailinglistData[ParsedMailKeys.MailingList.UNSUBSCRIBE],
+                    'list_post': mailinglistData[ParsedMailKeys.MailingList.POST],
+                    'list_help': mailinglistData[ParsedMailKeys.MailingList.HELP],
+                    'list_archive': mailinglistData[ParsedMailKeys.MailingList.ARCHIVE],
                     'correspondent': fromCorrespondentEntry
                 }
             )
@@ -153,7 +153,7 @@ def insertEMail(parsedEMail, account):
         with django.db.transaction.atomic():
             
             # the FROM correspondent insertion has to be split to be able to add the FROM correspondent to an eventual mailinglist
-            fromCorrespondent = parsedEMail[MailParser.fromHeader]
+            fromCorrespondent = parsedEMail[ParsedMailKeys.Header.FROM]
             if fromCorrespondent:
                 logger.debug("Adding FROM correspondent to DB...")
                 
@@ -164,22 +164,22 @@ def insertEMail(parsedEMail, account):
                 
                 
             mailinglistEntry = None  
-            if parsedEMail[MailParser.mailinglistString]:
-                mailinglistEntry = _insertMailinglist(parsedEMail[MailParser.mailinglistString])
+            if parsedEMail[ParsedMailKeys.MAILINGLIST]:
+                mailinglistEntry = _insertMailinglist(parsedEMail[ParsedMailKeys.MAILINGLIST])
             else:
                 logger.debug("No mailinglist info found in mail, not writing to DB")
                 
                 
                 
-            inReplyToMail = None
-            if parsedEMail[MailParser.inReplyToHeader]:
+            inReplyToMailEntry = None
+            if parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO]:
                 logger.debug("Querying inReplyTo mail ...")
                 try:
-                    inReplyToMail = EMailModel.objects.get(message_id = parsedEMail[MailParser.inReplyToHeader])
+                    inReplyToMailEntry = EMailModel.objects.get(message_id = parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO])
                     
                     logger.debug("Successfully retrieved inReplyTo mail.")
                 except EMailModel.DoesNotExist:
-                    logger.warning(f"Could not find inReplyTo mail {parsedEMail[MailParser.inReplyToHeader]}!")     
+                    logger.warning(f"Could not find inReplyTo mail {parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO]}!")     
             else:
                 logger.debug("No In-Reply-To found in mail, not writing to DB")
                 
@@ -188,38 +188,38 @@ def insertEMail(parsedEMail, account):
             logger.debug("Creating entry for email in DB...")
             
             emailEntry, created = EMailModel.objects.get_or_create(
-                message_id = parsedEMail[MailParser.messageIDHeader],
+                message_id = parsedEMail[ParsedMailKeys.Header.MESSAGE_ID],
                 defaults = {
-                    'datetime' : parsedEMail[MailParser.dateHeader],
-                    'email_subject' : parsedEMail[MailParser.subjectHeader],
-                    'bodytext' : parsedEMail[MailParser.bodyText],
-                    'inReplyTo' : inReplyToMail,
-                    'datasize' :  parsedEMail[MailParser.sizeString],
-                    'eml_filepath' : parsedEMail[MailParser.emlFilePathString],
-                    'prerender_filepath': parsedEMail[MailParser.prerenderFilePathString],
                     'account' : account,
                     'mailinglist': mailinglistEntry,
-                    'comments': parsedEMail[MailParser.commentsHeader],
-                    'keywords': parsedEMail[MailParser.keywordsHeader],
-                    'importance': parsedEMail[MailParser.importanceHeader],
-                    'priority': parsedEMail[MailParser.priorityHeader],
-                    'precedence': parsedEMail[MailParser.precedenceHeader],
-                    'received': parsedEMail[MailParser.receivedHeader],
-                    'sender': parsedEMail[MailParser.senderHeader] ,
-                    'return_receipt_to': parsedEMail[MailParser.returnReceiptTo] ,
-                    'disposition_notification_to': parsedEMail[MailParser.dispositionNotificationTo] ,
-                    'reply_to': parsedEMail[MailParser.replyToHeader] ,
-                    'envelope_to': parsedEMail[MailParser.envelopeToHeader] ,
-                    'delivered_to': parsedEMail[MailParser.deliveredToHeader] ,
-                    'return_path': parsedEMail[MailParser.returnPathHeader] ,
-                    'user_agent': parsedEMail[MailParser.userAgentHeader],
-                    'auto_submitted': parsedEMail[MailParser.autoSubmittedHeader],
-                    'content_type': parsedEMail[MailParser.contentTypeHeader],
-                    'content_language': parsedEMail[MailParser.contentLanguageHeader],
-                    'content_location': parsedEMail[MailParser.contentLocationHeader],
-                    'x_priority': parsedEMail[MailParser.xPriorityHeader],
-                    'x_originated_client': parsedEMail[MailParser.xOriginatingClientHeader],
-                    'x_spam': parsedEMail[MailParser.xSpamFlag]                       
+                    'inReplyTo' : inReplyToMailEntry,
+                    'bodytext' : parsedEMail[ParsedMailKeys.BODYTEXT],
+                    'datasize' :  parsedEMail[ParsedMailKeys.SIZE],
+                    'eml_filepath' : parsedEMail[ParsedMailKeys.EML_FILE_PATH],
+                    'prerender_filepath': parsedEMail[ParsedMailKeys.PRERENDER_FILE_PATH],
+                    'datetime' : parsedEMail[ParsedMailKeys.Header.DATE],
+                    'email_subject' : parsedEMail[ParsedMailKeys.Header.SUBJECT],
+                    'comments': parsedEMail[ParsedMailKeys.Header.COMMENTS],
+                    'keywords': parsedEMail[ParsedMailKeys.Header.KEYWORDS],
+                    'importance': parsedEMail[ParsedMailKeys.Header.IMPORTANCE],
+                    'priority': parsedEMail[ParsedMailKeys.Header.PRIORITY],
+                    'precedence': parsedEMail[ParsedMailKeys.Header.PRECEDENCE],
+                    'received': parsedEMail[ParsedMailKeys.Header.RECEIVED],
+                    'sender': parsedEMail[ParsedMailKeys.Header.SENDER],
+                    'return_receipt_to': parsedEMail[ParsedMailKeys.Header.RETURN_RECEIPT_TO],
+                    'disposition_notification_to': parsedEMail[ParsedMailKeys.Header.DISPOSITION_NOTIFICATION_TO],
+                    'reply_to': parsedEMail[ParsedMailKeys.Header.REPLY_TO],
+                    'envelope_to': parsedEMail[ParsedMailKeys.Header.ENVELOPE_TO],
+                    'delivered_to': parsedEMail[ParsedMailKeys.Header.DELIVERED_TO],
+                    'return_path': parsedEMail[ParsedMailKeys.Header.RETURN_PATH],
+                    'user_agent': parsedEMail[ParsedMailKeys.Header.USER_AGENT],
+                    'auto_submitted': parsedEMail[ParsedMailKeys.Header.AUTO_SUBMITTED],
+                    'content_type': parsedEMail[ParsedMailKeys.Header.CONTENT_TYPE],
+                    'content_language': parsedEMail[ParsedMailKeys.Header.CONTENT_LANGUAGE],
+                    'content_location': parsedEMail[ParsedMailKeys.Header.CONTENT_LOCATION],
+                    'x_priority': parsedEMail[ParsedMailKeys.Header.X_PRIORITY],
+                    'x_originated_client': parsedEMail[ParsedMailKeys.Header.X_ORIGINATING_CLIENT],
+                    'x_spam': parsedEMail[ParsedMailKeys.Header.X_SPAM_FLAG]
                 }
             )
             if created:
@@ -229,10 +229,10 @@ def insertEMail(parsedEMail, account):
             
             
             
-            if parsedEMail[MailParser.attachmentsString]: 
+            if parsedEMail[ParsedMailKeys.ATTACHMENTS]: 
                 logger.debug("Creating entries for attachments in DB...")
                 
-                for attachmentData in parsedEMail[MailParser.attachmentsString]:
+                for attachmentData in parsedEMail[ParsedMailKeys.ATTACHMENTS]:
                     _insertAttachment(attachmentData, emailEntry)
                 
                 logger.debug("Successfully added images to DB.")
@@ -241,10 +241,10 @@ def insertEMail(parsedEMail, account):
             
             
             
-            if parsedEMail[MailParser.imagesString]: 
+            if parsedEMail[ParsedMailKeys.IMAGES]: 
                 logger.debug("Creating entries for images in DB...")
                 
-                for imageData in parsedEMail[MailParser.imagesString]:
+                for imageData in parsedEMail[ParsedMailKeys.IMAGES]:
                     _insertImage(imageData, emailEntry)
                     
                 logger.debug("Successfully added images to DB.")
@@ -263,10 +263,10 @@ def insertEMail(parsedEMail, account):
 
 
 
-            if parsedEMail[MailParser.toHeader]:
+            if parsedEMail[ParsedMailKeys.Header.TO]:
                 logger.debug("Creating entry for TO correspondents in DB...")
                 
-                for toCorrespondentData in parsedEMail[MailParser.toHeader]:
+                for toCorrespondentData in parsedEMail[ParsedMailKeys.Header.TO]:
                     toCorrespondentEntry = _insertCorrespondent(toCorrespondentData)
                     _insertEMailCorrespondent(emailEntry, toCorrespondentEntry, constants.MENTIONS.TO)
                     
@@ -276,10 +276,10 @@ def insertEMail(parsedEMail, account):
 
 
 
-            if parsedEMail[MailParser.ccHeader]:
+            if parsedEMail[ParsedMailKeys.Header.CC]:
                 logger.debug("Creating entries for CC correspondents in DB...")
                 
-                for ccCorrespondentData in parsedEMail[MailParser.ccHeader]:
+                for ccCorrespondentData in parsedEMail[ParsedMailKeys.Header.CC]:
                     ccCorrespondentEntry = _insertCorrespondent(ccCorrespondentData)
                     _insertEMailCorrespondent(emailEntry, ccCorrespondentEntry, constants.MENTIONS.CC)
                     
@@ -289,10 +289,10 @@ def insertEMail(parsedEMail, account):
 
 
 
-            if parsedEMail[MailParser.bccHeader]:
+            if parsedEMail[ParsedMailKeys.Header.BCC]:
                 logger.debug("Creating entries for CC correspondents in DB...")
                 
-                for bccCorrespondentData in parsedEMail[MailParser.bccHeader]:
+                for bccCorrespondentData in parsedEMail[ParsedMailKeys.Header.BCC]:
                     bccCorrespondentEntry = _insertCorrespondent(bccCorrespondentData)
                     _insertEMailCorrespondent(emailEntry, bccCorrespondentEntry, constants.MENTIONS.BCC)
                     

@@ -1,5 +1,4 @@
 implement basic exchange
-mailparser should be factories or something more maintainable than right now, more pythonic
 attachmentdatasize kinda small
 different choices for fetching depending on protocol
 custom fetching filters
@@ -10,11 +9,15 @@ custom additional healthchecks
 return serialized db data after scan and fetch_all
 dbstats can be apiview
 parsing walks multiple times, could be more efficient
-possibly move extra emailfields from emailmodel to correspondents
 maybe unique together account and id 
 reconsider decoding of mailbytes using BytesParser
 
+possibly move extra emailfields from emailmodel to correspondents
+received should be text field
+popfetcher scan mailboxes prop
+
 # to test
+restructured code
 
 # to fix
 'Decoding this mime part returned error' for paypal mail

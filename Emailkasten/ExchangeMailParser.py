@@ -20,7 +20,7 @@ import exchangelib
 import email
 import email.header
 
-from .MailParser import MailParser
+from .MailParsing import MailParser
 
 class ExchangeMailParser:
 

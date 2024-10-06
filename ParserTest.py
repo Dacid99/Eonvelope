@@ -1,4 +1,3 @@
-from Emailkasten.MailParser import MailParser
 import email
 import email.header
 import email_validator

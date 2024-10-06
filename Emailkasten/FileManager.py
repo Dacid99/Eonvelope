@@ -21,7 +21,7 @@ import email.generator
 import os.path
 from . import constants
 from .LoggerFactory import LoggerFactory
-from .MailParser import MailParser
+from .MailParsing import ParsedMailKeys
 
 class FileManager:
     subdirNumber = 0
@@ -31,8 +31,8 @@ class FileManager:
     def writeMessageToEML(parsedEMail):
         logger = LoggerFactory.getChildLogger(FileManager.__class__.__name__)
         logger.debug("Storing mail in .eml file ...")
-        emlDirPath = FileManager.getStoragePath(parsedEMail[MailParser.messageIDHeader])
-        emlFilePath = os.path.join(emlDirPath , parsedEMail[MailParser.messageIDHeader] + ".eml")
+        emlDirPath = FileManager.getStoragePath(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
+        emlFilePath = os.path.join(emlDirPath , parsedEMail[ParsedMailKeys.Header.MESSAGE_ID] + ".eml")
         try:
             if os.path.exists(emlFilePath):
                 if os.path.getsize(emlFilePath) > 0:
@@ -42,7 +42,7 @@ class FileManager:
                     logger.debug(f"Writing to empty .eml file {emlFilePath} ...")
                     with open(emlFilePath, "wb") as emlFile:
                         emlGenerator = email.generator.BytesGenerator(emlFile)
-                        emlGenerator.flatten(parsedEMail[MailParser.fullMessageString])
+                        emlGenerator.flatten(parsedEMail[ParsedMailKeys.FULL_MESSAGE])
                     logger.debug("Success")
             else:
                 if not os.path.exists(emlDirPath):
@@ -53,7 +53,7 @@ class FileManager:
                 logger.debug(f"Creating and writing new .eml file {emlFilePath}...")
                 with open(emlFilePath, "wb") as emlFile:
                     emlGenerator = email.generator.BytesGenerator(emlFile)
-                    emlGenerator.flatten(parsedEMail[MailParser.fullMessageString])
+                    emlGenerator.flatten(parsedEMail[ParsedMailKeys.FULL_MESSAGE])
                 
                 logger.debug("Success")
 
@@ -71,16 +71,16 @@ class FileManager:
                 logger.debug("File was not created")
             emlFilePath = None
 
-        parsedEMail[MailParser.emlFilePathString] = emlFilePath
+        parsedEMail[ParsedMailKeys.EML_FILE_PATH] = emlFilePath
 
 
     @staticmethod
     def writeAttachments(parsedEMail):
         logger = LoggerFactory.getChildLogger(FileManager.__class__.__name__)
 
-        dirPath = FileManager.getStoragePath(parsedEMail[MailParser.messageIDHeader])
-        for attachmentData in parsedEMail[MailParser.attachmentsString]:
-            fileName = attachmentData[MailParser.attachment_fileNameString]
+        dirPath = FileManager.getStoragePath(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
+        for attachmentData in parsedEMail[ParsedMailKeys.ATTACHMENTS]:
+            fileName = attachmentData[ParsedMailKeys.Attachment.FILE_NAME]
             filePath = os.path.join(dirPath, fileName)
             logger.debug(f"Storing attachment {fileName} in {filePath} ...")
             try:
@@ -91,7 +91,7 @@ class FileManager:
                     else:
                         logger.debug(f"Writing to empty file {filePath} ...")
                         with open(filePath, "wb") as file:
-                            file.write(attachmentData[MailParser.attachment_dataString].get_payload(decode=True))
+                            file.write(attachmentData[ParsedMailKeys.Attachment.DATA].get_payload(decode=True))
                         logger.debug("Success")
                 else:
                     if not os.path.exists(dirPath):
@@ -101,7 +101,7 @@ class FileManager:
                         logger.debug("Success")
                     logger.debug(f"Creating new file {filePath} ...")
                     with open(filePath, "wb") as file:
-                        file.write(attachmentData[MailParser.attachment_dataString].get_payload(decode=True))
+                        file.write(attachmentData[ParsedMailKeys.Attachment.DATA].get_payload(decode=True))
                     logger.debug("Success")
 
             except OSError as e:
@@ -118,15 +118,15 @@ class FileManager:
                     logger.debug("File was not created")
                 filePath = None
         
-            attachmentData[MailParser.attachment_filePathString] = filePath
+            attachmentData[ParsedMailKeys.Attachment.FILE_PATH] = filePath
             
     @staticmethod
     def writeImages(parsedEMail):
         logger = LoggerFactory.getChildLogger(FileManager.__class__.__name__)
 
-        dirPath = FileManager.getStoragePath(parsedEMail[MailParser.messageIDHeader])
-        for imageData in parsedEMail[MailParser.imagesString]:
-            fileName = imageData[MailParser.images_fileNameString]
+        dirPath = FileManager.getStoragePath(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
+        for imageData in parsedEMail[ParsedMailKeys.IMAGES]:
+            fileName = imageData[ParsedMailKeys.Image.FILE_NAME]
             filePath = os.path.join(dirPath, fileName)
             logger.debug(f"Storing image {fileName} in {filePath} ...")
             try:
@@ -137,7 +137,7 @@ class FileManager:
                     else:
                         logger.debug(f"Writing to empty file {filePath} ...")
                         with open(filePath, "wb") as file:
-                            file.write(imageData[MailParser.images_dataString].get_payload(decode=True))
+                            file.write(imageData[ParsedMailKeys.Image.DATA].get_payload(decode=True))
                         logger.debug("Success")
                 else:
                     if not os.path.exists(dirPath):
@@ -147,7 +147,7 @@ class FileManager:
                         logger.debug("Success")
                     logger.debug(f"Creating new file {filePath} ...")
                     with open(filePath, "wb") as file:
-                        file.write(imageData[MailParser.images_dataString].get_payload(decode=True))
+                        file.write(imageData[ParsedMailKeys.Image.DATA].get_payload(decode=True))
                     logger.debug("Success")
 
             except OSError as e:
@@ -164,15 +164,15 @@ class FileManager:
                     logger.debug("File was not created")
                 filePath = None
         
-            imageData[MailParser.images_filePathString] = filePath
+            imageData[ParsedMailKeys.Image.FILE_PATH] = filePath
             
 
     @staticmethod
     def getPrerenderImageStoragePath(parsedMail):
-        dirPath = FileManager.getStoragePath(parsedMail[MailParser.messageIDHeader])
+        dirPath = FileManager.getStoragePath(parsedMail[ParsedMailKeys.Header.MESSAGE_ID])
 
-        filePath = os.path.join(dirPath, f"{parsedMail[MailParser.messageIDHeader]}.{constants.StorageConfiguration.PRERENDER_IMAGETYPE}")
-        parsedMail[MailParser.prerenderFilePathString] = filePath
+        filePath = os.path.join(dirPath, f"{parsedMail[ParsedMailKeys.Header.MESSAGE_ID]}.{constants.StorageConfiguration.PRERENDER_IMAGETYPE}")
+        parsedMail[ParsedMailKeys.PRERENDER_FILE_PATH] = filePath
         return filePath
 
     @staticmethod

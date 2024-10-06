@@ -20,7 +20,7 @@ import imaplib
 
 from .. import constants
 from ..LoggerFactory import LoggerFactory
-from ..MailParser import MailParser
+from ..MailParsing import parseMailbox
 
 class IMAPFetcher: 
     
@@ -129,7 +129,7 @@ class IMAPFetcher:
 
             mailboxesList = []
             for mailbox in mailboxes:
-                mailboxesList.append(MailParser.parseMailbox(mailbox))
+                mailboxesList.append(parseMailbox(mailbox))
 
             self.logger.debug(f"Successfully fetched mailboxes in {str(self.account)}.")
             return mailboxesList

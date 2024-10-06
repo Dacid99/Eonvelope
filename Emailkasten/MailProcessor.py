@@ -23,7 +23,7 @@ from .Fetchers.POP3Fetcher import POP3Fetcher
 from .Fetchers.ExchangeFetcher import ExchangeFetcher
 from .FileManager import FileManager
 from .LoggerFactory import LoggerFactory
-from .MailParser import MailParser
+from .MailParsing import parseMail, ParsedMailKeys
 from .EMailDBFeeding import insertEMail, insertMailbox
 import datetime
 import email
@@ -151,7 +151,7 @@ class MailProcessor:
         logger.debug("Parsing emaildata ...")
         parsedMailsList = []
         for mailData in mailDataList:
-            parsedMail = MailParser.parseMail(mailData)
+            parsedMail = parseMail(mailData)
             parsedMailsList.append(parsedMail)
         logger.debug("Successfully parsed emaildata")
 
@@ -223,7 +223,7 @@ class MailProcessor:
             os.makedirs(dumpDir)
             logger.debug(f"Created dump directory {dumpDir}")
 
-        message = email.message_from_bytes(parsedMail[MailParser.dataString])
+        message = email.message_from_bytes(parsedMail[ParsedMailKeys.DATA])
             
         textTypes  = [ 'text/plain', 'text/html' ]
         imageTypes = [ 'image/gif', 'image/jpeg', 'image/png' ]

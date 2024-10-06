@@ -330,13 +330,13 @@ class MailParser:
         
         def parseMailinglist():
             mailinglist = {}
-            mailinglist[MailParser.listIDHeader] = parseAdditionalHeader[MailParser.listIDHeader]
-            mailinglist[MailParser.listOwnerHeader] = parseAdditionalHeader[MailParser.listOwnerHeader]
-            mailinglist[MailParser.listSubscribeHeader] = parseAdditionalMailAddressHeader[MailParser.listSubscribeHeader]
-            mailinglist[MailParser.listUnsubscribeHeader] = parseAdditionalMailAddressHeader[MailParser.listUnsubscribeHeader]
-            mailinglist[MailParser.listPostHeader] = parseAdditionalHeader[MailParser.listPostHeader]
-            mailinglist[MailParser.listHelpHeader] = parseAdditionalHeader[MailParser.listHelpHeader]
-            mailinglist[MailParser.listArchiveHeader] = parseAdditionalHeader[MailParser.listArchiveHeader]
+            mailinglist[MailParser.listIDHeader] = parseAdditionalHeader(MailParser.listIDHeader)
+            mailinglist[MailParser.listOwnerHeader] = parseAdditionalHeader(MailParser.listOwnerHeader)
+            mailinglist[MailParser.listSubscribeHeader] = parseAdditionalMailAddressHeader(MailParser.listSubscribeHeader)
+            mailinglist[MailParser.listUnsubscribeHeader] = parseAdditionalMailAddressHeader(MailParser.listUnsubscribeHeader)
+            mailinglist[MailParser.listPostHeader] = parseAdditionalHeader(MailParser.listPostHeader)
+            mailinglist[MailParser.listHelpHeader] = parseAdditionalHeader(MailParser.listHelpHeader)
+            mailinglist[MailParser.listArchiveHeader] = parseAdditionalHeader(MailParser.listArchiveHeader)
             return mailinglist
 
 
@@ -361,30 +361,30 @@ class MailParser:
         parsedEMail[MailParser.emlFilePathString] = None
         parsedEMail[MailParser.prerenderFilePathString] = None
         
-        parsedEMail[MailParser.returnPathHeader] = parseAdditionalMailAddressHeader[MailParser.returnPathHeader]
-        parsedEMail[MailParser.commentsHeader] = parseAdditionalHeader[MailParser.commentsHeader]
-        parsedEMail[MailParser.languageHeader] = parseAdditionalHeader[MailParser.languageHeader]
-        parsedEMail[MailParser.contentLanguageHeader] = parseAdditionalHeader[MailParser.contentLanguageHeader]
-        parsedEMail[MailParser.contentTypeHeader] = parseAdditionalHeader[MailParser.contentTypeHeader]
-        parsedEMail[MailParser.envelopeToHeader] = parseAdditionalHeader[MailParser.envelopeToHeader]
-        parsedEMail[MailParser.deliveredToHeader] = parseAdditionalMailAddressHeader[MailParser.deliveredToHeader]
-        parsedEMail[MailParser.senderHeader] = parseAdditionalMailAddressHeader[MailParser.senderHeader]
+        parsedEMail[MailParser.returnPathHeader] = parseAdditionalMailAddressHeader(MailParser.returnPathHeader)
+        parsedEMail[MailParser.commentsHeader] = parseAdditionalHeader(MailParser.commentsHeader)
+        parsedEMail[MailParser.languageHeader] = parseAdditionalHeader(MailParser.languageHeader)
+        parsedEMail[MailParser.contentLanguageHeader] = parseAdditionalHeader(MailParser.contentLanguageHeader)
+        parsedEMail[MailParser.contentTypeHeader] = parseAdditionalHeader(MailParser.contentTypeHeader)
+        parsedEMail[MailParser.envelopeToHeader] = parseAdditionalHeader(MailParser.envelopeToHeader)
+        parsedEMail[MailParser.deliveredToHeader] = parseAdditionalMailAddressHeader(MailParser.deliveredToHeader)
+        parsedEMail[MailParser.senderHeader] = parseAdditionalMailAddressHeader(MailParser.senderHeader)
         parsedEMail[MailParser.replyToHeader] = parseAdditionalMailAddressHeader(MailParser.replyToHeader)
-        parsedEMail[MailParser.returnReceiptTo] = parseAdditionalMailAddressHeader[MailParser.returnReceiptTo]
-        parsedEMail[MailParser.dispositionNotificationTo] = parseAdditionalMailAddressHeader[MailParser.dispositionNotificationTo]
+        parsedEMail[MailParser.returnReceiptTo] = parseAdditionalMailAddressHeader(MailParser.returnReceiptTo)
+        parsedEMail[MailParser.dispositionNotificationTo] = parseAdditionalMailAddressHeader(MailParser.dispositionNotificationTo)
         
-        parsedEMail[MailParser.keywordsHeader] = parseAdditionalHeader[MailParser.keywordsHeader]
-        parsedEMail[MailParser.receivedHeader] = parseAdditionalHeader[MailParser.receivedHeader]
-        parsedEMail[MailParser.importanceHeader] = parseAdditionalHeader[MailParser.importanceHeader]
-        parsedEMail[MailParser.priorityHeader] = parseAdditionalHeader[MailParser.priorityHeader]
-        parsedEMail[MailParser.precedenceHeader] = parseAdditionalHeader[MailParser.precedenceHeader]
-        parsedEMail[MailParser.contentLocationHeader] = parseAdditionalHeader[MailParser.contentLocationHeader]
-        parsedEMail[MailParser.archivedAtHeader] = parseAdditionalHeader[MailParser.archivedAtHeader]
-        parsedEMail[MailParser.userAgentHeader] = parseAdditionalHeader[MailParser.userAgentHeader]
-        parsedEMail[MailParser.xPriorityHeader] = parseAdditionalHeader[MailParser.xPriorityHeader]
-        parsedEMail[MailParser.xOriginatingClientHeader] = parseAdditionalHeader[MailParser.xOriginatingClientHeader]
-        parsedEMail[MailParser.xSpamFlag] = parseAdditionalHeader[MailParser.xSpamFlag]
-        parsedEMail[MailParser.autoSubmittedHeader] = parseAdditionalHeader[MailParser.autoSubmittedHeader]
+        parsedEMail[MailParser.keywordsHeader] = parseAdditionalHeader(MailParser.keywordsHeader)
+        parsedEMail[MailParser.receivedHeader] = parseAdditionalHeader(MailParser.receivedHeader)
+        parsedEMail[MailParser.importanceHeader] = parseAdditionalHeader(MailParser.importanceHeader)
+        parsedEMail[MailParser.priorityHeader] = parseAdditionalHeader(MailParser.priorityHeader)
+        parsedEMail[MailParser.precedenceHeader] = parseAdditionalHeader(MailParser.precedenceHeader)
+        parsedEMail[MailParser.contentLocationHeader] = parseAdditionalHeader(MailParser.contentLocationHeader)
+        parsedEMail[MailParser.archivedAtHeader] = parseAdditionalHeader(MailParser.archivedAtHeader)
+        parsedEMail[MailParser.userAgentHeader] = parseAdditionalHeader(MailParser.userAgentHeader)
+        parsedEMail[MailParser.xPriorityHeader] = parseAdditionalHeader(MailParser.xPriorityHeader)
+        parsedEMail[MailParser.xOriginatingClientHeader] = parseAdditionalHeader(MailParser.xOriginatingClientHeader)
+        parsedEMail[MailParser.xSpamFlag] = parseAdditionalHeader(MailParser.xSpamFlag)
+        parsedEMail[MailParser.autoSubmittedHeader] = parseAdditionalHeader(MailParser.autoSubmittedHeader)
         
         parsedEMail[MailParser.mailinglistString] = parseMailinglist()
 

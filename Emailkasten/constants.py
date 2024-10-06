@@ -48,12 +48,13 @@ class StorageConfiguration:
     PRERENDER_IMAGETYPE = 'jpg'
 
 class LoggerConfiguration:
-    LOGGER_NAME = "EMailkasten"
-    LOGFILE_PATH = "helperlog.log" #
-    LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+    APP_LOGFILE_PATH = "/var/log/Emaikasten.log" # 
+    DJANGO_LOGFILE_PATH = "/var/log/django.log"  # 
+    APP_LOG_LEVEL = os.environ.get('APP_LOG_LEVEL', 'INFO')
+    DJANGO_LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
+    ROOT_LOG_LEVEL = os.environ.get('ROOT_LOG_LEVEL', 'INFO')
     LOGFILE_MAXSIZE = 10 * 1024 * 1024 # 10 MB
     LOGFILE_BACKUP_NUMBER = 3 
-    CONSOLE_LOGGING = False
     LOG_FORMAT = '{name} {levelname} {asctime} {module} {message}'
 
 class ParsingConfiguration:

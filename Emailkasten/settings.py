@@ -178,10 +178,18 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'default',
         },
-        'file': {
+        'django_logfile': {
             'level': 'DEBUG',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': constants.LoggerConfiguration.LOGFILE_PATH,
+            'filename': constants.LoggerConfiguration.DJANGO_LOGFILE_PATH,
+            'maxBytes': constants.LoggerConfiguration.LOGFILE_MAXSIZE,
+            'backupCount': constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
+            'formatter': 'default',
+        },
+        'app_logfile': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': constants.LoggerConfiguration.APP_LOGFILE_PATH,
             'maxBytes': constants.LoggerConfiguration.LOGFILE_MAXSIZE,
             'backupCount': constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
             'formatter': 'default',
@@ -189,17 +197,17 @@ LOGGING = {
     },
     'root': {
         'handlers': ['console'],
-        'level': 'INFO',
+        'level': constants.LoggerConfiguration.ROOT_LOG_LEVEL,
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['django_logfile'],
+            'level': constants.LoggerConfiguration.DJANGO_LOG_LEVEL,
             'propagate': True,
         },
-        constants.LoggerConfiguration.LOGGER_NAME: {
-            'handlers': ['file'],
-            'level': constants.LoggerConfiguration.LOG_LEVEL,
+        "Emailkasten": {
+            'handlers': ['app_logfile'],
+            'level': constants.LoggerConfiguration.APP_LOG_LEVEL,
             'propagate': True,
         },
     },

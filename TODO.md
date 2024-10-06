@@ -7,7 +7,6 @@ storageModel and fix for getStoragePath
 distinguish configs by env, db and user-immutables, migrate db settings to initial settings
 autostart daemons on restart
 custom additional healthchecks
-restructure logging
 return serialized db data after scan and fetch_all
 dbstats can be apiview
 parsing walks multiple times, could be more efficient

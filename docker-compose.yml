@@ -30,7 +30,8 @@ services:
       - DB_NAME=email_archive_django
       - DB_USER=user
       - DB_PASSWORD=passwd
-      - LOG_LEVEL=DEBUG
+      - APP_LOG_LEVEL=DEBUG
+      - ROOT_LOG_LEVEL=DEBUG
     restart: unless-stopped
     depends_on:
       - db

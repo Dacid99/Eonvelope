@@ -24,7 +24,7 @@ from .Fetchers.ExchangeFetcher import ExchangeFetcher
 from .FileManager import FileManager
 from .LoggerFactory import LoggerFactory
 from .MailParser import MailParser
-from .EMailDBFeeder import EMailDBFeeder
+from .EMailDBFeeding import insertEMail, insertMailbox
 import datetime
 import email
 import email.header
@@ -105,7 +105,7 @@ class MailProcessor:
             mailboxes = []
             
         for mailbox in mailboxes:
-            EMailDBFeeder.insertMailbox(mailbox, mailAccount)
+            insertMailbox(mailbox, mailAccount)
 
         logger.debug("Successfully searched mailboxes")
         return mailboxes
@@ -186,7 +186,7 @@ class MailProcessor:
 
         logger.debug("Writing emails to database ...")
         for parsedMail in parsedMailsList:
-            EMailDBFeeder.insertEMail(parsedMail, mailAccount)
+            insertEMail(parsedMail, mailAccount)
         logger.debug("Successfully wrote emails to database")
 
 

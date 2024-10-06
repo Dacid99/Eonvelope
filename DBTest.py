@@ -1,12 +1,11 @@
 import logging
 
-from .EMailDBFeeder import EMailDBFeeder
-from .Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
-from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from .MailParser import MailParser
-from .DBManager import DBManager
-from .LoggerFactory import LoggerFactory
-from .FileManager import FileManager
+from Emailkasten.EMailDBFeeding import insertEmail, insertMailbox
+from Emailkasten.Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+from Emailkasten.Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
+from Emailkasten.MailParser import MailParser
+from Emailkasten.LoggerFactory import LoggerFactory
+from Emailkasten.FileManager import FileManager
 
 # on Windows
 MailParser.emlDirectoryPath = "C:\\Users\\phili\\Desktop\\emltest\\"

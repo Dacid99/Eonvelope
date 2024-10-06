@@ -26,7 +26,7 @@ from ..Models.AccountModel import AccountModel
 from ..Filters.AccountFilter import AccountFilter
 from ..Serializers.AccountSerializers.AccountSerializer import AccountSerializer
 from ..MailProcessor import MailProcessor
-from ..EMailDBFeeder import EMailDBFeeder
+
 
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = AccountModel.objects.all()

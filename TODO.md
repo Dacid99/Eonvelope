@@ -18,6 +18,7 @@ middleware for reconnecting
 
 # to fix
 'Decoding this mime part returned error' for paypal
+reconnectmiddleware
 
 # at next db reset
 start to use configurationmodel

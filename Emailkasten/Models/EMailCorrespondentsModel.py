@@ -17,15 +17,15 @@
 '''
 
 from django.db import models
-from .. import constants
+from ..constants import ParsedMailKeys
 from .EMailModel import EMailModel
 from .CorrespondentModel import CorrespondentModel
 
 class EMailCorrespondentsModel(models.Model):
     email = models.ForeignKey(EMailModel, related_name="emailcorrespondents", on_delete=models.CASCADE)
     correspondent = models.ForeignKey(CorrespondentModel, related_name="correspondentemails", on_delete=models.CASCADE)
-    MENTIONTYPES = {constants.MENTIONS.TO : "To", constants.MENTIONS.FROM : "From", constants.MENTIONS.CC : "Cc", constants.MENTIONS.BCC : "Bcc"}
-    mention = models.CharField(choices=MENTIONTYPES, max_length=10)
+    MENTIONTYPES = dict(ParsedMailKeys.Correspondent())
+    mention = models.CharField(choices=MENTIONTYPES, max_length=30)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 

@@ -32,12 +32,6 @@ class MailFetchingProtocols:
     POP3_SSL = "POP3_SSL"
     EXCHANGE = "EXCHANGE"
 
-class MENTIONS:
-    FROM = "FROM"
-    TO = "TO"
-    CC = "CC"
-    BCC = "BCC"
-
 class EMailArchiverDaemonConfiguration:
     CYCLE_PERIOD_DEFAULT = 60
     RESTART_TIME = 10
@@ -73,3 +67,89 @@ class DatabaseConfiguration:
     NAME = os.environ.get("DB_NAME", "emailkasten")
     USER = os.environ.get("DB_USER", "user")
     PASSWORD = os.environ.get("DB_PASSWORD", "passwd")
+
+
+
+class ParsedMailKeys:
+    #Keys to the dict
+    DATA = "Raw"
+    FULL_MESSAGE = "Full"
+    SIZE = "Size"
+    EML_FILE_PATH = "EmlFilePath"
+    PRERENDER_FILE_PATH = "PrerenderFilePath"
+    ATTACHMENTS = "Attachments"
+    IMAGES = "Images"
+    MAILINGLIST = "Mailinglist"
+    BODYTEXT = "Bodytext"
+    
+    class Header:
+        MESSAGE_ID = "Message-ID"
+        IN_REPLY_TO = "In-Reply-To"
+        
+        DATE = "Date"
+        SUBJECT = "Subject"
+        COMMENTS = "Comments"
+        KEYWORDS = "Keywords"
+    
+        RECEIVED = "Received"
+        IMPORTANCE = "Importance"
+        PRIORITY = "Priority"
+        PRECEDENCE = "Precedence"
+
+        LANGUAGE = "Language"
+        CONTENT_LANGUAGE = "Content-Language"
+        CONTENT_LOCATION = "Content-Location"
+        CONTENT_TYPE = "Content-Type"
+
+        USER_AGENT = "User-Agent"
+        AUTO_SUBMITTED = "Auto-Submitted"
+        ARCHIVED_AT = "Archived-At"
+
+        X_PRIORITY = "X-Priority"
+        X_ORIGINATING_CLIENT = "X-Originating-Client"
+        X_SPAM_FLAG = "X-Spam-Flag"
+        
+        
+    class Correspondent:
+        FROM = "From"
+        TO = "To"
+        BCC = "Bcc"
+        CC = "Cc"
+        REPLY_TO = "Reply-To"
+        RETURN_PATH = "Return-Path"
+        ENVELOPE_TO = "Envelope-To"
+        DELIVERED_TO = "Delivered-To"
+        SENDER = "Sender"
+        RETURN_RECEIPT_TO = "Return-Receipt-To"
+        DISPOSITION_NOTIFICATION_TO = "Disposition-Notification-To"
+        
+        def __iter__(self):
+            return iter((attr, value) for attr, value in self.__class__.__dict__.items() if not attr.startswith("__"))
+
+        def __getitem__(self, key):
+            return getattr(self, key)
+            
+
+    #attachment keys
+    class Attachment:
+        DATA = "AttachmentData"
+        SIZE= "AttachmentSize"
+        FILE_NAME = "AttachmentFileName"
+        FILE_PATH= "AttachmentFilePath" 
+    
+    #image keys
+    class Image:
+        DATA = "ImageData"
+        SIZE= "ImageSize"
+        FILE_NAME = "ImageFileName"
+        FILE_PATH= "ImageFilePath" 
+    
+    #mailinglist keys
+    class MailingList:
+        ID = "List-Id"
+        OWNER = "List-Owner"
+        SUBSCRIBE = "List-Subscribe"
+        UNSUBSCRIBE = "List-Unsubscribe"
+        POST = "List-Post"
+        HELP = "List-Help"
+        ARCHIVE = "List-Archive"

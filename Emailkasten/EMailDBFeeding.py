@@ -153,11 +153,11 @@ def insertEMail(parsedEMail, account):
         with django.db.transaction.atomic():
             
             # the FROM correspondent insertion has to be split to be able to add the FROM correspondent to an eventual mailinglist
-            fromCorrespondent = parsedEMail[ParsedMailKeys.Header.FROM]
+            fromCorrespondent = parsedEMail[ParsedMailKeys.Correspondent.FROM]
             if fromCorrespondent:
                 logger.debug("Adding FROM correspondent to DB...")
                 
-                fromCorrespondentEntry = _insertCorrespondent(fromCorrespondent)
+                fromCorrespondentEntry = _insertCorrespondent(fromCorrespondent[0]) #there should only be one from correspondent
             else:
                 logger.error("No FROM Correspondent found in mail, not writing to DB!")
                 
@@ -205,13 +205,6 @@ def insertEMail(parsedEMail, account):
                     'priority': parsedEMail[ParsedMailKeys.Header.PRIORITY],
                     'precedence': parsedEMail[ParsedMailKeys.Header.PRECEDENCE],
                     'received': parsedEMail[ParsedMailKeys.Header.RECEIVED],
-                    'sender': parsedEMail[ParsedMailKeys.Header.SENDER],
-                    'return_receipt_to': parsedEMail[ParsedMailKeys.Header.RETURN_RECEIPT_TO],
-                    'disposition_notification_to': parsedEMail[ParsedMailKeys.Header.DISPOSITION_NOTIFICATION_TO],
-                    'reply_to': parsedEMail[ParsedMailKeys.Header.REPLY_TO],
-                    'envelope_to': parsedEMail[ParsedMailKeys.Header.ENVELOPE_TO],
-                    'delivered_to': parsedEMail[ParsedMailKeys.Header.DELIVERED_TO],
-                    'return_path': parsedEMail[ParsedMailKeys.Header.RETURN_PATH],
                     'user_agent': parsedEMail[ParsedMailKeys.Header.USER_AGENT],
                     'auto_submitted': parsedEMail[ParsedMailKeys.Header.AUTO_SUBMITTED],
                     'content_type': parsedEMail[ParsedMailKeys.Header.CONTENT_TYPE],
@@ -251,54 +244,29 @@ def insertEMail(parsedEMail, account):
             else:
                 logger.debug("No images found in mail, not writing to DB")
                 
+    
+
+            for mentionType, correspondentHeader in ParsedMailKeys.Correspondent:
+                if (correspondentHeader is ParsedMailKeys.Correspondent.FROM):   # from correspondent has been added earlier, just add the connection to bridge table here
+                    if fromCorrespondent:
                 
-                
-            if fromCorrespondent:
-                
-                _insertEMailCorrespondent(fromCorrespondentEntry, emailEntry, constants.MENTIONS.FROM)
-                
-                logger.debug("Successfully added entries for FROM correspondent to DB.")
-            else:
-                logger.error("No FROM Correspondent found in mail, not writing to DB!")
-
-
-
-            if parsedEMail[ParsedMailKeys.Header.TO]:
-                logger.debug("Creating entry for TO correspondents in DB...")
-                
-                for toCorrespondentData in parsedEMail[ParsedMailKeys.Header.TO]:
-                    toCorrespondentEntry = _insertCorrespondent(toCorrespondentData)
-                    _insertEMailCorrespondent(emailEntry, toCorrespondentEntry, constants.MENTIONS.TO)
-                    
-                logger.debug("Successfully added entries for TO correspondents to DB.")
-            else:
-                logger.warning("No TO Correspondent found in mail, not writing to DB!")
-
-
-
-            if parsedEMail[ParsedMailKeys.Header.CC]:
-                logger.debug("Creating entries for CC correspondents in DB...")
-                
-                for ccCorrespondentData in parsedEMail[ParsedMailKeys.Header.CC]:
-                    ccCorrespondentEntry = _insertCorrespondent(ccCorrespondentData)
-                    _insertEMailCorrespondent(emailEntry, ccCorrespondentEntry, constants.MENTIONS.CC)
-                    
-                logger.debug("Successfully added entries for CC correspondents to DB.")
-            else:
-                logger.debug("No CC Correspondent found in mail, not writing to DB")
-
-
-
-            if parsedEMail[ParsedMailKeys.Header.BCC]:
-                logger.debug("Creating entries for CC correspondents in DB...")
-                
-                for bccCorrespondentData in parsedEMail[ParsedMailKeys.Header.BCC]:
-                    bccCorrespondentEntry = _insertCorrespondent(bccCorrespondentData)
-                    _insertEMailCorrespondent(emailEntry, bccCorrespondentEntry, constants.MENTIONS.BCC)
-                    
-                logger.debug("Successfully added entries for BCC correspondents to DB.")
-            else:
-                logger.debug("No BCC Correspondent found in mail, not writing to DB")
+                        _insertEMailCorrespondent(fromCorrespondentEntry, emailEntry, mentionType)
+                        
+                        logger.debug(f"Successfully added entries for {mentionType} correspondent to DB.")
+                    else:
+                        logger.error(f"No {mentionType} correspondent found in mail, not writing to DB!")
+                        
+                else:
+                    if parsedEMail[correspondentHeader]:
+                        logger.debug(f"Creating entry for {mentionType} correspondents in DB...")
+                        
+                        for correspondentData in parsedEMail[correspondentHeader]:
+                            correspondentEntry = _insertCorrespondent(correspondentData)
+                            _insertEMailCorrespondent(emailEntry, correspondentEntry, mentionType)
+                            
+                        logger.debug(f"Successfully added entries for {mentionType} correspondents to DB.")
+                    else:
+                        logger.warning(f"No {mentionType} correspondent found in mail, not writing to DB!")
 
 
     except django.db.IntegrityError as e:

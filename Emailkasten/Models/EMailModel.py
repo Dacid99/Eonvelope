@@ -56,13 +56,6 @@ class EMailModel(models.Model):
     precedence = models.CharField(max_length=255, null=True)
     received = models.TextField(null=True)
     
-    sender = models.EmailField(max_length=255, null=True)
-    return_receipt_to = models.EmailField(max_length=255, null=True)
-    disposition_notification_to = models.EmailField(max_length=255, null=True)
-    reply_to = models.EmailField(max_length=255, null=True)
-    envelope_to = models.EmailField(max_length=255, null=True)
-    delivered_to = models.EmailField(max_length=255, null=True)
-    return_path = models.EmailField(max_length=255, null=True)
     user_agent = models.CharField(max_length=255, null=True)
     auto_submitted = models.CharField(max_length=255, null=True)
     

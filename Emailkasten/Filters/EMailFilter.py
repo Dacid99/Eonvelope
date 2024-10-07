@@ -57,6 +57,8 @@ class EMailFilter(django_filters.FilterSet):
     correspondent_address__in = django_filters.BaseInFilter(field_name='correspondents__email_address', lookup_expr='in')
 
     correspondent_mention__exact = django_filters.CharFilter(field_name='emailcorrespondents__mention', lookup_expr='exact')
+    correspondent_mention__icontains = django_filters.CharFilter(field_name='emailcorrespondents__mention', lookup_expr='icontains')
+    correspondent_mention__in = django_filters.BaseInFilter(field_name='emailcorrespondents__mention', lookup_expr='in')
 
     mailinglist_list_id__icontains = django_filters.CharFilter(field_name='mailinglist__list_id', lookup_expr='icontains')
     mailinglist_list_id__contains = django_filters.CharFilter(field_name='mailinglist__list_id', lookup_expr='contains')
@@ -68,7 +70,7 @@ class EMailFilter(django_filters.FilterSet):
     mailinglist_list_id__iendswith = django_filters.CharFilter(field_name='mailinglist__list_id', lookup_expr='iendswith')
     mailinglist_list_id__regex = django_filters.CharFilter(field_name='mailinglist__list_id', lookup_expr='regex')
     mailinglist_list_id__iregex = django_filters.CharFilter(field_name='mailinglist__list_id', lookup_expr='iregex')
-    mailinglist_list_id__in = django_filters.CharFilter(field_name='mailinglist__list_id', lookup_expr='in')
+    mailinglist_list_id__in = django_filters.BaseInFilter(field_name='mailinglist__list_id', lookup_expr='in')
     
     mailinglist_list_owner__icontains = django_filters.CharFilter(field_name='mailinglist__list_owner', lookup_expr='icontains')
     mailinglist_list_owner__contains = django_filters.CharFilter(field_name='mailinglist__list_owner', lookup_expr='contains')
@@ -80,7 +82,7 @@ class EMailFilter(django_filters.FilterSet):
     mailinglist_list_owner__iendswith = django_filters.CharFilter(field_name='mailinglist__list_owner', lookup_expr='iendswith')
     mailinglist_list_owner__regex = django_filters.CharFilter(field_name='mailinglist__list_owner', lookup_expr='regex')
     mailinglist_list_owner__iregex = django_filters.CharFilter(field_name='mailinglist__list_owner', lookup_expr='iregex')
-    mailinglist_list_owner__in = django_filters.CharFilter(field_name='mailinglist__list_owner', lookup_expr='in')
+    mailinglist_list_owner__in = django_filters.BaseInFilter(field_name='mailinglist__list_owner', lookup_expr='in')
     
     account_address__icontains = django_filters.CharFilter(field_name='account__address', lookup_expr="icontains")
     account_address__contains = django_filters.CharFilter(field_name='account__address', lookup_expr="contains")
@@ -121,13 +123,6 @@ class EMailFilter(django_filters.FilterSet):
             'priority': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
             'precedence': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
     
-            'sender': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
-            'return_receipt_to': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
-            'disposition_notification_to': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
-            'reply_to': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
-            'envelope_to': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
-            'delivered_to': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
-            'return_path': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
             'user_agent': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
             'auto_submitted': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
             'content_type': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],

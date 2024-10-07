@@ -112,11 +112,13 @@ def _parseSubject(mailMessage):
     return parsedSubject
 
 
-def _parseBody(mailMessage):
+def _parseBodyText(mailMessage):
     logger.debug("Parsing bodytext ...")
     mailBodyText = ""
     if mailMessage.is_multipart():
         for part in mailMessage.walk():
+            if part.get_content_disposition():
+                continue
             if part.get_content_type() in ['text/plain', 'text/html']:
                 mailBodyText += _decodeText(part)
     else:
@@ -139,13 +141,15 @@ def _parseImages(mailMessage):
     images = []
     if mailMessage.is_multipart():
         for part in mailMessage.walk():
-            if part.get_content_type() in ['image/png', 'image/jpeg', 'image/gif']:
+            if part.get_content_disposition().startswith('attachment'):
+                continue 
+            if part.get_content_type().startswith('image/'):
                 # imageFileName = part.get_filename()
                 # if not imageFileName:
                 #     imageFileName = 
                 imagesDict = {}
                 imagesDict[ParsedMailKeys.Image.DATA] = part
-                imagesDict[ParsedMailKeys.Image.SIZE] = sys.getsizeof(part)
+                imagesDict[ParsedMailKeys.Image.SIZE] = len(part.as_bytes())
                 imagesDict[ParsedMailKeys.Image.FILE_NAME] = part.get_filename()
                 imagesDict[ParsedMailKeys.Image.FILE_PATH] = None 
 
@@ -164,11 +168,11 @@ def _parseAttachments(mailMessage):
     attachments = []
     if mailMessage.is_multipart():
         for part in mailMessage.walk():
-            if part.get_content_disposition() == "attachment":
+            if ( part.get_content_disposition() and "attachment" in part.get_content_disposition() ) or ( part.get_content_type() and part.get_content_type() in ParsingConfiguration.APPLICATION_TYPES):
                 attachmentDict = {}
                 attachmentDict[ParsedMailKeys.Attachment.DATA] = part
-                attachmentDict[ParsedMailKeys.Attachment.SIZE] = sys.getsizeof(part)
-                attachmentDict[ParsedMailKeys.Attachment.FILE_NAME] = part.get_filename()
+                attachmentDict[ParsedMailKeys.Attachment.SIZE] = len(part.as_bytes())
+                attachmentDict[ParsedMailKeys.Attachment.FILE_NAME] = part.get_filename() or f"{hash(part)}.attachment"
                 attachmentDict[ParsedMailKeys.Attachment.FILE_PATH] = None 
 
                 attachments.append(attachmentDict)
@@ -241,12 +245,12 @@ def parseMail(mailToParse):
     parsedEMail = {}
     parsedEMail[ParsedMailKeys.DATA] = mailToParse
     parsedEMail[ParsedMailKeys.FULL_MESSAGE] = mailMessage
-    parsedEMail[ParsedMailKeys.SIZE] = sys.getsizeof(mailToParse)
+    parsedEMail[ParsedMailKeys.SIZE] = len(mailToParse)
     parsedEMail[ParsedMailKeys.Header.MESSAGE_ID] = _parseMessageID(mailMessage)
     parsedEMail[ParsedMailKeys.Header.DATE] = _parseDate(mailMessage)
     parsedEMail[ParsedMailKeys.Header.SUBJECT] = _parseSubject(mailMessage)
     parsedEMail[ParsedMailKeys.Header.DATE] = _parseDate(mailMessage)
-    parsedEMail[ParsedMailKeys.BODYTEXT] = _parseBody(mailMessage)
+    parsedEMail[ParsedMailKeys.BODYTEXT] = _parseBodyText(mailMessage)
     
     for mentionType, correspondentHeader in ParsedMailKeys.Correspondent():
         parsedEMail[correspondentHeader] = _parseCorrespondents(mailMessage, correspondentHeader)

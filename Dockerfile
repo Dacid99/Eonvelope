@@ -3,6 +3,7 @@ RUN apt-get -y update && apt-get -y install build-essential default-mysql-client
 WORKDIR /mnt
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
+ENV XDG_RUNTIME_DIR /tmp/xdg_runtime
 ENV PYTHONPATH /mnt/Emailkasten
 COPY dependencies.txt /mnt/
 RUN pip install --upgrade pip

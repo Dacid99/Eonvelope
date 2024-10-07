@@ -49,14 +49,31 @@ class LoggerConfiguration:
     ROOT_LOG_LEVEL = os.environ.get('ROOT_LOG_LEVEL', 'INFO')
     LOGFILE_MAXSIZE = 10 * 1024 * 1024 # 10 MB
     LOGFILE_BACKUP_NUMBER = 3 
-    LOG_FORMAT = '{name} {levelname} {asctime} {module} {message}'
+    LOG_FORMAT = '{asctime} {levelname} - {name}.{funcname}: {message}'
 
 class ParsingConfiguration:
     CHARSET_DEFAULT = 'utf-8'
     STRIP_TEXTS = True
+    APPLICATION_TYPES = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
     
 class ProcessingConfiguration:
     DUMP_DIRECTORY = '/tmp/images'
+    HTML_FORMAT = html_body = """
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    white-space: pre-wrap;
+                }}
+            </style>
+        </head>
+        <body>
+            <pre>%s</pre>
+        </body>
+        </html>
+        """
     
 class FetchingConfiguration:
     SAVE_TO_EML_DEFAULT = True
@@ -67,7 +84,6 @@ class DatabaseConfiguration:
     NAME = os.environ.get("DB_NAME", "emailkasten")
     USER = os.environ.get("DB_USER", "user")
     PASSWORD = os.environ.get("DB_PASSWORD", "passwd")
-
 
 
 class ParsedMailKeys:

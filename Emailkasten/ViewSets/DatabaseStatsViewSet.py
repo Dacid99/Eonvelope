@@ -15,8 +15,8 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
-
-from rest_framework import viewsets
+from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from ..Models.EMailModel import EMailModel
@@ -25,21 +25,25 @@ from ..Models.AttachmentModel import AttachmentModel
 from ..Models.ImageModel import ImageModel
 from ..Models.AccountModel import AccountModel
 
-class DatabaseStatsViewSet(viewsets.ViewSet):
+class DatabaseStatsViewSet(APIView):
     permission_classes = [IsAuthenticated]
 
-    def list(self, request):
-        email_count = EMailModel.objects.filter(account__user = request.user).count()
-        correspondent_count = CorrespondentModel.objects.filter(emails__account__user = request.user).distinct().count()
-        attachment_count = AttachmentModel.objects.filter(email__account__user = request.user).count()
-        images_count = ImageModel.objects.filter(email__account__user = request.user).count()
-        account_count = AccountModel.objects.filter(user = request.user).count()
+    def get(self, request):
+        try:
+            email_count = EMailModel.objects.filter(account__user = request.user).count()
+            correspondent_count = CorrespondentModel.objects.filter(emails__account__user = request.user).distinct().count()
+            attachment_count = AttachmentModel.objects.filter(email__account__user = request.user).count()
+            images_count = ImageModel.objects.filter(email__account__user = request.user).count()
+            account_count = AccountModel.objects.filter(user = request.user).count()
 
-        data = {
-            'email_count': email_count,
-            'correspondent_count': correspondent_count,
-            'attachment_count': attachment_count,
-            'images_count': images_count,
-            'account_count': account_count,
-        }
-        return Response(data)
+            data = {
+                'email_count': email_count,
+                'correspondent_count': correspondent_count,
+                'attachment_count': attachment_count,
+                'images_count': images_count,
+                'account_count': account_count,
+            }
+            return Response(data)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

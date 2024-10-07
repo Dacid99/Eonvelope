@@ -1,4 +1,5 @@
 implement basic exchange
+maybe get rid of filesizes
 restructure filemanager
 different choices for fetching depending on protocol
 custom fetching filters
@@ -11,17 +12,13 @@ parsing walks multiple times, could be more efficient
 saving images and attachments is done even if theyre already in db
 maybe unique together account and id 
 reconsider decoding of mailbytes using BytesParser
-
+middleware for reconnecting
 
 # to test
-filesizes fix
-xdg path message
-attachment recognition
-db stats api
-prerender html
 
 # to fix
-'Decoding this mime part returned error' for paypal mail
+'Decoding this mime part returned error' for paypal 
+accounts cant handle duplicate inputs
 
 # at next db reset
 start to use configurationmodel

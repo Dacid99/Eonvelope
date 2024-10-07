@@ -225,8 +225,6 @@ class MailProcessor:
 
         message = email.message_from_bytes(parsedMail[ParsedMailKeys.DATA])
             
-        textTypes  = [ 'text/plain', 'text/html' ]
-        imageTypes = [ 'image/gif', 'image/jpeg', 'image/png' ]
         dirtyChars = [ '\n', '\\n', '\t', '\\t', '\r', '\\r']
         
         imgkitOptions = { 'load-error-handling': 'skip'}
@@ -242,53 +240,60 @@ class MailProcessor:
                 logger.debug('Multipart found, continue')
                 continue
             
-            mimeType = part.get_content_type()
-            charset = part.get_content_charset()
-            if charset is None:
-                charset = constants.ParsingConfiguration.CHARSET_DEFAULT
+            if not part.get_content_disposition():
+                mimeType = part.get_content_type()
+                charset = part.get_content_charset() or constants.ParsingConfiguration.CHARSET_DEFAULT
 
-            logger.debug(f'Found MIME part: {mimeType}')
-            if mimeType in textTypes:
-                
-                try:
-                    payload = quopri.decodestring(part.get_payload(decode=True)).decode(charset, errors='replace')
-                except:
-                    payload = str(quopri.decodestring(part.get_payload(decode=True)))[2:-1]
-                
-                # Cleanup dirty characters
-                for char in dirtyChars:
-                    payload = payload.replace(char, '')
-                
-                # Generate MD5 hash of the payload
-                m = hashlib.md5()
-                m.update(payload.encode(charset))
-                imagePath = m.hexdigest() + '.png'
-                try:
-                    imgkit.from_string(payload, dumpDir + '/' + imagePath, options = imgkitOptions)
-                    logger.debug(f'Decoded {imagePath}')
-                    imagesList.append(os.path.join(dumpDir, imagePath))
-                except Exception as e:
-                    logger.warning(f'Decoding this MIME part of type {mimeType} returned error {e}')
+                logger.debug(f'Found MIME part: {mimeType}')
+                if mimeType.startswith('text/'):
                     
-            elif mimeType in imageTypes:
-                payload = part.get_payload(decode=False)
-                imgdata = base64.b64decode(payload)
-                # Generate MD5 hash of the payload
-                m = hashlib.md5()
-                m.update(payload.encode(charset, errors='replace'))
-                imagePath = m.hexdigest() + '.' + mimeType.split('/')[1]
-                try:
-                    with open(dumpDir + '/' + imagePath, 'wb') as f:
-                        f.write(imgdata)
-                    logger.debug(f'Decoded {imagePath}')
-                    imagesList.append(os.path.join(dumpDir, imagePath))
-                except Exception as e:
-                    logger.warning(f'Decoding this MIME part of type {mimeType} returned error {e}')
+                    try:
+                        payload = quopri.decodestring(part.get_payload(decode=True)).decode(charset, errors='replace')
+                    except:
+                        payload = str(quopri.decodestring(part.get_payload(decode=True)))[2:-1]
                     
+                    # Cleanup dirty characters in html
+                    if mimeType == 'text/html':
+                        for char in dirtyChars:
+                            payload = payload.replace(char, '')
+                    
+                    # Insert other text into html format
+                    else: 
+                        payload = constants.ProcessingConfiguration.HTML_FORMAT % payload
+                    
+                    
+                    # Generate MD5 hash of the payload
+                    m = hashlib.md5()
+                    m.update(payload.encode(charset))
+                    imagePath = m.hexdigest() + '.png'
+                    try:
+                        imgkit.from_string(payload, dumpDir + '/' + imagePath, options = imgkitOptions)
+                        logger.debug(f'Decoded {imagePath}')
+                        imagesList.append(os.path.join(dumpDir, imagePath))
+                    except Exception as e:
+                        logger.warning(f'Decoding this MIME part of type {mimeType} returned error {e}')
+                        
+                elif mimeType.startswith('image/'):
+                    payload = part.get_payload(decode=False)
+                    imgdata = base64.b64decode(payload)
+                    # Generate MD5 hash of the payload
+                    m = hashlib.md5()
+                    m.update(payload.encode(charset, errors='replace'))
+                    imagePath = m.hexdigest() + '.' + mimeType.split('/')[1]
+                    try:
+                        with open(dumpDir + '/' + imagePath, 'wb') as f:
+                            f.write(imgdata)
+                        logger.debug(f'Decoded {imagePath}')
+                        imagesList.append(os.path.join(dumpDir, imagePath))
+                    except Exception as e:
+                        logger.warning(f'Decoding this MIME part of type {mimeType} returned error {e}')
+                        
+                else:
+                    fileName = part.get_filename() or f"{hash(part)}.attachment"
+                    attachments.append(f"{fileName} ({mimeType})")
+                    logger.debug(f'Added attachment {fileName} of MIME type {mimeType}')
             else:
-                fileName = part.get_filename()
-                if not fileName:
-                    fileName = "Unknown"
+                fileName = part.get_filename() or f"{hash(part)}.attachment"
                 attachments.append(f"{fileName} ({mimeType})")
                 logger.debug(f'Added attachment {fileName} of MIME type {mimeType}')
 

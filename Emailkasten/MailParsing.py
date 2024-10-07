@@ -119,7 +119,7 @@ def _parseBodyText(mailMessage):
         for part in mailMessage.walk():
             if part.get_content_disposition():
                 continue
-            if part.get_content_type() in ['text/plain', 'text/html']:
+            if part.get_content_type().startswith('text/'):
                 mailBodyText += _decodeText(part)
     else:
         mailBodyText = _decodeText(mailMessage)

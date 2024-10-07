@@ -58,7 +58,7 @@ class ParsingConfiguration:
     
 class ProcessingConfiguration:
     DUMP_DIRECTORY = '/tmp/images'
-    HTML_FORMAT = html_body = """
+    HTML_FORMAT = """
         <html>
         <head>
             <style>

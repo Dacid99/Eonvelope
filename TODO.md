@@ -18,10 +18,10 @@ filesizes fix
 xdg path message
 attachment recognition
 db stats api
+prerender html
 
 # to fix
 'Decoding this mime part returned error' for paypal mail
-newline characters missing (1)
 
 # at next db reset
 start to use configurationmodel

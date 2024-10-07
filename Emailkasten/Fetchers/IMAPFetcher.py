@@ -19,7 +19,7 @@
 import imaplib
 
 from .. import constants
-from ..LoggerFactory import LoggerFactory
+import logging
 from ..MailParsing import parseMailbox
 
 class IMAPFetcher: 
@@ -29,7 +29,7 @@ class IMAPFetcher:
     def __init__(self, account):
         self.account = account
 
-        self.logger = LoggerFactory.getChildLogger(self.__class__.__name__)
+        self.logger = logging.getLogger(__name__)
         try:
             self.connectToHost()
             self.login()

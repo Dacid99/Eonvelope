@@ -20,7 +20,7 @@ import email
 import email.generator
 import os.path
 from . import constants
-from .LoggerFactory import LoggerFactory
+import logging
 from .MailParsing import ParsedMailKeys
 
 class FileManager:
@@ -29,7 +29,7 @@ class FileManager:
 
     @staticmethod
     def writeMessageToEML(parsedEMail):
-        logger = LoggerFactory.getChildLogger(FileManager.__class__.__name__)
+        logger = logging.getLogger(__name__)
         logger.debug("Storing mail in .eml file ...")
         emlDirPath = FileManager.getStoragePath(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
         emlFilePath = os.path.join(emlDirPath , parsedEMail[ParsedMailKeys.Header.MESSAGE_ID] + ".eml")
@@ -76,7 +76,7 @@ class FileManager:
 
     @staticmethod
     def writeAttachments(parsedEMail):
-        logger = LoggerFactory.getChildLogger(FileManager.__class__.__name__)
+        logger = logging.getLogger(__name__)
 
         dirPath = FileManager.getStoragePath(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
         for attachmentData in parsedEMail[ParsedMailKeys.ATTACHMENTS]:
@@ -122,7 +122,7 @@ class FileManager:
             
     @staticmethod
     def writeImages(parsedEMail):
-        logger = LoggerFactory.getChildLogger(FileManager.__class__.__name__)
+        logger = logging.getLogger(__name__)
 
         dirPath = FileManager.getStoragePath(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
         for imageData in parsedEMail[ParsedMailKeys.IMAGES]:

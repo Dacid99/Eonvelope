@@ -20,7 +20,7 @@ import time
 import threading
 from rest_framework.response import Response
 from . import constants
-from .LoggerFactory import LoggerFactory
+import logging
 from .MailProcessor import MailProcessor
 
 
@@ -55,7 +55,7 @@ class EMailArchiverDaemon:
         
 
     def __init__(self, daemon):
-        self.logger = LoggerFactory.getChildLogger(self.__class__.__name__)
+        self.logger = logging.getLogger(__name__)
         self.thread = None
         self.isRunning = False
         

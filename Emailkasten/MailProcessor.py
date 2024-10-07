@@ -22,7 +22,7 @@ from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from .Fetchers.POP3Fetcher import POP3Fetcher
 from .Fetchers.ExchangeFetcher import ExchangeFetcher
 from .FileManager import FileManager
-from .LoggerFactory import LoggerFactory
+import logging
 from .MailParsing import parseMail, ParsedMailKeys
 from .EMailDBFeeding import insertEMail, insertMailbox
 import datetime
@@ -47,7 +47,7 @@ class MailProcessor:
         
     @staticmethod
     def test(account):
-        logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
+        logger = logging.getLogger(__name__)
 
         logger.debug(f"Testing {str(account)} ...")
         if account.protocol == IMAPFetcher.PROTOCOL:
@@ -75,7 +75,7 @@ class MailProcessor:
 
     @staticmethod
     def scanMailboxes(mailAccount):
-        logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
+        logger = logging.Logger(__name__)
 
         logger.debug(f"Searching mailboxes in {mailAccount}...")
 
@@ -113,7 +113,7 @@ class MailProcessor:
         
     @staticmethod
     def fetch(mailbox, mailAccount, criterion):
-        logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
+        logger = logging.getLogger(__name__)
 
         logger.debug(f"Fetching emails with criterion {criterion} from mailbox {mailbox} in account {mailAccount}...")
         if mailAccount.protocol == IMAPFetcher.PROTOCOL:
@@ -216,7 +216,7 @@ class MailProcessor:
             return new_im
         
         
-        logger = LoggerFactory.getChildLogger(MailProcessor.__name__)
+        logger = logging.getLogger(__name__)
         dumpDir = constants.ProcessingConfiguration.DUMP_DIRECTORY
         # Create the dump directory if not existing yet
         if not os.path.isdir(dumpDir):

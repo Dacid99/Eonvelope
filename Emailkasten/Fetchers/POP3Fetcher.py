@@ -19,7 +19,7 @@
 import poplib
 
 from .. import constants
-from ..LoggerFactory import LoggerFactory
+import logging
 
 class POP3Fetcher: 
 
@@ -28,7 +28,7 @@ class POP3Fetcher:
     def __init__(self, account):
         self.account = account
 
-        self.logger = LoggerFactory.getChildLogger(self.__class__.__name__)
+        self.logger = logging.getLogger(__name__)
         
         try:
             self.connectToHost()

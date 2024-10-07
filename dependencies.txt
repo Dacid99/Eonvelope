@@ -8,3 +8,4 @@ exchangelib
 pillow
 imgkit
 email-validator
+gssapi

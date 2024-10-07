@@ -141,7 +141,7 @@ def _parseImages(mailMessage):
     images = []
     if mailMessage.is_multipart():
         for part in mailMessage.walk():
-            if part.get_content_disposition().startswith('attachment'):
+            if part.get_content_disposition() and part.get_content_disposition().startswith('attachment'):
                 continue 
             if part.get_content_type().startswith('image/'):
                 # imageFileName = part.get_filename()

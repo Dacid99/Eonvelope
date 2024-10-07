@@ -41,7 +41,7 @@ from .ViewSets.CorrespondentViewSet import CorrespondentViewSet
 from .ViewSets.AttachmentViewSet import AttachmentViewSet
 from .ViewSets.ImageViewSet import ImageViewSet
 from .ViewSets.MailboxViewSet import MailboxViewSet
-from .ViewSets.DatabaseStatsViewSet import DatabaseStatsViewSet
+from .ViewSets.DatabaseStatsView import DatabaseStatsView
 from .ViewSets.UserCreateView import UserViewSet
 from .ViewSets.ConfigurationViewSet import ConfigurationViewSet
 from .ViewSets.LoginOut import LoginView, LogoutView, CSRFCookieView
@@ -54,7 +54,6 @@ router.register(r'correspondents', CorrespondentViewSet)
 router.register(r'attachments', AttachmentViewSet)
 router.register(r'images', ImageViewSet)
 router.register(r'config', ConfigurationViewSet)
-router.register(r'stats', DatabaseStatsViewSet, basename='stats')
 router.register(r'users', UserViewSet)
 
 urlpatterns = [
@@ -66,6 +65,7 @@ urlpatterns = [
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path("health/", include('health_check.urls')),
+    path('stats/', DatabaseStatsView.as_view(), name = 'stats')
     path('', include(router.urls)),
     path("api-auth/", include('rest_framework.urls', namespace='rest_framework')), 
 ]

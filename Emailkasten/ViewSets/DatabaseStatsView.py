@@ -25,7 +25,7 @@ from ..Models.AttachmentModel import AttachmentModel
 from ..Models.ImageModel import ImageModel
 from ..Models.AccountModel import AccountModel
 
-class DatabaseStatsViewSet(APIView):
+class DatabaseStatsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):

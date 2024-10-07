@@ -49,7 +49,7 @@ class LoggerConfiguration:
     ROOT_LOG_LEVEL = os.environ.get('ROOT_LOG_LEVEL', 'INFO')
     LOGFILE_MAXSIZE = 10 * 1024 * 1024 # 10 MB
     LOGFILE_BACKUP_NUMBER = 3 
-    LOG_FORMAT = '{asctime} {levelname} - {name}.{funcname}: {message}'
+    LOG_FORMAT = '{asctime} {levelname} - {name}.{funcName}: {message}'
 
 class ParsingConfiguration:
     CHARSET_DEFAULT = 'utf-8'

@@ -26,8 +26,7 @@ from .Models.AttachmentModel import AttachmentModel
 from .Models.ImageModel import ImageModel
 from .Models.CorrespondentModel import CorrespondentModel
 from .Models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from .MailParsing import ParsedMailKeys
-from . import constants
+from .constants import ParsedMailKeys
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +42,11 @@ def _insertCorrespondent(correspondentData):
         logger.debug(f"Entry for {str(correspondentEntry)} created")
     else:
         logger.debug(f"Entry for {str(correspondentEntry)} already exists")
+        if not correspondentEntry.email_name and correspondentData[0]:
+            logger.debug(f"EMailName field of {str(correspondentEntry)} is blank, update it ... ")
+            correspondentEntry.email_name = correspondentData[0]
+            correspondentEntry.save()
+            logger.debug(f"Successfully updated emailName of {str(correspondentEntry)}.")
         
     return correspondentEntry
             

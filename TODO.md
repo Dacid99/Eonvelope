@@ -13,7 +13,6 @@ parsing walks multiple times, could be more efficient
 saving images and attachments is done even if theyre already in db
 maybe unique together account and id 
 reconsider decoding of mailbytes using BytesParser
-update incomplete correspondents
 popfetcher scan mailboxes prop
 
 

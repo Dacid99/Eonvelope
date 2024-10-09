@@ -21,7 +21,7 @@ import threading
 from rest_framework.response import Response
 from . import constants
 import logging
-from .MailProcessor import MailProcessor
+from .mailProcessing import fetchMails
 
 
 class EMailArchiverDaemon:
@@ -89,7 +89,7 @@ class EMailArchiverDaemon:
         self.logger.debug("---------------------------------------\nNew cycle")
         startTime = time.time()
         try:
-            MailProcessor.fetch(self.mailbox, self.account, self.mailbox.fetching_criterion)
+            fetchMails(self.mailbox, self.account, self.mailbox.fetching_criterion)
 
             endtime = time.time()
             self.logger.debug(f"Cycle complete after {endtime - startTime} seconds\n-------------------------------------------")

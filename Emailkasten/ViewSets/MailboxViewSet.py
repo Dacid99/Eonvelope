@@ -27,7 +27,7 @@ from ..Filters.MailboxFilter import MailboxFilter
 from ..Serializers.MailboxSerializers.MailboxWithDaemonSerializer import MailboxWithDaemonSerializer
 from ..EMailArchiverDaemon import EMailArchiverDaemon
 from .. import constants
-from ..MailProcessor import MailProcessor
+from ..mailProcessing import fetchMails
 
 
 class MailboxViewSet(viewsets.ModelViewSet):
@@ -58,7 +58,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
     def fetch_all(self, request, pk=None):
         mailbox = self.get_object() 
         
-        MailProcessor.fetch(mailbox, mailbox.account, constants.MailFetchingCriteria.ALL)
+        fetchMails(mailbox, mailbox.account, constants.MailFetchingCriteria.ALL)
 
         return Response({'status': 'All mails fetched', 'account': mailbox.account.mail_address, 'mailbox': mailbox.name})
     

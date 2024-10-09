@@ -26,7 +26,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from ..Models.AccountModel import AccountModel
 from ..Filters.AccountFilter import AccountFilter
 from ..Serializers.AccountSerializers.AccountSerializer import AccountSerializer
-from ..MailProcessor import MailProcessor
+from ..mailProcessing import testAccount, scanMailboxes
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -53,7 +53,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def scan_mailboxes(self, request, pk=None):
         account = self.get_object()
-        mailboxesList = MailProcessor.scanMailboxes(account)
+        mailboxesList = scanMailboxes(account)
         
         return Response({'status': 'Scanned for mailboxes', 'account': account.mail_address, 'found mailboxes': mailboxesList})
     
@@ -61,6 +61,6 @@ class AccountViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def test(self, request, pk=None):
         account = self.get_object()
-        result = MailProcessor.test(account)
+        result = testAccount(account)
         return Response({'status': 'Tested mailaccount', 'account': account.mail_address, 'result': result})
 

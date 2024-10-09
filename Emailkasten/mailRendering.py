@@ -15,6 +15,12 @@
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''   
+''' 
+    The following code is a modified version of code from xme's emlrender project https://github.com/xme/emlrender.
+    Original code by Xavier Mertens, licensed under the GNU General Public License version 3 (GPLv3).
+    Modifications by David & Philipp Aderbauer, licensed under the GNU Affero General Public License version 3 (AGPLv3).
+    This modified code is part of an AGPLv3 project. See the LICENSE file for details.
+'''
 
 import email
 import email.header
@@ -30,14 +36,10 @@ from .mailParsing import ParsedMailKeys
 from .constants import ProcessingConfiguration, ParsingConfiguration
 
 
-''' 
-    The following code is a modified version of code from xme's emlrender project https://github.com/xme/emlrender.
-    Original code by Xavier Mertens, licensed under the GNU General Public License version 3 (GPLv3).
-    Modifications by David & Philipp Aderbauer, licensed under the GNU Affero General Public License version 3 (AGPLv3).
-    This modified code is part of an AGPLv3 project. See the LICENSE file for details.
-'''
+logger = logging.getLogger(__name__)
 
 def _combineImages(imagesList):
+    logger.debug("Combining image parts ...")
     backgroundColor=(255,255,255)
     widths, heights = zip(*(i.size for i in imagesList))
 
@@ -50,12 +52,15 @@ def _combineImages(imagesList):
         x = 0
         new_im.paste(images, (x, offset))
         offset += images.size[1]
+    
+    logger.debug("Successfully combined image parts.")
     return new_im
     
 
 
 def prerender(parsedMail):
-    logger = logging.getLogger(__name__)
+    logger.debug("Generating prerender image for mail ...")
+
     dumpDir = ProcessingConfiguration.DUMP_DIRECTORY
     # Create the dump directory if not existing yet
     if not os.path.isdir(dumpDir):
@@ -154,9 +159,9 @@ def prerender(parsedMail):
 
     if imagesList:
         renderImageFilePath = getPrerenderImageStoragePath(parsedMail)
-        logger.debug(f"Combining and saving prerender image at {renderImageFilePath} ...")
         images = list(map(Image.open, imagesList))
         combinedImage = _combineImages(images)
+        logger.debug(f"Saving prerender image at {renderImageFilePath} ...")
         combinedImage.save(renderImageFilePath)
         logger.debug(f"Successfully saved prerender image at {renderImageFilePath}.")
         # Clean up temporary images

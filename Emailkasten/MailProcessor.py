@@ -21,7 +21,7 @@ from .Fetchers.IMAPFetcher import IMAPFetcher
 from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from .Fetchers.POP3Fetcher import POP3Fetcher
 from .Fetchers.ExchangeFetcher import ExchangeFetcher
-from .FileManager import FileManager
+from .FileManagment import writeImages, writeAttachments, writeMessageToEML, getPrerenderImageStoragePath
 import logging
 from .MailParsing import parseMail, ParsedMailKeys
 from .EMailDBFeeding import insertEMail, insertMailbox
@@ -159,7 +159,7 @@ class MailProcessor:
         if mailbox.save_toEML:
             logger.debug("Saving mails to eml files ...")
             for parsedMail in parsedMailsList:
-                FileManager.writeMessageToEML(parsedMail)
+                writeMessageToEML(parsedMail)
                 MailProcessor.prerender(parsedMail)
             logger.debug("Successfully saved mails to eml files")
         else:
@@ -169,7 +169,7 @@ class MailProcessor:
         if mailbox.save_attachments:
             logger.debug("Saving attachments ...")
             for parsedMail in parsedMailsList:
-                FileManager.writeAttachments(parsedMail)
+                writeAttachments(parsedMail)
             logger.debug("Successfully saved attachments")
         else:
             logger.debug(f"Not saving attachments for mailbox {mailbox.name}")
@@ -178,7 +178,7 @@ class MailProcessor:
         if mailbox.save_images:
             logger.debug("Saving images ...")
             for parsedMail in parsedMailsList:
-                FileManager.writeImages(parsedMail)
+                writeImages(parsedMail)
             logger.debug("Successfully saved images")
         else:
             logger.debug(f"Not saving images for mailbox {mailbox.name}")
@@ -314,7 +314,7 @@ class MailProcessor:
             logger.debug("No attachments found for rendering.")
 
         if imagesList:
-            renderImageFilePath = FileManager.getPrerenderImageStoragePath(parsedMail)
+            renderImageFilePath = getPrerenderImageStoragePath(parsedMail)
             logger.debug(f"Combining and saving prerender image at {renderImageFilePath} ...")
             images = list(map(Image.open, imagesList))
             combinedImage = combineImages(images)

@@ -5,7 +5,7 @@ from Emailkasten.Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from Emailkasten.Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from Emailkasten.MailParsing import ParsedMailKeys
 from Emailkasten.LoggerFactory import LoggerFactory
-from Emailkasten.FileManager import FileManager
+from Emailkasten.FileManagment import FileManager
 
 # on Windows
 ParsedMailKeys.EML_FILE_PATH = "C:\\Users\\phili\\Desktop\\emltest\\"

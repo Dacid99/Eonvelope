@@ -1,6 +1,5 @@
 implement basic exchange
 maybe get rid of filesizes
-restructure filemanager
 different choices for fetching depending on protocol
 custom fetching filters
 storageModel and fix for getStoragePath

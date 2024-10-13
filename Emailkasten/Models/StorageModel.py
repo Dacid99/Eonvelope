@@ -43,7 +43,7 @@ class StorageModel(models.Model):
         if self.current and StorageModel.objects.filter(current=True):
             logger.critical("More than one current storage directories!!")
         if not self.path:
-            self.path = os.path.join(constants.StorageConfiguration.STORAGE_PATH, self.directory_number)
+            self.path = os.path.join(constants.StorageConfiguration.STORAGE_PATH, str(self.directory_number))
             if not os.path.exists( self.path ):
                 logger.debug(f"Creating new storage directory {self.path} ...")
                 os.makedirs( self.path )

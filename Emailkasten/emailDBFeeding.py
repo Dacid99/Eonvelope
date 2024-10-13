@@ -271,7 +271,10 @@ def insertEMail(parsedEMail, account):
                             
                         logger.debug(f"Successfully added entries for {mentionType} correspondents to DB.")
                     else:
-                        logger.warning(f"No {mentionType} correspondent found in mail, not writing to DB!")
+                        if mentionType is ParsedMailKeys.Correspondent.TO:
+                            logger.warning(f"No {mentionType} correspondent found in mail, not writing to DB!")
+                        else:
+                            logger.debug(f"No {mentionType} correspondent found in mail, not writing to DB!")
 
         
     except django.db.IntegrityError as e:

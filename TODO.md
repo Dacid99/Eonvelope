@@ -7,9 +7,9 @@ autostart daemons on restart
 custom additional healthchecks
 return serialized db data after scan and fetch_all
 parsing walks multiple times, could be more efficient
-saving images and attachments is done even if theyre already in db
 maybe unique together account and id 
 reconsider decoding of mailbytes using BytesParser
+option to throw spam out by default
 
 # to test
 

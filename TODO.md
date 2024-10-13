@@ -12,13 +12,9 @@ maybe unique together account and id
 reconsider decoding of mailbytes using BytesParser
 
 # to test
-middleware for reconnecting
-sucessive mailprocessing
-storageModel
 
 # to fix
 'Decoding this mime part returned error' for paypal
-reconnectmiddleware
 
 # at next db reset
 start to use configurationmodel

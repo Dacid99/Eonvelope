@@ -30,6 +30,7 @@ class IMAPFetcher:
         self.account = account
 
         self.logger = logging.getLogger(__name__)
+
         try:
             self.connectToHost()
             self.login()
@@ -40,16 +41,17 @@ class IMAPFetcher:
             self.account.save()
             self.logger.info(f"Marked {str(self.account)} as unhealthy")
 
+
     def connectToHost(self):
         self.logger.debug(f"Connecting to {str(self.account)} ...")
         self._mailhost = imaplib.IMAP4(host=self.account.mail_host, port=self.account.mail_host_port, timeout=None)
-        self.logger.debug("Success")
+        self.logger.debug("Successfully connected to mail account.")
         
 
     def login(self):
         self.logger.debug(f"Logging into {str(self.account)} ...")
         self._mailhost.login(self.account.mail_address, self.account.password)
-        self.logger.info(f"Successfully logged into {str(self.account)}.")
+        self.logger.debug(f"Successfully logged into {str(self.account)}.")
         
 
     def close(self):
@@ -60,21 +62,23 @@ class IMAPFetcher:
                 if status == "BYE":
                     self.logger.info(f"Gracefully closed connection to {str(self.account)}.")
                 else:
-                    self.logger.info(f"Closed connection to {str(self.account)} with response {status}.")
+                    self.logger.warning(f"Closed connection to {str(self.account)} with response {status}.")
 
             except imaplib.IMAP4.error:
                 self.logger.error(f"Failed to close connection to {str(self.account)}!", exc_info=True)
 
+
     def __bool__(self):
         self.logger.debug(f"Testing connection to {str(self.account)}")
-        return self._mailhost is not None
+        status = self._mailhost is not None
+        self.logger.debug(f"Tested account with result {status}.")
+        return status
+
 
     @staticmethod
     def test(account):
         with IMAPFetcher(account) as imapFetcher:
-            result = bool(imapFetcher)
-            print(result)
-            return result
+            return bool(imapFetcher)
         
         
     def fetchBySearch(self, mailbox = 'INBOX', searchCriterion='RECENT'):    #for criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
@@ -84,9 +88,9 @@ class IMAPFetcher:
         
         self.logger.debug(f"Searching and fetching {searchCriterion} messages in {mailbox} of {str(self.account)} ...")
         try:
-            self.logger.debug(f"Opening {mailbox} of {str(self.account)} ...")
+            self.logger.debug(f"Opening mailbox {mailbox} of {str(self.account)} ...")
             self._mailhost.select(mailbox, readonly=True)
-            self.logger.debug("Success")
+            self.logger.debug("Successfully opened mailbox.")
             status, messageNumbers = self._mailhost.search(None, searchCriterion)
             if status != "OK":
                 self.logger.error(f"Bad response searching for mails, response {status}")
@@ -103,10 +107,11 @@ class IMAPFetcher:
 
                 mailDataList.append(messageData[0][1])
                 
-            self.logger.info(f"Finished fetching {searchCriterion} messages from {mailbox} of {str(self.account)}.")
-            self.logger.debug(f"Closing {mailbox} of {str(self.account)} ...")
+            self.logger.debug(f"Finished fetching {searchCriterion} messages from {mailbox} of {str(self.account)}.")
+
+            self.logger.debug(f"Closing mailbox {mailbox} of {str(self.account)} ...")
             self._mailhost.close()
-            self.logger.debug("Success")
+            self.logger.debug("Successfully closed mailbox.")
     
             return mailDataList
 
@@ -138,9 +143,11 @@ class IMAPFetcher:
             self.logger.error(f"Failed to fetch mailboxes in {str(self.account)}!", exc_info=True)
             return []
 
+
     def __enter__(self):
         self.logger.debug(str(self.__class__.__name__) + "._enter_")
         return self
+
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.logger.debug(str(self.__class__.__name__) + "._exit_")

@@ -42,6 +42,7 @@ class EMailArchiverDaemon:
         else:
             return Response({'status': 'Daemon already running', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
         
+
     @staticmethod
     def stopDaemon(daemonModel):
         if daemonModel.id in EMailArchiverDaemon.runningDaemons:
@@ -70,9 +71,11 @@ class EMailArchiverDaemon:
         self.thread = threading.Thread(target = self.run)
         self.thread.start()
 
+
     def stop(self):
         self.logger.info("Stopping EMailArchiverDaemon")
         self.isRunning = False
+
 
     def run(self):
         try:
@@ -85,16 +88,17 @@ class EMailArchiverDaemon:
             time.sleep(constants.EMailArchiverDaemonConfiguration.RESTART_TIME)
             self.run()
 
+
     def cycle(self):
         self.logger.debug("---------------------------------------\nNew cycle")
+        
         startTime = time.time()
         try:
             fetchMails(self.mailbox, self.account, self.mailbox.fetching_criterion)
-
             endtime = time.time()
-            self.logger.debug(f"Cycle complete after {endtime - startTime} seconds\n-------------------------------------------")
                             
         except Exception as e:
             self.logger.error("Error during daemon cycle execution!", exc_info=True)
             raise
 
+        self.logger.debug(f"Cycle complete after {endtime - startTime} seconds\n-------------------------------------------")

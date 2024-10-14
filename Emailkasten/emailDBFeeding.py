@@ -128,6 +128,7 @@ def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
 
 
 def insertMailbox(mailbox, account):
+    logger.debug(f"Saving mailbox {mailbox} from {str(account)} to db ...")
     try:
         with django.db.transaction.atomic():
             
@@ -149,6 +150,8 @@ def insertMailbox(mailbox, account):
 
     except django.db.IntegrityError as e:
         logger.error("Error while writing to database, rollback to last state", exc_info=True)
+
+    logger.debug(f"Successfully saved mailbox to db ...")
 
 
 

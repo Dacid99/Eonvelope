@@ -227,7 +227,7 @@ def _parseCorrespondents(mailMessage, mentionHeaderKey):
     logger.debug(f"Parsing {mentionHeaderKey} ...")
     recipients = mailMessage.get_all(mentionHeaderKey)
     if recipients is None:
-        logger.info(f"No {mentionHeaderKey} correspondents found in mail!")
+        logger.debug(f"No {mentionHeaderKey} correspondents found in mail!")
         return []
     else:
         logger.debug(f"Successfully parsed {mentionHeaderKey} correspondents.")

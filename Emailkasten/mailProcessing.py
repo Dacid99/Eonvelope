@@ -42,7 +42,7 @@ def _getFilter(flag):
 def testAccount(account):
     logger = logging.getLogger(__name__)
 
-    logger.debug(f"Testing {str(account)} ...")
+    logger.info(f"Testing {str(account)} ...")
     if account.protocol == IMAPFetcher.PROTOCOL:
             result = IMAPFetcher.test(account)
 
@@ -62,7 +62,7 @@ def testAccount(account):
         logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
         result = False
 
-    logger.debug(f"Tested {str(account)} as {result}")
+    logger.info(f"Tested {str(account)} as {result}")
     return result
 
 
@@ -70,7 +70,7 @@ def testAccount(account):
 def scanMailboxes(mailAccount):
     logger = logging.Logger(__name__)
 
-    logger.debug(f"Searching mailboxes in {mailAccount}...")
+    logger.info(f"Searching mailboxes in {mailAccount}...")
 
     if mailAccount.protocol == IMAPFetcher.PROTOCOL:
         with IMAPFetcher(mailAccount) as imapMail:
@@ -100,7 +100,7 @@ def scanMailboxes(mailAccount):
     for mailbox in mailboxes:
         insertMailbox(mailbox, mailAccount)
 
-    logger.debug("Successfully searched mailboxes")
+    logger.info("Successfully searched mailboxes")
     return mailboxes
 
     
@@ -108,7 +108,7 @@ def scanMailboxes(mailAccount):
 def fetchMails(mailbox, mailAccount, criterion):
     logger = logging.getLogger(__name__)
 
-    logger.debug(f"Fetching emails with criterion {criterion} from mailbox {mailbox} in account {mailAccount}...")
+    logger.info(f"Fetching emails with criterion {criterion} from mailbox {mailbox} in account {mailAccount}...")
     if mailAccount.protocol == IMAPFetcher.PROTOCOL:
         with IMAPFetcher(mailAccount) as imapMail:
 
@@ -138,10 +138,11 @@ def fetchMails(mailbox, mailAccount, criterion):
         logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
         return
 
-    logger.debug("Successfully fetched emails")
+    logger.info("Successfully fetched emails")
 
 
-    logger.debug("Parsing emails from data and saving to db ...")
+    logger.info("Parsing emails from data and saving to db ...")
+    status = True
     for mailData in mailDataList:
         try: 
             parsedMail = parseMail(mailData)
@@ -167,9 +168,12 @@ def fetchMails(mailbox, mailAccount, criterion):
             insertEMail(parsedMail, mailAccount)
         
         except Exception as e:
+            status = False
             logger.error(f"Error parsing and saving email with subject {parsedMail[constants.ParsedMailKeys.Header.SUBJECT]} from {parsedMail[constants.ParsedMailKeys.Header.DATE]}!", exc_info=True)
             continue
 
-    logger.debug("Successfully parsed emails from data and saved to db.")
-
+    if status:
+        logger.info("Successfully parsed emails from data and saved to db.")
+    else:
+        logger.info("Parsed emails from data and saved to db with an error.")
         

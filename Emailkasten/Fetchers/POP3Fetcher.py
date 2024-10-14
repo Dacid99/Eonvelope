@@ -44,13 +44,15 @@ class POP3Fetcher:
     def connectToHost(self):
         self.logger.debug(f"Connecting to {str(self.account)} ...")
         self._mailhost = poplib.POP3(host=self.account.mail_host, port=self.account.mail_host_port, timeout=None)
-        self.logger.debug("Success")
+        self.logger.debug("Successfully connected to account.")
+
 
     def login(self):
         self.logger.debug(f"Logging into {str(self.account)} ...")
         self._mailhost.user(self.account.mail_account)
         self._mailhost.pass_(self.account.password)
-        self.logger.info(f"Successfully logged into {str(self.account)}.")
+        self.logger.debug(f"Successfully logged into {str(self.account)}.")
+
 
     def close(self):
         self.logger.debug(f"Closing connection to {str(self.account)} ...")
@@ -61,10 +63,14 @@ class POP3Fetcher:
             except poplib.error_proto:
                 self.logger.error(f"Failed to close connection to {str(self.account)}!", exc_info=True)
 
+
     def __bool__(self):
         self.logger.debug(f"Testing connection to {str(self.account)}")
-        return self._mailhost is not None
-    
+        status = self._mailhost is not None
+        self.logger.debug(f"Tested account with result {status}.")
+        return status
+
+
     @staticmethod
     def test(account):
         with POP3Fetcher(account) as pop3Fetcher:
@@ -98,9 +104,11 @@ class POP3Fetcher:
             self.logger.error(f"Failed to fetch all messages in {str(self.account)}!", exc_info=True)
             return []
 
+
     def __enter__(self):
         self.logger.debug(str(self.__class__.__name__) + "._enter_")
         return self
+
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.logger.debug(str(self.__class__.__name__) + "._exit_")

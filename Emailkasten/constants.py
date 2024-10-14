@@ -54,6 +54,7 @@ class LoggerConfiguration:
 class ParsingConfiguration:
     CHARSET_DEFAULT = 'utf-8'
     STRIP_TEXTS = True
+    THROW_OUT_SPAM = True
     APPLICATION_TYPES = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
     
 class ProcessingConfiguration:

@@ -147,6 +147,10 @@ def fetchMails(mailbox, mailAccount, criterion):
         try: 
             parsedMail = parseMail(mailData)
 
+            if constants.ParsingConfiguration.THROW_OUT_SPAM and parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG]:
+                logger.debug("Not saving email, it is flagged as spam.")
+                continue
+
             if mailbox.save_toEML:
                 writeMessageToEML(parsedMail)
                 prerender(parsedMail)

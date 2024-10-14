@@ -9,7 +9,7 @@ return serialized db data after scan and fetch_all
 parsing walks multiple times, could be more efficient
 maybe unique together account and id 
 reconsider decoding of mailbytes using BytesParser
-option to throw spam out by default
+more spam flags
 
 # to test
 

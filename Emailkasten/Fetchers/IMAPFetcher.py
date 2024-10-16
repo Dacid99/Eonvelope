@@ -134,7 +134,7 @@ class IMAPFetcher:
             self.logger.debug(f"Opening mailbox {mailbox} of {str(self.account)} ...")
             self._mailhost.select(mailbox, readonly=True)
             self.logger.debug("Successfully opened mailbox.")
-            status, messageNumbers = self._mailhost.search(None, searchCriterion)
+            status, messageNumbers = self._mailhost.uid('SEARCH', None, searchCriterion)
             if status != "OK":
                 self.logger.error(f"Bad response searching for mails, response {status}")
                 return []
@@ -143,7 +143,7 @@ class IMAPFetcher:
             
             mailDataList = []
             for number in messageNumbers[0].split():
-                status, messageData = self._mailhost.fetch(number, '(RFC822)')
+                status, messageData = self._mailhost.uid('FETCH', number, '(RFC822)')
                 if status != "OK":
                     self.logger.error(f"Bad response fetching mail {number}, response {status}")
                     continue

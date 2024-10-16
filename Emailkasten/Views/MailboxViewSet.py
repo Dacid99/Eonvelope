@@ -50,12 +50,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         changedMailbox = request.get_object()
         
-        if mailbox.account__protocol.startswith(IMAPFetcher.PROTOCOL):
-            availableFetchingOptions = IMAPFetcher.AVAILABLE_FETCHING_CRITERIA
-        elif mailbox.account__protocol.startswith(POP3Fetcher.PROTOCOL):
-            availableFetchingOptions = POP3Fetcher.AVAILABLE_FETCHING_CRITERIA
-        else:
-            availableFetchingOptions = []
+        availableFetchingOptions = changedMailbox.getAvailableFetchingCriteria()
           
         if changedMailbox.fetching_criterion not in availableFetchingOptions:
             return Response({'error': "Fetching criterion not available for this mailbox!"}, status=status.HTTP_400_BAD_REQUEST)
@@ -88,10 +83,9 @@ class MailboxViewSet(viewsets.ModelViewSet):
     def fetching_options(self, request, pk=None):
         mailbox = self.get_object()
 
-        if mailbox.account__protocol.startswith(IMAPFetcher.PROTOCOL):
-            return Response({'fetching_options': IMAPFetcher.AVAILABLE_FETCHING_CRITERIA})
-        elif mailbox.account__protocol.startswith(POP3Fetcher.PROTOCOL):
-            return Response({'fetching_options': POP3Fetcher.AVAILABLE_FETCHING_CRITERIA})
+        availableFetchingOptions = mailbox.getAvailableFetchingCriteria()
+        if availableFetchingOptions:
+            return Response({'options': availableFetchingOptions})
         else:
-            return Response({'error': "The protocol of this account is unknown!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'error': "No fetching options available for this mailbox!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     

@@ -40,6 +40,15 @@ class MailboxModel(models.Model):
     def __str__(self):
         return f"Mailbox {self.name} of {self.account}"
 
+    def getAvailableFetchingCriteria(self):
+        if mailbox.account__protocol.startswith(IMAPFetcher.PROTOCOL):
+            availableFetchingOptions = IMAPFetcher.AVAILABLE_FETCHING_CRITERIA
+        elif mailbox.account__protocol.startswith(POP3Fetcher.PROTOCOL):
+            availableFetchingOptions = POP3Fetcher.AVAILABLE_FETCHING_CRITERIA
+        else:
+            availableFetchingOptions = []
+        return availableFetchingOptions
+
     class Meta:
         unique_together = ('name', 'account')
         db_table = "mailboxes"

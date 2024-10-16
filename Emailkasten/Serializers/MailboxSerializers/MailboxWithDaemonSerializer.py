@@ -38,4 +38,8 @@ class MailboxWithDaemonSerializer(serializers.ModelSerializer):
             daemonInstance.save()
         
         return super().update(instance, validated_data)
+
+    def validate_fetching_criterion(self, value):
+        if self.instance and value not in self.instance.getAvailableFetchingCriteria():
+            raise serializers.ValidationError("Fetching criterion not available for this mailbox!")
     

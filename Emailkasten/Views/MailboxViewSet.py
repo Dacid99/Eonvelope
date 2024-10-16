@@ -45,17 +45,6 @@ class MailboxViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return MailboxModel.objects.filter(account__user = self.request.user)
-
-
-    def update(self, request, *args, **kwargs):
-        changedMailbox = request.get_object()
-        
-        availableFetchingOptions = changedMailbox.getAvailableFetchingCriteria()
-          
-        if changedMailbox.fetching_criterion not in availableFetchingOptions:
-            return Response({'error': "Fetching criterion not available for this mailbox!"}, status=status.HTTP_400_BAD_REQUEST)
-
-        return super().update(request, *args, **kwargs)
     
 
     @action(detail=True, methods=['post'])

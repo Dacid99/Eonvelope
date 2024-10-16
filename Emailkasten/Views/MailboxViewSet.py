@@ -65,7 +65,8 @@ class MailboxViewSet(viewsets.ModelViewSet):
         
         fetchMails(mailbox, mailbox.account, constants.MailFetchingCriteria.ALL)
 
-        return Response({'status': 'All mails fetched', 'account': mailbox.account.mail_address, 'mailbox': mailbox.name})
+        mailboxSerializer = self.get_serializer(mailbox)
+        return Response({'status': 'All mails fetched', "mailbox": mailboxSerializer.data})
 
 
     @action(detail=True, methods=['get'])

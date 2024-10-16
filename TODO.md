@@ -4,7 +4,6 @@ custom fetching filters with NOT, OR and custom criteria
 distinguish configs by env, db and user-immutables, migrate db settings to initial settings
 autostart daemons on restart
 custom additional healthchecks
-return serialized db data after scan and fetch_all
 parsing walks multiple times, could be more efficient
 maybe unique together account and id 
 reconsider decoding of mailbytes using BytesParser
@@ -13,6 +12,7 @@ reading from imap with uid
 exceptions while fetching parsing and inserting for appropriate api response
 
 # to test
+serialized db data after scan and fetch_all
 
 # to fix
 'Decoding this mime part returned error' for paypal

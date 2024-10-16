@@ -25,3 +25,8 @@ class MailboxSerializer(serializers.ModelSerializer):
         model = MailboxModel
         fields = '__all__'
         read_only_fields = ['name', 'account', 'created', 'updated']
+
+    def validate_fetching_criterion(self, value):
+        if self.instance and value not in self.instance.getAvailableFetchingCriteria():
+            raise serializers.ValidationError("Fetching criterion not available for this mailbox!")
+    

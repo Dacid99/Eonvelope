@@ -55,8 +55,8 @@ class StorageConfiguration:
     PRERENDER_IMAGETYPE = 'jpg'
 
 class LoggerConfiguration:
-    APP_LOGFILE_PATH = "/var/log/Emailkasten.log" # 
-    DJANGO_LOGFILE_PATH = "/var/log/django.log"  # 
+    APP_LOGFILE_PATH = "Emailkasten.log" # /var/log/
+    DJANGO_LOGFILE_PATH = "django.log"  # /var/log/
     APP_LOG_LEVEL = os.environ.get('APP_LOG_LEVEL', 'INFO')
     DJANGO_LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
     ROOT_LOG_LEVEL = os.environ.get('ROOT_LOG_LEVEL', 'INFO')

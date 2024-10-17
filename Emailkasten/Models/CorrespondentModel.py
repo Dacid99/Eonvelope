@@ -17,7 +17,7 @@
 '''
 
 from django.db import models
-from .Models.AccountModel import AccountModel
+from .AccountModel import AccountModel
 
 class CorrespondentModel(models.Model):
     email_name = models.CharField(max_length=255, blank=True)

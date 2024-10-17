@@ -26,7 +26,6 @@ class AttachmentModel(models.Model):
         path=constants.StorageConfiguration.STORAGE_PATH,
         max_length=511,
         recursive=True,
-        unique=True,
         null=True)
     datasize = models.IntegerField()
     email = models.ForeignKey(EMailModel, related_name="attachments", on_delete=models.CASCADE)
@@ -38,3 +37,5 @@ class AttachmentModel(models.Model):
 
     class Meta:
         db_table = "attachments"
+        unique_together = ("file_path", "email")
+

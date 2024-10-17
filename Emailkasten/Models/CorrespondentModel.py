@@ -17,10 +17,12 @@
 '''
 
 from django.db import models
+from .Models.AccountModel import AccountModel
 
 class CorrespondentModel(models.Model):
     email_name = models.CharField(max_length=255, blank=True)
-    email_address = models.CharField(max_length=255, unique=True)
+    email_address = models.CharField(max_length=255)
+    account = models.ForeignKey(AccountModel, related_name="correspondents", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
@@ -29,3 +31,4 @@ class CorrespondentModel(models.Model):
 
     class Meta:
         db_table = "correspondents"
+        unique_together = ("email_address", "account")

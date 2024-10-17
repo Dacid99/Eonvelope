@@ -31,11 +31,12 @@ from .constants import ParsedMailKeys
 logger = logging.getLogger(__name__)
 
 
-def _insertCorrespondent(correspondentData):   
+def _insertCorrespondent(correspondentData, account):   
     logger.debug(f"Creating entry for correspondent in DB...")
          
     correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
         email_address = correspondentData[1], 
+        account = account,
         defaults = {'email_name': correspondentData[0]}
     )
     if created:
@@ -106,6 +107,7 @@ def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
         logger.debug("Creating entry for mailinglist in DB...")
         mailinglistEntry, created = MailingListModel.objects.get_or_create(
                 list_id = mailinglistData[ParsedMailKeys.MailingList.ID],
+                correspondent = fromCorrespondentEntry,
                 defaults= {
                     'list_owner': mailinglistData[ParsedMailKeys.MailingList.OWNER],
                     'list_subscribe': mailinglistData[ParsedMailKeys.MailingList.SUBSCRIBE],
@@ -113,7 +115,6 @@ def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
                     'list_post': mailinglistData[ParsedMailKeys.MailingList.POST],
                     'list_help': mailinglistData[ParsedMailKeys.MailingList.HELP],
                     'list_archive': mailinglistData[ParsedMailKeys.MailingList.ARCHIVE],
-                    'correspondent': fromCorrespondentEntry
                 }
             )
         if created:
@@ -165,7 +166,7 @@ def insertEMail(parsedEMail, account):
             if fromCorrespondent:
                 logger.debug("Adding FROM correspondent to DB...")
                 
-                fromCorrespondentEntry = _insertCorrespondent(fromCorrespondent[0]) #there should only be one from correspondent
+                fromCorrespondentEntry = _insertCorrespondent(fromCorrespondent[0], account) #there should only be one from correspondent
             else:
                 logger.error("No FROM Correspondent found in mail, not writing to DB!")
                 
@@ -269,7 +270,7 @@ def insertEMail(parsedEMail, account):
                         logger.debug(f"Creating entry for {mentionType} correspondents in DB...")
                         
                         for correspondentData in parsedEMail[correspondentHeader]:
-                            correspondentEntry = _insertCorrespondent(correspondentData)
+                            correspondentEntry = _insertCorrespondent(correspondentData, account)
                             _insertEMailCorrespondent(emailEntry, correspondentEntry, mentionType)
                             
                         logger.debug(f"Successfully added entries for {mentionType} correspondents to DB.")

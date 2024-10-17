@@ -21,7 +21,7 @@ from django.contrib.auth.models import User
 from .. import constants
 
 class AccountModel(models.Model):
-    mail_address = models.EmailField(max_length=255, unique=True)
+    mail_address = models.EmailField(max_length=255)
     password = models.CharField(max_length=255)
     mail_host = models.CharField(max_length=255)
     mail_host_port = models.IntegerField(null=True)
@@ -43,4 +43,6 @@ class AccountModel(models.Model):
 
     class Meta:
         db_table = "accounts"
+        unique_together = ("mail_address", "user")
+
 

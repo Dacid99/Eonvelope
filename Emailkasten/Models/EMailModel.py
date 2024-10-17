@@ -23,7 +23,7 @@ from .MailingListModel import MailingListModel
 
 
 class EMailModel(models.Model):
-    message_id = models.CharField(max_length=255, unique=True)
+    message_id = models.CharField(max_length=255)
     datetime = models.DateTimeField()
     email_subject = models.CharField(max_length=255)
     bodytext = models.TextField()
@@ -77,3 +77,4 @@ class EMailModel(models.Model):
 
     class Meta:
         db_table = "emails"
+        unique_together = ("message_id", "account")

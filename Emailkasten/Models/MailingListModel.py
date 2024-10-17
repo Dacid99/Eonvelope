@@ -20,7 +20,7 @@ from django.db import models
 from .CorrespondentModel import CorrespondentModel
 
 class MailingListModel(models.Model):
-    list_id = models.CharField(max_length=255, unique=True)
+    list_id = models.CharField(max_length=255)
     list_owner = models.CharField(max_length=255, null=True)
     list_subscribe = models.EmailField(max_length=255, null=True)
     list_unsubscribe = models.EmailField(max_length=255, null=True)
@@ -38,3 +38,5 @@ class MailingListModel(models.Model):
 
     class Meta:
         db_table = "mailinglists"
+        unique_together = ("list_id", "correspondent")
+

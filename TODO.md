@@ -10,6 +10,7 @@ more spam flags
 exceptions while fetching parsing and inserting for appropriate api response
 user divided storage to make file_paths unique again
 some fallback for failed emailaddress parsing is required
+combined filter for correspondent with mention 
 
 # work in progress
 

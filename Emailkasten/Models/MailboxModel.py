@@ -20,6 +20,8 @@ from django.db import models
 from rest_framework.decorators import action
 from ..constants import MailFetchingCriteria, FetchingConfiguration
 from .AccountModel import AccountModel
+from ..Fetchers.IMAPFetcher import IMAPFetcher
+from ..Fetchers.POP3Fetcher import POP3Fetcher 
 
 class MailboxModel(models.Model):
     name = models.CharField(max_length=255)
@@ -39,9 +41,9 @@ class MailboxModel(models.Model):
         return f"Mailbox {self.name} of {self.account}"
 
     def getAvailableFetchingCriteria(self):
-        if mailbox.account__protocol.startswith(IMAPFetcher.PROTOCOL):
+        if self.account.protocol.startswith(IMAPFetcher.PROTOCOL):
             availableFetchingOptions = IMAPFetcher.AVAILABLE_FETCHING_CRITERIA
-        elif mailbox.account__protocol.startswith(POP3Fetcher.PROTOCOL):
+        elif self.account.protocol.startswith(POP3Fetcher.PROTOCOL):
             availableFetchingOptions = POP3Fetcher.AVAILABLE_FETCHING_CRITERIA
         else:
             availableFetchingOptions = []

@@ -9,14 +9,15 @@ reconsider decoding of mailbytes using BytesParser
 more spam flags
 exceptions while fetching parsing and inserting for appropriate api response
 user divided storage to make file_paths unique again
+some fallback for failed emailaddress parsing is required
 
 # work in progress
 
 # to test
-unique together account and id, adapted insertion and querying
 
 # to fix
-'Decoding this mime part returned error' for paypal
+'Decoding this mime part returned error' for paypal in prerender
+google notifcations not formatted in prerender
 
 # at next db reset
 start to use configurationmodel

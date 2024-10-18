@@ -20,7 +20,6 @@ import email
 import email.header
 import email.utils
 import email_validator
-import sys
 import datetime
 import logging
 from .constants import ParsingConfiguration 
@@ -64,15 +63,18 @@ def _decodeHeader(header):
         return decodedString
     
 
-def _separateRFC2822MailAddressFormat(mailer):
-    mailName, mailAddress = email.utils.parseaddr(mailer)
-    try:
-        email_validator.validate_email(mailAddress, check_deliverability=False)
-    except email_validator.EmailNotValidError:
-        logger.warning(f"Separation of mailname and address failed for {mailer}!")
-        mailAddress = mailer 
+def _separateRFC2822MailAddressFormat(mailers):
+    decodedMailers = [_decodeHeader(mailer) for mailer in mailers]
+    mailAddresses = email.utils.getaddresses(decodedMailers)
+    separatedMailers = []
+    for mailName, mailAddress in mailAddresses:
+        try:
+            email_validator.validate_email(mailAddress, check_deliverability=False)
+        except email_validator.EmailNotValidError:
+            logger.warning(f"Mailaddress is invalid for {mailName}, {mailAddress}!")
 
-    return (mailName, mailAddress)
+        separatedMailers.append( (mailName, mailAddress) )
+    return separatedMailers
 
 
 def _parseMessageID(mailMessage):
@@ -225,14 +227,14 @@ def _parseMailinglist(mailMessage):
 
 def _parseCorrespondents(mailMessage, mentionHeaderKey):
     logger.debug(f"Parsing {mentionHeaderKey} ...")
-    recipients = mailMessage.get_all(mentionHeaderKey)
-    if recipients is None:
+    correspondents = mailMessage.get_all(mentionHeaderKey)
+    if correspondents is None:
         logger.debug(f"No {mentionHeaderKey} correspondents found in mail!")
         return []
     else:
         logger.debug(f"Successfully parsed {mentionHeaderKey} correspondents.")
-    decodedAndSeparatedRecipients = [ _separateRFC2822MailAddressFormat(_decodeHeader(recipient)) for recipient in recipients ]
-    return decodedAndSeparatedRecipients
+        
+    return _separateRFC2822MailAddressFormat(correspondents)
 
 
 

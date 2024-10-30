@@ -22,6 +22,18 @@ from .. import constants
 import logging
 
 class POP3Fetcher: 
+    """Maintains a connection to the POP server and fetches data
+
+    Opens a connection to the POP server on construction, it's preferably used in a 'with' environment.
+    Allows fetching of mails and mailboxes from an account on an POP host.
+
+    Attributes:
+        PROTOCOL (string): Name of the used protocol, refers to :class:`constants.MailFetchingProtocols`.
+        AVAILABLE_FETCHING_CRITERIA (list): List of all criteria available for fetching. 
+        account (:class:`Emailkasten.Models.AccountModel`): The model of the account to be fetched from.
+        logger (logging.Logger): The logger for this instance.
+        _mailhost (poplib.POP3): The POP host this instance connects to.
+    """
 
     PROTOCOL = constants.MailFetchingProtocols.POP3
 
@@ -30,6 +42,15 @@ class POP3Fetcher:
     ]
 
     def __init__(self, account):
+        """Constructor, starts the POP connection and logs into the account.
+        If the connection could not be established, `_mailhost` remains None and the `account` is marked as unhealthy.
+
+        Args:
+            account (:class:`Emailkasten.Models.AccountModel`): The model of the account to be fetched from.
+        
+        Returns:
+            None
+        """
         self.account = account
 
         self.logger = logging.getLogger(__name__)
@@ -46,12 +67,22 @@ class POP3Fetcher:
 
 
     def connectToHost(self):
+        """Opens the connection to the POP server using the credentials from `account`.
+        
+        Returns:
+            None
+        """
         self.logger.debug(f"Connecting to {str(self.account)} ...")
         self._mailhost = poplib.POP3(host=self.account.mail_host, port=self.account.mail_host_port, timeout=None)
         self.logger.debug("Successfully connected to account.")
 
 
     def login(self):
+        """Logs into the target account using credentials from `account`.
+        
+        Returns:
+            None
+        """
         self.logger.debug(f"Logging into {str(self.account)} ...")
         self._mailhost.user(self.account.mail_account)
         self._mailhost.pass_(self.account.password)
@@ -59,6 +90,11 @@ class POP3Fetcher:
 
 
     def close(self):
+        """Logs out of the account and closes the connection to the POP server if it is open.
+        
+        Returns:
+            None
+        """
         self.logger.debug(f"Closing connection to {str(self.account)} ...")
         if self._mailhost:
             try:
@@ -69,6 +105,11 @@ class POP3Fetcher:
 
 
     def __bool__(self):
+        """Returns whether the connection to the POP host is alive.
+
+        Returns:
+            bool: Whether `_mailhost` is None or not.
+        """
         self.logger.debug(f"Testing connection to {str(self.account)}")
         status = self._mailhost is not None
         self.logger.debug(f"Tested account with result {status}.")
@@ -77,11 +118,24 @@ class POP3Fetcher:
 
     @staticmethod
     def test(account):
+        """Static method to test the validity of account data.
+
+        Args:
+            account (:class:`Emailkasten.Models.AccountModel`): Data of the account to be tested.
+
+        Returns:
+            bool: Whether a connection was successfully established or not.
+        """
         with POP3Fetcher(account) as pop3Fetcher:
             return bool(pop3Fetcher)
 
 
     def fetchAll(self):
+        """Fetches and returns all maildata from the server.
+        
+        Returns:
+            list: List of :class:`email.Message` mails in the mailbox matching the criterion. Empty if no such messages are found or if an error occured.
+        """
         self.logger.debug(f"Fetching all messages in {str(self.account)} ...")
         try:
             status, messageNumbersList, _ = self._mailhost.list()
@@ -110,10 +164,12 @@ class POP3Fetcher:
 
 
     def __enter__(self):
+        """Framework method for use of class in 'with' statement, creates an instance."""
         self.logger.debug(str(self.__class__.__name__) + "._enter_")
         return self
 
 
     def __exit__(self, exc_type, exc_value, traceback):
+        """Framework method for use of class in 'with' statement, closes an instance."""
         self.logger.debug(str(self.__class__.__name__) + "._exit_")
         self.close()

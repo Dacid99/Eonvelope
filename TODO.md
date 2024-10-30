@@ -8,6 +8,7 @@ parsing walks multiple times, could be more efficient
 reconsider decoding of mailbytes using BytesParser
 more spam flags
 exceptions while fetching parsing and inserting for appropriate api response
+more finegrain try catch in fetchers, marking as unhealthy for wrong data
 user divided storage to make file_paths unique again
 some fallback for failed emailaddress parsing is required
 combined filter for correspondent with mention 

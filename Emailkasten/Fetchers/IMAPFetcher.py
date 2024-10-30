@@ -105,7 +105,7 @@ class IMAPFetcher:
         
 
     def close(self):
-        """Logs out of the account and closes the connection to the IMAP server.
+        """Logs out of the account and closes the connection to the IMAP server if it is open.
         
         Returns:
             None
@@ -191,7 +191,7 @@ class IMAPFetcher:
                 If an invalid criterion is given, returns []. 
 
         Returns:
-            list: List of :class:`email.Message` mails in the mailbox matching the criterion. Empty if no such messages are found.
+            list: List of :class:`email.Message` mails in the mailbox matching the criterion. Empty if no such messages are found or if an error occured.
         """
         if not self._mailhost:
             self.logger.error(f"No connection to {str(self.account)}!")   

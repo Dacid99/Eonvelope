@@ -31,12 +31,20 @@ from .constants import ParsedMailKeys
 logger = logging.getLogger(__name__)
 
 
-def _insertCorrespondent(correspondentData, account):   
+def _insertCorrespondent(correspondentData):   
+    """Writes the given data of a correspondent to the database.  
+    If a correspondent with that address already exists, updates the name field if it is blank.
+
+    Args:
+        correspondentData (dict): Data of the correspondent as created by `Emailkasten.mailParsing.parseCorrespondent` to be inserted.
+
+    Returns:
+        :class:`Emailkasten.Models.CorrespondentModel`: The entry to the correspondent from the database. 
+    """
     logger.debug(f"Creating entry for correspondent in DB...")
          
     correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
-        email_address = correspondentData[1], 
-        account = account,
+        email_address = correspondentData[1],
         defaults = {'email_name': correspondentData[0]}
     )
     if created:
@@ -166,7 +174,7 @@ def insertEMail(parsedEMail, account):
             if fromCorrespondent:
                 logger.debug("Adding FROM correspondent to DB...")
                 
-                fromCorrespondentEntry = _insertCorrespondent(fromCorrespondent[0], account) #there should only be one from correspondent
+                fromCorrespondentEntry = _insertCorrespondent(fromCorrespondent[0]) #there should only be one from correspondent
             else:
                 logger.error("No FROM Correspondent found in mail, not writing to DB!")
                 
@@ -270,7 +278,7 @@ def insertEMail(parsedEMail, account):
                         logger.debug(f"Creating entry for {mentionType} correspondents in DB...")
                         
                         for correspondentData in parsedEMail[correspondentHeader]:
-                            correspondentEntry = _insertCorrespondent(correspondentData, account)
+                            correspondentEntry = _insertCorrespondent(correspondentData)
                             _insertEMailCorrespondent(emailEntry, correspondentEntry, mentionType)
                             
                         logger.debug(f"Successfully added entries for {mentionType} correspondents to DB.")

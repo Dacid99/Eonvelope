@@ -18,7 +18,6 @@
 
 from django.db import models
 from rest_framework.decorators import action
-from .AccountModel import AccountModel
 
 class CorrespondentModel(models.Model):
     email_name = models.CharField(max_length=255, blank=True)

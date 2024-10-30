@@ -53,7 +53,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def scan_mailboxes(self, request, pk=None):
         account = self.get_object()
-        mailboxesList = scanMailboxes(account)
+        scanMailboxes(account)
         
         accountSerializer = self.get_serializer(account)
         return Response({'status': 'Scanned for mailboxes', 'account': accountSerializer.data})

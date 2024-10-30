@@ -26,12 +26,21 @@ import logging
 from .mailParsing import parseMail
 from .mailRendering import prerender
 from .emailDBFeeding import insertEMail, insertMailbox
-import datetime
+
 
 from . import constants
 
 
 def testAccount(account):
+    """Tests whether the data in an accountmodel is correct and allows connecting and logging in to the mailhost and account.
+    Set is_healthy according to the result. Relies on the `test` static method of the `Emailkasten.Fetchers` classes. 
+    
+    Args:
+        account (:class:`Emailkasten.Models.AccountModel`): The account data to test.
+        
+    Returns:
+        bool: The result of the test.
+    """
     logger = logging.getLogger(__name__)
 
     logger.info(f"Testing {str(account)} ...")
@@ -62,29 +71,39 @@ def testAccount(account):
 
 
 
-def scanMailboxes(mailAccount):
+def scanMailboxes(account):
+    """Scans the given mailaccount for mailboxes, inserts them into the database. 
+    For POP3 accounts, there is only one mailbox, it defaults to INBOX.
+    Relies on the `fetchMailboxes` method of the `Emailkasten.Fetchers` classes and `insertMailbox` from `Emailkasten.emailDBFeeding`. 
+
+    Args:
+        account (:class:`Emailkasten.Models.AccountModel`): The data of the account to scan for mailboxes.
+        
+    Returns:
+        None
+    """
     logger = logging.Logger(__name__)
 
-    logger.info(f"Searching mailboxes in {mailAccount}...")
+    logger.info(f"Searching mailboxes in {account}...")
 
-    if mailAccount.protocol == IMAPFetcher.PROTOCOL:
-        with IMAPFetcher(mailAccount) as imapMail:
-
-            mailboxes = imapMail.fetchMailboxes()
-
-    elif mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-        with IMAP_SSL_Fetcher(mailAccount) as imapMail:
+    if account.protocol == IMAPFetcher.PROTOCOL:
+        with IMAPFetcher(account) as imapMail:
 
             mailboxes = imapMail.fetchMailboxes()
 
-    elif mailAccount.protocol == POP3Fetcher.PROTOCOL:
+    elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+        with IMAP_SSL_Fetcher(account) as imapMail:
+
+            mailboxes = imapMail.fetchMailboxes()
+
+    elif account.protocol == POP3Fetcher.PROTOCOL:
         mailboxes = ['INBOX']
 
-    elif mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
+    elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
         mailboxes = ['INBOX']
 
-    elif mailAccount.protocol == ExchangeFetcher.PROTOCOL:
-        with ExchangeFetcher(mailAccount) as exchangeMail:
+    elif account.protocol == ExchangeFetcher.PROTOCOL:
+        with ExchangeFetcher(account) as exchangeMail:
 
             mailboxes = exchangeMail.fetchMailboxes()
 
@@ -93,39 +112,52 @@ def scanMailboxes(mailAccount):
         mailboxes = []
         
     for mailbox in mailboxes:
-        insertMailbox(mailbox, mailAccount)
+        insertMailbox(mailbox, account)
 
     logger.info("Successfully searched mailboxes")
-    return mailboxes
+
 
     
 
-def fetchMails(mailbox, mailAccount, criterion):
+def fetchMails(mailbox, account, criterion):
+    """Fetches maildata from a given mailbox in a mailaccount based on a search criterion and stores them in the database. 
+    For POP3 accounts, there is only one mailbox and no options for specific queries, so all messages are fetched.
+    Relies on the `fetchBySearch` and `fetchAll` methods of the `Emailkasten.Fetchers` classes, the methods from `Emailkasten.mailParsing` and `Emailkasten.emailDBFeeding`. 
+
+    Args:
+        mailbox (:class:`Emailkasten.Models.MailboxModel`): The data of the mailbox to fetch from.
+        account (:class:`Emailkasten.Models.AccountModel`): The data of the mailaccount to fetch from.
+        criterion (str): A formatted criterion for message filtering as returned by `Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
+            If none is given, defaults to RECENT inside `Emailkasten.Fetchers.IMAPFetcher.fetchBySearch`.
+        
+    Returns:
+        None
+    """
     logger = logging.getLogger(__name__)
 
-    logger.info(f"Fetching emails with criterion {criterion} from mailbox {mailbox} in account {mailAccount}...")
-    if mailAccount.protocol == IMAPFetcher.PROTOCOL:
-        with IMAPFetcher(mailAccount) as imapMail:
+    logger.info(f"Fetching emails with criterion {criterion} from mailbox {mailbox} in account {account}...")
+    if account.protocol == IMAPFetcher.PROTOCOL:
+        with IMAPFetcher(account) as imapMail:
 
-            mailDataList = imapMail.fetchBySearch(mailbox=mailbox.name, criterionName=criterion)
+            mailDataList = imapMail.fetchBySearch(mailbox=mailbox.name, criterion=criterion)
 
-    elif mailAccount.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-        with IMAP_SSL_Fetcher(mailAccount) as imapMail:
+    elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+        with IMAP_SSL_Fetcher(account) as imapMail:
 
-            mailDataList = imapMail.fetchBySearch(mailbox=mailbox.name, criterionName=criterion)
+            mailDataList = imapMail.fetchBySearch(mailbox=mailbox.name, criterion=criterion)
 
-    elif mailAccount.protocol == POP3Fetcher.PROTOCOL:
-        with POP3Fetcher(mailAccount) as popMail:
-
-            mailDataList = popMail.fetchAll()
-
-    elif mailAccount.protocol == POP3_SSL_Fetcher.PROTOCOL:
-        with POP3_SSL_Fetcher(mailAccount) as popMail:
+    elif account.protocol == POP3Fetcher.PROTOCOL:
+        with POP3Fetcher(account) as popMail:
 
             mailDataList = popMail.fetchAll()
 
-    elif mailAccount.protocol == ExchangeFetcher.PROTOCOL:
-        with ExchangeFetcher(mailAccount) as exchangeMail:
+    elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
+        with POP3_SSL_Fetcher(account) as popMail:
+
+            mailDataList = popMail.fetchAll()
+
+    elif account.protocol == ExchangeFetcher.PROTOCOL:
+        with ExchangeFetcher(account) as exchangeMail:
 
             mailDataList = exchangeMail.fetchBySearch() #incomplete
 
@@ -165,7 +197,7 @@ def fetchMails(mailbox, mailAccount, criterion):
             else:
                 logger.debug(f"Not saving images for mailbox {mailbox.name}")
 
-            insertEMail(parsedMail, mailAccount)
+            insertEMail(parsedMail, account)
         
         except Exception as e:
             status = False

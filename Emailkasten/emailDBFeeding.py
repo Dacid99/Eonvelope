@@ -92,8 +92,9 @@ def _insertAttachment(attachmentData, emailEntry):
     If that entry already exists does nothing.
 
     Args:
-        attachmentData (dict): The data for the attachment to be inserted, as created by `Emailkasten.mailParsing.parseAttachment`.
+        attachmentData (dict): The data of the attachment to be inserted, as created by `Emailkasten.mailParsing.parseAttachment`.
         emailEntry (:class:`Emailkasten.Models.EMailModel`): The database entry of the mail that the attachment is part of.
+
     Returns:
         None
     """
@@ -117,8 +118,9 @@ def _insertImage(imageData, emailEntry):
     If that entry already exists does nothing.
 
     Args:
-        imageData (dict): The data for the image to be inserted, as created by `Emailkasten.mailParsing.parseImage`.
+        imageData (dict): The data of the image to be inserted, as created by `Emailkasten.mailParsing.parseImage`.
         emailEntry (:class:`Emailkasten.Models.EMailModel`): The database entry of the mail that the image is part of.
+
     Returns:
         None
     """
@@ -138,6 +140,16 @@ def _insertImage(imageData, emailEntry):
         
         
 def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
+    """Writes the given data for an mailingslist served by a existing correspondent to database.  
+    If that entry already exists does nothing. If the mailinglist has no ID, it will not be saved.
+
+    Args:
+        mailinglistData (dict): The data of the mailinglist to be inserted, as created by `Emailkasten.mailParsing.parseMailinglist`.
+        fromCorrespondentEntry (:class:`Emailkasten.Models.CorrespondentModel`): The database entry of the correspondent that serves the mailinglist.
+
+    Returns:
+        :class:``Emailkasten.Models.MailingListModel`: The database entry of the mailinglist, either newly created or retrieved.
+    """
     mailinglistEntry = None
     if mailinglistData[ParsedMailKeys.MailingList.ID]:
                 
@@ -165,13 +177,24 @@ def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
             
 
 
-def insertMailbox(mailbox, account):
-    logger.debug(f"Saving mailbox {mailbox} from {str(account)} to db ...")
+def insertMailbox(mailboxData, account):
+    """Writes the given data for a mailbox of an account to database. 
+    If a new entry is created, adds a new daemon entry for that mailbox as well. If any of the database operations fails, discards all changes to ensure data integrity.
+    If the entry for the mailbox already exists does nothing.
+
+    Args:
+        mailboxData (str): The name of the mailbox to be inserted, as created by `Emailkasten.mailParsing.parseMailbox`.
+        account (:class:`Emailkasten.Models.AccountModel`): The database entry of the account that the mailbox belongs to.
+
+    Returns:
+        None
+    """
+    logger.debug(f"Saving mailbox {mailboxData} from {str(account)} to db ...")
     try:
         with django.db.transaction.atomic():
             
             mailboxEntry, created = MailboxModel.objects.get_or_create(
-                name = mailbox,
+                name = mailboxData,
                 account = account
             )
             if created:
@@ -180,7 +203,7 @@ def insertMailbox(mailbox, account):
                 logger.debug("Attaching daemon...")
                 newDaemon = DaemonModel.objects.create(mailbox = mailboxEntry)
                 if not newDaemon:
-                    logger.error(f"Failed to create daemon for new mailbox {mailbox}!")
+                    logger.error(f"Failed to create daemon for new mailbox {mailboxData}!")
                 else:
                     logger.debug("Successfully created daemon for new mailbox")
             else:
@@ -193,13 +216,23 @@ def insertMailbox(mailbox, account):
 
 
 
-def insertEMail(parsedEMail, account):
-    logger.debug(f"Saving mail with subject {parsedEMail[ParsedMailKeys.Header.SUBJECT]} from {parsedEMail[ParsedMailKeys.Header.DATE]} to db ...")
+def insertEMail(emailData, account):
+    """Writes the given data for an email to database. 
+    If that entry already exists does nothing. If any of the database operations fails, discards all changes to ensure data integrity.
+
+    Args:
+        emailData (dict): The data of the mail to be inserted, as created by `Emailkasten.mailParsing.parseMail`.
+        account (:class:`Emailkasten.Models.AccountModel`): The database entry of the account that the mail was found in.
+
+    Returns:
+        None
+    """
+    logger.debug(f"Saving mail with subject {emailData[ParsedMailKeys.Header.SUBJECT]} from {emailData[ParsedMailKeys.Header.DATE]} to db ...")
     try:
         with django.db.transaction.atomic():
             
             # the FROM correspondent insertion has to be split to be able to add the FROM correspondent to an eventual mailinglist
-            fromCorrespondent = parsedEMail[ParsedMailKeys.Correspondent.FROM]
+            fromCorrespondent = emailData[ParsedMailKeys.Correspondent.FROM]
             if fromCorrespondent:
                 logger.debug("Adding FROM correspondent to DB...")
                 
@@ -210,22 +243,22 @@ def insertEMail(parsedEMail, account):
                 
                 
             mailinglistEntry = None  
-            if parsedEMail[ParsedMailKeys.MAILINGLIST] and fromCorrespondentEntry:
-                mailinglistEntry = _insertMailinglist(parsedEMail[ParsedMailKeys.MAILINGLIST], fromCorrespondentEntry)
+            if emailData[ParsedMailKeys.MAILINGLIST] and fromCorrespondentEntry:
+                mailinglistEntry = _insertMailinglist(emailData[ParsedMailKeys.MAILINGLIST], fromCorrespondentEntry)
             else:
                 logger.debug("No mailinglist info found in mail, not writing to DB")
                 
                 
                 
             inReplyToMailEntry = None
-            if parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO]:
+            if emailData[ParsedMailKeys.Header.IN_REPLY_TO]:
                 logger.debug("Querying inReplyTo mail ...")
                 try:
-                    inReplyToMailEntry = EMailModel.objects.get(message_id = parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO])
+                    inReplyToMailEntry = EMailModel.objects.get(message_id = emailData[ParsedMailKeys.Header.IN_REPLY_TO])
                     
                     logger.debug("Successfully retrieved inReplyTo mail.")
                 except EMailModel.DoesNotExist:
-                    logger.warning(f"Could not find inReplyTo mail {parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO]}!")     
+                    logger.warning(f"Could not find inReplyTo mail {emailData[ParsedMailKeys.Header.IN_REPLY_TO]}!")     
             else:
                 logger.debug("No In-Reply-To found in mail, not writing to DB")
                 
@@ -234,31 +267,31 @@ def insertEMail(parsedEMail, account):
             logger.debug("Creating entry for email in DB...")
             
             emailEntry, created = EMailModel.objects.get_or_create(
-                message_id = parsedEMail[ParsedMailKeys.Header.MESSAGE_ID],
+                message_id = emailData[ParsedMailKeys.Header.MESSAGE_ID],
                 defaults = {
                     'account' : account,
                     'mailinglist': mailinglistEntry,
                     'inReplyTo' : inReplyToMailEntry,
-                    'bodytext' : parsedEMail[ParsedMailKeys.BODYTEXT],
-                    'datasize' :  parsedEMail[ParsedMailKeys.SIZE],
-                    'eml_filepath' : parsedEMail[ParsedMailKeys.EML_FILE_PATH],
-                    'prerender_filepath': parsedEMail[ParsedMailKeys.PRERENDER_FILE_PATH],
-                    'datetime' : parsedEMail[ParsedMailKeys.Header.DATE],
-                    'email_subject' : parsedEMail[ParsedMailKeys.Header.SUBJECT],
-                    'comments': parsedEMail[ParsedMailKeys.Header.COMMENTS],
-                    'keywords': parsedEMail[ParsedMailKeys.Header.KEYWORDS],
-                    'importance': parsedEMail[ParsedMailKeys.Header.IMPORTANCE],
-                    'priority': parsedEMail[ParsedMailKeys.Header.PRIORITY],
-                    'precedence': parsedEMail[ParsedMailKeys.Header.PRECEDENCE],
-                    'received': parsedEMail[ParsedMailKeys.Header.RECEIVED],
-                    'user_agent': parsedEMail[ParsedMailKeys.Header.USER_AGENT],
-                    'auto_submitted': parsedEMail[ParsedMailKeys.Header.AUTO_SUBMITTED],
-                    'content_type': parsedEMail[ParsedMailKeys.Header.CONTENT_TYPE],
-                    'content_language': parsedEMail[ParsedMailKeys.Header.CONTENT_LANGUAGE],
-                    'content_location': parsedEMail[ParsedMailKeys.Header.CONTENT_LOCATION],
-                    'x_priority': parsedEMail[ParsedMailKeys.Header.X_PRIORITY],
-                    'x_originated_client': parsedEMail[ParsedMailKeys.Header.X_ORIGINATING_CLIENT],
-                    'x_spam': parsedEMail[ParsedMailKeys.Header.X_SPAM_FLAG]
+                    'bodytext' : emailData[ParsedMailKeys.BODYTEXT],
+                    'datasize' :  emailData[ParsedMailKeys.SIZE],
+                    'eml_filepath' : emailData[ParsedMailKeys.EML_FILE_PATH],
+                    'prerender_filepath': emailData[ParsedMailKeys.PRERENDER_FILE_PATH],
+                    'datetime' : emailData[ParsedMailKeys.Header.DATE],
+                    'email_subject' : emailData[ParsedMailKeys.Header.SUBJECT],
+                    'comments': emailData[ParsedMailKeys.Header.COMMENTS],
+                    'keywords': emailData[ParsedMailKeys.Header.KEYWORDS],
+                    'importance': emailData[ParsedMailKeys.Header.IMPORTANCE],
+                    'priority': emailData[ParsedMailKeys.Header.PRIORITY],
+                    'precedence': emailData[ParsedMailKeys.Header.PRECEDENCE],
+                    'received': emailData[ParsedMailKeys.Header.RECEIVED],
+                    'user_agent': emailData[ParsedMailKeys.Header.USER_AGENT],
+                    'auto_submitted': emailData[ParsedMailKeys.Header.AUTO_SUBMITTED],
+                    'content_type': emailData[ParsedMailKeys.Header.CONTENT_TYPE],
+                    'content_language': emailData[ParsedMailKeys.Header.CONTENT_LANGUAGE],
+                    'content_location': emailData[ParsedMailKeys.Header.CONTENT_LOCATION],
+                    'x_priority': emailData[ParsedMailKeys.Header.X_PRIORITY],
+                    'x_originated_client': emailData[ParsedMailKeys.Header.X_ORIGINATING_CLIENT],
+                    'x_spam': emailData[ParsedMailKeys.Header.X_SPAM_FLAG]
                 }
             )
             if created:
@@ -268,10 +301,10 @@ def insertEMail(parsedEMail, account):
             
             
             
-            if parsedEMail[ParsedMailKeys.ATTACHMENTS]: 
+            if emailData[ParsedMailKeys.ATTACHMENTS]: 
                 logger.debug("Creating entries for attachments in DB...")
                 
-                for attachmentData in parsedEMail[ParsedMailKeys.ATTACHMENTS]:
+                for attachmentData in emailData[ParsedMailKeys.ATTACHMENTS]:
                     _insertAttachment(attachmentData, emailEntry)
                 
                 logger.debug("Successfully added images to DB.")
@@ -280,10 +313,10 @@ def insertEMail(parsedEMail, account):
             
             
             
-            if parsedEMail[ParsedMailKeys.IMAGES]: 
+            if emailData[ParsedMailKeys.IMAGES]: 
                 logger.debug("Creating entries for images in DB...")
                 
-                for imageData in parsedEMail[ParsedMailKeys.IMAGES]:
+                for imageData in emailData[ParsedMailKeys.IMAGES]:
                     _insertImage(imageData, emailEntry)
                     
                 logger.debug("Successfully added images to DB.")
@@ -303,10 +336,10 @@ def insertEMail(parsedEMail, account):
                         logger.error(f"No {mentionType} correspondent found in mail, not writing to DB!")
                         
                 else:
-                    if parsedEMail[correspondentHeader]:
+                    if emailData[correspondentHeader]:
                         logger.debug(f"Creating entry for {mentionType} correspondents in DB...")
                         
-                        for correspondentData in parsedEMail[correspondentHeader]:
+                        for correspondentData in emailData[correspondentHeader]:
                             correspondentEntry = _insertCorrespondent(correspondentData)
                             _insertEMailCorrespondent(emailEntry, correspondentEntry, mentionType)
                             

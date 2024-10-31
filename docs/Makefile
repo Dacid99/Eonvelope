@@ -14,6 +14,9 @@ help:
 
 .PHONY: help Makefile
 
+source: Makefile
+	sphinx-apidoc -o source ../Emailkasten
+
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile

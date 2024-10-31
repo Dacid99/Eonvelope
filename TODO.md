@@ -19,6 +19,9 @@ documentation
 # work in progress
 
 # to test
+mailbox with full decode method
+parseMailbox splitting (why?)
+does decodeHeader do anything. if yes it should be used more
 
 # to fix
 'Decoding this mime part returned error' for paypal in prerender

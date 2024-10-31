@@ -35,7 +35,7 @@ __DATE_DEFAULT = "1971-01-01 00:00:00"  #must fit dateFormat
 
    
 def parseMailbox(mailboxBytes):
-    mailbox = mailboxBytes.decode(ParsingConfiguration.CHARSET_DEFAULT)
+    mailbox = _decodeText(mailboxBytes)
     mailboxName = mailbox.split("\"/\"")[1].strip()
     if mailboxName == "":
         mailboxName = mailbox.split("\" \"")[1].strip()

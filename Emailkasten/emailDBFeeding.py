@@ -16,6 +16,22 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
+"""Provides functions for inserting data from the mails and their environment into the database.
+Functions starting with _ are helpers and are used only within the scope of the module.
+
+Functions:
+    :func:`_insertCorrespondent`: Writes the given data of a correspondent to the database.  
+    :func:`_insertEMailCorrespondent`: Writes the connection betweeen an email and a correspondent to the database.
+    :func:`_insertAttachment`: Writes the given data for an attachment to the database. 
+    :func:`_insertImage`: Writes the given data for an image to the database.  
+    :func:`_insertMailinglist`: Writes the given data for an mailingslist served by a existing correspondent to database.  
+    :func:`insertMailbox`: Writes the given data for a mailbox of an account to database. 
+    :func:`insertEMail`: Writes the given data for an email to database.
+
+Global variables:
+    logger (:class:`python:logging.Logger`): The logger for this module.
+"""
+
 import django.db
 import logging
 from .Models.EMailModel import EMailModel

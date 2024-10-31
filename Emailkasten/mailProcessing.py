@@ -16,6 +16,18 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 '''
 
+"""Provides functions for processing the mails by fetching and storing them.
+Combines functions from :mod:`Emailkasten.emailDBFeeding`, :mod:`Emailkasten.mailParsing` and :mod:`Emailkasten.Fetchers`.
+
+Functions:
+    :func:`testAccount`: Tests whether the data in an accountmodel is correct and allows connecting and logging in to the mailhost and account.
+    :func:`scanMailboxes`: Scans the given mailaccount for mailboxes, inserts them into the database.
+    :func:`fetchMails`: Fetches maildata from a given mailbox in a mailaccount based on a search criterion and stores them in the database. 
+
+Global variables:
+    logger (:class:`python:logging.Logger`): The logger for this module.
+"""
+
 from .Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from .Fetchers.IMAPFetcher import IMAPFetcher
 from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
@@ -27,8 +39,10 @@ from .mailParsing import parseMail
 from .mailRendering import prerender
 from .emailDBFeeding import insertEMail, insertMailbox
 
-
 from . import constants
+
+
+logger = logging.getLogger(__name__)
 
 
 def testAccount(account):
@@ -41,8 +55,7 @@ def testAccount(account):
     Returns:
         bool: The result of the test.
     """
-    logger = logging.getLogger(__name__)
-
+    
     logger.info(f"Testing {str(account)} ...")
     if account.protocol == IMAPFetcher.PROTOCOL:
         result = IMAPFetcher.test(account)
@@ -82,8 +95,7 @@ def scanMailboxes(account):
     Returns:
         None
     """
-    logger = logging.Logger(__name__)
-
+    
     logger.info(f"Searching mailboxes in {account}...")
 
     if account.protocol == IMAPFetcher.PROTOCOL:
@@ -133,7 +145,6 @@ def fetchMails(mailbox, account, criterion):
     Returns:
         None
     """
-    logger = logging.getLogger(__name__)
 
     logger.info(f"Fetching emails with criterion {criterion} from mailbox {mailbox} in account {account}...")
     if account.protocol == IMAPFetcher.PROTOCOL:

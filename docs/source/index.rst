@@ -10,7 +10,7 @@ EMailkasten documentation
    :maxdepth: 2
    :caption: Contents:
 
-.. automodule:: EMailkasten
+.. automodule:: Emailkasten
    :members:
    :undoc-members:
    :show-inheritance:

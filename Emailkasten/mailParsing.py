@@ -262,6 +262,7 @@ def _parseImages(mailMessage):
 def _parseAttachments(mailMessage):
     """Parses the attachments in the given mailmessage.
     Looks for elements with content disposition attachment or content type in :attr:`Emailkasten.ParsingConfiguration.APPLICATION_TYPES`.
+    If no filename is found for a file uses the hash +.attachment.
 
     Args:
         mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.

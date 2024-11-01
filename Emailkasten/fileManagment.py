@@ -16,6 +16,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
+"""Provides functions for saving various files to the storage.
+Functions starting with _ are helpers and are used only within the scope of this module.
+
+Functions:
+    :func:`writeMessageToEML`: Saves an entire mail as a .eml file in the storage.
+    :func:`writeAttachments`: Saves all attachments of a mail to the storage.
+    :func:`writeImages`: Saves all inline images of a mail to the storage.
+    :func:`getPrerenderStoragePath`: Gets the storage path for a prerender image.
+
+Global variables:
+    logger (:python::class:`logging.Logger`): The logger for this module.
+"""
+
 import email
 import email.generator
 import os.path
@@ -29,6 +43,16 @@ logger = logging.getLogger(__name__)
 
 
 def writeMessageToEML(parsedEMail):
+    """Saves an entire mail as a .eml file in the storage.
+    The files name is given by the unique messageID.
+    If the file already exists, does not overwrite. If an error occurs, removes the incomplete file.
+
+    Args:
+        parsedEMail (dict): The parsed mail to be saved.
+
+    Returns:
+        None
+    """
     emlDirPath = StorageModel.getSubdirectory(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
     emlFilePath = os.path.join(emlDirPath , parsedEMail[ParsedMailKeys.Header.MESSAGE_ID] + ".eml")
 
@@ -77,6 +101,15 @@ def writeMessageToEML(parsedEMail):
 
 
 def writeAttachments(parsedEMail):
+    """Saves all attachments of a mail to the storage.
+    If the file already exists, does not overwrite. If no attachments are found, does nothing. If an error occurs, removes the incomplete file.
+
+    Args:
+        parsedEMail (dict): The parsed mail with attachments to be saved.
+
+    Returns:
+        None
+    """
     logger.debug("Saving attachments from mail ...")
     
     dirPath = StorageModel.getSubdirectory(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
@@ -131,6 +164,15 @@ def writeAttachments(parsedEMail):
 
 
 def writeImages(parsedEMail):
+    """Saves all inline images of a mail to the storage.
+    If the file already exists, does not overwrite. If no images are found, does nothing. If an error occurs, removes the incomplete file.
+
+    Args:
+        parsedEMail (dict): The parsed mail with inline images to be saved.
+
+    Returns:
+        None
+    """
     logger.debug("Saving images from mail ...")
 
     dirPath = StorageModel.getSubdirectory(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
@@ -184,6 +226,14 @@ def writeImages(parsedEMail):
 
 
 def getPrerenderImageStoragePath(parsedMail):
+    """Gets the storage path for a prerender image.
+
+    Args:
+        parsedMail (dict): The parsed mail to be prerendered.
+
+    Returns:
+        str: The path in the storage where the prerender image should be saved.
+    """
     dirPath = StorageModel.getSubdirectory(parsedMail[ParsedMailKeys.Header.MESSAGE_ID])
 
     filePath = os.path.join(dirPath, f"{parsedMail[ParsedMailKeys.Header.MESSAGE_ID]}.{StorageConfiguration.PRERENDER_IMAGETYPE}")

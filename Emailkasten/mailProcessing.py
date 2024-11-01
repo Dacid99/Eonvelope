@@ -34,7 +34,7 @@ from .Fetchers.IMAPFetcher import IMAPFetcher
 from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from .Fetchers.POP3Fetcher import POP3Fetcher
 from .Fetchers.ExchangeFetcher import ExchangeFetcher
-from .fileManagment import writeImages, writeAttachments, writeMessageToEML
+from .fileManagment import storeImages, storeAttachments, storeMessageAsEML
 import logging
 from .mailParsing import parseMail, parseMailbox
 from .mailRendering import prerender
@@ -193,20 +193,20 @@ def fetchMails(mailbox, account, criterion):
                     continue
 
             if mailbox.save_toEML:
-                writeMessageToEML(parsedMail)
+                storeMessageAsEML(parsedMail)
                 prerender(parsedMail)
             else:
                 logger.debug(f"Not saving to eml for mailbox {mailbox.name}")
 
 
             if mailbox.save_attachments:
-                writeAttachments(parsedMail)
+                storeAttachments(parsedMail)
             else:
                 logger.debug(f"Not saving attachments for mailbox {mailbox.name}")
                 
             
             if mailbox.save_images:
-                writeImages(parsedMail)
+                storeImages(parsedMail)
             else:
                 logger.debug(f"Not saving images for mailbox {mailbox.name}")
 

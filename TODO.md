@@ -14,7 +14,7 @@ marking of daemon as unhealthy, improved crashhandling
 user divided storage to make file_paths unique again
 some fallback for failed emailaddress parsing is required
 combined filter for correspondent with mention 
-general save template method in filemanagement
+general save decorator in filemanagement
 
 # work in progress
 documentation

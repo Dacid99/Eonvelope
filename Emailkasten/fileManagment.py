@@ -21,9 +21,9 @@
 Functions starting with _ are helpers and are used only within the scope of this module.
 
 Functions:
-    :func:`writeMessageToEML`: Saves an entire mail as a .eml file in the storage.
-    :func:`writeAttachments`: Saves all attachments of a mail to the storage.
-    :func:`writeImages`: Saves all inline images of a mail to the storage.
+    :func:`storeMessageAsEML`: Saves an entire mail as a .eml file in the storage.
+    :func:`storeAttachments`: Saves all attachments of a mail to the storage.
+    :func:`storeImages`: Saves all inline images of a mail to the storage.
     :func:`getPrerenderStoragePath`: Gets the storage path for a prerender image.
 
 Global variables:
@@ -42,7 +42,7 @@ from .Models.StorageModel import StorageModel
 logger = logging.getLogger(__name__)
 
 
-def writeMessageToEML(parsedEMail):
+def storeMessageAsEML(parsedEMail):
     """Saves an entire mail as a .eml file in the storage.
     The files name is given by the unique messageID.
     If the file already exists, does not overwrite. If an error occurs, removes the incomplete file.
@@ -100,7 +100,7 @@ def writeMessageToEML(parsedEMail):
 
 
 
-def writeAttachments(parsedEMail):
+def storeAttachments(parsedEMail):
     """Saves all attachments of a mail to the storage.
     If the file already exists, does not overwrite. If no attachments are found, does nothing. If an error occurs, removes the incomplete file.
 
@@ -163,7 +163,7 @@ def writeAttachments(parsedEMail):
         
 
 
-def writeImages(parsedEMail):
+def storeImages(parsedEMail):
     """Saves all inline images of a mail to the storage.
     If the file already exists, does not overwrite. If no images are found, does nothing. If an error occurs, removes the incomplete file.
 

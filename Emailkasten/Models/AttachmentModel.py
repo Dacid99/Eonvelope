@@ -16,27 +16,48 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
 from django.db import models
 from .EMailModel import EMailModel
 from .. import constants
 
+
 class AttachmentModel(models.Model):
+    """Database model for an attachment file in a mail."""
+
     file_name = models.CharField(max_length=255)
+    """The filename of the attachment."""
+
     file_path = models.FilePathField(
         path=constants.StorageConfiguration.STORAGE_PATH,
         max_length=511,
         recursive=True,
         null=True)
+    """The path where the attachment is stored. Unique together with `email`. 
+    Can be null if the attachment has not been saved (null does not collide with the unique constraint.)."""
+    
     datasize = models.IntegerField()
+    """The filesize of the attachment."""
+
     is_favorite = models.BooleanField(default=False)
+    """Flags favorite attachments. False by default."""
+
     email = models.ForeignKey(EMailModel, related_name="attachments", on_delete=models.CASCADE)
+    """The mail that the attachment was found in.  Deletion of that `email` deletes this attachment."""
+
     created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
     updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
+
 
     def __str__(self):
         return f"Attachment {self.file_name}"
 
     class Meta:
         db_table = "attachments"
-        unique_together = ("file_path", "email")
+        """The name of the database table for the attachments."""
 
+        unique_together = ("file_path", "email")
+        """`file_path` and `email` in combination are unique."""

@@ -33,8 +33,12 @@ class MailboxModel(models.Model):
     save_toEML = models.BooleanField(default=FetchingConfiguration.SAVE_TO_EML_DEFAULT)
     is_favorite = models.BooleanField(default=False)
 
+    
     created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
     updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
 
 
     def __str__(self):

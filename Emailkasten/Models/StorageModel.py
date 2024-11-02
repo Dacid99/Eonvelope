@@ -30,8 +30,12 @@ class StorageModel(models.Model):
     subdirectory_count = models.PositiveSmallIntegerField(default=0)
     current = models.BooleanField(default=False)
 
+    
     created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
     updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
 
 
     def __str__(self):

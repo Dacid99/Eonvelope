@@ -26,8 +26,12 @@ class EMailCorrespondentsModel(models.Model):
     correspondent = models.ForeignKey(CorrespondentModel, related_name="correspondentemails", on_delete=models.CASCADE)
     MENTIONTYPES = dict(ParsedMailKeys.Correspondent())
     mention = models.CharField(choices=MENTIONTYPES, max_length=30)
+    
     created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
     updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
 
     def __str__(self):
         return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"

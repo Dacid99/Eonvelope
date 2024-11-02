@@ -68,8 +68,12 @@ class EMailModel(models.Model):
     x_spam = models.CharField(max_length=255, null=True) 
     
     
+    
     created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
     updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
     
 
     def __str__(self):

@@ -16,7 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
 from django.db import models
+
 
 class ConfigurationModel(models.Model):
     CATEGORY_CHOICES = [
@@ -31,8 +33,12 @@ class ConfigurationModel(models.Model):
     value_int = models.IntegerField(null=True, blank=True)
     value_char = models.CharField(max_length=255, null=True, blank=True)
     description = models.CharField(max_length=255)
+    
     created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
     updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
 
     class Meta:
         db_table = "config"

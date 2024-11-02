@@ -15,6 +15,7 @@ user divided storage to make file_paths unique again
 some fallback for failed emailaddress parsing is required
 combined filter for correspondent with mention 
 general save decorator in filemanagement
+auto deletion of archived files with database entries
 
 # work in progress
 documentation

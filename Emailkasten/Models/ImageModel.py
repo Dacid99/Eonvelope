@@ -16,29 +16,47 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
 from django.db import models
-from rest_framework.decorators import action
 from .EMailModel import EMailModel
 from .. import constants
 
+
 class ImageModel(models.Model):
+    """Database model for an image in a mail."""
+
     file_name = models.CharField(max_length=255)
+    """The filename of the image."""
+
     file_path = models.FilePathField(
         path=constants.StorageConfiguration.STORAGE_PATH,
         max_length=511,
         recursive=True,
         null=True)
+    """The path where the image is stored. Unique together with `email`.
+    Can be null if the image has not been saved (null does not collide with the unique constraint.)."""
+
     datasize = models.IntegerField()
+    """The filesize of the image."""
+
     is_favorite = models.BooleanField(default=False)
+    """Flags favorite images. False by default."""
+
     email = models.ForeignKey(EMailModel, related_name="images", on_delete=models.CASCADE)
-    
+    """The mail that the image was found in.  Deletion of that `email` deletes this image."""
+
     created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
     updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
 
     def __str__(self):
         return f"Image {self.file_name}"
 
     class Meta:
         db_table = "images"
-        unique_together = ("file_path", "email")
+        """The name of the database table for the images."""
 
+        unique_together = ("file_path", "email")
+        """`file_path` and `email` in combination are unique."""

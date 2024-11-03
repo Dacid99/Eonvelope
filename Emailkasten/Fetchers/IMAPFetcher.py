@@ -16,9 +16,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import datetime
 import imaplib
 import logging
-import datetime
+
 from django.utils import timezone
 
 from .. import constants
@@ -72,7 +73,7 @@ class IMAPFetcher:
         try:
             self.connectToHost()
             self.login()
-        except imaplib.IMAP4.error as e:
+        except imaplib.IMAP4.error:
             self.logger.error(f"Failed logging into {str(self.account)}!", exc_info=True)
             self._mailhost = None
             self.account.is_healthy = False
@@ -228,7 +229,7 @@ class IMAPFetcher:
     
             return mailDataList
 
-        except imaplib.IMAP4.error as e:
+        except imaplib.IMAP4.error:
             self.logger.error(f"Failed to fetch {searchCriterion} messages from {str(self.account)}!", exc_info=True)
             return []
 
@@ -253,7 +254,7 @@ class IMAPFetcher:
             self.logger.debug(f"Successfully fetched mailboxes in {str(self.account)}.")
             return mailboxes
 
-        except imaplib.IMAP4.error as e:
+        except imaplib.IMAP4.error:
             self.logger.error(f"Failed to fetch mailboxes in {str(self.account)}!", exc_info=True)
             return []
 

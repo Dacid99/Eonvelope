@@ -17,9 +17,11 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from django.db import models
+
 from ..constants import ParsedMailKeys
-from .EMailModel import EMailModel
 from .CorrespondentModel import CorrespondentModel
+from .EMailModel import EMailModel
+
 
 class EMailCorrespondentsModel(models.Model):
     """Database model for connecting emails and their correspondents."""

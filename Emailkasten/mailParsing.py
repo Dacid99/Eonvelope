@@ -41,15 +41,15 @@ Global variables:
     logger (:python::class:`logging.Logger`): The logger for this module.
 """
 
-import email 
+import datetime
+import email
 import email.header
 import email.utils
-import email_validator
-import datetime
 import logging
-from .constants import ParsingConfiguration 
-from .constants import ParsedMailKeys
 
+import email_validator
+
+from .constants import ParsedMailKeys, ParsingConfiguration
 
 logger = logging.getLogger(__name__)
 
@@ -132,10 +132,10 @@ def _parseMessageID(mailMessage):
     logger.debug("Parsing MessageID ...")
     messageID = mailMessage.get(ParsedMailKeys.Header.MESSAGE_ID)
     if messageID is None:
-        logger.warning(f"No messageID found in mail, resorting to hash!")
+        logger.warning("No messageID found in mail, resorting to hash!")
         return str(hash(mailMessage))  #fallback for unique identifier if no messageID found
     else:
-        logger.debug(f"Successfully parsed messageID")
+        logger.debug("Successfully parsed messageID")
     return messageID
 
 
@@ -180,7 +180,7 @@ def _parseSubject(mailMessage):
             parsedSubject = decodedSubject.strip()
         else:
             parsedSubject = decodedSubject
-        logger.debug(f"Successfully parsed subject")
+        logger.debug("Successfully parsed subject")
     else: 
         logger.warning("No SUBJECT found in mail!")
         parsedSubject = ""
@@ -212,7 +212,7 @@ def _parseBodyText(mailMessage):
     if mailBodyText == "":
         logger.warning("No BODYTEXT found in mail!")
     else:
-        logger.debug(f"Successfully parsed bodytext")
+        logger.debug("Successfully parsed bodytext")
 
     if ParsingConfiguration.STRIP_TEXTS:
         parsedBodyText = mailBodyText.strip()
@@ -254,7 +254,7 @@ def _parseImages(mailMessage):
     if not images:
         logger.debug("No images found in mail")
     else:
-        logger.debug(f"Successfully parsed images")
+        logger.debug("Successfully parsed images")
 
     return images
         
@@ -287,7 +287,7 @@ def _parseAttachments(mailMessage):
     if not attachments:
         logger.debug("No attachments found in mail")
     else:
-        logger.debug(f"Successfully parsed attachments")
+        logger.debug("Successfully parsed attachments")
 
     return attachments
 

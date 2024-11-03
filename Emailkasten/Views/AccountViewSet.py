@@ -16,17 +16,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from rest_framework import viewsets, status
-from rest_framework.filters import OrderingFilter
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
-from ..Models.AccountModel import AccountModel
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.filters import OrderingFilter
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
 from ..Filters.AccountFilter import AccountFilter
-from ..Serializers.AccountSerializers.AccountSerializer import AccountSerializer
-from ..mailProcessing import testAccount, scanMailboxes
+from ..mailProcessing import scanMailboxes, testAccount
+from ..Models.AccountModel import AccountModel
+from ..Serializers.AccountSerializers.AccountSerializer import \
+    AccountSerializer
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -46,7 +48,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         try:
             serializer.save(user = self.request.user)
-        except IntegrityError as e:
+        except IntegrityError:
             return Response({'detail': 'This account already exists!'}, status=status.HTTP_409_CONFLICT)
         
         

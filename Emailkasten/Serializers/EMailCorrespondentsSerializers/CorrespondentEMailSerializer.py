@@ -17,6 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from rest_framework import serializers
+
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from ..EMailSerializers.SimpleEMailSerializer import SimpleEmailSerializer
 

@@ -17,10 +17,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from django.contrib.auth.models import User
-from ..Serializers.UserSerializers.UserSerializer import UserSerializer
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework import viewsets
+from rest_framework.permissions import AllowAny, IsAuthenticated
+
 from ..permissions import IsAdminOrSelf
+from ..Serializers.UserSerializers.UserSerializer import UserSerializer
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()

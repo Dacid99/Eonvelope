@@ -18,9 +18,11 @@
 
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
+
 from ..Models.ConfigurationModel import ConfigurationModel
-from ..Serializers.ConfigurationSerializers.ConfigurationSerializer import ConfigurationSerializer
-import os
+from ..Serializers.ConfigurationSerializers.ConfigurationSerializer import \
+    ConfigurationSerializer
+
 
 class ConfigurationViewSet(viewsets.ModelViewSet):
     queryset = ConfigurationModel.objects.all()

@@ -17,6 +17,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from django.db import models
+
 from .. import constants
 from .AccountModel import AccountModel
 from .MailingListModel import MailingListModel

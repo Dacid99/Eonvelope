@@ -16,14 +16,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from django.contrib.auth import login, logout, authenticate
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.middleware.csrf import get_token
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
+from django.middleware.csrf import get_token
 from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework import status
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 
 class LoginView(APIView):
     permission_classes = [AllowAny]

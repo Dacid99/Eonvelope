@@ -30,19 +30,18 @@ Global variables:
     logger (:python::class:`logging.Logger`): The logger for this module.
 """
 
+import logging
+
+from . import constants
+from .emailDBFeeding import insertEMail, insertMailbox
+from .Fetchers.ExchangeFetcher import ExchangeFetcher
 from .Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from .Fetchers.IMAPFetcher import IMAPFetcher
 from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from .Fetchers.POP3Fetcher import POP3Fetcher
-from .Fetchers.ExchangeFetcher import ExchangeFetcher
-from .fileManagment import storeImages, storeAttachments, storeMessageAsEML
-import logging
+from .fileManagment import storeAttachments, storeImages, storeMessageAsEML
 from .mailParsing import parseMail, parseMailbox
 from .mailRendering import prerender
-from .emailDBFeeding import insertEMail, insertMailbox
-
-from . import constants
-
 
 logger = logging.getLogger(__name__)
 
@@ -213,7 +212,7 @@ def fetchMails(mailbox, account, criterion):
 
             insertEMail(parsedMail, account)
         
-        except Exception as e:
+        except Exception:
             status = False
             logger.error(f"Error parsing and saving email with subject {parsedMail[constants.ParsedMailKeys.Header.SUBJECT]} from {parsedMail[constants.ParsedMailKeys.Header.DATE]}!", exc_info=True)
             continue

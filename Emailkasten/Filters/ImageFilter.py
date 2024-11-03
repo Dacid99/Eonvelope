@@ -17,7 +17,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import django_filters
+
 from ..Models.ImageModel import ImageModel
+
 
 class ImageFilter(django_filters.FilterSet):
     datetime__lte = django_filters.DateTimeFilter(field_name='email__datetime', lookup_expr='lte')

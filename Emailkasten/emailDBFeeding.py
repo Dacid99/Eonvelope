@@ -58,7 +58,7 @@ def _insertCorrespondent(correspondentData):
     Returns:
         :class:`Emailkasten.Models.CorrespondentModel`: The entry to the correspondent from the database. 
     """
-    logger.debug(f"Creating entry for correspondent in DB...")
+    logger.debug("Creating entry for correspondent in DB...")
          
     correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
         email_address = correspondentData[1],
@@ -226,10 +226,10 @@ def insertMailbox(mailboxData, account):
             else:
                 logger.debug(f"Entry for {str(mailboxEntry)} already exists")
 
-    except django.db.IntegrityError as e:
+    except django.db.IntegrityError:
         logger.error("Error while writing to database, rollback to last state", exc_info=True)
 
-    logger.debug(f"Successfully saved mailbox to db ...")
+    logger.debug("Successfully saved mailbox to db ...")
 
 
 
@@ -368,7 +368,7 @@ def insertEMail(emailData, account):
                             logger.debug(f"No {mentionType} correspondent found in mail, not writing to DB!")
 
         
-    except django.db.IntegrityError as e:
+    except django.db.IntegrityError:
         logger.error("Error while writing to database, rollback to last state", exc_info=True)
 
     logger.debug("Successfully saved mail to db.")

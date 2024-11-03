@@ -1,0 +1,3 @@
+django-stubs
+djangorestframework-stubs
+django-filter-stubs

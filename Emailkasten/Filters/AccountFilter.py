@@ -17,7 +17,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import django_filters
+
 from ..Models.AccountModel import AccountModel
+
 
 class AccountFilter(django_filters.FilterSet):
 

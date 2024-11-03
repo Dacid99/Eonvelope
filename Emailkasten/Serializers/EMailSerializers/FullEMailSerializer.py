@@ -17,11 +17,13 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from rest_framework import serializers
-from ...Models.EMailModel import EMailModel
+
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
+from ...Models.EMailModel import EMailModel
 from ..AttachmentSerializers.AttachmentSerializer import AttachmentSerializer
+from ..EMailCorrespondentsSerializers.EMailCorrespondentsSerializer import \
+    EMailCorrespondentSerializer
 from ..ImageSerializers.ImageSerializer import ImageSerializer
-from ..EMailCorrespondentsSerializers.EMailCorrespondentsSerializer import EMailCorrespondentSerializer
 
 
 class FullEMailSerializer(serializers.ModelSerializer):

@@ -17,7 +17,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import django_filters
+
 from ..Models.EMailModel import EMailModel
+
 
 class EMailFilter(django_filters.FilterSet):
     attachment_name__icontains = django_filters.CharFilter(field_name='attachments__file_name', lookup_expr='icontains')

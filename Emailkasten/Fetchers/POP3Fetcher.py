@@ -16,10 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
 import poplib
 
 from .. import constants
-import logging
+
 
 class POP3Fetcher: 
     """Maintains a connection to the POP server and fetches data using :python::mod:`poplib`.
@@ -59,7 +60,7 @@ class POP3Fetcher:
         try:
             self.connectToHost()
             self.login()
-        except poplib.error_proto as e:
+        except poplib.error_proto:
             self.logger.error(f"Failed connecting to {str(self.account)}!", exc_info=True)
             self._mailhost = None
             self.account.is_healthy = False
@@ -159,7 +160,7 @@ class POP3Fetcher:
             self.logger.debug(f"Successfully fetched all messages in {str(self.account)}.")
             return mailDataList
                 
-        except poplib.error_proto as e:
+        except poplib.error_proto:
             self.logger.error(f"Failed to fetch all messages in {str(self.account)}!", exc_info=True)
             return []
 

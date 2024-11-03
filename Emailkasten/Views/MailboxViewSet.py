@@ -16,21 +16,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from rest_framework import viewsets, status
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.filters import OrderingFilter
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
-from ..Models.MailboxModel import MailboxModel
-from ..Filters.MailboxFilter import MailboxFilter
-from ..Serializers.MailboxSerializers.MailboxWithDaemonSerializer import MailboxWithDaemonSerializer
-from ..EMailArchiverDaemon import EMailArchiverDaemon
-from .. import constants
-from ..mailProcessing import fetchMails
-from ..Fetchers.IMAPFetcher import IMAPFetcher
-from ..Fetchers.POP3Fetcher import POP3Fetcher
+from rest_framework.response import Response
 
+from .. import constants
+from ..EMailArchiverDaemon import EMailArchiverDaemon
+from ..Filters.MailboxFilter import MailboxFilter
+from ..mailProcessing import fetchMails
+from ..Models.MailboxModel import MailboxModel
+from ..Serializers.MailboxSerializers.MailboxWithDaemonSerializer import \
+    MailboxWithDaemonSerializer
 
 
 class MailboxViewSet(viewsets.ModelViewSet):

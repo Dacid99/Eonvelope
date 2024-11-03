@@ -17,7 +17,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import django_filters
+
 from ..Models.MailingListModel import MailingListModel
+
 
 class MailingListFilter(django_filters.FilterSet):
     

@@ -17,9 +17,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from rest_framework import serializers
-from ...Models.MailboxModel import MailboxModel        
 
-        
+from ...Models.MailboxModel import MailboxModel
+
+
 class MailboxSerializer(serializers.ModelSerializer):
     class Meta:
         model = MailboxModel

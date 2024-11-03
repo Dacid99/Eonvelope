@@ -21,6 +21,7 @@ import imaplib
 from .. import constants
 from .IMAPFetcher import IMAPFetcher
 
+
 class IMAP_SSL_Fetcher(IMAPFetcher): 
     """Subclass of :class:`Emailkasten.Fetchers.IMAP_Fetcher`.
 

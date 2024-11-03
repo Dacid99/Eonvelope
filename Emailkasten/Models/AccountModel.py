@@ -17,8 +17,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
+
 from .. import constants
 
 

@@ -1,6 +1,9 @@
 import time
+
+from django.db import OperationalError, connection
+
 from .constants import DatabaseConfiguration
-from django.db import connection, OperationalError
+
 
 class DBReconnectMiddleware:
     def __init__(self, get_response):
@@ -13,7 +16,7 @@ class DBReconnectMiddleware:
         for attempt in range(max_retries):
             try:
                 # Try to connect to the database
-                with connection.cursor() as cursor:
+                with connection.cursor():
                     break  # If connection succeeds, exit the loop
             except OperationalError:
                 if attempt == max_retries - 1:

@@ -32,19 +32,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 from rest_framework.routers import DefaultRouter
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
+
 from .Views.AccountViewSet import AccountViewSet
-from .Views.EMailViewSet import EMailViewSet
-from .Views.CorrespondentViewSet import CorrespondentViewSet
 from .Views.AttachmentViewSet import AttachmentViewSet
-from .Views.ImageViewSet import ImageViewSet
-from .Views.MailboxViewSet import MailboxViewSet
-from .Views.DatabaseStatsView import DatabaseStatsView
-from .Views.UserCreateView import UserViewSet
 from .Views.ConfigurationViewSet import ConfigurationViewSet
-from .Views.LoginOutView import LoginView, LogoutView, CSRFCookieView
+from .Views.CorrespondentViewSet import CorrespondentViewSet
+from .Views.DatabaseStatsView import DatabaseStatsView
+from .Views.EMailViewSet import EMailViewSet
+from .Views.ImageViewSet import ImageViewSet
+from .Views.LoginOutView import CSRFCookieView, LoginView, LogoutView
+from .Views.MailboxViewSet import MailboxViewSet
+from .Views.UserCreateView import UserViewSet
 
 router = DefaultRouter()
 router.register(r'accounts', AccountViewSet)

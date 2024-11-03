@@ -16,14 +16,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from ..Models.EMailModel import EMailModel
-from ..Models.CorrespondentModel import CorrespondentModel
-from ..Models.AttachmentModel import AttachmentModel
-from ..Models.ImageModel import ImageModel
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from ..Models.AccountModel import AccountModel
+from ..Models.AttachmentModel import AttachmentModel
+from ..Models.CorrespondentModel import CorrespondentModel
+from ..Models.EMailModel import EMailModel
+from ..Models.ImageModel import ImageModel
+
 
 class DatabaseStatsView(APIView):
     permission_classes = [IsAuthenticated]

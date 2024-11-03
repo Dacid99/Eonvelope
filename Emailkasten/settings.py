@@ -27,10 +27,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os
-import logging
-import logging.handlers
+from pathlib import Path
+
 from . import constants
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

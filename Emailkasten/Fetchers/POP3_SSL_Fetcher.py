@@ -21,6 +21,7 @@ import poplib
 from .. import constants
 from .POP3Fetcher import POP3Fetcher
 
+
 class POP3_SSL_Fetcher(POP3Fetcher): 
     """Subclass of :class:`Emailkasten.Fetchers.POP3_Fetcher`.
 

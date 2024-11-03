@@ -17,11 +17,14 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from rest_framework import serializers
-from ...Models.EMailModel import EMailModel
+
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
+from ...Models.EMailModel import EMailModel
 from ..AttachmentSerializers.AttachmentSerializer import AttachmentSerializer
-from ..EMailCorrespondentsSerializers.EMailCorrespondentsSerializer import EMailCorrespondentSerializer
-            
+from ..EMailCorrespondentsSerializers.EMailCorrespondentsSerializer import \
+    EMailCorrespondentSerializer
+
+
 class EMailSerializer(serializers.ModelSerializer):
     attachments = AttachmentSerializer(many=True, read_only=True)
     correspondents = serializers.SerializerMethodField()

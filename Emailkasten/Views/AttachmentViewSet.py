@@ -16,16 +16,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import os
+
+from django.http import FileResponse, Http404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
-from django_filters.rest_framework import DjangoFilterBackend
-from django.http import FileResponse, Http404
-from rest_framework.decorators import action
-from ..Models.AttachmentModel import AttachmentModel
-from ..Serializers.AttachmentSerializers.AttachmentSerializer import AttachmentSerializer
+from rest_framework.response import Response
+
 from ..Filters.AttachmentsFilter import AttachmentFilter
-import os
+from ..Models.AttachmentModel import AttachmentModel
+from ..Serializers.AttachmentSerializers.AttachmentSerializer import \
+    AttachmentSerializer
+
 
 class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AttachmentModel.objects.all()

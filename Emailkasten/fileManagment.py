@@ -32,12 +32,12 @@ Global variables:
 
 import email
 import email.generator
-import os.path
 import logging
-from .mailParsing import ParsedMailKeys
-from .constants import StorageConfiguration
-from .Models.StorageModel import StorageModel
+import os.path
 
+from .constants import StorageConfiguration
+from .mailParsing import ParsedMailKeys
+from .Models.StorageModel import StorageModel
 
 logger = logging.getLogger(__name__)
 
@@ -79,8 +79,8 @@ def storeMessageAsEML(parsedEMail):
             
             logger.debug("Successfully created and wrote new .eml file.")
 
-    except OSError as e:
-        logger.error(f"Failed to write .eml file for message!", exc_info=True)
+    except OSError:
+        logger.error("Failed to write .eml file for message!", exc_info=True)
         if os.path.exists(emlFilePath):
             logger.debug("Clearing incomplete file ...")
             try: 
@@ -89,7 +89,7 @@ def storeMessageAsEML(parsedEMail):
 
                 logger.debug("Successfully cleared incomplete file.")
 
-            except OSError as e:
+            except OSError:
                 logger.error("Failed to clear the incomplete file!")
         else:
             logger.debug("File was not created")
@@ -138,7 +138,7 @@ def storeAttachments(parsedEMail):
                 
                 logger.debug("Successfully created and wrote new .eml file.")
 
-        except OSError as e:
+        except OSError:
             logger.error(f"Failed to write attachment file {fileName} to {filePath}!", exc_info=True)
             if os.path.exists(filePath):
                 logger.debug("Clearing incomplete file ...")
@@ -147,7 +147,7 @@ def storeAttachments(parsedEMail):
                         file.truncate(0)
 
                     logger.debug("Successfully cleared incomplete file.")
-                except OSError as e:
+                except OSError:
                     logger.error("Failed to clear the incomplete file!")
             else:
                 logger.debug("File was not created")
@@ -199,7 +199,7 @@ def storeImages(parsedEMail):
 
                 logger.debug("Successfully created and wrote new file.")
 
-        except OSError as e:
+        except OSError:
             logger.error(f"Failed to write image file {fileName} to {filePath}!", exc_info=True)
             if os.path.exists(filePath):
                 logger.debug("Clearing incomplete file ...")
@@ -209,7 +209,7 @@ def storeImages(parsedEMail):
 
                     logger.debug("Successfully cleared incomplete file.")
 
-                except OSError as e:
+                except OSError:
                     logger.error("Failed to clear the incomplete file!")
             else:
                 logger.debug("File was not created")

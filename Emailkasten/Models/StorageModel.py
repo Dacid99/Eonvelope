@@ -16,11 +16,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from django.db import models
 import logging
 import os
-from .. import constants
 
+from django.db import models
+
+from .. import constants
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -65,7 +66,7 @@ class StorageModel(models.Model):
             if not os.path.exists( self.path ):
                 logger.debug(f"Creating new storage directory {self.path} ...")
                 os.makedirs( self.path )
-                logger.debug(f"Successfully created new storage directory.")
+                logger.debug("Successfully created new storage directory.")
 
         super().save(*args, **kwargs)
 

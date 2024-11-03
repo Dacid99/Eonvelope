@@ -17,11 +17,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from django.db import models
-from rest_framework.decorators import action
-from ..constants import MailFetchingCriteria, FetchingConfiguration
-from .AccountModel import AccountModel
+
+from ..constants import FetchingConfiguration, MailFetchingCriteria
 from ..Fetchers.IMAPFetcher import IMAPFetcher
-from ..Fetchers.POP3Fetcher import POP3Fetcher 
+from ..Fetchers.POP3Fetcher import POP3Fetcher
+from .AccountModel import AccountModel
+
 
 class MailboxModel(models.Model):
     """Database model for a mailbox in a mail account."""

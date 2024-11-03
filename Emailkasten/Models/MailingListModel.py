@@ -17,7 +17,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from django.db import models
+
 from .CorrespondentModel import CorrespondentModel
+
 
 class MailingListModel(models.Model):
     """Database model for a mailinglist."""

@@ -93,7 +93,7 @@ def prerender(parsedMail):
                 
                 try:
                     payload = quopri.decodestring(part.get_payload(decode=True)).decode(charset, errors='replace')
-                except:
+                except Exception:
                     payload = str(quopri.decodestring(part.get_payload(decode=True)))[2:-1]
                 
                 # Cleanup dirty characters in html

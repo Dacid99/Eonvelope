@@ -16,9 +16,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from rest_framework import serializers
 from django.contrib.auth.models import User
+from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

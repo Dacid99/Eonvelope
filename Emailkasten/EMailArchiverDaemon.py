@@ -16,11 +16,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import time
-import threading
-from rest_framework.response import Response
-from . import constants
 import logging
+import threading
+import time
+
+from rest_framework.response import Response
+
+from . import constants
 from .mailProcessing import fetchMails
 
 
@@ -50,7 +52,7 @@ class EMailArchiverDaemon:
         Returns: 
             :rest_framework::class:`response.Response`: A response detailing what has done. 
         """
-        if not daemonModel.id in EMailArchiverDaemon.runningDaemons:
+        if daemonModel.id not in EMailArchiverDaemon.runningDaemons:
             try:
                 newDaemon = EMailArchiverDaemon(daemonModel)
                 newDaemon.start()
@@ -58,7 +60,7 @@ class EMailArchiverDaemon:
                 daemonModel.is_running = True
                 daemonModel.save() 
                 return Response({'status': 'Daemon started', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
-            except Exception as e:
+            except Exception:
                 return Response({'status': 'Daemon failed to start!', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
         else:
             return Response({'status': 'Daemon already running', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
@@ -147,7 +149,7 @@ class EMailArchiverDaemon:
                 self.cycle()
                 time.sleep(self.daemon.cycle_interval)
             self.logger.info(f"{str(self.daemon)} finished")
-        except Exception as e:
+        except Exception:
             self.logger.error(f"{str(self.daemon)} crashed! Attempting to restart ...", exc_info=True)
             time.sleep(constants.EMailArchiverDaemonConfiguration.RESTART_TIME)
             self.run()
@@ -169,7 +171,7 @@ class EMailArchiverDaemon:
             fetchMails(self.mailbox, self.account, self.mailbox.fetching_criterion)
             endtime = time.time()
                             
-        except Exception as e:
+        except Exception:
             self.logger.error("Error during daemon cycle execution!", exc_info=True)
             raise
 

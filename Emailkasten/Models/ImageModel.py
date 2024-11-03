@@ -18,8 +18,9 @@
 
 
 from django.db import models
-from .EMailModel import EMailModel
+
 from .. import constants
+from .EMailModel import EMailModel
 
 
 class ImageModel(models.Model):

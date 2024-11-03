@@ -16,15 +16,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from rest_framework import viewsets, status
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
-from django_filters.rest_framework import DjangoFilterBackend
-from ..Models.MailingListModel import MailingListModel
-from ..Serializers.MailingListSerializers.MailingListSerializer import MailingListSerializer
+from rest_framework.response import Response
+
 from ..Filters.MailingListFilter import MailingListFilter
+from ..Models.MailingListModel import MailingListModel
+from ..Serializers.MailingListSerializers.MailingListSerializer import \
+    MailingListSerializer
+
 
 class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = MailingListModel.objects.all()

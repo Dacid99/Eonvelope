@@ -21,16 +21,28 @@ import logging
 import os
 from .. import constants
 
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
+"""The logger instance for this module."""
 
 class StorageModel(models.Model):
-    directory_number = models.PositiveIntegerField(unique=True)
-    path = models.FilePathField(unique=True, path=constants.StorageConfiguration.STORAGE_PATH)
-    subdirectory_count = models.PositiveSmallIntegerField(default=0)
-    current = models.BooleanField(default=False)
+    """A database model to keep track of and manage the storage status and structure."""
 
+    directory_number = models.PositiveIntegerField(unique=True)
+    """The number of the directory tracked by this entry. Unique."""
     
+    path = models.FilePathField(unique=True, path=constants.StorageConfiguration.STORAGE_PATH)
+    """The path of the tracked directory. Unique.
+    Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`."""
+    
+    subdirectory_count = models.PositiveSmallIntegerField(default=0)
+    """The number of subdirectories in this directory. 0 by default.
+    Managed to not exceed :attr:`Emailkasten.constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR`."""
+
+    current = models.BooleanField(default=False)
+    """Flags whether this directory is the one where new data is being stored. False by default.
+    There must only be one entry where this is set to True."""
+
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
 
@@ -44,6 +56,8 @@ class StorageModel(models.Model):
     
 
     def save(self, *args, **kwargs):
+        """Extended :django::func:`django.models.Model.save` method with additional check for unique current directory and storage directory creation for new entries."""
+
         if self.current and StorageModel.objects.filter(current=True):
             logger.critical("More than one current storage directories!!")
         if not self.path:
@@ -56,35 +70,62 @@ class StorageModel(models.Model):
         super().save(*args, **kwargs)
 
 
-    def incrementSubdirectoryCount(self):
+    def _incrementSubdirectoryCount(self):
+        """Increments the :attr:`subdirectory_count` within the limits of :attr:`Emailkasten.constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR`.
+        If the result exceeds this limit, creates a new storage directory via :func:`_addNewDirectory`.
+
+        Returns: 
+            None
+        """
         self.subdirectory_count += 1
         if (self.subdirectory_count >= constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR):
-            self.__addNewDirectory()
+            self._addNewDirectory()
         else:
             self.save()
 
 
-    def __addNewDirectory(self):
+    def _addNewDirectory(self):
+        """Adds a new storage directory by setting this entries :attr:`current` to `False` and creating a new database entry with incremented :attr:`directory_number` and :attr:`current` set to `True`.
+
+        Returns: 
+            None
+        """
         self.current = False
-        self.save()
-        
+        self.save() 
         StorageModel.objects.create(directory_number=self.directory_number+1, current=True, subdirectory_count=0)
 
 
     class Meta:
         db_table = "storage"
+        """The name of the database table for the storage status."""
 
 
     @staticmethod
     def getSubdirectory(subdirectoryName):
+        """Static utility to acquire a path for a subdirectory in the storage.
+        If that subdirectory does not exist yet, creates it and increments the :attr:`subdirectory_count` of the current storage directory.
+
+        Args:
+            subdirectoryName (str): The name of subdirectory to be stored.
+
+        Returns:
+            str: The path of the subdirectory in the storage.
+        """
         storageEntry = StorageModel.objects.filter(current=True).first()
         if not storageEntry:
+
+            logger.info("The storage is empty, creating first storage directory.")
             storageEntry = StorageModel.objects.create(directory_number=0, current=True, subdirectory_count=0)
+            logger.info("Successfully created first storage directory.")
+
 
         subdirectoryPath = os.path.join(storageEntry.path, subdirectoryName)
         if not os.path.exists(subdirectoryPath):
+            logger.debug("Creating new subdirectory in the current storage directory ...")
             os.makedirs(subdirectoryPath)
-            storageEntry.incrementSubdirectoryCount()
+            storageEntry._incrementSubdirectoryCount()
+            logger.debug("Successfully created new subdirectory in the current storage directory.")
+
  
         return subdirectoryPath
 

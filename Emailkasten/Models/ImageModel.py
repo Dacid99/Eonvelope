@@ -34,7 +34,8 @@ class ImageModel(models.Model):
         recursive=True,
         null=True)
     """The path where the image is stored. Unique together with `email`.
-    Can be null if the image has not been saved (null does not collide with the unique constraint.)."""
+    Can be null if the image has not been saved (null does not collide with the unique constraint.).
+    Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`."""
 
     datasize = models.IntegerField()
     """The filesize of the image."""
@@ -43,13 +44,14 @@ class ImageModel(models.Model):
     """Flags favorite images. False by default."""
 
     email = models.ForeignKey(EMailModel, related_name="images", on_delete=models.CASCADE)
-    """The mail that the image was found in.  Deletion of that `email` deletes this image."""
+    """The mail that the image was found in. Deletion of that `email` deletes this image."""
 
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
 
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
+
 
     def __str__(self):
         return f"Image {self.file_name}"

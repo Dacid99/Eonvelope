@@ -8,6 +8,7 @@ custom additional healthchecks
 parsing walks multiple times, could be more efficient
 reconsider decoding of mailbytes using BytesParser
 more spam flags
+resent correspondents
 exceptions while fetching parsing and inserting for appropriate api response
 more finegrain try catch in fetchers, marking as unhealthy for wrong data
 marking of daemon as unhealthy, improved crashhandling

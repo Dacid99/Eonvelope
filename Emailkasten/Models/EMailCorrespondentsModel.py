@@ -22,10 +22,19 @@ from .EMailModel import EMailModel
 from .CorrespondentModel import CorrespondentModel
 
 class EMailCorrespondentsModel(models.Model):
+    """Database model for connecting emails and their correspondents."""
+
     email = models.ForeignKey(EMailModel, related_name="emailcorrespondents", on_delete=models.CASCADE)
+    """The email `correspondent` was mentioned in. Unique together with `correspondent` and `mention`."""
+
     correspondent = models.ForeignKey(CorrespondentModel, related_name="correspondentemails", on_delete=models.CASCADE)
+    """The correspondent that was mentioned in `email`. Unique together with `email` and `mention`."""
+
     MENTIONTYPES = dict(ParsedMailKeys.Correspondent())
+    """The available types of correspondent memtions. Refers to :class:`Emailkasten.constants.ParsedMailKeys.Correspondent`."""
+
     mention = models.CharField(choices=MENTIONTYPES, max_length=30)
+    """The way that `correspondent` was mentioned in `email`. One of :attr:`MENTIONTYPES`.  Unique together with `email` and `correspondent`."""
     
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
@@ -33,9 +42,13 @@ class EMailCorrespondentsModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
+
     def __str__(self):
         return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"
     
     class Meta:
-        unique_together = ('email', 'correspondent', 'mention')
         db_table = "email_correspondents"
+        """The name of the database table for the images."""
+
+        unique_together = ('email', 'correspondent', 'mention')
+        """`email`, `correspondent` and `mention` in combination are unique."""

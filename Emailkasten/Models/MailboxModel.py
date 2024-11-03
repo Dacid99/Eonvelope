@@ -24,16 +24,32 @@ from ..Fetchers.IMAPFetcher import IMAPFetcher
 from ..Fetchers.POP3Fetcher import POP3Fetcher 
 
 class MailboxModel(models.Model):
-    name = models.CharField(max_length=255)
-    account = models.ForeignKey(AccountModel, related_name="mailboxes", on_delete=models.CASCADE)
-    FETCHINGCHOICES = dict(MailFetchingCriteria())
-    fetching_criterion = models.CharField(choices=FETCHINGCHOICES, default=MailFetchingCriteria.ALL, max_length=10)
-    save_attachments = models.BooleanField(default=FetchingConfiguration.SAVE_ATTACHMENTS_DEFAULT)
-    save_images = models.BooleanField(default=FetchingConfiguration.SAVE_IMAGES_DEFAULT)
-    save_toEML = models.BooleanField(default=FetchingConfiguration.SAVE_TO_EML_DEFAULT)
-    is_favorite = models.BooleanField(default=False)
+    """Database model for a mailbox in a mail account."""
 
-    
+    name = models.CharField(max_length=255)
+    """The mailaccount internal name of the mailbox. Unique together with `account`."""
+
+    account = models.ForeignKey(AccountModel, related_name="mailboxes", on_delete=models.CASCADE)
+    """The mailaccount this mailbox was found in. Unique together with `name`. Deletion of that `account` deletes this mailbox."""
+
+    FETCHINGCHOICES = dict(MailFetchingCriteria())
+    """The available mail fetching criteria. Refers to :class:`Emailkasten.constants.MailFetchingCriteria`."""
+
+    fetching_criterion = models.CharField(choices=FETCHINGCHOICES, default=MailFetchingCriteria.ALL, max_length=10)
+    """The fetching criterion for this mailbox. One of :attr:`FETCHING_CHOICES`. :attr:`Emailkasten.constants.MailFetchingCriteria.ALL` by default."""
+
+    save_attachments = models.BooleanField(default=FetchingConfiguration.SAVE_ATTACHMENTS_DEFAULT)
+    """Whether to save attachments of the mails found in this mailbox. :attr:`Emailkasten.constants.FetchingConfiguration.SAVE_ATTACHMENTS_DEFAULT` by default."""
+
+    save_images = models.BooleanField(default=FetchingConfiguration.SAVE_IMAGES_DEFAULT)
+    """Whether to save images of the mails found in this mailbox. :attr:`Emailkasten.constants.FetchingConfiguration.SAVE_IMAGES_DEFAULT` by default."""
+
+    save_toEML = models.BooleanField(default=FetchingConfiguration.SAVE_TO_EML_DEFAULT)
+    """Whether to save the mails found in this mailbox as .eml files. :attr:`Emailkasten.constants.FetchingConfiguration.SAVE_TO_EML_DEFAULT` by default."""
+
+    is_favorite = models.BooleanField(default=False)
+    """Flags favorite mailboxes. False by default."""
+
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
 
@@ -45,6 +61,12 @@ class MailboxModel(models.Model):
         return f"Mailbox {self.name} of {self.account}"
 
     def getAvailableFetchingCriteria(self):
+        """Gets the available fetching criteria based on the mail protocol of this mailbox. 
+        Used by :func:`Emailkasten.Views.MailboxViewSet.fetching_options` to show the choices for fetching to the user.
+
+        Returns:
+            list: A list of all available fetching criteria for this mailbox. Empty if the protocol is unknown.
+        """
         if self.account.protocol.startswith(IMAPFetcher.PROTOCOL):
             availableFetchingOptions = IMAPFetcher.AVAILABLE_FETCHING_CRITERIA
         elif self.account.protocol.startswith(POP3Fetcher.PROTOCOL):
@@ -52,8 +74,13 @@ class MailboxModel(models.Model):
         else:
             availableFetchingOptions = []
         return availableFetchingOptions
+    
 
     class Meta:
         db_table = "mailboxes"
+        """The name of the database table for the mailboxes."""
+
         unique_together = ('name', 'account')
+        """`name` and `account` in combination are unique."""
+
 

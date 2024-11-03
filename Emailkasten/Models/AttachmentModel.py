@@ -34,7 +34,8 @@ class AttachmentModel(models.Model):
         recursive=True,
         null=True)
     """The path where the attachment is stored. Unique together with `email`. 
-    Can be null if the attachment has not been saved (null does not collide with the unique constraint.)."""
+    Can be null if the attachment has not been saved (null does not collide with the unique constraint.).
+    Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`."""
     
     datasize = models.IntegerField()
     """The filesize of the attachment."""

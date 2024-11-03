@@ -17,20 +17,37 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from django.db import models
-from rest_framework.decorators import action
 from .CorrespondentModel import CorrespondentModel
 
 class MailingListModel(models.Model):
-    list_id = models.CharField(max_length=255)
-    list_owner = models.CharField(max_length=255, null=True)
-    list_subscribe = models.EmailField(max_length=255, null=True)
-    list_unsubscribe = models.EmailField(max_length=255, null=True)
-    list_post = models.CharField(max_length=255, null=True)
-    list_help = models.CharField(max_length=255, null=True)
-    list_archive = models.CharField(max_length=255, null=True)
-    is_favorite = models.BooleanField(default=False)
-    correspondent = models.ForeignKey(CorrespondentModel, related_name='mailinglist', on_delete=models.CASCADE)
+    """Database model for a mailinglist."""
 
+    list_id = models.CharField(max_length=255)
+    """The List-ID header of the mailinglist. Unique together with `correspondent`."""
+
+    list_owner = models.CharField(max_length=255, null=True)
+    """The List-Owner header of the mailinglist. Can be null."""
+
+    list_subscribe = models.EmailField(max_length=255, null=True)
+    """The List-Subscribe header of the mailinglist. Can be null."""
+
+    list_unsubscribe = models.EmailField(max_length=255, null=True)
+    """The List-Unsubscribe header of the mailinglist. Can be null."""
+
+    list_post = models.CharField(max_length=255, null=True)
+    """The List-Post header of the mailinglist. Can be null."""
+
+    list_help = models.CharField(max_length=255, null=True)
+    """The List-Help header of the mailinglist. Can be null."""
+
+    list_archive = models.CharField(max_length=255, null=True)
+    """The List-Archive header of the mailinglist. Can be null."""
+
+    is_favorite = models.BooleanField(default=False)
+    """Flags favorite mailingslists. False by default."""
+
+    correspondent = models.ForeignKey(CorrespondentModel, related_name='mailinglist', on_delete=models.CASCADE)
+    """The correspondent that sends the mailinglist. Unique together with `list_id`. Deletion of that `correspondent` deletes this mailinglist."""
     
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
@@ -44,5 +61,9 @@ class MailingListModel(models.Model):
 
     class Meta:
         db_table = "mailinglists"
+        """The name of the database table for the mailinglists."""
+
         unique_together = ("list_id", "correspondent")
+        """`list_id` and `correspondent` in combination are unique."""
+
 

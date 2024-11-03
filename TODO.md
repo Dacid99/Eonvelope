@@ -17,6 +17,7 @@ some fallback for failed emailaddress parsing is required
 combined filter for correspondent with mention 
 general save decorator in filemanagement
 auto deletion of archived files with database entries
+refine storage management logging and error correction 
 
 # work in progress
 documentation

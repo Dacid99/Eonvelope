@@ -58,8 +58,8 @@ class StorageModel(models.Model):
     def save(self, *args, **kwargs):
         """Extended :django::func:`django.models.Model.save` method with additional check for unique current directory and storage directory creation for new entries."""
 
-        if self.current and StorageModel.objects.filter(current=True):
-            logger.critical("More than one current storage directories!!")
+        if StorageModel.objects.filter(current=True).count() > 1:
+            logger.critical("More than one current storage directory!!")
         if not self.path:
             self.path = os.path.join(constants.StorageConfiguration.STORAGE_PATH, str(self.directory_number))
             if not os.path.exists( self.path ):
@@ -113,6 +113,8 @@ class StorageModel(models.Model):
         """
         storageEntry = StorageModel.objects.filter(current=True).first()
         if not storageEntry:
+            if os.listdir(constants.StorageConfiguration.STORAGE_PATH) and not StorageModel.objects.count():
+                logger.critical("The storage is not empty but there is no information about it in the database!!")
 
             logger.info("The storage is empty, creating first storage directory.")
             storageEntry = StorageModel.objects.create(directory_number=0, current=True, subdirectory_count=0)

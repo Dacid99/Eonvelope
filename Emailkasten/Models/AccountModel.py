@@ -19,6 +19,8 @@
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from .. import constants
 
@@ -76,4 +78,13 @@ class AccountModel(models.Model):
         unique_together = ("mail_address", "user")
         """`mail_address` and `user` in combination are unique fields."""
 
+
+@receiver(post_save, sender=AccountModel)
+def post_save_is_healthy(sender, instance, **kwargs):
+    try:
+        oldInstance = AccountModel.objects.get(pk=instance.pk)
+        if (oldInstance.is_healthy != instance.isHealthy and not instance.is_healthy):
+            instance.mailboxes.update(is_healthy=instance.is_healthy)
+    except AccountModel.DoesNotExist:
+        pass
 

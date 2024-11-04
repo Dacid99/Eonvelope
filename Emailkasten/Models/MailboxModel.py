@@ -51,6 +51,10 @@ class MailboxModel(models.Model):
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mailboxes. False by default."""
 
+    is_healthy = models.BooleanField(default=True)
+    """Flags whether the mailbox can be accessed and read. True by default. 
+    When the :attr:`AccountModel.is_healthy` field changes to `False`, this field is updated accordingly."""
+
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
 

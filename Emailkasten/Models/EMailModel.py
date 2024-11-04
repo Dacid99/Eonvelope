@@ -34,7 +34,7 @@ class EMailModel(models.Model):
     """Database model for an email."""
 
     message_id = models.CharField(max_length=255)
-    """The messageID header of the mail. Unique together with `account`."""
+    """The messageID header of the mail. Unique together with :attr:`account`."""
 
     datetime = models.DateTimeField()
     """The Date header of the mail."""
@@ -46,7 +46,7 @@ class EMailModel(models.Model):
     """The bodytext of the mail."""
 
     inReplyTo = models.ForeignKey('self', null=True, related_name='replies', on_delete=models.SET_NULL)
-    """The mail that this mail is a response to. Can bbe null. Deletion of that `inReplyTo` sets this field to NULL."""
+    """The mail that this mail is a response to. Can be null. Deletion of that replied-to mail sets this field to NULL."""
 
     datasize = models.IntegerField()
     """The bytes size of the mail."""
@@ -86,7 +86,7 @@ class EMailModel(models.Model):
     """The mailinglist that this mail has been sent from. Can be null. Deletion of that `mailinglist` deletes this mail."""
     
     account = models.ForeignKey(AccountModel, related_name="emails", on_delete=models.CASCADE)
-    """The account that this mail has been found in. Unique together with `message_id`. Deletion of that `account` deletes this mail."""
+    """The account that this mail has been found in. Unique together with :attr:`message_id`. Deletion of that `account` deletes this mail."""
     
     comments = models.CharField(max_length=255, null=True)
     """The comments header of this mail. Can be null."""
@@ -145,7 +145,7 @@ class EMailModel(models.Model):
         """The name of the database table for the emails."""
 
         unique_together = ("message_id", "account")
-        """`message_id` and `account` in combination are unique."""
+        """`message_id` and :attr:`account` in combination are unique."""
 
 
 

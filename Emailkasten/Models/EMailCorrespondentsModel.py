@@ -27,16 +27,16 @@ class EMailCorrespondentsModel(models.Model):
     """Database model for connecting emails and their correspondents."""
 
     email = models.ForeignKey(EMailModel, related_name="emailcorrespondents", on_delete=models.CASCADE)
-    """The email `correspondent` was mentioned in. Unique together with `correspondent` and `mention`."""
+    """The email :attr:`correspondent` was mentioned in. Unique together with :attr:`correspondent` and :attr:`mention`."""
 
     correspondent = models.ForeignKey(CorrespondentModel, related_name="correspondentemails", on_delete=models.CASCADE)
-    """The correspondent that was mentioned in `email`. Unique together with `email` and `mention`."""
+    """The correspondent that was mentioned in :attr:`email`. Unique together with :attr:`email` and :attr:`mention`."""
 
     MENTIONTYPES = dict(ParsedMailKeys.Correspondent())
     """The available types of correspondent memtions. Refers to :class:`Emailkasten.constants.ParsedMailKeys.Correspondent`."""
 
     mention = models.CharField(choices=MENTIONTYPES, max_length=30)
-    """The way that `correspondent` was mentioned in `email`. One of :attr:`MENTIONTYPES`.  Unique together with `email` and `correspondent`."""
+    """The way that :attr:`correspondent` was mentioned in :attr:`email`. One of :attr:`MENTIONTYPES`.  Unique together with :attr:`email` and :attr:`correspondent`."""
     
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
@@ -53,4 +53,4 @@ class EMailCorrespondentsModel(models.Model):
         """The name of the database table for the images."""
 
         unique_together = ('email', 'correspondent', 'mention')
-        """`email`, `correspondent` and `mention` in combination are unique."""
+        """:attr:`email`, :attr:`correspondent` and :attr:`mention` in combination are unique."""

@@ -163,7 +163,7 @@ class ParsingConfiguration:
     """The fallback date to use if none is found in a mail."""
     
     DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
-    """The mail datetime format as specified in RFC5322. Must match the pattern of `DATE_DEFAULT`."""
+    """The mail datetime format as specified in RFC5322. Must match the pattern of :attr:`DATE_DEFAULT`."""
 
 
     

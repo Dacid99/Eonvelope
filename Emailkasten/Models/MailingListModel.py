@@ -25,7 +25,7 @@ class MailingListModel(models.Model):
     """Database model for a mailinglist."""
 
     list_id = models.CharField(max_length=255)
-    """The List-ID header of the mailinglist. Unique together with `correspondent`."""
+    """The List-ID header of the mailinglist. Unique together with :attr:`correspondent`."""
 
     list_owner = models.CharField(max_length=255, null=True)
     """The List-Owner header of the mailinglist. Can be null."""
@@ -49,7 +49,7 @@ class MailingListModel(models.Model):
     """Flags favorite mailingslists. False by default."""
 
     correspondent = models.ForeignKey(CorrespondentModel, related_name='mailinglist', on_delete=models.CASCADE)
-    """The correspondent that sends the mailinglist. Unique together with `list_id`. Deletion of that `correspondent` deletes this mailinglist."""
+    """The correspondent that sends the mailinglist. Unique together with :attr:`list_id`. Deletion of that `correspondent` deletes this mailinglist."""
     
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
@@ -66,6 +66,6 @@ class MailingListModel(models.Model):
         """The name of the database table for the mailinglists."""
 
         unique_together = ("list_id", "correspondent")
-        """`list_id` and `correspondent` in combination are unique."""
+        """:attr:`list_id` and :attr:`correspondent` in combination are unique."""
 
 

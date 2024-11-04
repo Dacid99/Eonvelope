@@ -23,7 +23,7 @@ from .IMAPFetcher import IMAPFetcher
 
 
 class IMAP_SSL_Fetcher(IMAPFetcher): 
-    """Subclass of :class:`Emailkasten.Fetchers.IMAP_Fetcher`.
+    """Subclass of :class:`Emailkasten.Fetchers.IMAPFetcher`.
 
     Does the same things, just using IMAP_SSL protocol.
     """
@@ -31,7 +31,7 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
     PROTOCOL = constants.MailFetchingProtocols.IMAP_SSL
 
     def connectToHost(self):
-        """Overrides `connectToHost` from `IMAPFetcher` to use :class:`imaplib.IMAP4_SSL`."""
+        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.connectToHost` to use :class:`imaplib.IMAP4_SSL`."""
         self.logger.debug(f"Connecting to {str(self.account)} ...")
         self._mailhost = imaplib.IMAP4_SSL(host=self.account.mail_host, port=self.account.mail_host_port, ssl_context=None, timeout=None)
         self.logger.debug(f"Successfully connected to {str(self.account)}.")
@@ -39,6 +39,6 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
 
     @staticmethod
     def test(account):
-        """Overrides `test` from `IMAPFetcher` to use :class:`imaplib.IMAP4_SSL`."""
+        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.test` to use :class:`imaplib.IMAP4_SSL`."""
         with IMAP_SSL_Fetcher(account) as imapsslFetcher:
             return bool(imapsslFetcher) 

@@ -35,10 +35,10 @@ class MailboxModel(models.Model):
     """Database model for a mailbox in a mail account."""
 
     name = models.CharField(max_length=255)
-    """The mailaccount internal name of the mailbox. Unique together with `account`."""
+    """The mailaccount internal name of the mailbox. Unique together with :attr:`account`."""
 
     account = models.ForeignKey(AccountModel, related_name="mailboxes", on_delete=models.CASCADE)
-    """The mailaccount this mailbox was found in. Unique together with `name`. Deletion of that `account` deletes this mailbox."""
+    """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
 
     FETCHINGCHOICES = dict(MailFetchingCriteria())
     """The available mail fetching criteria. Refers to :class:`Emailkasten.constants.MailFetchingCriteria`."""
@@ -94,7 +94,7 @@ class MailboxModel(models.Model):
         """The name of the database table for the mailboxes."""
 
         unique_together = ('name', 'account')
-        """`name` and `account` in combination are unique."""
+        """:attr:`name` and :attr:`account` in combination are unique."""
 
 
 

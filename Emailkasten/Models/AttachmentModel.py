@@ -40,7 +40,7 @@ class AttachmentModel(models.Model):
         max_length=511,
         recursive=True,
         null=True)
-    """The path where the attachment is stored. Unique together with `email`. 
+    """The path where the attachment is stored. Unique together with :attr:`email`. 
     Can be null if the attachment has not been saved (null does not collide with the unique constraint.).
     Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`.
     When this entry is deleted, the file will be removed by :func:`post_delete_attachment`."""
@@ -70,7 +70,7 @@ class AttachmentModel(models.Model):
         """The name of the database table for the attachments."""
 
         unique_together = ("file_path", "email")
-        """`file_path` and `email` in combination are unique."""
+        """:attr:`file_path` and :attr:`email` in combination are unique."""
 
 
 

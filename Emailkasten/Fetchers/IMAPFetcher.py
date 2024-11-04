@@ -59,7 +59,7 @@ class IMAPFetcher:
 
     def __init__(self, account):
         """Constructor, starts the IMAP connection and logs into the account.
-        If the connection or session could not be established, `_mailhost` remains None and the `account` is marked as unhealthy.
+        If the connection or session could not be established, :attr:`_mailhost` remains None and the `account` is marked as unhealthy.
         If the connection succeeds, the account is flagged as healthy.
 
         Args:
@@ -94,7 +94,7 @@ class IMAPFetcher:
 
 
     def connectToHost(self):
-        """Opens the connection to the IMAP server using the credentials from `account`.
+        """Opens the connection to the IMAP server using the credentials from :attr:`account`.
         
         Returns:
             None
@@ -106,7 +106,7 @@ class IMAPFetcher:
         
 
     def login(self):
-        """Logs into the target account using credentials from `account`.
+        """Logs into the target account using credentials from :attr:`account`.
         
         Returns:
             None
@@ -145,7 +145,7 @@ class IMAPFetcher:
         """Returns whether connecting to the IMAP host is possible.
 
         Returns:
-            bool: Whether `_mailhost` is None or not.
+            bool: Whether :attr:`_mailhost` is None or not.
         """
         self.logger.debug(f"Testing connection to {str(self.account)}")
         status = self._mailhost is not None
@@ -172,11 +172,11 @@ class IMAPFetcher:
 
         Args:
             criterionName (str): The criterion to prepare for the IMAP request.
-                If not in `AVAILABLE_FETCHING_CRITERIA`, returns None.
+                If not in :attr:`AVAILABLE_FETCHING_CRITERIA`, returns None.
 
         Returns:
             Optional[str]: Formatted criterion to be used in IMAP request;
-            None if `criterionName` is not in `AVAILABLE_FETCHING_CRITERIA`.
+            None if `criterionName` is not in :attr:`AVAILABLE_FETCHING_CRITERIA`.
         """
         if criterionName in IMAPFetcher.AVAILABLE_FETCHING_CRITERIA:
             if criterionName == constants.MailFetchingCriteria.DAILY:

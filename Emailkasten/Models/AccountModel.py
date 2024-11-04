@@ -33,7 +33,7 @@ class AccountModel(models.Model):
     """Database model for the account data of a mail account."""
 
     mail_address = models.EmailField(max_length=255)
-    """The mail address of the account. Unique together with `user`."""
+    """The mail address of the account. Unique together with :attr:`user`."""
 
     password = models.CharField(max_length=255)
     """The password to log into the account."""
@@ -54,7 +54,7 @@ class AccountModel(models.Model):
     """The available mail protocols."""
 
     protocol = models.CharField(choices=PROTOCOL_CHOICES, max_length=10)
-    """The mail protocol of the mail server. One of `PROTOCOL_CHOICES`."""
+    """The mail protocol of the mail server. One of :attr:`PROTOCOL_CHOICES`."""
 
     is_healthy = models.BooleanField(default=True)
     """Flags whether the account can be accessed using the data. True by default.
@@ -83,7 +83,7 @@ class AccountModel(models.Model):
         """The name of the database table for the mail accounts."""
 
         unique_together = ("mail_address", "user")
-        """`mail_address` and `user` in combination are unique fields."""
+        """`mail_address` and :attr:`user` in combination are unique fields."""
 
 
 

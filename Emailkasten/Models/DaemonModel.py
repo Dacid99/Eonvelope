@@ -30,10 +30,10 @@ class DaemonModel(models.Model):
     """The mailbox this daemon fetches. Unique. Deletion of that `mailbox` deletes this daemon."""
 
     cycle_interval = models.IntegerField(default=constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT)
-    """The interval in which the mailbox is fetched. Set to `constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT` by default."""
+    """The interval in which the mailbox is fetched. Set to :attr:`Emailkasten.constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT` by default."""
     
     is_running = models.BooleanField(default=False)
-    """Flags whether the daemon is active. False by default."""
+    """Flags whether the daemon is active. `False` by default."""
     
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""

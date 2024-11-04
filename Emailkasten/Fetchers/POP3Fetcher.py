@@ -45,7 +45,7 @@ class POP3Fetcher:
 
     def __init__(self, account):
         """Constructor, starts the POP connection and logs into the account.
-        If the connection could not be established, `_mailhost` remains None and the `account` is marked as unhealthy.
+        If the connection could not be established, :attr:`_mailhost` remains None and the `account` is marked as unhealthy.
         If the connection succeeds, the account is flagged as healthy.
 
         Args:
@@ -79,7 +79,7 @@ class POP3Fetcher:
 
 
     def connectToHost(self):
-        """Opens the connection to the POP server using the credentials from `account`.
+        """Opens the connection to the POP server using the credentials from :attr:`account`.
         
         Returns:
             None
@@ -90,7 +90,7 @@ class POP3Fetcher:
 
 
     def login(self):
-        """Logs into the target account using credentials from `account`.
+        """Logs into the target account using credentials from :attr:`account`.
         
         Returns:
             None
@@ -125,7 +125,7 @@ class POP3Fetcher:
         """Returns whether the connection to the POP host is alive.
 
         Returns:
-            bool: Whether `_mailhost` is None or not.
+            bool: Whether :attr:`_mailhost` is None or not.
         """
         self.logger.debug(f"Testing connection to {str(self.account)}")
         status = self._mailhost is not None

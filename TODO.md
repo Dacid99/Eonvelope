@@ -18,8 +18,7 @@
 - some fallback for failed emailaddress parsing is required
 - combined filter for correspondent with mention 
 - general save decorator in filemanagement
-- refine storage management logging and error correction 
-- documentation check for missing :flags: before ``
+- refine storage management logging and error correction
   
 ### Work in progress
 - documentation 

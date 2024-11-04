@@ -46,6 +46,7 @@ class POP3Fetcher:
     def __init__(self, account):
         """Constructor, starts the POP connection and logs into the account.
         If the connection could not be established, `_mailhost` remains None and the `account` is marked as unhealthy.
+        If the connection succeeds, the account is flagged as healthy.
 
         Args:
             account (:class:`Emailkasten.Models.AccountModel`): The model of the account to be fetched from.
@@ -59,33 +60,22 @@ class POP3Fetcher:
         
         try:
             self.connectToHost()
-        except poplib.error_proto:
-            self.logger.error(f"A POP error occured connecting to {str(self.account)}!", exc_info=True)
-            self._mailhost = None
-            self.account.is_healthy = False
-            self.account.save()
-            self.logger.info(f"Marked {str(self.account)} as unhealthy")
-        except Exception:
-            self.logger.error(f"An unexpected error occured connecting to {str(self.account)}!", exc_info=True)
-            self._mailhost = None
-            self.account.is_healthy = False
-            self.account.save()
-            self.logger.info(f"Marked {str(self.account)} as unhealthy")
-
-        try:
             self.login()
         except poplib.error_proto:
-            self.logger.error(f"A POP error occured logging into {str(self.account)}!", exc_info=True)
+            self.logger.error(f"A POP error occured connecting and logging in to {str(self.account)}!", exc_info=True)
             self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
             self.logger.info(f"Marked {str(self.account)} as unhealthy")
         except Exception:
-            self.logger.error(f"An unexpected error occured logging into {str(self.account)}!", exc_info=True)
+            self.logger.error(f"An unexpected error occured connecting and logging in to {str(self.account)}!", exc_info=True)
             self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
             self.logger.info(f"Marked {str(self.account)} as unhealthy")
+        
+        self.account.is_healthy = True
+        self.account.save()
 
 
     def connectToHost(self):
@@ -157,56 +147,69 @@ class POP3Fetcher:
             return bool(pop3Fetcher)
 
 
-    def fetchAll(self):
+    def fetchAll(self, mailbox):
         """Fetches and returns all maildata from the server.
+        If an :python::class:`poplib.POP3.error_proto` occurs the mailbox is flagged as unhealthy.
+        If a bad response is received when listing messages, it is flagged as unhealthy as well. 
+        In case of success the mailbox is flagged as healthy.
         
+        Args:
+            mailbox (:class:`Emailkasten.Models.MailboxModel`): Database model of the mailbox to fetch data from.
+                If a mailbox that is not in the account is given, returns [].
+
         Returns:
-            list: List of :class:`email.Message` mails in the mailbox matching the criterion. Empty if no such messages are found or if an error occured.
+            list: List of :class:`email.message.EmailMessage` mails in the mailbox. Empty if no messages are found or if an error occured.
         """
         if not self._mailhost:
             self.logger.error(f"No connection to {str(self.account)}!")   
             return []
         
-        self.logger.debug(f"Fetching all messages in {str(self.account)} ...")
+        if mailbox.account != self.account:
+            self.logger.error(f"{str(mailbox)} is not a mailbox of {self.account}!")
+            return []
+        
+        self.logger.debug(f"Fetching all messages in {str(mailbox)} ...")
 
-        self.logger.debug(f"Listing all messages in {str(self.account)} ...")
+        self.logger.debug(f"Listing all messages in {str(mailbox)} ...")
         try:
             status, messageNumbersList, _ = self._mailhost.list()
             if status != b'+OK':
-                self.logger.error(f"Bad response trying to list mails, response {status}")
+                self.logger.error(f"Bad response listing mails in {str(mailbox)}:\n {status}, {messageNumbersList}!")
+                mailbox.is_healthy = False
+                mailbox.save()
                 return []
-        except poplib.error_proto:
-            self.logger.error(f"A POP error occured listing all messages in {str(self.account)}!", exc_info=True)
-            return []
-        except Exception:
-            self.logger.error(f"An unexpected error occured listing all messages in {str(self.account)}!", exc_info=True)
-            return []
 
-        messageCount = len(messageNumbersList)
-        self.logger.debug(f"Found {messageCount} messages in {str(self.account)}.")
+            messageCount = len(messageNumbersList)
+            self.logger.debug(f"Found {messageCount} messages in {str(mailbox)}.")
 
-        self.logger.debug(f"Retrieving all messages in {str(self.account)} ...")
-        mailDataList = []
-        try:
+            self.logger.debug(f"Retrieving all messages in {str(mailbox)} ...")
+            mailDataList = []
+        
             for number in range(messageCount):
                 status, messageData, _ = self._mailhost.retr(number + 1)
                 if status != b'+OK':
-                    self.logger.error(f"Bad response trying to retrieve mail {number}, response {status}")
+                    self.logger.error(f"Bad response retrieving mail {number} in {str(mailbox)}:\n {status}, {messageData}")
                     continue
                     
                 fullMessage = b'\n'.join(messageData)
                 mailDataList.append(fullMessage)
                 
-            self.logger.debug(f"Successfully retrieved all messages in {str(self.account)}.")
+            self.logger.debug(f"Successfully retrieved all messages in {str(mailbox)}.")
 
         except poplib.error_proto:
-            self.logger.error(f"A POP error occured retrieving all messages in {str(self.account)}!", exc_info=True)
+            self.logger.error(f"A POP error occured retrieving all messages in {str(mailbox)}!", exc_info=True)
+            mailbox.is_healthy = False
+            mailbox.save()
             return []
         except Exception:
-            self.logger.error(f"An unexpected error occured retrieving all messages in {str(self.account)}!", exc_info=True)
+            self.logger.error(f"An unexpected error occured retrieving all messages in {str(mailbox)}!", exc_info=True)
             return []
 
-        self.logger.debug(f"Successfully fetched all messages in {str(self.account)}.")
+        self.logger.debug(f"Successfully fetched all messages in {str(mailbox)}.")
+        
+        mailbox.is_healthy = True
+        mailbox.save()
+        
         return mailDataList
     
 

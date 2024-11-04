@@ -151,22 +151,22 @@ def fetchMails(mailbox, account, criterion):
     if account.protocol == IMAPFetcher.PROTOCOL:
         with IMAPFetcher(account) as imapMail:
 
-            mailDataList = imapMail.fetchBySearch(mailbox=mailbox.name, criterion=criterion)
+            mailDataList = imapMail.fetchBySearch(mailbox=mailbox, criterion=criterion)
 
     elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
         with IMAP_SSL_Fetcher(account) as imapMail:
 
-            mailDataList = imapMail.fetchBySearch(mailbox=mailbox.name, criterion=criterion)
+            mailDataList = imapMail.fetchBySearch(mailbox=mailbox, criterion=criterion)
 
     elif account.protocol == POP3Fetcher.PROTOCOL:
         with POP3Fetcher(account) as popMail:
 
-            mailDataList = popMail.fetchAll()
+            mailDataList = popMail.fetchAll(mailbox)
 
     elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
         with POP3_SSL_Fetcher(account) as popMail:
 
-            mailDataList = popMail.fetchAll()
+            mailDataList = popMail.fetchAll(mailbox)
 
     elif account.protocol == ExchangeFetcher.PROTOCOL:
         with ExchangeFetcher(account) as exchangeMail:

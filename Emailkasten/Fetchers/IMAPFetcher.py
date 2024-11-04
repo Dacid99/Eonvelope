@@ -60,6 +60,7 @@ class IMAPFetcher:
     def __init__(self, account):
         """Constructor, starts the IMAP connection and logs into the account.
         If the connection or session could not be established, `_mailhost` remains None and the `account` is marked as unhealthy.
+        If the connection succeeds, the account is flagged as healthy.
 
         Args:
             account (:class:`Emailkasten.Models.AccountModel`): The model of the account to be fetched from.
@@ -73,33 +74,23 @@ class IMAPFetcher:
 
         try:
             self.connectToHost()
+            self.login()
         except imaplib.IMAP4.error:
-            self.logger.error(f"An IMAP error occured connecting to {str(self.account)}!", exc_info=True)
+            self.logger.error(f"An IMAP error occured connecting and logging in to {str(self.account)}!", exc_info=True)
             self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
             self.logger.info(f"Marked {str(self.account)} as unhealthy")
         except Exception:
-            self.logger.error(f"An unexpected error occured connecting to {str(self.account)}!", exc_info=True)
+            self.logger.error(f"An unexpected error occured connecting and logging in to {str(self.account)}!", exc_info=True)
             self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
             self.logger.info(f"Marked {str(self.account)} as unhealthy")
 
-        try:
-            self.login()
-        except imaplib.IMAP4.error:
-            self.logger.error(f"An IMAP error occured logging into {str(self.account)}!", exc_info=True)
-            self._mailhost = None
-            self.account.is_healthy = False
-            self.account.save()
-            self.logger.info(f"Marked {str(self.account)} as unhealthy")
-        except Exception:
-            self.logger.error(f"An unexpected error occured logging into {str(self.account)}!", exc_info=True)
-            self._mailhost = None
-            self.account.is_healthy = False
-            self.account.save()
-            self.logger.info(f"Marked {str(self.account)} as unhealthy")
+        self.account.is_healthy = True
+        self.account.save()
+
 
 
     def connectToHost(self):
@@ -127,6 +118,7 @@ class IMAPFetcher:
 
     def close(self):
         """Logs out of the account and closes the connection to the IMAP server if it is open.
+        Errors do not flag the account as unhealty.
         
         Returns:
             None
@@ -150,7 +142,7 @@ class IMAPFetcher:
 
 
     def __bool__(self):
-        """Returns whether the connection to the IMAP host is alive.
+        """Returns whether connecting to the IMAP host is possible.
 
         Returns:
             bool: Whether `_mailhost` is None or not.
@@ -208,91 +200,99 @@ class IMAPFetcher:
             
 
         
-    def fetchBySearch(self, mailbox = 'INBOX', criterion ='RECENT'):
+    def fetchBySearch(self, mailbox, criterion = constants.MailFetchingCriteria.RECENT):
         """Fetches and returns maildata from a mailbox based on a given criterion.
+        If an :python::class:`imaplib.IMAP4.error` that is not an :python::class:`imaplib.IMAP4.abort` occurs the mailbox is flagged as unhealthy.
+        If a bad response is received when opening or searching the mailbox, it is flagged as unhealthy as well. 
+        In case of success the mailbox is flagged as healthy.
 
         Args:
-            mailbox (str, optional): Name of the mailbox to fetch data from. Defaults to INBOX.
+            mailbox (:class:`Emailkasten.Models.MailboxModel`): Database model of the mailbox to fetch data from.
                 If a mailbox that is not in the account is given, returns [].
-            criterion (str, optional): Formatted criterion to filter mails in the IMAP request. Defaults to RECENT.
+            criterion (str, optional): Formatted criterion to filter mails in the IMAP request. Defaults to :attr:`Emailkasten.constants.MailFetchingCriteria.RECENT`.
                 If an invalid criterion is given, returns []. 
 
         Returns:
-            list: List of :class:`email.Message` mails in the mailbox matching the criterion. Empty if no such messages are found, if there is no connection to the server or if an error occured.
+            list: List of :class:`email.message.EmailMessage` mails in the mailbox matching the criterion. Empty if no such messages are found, if there is no connection to the server or if an error occured.
         """
         if not self._mailhost:
             self.logger.error(f"No connection to {str(self.account)}!")   
+            return []
+        
+        if mailbox.account != self.account:
+            self.logger.error(f"{str(mailbox)} is not a mailbox of {self.account}!")
             return []
         
         searchCriterion = self.makeFetchingCriterion(criterion)
         if not searchCriterion:  
             return []
 
-        self.logger.debug(f"Searching and fetching {searchCriterion} messages in {mailbox} of {str(self.account)} ...")
-
-        self.logger.debug(f"Opening mailbox {mailbox} of {str(self.account)} ...")
+        self.logger.debug(f"Searching and fetching {searchCriterion} messages in {str(mailbox)} of {str(self.account)} ...")
         try:
-            status, _ = self._mailhost.select(mailbox, readonly=True)
+            self.logger.debug(f"Opening mailbox {str(mailbox)} ...")
+            status, data = self._mailhost.select(mailbox.name, readonly=True)
             if status != "OK":
-                self.logger.warning(f"Bad response opening mailbox, response {status}!")
-            else:
-                self.logger.debug("Successfully opened mailbox.")
-        except imaplib.IMAP4.error:
-            self.logger.error(f"An IMAP error occured opening mailbox {mailbox} of {str(self.account)}!", exc_info=True)
-            return []
-        except Exception:
-            self.logger.error(f"An unexpected error occured opening mailbox {mailbox} of {str(self.account)}!", exc_info=True)
-            return []
-        
-        self.logger.debug(f"Searching {searchCriterion} messages in {mailbox} of {str(self.account)} ...")
-        try:
-            status, messageNumbers = self._mailhost.uid('SEARCH', None, searchCriterion)
-            if status != "OK":
-                self.logger.error(f"Bad response searching for mails, response {status}!")
+                errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
+                self.logger.error(f"Bad response opening {str(mailbox)}:\n {status}, {errorMessage}")
+                mailbox.is_healthy = False
+                mailbox.save()
                 return []
             
-            self.logger.info(f"Found {searchCriterion} messages with numbers {messageNumbers} in {mailbox} of {str(self.account)}.")
-        except imaplib.IMAP4.error:
-            self.logger.error(f"An IMAP error occured searching {searchCriterion} messages in {mailbox} of {str(self.account)}!", exc_info=True)
-            return []
-        except Exception:
-            self.logger.error(f"An unexpected error occured searching {searchCriterion} messages in {mailbox} of {str(self.account)}!", exc_info=True)
-            return []
+            self.logger.debug("Successfully opened mailbox.")
         
-        self.logger.debug(f"Fetching {searchCriterion} messages in {mailbox} of {str(self.account)} ...")
-        mailDataList = []
-        try:
-            for number in messageNumbers[0].split():
-                status, messageData = self._mailhost.uid('FETCH', number, '(RFC822)')
+            self.logger.debug(f"Searching {searchCriterion} messages in {str(mailbox)} ...")
+            status, messageUIDs = self._mailhost.uid('SEARCH', None, searchCriterion)
+            if status != "OK":
+                errorMessage = messageUIDs[0].decode('utf-8') if messageUIDs and messageUIDs[0] else "Unknown error"
+                self.logger.error(f"Bad response searching for mails in {mailbox}:\n {status}, {errorMessage}")
+                mailbox.is_healthy = False
+                mailbox.save()
+                return []
+            
+            self.logger.info(f"Found {searchCriterion} messages with uIDs {messageUIDs} in {str(mailbox)}.")
+        
+        
+            self.logger.debug(f"Fetching {searchCriterion} messages in {str(mailbox)} ...")
+            mailDataList = []
+        
+            for uID in messageUIDs[0].split():
+                status, messageData = self._mailhost.uid('FETCH', uID, '(RFC822)')
                 if status != "OK":
-                    self.logger.error(f"Bad response fetching mail {number}, response {status}!")
+                    errorMessage = messageData[0].decode('utf-8') if messageData and messageData[0] else "Unknown error"
+                    self.logger.warning(f"Bad response fetching mail {uID} from {mailbox}:\n {status}, {errorMessage}")
                     continue
 
                 mailDataList.append(messageData[0][1])
                 
             self.logger.debug(f"Successfully fetched {searchCriterion} messages from {mailbox} of {str(self.account)}.")
-        except imaplib.IMAP4.error:
-            self.logger.error(f"An IMAP error occured fetching {searchCriterion} messages in {mailbox} of {str(self.account)}!", exc_info=True)
-            return []
-        except Exception:
-            self.logger.error(f"An unexpected error occured fetching {searchCriterion} messages in {mailbox} of {str(self.account)}!", exc_info=True)
-            return []
         
-        self.logger.debug(f"Closing mailbox {mailbox} of {str(self.account)} ...")
-        try:
-            status, _ = self._mailhost.close()
+        
+            self.logger.debug(f"Closing mailbox {str(mailbox)} ...")
+        
+            status, data = self._mailhost.close()
             if status != "OK":
-                self.logger.warning(f"Bad response closing {mailbox}!")
+                errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
+                self.logger.warning(f"Bad response closing {mailbox}:\n {status}, {errorMessage}")
             else:
                 self.logger.debug("Successfully closed mailbox.")
+
+        except imaplib.IMAP4.abort:
+            self.logger.error(f"Abort error occured searching and fetching {searchCriterion} messages in {str(mailbox)}!", exc_info=True)
+            return []
         except imaplib.IMAP4.error:
-            self.logger.error(f"An IMAP error occured closing mailbox {mailbox} of {str(self.account)}!", exc_info=True)
+            self.logger.error(f"An IMAP error occured searching and fetching {searchCriterion} messages in {str(mailbox)}!", exc_info=True)
+            mailbox.is_healthy = False
+            mailbox.save()
             return []
         except Exception:
-            self.logger.error(f"An unexpected error occured closing mailbox {mailbox} of {str(self.account)}!", exc_info=True)
+            self.logger.error(f"An unexpected error occured searching and fetching {searchCriterion} messages in {str(mailbox)}!", exc_info=True)
             return []
         
-        self.logger.debug(f"Successfully searched and fetched {searchCriterion} messages in {mailbox} of {str(self.account)}.")
+        self.logger.debug(f"Successfully searched and fetched {searchCriterion} messages in {str(mailbox)}.")
+
+        mailbox.is_healthy = True
+        mailbox.save()
+
         return mailDataList
 
 
@@ -311,9 +311,13 @@ class IMAPFetcher:
         try:
             status, mailboxes = self._mailhost.list()
             if status != "OK":
-                self.logger.error(f"Bad response trying to fetch mailboxes, response {status}!")                  
+                errorMessage = mailboxes[0].decode('utf-8') if mailboxes and mailboxes[0] else "Unknown error"
+                self.logger.error(f"Bad response trying to fetch mailboxes:\n {status}, {errorMessage}")  
+                self.account.is_healthy = False
+                self.account.save()                
                 return []
             self.logger.debug(f"Successfully fetched mailboxes in {str(self.account)}.")
+
         except imaplib.IMAP4.error:
             self.logger.error(f"An IMAP error occured fetching mailboxes in {str(self.account)}!", exc_info=True)
             return []

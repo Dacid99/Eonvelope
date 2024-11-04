@@ -12,16 +12,18 @@
 - reconsider decoding of mailbytes using BytesParser
 - more spam flags
 - exceptions while fetching parsing and inserting for appropriate api response
-- more finegrain try catch in fetchers, marking as unhealthy for wrong data
+- test for mailbox in fetchers
 - marking of daemon as unhealthy, improved crashhandling
 - user divided storage to make file_paths unique again
 - some fallback for failed emailaddress parsing is required
 - combined filter for correspondent with mention 
 - general save decorator in filemanagement
 - refine storage management logging and error correction 
+- documentation check for missing :flags: before ``
+- replace prolematic 'is' comparisons
   
 ### Work in progress
-- documentation
+- documentation 
 - type annotations
  
 ## To test

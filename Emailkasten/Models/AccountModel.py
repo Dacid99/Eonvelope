@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -24,6 +25,9 @@ from django.dispatch import receiver
 
 from .. import constants
 
+
+logger = logging.getLogger(__name__)
+"""The logger instance for this module."""
 
 class AccountModel(models.Model):
     """Database model for the account data of a mail account."""
@@ -53,7 +57,10 @@ class AccountModel(models.Model):
     """The mail protocol of the mail server. One of `PROTOCOL_CHOICES`."""
 
     is_healthy = models.BooleanField(default=True)
-    """Flags whether the account can be accessed using the data. True by default."""
+    """Flags whether the account can be accessed using the data. True by default.
+    When this field changes to `False`, all mailboxes :attr:`Emailkasten.Models.MailboxModel.is_healthy` field will be updated accordingly.
+    When the :attr:`Emailkasten.Models.MailboxModel.is_healthy` field of one of the mailboxes referencing this entry via :attr:`Emailkasten.Models.MailboxModel.account` 
+    becomes `True` after being `False`, this field will be set to `True` as well."""
 
     is_favorite = models.BooleanField(default=False)
     """Flags favorite accounts. False by default."""
@@ -79,12 +86,26 @@ class AccountModel(models.Model):
         """`mail_address` and `user` in combination are unique fields."""
 
 
+
 @receiver(post_save, sender=AccountModel)
 def post_save_is_healthy(sender, instance, **kwargs):
-    try:
-        oldInstance = AccountModel.objects.get(pk=instance.pk)
-        if (oldInstance.is_healthy != instance.isHealthy and not instance.is_healthy):
-            instance.mailboxes.update(is_healthy=instance.is_healthy)
-    except AccountModel.DoesNotExist:
-        pass
+    """Receiver function flagging all mailboxes of an account as unhealthy once that account becomes unhealthy.
 
+    Args:
+        sender (type): The class type that sent the post_save signal.
+        instance (:class:`Emailkasten.Models.AccountModel`): The instance that has been saved.
+    
+    Returns:
+        None
+    """
+    if not instance.is_healthy:
+        try:
+            oldInstance = AccountModel.objects.get(pk=instance.pk)
+            if oldInstance.is_healthy is not instance.is_healthy:
+                logger.debug(f"{str(instance)} has become unhealthy, flagging all its mailboxes as unhealthy ...")
+                instance.mailboxes.update(is_healthy=instance.is_healthy)
+                logger.debug("Successfully flagged mailboxes as unhealthy.")
+
+        except AccountModel.DoesNotExist:
+            logger.debug(f"Previous instance of {str(instance)} not found, no health flag comparison possible.")
+        

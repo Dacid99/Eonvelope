@@ -48,7 +48,8 @@ logger = logging.getLogger(__name__)
 
 def testAccount(account):
     """Tests whether the data in an accountmodel is correct and allows connecting and logging in to the mailhost and account.
-    Set is_healthy according to the result. Relies on the `test` static method of the :mod:`Emailkasten.Fetchers` classes. 
+    The :attr:`Emailkasten.Models.AccountModel.is_healthy` flag is set according to the result by the Fetcher class, e.g. :class:`Emailkasten.Fetchers.IMAPFetcher`. 
+    Relies on the `test` static method of the :mod:`Emailkasten.Fetchers` classes. 
     
     Args:
         account (:class:`Emailkasten.Models.AccountModel`): The account data to test.
@@ -79,8 +80,6 @@ def testAccount(account):
 
     logger.info(f"Successfully tested account to be {result}.")
 
-    account.is_healthy = result
-    account.save()
     return result
 
 

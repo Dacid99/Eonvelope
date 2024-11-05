@@ -24,6 +24,6 @@ from ...Models.DaemonModel import DaemonModel
 class DaemonSerializer(serializers.ModelSerializer):
     class Meta:
         model = DaemonModel
-        exclude = ['mailbox']
+        exclude = ['mailbox', 'log_filepath']
         read_only_fields = ['is_running', 'created', 'updated']
 

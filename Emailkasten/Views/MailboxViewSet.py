@@ -46,14 +46,20 @@ class MailboxViewSet(viewsets.ModelViewSet):
         return MailboxModel.objects.filter(account__user = self.request.user)
     
 
-    @action(detail=True, methods=['post'])
-    def start(self, request, pk=None):
+    @action(detail=True, methods=['post'], url_path='daemon/test')
+    def test_daemon(self, request, pk=None):
+        mailbox = self.get_object()
+        return EMailArchiverDaemon.testDaemon(mailbox.daemon)
+
+
+    @action(detail=True, methods=['post'], url_path='daemon/start')
+    def start_daemon(self, request, pk=None):
         mailbox = self.get_object()
         return EMailArchiverDaemon.startDaemon(mailbox.daemon)
     
 
-    @action(detail=True, methods=['post'])
-    def stop(self, request, pk=None):
+    @action(detail=True, methods=['post'], url_path='daemon/stop')
+    def stop_daemon(self, request, pk=None):
         mailbox = self.get_object() 
         return EMailArchiverDaemon.stopDaemon(mailbox.daemon)
     

@@ -19,12 +19,15 @@
 - combined filter for correspondent with mention 
 - general save decorator in filemanagement
 - refine storage management logging and error correction
-  
+- health flag for daemons
+
 ### Work in progress
 - documentation 
 - type annotations
  
 ## To test
+- daemontest
+- logfile for daemons
 - mailboxparsing moved to processing
 - mailbox with full decode method
 - parseMailbox splitting (why?)

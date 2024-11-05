@@ -40,6 +40,25 @@ class EMailArchiverDaemon:
 
     runningDaemons = {}
     """A static dictionary of all active daemon instances with their database IDs as keys."""
+
+
+    @staticmethod
+    def testDaemon(daemonModel):
+        """Static method to test data for a daemon. 
+
+        Args:
+            daemonModel (:class:`Emailkasten.Models.DaemonModel`): The data for the daemon to be tested.
+
+        Returns: 
+            :rest_framework::class:`response.Response`: A response detailing what has happened. 
+        """
+        try:
+            newDaemon = EMailArchiverDaemon(daemonModel)
+            newDaemon.cycle()
+            return Response({'status': 'Daemon tested', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
+        except Exception:
+            return Response({'status': 'Daemon test failed!', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
+        
     
     @staticmethod
     def startDaemon(daemonModel):
@@ -50,7 +69,7 @@ class EMailArchiverDaemon:
             daemonModel (:class:`Emailkasten.Models.DaemonModel`): The data for the daemon.
 
         Returns: 
-            :rest_framework::class:`response.Response`: A response detailing what has done. 
+            :rest_framework::class:`response.Response`: A response detailing what has been done. 
         """
         if daemonModel.id not in EMailArchiverDaemon.runningDaemons:
             try:
@@ -75,7 +94,7 @@ class EMailArchiverDaemon:
             daemonModel (:class:`Emailkasten.Models.DaemonModel`): The data of the daemon.
 
         Returns: 
-            :rest_framework::class:`response.Response`: A response detailing what has done. 
+            :rest_framework::class:`response.Response`: A response detailing what has been done. 
         """
         if daemonModel.id in EMailArchiverDaemon.runningDaemons:
             oldDaemon = EMailArchiverDaemon.runningDaemons.pop(daemonModel.id)

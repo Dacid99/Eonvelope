@@ -156,6 +156,7 @@ class IMAPFetcher:
     @staticmethod
     def test(account):
         """Static method to test the validity of account data.
+        The is_healthy flag is automatically updated by :func:`__init__`.
 
         Args:
             account (:class:`Emailkasten.Models.AccountModel`): Data of the account to be tested.
@@ -251,7 +252,6 @@ class IMAPFetcher:
             
             self.logger.info(f"Found {searchCriterion} messages with uIDs {messageUIDs} in {str(mailbox)}.")
         
-        
             self.logger.debug(f"Fetching {searchCriterion} messages in {str(mailbox)} ...")
             mailDataList = []
         
@@ -264,11 +264,10 @@ class IMAPFetcher:
 
                 mailDataList.append(messageData[0][1])
                 
-            self.logger.debug(f"Successfully fetched {searchCriterion} messages from {mailbox} of {str(self.account)}.")
-        
+            self.logger.debug(f"Successfully fetched {searchCriterion} messages from {str(mailbox)}.")
         
             self.logger.debug(f"Closing mailbox {str(mailbox)} ...")
-        
+            
             status, data = self._mailhost.close()
             if status != "OK":
                 errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
@@ -298,7 +297,10 @@ class IMAPFetcher:
 
 
     def fetchMailboxes(self):
-        """Retrieves and returns the data of the mailboxes in the account.  
+        """Retrieves and returns the data of the mailboxes in the account.
+        If an :python::class:`imaplib.IMAP4.error` that is not an :python::class:`imaplib.IMAP4.abort` occurs the account is flagged as unhealthy.
+        If a bad response is received when listing the mailboxes, it is flagged as unhealthy as well. 
+        In case of success the account is flagged as healthy.
         
         Returns:
             list: List of data of all mailboxes in the account. Empty if none are found.
@@ -318,13 +320,20 @@ class IMAPFetcher:
                 return []
             self.logger.debug(f"Successfully fetched mailboxes in {str(self.account)}.")
 
+        except imaplib.IMAP4.abort:
+            self.logger.error(f"Abort error occured fetching mailboxes in {str(self.account)}!", exc_info=True)
+            return []
         except imaplib.IMAP4.error:
             self.logger.error(f"An IMAP error occured fetching mailboxes in {str(self.account)}!", exc_info=True)
+            self.account.is_healthy = False
+            self.account.save() 
             return []
         except Exception:
             self.logger.error(f"An unexpected error occured fetching mailboxes in {str(self.account)}!", exc_info=True)
             return []
-
+        
+        self.account.is_healthy = True
+        self.account.save() 
         return mailboxes
 
 

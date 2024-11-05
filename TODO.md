@@ -20,6 +20,7 @@
 - general save decorator in filemanagement
 - refine storage management logging and error correction
 - health flag for daemons
+- streamable logs for daemons
 
 ### Work in progress
 - documentation 
@@ -28,6 +29,7 @@
 ## To test
 - daemontest
 - logfile for daemons
+- health flagging in fetchers
 - mailboxparsing moved to processing
 - mailbox with full decode method
 - parseMailbox splitting (why?)

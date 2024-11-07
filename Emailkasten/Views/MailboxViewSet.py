@@ -46,7 +46,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return MailboxModel.objects.filter(account__user = self.request.user)
-    
+
 
     @action(detail=True, methods=['post'], url_path='daemon/test')
     def test_daemon(self, request, pk=None):
@@ -58,18 +58,18 @@ class MailboxViewSet(viewsets.ModelViewSet):
     def start_daemon(self, request, pk=None):
         mailbox = self.get_object()
         return EMailArchiverDaemon.startDaemon(mailbox.daemon)
-    
+
 
     @action(detail=True, methods=['post'], url_path='daemon/stop')
     def stop_daemon(self, request, pk=None):
-        mailbox = self.get_object() 
+        mailbox = self.get_object()
         return EMailArchiverDaemon.stopDaemon(mailbox.daemon)
-    
-    
+
+
     @action(detail=True, methods=['post'])
     def fetch_all(self, request, pk=None):
-        mailbox = self.get_object() 
-        
+        mailbox = self.get_object()
+
         fetchMails(mailbox, mailbox.account, constants.MailFetchingCriteria.ALL)
 
         mailboxSerializer = self.get_serializer(mailbox)
@@ -85,7 +85,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
             return Response({'options': availableFetchingOptions})
         else:
             return Response({'error': "No fetching options available for this mailbox!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
 
     @action(detail=True, methods=['post'], url_path='toggle_favorite')
     def toggle_favorite(self, request, pk=None):
@@ -93,8 +93,8 @@ class MailboxViewSet(viewsets.ModelViewSet):
         mailbox.is_favorite = not mailbox.is_favorite
         mailbox.save()
         return Response({'status': 'Mailbox marked as favorite'})
-    
-    
+
+
     @action(detail=False, methods=['get'], url_path='favorites')
     def favorites(self, request):
         favoriteMailboxes = MailboxModel.objects.filter(is_favorite=True)
@@ -110,6 +110,6 @@ class MailboxViewSet(viewsets.ModelViewSet):
 
         if not os.path.exists(daemonLogFilepath):
             raise Http404("Log file not found")
-        
+
         response = FileResponse(open(daemonLogFilepath, 'rb'), as_attachment=True, filename=daemonLogFilename)
         return response

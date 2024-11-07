@@ -215,11 +215,11 @@ class POP3Fetcher:
 
     def __enter__(self):
         """Framework method for use of class in 'with' statement, creates an instance."""
-        self.logger.debug(str(self.__class__.__name__) + "._enter_")
+        self.logger.debug("%s._enter_", str(self.__class__.__name__))
         return self
 
 
     def __exit__(self, exc_type, exc_value, traceback):
         """Framework method for use of class in 'with' statement, closes an instance."""
-        self.logger.debug(str(self.__class__.__name__) + "._exit_")
+        self.logger.debug("%s._exit_", str(self.__class__.__name__))
         self.close()

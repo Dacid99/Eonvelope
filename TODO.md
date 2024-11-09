@@ -9,22 +9,22 @@
 - autostart daemons on restart
 - custom additional healthchecks
 - parsing walks multiple times, could be more efficient
-- reconsider decoding of mailbytes using BytesParser
 - more spam flags
 - exceptions while fetching parsing and inserting for appropriate api response
-- test for mailbox in fetchers
 - marking of daemon as unhealthy, improved crashhandling
 - user divided storage to make file_paths unique again
 - some fallback for failed emailaddress parsing is required
-- combined filter for correspondent with mention 
+- combined filter for correspondent with mention
 - general save decorator in filemanagement
 - refine storage management logging and error correction
 - streamable logs for daemons
+- adding daemons to mailboxes
+- test on insertion
 
 ### Work in progress
-- documentation 
+- documentation
 - type annotations
- 
+
 ## To test
 - available fetching criteria validation
 - daemontest
@@ -39,7 +39,7 @@
 ## To fix
 - 'Decoding this mime part returned error' for paypal in prerender
 - google notifcations not formatted in prerender
- 
+
 # Remember
 - new migration must include setting of defaults
 - logpath is misconfigured to work on windows

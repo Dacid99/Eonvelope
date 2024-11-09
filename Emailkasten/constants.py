@@ -75,19 +75,42 @@ class MailFetchingProtocols:
 
     IMAP = "IMAP"
     """The IMAP4 protocol."""
-    
+
     IMAP_SSL = "IMAP_SSL"
     """The IMAP4 protocol over SSL."""
-    
+
     POP3 = "POP3"
     """The POP3 protocol."""
-    
+
     POP3_SSL = "POP3_SSL"
     """The POP3 protocol over SSL."""
-    
+
     EXCHANGE = "EXCHANGE"
     """Microsofts Exchange protocol."""
 
+class TestStatusCodes:
+    """Namespace class for all status codes for the tests of mailaccounts and mailboxes."""
+
+    OK = 0
+    """Everything worked fine"""
+
+    ABORTED = 1
+    """The operation was aborted, try again."""
+
+    BAD_RESPONSE = 2
+    """The server did not return status OK."""
+
+    ERROR = 3
+    """There was an IMAP error, the account is unhealthy."""
+
+    UNEXPECTED_ERROR = 4
+    """An unexpected error occured, try again and check the logs."""
+
+    INFOS = [ "Everything worked as expected." ,
+        "The operation was aborted, please try again." ,
+        "The server returned a bad status, the unhealthy flag set." ,
+        "There was an error, the unhealthy flag set." ,
+        "An unexpected error occured, please try again and check the logs." ]
 
 
 class EMailArchiverDaemonConfiguration:
@@ -103,13 +126,13 @@ class EMailArchiverDaemonConfiguration:
 
 class StorageConfiguration:
     """Namespace class for all configurations constants for the :class:`Emailkasten.Models.StorageModel`."""
-    
+
     MAX_SUBDIRS_PER_DIR = 1000
     """The maximum numbers of subdirectories in one storage unit. Must not exceed 64000 for ext4 filesystem! """
-    
+
     STORAGE_PATH = "/mnt/archive"
     """The path to the storage for the saved data. Must match the path in the docker-compose.yml to ensure data safety."""
-    
+
     PRERENDER_IMAGETYPE = 'jpg'
     """The image format for the prerendered eml files."""
 
@@ -117,7 +140,7 @@ class StorageConfiguration:
 
 class LoggerConfiguration:
     """Namespace class for all configurations constants for the application loggers."""
-   
+
     LOG_DIRECTORY_PATH = "" #/var/log
     """The path to directory with the logs.  Must match the path in the docker-compose.yml to store the logs outside the container."""
 
@@ -129,19 +152,19 @@ class LoggerConfiguration:
 
     APP_LOG_LEVEL = os.environ.get('APP_LOG_LEVEL', 'INFO')
     """The loglevel to the Emailkasten logfile. Is being set from an environment variable of the same name."""
-    
+
     DJANGO_LOG_LEVEL = os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
     """The loglevel to the django logfile. Is being set from an environment variable of the same name."""
-    
+
     ROOT_LOG_LEVEL = os.environ.get('ROOT_LOG_LEVEL', 'INFO')
     """The loglevel to the root console logger. Is being set from an environment variable of the same name."""
-    
+
     LOGFILE_MAXSIZE = 10 * 1024 * 1024 # 10 MiB
     """The maximum file size of a logfile."""
-    
-    LOGFILE_BACKUP_NUMBER = 3 
+
+    LOGFILE_BACKUP_NUMBER = 3
     """The maximum number of backup logfiles to keep."""
-    
+
     LOG_FORMAT = '{asctime} {levelname} - {name}.{funcName}: {message}'
     """The format of the log messages for all loggers."""
 
@@ -152,24 +175,24 @@ class ParsingConfiguration:
 
     CHARSET_DEFAULT = 'utf-8'
     """The default charset used for parsing of text."""
-    
+
     STRIP_TEXTS = True
     """Whether or not to strip whitespace from textfields like bodytext and subject."""
-    
+
     THROW_OUT_SPAM = True
     """Whether or not to ignore emails that have a spam flag."""
-    
+
     APPLICATION_TYPES = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
     """A list of application types to parse as attachments."""
-    
+
     DATE_DEFAULT = "1971-01-01 00:00:00"
     """The fallback date to use if none is found in a mail."""
-    
+
     DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
     """The mail datetime format as specified in RFC5322. Must match the pattern of :attr:`DATE_DEFAULT`."""
 
 
-    
+
 class ProcessingConfiguration:
     """Namespace class for all configurations constants for the processing, especially the prerendering, of mails."""
 
@@ -201,13 +224,13 @@ class FetchingConfiguration:
 
     SAVE_TO_EML_DEFAULT = True
     """The default setting whether to store mails as eml. Initially set to True."""
-    
+
     SAVE_ATTACHMENTS_DEFAULT = True
     """The default setting whether to store attachments. Initially set to True."""
-    
+
     SAVE_IMAGES_DEFAULT = True
     """The default setting whether to store images. Initially set to True."""
-    
+
 
 
 class DatabaseConfiguration:
@@ -215,10 +238,10 @@ class DatabaseConfiguration:
 
     NAME = os.environ.get("DB_NAME", "emailkasten")
     """The name of the database on the mariadb server. Can be set from docker-compose.yml."""
-    
+
     USER = os.environ.get("DB_USER", "user")
     """The name of the database user. Can be set from docker-compose.yml."""
-    
+
     PASSWORD = os.environ.get("DB_PASSWORD", "passwd")
     """The password of the database user. Can be set from docker-compose.yml."""
 
@@ -241,17 +264,17 @@ class ParsedMailKeys:
     IMAGES = "Images"
     MAILINGLIST = "Mailinglist"
     BODYTEXT = "Bodytext"
-    
+
     class Header:
         """For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml."""
         MESSAGE_ID = "Message-ID"
         IN_REPLY_TO = "In-Reply-To"
-        
+
         DATE = "Date"
         SUBJECT = "Subject"
         COMMENTS = "Comments"
         KEYWORDS = "Keywords"
-    
+
         RECEIVED = "Received"
         IMPORTANCE = "Importance"
         PRIORITY = "Priority"
@@ -269,8 +292,8 @@ class ParsedMailKeys:
         X_PRIORITY = "X-Priority"
         X_ORIGINATING_CLIENT = "X-Originating-Client"
         X_SPAM_FLAG = "X-Spam-Flag"
-        
-        
+
+
     class Correspondent:
         FROM = "From"
         TO = "To"
@@ -289,28 +312,28 @@ class ParsedMailKeys:
         RETURN_PATH = "Return-Path"
         RETURN_RECEIPT_TO = "Return-Receipt-To"
         DISPOSITION_NOTIFICATION_TO = "Disposition-Notification-To"
-        
+
         def __iter__(self):
             return iter((attr, value) for attr, value in self.__class__.__dict__.items() if not attr.startswith("__"))
 
         def __getitem__(self, key):
             return getattr(self, key)
-            
+
 
     #attachment keys
     class Attachment:
         DATA = "AttachmentData"
         SIZE= "AttachmentSize"
         FILE_NAME = "AttachmentFileName"
-        FILE_PATH= "AttachmentFilePath" 
-    
+        FILE_PATH= "AttachmentFilePath"
+
     #image keys
     class Image:
         DATA = "ImageData"
         SIZE= "ImageSize"
         FILE_NAME = "ImageFileName"
-        FILE_PATH= "ImageFilePath" 
-    
+        FILE_PATH= "ImageFilePath"
+
     #mailinglist keys
     class MailingList:
         ID = "List-Id"

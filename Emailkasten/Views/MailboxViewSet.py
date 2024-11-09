@@ -26,9 +26,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .. import constants
+from ..constants import TestStatusCodes
 from ..EMailArchiverDaemon import EMailArchiverDaemon
 from ..Filters.MailboxFilter import MailboxFilter
-from ..mailProcessing import fetchMails
+from ..mailProcessing import fetchMails, testMailbox
 from ..Models.MailboxModel import MailboxModel
 from ..Serializers.MailboxSerializers.MailboxWithDaemonSerializer import \
     MailboxWithDaemonSerializer
@@ -46,6 +47,15 @@ class MailboxViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return MailboxModel.objects.filter(account__user = self.request.user)
+
+
+    @action(detail=True, methods=['post'], url_path='test')
+    def test_mailbox(self, request, pk=None):
+        mailbox = self.get_object()
+        result = testMailbox(mailbox)
+
+        mailboxSerializer = self.get_serializer(mailbox)
+        return Response({'status': 'Tested mailbox', 'mailbox': mailboxSerializer.data, 'result': TestStatusCodes.INFOS[result]})
 
 
     @action(detail=True, methods=['post'], url_path='daemon/test')

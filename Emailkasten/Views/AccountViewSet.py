@@ -29,6 +29,7 @@ from ..mailProcessing import scanMailboxes, testAccount
 from ..Models.AccountModel import AccountModel
 from ..Serializers.AccountSerializers.AccountSerializer import \
     AccountSerializer
+from ..constants import TestStatusCodes
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -50,24 +51,24 @@ class AccountViewSet(viewsets.ModelViewSet):
             serializer.save(user = self.request.user)
         except IntegrityError:
             return Response({'detail': 'This account already exists!'}, status=status.HTTP_409_CONFLICT)
-        
-        
+
+
     @action(detail=True, methods=['post'])
     def scan_mailboxes(self, request, pk=None):
         account = self.get_object()
         scanMailboxes(account)
-        
+
         accountSerializer = self.get_serializer(account)
         return Response({'status': 'Scanned for mailboxes', 'account': accountSerializer.data})
-    
-    
-    @action(detail=True, methods=['post'])
+
+
+    @action(detail=True, methods=['post'], url_path='test')
     def test(self, request, pk=None):
         account = self.get_object()
         result = testAccount(account)
-        
+
         accountSerializer = self.get_serializer(account)
-        return Response({'status': 'Tested mailaccount', 'account': accountSerializer.data, 'result': result})
+        return Response({'status': 'Tested mailaccount', 'account': accountSerializer.data, 'result': TestStatusCodes.INFOS[result]})
 
 
     @action(detail=True, methods=['post'], url_path='toggle_favorite')
@@ -76,8 +77,8 @@ class AccountViewSet(viewsets.ModelViewSet):
         account.is_favorite = not account.is_favorite
         account.save()
         return Response({'status': 'Account marked as favorite'})
-    
-    
+
+
     @action(detail=False, methods=['get'], url_path='favorites')
     def favorites(self, request):
         favoriteAccounts = AccountModel.objects.filter(is_favorite=True)

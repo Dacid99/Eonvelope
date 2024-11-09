@@ -38,7 +38,13 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
 
 
     @staticmethod
-    def test(account):
-        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.test` to use :class:`imaplib.IMAP4_SSL`."""
+    def testAccount(account):
+        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.testAccount` to use :class:`imaplib.IMAP4_SSL`."""
         with IMAP_SSL_Fetcher(account) as imapsslFetcher:
-            return bool(imapsslFetcher)
+            return imapsslFetcher.test()
+
+    @staticmethod
+    def testMailbox(mailbox):
+        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.testMailbox` to use :class:`imaplib.IMAP4_SSL`."""
+        with IMAP_SSL_Fetcher(mailbox.account) as imapsslFetcher:
+            return imapsslFetcher.test(mailbox)

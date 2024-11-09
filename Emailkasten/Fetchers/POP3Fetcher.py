@@ -20,6 +20,7 @@ import logging
 import poplib
 
 from .. import constants
+from ..constants import TestStatusCodes
 
 
 class POP3Fetcher:
@@ -63,13 +64,11 @@ class POP3Fetcher:
             self.login()
         except poplib.error_proto:
             self.logger.error("A POP error occured connecting and logging in to %s!", str(self.account), exc_info=True)
-            self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
         except Exception:
             self.logger.error("An unexpected error occured connecting and logging in to %s!", str(self.account), exc_info=True)
-            self._mailhost = None
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
@@ -120,36 +119,90 @@ class POP3Fetcher:
             self.logger.debug("Connection to %s was already closed.", str(self.account))
 
 
+    def test(self, mailbox=None):
+        """Tests the connection to the mailserver and, if a mailbox is provided, whether messages can be listed.
+        Sets the The :attr:`Emailkasten.Models.MailboxModel.is_healthy` flag accordingly.
 
-    def __bool__(self):
-        """Returns whether the connection to the POP host is alive.
+        Args:
+            mailbox (:class:`Emailkasten.Models.MailboxModel`, optional): The mailbox to be tested. Default is None.
 
         Returns:
-            bool: Whether :attr:`_mailhost` is None or not.
+            int: The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
         """
-        self.logger.debug("Testing connection to %s", str(self.account))
-        status = self._mailhost is not None
-        self.logger.debug("Tested account with result %s.", status)
-        return status
+        self.logger.debug("Testing %s ...", str(self.account))
+        if mailbox.account != self.account:
+            self.logger.error("%s is not a mailbox of %s!", str(mailbox), self.account)
+            return TestStatusCodes.UNEXPECTED_ERROR
+
+        try:
+            status, response = self._mailhost.noop()
+
+            if status != b'+OK':
+                self.logger.error("Bad response testing %s:\n %s, %s", str(self.account), status, response)
+                self.account.is_healthy = False
+                self.account.save()
+
+                return TestStatusCodes.BAD_RESPONSE
+
+            self.logger.error("Successfully tested %s.", str(self.account))
+
+            if mailbox:
+                status, response = self._mailhost.list()
+
+                if status != b'+OK':
+                    self.logger.error("Bad response listing %s:\n %s, %s", str(mailbox), status, response)
+                    mailbox.is_healthy = False
+                    mailbox.save()
+
+                    return TestStatusCodes.BAD_RESPONSE
+
+            self.logger.error("Successfully tested %s.", str(mailbox))
+
+            return TestStatusCodes.OK
+
+        except poplib.error_proto:
+            self.logger.error("An IMAP error occured during test of %s!", str(self.account), exc_info=True)
+            self.account.is_healthy = False
+            self.account.save()
+            return TestStatusCodes.ERROR
+        except Exception:
+            self.logger.error("An unexpected error occured during test of %s!", str(self.account), exc_info=True)
+            return TestStatusCodes.UNEXPECTED_ERROR
 
 
     @staticmethod
-    def test(account):
+    def testAccount(account):
         """Static method to test the validity of account data.
+        The :attr:`Emailkasten.Models.AccountModel.is_healthy` flag is updated accordingly.
 
         Args:
             account (:class:`Emailkasten.Models.AccountModel`): Data of the account to be tested.
 
         Returns:
-            bool: Whether a connection was successfully established or not.
+            int: The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
         """
         with POP3Fetcher(account) as pop3Fetcher:
-            return bool(pop3Fetcher)
+            return pop3Fetcher.test()
+
+
+    @staticmethod
+    def testMailbox(mailbox):
+        """Static method to test the validity of mailbox data.
+        The :attr:`Emailkasten.Models.MailboxModel.is_healthy` flag is updated accordingly.
+
+        Args:
+            mailbox (:class:`Emailkasten.Models.MailboxModel`): Data of the mailbox to be tested.
+
+        Returns:
+            int: The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
+        """
+        with POP3Fetcher(mailbox.account) as pop3Fetcher:
+            return pop3Fetcher.test(mailbox=mailbox)
 
 
     def fetchAll(self, mailbox):
         """Fetches and returns all maildata from the server.
-        If an :python::class:`poplib.POP3.error_proto` occurs the mailbox is flagged as unhealthy.
+        If an :python::class:`poplib.error_proto` occurs the mailbox is flagged as unhealthy.
         If a bad response is received when listing messages, it is flagged as unhealthy as well.
         In case of success the mailbox is flagged as healthy.
 

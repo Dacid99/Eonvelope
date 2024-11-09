@@ -55,9 +55,9 @@ class EMailArchiverDaemon:
         try:
             newDaemon = EMailArchiverDaemon(daemonModel)
             newDaemon.cycle()
-            return Response({'status': 'Daemon tested', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
-        except Exception:
-            return Response({'status': 'Daemon test failed!', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name})
+            return Response({'status': 'Daemon testrun was successful.', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name, 'info': "Success" })
+        except Exception as e:
+            return Response({'status': 'Daemon testrun failed!', 'account': daemonModel.mailbox.account.mail_address, 'mailbox': daemonModel.mailbox.name, 'info': str(e)})
 
 
     @staticmethod

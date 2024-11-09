@@ -39,7 +39,13 @@ class POP3_SSL_Fetcher(POP3Fetcher):
 
 
     @staticmethod
-    def test(account):
-        """Overrides :func:`Emailkasten.Fetchers.POP3Fetcher.test` to use :class:`poplib.POP3_SSL`."""
+    def testAccount(account):
+        """Overrides :func:`Emailkasten.Fetchers.POP3Fetcher.testAccount` to use :class:`poplib.POP3_SSL`."""
         with POP3_SSL_Fetcher(account) as pop3sslFetcher:
-            return bool(pop3sslFetcher)
+            return pop3sslFetcher.test()
+
+    @staticmethod
+    def testMailbox(mailbox):
+        """Overrides :func:`Emailkasten.Fetchers.POP3Fetcher.testMailbox` to use :class:`poplib.POP3_SSL`."""
+        with POP3_SSL_Fetcher(mailbox.account) as pop3sslFetcher:
+            return pop3sslFetcher.test(mailbox=mailbox)

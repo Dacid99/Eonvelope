@@ -33,6 +33,7 @@ Global variables:
 import logging
 
 from . import constants
+from .constants import TestStatusCodes
 from .emailDBFeeding import insertEMail, insertMailbox
 from .Fetchers.ExchangeFetcher import ExchangeFetcher
 from .Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
@@ -60,25 +61,66 @@ def testAccount(account):
 
     logger.info("Testing %s ...", str(account))
     if account.protocol == IMAPFetcher.PROTOCOL:
-        result = IMAPFetcher.test(account)
+        result = IMAPFetcher.testAccount(account)
 
     elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-        result = IMAP_SSL_Fetcher.test(account)
+        result = IMAP_SSL_Fetcher.testAccount(account)
 
     elif account.protocol == POP3Fetcher.PROTOCOL:
-        result = POP3Fetcher.test(account)
+        result = POP3Fetcher.testAccount(account)
 
     elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
-        result = POP3_SSL_Fetcher.test(account)
+        result = POP3_SSL_Fetcher.testAccount(account)
 
     elif account.protocol == ExchangeFetcher.PROTOCOL:
-        result = ExchangeFetcher.test(account)
+        result = ExchangeFetcher.testAccount(account)
 
     else:
         logger.error("Account %s has unknown protocol!", str(account))
-        result = False
+        account.is_healthy = False
+        account.save()
+        result = TestStatusCodes.ERROR
 
     logger.info("Successfully tested account to be %s.", result)
+
+    return result
+
+
+def testMailbox(mailbox):
+    """Tests whether the data in a mailboxmodel is correct and allows connecting and opening the account and mailbox.
+    The :attr:`Emailkasten.Models.MailboxModel.is_healthy` flag is set according to the result by the Fetcher class, e.g. :class:`Emailkasten.Fetchers.IMAPFetcher`.
+    Relies on the `test` static method of the :mod:`Emailkasten.Fetchers` classes.
+
+    Args:
+        mailbox (:class:`Emailkasten.Models.MailboxModel`): The mailbox data to test.
+
+    Returns:
+        int: The result of the test.
+    """
+
+    logger.info("Testing %s ...", str(mailbox))
+    if mailbox.account.protocol == IMAPFetcher.PROTOCOL:
+        result = IMAPFetcher.testMailbox(mailbox)
+
+    elif mailbox.account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+        result = IMAP_SSL_Fetcher.testMailbox(mailbox)
+
+    elif mailbox.account.protocol == POP3Fetcher.PROTOCOL:
+        result = POP3Fetcher.testMailbox(mailbox)
+
+    elif mailbox.account.protocol == POP3_SSL_Fetcher.PROTOCOL:
+        result = POP3_SSL_Fetcher.testMailbox(mailbox)
+
+    elif mailbox.account.protocol == ExchangeFetcher.PROTOCOL:
+        result = ExchangeFetcher.testMailbox(mailbox)
+
+    else:
+        logger.error("Account %s has unknown protocol!", str(mailbox.account))
+        mailbox.is_healthy = False
+        mailbox.save()
+        result = TestStatusCodes.ERROR
+
+    logger.info("Successfully tested mailbox to be %s.", result)
 
     return result
 

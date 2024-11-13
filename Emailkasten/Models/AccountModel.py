@@ -56,6 +56,9 @@ class AccountModel(models.Model):
     protocol = models.CharField(choices=PROTOCOL_CHOICES, max_length=10)
     """The mail protocol of the mail server. One of :attr:`PROTOCOL_CHOICES`."""
 
+    timeout = models.IntegerField(null=True)
+    """The timeout parameter for the connection to the host. Can be null."""
+
     is_healthy = models.BooleanField(default=True)
     """Flags whether the account can be accessed using the data. True by default.
     When this field changes to `False`, all mailboxes :attr:`Emailkasten.Models.MailboxModel.is_healthy` field will be updated accordingly.

@@ -80,11 +80,13 @@ class IMAPFetcher:
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
+            return
         except Exception:
             self.logger.error("An unexpected error occured connecting and logging in to %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
+            return
 
         self.account.is_healthy = True
         self.account.save()
@@ -179,6 +181,9 @@ class IMAPFetcher:
                     mailbox.is_healthy = False
                     mailbox.save()
                     return TestStatusCodes.BAD_RESPONSE
+
+            self.account.is_healthy = True
+            self.account.save()
 
             self.logger.error("Successfully tested %s.", str(self.account))
             return TestStatusCodes.OK

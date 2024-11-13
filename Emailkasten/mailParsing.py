@@ -438,15 +438,16 @@ def parseMail(mailToParse):
     return parsedEMail
 
 
-def parseMailbox(mailbox):
+def parseMailbox(mailboxBytes):
     """Parses the mailbox name as received by the scanMailboxes method in :mod:`Emailkasten.Fetchers`.
 
     Args:
-        mailbox (str): The mailbox name as received from the mail server.
+        mailboxBytes (bytes): The mailbox name in bytes as received from the mail server.
 
     Returns:
         str: The name of the mailbox independent of its parent folders
     """
+    mailbox = mailboxBytes.decode(ParsingConfiguration.CHARSET_DEFAULT)
     mailboxName = mailbox.split("\"/\"")[1].strip()
     if mailboxName == "":
         mailboxName = mailbox.split("\" \"")[1].strip()

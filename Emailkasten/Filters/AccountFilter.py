@@ -30,6 +30,7 @@ class AccountFilter(django_filters.FilterSet):
             'mail_host': ['icontains', 'contains', 'exact', 'iexact', 'startswith', 'istartswith', 'endswith', 'iendswith', 'regex', 'iregex', 'in'],
             'mail_host_port': ['exact', 'lte', 'gte', 'lt', 'gt', 'in'],
             'protocol': ['icontains', 'iexact', 'in'],
+            'timeout': ['lte', 'gte'],
             'is_healthy': ['exact'],
             'created': ['lte', 'gte'],
             'updated': ['lte', 'gte']

@@ -151,9 +151,6 @@ class IMAPFetcher:
             int: The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
         """
         self.logger.debug("Testing %s ...", str(self.account))
-        if mailbox.account != self.account:
-            self.logger.error("%s is not a mailbox of %s!", str(mailbox), self.account)
-            return TestStatusCodes.UNEXPECTED_ERROR
 
         try:
             status, response = self._mailhost.noop()
@@ -166,6 +163,10 @@ class IMAPFetcher:
                 return TestStatusCodes.BAD_RESPONSE
 
             if mailbox:
+                if mailbox.account != self.account:
+                    self.logger.error("%s is not a mailbox of %s!", str(mailbox), self.account)
+                    return TestStatusCodes.UNEXPECTED_ERROR
+
                 status, response = self._mailhost.select(mailbox.name)
                 if status != "OK":
                     errorMessage = response[0].decode('utf-8') if response and response[0] else "Unknown error"

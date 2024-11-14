@@ -1,8 +1,8 @@
 lint: pylintrc
-	pylint $< ../Emailkasten
+	pylint --rcfile=$< ../Emailkasten
 
-stronglint: pylintrc_strong
-	pylint $< ../Emailkasten
+strictlint: pylintrc_strict
+	pylint --rcfile=$< ../Emailkasten
 
 check: mypy.ini
 	mypy --config-file $< Emailkasten/

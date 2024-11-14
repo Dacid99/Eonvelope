@@ -1,10 +1,9 @@
-__pycache__/*
-venv/*
+__pycache__/
+venv/
 .vscode/
-C:\\Users\\phili\\Desktop\\log.log
+.mypy_cache/
 cookie.txt
 debug.txt
 helperlog.log
 django.log
 Emailkasten.log
-.mypy_cache/

@@ -71,9 +71,7 @@ class DaemonModel(models.Model):
         """Extended :django::func:`django.models.Model.save` method to create and set :attr:`log_filepath` if it is null."""
 
         if not self.log_filepath:
-            if self.pk is None:
-                super().save(*args, **kwargs)
-            self.log_filepath = os.path.join(constants.LoggerConfiguration.LOG_DIRECTORY_PATH, f"daemon_{self.id}.log")
+            self.log_filepath = os.path.join(constants.LoggerConfiguration.LOG_DIRECTORY_PATH, f"daemon_{self.mailbox.id}.log")
             if not os.path.exists(self.log_filepath):
                 with open(self.log_filepath, 'w'):
                     pass

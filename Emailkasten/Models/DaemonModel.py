@@ -48,8 +48,9 @@ class DaemonModel(models.Model):
     log_filepath = models.FilePathField(
         path=constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
         recursive=True,
-        null=True)
-    """The logfile the daemon logs to. Is automatically set by :func:`save`."""
+        null=True,
+        unique=True)
+    """The logfile the daemon logs to. Is automatically set by :func:`save`. Unique."""
 
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""

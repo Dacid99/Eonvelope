@@ -36,7 +36,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx_autodoc_typehints',
     'sphinxcontrib.apidoc',
-  #  'sphinxcontrib_django',
+    'myst_parser',
 ]
 
 templates_path = ['_templates']
@@ -53,7 +53,7 @@ autodoc_default_options = {
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{}'.format(python_version), None),
-    'django': ('https://docs.djangoproject.com/en/{}/'.format(django_version), 
+    'django': ('https://docs.djangoproject.com/en/{}/'.format(django_version),
                'https://docs.djangoproject.com/en/{}/_objects/'.format(django_version)),
     'rest_framework': ('https://www.django-rest-framework.org/', None),
 }

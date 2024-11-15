@@ -4,4 +4,4 @@ sphinxcontrib-napoleon
 sphinxcontrib-apidoc
 sphinxcontrib-django
 sphinx-autodoc-typehints
-
+myst-parser

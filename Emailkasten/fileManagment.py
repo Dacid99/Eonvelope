@@ -21,7 +21,7 @@
 Functions starting with _ are helpers and are used only within the scope of this module.
 
 Global variables:
-    logger (:python::class:`logging.Logger`): The logger for this module.
+    logger (:class:`logging.Logger`): The logger for this module.
 """
 
 import email
@@ -35,7 +35,6 @@ from .mailParsing import ParsedMailKeys
 from .Models.StorageModel import StorageModel
 
 logger = logging.getLogger(__name__)
-"""The logger instance for this module"""
 
 
 def storeMessageAsEML(parsedEMail: dict[str,Any]) -> None:

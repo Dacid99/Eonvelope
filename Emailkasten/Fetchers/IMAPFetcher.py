@@ -33,7 +33,7 @@ class IMAPFetcher:
 
     Attributes:
         account (:class:`Emailkasten.Models.AccountModel`): The model of the account to be fetched from.
-        logger (:python::class:`logging.Logger`): The logger for this instance.
+        logger (:class:`logging.Logger`): The logger for this instance.
         _mailhost (:python::class:`imaplib.IMAP4`): The IMAP host this instance connects to.
     """
 

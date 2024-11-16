@@ -24,33 +24,36 @@ from rest_framework.response import Response
 
 from . import constants
 from .mailProcessing import fetchMails
+from .Models.DaemonModel import DaemonModel
+from .Models.AccountModel import AccountModel
+from .Models.MailboxModel import MailboxModel
 
 
 class EMailArchiverDaemon:
     """Daemon for continuous fetching and saving of mails to database.
 
     Attributes:
-        logger (:python::class:`logging.Logger`): Logger for this instance with a filehandler for the daemons own logfile.
-        thread (:python::class:`threading.Thread`): The thread that the daemon runs on.
+        logger (:class:`logging.Logger`): Logger for this instance with a filehandler for the daemons own logfile.
+        thread (:class:`threading.Thread`): The thread that the daemon runs on.
         isRunning (bool): Whether this daemon instance is active.
         daemon (:class:`Emailkasten.Models.DaemonModel`): The database model of this daemon.
         mailbox (:class:`Emailkasten.Models.MailboxModel`): The database model of the mailbox this instance fetches from.
         account (:class:`Emailkasten.Models.AccountModel`): The database model of the account this instance fetches from.
     """
 
-    runningDaemons = {}
+    runningDaemons: dict = {}
     """A static dictionary of all active daemon instances with their database IDs as keys."""
 
 
     @staticmethod
-    def testDaemon(daemonModel):
+    def testDaemon(daemonModel: DaemonModel) -> Response:
         """Static method to test data for a daemon.
 
         Args:
-            daemonModel (:class:`Emailkasten.Models.DaemonModel`): The data for the daemon to be tested.
+            daemonModel: The data for the daemon to be tested.
 
         Returns:
-            :rest_framework::class:`response.Response`: A response detailing what has happened.
+            A response detailing what has happened.
         """
         try:
             newDaemon = EMailArchiverDaemon(daemonModel)
@@ -60,25 +63,25 @@ class EMailArchiverDaemon:
                 'account': daemonModel.mailbox.account.mail_address,
                 'mailbox': daemonModel.mailbox.name, 'info': "Success"
                 })
-        except Exception as e:
+        except Exception as error:
             return Response({
                 'status': 'Daemon testrun failed!',
                 'account': daemonModel.mailbox.account.mail_address,
                 'mailbox': daemonModel.mailbox.name,
-                'info': str(e)
+                'info': str(error)
                 })
 
 
     @staticmethod
-    def startDaemon(daemonModel):
+    def startDaemon(daemonModel: DaemonModel) -> Response:
         """Static method to create, start and add a new daemon to :attr:`runningDaemons`.
         If it is already in the dict does nothing.
 
         Args:
-            daemonModel (:class:`Emailkasten.Models.DaemonModel`): The data for the daemon.
+            daemonModel: The data for the daemon.
 
         Returns:
-            :rest_framework::class:`response.Response`: A response detailing what has been done.
+            A response detailing what has been done.
         """
         if daemonModel.id not in EMailArchiverDaemon.runningDaemons:
             try:
@@ -108,15 +111,15 @@ class EMailArchiverDaemon:
 
 
     @staticmethod
-    def stopDaemon(daemonModel):
+    def stopDaemon(daemonModel: DaemonModel) -> Response:
         """Static method to stop and remove a daemon from :attr:`runningDaemons`.
         If it is not in the dict does nothing.
 
         Args:
-            daemonModel (:class:`Emailkasten.Models.DaemonModel`): The data of the daemon.
+            daemonModel: The data of the daemon.
 
         Returns:
-            :rest_framework::class:`response.Response`: A response detailing what has been done.
+            A response detailing what has been done.
         """
         if daemonModel.id in EMailArchiverDaemon.runningDaemons:
             oldDaemon = EMailArchiverDaemon.runningDaemons.pop( daemonModel.id )
@@ -136,42 +139,32 @@ class EMailArchiverDaemon:
                 })
 
 
-    def __init__(self, daemon):
+    def __init__(self, daemon: DaemonModel) -> None:
         """Constructor, sets up the daemon with the specification in `daemon`.
 
         Args:
-            daemon (:class:`Emailkasten.Models.DaemonModel`): The data of the daemon.
-
-        Returns:
-            None
+            daemon: The data of the daemon.
         """
-        self.daemon = daemon
-        self.mailbox = daemon.mailbox
-        self.account = daemon.mailbox.account
+        self.daemon: DaemonModel = daemon
+        self.mailbox: MailboxModel = daemon.mailbox
+        self.account: AccountModel = daemon.mailbox.account
 
-        self.thread = None
-        self.isRunning = False
+        self.thread: threading.Thread|None = None
+        self.isRunning: bool = False
 
         self.setupLogger()
 
 
-    def setupLogger(self):
-        """Sets up the logger for the daemon with an additional filehandler for its own logfile.
-
-        Return:
-            None
-        """
+    def setupLogger(self) -> None:
+        """Sets up the logger for the daemon with an additional filehandler for its own logfile."""
         self.logger = logging.getLogger(__name__ + f".daemon_{self.daemon.id}")
         fileHandler = logging.FileHandler(self.daemon.log_filepath)
         self.logger.addHandler(fileHandler)
 
 
-    def start(self):
+    def start(self) -> None:
         """Starts this daemon instance if it is not active.
         Creates and starts a new thread performing :func:`run`.
-
-        Returns:
-            None
         """
         if not self.isRunning:
             self.logger.info("Starting %s ...", str(self.daemon))
@@ -183,12 +176,9 @@ class EMailArchiverDaemon:
             self.logger.info("EMailArchiverDaemon is already running.")
 
 
-    def stop(self):
+    def stop(self) -> None:
         """Stops this daemon instance if it is active.
         The thread finishes by itself later.
-
-        Returns:
-            None
         """
         if self.isRunning:
             self.logger.info("Stopping %s ...", str(self.daemon))
@@ -197,12 +187,9 @@ class EMailArchiverDaemon:
             self.logger.info("EMailArchiverDaemon is not running.")
 
 
-    def run(self):
+    def run(self) -> None:
         """The looping task execute on :attr:`thread`.
         Attempts to restart if crashed after time set in :attr:`constants.EMailArchiverDaemonConfiguration.RESTART_TIME`.
-
-        Returns:
-            None
         """
         try:
             while self.isRunning:
@@ -215,12 +202,12 @@ class EMailArchiverDaemon:
             self.run()
 
 
-    def cycle(self):
+    def cycle(self) -> None:
         """The routine of this daemon.
         Fetches and saves mails using :func:`Emailkasten.mailProcessing.fetchMails`. Logs the execution time.
 
-        Returns:
-            None
+        Raises:
+            Exception: The exception thrown during execution of the routine.
         """
         self.logger.debug("---------------------------------------\nNew cycle")
 

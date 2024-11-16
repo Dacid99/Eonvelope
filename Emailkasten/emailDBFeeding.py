@@ -30,10 +30,11 @@ Functions:
     :func:`insertEMail`: Writes the given data for an email to database.
 
 Global variables:
-    logger (:python::class:`logging.Logger`): The logger for this module.
+    logger (:class:`logging.Logger`): The logger for this module.
 """
 
 import logging
+from typing import Any
 
 import django.db
 
@@ -46,19 +47,20 @@ from .Models.EMailModel import EMailModel
 from .Models.ImageModel import ImageModel
 from .Models.MailboxModel import MailboxModel
 from .Models.MailingListModel import MailingListModel
+from .Models.AccountModel import AccountModel
 
 logger = logging.getLogger(__name__)
 
 
-def _insertCorrespondent(correspondentData):
+def _insertCorrespondent(correspondentData: tuple[str,str]) -> CorrespondentModel:
     """Writes the given data of a correspondent to the database.
     If a correspondent with that address already exists, updates the name field if it is blank.
 
     Args:
-        correspondentData (dict): Data of the correspondent to be inserted, as created by :func:`Emailkasten.mailParsing.parseCorrespondent`.
+        correspondentData: Data of the correspondent to be inserted, as created by :func:`Emailkasten.mailParsing.parseCorrespondent`.
 
     Returns:
-        :class:`Emailkasten.Models.CorrespondentModel`: The entry to the correspondent from the database.
+        The entry to the correspondent from the database.
     """
     logger.debug("Creating entry for correspondent in DB...")
 
@@ -80,17 +82,14 @@ def _insertCorrespondent(correspondentData):
 
 
 
-def _insertEMailCorrespondent(emailEntry, correspondentEntry, mention):
+def _insertEMailCorrespondent(emailEntry: EMailModel, correspondentEntry: CorrespondentModel, mention: str) -> None:
     """Writes the connection betweeen an email and a correspondent to the database.
     If that entry already exists does nothing.
 
     Args:
-        emailEntry (:class:`Emailkasten.Models.CorrespondentModel`): The database entry of the mail that names the correspondent.
-        correspondentEntry (:class:`Emailkasten.Models.CorrespondentModel`): The database entry of the correspondent to connect to the mails entry.
-        mention (str): The mention type of the correspondent in the mail. Must be one of :class:`Emailkasten.constants.ParsedMailKeys.Correspondent`.
-
-    Returns:
-        None
+        emailEntry: The database entry of the mail that names the correspondent.
+        correspondentEntry: The database entry of the correspondent to connect to the mails entry.
+        mention: The mention type of the correspondent in the mail. Must be one of :class:`Emailkasten.constants.ParsedMailKeys.Correspondent`.
     """
     logger.debug("Creating entry for %s correspondent in DB...", mention)
 
@@ -106,16 +105,13 @@ def _insertEMailCorrespondent(emailEntry, correspondentEntry, mention):
 
 
 
-def _insertAttachment(attachmentData, emailEntry):
+def _insertAttachment(attachmentData: dict[str,Any], emailEntry: EMailModel) -> None:
     """Writes the given data for an attachment to the database.
     If that entry already exists does nothing.
 
     Args:
-        attachmentData (dict): The data of the attachment to be inserted, as created by :func:`Emailkasten.mailParsing.parseAttachment`.
-        emailEntry (:class:`Emailkasten.Models.EMailModel`): The database entry of the mail that the attachment is part of.
-
-    Returns:
-        None
+        attachmentData: The data of the attachment to be inserted, as created by :func:`Emailkasten.mailParsing.parseAttachment`.
+        emailEntry: The database entry of the mail that the attachment is part of.
     """
     attachmentEntry, created  = AttachmentModel.objects.get_or_create(
         file_path = attachmentData[ParsedMailKeys.Attachment.FILE_PATH],
@@ -132,16 +128,13 @@ def _insertAttachment(attachmentData, emailEntry):
 
 
 
-def _insertImage(imageData, emailEntry):
+def _insertImage(imageData: dict[str,Any], emailEntry: EMailModel) -> None:
     """Writes the given data for an image to the database.
     If that entry already exists does nothing.
 
     Args:
-        imageData (dict): The data of the image to be inserted, as created by :func:`Emailkasten.mailParsing.parseImage`.
-        emailEntry (:class:`Emailkasten.Models.EMailModel`): The database entry of the mail that the image is part of.
-
-    Returns:
-        None
+        imageData: The data of the image to be inserted, as created by :func:`Emailkasten.mailParsing.parseImage`.
+        emailEntry: The database entry of the mail that the image is part of.
     """
     imageEntry, created  = ImageModel.objects.get_or_create(
         file_path = imageData[ParsedMailKeys.Image.FILE_PATH],
@@ -158,16 +151,16 @@ def _insertImage(imageData, emailEntry):
 
 
 
-def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
+def _insertMailinglist(mailinglistData: dict[str,Any], fromCorrespondentEntry: CorrespondentModel) -> MailingListModel|None:
     """Writes the given data for an mailingslist served by a existing correspondent to database.
     If that entry already exists does nothing. If the mailinglist has no ID, it will not be saved.
 
     Args:
-        mailinglistData (dict): The data of the mailinglist to be inserted, as created by :func:`Emailkasten.mailParsing.parseMailinglist`.
-        fromCorrespondentEntry (:class:`Emailkasten.Models.CorrespondentModel`): The database entry of the correspondent that serves the mailinglist.
+        mailinglistData: The data of the mailinglist to be inserted, as created by :func:`Emailkasten.mailParsing.parseMailinglist`.
+        fromCorrespondentEntry: The database entry of the correspondent that serves the mailinglist.
 
     Returns:
-        :class:`Emailkasten.Models.MailingListModel`: The database entry of the mailinglist, either newly created or retrieved.
+        The database entry of the mailinglist, either newly created or retrieved.
     """
     mailinglistEntry = None
     if mailinglistData[ParsedMailKeys.MailingList.ID]:
@@ -196,17 +189,14 @@ def _insertMailinglist(mailinglistData, fromCorrespondentEntry):
 
 
 
-def insertMailbox(mailboxData, account):
+def insertMailbox(mailboxData: str, account: AccountModel) -> None:
     """Writes the given data for a mailbox of an account to database.
     If a new entry is created, adds a new daemon entry for that mailbox as well. If any of the database operations fails, discards all changes to ensure data integrity.
     If the entry for the mailbox already exists does nothing.
 
     Args:
-        mailboxData (str): The name of the mailbox to be inserted, as created by :func:`Emailkasten.mailParsing.parseMailbox`.
-        account (:class:`Emailkasten.Models.AccountModel`): The database entry of the account that the mailbox belongs to.
-
-    Returns:
-        None
+        mailboxData: The name of the mailbox to be inserted, as created by :func:`Emailkasten.mailParsing.parseMailbox`.
+        account: The database entry of the account that the mailbox belongs to.
     """
     logger.debug("Saving mailbox %s from %s to db ...", mailboxData, str(account))
     try:
@@ -235,16 +225,13 @@ def insertMailbox(mailboxData, account):
 
 
 
-def insertEMail(emailData, account):
+def insertEMail(emailData: dict[str,Any], account: AccountModel) -> None:
     """Writes the given data for an email to database.
     If that entry already exists does nothing. If any of the database operations fails, discards all changes to ensure data integrity.
 
     Args:
-        emailData (dict): The data of the mail to be inserted, as created by :func:`Emailkasten.mailParsing.parseMail`.
-        account (:class:`Emailkasten.Models.AccountModel`): The database entry of the account that the mail was found in.
-
-    Returns:
-        None
+        emailData: The data of the mail to be inserted, as created by :func:`Emailkasten.mailParsing.parseMail`.
+        account: The database entry of the account that the mail was found in.
     """
     logger.debug("Saving mail with subject %s from %s to db ...", emailData[ParsedMailKeys.Header.SUBJECT], emailData[ParsedMailKeys.Header.DATE])
     try:
@@ -347,7 +334,7 @@ def insertEMail(emailData, account):
 
             for mentionType, correspondentHeader in ParsedMailKeys.Correspondent():
                 if correspondentHeader == ParsedMailKeys.Correspondent.FROM:   # from correspondent has been added earlier, just add the connection to bridge table here
-                    if fromCorrespondent:
+                    if fromCorrespondentEntry:
 
                         _insertEMailCorrespondent(emailEntry, fromCorrespondentEntry, mentionType)
 

@@ -27,7 +27,7 @@ Functions:
     :func:`_isSpam`: Checks the spam headers of the parsed mail to decide whether the mail is spam.
 
 Global variables:
-    logger (:python::class:`logging.Logger`): The logger for this module.
+    logger (:class:`logging.Logger`): The logger for this module.
 """
 
 import logging

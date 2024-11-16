@@ -54,7 +54,7 @@ from .constants import ParsedMailKeys, ParsingConfiguration
 logger = logging.getLogger(__name__)
 
 
-def _decodeText(text):
+def _decodeText(text: bytes) -> str:
     """Decodes a text encoded as bytes.
     Checks for a specific charset to use. If none is found uses the default :attr:`Emailkasten.constants.ParsingConfiguration.CHARSET_DEFAULT`.
 
@@ -124,7 +124,7 @@ def _parseMessageID(mailMessage):
     If none is found uses the hash of the mailmessage as a fallback.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
 
     Returns:
         str: The messageID header of the mailmessage.
@@ -146,7 +146,7 @@ def _parseDate(mailMessage):
     If none is found uses :attr:`Emailkasten.constants.ParsingConfiguration.DATE_DEFAULT` as a fallback.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
 
     Returns:
         datetime: The datetime of the mailmessage.
@@ -167,7 +167,7 @@ def _parseSubject(mailMessage):
     If :attr:`constants.ParsingConfiguration.STRIP_TEXTS` is True, whitespace is stripped.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
 
     Returns:
         str: The subject header of the mailmessage.
@@ -194,7 +194,7 @@ def _parseBodyText(mailMessage):
     If :attr:`constants.ParsingConfiguration.STRIP_TEXTS` is True, whitespace is stripped.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
 
     Returns:
         str: The bodytext of the mailmessage.
@@ -228,7 +228,7 @@ def _parseImages(mailMessage):
     Looks for elements of content type image that are not an attachment.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
 
     Returns:
         list: A list of images in the mailmessage.
@@ -266,7 +266,7 @@ def _parseAttachments(mailMessage):
     If no filename is found for a file uses the hash +.attachment.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
 
     Returns:
         list: A list of attachments in the mailmessage.
@@ -299,7 +299,7 @@ def _parseAdditionalHeader(mailMessage, headerKey):
     For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
         headerKey (str): The header to extract from the message.
 
     Returns:
@@ -319,7 +319,7 @@ def _parseAdditionalMultipleHeader(mailMessage, headerKey):
     """Parses the given header, which may appear multiple times, of the given mailmessage.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
         headerKey (str): The header to extract from the message.
 
     Returns:
@@ -344,7 +344,7 @@ def _parseMailinglist(mailMessage):
     """Parses the mailinglist headers of the given mailmessage.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
 
     Returns:
         dict: The parsed mailinglist headers in the mailmessage.
@@ -364,7 +364,7 @@ def _parseCorrespondents(mailMessage, mentionHeaderKey):
     """Parses the correspondents that are mentioned in a given way.
 
     Args:
-        mailMessage (:python::class:`email.message.EmailMessage`): The mailmessage to be parsed.
+        mailMessage (email.message.EmailMessage): The mailmessage to be parsed.
         mentionHeaderKey (str): The way the correspondents are mentioned.
 
     Returns:

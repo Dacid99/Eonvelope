@@ -82,7 +82,9 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylint.extensions.docparams,
+             pylint.extensions.bad_builtin
+
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -140,11 +142,12 @@ bad-names=foo,
           baz,
           toto,
           tutu,
-          tata
+          tata,
+          func
 
 # Bad variable names regexes, separated by a comma. If names match any regex,
 # they will always be refused
-bad-names-rgxs=
+bad-names-rgxs=^.{,3}$
 
 # Naming style matching correct class attribute names.
 class-attribute-naming-style=camelCase
@@ -190,19 +193,14 @@ function-naming-style=camelCase
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=i,
-           j,
-           k,
-           ex,
-           Run,
-           _
+good-names=_
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
 good-names-rgxs=
 
 # Include a hint for the correct naming format with invalid-name.
-include-naming-hint=no
+include-naming-hint=yes
 
 # Naming style matching correct inline iteration names.
 inlinevar-naming-style=any
@@ -232,7 +230,7 @@ name-group=
 
 # Regular expression which should only match function or class names that do
 # not require a docstring.
-no-docstring-rgx=^_
+no-docstring-rgx=^$
 
 # List of decorators that produce properties, such as abc.abstractproperty. Add
 # to this list to register other decorators that produce valid properties.
@@ -308,7 +306,7 @@ max-locals=15
 max-parents=7
 
 # Maximum number of positional arguments for function / method.
-max-positional-arguments=5
+#max-positional-arguments=5
 
 # Maximum number of public methods for a class (see R0904).
 max-public-methods=20
@@ -376,16 +374,16 @@ deprecated-modules=
 
 # Output a graph (.gv or any supported image format) of external dependencies
 # to the given file (report RP0402 must not be disabled).
-ext-import-graph=
+ext-import-graph=docs/external-import-graph.gv
 
 # Output a graph (.gv or any supported image format) of all (i.e. internal and
 # external) dependencies to the given file (report RP0402 must not be
 # disabled).
-import-graph=
+import-graph=docs/import-graph.gv
 
 # Output a graph (.gv or any supported image format) of internal dependencies
 # to the given file (report RP0402 must not be disabled).
-int-import-graph=
+int-import-graph=docs/internal-import-graph.gv
 
 # Force import order to recognize a module as part of the standard
 # compatibility libraries.
@@ -454,7 +452,7 @@ disable=raw-checker-failed,
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once). See also the "--disable" option for examples.
-enable=
+enable=deprecated_builtins
 
 
 [METHOD_ARGS]
@@ -533,7 +531,7 @@ ignore-imports=yes
 ignore-signatures=yes
 
 # Minimum lines number of a similarity.
-min-similarity-lines=4
+min-similarity-lines=10
 
 
 [SPELLING]
@@ -637,7 +635,7 @@ additional-builtins=
 allow-global-unused-variables=yes
 
 # List of names allowed to shadow builtins
-allowed-redefined-builtins=
+allowed-redefined-builtins=object
 
 # List of strings which can identify a callback function by name. A callback
 # name must start or end with one of those strings.
@@ -657,3 +655,21 @@ init-import=no
 # List of qualified module names which can have objects that can redefine
 # builtins.
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+
+
+[docparams]
+
+# Whether to accept totally missing parameter documentation in the docstring of a function that has parameters.
+accept-no-param-doc=no
+
+# Whether to accept totally missing raises documentation in the docstring of a function that raises an exception.
+accept-no-return-doc=no
+
+# Whether to accept totally missing return documentation in the docstring of a function that returns a statement.
+accept-no-raise-doc=no
+
+# Whether to accept totally missing yields documentation in the docstring of a generator.
+accept-no-yields-doc=no
+
+# If the docstring type cannot be guessed the specified docstring type will be used.
+default-docstring-type=default

@@ -15,12 +15,13 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-'''
-    The following code is a modified version of code from xme's emlrender project https://github.com/xme/emlrender.
-    Original code by Xavier Mertens, licensed under the GNU General Public License version 3 (GPLv3).
-    Modifications by David & Philipp Aderbauer, licensed under the GNU Affero General Public License version 3 (AGPLv3).
-    This modified code is part of an AGPLv3 project. See the LICENSE file for details.
-'''
+
+
+# The following code is a modified version of code from xme's emlrender project https://github.com/xme/emlrender.
+# Original code by Xavier Mertens, licensed under the GNU General Public License version 3 (GPLv3).
+# Modifications by David & Philipp Aderbauer, licensed under the GNU Affero General Public License version 3 (AGPLv3).
+# This modified code is part of an AGPLv3 project. See the LICENSE file for details.
+
 
 import base64
 import email
@@ -47,7 +48,7 @@ def _combineImages(imagesList):
 
     newWidth = max(widths)
     newHeight = sum(heights)
-    newImage = Image.new('RGB', (newWidth, newHeight), color = backgroundColor)
+    newImage = Image.new("RGB", (newWidth, newHeight), color = backgroundColor)
     offset = 0
     for images in imagesList:
         # x = int((new_width - im.size[0])/2)

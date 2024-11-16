@@ -42,6 +42,7 @@ extensions = [
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+autodoc_typehints = "description"
 
 autodoc_default_options = {
     'members': True,
@@ -53,7 +54,7 @@ autodoc_default_options = {
 
 intersphinx_mapping = {
     'python': ('https://docs.python.org/{}'.format(python_version), None),
-    'django': ('https://docs.djangoproject.com/en/{}/'.format(django_version), 
+    'django': ('https://docs.djangoproject.com/en/{}/'.format(django_version),
                'https://docs.djangoproject.com/en/{}/_objects/'.format(django_version)),
     'rest_framework': ('https://www.django-rest-framework.org/', None),
 }

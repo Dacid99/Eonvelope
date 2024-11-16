@@ -20,12 +20,6 @@
 """Provides functions for saving various files to the storage.
 Functions starting with _ are helpers and are used only within the scope of this module.
 
-Functions:
-    :func:`storeMessageAsEML`: Saves an entire mail as a .eml file in the storage.
-    :func:`storeAttachments`: Saves all attachments of a mail to the storage.
-    :func:`storeImages`: Saves all inline images of a mail to the storage.
-    :func:`getPrerenderStoragePath`: Gets the storage path for a prerender image.
-
 Global variables:
     logger (:python::class:`logging.Logger`): The logger for this module.
 """
@@ -34,24 +28,24 @@ import email
 import email.generator
 import logging
 import os.path
+from typing import Any
 
 from .constants import StorageConfiguration
 from .mailParsing import ParsedMailKeys
 from .Models.StorageModel import StorageModel
 
 logger = logging.getLogger(__name__)
+"""The logger instance for this module"""
 
 
-def storeMessageAsEML(parsedEMail):
+def storeMessageAsEML(parsedEMail: dict[str,Any]) -> None:
     """Saves an entire mail as a .eml file in the storage.
     The files name is given by the unique messageID.
     If the file already exists, does not overwrite. If an error occurs, removes the incomplete file.
 
     Args:
-        parsedEMail (dict): The parsed mail to be saved.
+        parsedEMail: The parsed mail to be saved.
 
-    Returns:
-        None
     """
     emlDirPath = StorageModel.getSubdirectory(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
     emlFilePath = os.path.join(emlDirPath , parsedEMail[ParsedMailKeys.Header.MESSAGE_ID] + ".eml")
@@ -100,15 +94,13 @@ def storeMessageAsEML(parsedEMail):
 
 
 
-def storeAttachments(parsedEMail):
+def storeAttachments(parsedEMail: dict[str,Any]) -> None:
     """Saves all attachments of a mail to the storage.
     If the file already exists, does not overwrite. If no attachments are found, does nothing. If an error occurs, removes the incomplete file.
 
     Args:
-        parsedEMail (dict): The parsed mail with attachments to be saved.
+        parsedEMail: The parsed mail with attachments to be saved.
 
-    Returns:
-        None
     """
     logger.debug("Saving attachments from mail ...")
 
@@ -163,15 +155,13 @@ def storeAttachments(parsedEMail):
 
 
 
-def storeImages(parsedEMail):
+def storeImages(parsedEMail: dict[str,Any]) -> None:
     """Saves all inline images of a mail to the storage.
     If the file already exists, does not overwrite. If no images are found, does nothing. If an error occurs, removes the incomplete file.
 
     Args:
-        parsedEMail (dict): The parsed mail with inline images to be saved.
+        parsedEMail: The parsed mail with inline images to be saved.
 
-    Returns:
-        None
     """
     logger.debug("Saving images from mail ...")
 
@@ -225,14 +215,14 @@ def storeImages(parsedEMail):
 
 
 
-def getPrerenderImageStoragePath(parsedMail):
+def getPrerenderImageStoragePath(parsedMail: dict[str,Any]) -> str:
     """Gets the storage path for a prerender image.
 
     Args:
-        parsedMail (dict): The parsed mail to be prerendered.
+        parsedMail: The parsed mail to be prerendered.
 
     Returns:
-        str: The path in the storage where the prerender image should be saved.
+        The path in the storage where the prerender image should be saved.
     """
     dirPath = StorageModel.getSubdirectory(parsedMail[ParsedMailKeys.Header.MESSAGE_ID])
 

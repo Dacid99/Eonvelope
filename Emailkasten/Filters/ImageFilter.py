@@ -22,6 +22,7 @@ from ..Models.ImageModel import ImageModel
 
 
 class ImageFilter(django_filters.FilterSet):
+    """The filter class for :class:`Emailkasten.Models.ImageModel`."""
 
     datetime__lte = django_filters.DateTimeFilter(
         field_name="email__datetime", lookup_expr="lte"

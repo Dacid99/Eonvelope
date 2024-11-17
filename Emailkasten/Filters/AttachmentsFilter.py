@@ -22,6 +22,7 @@ from ..Models.AttachmentModel import AttachmentModel
 
 
 class AttachmentFilter(django_filters.FilterSet):
+    """The filter class for :class:`Emailkasten.Models.AttachmentModel`."""
 
     datetime__lte = django_filters.DateTimeFilter(
         field_name="email__datetime", lookup_expr="lte"

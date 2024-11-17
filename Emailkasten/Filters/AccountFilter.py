@@ -22,6 +22,7 @@ from ..Models.AccountModel import AccountModel
 
 
 class AccountFilter(django_filters.FilterSet):
+    """The filter class for :class:`Emailkasten.Models.AccountModel`."""
 
     class Meta:
         model = AccountModel

@@ -22,6 +22,8 @@ from ..Models.EMailModel import EMailModel
 
 
 class EMailFilter(django_filters.FilterSet):
+    """The filter class for :class:`Emailkasten.Models.EMailModel`."""
+
     attachment_name__icontains = django_filters.CharFilter(
         field_name="attachments__file_name", lookup_expr="icontains"
     )

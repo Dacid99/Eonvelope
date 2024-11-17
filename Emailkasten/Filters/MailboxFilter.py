@@ -22,6 +22,7 @@ from ..Models.MailboxModel import MailboxModel
 
 
 class MailboxFilter(django_filters.FilterSet):
+    """The filter class for :class:`Emailkasten.Models.MailboxModel`."""
 
     mail_address__icontains = django_filters.CharFilter(
         field_name="account__mail_address", lookup_expr="icontains"

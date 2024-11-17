@@ -22,6 +22,7 @@ from ..Models.CorrespondentModel import CorrespondentModel
 
 
 class CorrespondentFilter(django_filters.FilterSet):
+    """The filter class for :class:`Emailkasten.Models.CorrespondentModel`."""
 
     mention__iexact = django_filters.CharFilter(
         field_name="correspondentemails__mention", lookup_expr="iexact"

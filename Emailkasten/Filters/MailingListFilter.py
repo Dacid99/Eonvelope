@@ -22,6 +22,7 @@ from ..Models.MailingListModel import MailingListModel
 
 
 class MailingListFilter(django_filters.FilterSet):
+    """The filter class for :class:`Emailkasten.Models.MailingListModel`."""
 
     correspondent_name__icontains = django_filters.CharFilter(
         field_name="correspondent__email_name", lookup_expr="icontains"

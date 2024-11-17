@@ -16,13 +16,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 import logging
 import poplib
+from typing import TYPE_CHECKING
 
 from .. import constants
 from ..constants import TestStatusCodes
-from ..Models.AccountModel import AccountModel
-from ..Models.MailboxModel import MailboxModel
+
+if TYPE_CHECKING:
+    from ..Models.AccountModel import AccountModel
+    from ..Models.MailboxModel import MailboxModel
 
 
 class POP3Fetcher:

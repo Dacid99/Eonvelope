@@ -1,5 +1,5 @@
 FROM python:3.13-rc-bookworm
-RUN apt-get -y update && apt-get -y install build-essential default-mysql-client libmysqlclient-dev wkhtmltopdf krb5-user krb5-multidev
+RUN apt-get -y update && apt-get -y install build-essential default-mysql-client wkhtmltopdf krb5-user krb5-multidev
 WORKDIR /mnt
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

@@ -41,19 +41,27 @@ from .mailParsing import ParsedMailKeys
 
 logger = logging.getLogger(__name__)
 
-def _combineImages(imagesList):
+def _combineImages(imagesFileList: list[Image.ImageFile.ImageFile]) -> Image.Image:
+    """Combining multiple images into one with attention to their sizes.
+
+    Args:
+        imagesFileList: The list of images to combine.
+
+    Returns:
+        The combined image.
+    """
     logger.debug("Combining image parts ...")
     backgroundColor=(255,255,255)
-    widths, heights = zip(*(i.size for i in imagesList))
+    widths, heights = zip(*(imageFile.size for imageFile in imagesFileList))
 
     newWidth = max(widths)
     newHeight = sum(heights)
     newImage = Image.new("RGB", (newWidth, newHeight), color = backgroundColor)
     offset = 0
-    for images in imagesList:
-        # x = int((new_width - im.size[0])/2)
-        x = 0
-        newImage.paste(images, (x, offset))
+    for images in imagesFileList:
+        # xCoordinate = int((new_width - im.size[0])/2)
+        xCoordinate = 0
+        newImage.paste(images, (xCoordinate, offset))
         offset += images.size[1]
 
     logger.debug("Successfully combined image parts.")
@@ -61,7 +69,12 @@ def _combineImages(imagesList):
 
 
 
-def prerender(parsedMail):
+def prerender(parsedMail: dict) -> None:
+    """Creates a prerender image of an email.
+
+    Args:
+        parsedMail: The data of the mail to be prerendered.
+    """
     logger.debug("Generating prerender image for mail ...")
 
     dumpDir = ProcessingConfiguration.DUMP_DIRECTORY
@@ -110,9 +123,9 @@ def prerender(parsedMail):
 
 
                 # Generate MD5 hash of the payload
-                m = hashlib.md5()
-                m.update(payload.encode(charset))
-                imagePath = m.hexdigest() + '.png'
+                md5 = hashlib.md5()
+                md5.update(payload.encode(charset))
+                imagePath = md5.hexdigest() + '.png'
                 try:
                     imgkit.from_string(payload, dumpDir + '/' + imagePath, options = imgkitOptions)
                     logger.debug("Decoded %s", imagePath)
@@ -124,12 +137,12 @@ def prerender(parsedMail):
                 payload = part.get_payload(decode=False)
                 imgdata = base64.b64decode(payload)
                 # Generate MD5 hash of the payload
-                m = hashlib.md5()
-                m.update(payload.encode(charset, errors='replace'))
-                imagePath = m.hexdigest() + '.' + mimeType.split('/')[1]
+                md5 = hashlib.md5()
+                md5.update(payload.encode(charset, errors='replace'))
+                imagePath = md5.hexdigest() + '.' + mimeType.split('/')[1]
                 try:
-                    with open(dumpDir + '/' + imagePath, 'wb') as f:
-                        f.write(imgdata)
+                    with open(dumpDir + '/' + imagePath, 'wb') as dumpImageFile:
+                        dumpImageFile.write(imgdata)
                     logger.debug("Decoded %s", imagePath)
                     imagesList.append(os.path.join(dumpDir, imagePath))
                 except Exception:
@@ -146,11 +159,11 @@ def prerender(parsedMail):
 
     if attachments:
         footer = '<p><hr><p><b>Attached Files:</b><p><ul>'
-        for a in attachments:
-            footer = footer + '<li>' + a + '</li>'
-        m = hashlib.md5()
-        m.update(footer.encode('utf-8'))
-        imagePath = m.hexdigest() + '.png'
+        for attachment in attachments:
+            footer = footer + '<li>' + attachment + '</li>'
+        md5 = hashlib.md5()
+        md5.update(footer.encode('utf-8'))
+        imagePath = md5.hexdigest() + '.png'
         try:
             imgkit.from_string(footer, dumpDir + '/' + imagePath, options = imgkitOptions)
             logger.debug("Created footer %s", imagePath)

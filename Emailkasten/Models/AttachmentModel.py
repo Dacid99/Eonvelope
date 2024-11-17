@@ -75,15 +75,13 @@ class AttachmentModel(models.Model):
 
 
 @receiver(post_delete, sender=AttachmentModel)
-def post_delete_attachment(sender, instance, **kwargs):
+def post_delete_attachment(sender: AttachmentModel, instance: AttachmentModel, **kwargs) -> None:
     """Receiver function removing an attachment from the storage when its db entry is deleted.
 
     Args:
-        sender (type): The class type that sent the post_delete signal.
-        instance (:class:`Emailkasten.Models.AttachmentModel`): The instance that has been deleted.
-
-    Returns:
-        None
+        sender: The class type that sent the post_delete signal.
+        instance: The instance that has been deleted.
+        **kwargs: Other keyword arguments.
     """
     if instance.file_path:
         logger.debug("Removing %s from storage ...", str(instance))

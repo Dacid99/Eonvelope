@@ -150,15 +150,13 @@ class EMailModel(models.Model):
 
 
 @receiver(post_delete, sender=EMailModel)
-def post_delete_email_files(sender, instance, **kwargs):
+def post_delete_email_files(sender: EMailModel, instance:EMailModel, **kwargs) -> None:
     """Receiver function removing the files for an email from the storage when its db entry is deleted.
 
     Args:
-        sender (type): The class type that sent the post_delete signal.
-        instance (:class:`Emailkasten.Models.EMailModel`): The instance that has been deleted.
-
-    Returns:
-        None
+        sender: The class type that sent the post_delete signal.
+        instance: The instance that has been deleted.
+        **kwargs: Other keyword arguments.
     """
     logger.debug("Removing files for %s from storage ...", str(instance))
     if instance.eml_filepath:

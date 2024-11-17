@@ -56,7 +56,7 @@ class StorageModel(models.Model):
         return f"{state} storage directory {self.path}"
 
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         """Extended :django::func:`django.models.Model.save` method with additional check for unique current directory and storage directory creation for new entries."""
 
         if StorageModel.objects.filter(current=True).count() > 1:
@@ -71,12 +71,9 @@ class StorageModel(models.Model):
         super().save(*args, **kwargs)
 
 
-    def incrementSubdirectoryCount(self):
+    def incrementSubdirectoryCount(self) -> None:
         """Increments the :attr:`subdirectory_count` within the limits of :attr:`Emailkasten.constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR`.
         If the result exceeds this limit, creates a new storage directory via :func:`_addNewDirectory`.
-
-        Returns:
-            None
         """
         self.subdirectory_count += 1
         if self.subdirectory_count >= constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR:
@@ -85,11 +82,8 @@ class StorageModel(models.Model):
             self.save()
 
 
-    def _addNewDirectory(self):
+    def _addNewDirectory(self) -> None:
         """Adds a new storage directory by setting this entries :attr:`current` to `False` and creating a new database entry with incremented :attr:`directory_number` and :attr:`current` set to `True`.
-
-        Returns:
-            None
         """
         self.current = False
         self.save()
@@ -102,12 +96,12 @@ class StorageModel(models.Model):
 
 
     @staticmethod
-    def getSubdirectory(subdirectoryName):
+    def getSubdirectory(subdirectoryName: str) -> str:
         """Static utility to acquire a path for a subdirectory in the storage.
         If that subdirectory does not exist yet, creates it and increments the :attr:`subdirectory_count` of the current storage directory.
 
         Args:
-            subdirectoryName (str): The name of subdirectory to be stored.
+            subdirectoryName: The name of subdirectory to be stored.
 
         Returns:
             str: The path of the subdirectory in the storage.

@@ -91,15 +91,13 @@ class AccountModel(models.Model):
 
 
 @receiver(post_save, sender=AccountModel)
-def post_save_is_healthy(sender, instance, **kwargs):
+def post_save_is_healthy(sender: AccountModel, instance: AccountModel, **kwargs) -> None:
     """Receiver function flagging all mailboxes of an account as unhealthy once that account becomes unhealthy.
 
     Args:
-        sender (type): The class type that sent the post_save signal.
-        instance (:class:`Emailkasten.Models.AccountModel`): The instance that has been saved.
-
-    Returns:
-        None
+        sender: The class type that sent the post_save signal.
+        instance: The instance that has been saved.
+        **kwargs: Other keyword arguments.
     """
     if not instance.is_healthy:
         try:

@@ -87,16 +87,11 @@ class IMAPFetcher:
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
-            return
         except Exception:
             self.logger.error("An unexpected error occured connecting and logging in to %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
-            return
-
-        self.account.is_healthy = True
-        self.account.save()
 
 
 
@@ -111,6 +106,7 @@ class IMAPFetcher:
 
     def login(self) -> None:
         """Logs into the target account using credentials from :attr:`account`.
+        If the login succeeds, the account is flagged as healthy.
         """
         self.logger.debug("Logging into %s ...", str(self.account))
         status, response = self._mailhost.login(self.account.mail_address, self.account.password)
@@ -119,13 +115,16 @@ class IMAPFetcher:
             self.logger.error("Bad response logging into %s:\n %s, %s", str(self.account), status, errorMessage)
             self.account.is_healthy = False
             self.account.save()
+            return
 
+        self.account.is_healthy = True
+        self.account.save()
         self.logger.debug("Successfully logged into %s.", str(self.account))
 
 
     def close(self) -> None:
         """Logs out of the account and closes the connection to the IMAP server if it is open.
-        Errors do not flag the account as unhealty.
+        Errors do not flag the account as unhealthy.
         """
         self.logger.debug("Closing connection to %s ...", str(self.account))
         if self._mailhost:

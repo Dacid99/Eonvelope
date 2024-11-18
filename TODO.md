@@ -21,7 +21,6 @@
 - streamable logs for daemons
 - adding daemons to mailboxes
 - test on insertion
-- imap capabilities for better decoding
 
 ### Work in progress
 - documentation

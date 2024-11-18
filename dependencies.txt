@@ -1,4 +1,4 @@
-django 
+django
 djangorestframework
 django-health-check
 django-filter
@@ -9,3 +9,4 @@ pillow
 imgkit
 email-validator
 gssapi
+imap-tools

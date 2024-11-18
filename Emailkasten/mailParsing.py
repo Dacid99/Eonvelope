@@ -35,6 +35,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import email_validator
+from imap_tools.imap_utf7 import utf7_decode
 
 from .constants import ParsedMailKeys, ParsingConfiguration
 
@@ -431,6 +432,7 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
 
 def parseMailbox(mailboxBytes: bytes) -> str:
     """Parses the mailbox name as received by the scanMailboxes method in :mod:`Emailkasten.Fetchers`.
+    Uses :func:`imap_tools.imap_utf7.utf7_decode` to decode IMAPs modified utf7 encoding.
 
     Args:
         mailboxBytes: The mailbox name in bytes as received from the mail server.
@@ -438,7 +440,7 @@ def parseMailbox(mailboxBytes: bytes) -> str:
     Returns:
         The name of the mailbox independent of its parent folders
     """
-    mailbox = mailboxBytes.decode('utf-7', errors='replace')
+    mailbox = utf7_decode(mailboxBytes)
     mailboxName = mailbox.split("\"/\"")[1].strip()
     if mailboxName == "":
         mailboxName = mailbox.split("\" \"")[1].strip()

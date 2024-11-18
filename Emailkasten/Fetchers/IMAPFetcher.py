@@ -94,7 +94,6 @@ class IMAPFetcher:
             self.logger.info("Marked %s as unhealthy", str(self.account))
 
 
-
     def connectToHost(self) -> None:
         """Opens the connection to the IMAP server using the credentials from :attr:`account`.
         """

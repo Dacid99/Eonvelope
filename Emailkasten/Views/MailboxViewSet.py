@@ -75,51 +75,6 @@ class MailboxViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Tested mailbox', 'mailbox': mailboxSerializer.data, 'result': TestStatusCodes.INFOS[result]})
 
 
-    @action(detail=True, methods=['post'], url_path='daemon/test')
-    def test_daemon(self, request: Request, pk:int|None = None) -> Response:
-        """Action method testing the daemon data of the mailbox.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the mailbox. Defaults to None.
-
-        Returns:
-            A response detailing the test result for the daemon.
-        """
-        mailbox = self.get_object()
-        return EMailArchiverDaemon.testDaemon(mailbox.daemon)
-
-
-    @action(detail=True, methods=['post'], url_path='daemon/start')
-    def start_daemon(self, request: Request, pk: int|None = None) -> Response:
-        """Action method starting the daemon for the mailbox.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the mailbox. Defaults to None.
-
-        Returns:
-            A response detailing the start result of the daemon.
-        """
-        mailbox = self.get_object()
-        return EMailArchiverDaemon.startDaemon(mailbox.daemon)
-
-
-    @action(detail=True, methods=['post'], url_path='daemon/stop')
-    def stop_daemon(self, request: Request, pk: int|None = None) -> Response:
-        """Action method stopping the daemon data of the mailbox.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the mailbox. Defaults to None.
-
-        Returns:
-            A response detailing the stop result for the daemon.
-        """
-        mailbox = self.get_object()
-        return EMailArchiverDaemon.stopDaemon(mailbox.daemon)
-
-
     @action(detail=True, methods=['post'])
     def fetch_all(self, request: Request, pk: int|None = None) -> Response:
         """Action method fetching all mails from the mailbox.
@@ -189,29 +144,3 @@ class MailboxViewSet(viewsets.ModelViewSet):
         favoriteMailboxes = MailboxModel.objects.filter(is_favorite=True)
         serializer = self.get_serializer(favoriteMailboxes, many=True)
         return Response(serializer.data)
-
-
-    @action(detail=True, methods=['get'], url_path='daemon/log/download')
-    def log_download(self, request: Request, pk: int|None = None) -> FileResponse:
-        """Action method downloading the log file of the mailbox daemon.
-
-        Args:
-            request: The request triggering the action.
-            pk: int: The private key of the mailbox. Defaults to None.
-
-        Raises:
-            Http404: If the filepath is not in the database or it doesnt exist.
-
-        Returns:
-            A fileresponse containing the requested file.
-        """
-        mailbox = self.get_object()
-
-        daemonLogFilepath = mailbox.dameon.log_filepath
-        if not daemonLogFilepath or not os.path.exists(daemonLogFilepath):
-            raise Http404("Log file not found")
-
-        daemonLogFilename = os.path.basename(daemonLogFilepath)
-        with open(daemonLogFilepath, 'rb') as daemonLogFile:
-            response = FileResponse(daemonLogFile, as_attachment=True, filename=daemonLogFilename)
-            return response

@@ -26,6 +26,8 @@ from .. import constants
 from ..constants import TestStatusCodes
 
 if TYPE_CHECKING:
+    from types import TracebackType
+
     from ..Models.AccountModel import AccountModel
     from ..Models.MailboxModel import MailboxModel
 
@@ -269,13 +271,25 @@ class POP3Fetcher:
         return mailDataList
 
 
-    def __enter__(self):
+    def __enter__(self) -> POP3Fetcher:
         """Framework method for use of class in 'with' statement, creates an instance."""
         self.logger.debug("%s._enter_", str(self.__class__.__name__))
         return self
 
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        """Framework method for use of class in 'with' statement, closes an instance."""
-        self.logger.debug("%s._exit_", str(self.__class__.__name__))
+    def __exit__(self, exc_type: BaseException|None, exc_value: BaseException|None, traceback: TracebackType|None) -> True:
+        """Framework method for use of class in 'with' statement, closes an instance.
+
+        Args:
+            exc_type: The exception type that raised close.
+            exc_value: The exception value that raised close.
+            traceback: The exception traceback that raised close.
+
+        Returns:
+            True, exceptions are consumed.
+        """
+        self.logger.debug("Exiting")
         self.close()
+        if exc_value or exc_type:
+            self.logger.error("Unexpected error %s occured!", exc_type, exc_info=exc_value)
+        return True

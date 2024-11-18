@@ -15,6 +15,7 @@
 
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from __future__ import annotations
 
 import datetime
@@ -28,6 +29,8 @@ from .. import constants
 from ..constants import TestStatusCodes
 
 if TYPE_CHECKING:
+    from types import TracebackType
+
     from ..Models.AccountModel import AccountModel
     from ..Models.MailboxModel import MailboxModel
 
@@ -267,7 +270,7 @@ class IMAPFetcher:
 
 
 
-    def fetchBySearch(self, mailbox: MailboxModel, criterion: str = constants.MailFetchingCriteria.RECENT) -> list[bytes]|None:
+    def fetchBySearch(self, mailbox: MailboxModel, criterion: str = constants.MailFetchingCriteria.RECENT) -> list[bytes]:
         """Fetches and returns maildata from a mailbox based on a given criterion.
         If an :python::class:`imaplib.IMAP4.error` that is not an :python::class:`imaplib.IMAP4.abort` occurs the mailbox is flagged as unhealthy.
         If a bad response is received when opening or searching the mailbox, it is flagged as unhealthy as well.
@@ -364,7 +367,7 @@ class IMAPFetcher:
 
 
 
-    def fetchMailboxes(self) -> imaplib._AnyResponseData:
+    def fetchMailboxes(self) -> list[bytes]:
         """Retrieves and returns the data of the mailboxes in the account.
         If an :python::class:`imaplib.IMAP4.error` that is not an :python::class:`imaplib.IMAP4.abort` occurs the account is flagged as unhealthy.
         If a bad response is received when listing the mailboxes, it is flagged as unhealthy as well.
@@ -386,6 +389,12 @@ class IMAPFetcher:
                 self.account.is_healthy = False
                 self.account.save()
                 return []
+
+            mailboxesList = []
+            for mailboxBytes in mailboxes:
+                if isinstance(mailboxBytes, bytes):
+                    mailboxesList.append(mailboxBytes)
+
             self.logger.debug("Successfully fetched mailboxes in %s.", str(self.account))
 
         except imaplib.IMAP4.abort:
@@ -402,17 +411,33 @@ class IMAPFetcher:
 
         self.account.is_healthy = True
         self.account.save()
-        return mailboxes
+        return mailboxesList
 
 
 
-    def __enter__(self):
-        """Framework method for use of class in 'with' statement, creates an instance."""
-        self.logger.debug("%s._enter_", str(self.__class__.__name__))
+    def __enter__(self) -> IMAPFetcher:
+        """Framework method for use of class in 'with' statement, creates an instance.
+
+        Returns:
+            The new IMAPFetcher instance.
+        """
+        self.logger.debug("Entering")
         return self
 
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        """Framework method for use of class in 'with' statement, closes an instance."""
-        self.logger.debug("%s._exit_", str(self.__class__.__name__))
+    def __exit__(self, exc_type: BaseException|None, exc_value: BaseException|None, traceback: TracebackType|None) -> True:
+        """Framework method for use of class in 'with' statement, closes an instance.
+
+        Args:
+            exc_type: The exception type that raised close.
+            exc_value: The exception value that raised close.
+            traceback: The exception traceback that raised close.
+
+        Returns:
+            True, exceptions are consumed.
+        """
+        self.logger.debug("Exiting")
         self.close()
+        if exc_value or exc_type:
+            self.logger.error("Unexpected error %s occured!", exc_type, exc_info=exc_value)
+        return True

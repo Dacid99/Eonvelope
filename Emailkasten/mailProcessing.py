@@ -96,7 +96,6 @@ def testAccount(account: AccountModel) -> int:
     return result
 
 
-
 def testMailbox(mailbox: MailboxModel) -> int:
     """Tests whether the data in a mailboxmodel is correct and allows connecting and opening the account and mailbox.
     The :attr:`Emailkasten.Models.MailboxModel.is_healthy` flag is set according to the result by the Fetcher class, e.g. :class:`Emailkasten.Fetchers.IMAPFetcher`.
@@ -136,7 +135,6 @@ def testMailbox(mailbox: MailboxModel) -> int:
     return result
 
 
-
 def scanMailboxes(account: AccountModel) -> None:
     """Scans the given mailaccount for mailboxes, parses and inserts them into the database.
     For POP3 accounts, there is only one mailbox, it defaults to INBOX.
@@ -147,20 +145,20 @@ def scanMailboxes(account: AccountModel) -> None:
     """
 
     logger.info("Searching mailboxes in %s...", account)
-
+    mailboxes = []
     if account.protocol == IMAPFetcher.PROTOCOL:
-        with IMAPFetcher(account) as imapMail:
-            mailboxes = imapMail.fetchMailboxes()
+        with IMAPFetcher(account) as imapFetcher:
+            mailboxes = imapFetcher.fetchMailboxes()
 
     elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-        with IMAP_SSL_Fetcher(account) as imapMail:
-            mailboxes = imapMail.fetchMailboxes()
+        with IMAP_SSL_Fetcher(account) as imapSSLFetcher:
+            mailboxes = imapSSLFetcher.fetchMailboxes()
 
     elif account.protocol == POP3Fetcher.PROTOCOL:
-        mailboxes = ['INBOX']
+        mailboxes = [b'INBOX']
 
     elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
-        mailboxes = ['INBOX']
+        mailboxes = [b'INBOX']
 
     elif account.protocol == ExchangeFetcher.PROTOCOL:
         with ExchangeFetcher(account) as exchangeMail:
@@ -168,15 +166,13 @@ def scanMailboxes(account: AccountModel) -> None:
 
     else:
         logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
-        mailboxes = []
+        return
 
     for mailbox in mailboxes:
         parsedMailbox = parseMailbox(mailbox)
         insertMailbox(parsedMailbox, account)
 
     logger.info("Successfully searched mailboxes")
-
-
 
 
 def fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> None:
@@ -191,38 +187,43 @@ def fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> 
             If none is given, defaults to RECENT inside :func:`Emailkasten.Fetchers.IMAPFetcher.fetchBySearch`.
     """
 
-    logger.info("Fetching emails with criterion %s from mailbox %s in account %s...", criterion, mailbox, account)
+    logger.info(
+        "Fetching emails with criterion %s from mailbox %s in account %s...",
+        criterion,
+        mailbox,
+        account,
+    )
+    mailDataList = []
     if account.protocol == IMAPFetcher.PROTOCOL:
-        with IMAPFetcher(account) as imapMail:
+        with IMAPFetcher(account) as imapFetcher:
 
-            mailDataList = imapMail.fetchBySearch(mailbox=mailbox, criterion=criterion)
+            mailDataList = imapFetcher.fetchBySearch(mailbox=mailbox, criterion=criterion)
 
     elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-        with IMAP_SSL_Fetcher(account) as imapMail:
+        with IMAP_SSL_Fetcher(account) as imapSSLFetcher:
 
-            mailDataList = imapMail.fetchBySearch(mailbox=mailbox, criterion=criterion)
+            mailDataList = imapSSLFetcher.fetchBySearch(mailbox=mailbox, criterion=criterion)
 
     elif account.protocol == POP3Fetcher.PROTOCOL:
-        with POP3Fetcher(account) as popMail:
+        with POP3Fetcher(account) as popFetcher:
 
-            mailDataList = popMail.fetchAll(mailbox)
+            mailDataList = popFetcher.fetchAll(mailbox)
 
     elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
-        with POP3_SSL_Fetcher(account) as popMail:
+        with POP3_SSL_Fetcher(account) as popSSLFetcher:
 
-            mailDataList = popMail.fetchAll(mailbox)
+            mailDataList = popSSLFetcher.fetchAll(mailbox)
 
     elif account.protocol == ExchangeFetcher.PROTOCOL:
-        with ExchangeFetcher(account) as exchangeMail:
+        with ExchangeFetcher(account) as exchangeFetcher:
 
-            mailDataList = exchangeMail.fetchBySearch() #incomplete
+            mailDataList = exchangeFetcher.fetchBySearch()  # incomplete
 
     else:
         logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
         return
 
     logger.info("Successfully fetched emails")
-
 
     logger.info("Parsing emails from data and saving to db ...")
     status = True
@@ -241,12 +242,10 @@ def fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> 
             else:
                 logger.debug("Not saving to eml for mailbox %s", mailbox.name)
 
-
             if mailbox.save_attachments:
                 storeAttachments(parsedMail)
             else:
                 logger.debug("Not saving attachments for mailbox %s", mailbox.name)
-
 
             if mailbox.save_images:
                 storeImages(parsedMail)
@@ -257,7 +256,12 @@ def fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> 
 
         except Exception:
             status = False
-            logger.error("Error parsing and saving email with subject %s from %s!", parsedMail[constants.ParsedMailKeys.Header.SUBJECT], parsedMail[constants.ParsedMailKeys.Header.DATE], exc_info=True)
+            logger.error(
+                "Error parsing and saving email with subject %s from %s!",
+                parsedMail[constants.ParsedMailKeys.Header.SUBJECT],
+                parsedMail[constants.ParsedMailKeys.Header.DATE],
+                exc_info=True,
+            )
             continue
 
     if status:
@@ -266,8 +270,7 @@ def fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> 
         logger.info("Parsed emails from data and saved to db with an error.")
 
 
-
-def _isSpam(parsedMail: dict[str,Any]) -> bool:
+def _isSpam(parsedMail: dict[str, Any]) -> bool:
     """Checks the spam headers of the parsed mail to decide whether the mail is spam.
 
     Args:
@@ -276,4 +279,7 @@ def _isSpam(parsedMail: dict[str,Any]) -> bool:
     Returns:
         Whether the mail is considered spam.
     """
-    return parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] is not None and parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] != 'NO'
+    return (
+        parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] is not None
+        and parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] != "NO"
+    )

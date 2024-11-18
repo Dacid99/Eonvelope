@@ -16,30 +16,55 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import exchangelib
+
 from .. import constants
 from ..ExchangeMailParser import ExchangeMailParser
 
+if TYPE_CHECKING:
+    from types import TracebackType
+
+
 class ExchangeFetcher:
     PROTOCOL = constants.MailFetchingProtocols.EXCHANGE
-    
+
     def __init__(self, username, password, primary_smtp_address=None, server='outlook.office365.com', fullname=None, access_type=exchangelib.DELEGATE, autodiscover=True, locale=None, default_timezone=None):
         self.__credentials = exchangelib.Credentials(username, password)
         self.__config = exchangelib.Configuration(server=server, credentials=self.__credentials)
-        
+
         self.__mailhost = exchangelib.Account(
             primary_smtp_address=primary_smtp_address,fullname=fullname,access_type=access_type,autodiscover=autodiscover,locale=locale,default_timezone=default_timezone
             )
-        
+
     def fetchAllAndPrint(self):
         for message in self.__mailhost.inbox.all().order_by('-datetime_received')[:10]:
             mailParser = ExchangeMailParser(message)
             print(mailParser.parseFrom())
 
 
-    def __enter__(self):
+    def __enter__(self) -> ExchangeFetcher:
+        """Framework method for use of class in 'with' statement, creates an instance."""
         self.logger.debug(str(self.__class__.__name__) + "._enter_")
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.logger.debug(str(self.__class__.__name__) + "._exit_")
+
+    def __exit__(self, exc_type: BaseException|None, exc_value: BaseException|None, traceback: TracebackType|None) -> True:
+        """Framework method for use of class in 'with' statement, closes an instance.
+
+        Args:
+            exc_type: The exception type that raised close.
+            exc_value: The exception value that raised close.
+            traceback: The exception traceback that raised close.
+
+        Returns:
+            True, exceptions are consumed.
+        """
+        self.logger.debug("Exiting")
+        self.close()
+        if exc_value or exc_type:
+            self.logger.error("Unexpected error %s occured!", exc_type, exc_info=exc_value)
+        return True

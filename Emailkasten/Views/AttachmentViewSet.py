@@ -90,7 +90,7 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
         """
         attachment = self.get_object()
         attachment.is_favorite = not attachment.is_favorite
-        attachment.save()
+        attachment.save(update_fields=['is_favorite'])
         return Response({'status': 'Attachment marked as favorite'})
 
 

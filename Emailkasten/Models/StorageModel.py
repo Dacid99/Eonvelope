@@ -86,7 +86,7 @@ class StorageModel(models.Model):
         """Adds a new storage directory by setting this entries :attr:`current` to `False` and creating a new database entry with incremented :attr:`directory_number` and :attr:`current` set to `True`.
         """
         self.current = False
-        self.save()
+        self.save(update_fields=['current'])
         StorageModel.objects.create(directory_number=self.directory_number+1, current=True, subdirectory_count=0)
 
 

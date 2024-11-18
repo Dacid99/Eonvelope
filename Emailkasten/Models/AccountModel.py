@@ -107,7 +107,7 @@ def post_save_is_healthy(sender: AccountModel, instance: AccountModel, **kwargs)
                 mailboxEntries = instance.mailboxes.all()
                 for mailboxEntry in mailboxEntries:
                     mailboxEntry.is_healthy = False
-                    mailboxEntry.save()
+                    mailboxEntry.save(update_fields=['is_healthy'])
                 logger.debug("Successfully flagged mailboxes as unhealthy.")
 
         except AccountModel.DoesNotExist:

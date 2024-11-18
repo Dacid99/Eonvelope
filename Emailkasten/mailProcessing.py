@@ -88,7 +88,7 @@ def testAccount(account: AccountModel) -> int:
     else:
         logger.error("Account %s has unknown protocol!", str(account))
         account.is_healthy = False
-        account.save()
+        account.save(update_fields=['is_healthy'])
         result = TestStatusCodes.ERROR
 
     logger.info("Successfully tested account to be %s.", result)
@@ -127,7 +127,7 @@ def testMailbox(mailbox: MailboxModel) -> int:
     else:
         logger.error("Account %s has unknown protocol!", str(mailbox.account))
         mailbox.is_healthy = False
-        mailbox.save()
+        mailbox.save(update_fields=['is_healthy'])
         result = TestStatusCodes.ERROR
 
     logger.info("Successfully tested mailbox to be %s.", result)

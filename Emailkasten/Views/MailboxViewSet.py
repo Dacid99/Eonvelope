@@ -172,7 +172,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         """
         mailbox = self.get_object()
         mailbox.is_favorite = not mailbox.is_favorite
-        mailbox.save()
+        mailbox.save(update_fields=['is_favorite'])
         return Response({'status': 'Mailbox marked as favorite'})
 
 

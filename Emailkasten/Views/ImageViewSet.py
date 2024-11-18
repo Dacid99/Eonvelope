@@ -89,7 +89,7 @@ class ImageViewSet(viewsets.ReadOnlyModelViewSet):
         """
         image = self.get_object()
         image.is_favorite = not image.is_favorite
-        image.save()
+        image.save(update_fields=['is_favorite'])
         return Response({'status': 'Image marked as favorite'})
 
 

@@ -116,7 +116,7 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         """
         email = self.get_object()
         email.is_favorite = not email.is_favorite
-        email.save()
+        email.save(update_fields=['is_favorite'])
         return Response({'status': 'Email marked as favorite'})
 
 

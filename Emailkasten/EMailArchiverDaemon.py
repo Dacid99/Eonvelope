@@ -89,7 +89,7 @@ class EMailArchiverDaemon:
                 newDaemon.start()
                 EMailArchiverDaemon.runningDaemons[daemonModel.id] = newDaemon
                 daemonModel.is_running = True
-                daemonModel.save()
+                daemonModel.save(update_fields=['is_running'])
                 return Response({
                     'status': 'Daemon started',
                     'account': daemonModel.mailbox.account.mail_address,
@@ -125,7 +125,7 @@ class EMailArchiverDaemon:
             oldDaemon = EMailArchiverDaemon.runningDaemons.pop( daemonModel.id )
             oldDaemon.stop()
             daemonModel.is_running = False
-            daemonModel.save()
+            daemonModel.save(update_fields=['is_running'])
             return Response({
                 'status': 'Daemon stopped',
                 'account': daemonModel.mailbox.account.mail_address,
@@ -201,7 +201,7 @@ class EMailArchiverDaemon:
             self.logger.error("%s crashed! Attempting to restart ...", str(self.daemon), exc_info=True)
             time.sleep(constants.EMailArchiverDaemonConfiguration.RESTART_TIME)
             self.daemon.is_healthy = False
-            self.daemon.save()
+            self.daemon.save(update_fields=['is_healthy'])
             self.run()
 
 
@@ -220,6 +220,6 @@ class EMailArchiverDaemon:
         endtime = time.time()
 
         self.daemon.is_healthy = True
-        self.daemon.save()
+        self.daemon.save(update_fields=['is_healthy'])
 
         self.logger.debug("Cycle complete after %s seconds\n-------------------------------------------", endtime - startTime)

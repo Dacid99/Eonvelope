@@ -85,12 +85,12 @@ class IMAPFetcher:
         except imaplib.IMAP4.error:
             self.logger.error("An IMAP error occured connecting and logging in to %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             self.logger.info("Marked %s as unhealthy", str(self.account))
         except Exception:
             self.logger.error("An unexpected error occured connecting and logging in to %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             self.logger.info("Marked %s as unhealthy", str(self.account))
 
 
@@ -113,11 +113,11 @@ class IMAPFetcher:
             errorMessage = response[0].decode('utf-8') if response and response[0] else "Unknown error"
             self.logger.error("Bad response logging into %s:\n %s, %s", str(self.account), status, errorMessage)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             return
 
         self.account.is_healthy = True
-        self.account.save()
+        self.account.save(update_fields=['is_healthy'])
         self.logger.debug("Successfully logged into %s.", str(self.account))
 
 
@@ -161,11 +161,11 @@ class IMAPFetcher:
                 errorMessage = responseNoop[0].decode('utf-8') if responseNoop and responseNoop[0] else "Unknown error"
                 self.logger.error("Bad response testing %s:\n %s, %s", str(self.account), status, errorMessage)
                 self.account.is_healthy = False
-                self.account.save()
+                self.account.save(update_fields=['is_healthy'])
                 return TestStatusCodes.BAD_RESPONSE
 
             self.account.is_healthy = True
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
 
             self.logger.debug("Successfully tested %s.", str(self.account))
 
@@ -181,7 +181,7 @@ class IMAPFetcher:
                     errorMessage = responseSelect[0].decode('utf-8') if responseSelect and responseSelect[0] else "Unknown error"
                     self.logger.error("Bad response opening %s:\n %s, %s", str(mailbox), status, errorMessage)
                     mailbox.is_healthy = False
-                    mailbox.save()
+                    mailbox.save(update_fields=['is_healthy'])
                     return TestStatusCodes.BAD_RESPONSE
 
                 status, responseList = self._mailhost.list()
@@ -189,7 +189,7 @@ class IMAPFetcher:
                     errorMessage = responseList[0].decode('utf-8') if responseList and isinstance(responseList[0], bytes) else "Unknown error"
                     self.logger.error("Bad response listing %s:\n %s, %s", str(mailbox), status, errorMessage)
                     mailbox.is_healthy = False
-                    mailbox.save()
+                    mailbox.save(update_fields=['is_healthy'])
                     return TestStatusCodes.BAD_RESPONSE
 
                 status, data = self._mailhost.unselect()
@@ -197,11 +197,11 @@ class IMAPFetcher:
                     errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
                     self.logger.warning("Bad response unselecting %s:\n %s, %s", mailbox, status, errorMessage)
                     mailbox.is_healthy = False
-                    mailbox.save()
+                    mailbox.save(update_fields=['is_healthy'])
                     return TestStatusCodes.BAD_RESPONSE
 
                 mailbox.is_healthy = True
-                mailbox.save()
+                mailbox.save(update_fields=['is_healthy'])
 
                 self.logger.debug("Successfully tested %s.", str(mailbox))
 
@@ -213,7 +213,7 @@ class IMAPFetcher:
         except imaplib.IMAP4.error:
             self.logger.error("An IMAP error occured during test of %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             return TestStatusCodes.ERROR
         except Exception:
             self.logger.error("An unexpected error occured during test of %s!", str(self.account), exc_info=True)
@@ -320,7 +320,7 @@ class IMAPFetcher:
                 errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
                 self.logger.error("Bad response opening %s:\n %s, %s", str(mailbox), status, errorMessage)
                 mailbox.is_healthy = False
-                mailbox.save()
+                mailbox.save(update_fields=['is_healthy'])
                 return []
 
             self.logger.debug("Successfully opened mailbox.")
@@ -331,7 +331,7 @@ class IMAPFetcher:
                 errorMessage = messageUIDs[0].decode('utf-8') if messageUIDs and messageUIDs[0] else "Unknown error"
                 self.logger.error("Bad response searching for mails in %s:\n %s, %s", mailbox, status, errorMessage)
                 mailbox.is_healthy = False
-                mailbox.save()
+                mailbox.save(update_fields=['is_healthy'])
                 return []
 
             self.logger.info("Found %s messages with uIDs %s in %s.", searchCriterion, messageUIDs, str(mailbox))
@@ -365,7 +365,7 @@ class IMAPFetcher:
         except imaplib.IMAP4.error:
             self.logger.error("An IMAP error occured searching and fetching %s messages in %s!", searchCriterion,  str(mailbox), exc_info=True)
             mailbox.is_healthy = False
-            mailbox.save()
+            mailbox.save(update_fields=['is_healthy'])
             return []
         except Exception:
             self.logger.error("An unexpected error occured searching and fetching %s messages in %s!", searchCriterion,  str(mailbox), exc_info=True)
@@ -374,7 +374,7 @@ class IMAPFetcher:
         self.logger.debug("Successfully searched and fetched %s messages in %s.", searchCriterion, str(mailbox))
 
         mailbox.is_healthy = True
-        mailbox.save()
+        mailbox.save(update_fields=['is_healthy'])
 
         return mailDataList
 
@@ -400,7 +400,7 @@ class IMAPFetcher:
                 errorMessage = mailboxes[0].decode('utf-8') if mailboxes and isinstance(mailboxes[0], bytes) else "Unknown error"
                 self.logger.error("Bad response trying to fetch mailboxes:\n %s, %s", status, errorMessage)
                 self.account.is_healthy = False
-                self.account.save()
+                self.account.save(update_fields=['is_healthy'])
                 return []
 
             mailboxesList = []
@@ -416,14 +416,14 @@ class IMAPFetcher:
         except imaplib.IMAP4.error:
             self.logger.error("An IMAP error occured fetching mailboxes in %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             return []
         except Exception:
             self.logger.error("An unexpected error occured fetching mailboxes in %s!", str(self.account), exc_info=True)
             return []
 
         self.account.is_healthy = True
-        self.account.save()
+        self.account.save(update_fields=['is_healthy'])
         return mailboxesList
 
 

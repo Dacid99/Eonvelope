@@ -110,7 +110,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         """
         account = self.get_object()
         account.is_favorite = not account.is_favorite
-        account.save()
+        account.save(update_fields=['is_favorite'])
         return Response({'status': 'Account marked as favorite'})
 
 

@@ -69,7 +69,7 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
         """
         correspondent = self.get_object()
         correspondent.is_favorite = not correspondent.is_favorite
-        correspondent.save()
+        correspondent.save(update_fields=['is_favorite'])
         return Response({'status': 'Correspondent marked as favorite'})
 
 

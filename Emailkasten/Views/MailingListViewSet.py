@@ -70,7 +70,7 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
         """
         mailinglist = self.get_object()
         mailinglist.is_favorite = not mailinglist.is_favorite
-        mailinglist.save()
+        mailinglist.save(update_fields=['is_favorite'])
         return Response({'status': 'Mailinglist marked as favorite'})
 
 

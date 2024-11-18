@@ -71,12 +71,12 @@ class POP3Fetcher:
         except poplib.error_proto:
             self.logger.error("A POP error occured connecting and logging in to %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             self.logger.info("Marked %s as unhealthy", str(self.account))
         except Exception:
             self.logger.error("An unexpected error occured connecting and logging in to %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             self.logger.info("Marked %s as unhealthy", str(self.account))
 
 
@@ -97,7 +97,7 @@ class POP3Fetcher:
         self._mailhost.pass_(self.account.password)
 
         self.account.is_healthy = True
-        self.account.save()
+        self.account.save(update_fields=['is_healthy'])
         self.logger.debug("Successfully logged into %s.", str(self.account))
 
 
@@ -138,12 +138,12 @@ class POP3Fetcher:
             if status != b'+OK':
                 self.logger.error("Bad response testing %s:\n %s, %s", str(self.account), status, response)
                 self.account.is_healthy = False
-                self.account.save()
+                self.account.save(update_fields=['is_healthy'])
 
                 return TestStatusCodes.BAD_RESPONSE
 
             self.account.is_healthy = True
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             self.logger.debug("Successfully tested %s.", str(self.account))
 
             if mailbox:
@@ -154,12 +154,12 @@ class POP3Fetcher:
                 if status != b'+OK':
                     self.logger.error("Bad response listing %s:\n %s, %s", str(mailbox), status, response)
                     mailbox.is_healthy = False
-                    mailbox.save()
+                    mailbox.save(update_fields=['is_healthy'])
 
                     return TestStatusCodes.BAD_RESPONSE
 
                 mailbox.is_healthy = True
-                mailbox.save()
+                mailbox.save(update_fields=['is_healthy'])
                 self.logger.debug("Successfully tested %s ...", str(mailbox))
 
             return TestStatusCodes.OK
@@ -167,7 +167,7 @@ class POP3Fetcher:
         except poplib.error_proto:
             self.logger.error("An IMAP error occured during test of %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
-            self.account.save()
+            self.account.save(update_fields=['is_healthy'])
             return TestStatusCodes.ERROR
         except Exception:
             self.logger.error("An unexpected error occured during test of %s!", str(self.account), exc_info=True)
@@ -233,7 +233,7 @@ class POP3Fetcher:
             if status != b'+OK':
                 self.logger.error("Bad response listing mails in %s:\n %s, %s!", str(mailbox), status, messageNumbersList)
                 mailbox.is_healthy = False
-                mailbox.save()
+                mailbox.save(update_fields=['is_healthy'])
                 return []
 
             messageCount = len(messageNumbersList)
@@ -256,7 +256,7 @@ class POP3Fetcher:
         except poplib.error_proto:
             self.logger.error("A POP error occured retrieving all messages in %s!", str(mailbox), exc_info=True)
             mailbox.is_healthy = False
-            mailbox.save()
+            mailbox.save(update_fields=['is_healthy'])
             return []
         except Exception:
             self.logger.error("An unexpected error occured retrieving all messages in %s!", str(mailbox), exc_info=True)
@@ -265,7 +265,7 @@ class POP3Fetcher:
         self.logger.debug("Successfully fetched all messages in %s.", str(mailbox))
 
         mailbox.is_healthy = True
-        mailbox.save()
+        mailbox.save(update_fields=['is_healthy'])
 
         return mailDataList
 

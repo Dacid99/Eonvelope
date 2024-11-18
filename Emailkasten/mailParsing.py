@@ -438,7 +438,7 @@ def parseMailbox(mailboxBytes: bytes) -> str:
     Returns:
         The name of the mailbox independent of its parent folders
     """
-    mailbox = mailboxBytes.decode(ParsingConfiguration.CHARSET_DEFAULT)
+    mailbox = mailboxBytes.decode('utf-7', errors='replace')
     mailboxName = mailbox.split("\"/\"")[1].strip()
     if mailboxName == "":
         mailboxName = mailbox.split("\" \"")[1].strip()

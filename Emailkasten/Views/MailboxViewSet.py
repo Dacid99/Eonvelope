@@ -18,10 +18,8 @@
 
 from __future__ import annotations
 
-import os
 from typing import TYPE_CHECKING
 
-from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -31,10 +29,10 @@ from rest_framework.response import Response
 
 from .. import constants
 from ..constants import TestStatusCodes
-from ..EMailArchiverDaemon import EMailArchiverDaemon
 from ..Filters.MailboxFilter import MailboxFilter
 from ..mailProcessing import fetchMails, testMailbox
 from ..Models.MailboxModel import MailboxModel
+from ..Models.DaemonModel import DaemonModel
 from ..Serializers.MailboxSerializers.MailboxWithDaemonSerializer import \
     MailboxWithDaemonSerializer
 
@@ -55,6 +53,24 @@ class MailboxViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return MailboxModel.objects.filter(account__user = self.request.user)
+
+
+    @action(detail=True, methods='POST')
+    def add_daemon(self, request: Request, pk: int|None = None) -> Response:
+        """Action method creating a new daemon for the mailbox.
+
+        Args:
+            request: The request triggering the action.
+            pk: The private key of the mailbox. Defaults to None.
+
+        Returns:
+            A response containing the updated mailbox data.
+        """
+        mailbox = self.get_object()
+        DaemonModel.objects.create(mailbox=mailbox)
+
+        mailboxSerializer = self.get_serializer(mailbox)
+        return Response({'status': 'Added daemon for mailbox', 'mailbox': mailboxSerializer.data})
 
 
     @action(detail=True, methods=['post'], url_path='test')

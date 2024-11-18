@@ -188,10 +188,10 @@ class IMAPFetcher:
                     mailbox.save()
                     return TestStatusCodes.BAD_RESPONSE
 
-                status, data = self._mailhost.close()
+                status, data = self._mailhost.unselect()
                 if status != "OK":
                     errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
-                    self.logger.warning("Bad response closing %s:\n %s, %s", mailbox, status, errorMessage)
+                    self.logger.warning("Bad response unselecting %s:\n %s, %s", mailbox, status, errorMessage)
                     mailbox.is_healthy = False
                     mailbox.save()
                     return TestStatusCodes.BAD_RESPONSE
@@ -348,10 +348,10 @@ class IMAPFetcher:
 
             self.logger.debug("Closing mailbox %s ...", str(mailbox))
 
-            status, data = self._mailhost.close()
+            status, data = self._mailhost.unselect()
             if status != "OK":
                 errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
-                self.logger.warning("Bad response closing %s:\n %s, %s", mailbox, status, errorMessage)
+                self.logger.warning("Bad response unselecting %s:\n %s, %s", mailbox, status, errorMessage)
             else:
                 self.logger.debug("Successfully closed mailbox.")
 

@@ -46,11 +46,13 @@ from .Views.EMailViewSet import EMailViewSet
 from .Views.ImageViewSet import ImageViewSet
 from .Views.LoginOutView import CSRFCookieView, LoginView, LogoutView
 from .Views.MailboxViewSet import MailboxViewSet
+from .Views.DaemonViewSet import DaemonViewSet
 from .Views.UserCreateView import UserViewSet
 
 router = DefaultRouter()
 router.register(r'accounts', AccountViewSet)
 router.register(r'mailboxes', MailboxViewSet)
+router.register(r'daemons', DaemonViewSet)
 router.register(r'emails', EMailViewSet)
 router.register(r'correspondents', CorrespondentViewSet)
 router.register(r'attachments', AttachmentViewSet)
@@ -69,5 +71,5 @@ urlpatterns = [
     path("health/", include('health_check.urls')),
     path('stats/', DatabaseStatsView.as_view(), name = 'stats'),
     path('', include(router.urls)),
-    path("api-auth/", include('rest_framework.urls', namespace='rest_framework')), 
+    path("api-auth/", include('rest_framework.urls', namespace='rest_framework')),
 ]

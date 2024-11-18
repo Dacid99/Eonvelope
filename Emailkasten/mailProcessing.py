@@ -30,7 +30,10 @@ Global variables:
     logger (:class:`logging.Logger`): The logger for this module.
 """
 
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from . import constants
 from .constants import TestStatusCodes
@@ -44,19 +47,26 @@ from .fileManagment import storeAttachments, storeImages, storeMessageAsEML
 from .mailParsing import parseMail, parseMailbox
 from .mailRendering import prerender
 
+if TYPE_CHECKING:
+    from typing import Any
+
+    from .Models.AccountModel import AccountModel
+    from .Models.MailboxModel import MailboxModel
+
+
 logger = logging.getLogger(__name__)
 
 
-def testAccount(account):
+def testAccount(account: AccountModel) -> int:
     """Tests whether the data in an accountmodel is correct and allows connecting and logging in to the mailhost and account.
     The :attr:`Emailkasten.Models.AccountModel.is_healthy` flag is set according to the result by the Fetcher class, e.g. :class:`Emailkasten.Fetchers.IMAPFetcher`.
     Relies on the `test` static method of the :mod:`Emailkasten.Fetchers` classes.
 
     Args:
-        account (:class:`Emailkasten.Models.AccountModel`): The account data to test.
+        account: The account data to test.
 
     Returns:
-        bool: The result of the test.
+        The resultcode of the test.
     """
 
     logger.info("Testing %s ...", str(account))
@@ -87,16 +97,16 @@ def testAccount(account):
 
 
 
-def testMailbox(mailbox):
+def testMailbox(mailbox: MailboxModel) -> int:
     """Tests whether the data in a mailboxmodel is correct and allows connecting and opening the account and mailbox.
     The :attr:`Emailkasten.Models.MailboxModel.is_healthy` flag is set according to the result by the Fetcher class, e.g. :class:`Emailkasten.Fetchers.IMAPFetcher`.
     Relies on the `test` static method of the :mod:`Emailkasten.Fetchers` classes.
 
     Args:
-        mailbox (:class:`Emailkasten.Models.MailboxModel`): The mailbox data to test.
+        mailbox: The mailbox data to test.
 
     Returns:
-        int: The result of the test.
+        The resultcode of the test.
     """
 
     logger.info("Testing %s ...", str(mailbox))
@@ -127,16 +137,13 @@ def testMailbox(mailbox):
 
 
 
-def scanMailboxes(account):
+def scanMailboxes(account: AccountModel) -> None:
     """Scans the given mailaccount for mailboxes, parses and inserts them into the database.
     For POP3 accounts, there is only one mailbox, it defaults to INBOX.
     Relies on the :func:`fetchMailboxes` method of the :mod:`Emailkasten.Fetchers` classes, :func:`parseMailbox` from :mod:`Emailkasten.mailParsing` and :func:`insertMailbox` from :mod:`Emailkasten.emailDBFeeding`.
 
     Args:
-        account (:class:`Emailkasten.Models.AccountModel`): The data of the account to scan for mailboxes.
-
-    Returns:
-        None
+        account: The data of the account to scan for mailboxes.
     """
 
     logger.info("Searching mailboxes in %s...", account)
@@ -172,19 +179,16 @@ def scanMailboxes(account):
 
 
 
-def fetchMails(mailbox, account, criterion):
+def fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> None:
     """Fetches maildata from a given mailbox in a mailaccount based on a search criterion and stores them in the database and storage.
     For POP3 accounts, there is only one mailbox and no options for specific queries, so all messages are fetched.
     Relies on the :func:`fetchBySearch` and :func:`fetchAll` methods of the :mod:`Emailkasten.Fetchers` classes, the methods from :mod:`Emailkasten.mailParsing` and :mod:`Emailkasten.emailDBFeeding`.
 
     Args:
-        mailbox (:class:`Emailkasten.Models.MailboxModel`): The data of the mailbox to fetch from.
-        account (:class:`Emailkasten.Models.AccountModel`): The data of the mailaccount to fetch from.
-        criterion (str): A formatted criterion for message filtering as returned by :func:`Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
+        mailbox: The data of the mailbox to fetch from.
+        account: The data of the mailaccount to fetch from.
+        criterion: A formatted criterion for message filtering as returned by :func:`Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
             If none is given, defaults to RECENT inside :func:`Emailkasten.Fetchers.IMAPFetcher.fetchBySearch`.
-
-    Returns:
-        None
     """
 
     logger.info("Fetching emails with criterion %s from mailbox %s in account %s...", criterion, mailbox, account)
@@ -262,13 +266,14 @@ def fetchMails(mailbox, account, criterion):
         logger.info("Parsed emails from data and saved to db with an error.")
 
 
-def _isSpam(parsedMail):
+
+def _isSpam(parsedMail: dict[str,Any]) -> bool:
     """Checks the spam headers of the parsed mail to decide whether the mail is spam.
 
     Args:
-        parsedMail (dict): The mail to be checked for spam.
+        parsedMail: The mail to be checked for spam.
 
     Returns:
-        bool: Whether the mail is considered spam.
+        Whether the mail is considered spam.
     """
-    return parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] and parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] != 'NO'
+    return parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] is not None and parsedMail[constants.ParsedMailKeys.Header.X_SPAM_FLAG] != 'NO'

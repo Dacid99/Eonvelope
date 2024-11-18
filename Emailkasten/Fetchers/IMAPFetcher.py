@@ -172,7 +172,7 @@ class IMAPFetcher:
                     self.logger.error("%s is not a mailbox of %s!", str(mailbox), self.account)
                     return TestStatusCodes.UNEXPECTED_ERROR
 
-                status, responseSelect = self._mailhost.select(mailbox.name)
+                status, responseSelect = self._mailhost.select(mailbox.name, readonly=True)
                 if status != "OK":
                     errorMessage = responseSelect[0].decode('utf-8') if responseSelect and responseSelect[0] else "Unknown error"
                     self.logger.error("Bad response opening %s:\n %s, %s", str(mailbox), status, errorMessage)
@@ -188,8 +188,17 @@ class IMAPFetcher:
                     mailbox.save()
                     return TestStatusCodes.BAD_RESPONSE
 
+                status, data = self._mailhost.close()
+                if status != "OK":
+                    errorMessage = data[0].decode('utf-8') if data and data[0] else "Unknown error"
+                    self.logger.warning("Bad response closing %s:\n %s, %s", mailbox, status, errorMessage)
+                    mailbox.is_healthy = False
+                    mailbox.save()
+                    return TestStatusCodes.BAD_RESPONSE
+
                 mailbox.is_healthy = True
                 mailbox.save()
+
                 self.logger.debug("Successfully tested %s.", str(mailbox))
 
             return TestStatusCodes.OK

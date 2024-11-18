@@ -73,16 +73,11 @@ class POP3Fetcher:
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
-            return
         except Exception:
             self.logger.error("An unexpected error occured connecting and logging in to %s!", str(self.account), exc_info=True)
             self.account.is_healthy = False
             self.account.save()
             self.logger.info("Marked %s as unhealthy", str(self.account))
-            return
-
-        self.account.is_healthy = True
-        self.account.save()
 
 
     def connectToHost(self) -> None:
@@ -95,10 +90,14 @@ class POP3Fetcher:
 
     def login(self) -> None:
         """Logs into the target account using credentials from :attr:`account`.
+        If the login succeeds, the account is flagged as healthy.
         """
         self.logger.debug("Logging into %s ...", str(self.account))
-        self._mailhost.user(self.account.mail_account)
+        self._mailhost.user(self.account.mail_address)
         self._mailhost.pass_(self.account.password)
+
+        self.account.is_healthy = True
+        self.account.save()
         self.logger.debug("Successfully logged into %s.", str(self.account))
 
 
@@ -272,7 +271,11 @@ class POP3Fetcher:
 
 
     def __enter__(self) -> POP3Fetcher:
-        """Framework method for use of class in 'with' statement, creates an instance."""
+        """Framework method for use of class in 'with' statement, creates an instance.
+
+        Returns:
+            The new POP3Fetcher instance.
+        """
         self.logger.debug("%s._enter_", str(self.__class__.__name__))
         return self
 

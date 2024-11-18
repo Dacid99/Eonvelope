@@ -33,6 +33,8 @@ Global variables:
     logger (:class:`logging.Logger`): The logger for this module.
 """
 
+from __future__ import annotations
+
 import logging
 from typing import TYPE_CHECKING
 
@@ -213,13 +215,6 @@ def insertMailbox(mailboxData: str, account: AccountModel) -> None:
             )
             if created:
                 logger.debug("Entry for %s created", str(mailboxEntry))
-
-                logger.debug("Attaching daemon...")
-                newDaemon = DaemonModel.objects.create(mailbox = mailboxEntry)
-                if not newDaemon:
-                    logger.error("Failed to create daemon for new mailbox %s!", mailboxData)
-                else:
-                    logger.debug("Successfully created daemon for new mailbox")
             else:
                 logger.debug("Entry for %s already exists", str(mailboxEntry))
 

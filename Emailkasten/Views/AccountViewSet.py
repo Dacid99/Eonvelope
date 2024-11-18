@@ -76,7 +76,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         scanMailboxes(account)
 
         accountSerializer = self.get_serializer(account)
-        return Response({'status': 'Scanned for mailboxes', 'account': accountSerializer.data})
+        return Response(data = {'status': 'Scanned for mailboxes', 'account': accountSerializer.data})
 
 
     @action(detail=True, methods=['post'], url_path='test')

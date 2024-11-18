@@ -137,7 +137,7 @@ class IMAPFetcher:
 
     def test(self, mailbox: MailboxModel|None = None ) -> int:
         """Tests the connection to the mailserver and, if a mailbox is provided, whether it can be opened and listed.
-        Sets the The :attr:`Emailkasten.Models.MailboxModel.is_healthy` flag accordingly.
+        Sets the :attr:`Emailkasten.Models.MailboxModel.is_healthy` flag accordingly.
 
         Args:
             mailbox: The mailbox to be tested. Default is None.
@@ -148,10 +148,10 @@ class IMAPFetcher:
         self.logger.debug("Testing %s ...", str(self.account))
 
         try:
-            status, response = self._mailhost.noop()
+            status, responseNoop = self._mailhost.noop()
 
             if status != "OK":
-                errorMessage = response[0].decode('utf-8') if response and response[0] else "Unknown error"
+                errorMessage = responseNoop[0].decode('utf-8') if responseNoop and responseNoop[0] else "Unknown error"
                 self.logger.error("Bad response testing %s:\n %s, %s", str(self.account), status, errorMessage)
                 self.account.is_healthy = False
                 self.account.save()
@@ -169,17 +169,17 @@ class IMAPFetcher:
                     self.logger.error("%s is not a mailbox of %s!", str(mailbox), self.account)
                     return TestStatusCodes.UNEXPECTED_ERROR
 
-                status, response = self._mailhost.select(mailbox.name)
+                status, responseSelect = self._mailhost.select(mailbox.name)
                 if status != "OK":
-                    errorMessage = response[0].decode('utf-8') if response and response[0] else "Unknown error"
-                    self.logger.error("Bad response opening %s:\n %s, %s", str(self.mailbox), status, errorMessage)
+                    errorMessage = responseSelect[0].decode('utf-8') if responseSelect and responseSelect[0] else "Unknown error"
+                    self.logger.error("Bad response opening %s:\n %s, %s", str(mailbox), status, errorMessage)
                     mailbox.is_healthy = False
                     mailbox.save()
                     return TestStatusCodes.BAD_RESPONSE
 
-                status, response = self._mailhost.list()
+                status, responseList = self._mailhost.list()
                 if status != "OK":
-                    errorMessage = response[0].decode('utf-8') if response and response[0] else "Unknown error"
+                    errorMessage = responseList[0].decode('utf-8') if responseList and isinstance(responseList[0], bytes) else "Unknown error"
                     self.logger.error("Bad response listing %s:\n %s, %s", str(mailbox), status, errorMessage)
                     mailbox.is_healthy = False
                     mailbox.save()
@@ -310,7 +310,7 @@ class IMAPFetcher:
             self.logger.debug("Successfully opened mailbox.")
 
             self.logger.debug("Searching %s messages in %s ...", searchCriterion, str(mailbox))
-            status, messageUIDs = self._mailhost.uid('SEARCH', None, searchCriterion)
+            status, messageUIDs = self._mailhost.uid('SEARCH', searchCriterion)
             if status != "OK":
                 errorMessage = messageUIDs[0].decode('utf-8') if messageUIDs and messageUIDs[0] else "Unknown error"
                 self.logger.error("Bad response searching for mails in %s:\n %s, %s", mailbox, status, errorMessage)
@@ -381,7 +381,7 @@ class IMAPFetcher:
         try:
             status, mailboxes = self._mailhost.list()
             if status != "OK":
-                errorMessage = mailboxes[0].decode('utf-8') if mailboxes and mailboxes[0] else "Unknown error"
+                errorMessage = mailboxes[0].decode('utf-8') if mailboxes and isinstance(mailboxes[0], bytes) else "Unknown error"
                 self.logger.error("Bad response trying to fetch mailboxes:\n %s, %s", status, errorMessage)
                 self.account.is_healthy = False
                 self.account.save()

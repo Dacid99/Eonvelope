@@ -24,6 +24,8 @@ Global variables:
     logger (:class:`logging.Logger`): The logger for this module.
 """
 
+from __future__ import annotations
+
 import datetime
 import email
 import email.header
@@ -51,14 +53,13 @@ def _decodeText(text: email.message.Message) -> str:
         text: The text in bytes format to decode properly.
 
     Returns:
-        The decoded text.
+        The decoded text. Blank if none is present.
     """
-    charset = text.get_content_charset()
-    if charset is None:
-        charset = ParsingConfiguration.CHARSET_DEFAULT
-    decodedText = text.get_payload(decode=True).decode(charset, errors='replace')
-
-    return decodedText
+    charset = text.get_content_charset() or ParsingConfiguration.CHARSET_DEFAULT
+    if isinstance(textPayload := text.get_payload(decode=True), bytes):
+        return textPayload.decode(charset, errors='replace')
+    else:
+        return ""
 
 
 def _decodeHeader(header: str) -> str:
@@ -71,7 +72,7 @@ def _decodeHeader(header: str) -> str:
         header: The mail header to decode.
 
     Returns:
-        The decoded mail header
+        The decoded mail header.
     """
     decodedFragments = email.header.decode_header(header)
     decodedString = ""
@@ -123,7 +124,7 @@ def _parseMessageID(mailMessage: email.message.Message) -> str:
     messageID = mailMessage.get(ParsedMailKeys.Header.MESSAGE_ID)
     if messageID is None:
         logger.warning("No messageID found in mail, resorting to hash!")
-        return str(hash(mailMessage))  #fallback for unique identifier if no messageID found
+        return str(hash(mailMessage))
     else:
         logger.debug("Successfully parsed messageID")
     return messageID
@@ -160,7 +161,7 @@ def _parseSubject(mailMessage: email.message.Message) -> str:
 
     Returns:
         The subject header of the mailmessage.
-        If there is no such header, the string is empty.
+        If there is no such header, the string is blank.
         If :attr:`constants.ParsingConfiguration.STRIP_TEXTS` is True, whitespace is stripped.
     """
     logger.debug("Parsing subject ...")
@@ -227,13 +228,13 @@ def _parseImages(mailMessage: email.message.Message) -> list[dict]:
     images = []
     if mailMessage.is_multipart():
         for part in mailMessage.walk():
-            if part.get_content_disposition() and part.get_content_disposition().startswith('attachment'):
+            if part.get_content_disposition() == "attachment":
                 continue
             if part.get_content_type().startswith('image/'):
                 # imageFileName = part.get_filename()
                 # if not imageFileName:
                 #     imageFileName =
-                imagesDict = {}
+                imagesDict: dict[str,Any] = {}
                 imagesDict[ParsedMailKeys.Image.DATA] = part
                 imagesDict[ParsedMailKeys.Image.SIZE] = len(part.as_bytes())
                 imagesDict[ParsedMailKeys.Image.FILE_NAME] = part.get_filename()
@@ -265,8 +266,8 @@ def _parseAttachments(mailMessage: email.message.Message) -> list[dict[str, Any]
     attachments = []
     if mailMessage.is_multipart():
         for part in mailMessage.walk():
-            if ( part.get_content_disposition() and part.get_content_disposition().startswith("attachment" ) ) or ( part.get_content_type() and part.get_content_type() in ParsingConfiguration.APPLICATION_TYPES ):
-                attachmentDict = {}
+            if part.get_content_disposition() == "attachment" or part.get_content_type() in ParsingConfiguration.APPLICATION_TYPES:
+                attachmentDict: dict[str,Any] = {}
                 attachmentDict[ParsedMailKeys.Attachment.DATA] = part
                 attachmentDict[ParsedMailKeys.Attachment.SIZE] = len(part.as_bytes())
                 attachmentDict[ParsedMailKeys.Attachment.FILE_NAME] = part.get_filename() or f"{hash(part)}.attachment"
@@ -283,7 +284,7 @@ def _parseAttachments(mailMessage: email.message.Message) -> list[dict[str, Any]
 
 
 
-def _parseAdditionalHeader(mailMessage: email.message.Message, headerKey: str) -> str:
+def _parseHeader(mailMessage: email.message.Message, headerKey: str) -> str:
     """Parses the given header of the given mailmessage.
     For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml.
 
@@ -304,7 +305,8 @@ def _parseAdditionalHeader(mailMessage: email.message.Message, headerKey: str) -
     return header
 
 
-def _parseAdditionalMultipleHeader(mailMessage: email.message.Message, headerKey: str) -> list[(str|None)]:
+
+def _parseMultipleHeader(mailMessage: email.message.Message, headerKey: str) -> str|None:
     """Parses the given header, which may appear multiple times, of the given mailmessage.
 
     Args:
@@ -312,20 +314,19 @@ def _parseAdditionalMultipleHeader(mailMessage: email.message.Message, headerKey
         headerKey: The header to extract from the message.
 
     Returns:
-        A list of the parsed headers in the mailmessage.
-        Empty if there is no such header.
+        The combined header from all occurances.
     """
     logger.debug("Parsing %s ...", headerKey)
-    header = mailMessage.get_all(headerKey)
-    if header is None:
+    headers = mailMessage.get_all(headerKey)
+    if headers :
+        combinedHeaders = ""
+        for item in headers:
+            combinedHeaders += item + '\n'
+        logger.debug("Successfully parsed %s", headerKey)
+        return combinedHeaders
+    else:
         logger.debug("No %s found in mail.", headerKey)
         return None
-    else:
-        allHeaders = ""
-        for item in header:
-            allHeaders += item + '\n'
-        logger.debug("Successfully parsed %s", headerKey)
-        return allHeaders
 
 
 
@@ -339,13 +340,13 @@ def _parseMailinglist(mailMessage: email.message.Message) -> dict[str, Any]:
         The parsed mailinglist headers in the mailmessage.
     """
     mailinglist = {}
-    mailinglist[ParsedMailKeys.MailingList.ID] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.MailingList.ID)
-    mailinglist[ParsedMailKeys.MailingList.OWNER] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.MailingList.OWNER)
-    mailinglist[ParsedMailKeys.MailingList.SUBSCRIBE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.MailingList.SUBSCRIBE)
-    mailinglist[ParsedMailKeys.MailingList.UNSUBSCRIBE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.MailingList.UNSUBSCRIBE)
-    mailinglist[ParsedMailKeys.MailingList.POST] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.MailingList.POST)
-    mailinglist[ParsedMailKeys.MailingList.HELP] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.MailingList.HELP)
-    mailinglist[ParsedMailKeys.MailingList.ARCHIVE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.MailingList.ARCHIVE)
+    mailinglist[ParsedMailKeys.MailingList.ID] = _parseHeader(mailMessage, ParsedMailKeys.MailingList.ID)
+    mailinglist[ParsedMailKeys.MailingList.OWNER] = _parseHeader(mailMessage, ParsedMailKeys.MailingList.OWNER)
+    mailinglist[ParsedMailKeys.MailingList.SUBSCRIBE] = _parseHeader(mailMessage, ParsedMailKeys.MailingList.SUBSCRIBE)
+    mailinglist[ParsedMailKeys.MailingList.UNSUBSCRIBE] = _parseHeader(mailMessage, ParsedMailKeys.MailingList.UNSUBSCRIBE)
+    mailinglist[ParsedMailKeys.MailingList.POST] = _parseHeader(mailMessage, ParsedMailKeys.MailingList.POST)
+    mailinglist[ParsedMailKeys.MailingList.HELP] = _parseHeader(mailMessage, ParsedMailKeys.MailingList.HELP)
+    mailinglist[ParsedMailKeys.MailingList.ARCHIVE] = _parseHeader(mailMessage, ParsedMailKeys.MailingList.ARCHIVE)
     return mailinglist
 
 
@@ -385,7 +386,7 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
 
     logger.debug("Parsing email with subject %s ...", _parseSubject(mailMessage))
 
-    parsedEMail = {}
+    parsedEMail: dict[str, Any] = {}
     parsedEMail[ParsedMailKeys.DATA] = mailToParse
     parsedEMail[ParsedMailKeys.FULL_MESSAGE] = mailMessage
     parsedEMail[ParsedMailKeys.SIZE] = len(mailToParse)
@@ -404,25 +405,25 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
     parsedEMail[ParsedMailKeys.PRERENDER_FILE_PATH] = None
 
     parsedEMail[ParsedMailKeys.MAILINGLIST] = _parseMailinglist(mailMessage)
-    parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.IN_REPLY_TO)
+    parsedEMail[ParsedMailKeys.Header.IN_REPLY_TO] = _parseHeader(mailMessage, ParsedMailKeys.Header.IN_REPLY_TO)
 
-    parsedEMail[ParsedMailKeys.Header.COMMENTS] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.COMMENTS)
-    parsedEMail[ParsedMailKeys.Header.LANGUAGE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.LANGUAGE)
-    parsedEMail[ParsedMailKeys.Header.CONTENT_LANGUAGE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.CONTENT_LANGUAGE)
-    parsedEMail[ParsedMailKeys.Header.CONTENT_TYPE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.CONTENT_TYPE)
+    parsedEMail[ParsedMailKeys.Header.COMMENTS] = _parseHeader(mailMessage, ParsedMailKeys.Header.COMMENTS)
+    parsedEMail[ParsedMailKeys.Header.LANGUAGE] = _parseHeader(mailMessage, ParsedMailKeys.Header.LANGUAGE)
+    parsedEMail[ParsedMailKeys.Header.CONTENT_LANGUAGE] = _parseHeader(mailMessage, ParsedMailKeys.Header.CONTENT_LANGUAGE)
+    parsedEMail[ParsedMailKeys.Header.CONTENT_TYPE] = _parseHeader(mailMessage, ParsedMailKeys.Header.CONTENT_TYPE)
 
-    parsedEMail[ParsedMailKeys.Header.KEYWORDS] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.KEYWORDS)
-    parsedEMail[ParsedMailKeys.Header.RECEIVED] = _parseAdditionalMultipleHeader(mailMessage, ParsedMailKeys.Header.RECEIVED)
-    parsedEMail[ParsedMailKeys.Header.IMPORTANCE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.IMPORTANCE)
-    parsedEMail[ParsedMailKeys.Header.PRIORITY] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.PRIORITY)
-    parsedEMail[ParsedMailKeys.Header.PRECEDENCE] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.PRECEDENCE)
-    parsedEMail[ParsedMailKeys.Header.CONTENT_LOCATION] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.CONTENT_LOCATION)
-    parsedEMail[ParsedMailKeys.Header.ARCHIVED_AT] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.ARCHIVED_AT)
-    parsedEMail[ParsedMailKeys.Header.USER_AGENT] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.USER_AGENT)
-    parsedEMail[ParsedMailKeys.Header.X_PRIORITY] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.X_PRIORITY)
-    parsedEMail[ParsedMailKeys.Header.X_ORIGINATING_CLIENT] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.X_ORIGINATING_CLIENT)
-    parsedEMail[ParsedMailKeys.Header.X_SPAM_FLAG] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.X_SPAM_FLAG)
-    parsedEMail[ParsedMailKeys.Header.AUTO_SUBMITTED] = _parseAdditionalHeader(mailMessage, ParsedMailKeys.Header.AUTO_SUBMITTED)
+    parsedEMail[ParsedMailKeys.Header.KEYWORDS] = _parseHeader(mailMessage, ParsedMailKeys.Header.KEYWORDS)
+    parsedEMail[ParsedMailKeys.Header.RECEIVED] = _parseMultipleHeader(mailMessage, ParsedMailKeys.Header.RECEIVED)
+    parsedEMail[ParsedMailKeys.Header.IMPORTANCE] = _parseHeader(mailMessage, ParsedMailKeys.Header.IMPORTANCE)
+    parsedEMail[ParsedMailKeys.Header.PRIORITY] = _parseHeader(mailMessage, ParsedMailKeys.Header.PRIORITY)
+    parsedEMail[ParsedMailKeys.Header.PRECEDENCE] = _parseHeader(mailMessage, ParsedMailKeys.Header.PRECEDENCE)
+    parsedEMail[ParsedMailKeys.Header.CONTENT_LOCATION] = _parseHeader(mailMessage, ParsedMailKeys.Header.CONTENT_LOCATION)
+    parsedEMail[ParsedMailKeys.Header.ARCHIVED_AT] = _parseHeader(mailMessage, ParsedMailKeys.Header.ARCHIVED_AT)
+    parsedEMail[ParsedMailKeys.Header.USER_AGENT] = _parseHeader(mailMessage, ParsedMailKeys.Header.USER_AGENT)
+    parsedEMail[ParsedMailKeys.Header.X_PRIORITY] = _parseHeader(mailMessage, ParsedMailKeys.Header.X_PRIORITY)
+    parsedEMail[ParsedMailKeys.Header.X_ORIGINATING_CLIENT] = _parseHeader(mailMessage, ParsedMailKeys.Header.X_ORIGINATING_CLIENT)
+    parsedEMail[ParsedMailKeys.Header.X_SPAM_FLAG] = _parseHeader(mailMessage, ParsedMailKeys.Header.X_SPAM_FLAG)
+    parsedEMail[ParsedMailKeys.Header.AUTO_SUBMITTED] = _parseHeader(mailMessage, ParsedMailKeys.Header.AUTO_SUBMITTED)
 
     logger.debug("Successfully parsed mail")
     return parsedEMail

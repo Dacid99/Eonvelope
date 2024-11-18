@@ -64,7 +64,7 @@ def _decodeText(text: email.message.Message) -> str:
 
 def _decodeHeader(header: str) -> str:
     """Decodes an email header field encoded as bytes.
-    Uses the :python::func:`email.header.decode_header` function.
+    Uses the :func:`email.header.decode_header` function.
     Checks for a specific charset to use.
     If none is found uses the default :attr:`Emailkasten.constants.MailParsingConfiguration.CHARSET_DEFAULT`.
 
@@ -87,7 +87,7 @@ def _decodeHeader(header: str) -> str:
 
 def _separateRFC2822MailAddressFormat(mailers: list[str]) -> list[tuple[str,str]]:
     """Splits the RFC2822 address fiels into the mailer name mail address.
-    Uses :func:`email.utils.getaddresses` to seperate and :python::func:`email_validator.validate_email` to validate.
+    Uses :func:`email.utils.getaddresses` to seperate and :func:`email_validator.validate_email` to validate.
     TODO: If no valid mailaddress is found uses the entire address as fallback.
 
     Args:

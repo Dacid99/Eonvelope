@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 
 
 class POP3Fetcher:
-    """Maintains a connection to the POP server and fetches data using :python::mod:`poplib`.
+    """Maintains a connection to the POP server and fetches data using :mod:`poplib`.
 
     Opens a connection to the POP server on construction and is preferably used in a 'with' environment.
     Allows fetching of mails and mailboxes from an account on an POP host.
@@ -41,7 +41,7 @@ class POP3Fetcher:
     Attributes:
         account (:class:`Emailkasten.Models.AccountModel`): The model of the account to be fetched from.
         logger (:class:`logging.Logger`): The logger for this instance.
-        _mailhost (:python::class:`poplib.POP3`): The POP host this instance connects to.
+        _mailhost (:class:`poplib.POP3`): The POP host this instance connects to.
     """
 
     PROTOCOL = constants.MailFetchingProtocols.POP3
@@ -207,7 +207,7 @@ class POP3Fetcher:
 
     def fetchAll(self, mailbox: MailboxModel) -> list[bytes]:
         """Fetches and returns all maildata from the server.
-        If an :python::class:`poplib.error_proto` occurs the mailbox is flagged as unhealthy.
+        If an :class:`poplib.error_proto` occurs the mailbox is flagged as unhealthy.
         If a bad response is received when listing messages, it is flagged as unhealthy as well.
         In case of success the mailbox is flagged as healthy.
 

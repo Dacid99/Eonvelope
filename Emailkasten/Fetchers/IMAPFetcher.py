@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
 
 class IMAPFetcher:
-    """Maintains a connection to the IMAP server and fetches data using :python::mod:`imaplib`.
+    """Maintains a connection to the IMAP server and fetches data using :mod:`imaplib`.
 
     Opens a connection to the IMAP server on construction and is preferably used in a 'with' environment.
     Allows fetching of mails and mailboxes from an account on an IMAP host.
@@ -44,7 +44,7 @@ class IMAPFetcher:
     Attributes:
         account (:class:`Emailkasten.Models.AccountModel`): The model of the account to be fetched from.
         logger (:class:`logging.Logger`): The logger for this instance.
-        _mailhost (:python::class:`imaplib.IMAP4`): The IMAP host this instance connects to.
+        _mailhost (:class:`imaplib.IMAP4`): The IMAP host this instance connects to.
     """
 
     PROTOCOL = constants.MailFetchingProtocols.IMAP
@@ -272,7 +272,7 @@ class IMAPFetcher:
 
     def fetchBySearch(self, mailbox: MailboxModel, criterion: str = constants.MailFetchingCriteria.RECENT) -> list[bytes]:
         """Fetches and returns maildata from a mailbox based on a given criterion.
-        If an :python::class:`imaplib.IMAP4.error` that is not an :python::class:`imaplib.IMAP4.abort` occurs the mailbox is flagged as unhealthy.
+        If an :class:`imaplib.IMAP4.error` that is not an :class:`imaplib.IMAP4.abort` occurs the mailbox is flagged as unhealthy.
         If a bad response is received when opening or searching the mailbox, it is flagged as unhealthy as well.
         In case of success the mailbox is flagged as healthy.
 
@@ -369,7 +369,7 @@ class IMAPFetcher:
 
     def fetchMailboxes(self) -> list[bytes]:
         """Retrieves and returns the data of the mailboxes in the account.
-        If an :python::class:`imaplib.IMAP4.error` that is not an :python::class:`imaplib.IMAP4.abort` occurs the account is flagged as unhealthy.
+        If an :class:`imaplib.IMAP4.error` that is not an :class:`imaplib.IMAP4.abort` occurs the account is flagged as unhealthy.
         If a bad response is received when listing the mailboxes, it is flagged as unhealthy as well.
         In case of success the account is flagged as healthy.
 

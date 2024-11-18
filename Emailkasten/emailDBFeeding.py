@@ -34,7 +34,7 @@ Global variables:
 """
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING
 
 import django.db
 
@@ -47,7 +47,12 @@ from .Models.EMailModel import EMailModel
 from .Models.ImageModel import ImageModel
 from .Models.MailboxModel import MailboxModel
 from .Models.MailingListModel import MailingListModel
-from .Models.AccountModel import AccountModel
+
+if TYPE_CHECKING:
+    from typing import Any
+
+    from .Models.AccountModel import AccountModel
+
 
 logger = logging.getLogger(__name__)
 

@@ -30,11 +30,15 @@ import email.header
 import email.message
 import email.utils
 import logging
-from typing import Any
+from typing import TYPE_CHECKING
 
 import email_validator
 
 from .constants import ParsedMailKeys, ParsingConfiguration
+
+if TYPE_CHECKING:
+    from typing import Any
+
 
 logger = logging.getLogger(__name__)
 

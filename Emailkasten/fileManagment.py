@@ -28,11 +28,15 @@ import email
 import email.generator
 import logging
 import os.path
-from typing import Any
+from typing import TYPE_CHECKING
 
 from .constants import StorageConfiguration
 from .mailParsing import ParsedMailKeys
 from .Models.StorageModel import StorageModel
+
+if TYPE_CHECKING:
+    from typing import Any
+
 
 logger = logging.getLogger(__name__)
 

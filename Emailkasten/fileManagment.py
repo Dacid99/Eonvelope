@@ -23,6 +23,7 @@ Functions starting with _ are helpers and are used only within the scope of this
 Global variables:
     logger (:class:`logging.Logger`): The logger for this module.
 """
+from __future__ import annotations
 
 import email
 import email.generator

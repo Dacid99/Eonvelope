@@ -43,7 +43,6 @@ import django.db
 from .constants import ParsedMailKeys
 from .Models.AttachmentModel import AttachmentModel
 from .Models.CorrespondentModel import CorrespondentModel
-from .Models.DaemonModel import DaemonModel
 from .Models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from .Models.EMailModel import EMailModel
 from .Models.ImageModel import ImageModel

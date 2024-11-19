@@ -82,8 +82,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint.extensions.docparams,
-             pylint.extensions.bad_builtin
+load-plugins=pylint.extensions.bad_builtin
 
 
 # Pickle collected data for later comparisons.
@@ -193,7 +192,7 @@ function-naming-style=camelCase
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=_
+good-names=_,pk,OK,CC,TO,ID,id,Id
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
@@ -446,7 +445,8 @@ disable=raw-checker-failed,
         deprecated-pragma,
         use-implicit-booleaness-not-comparison-to-string,
         use-implicit-booleaness-not-comparison-to-zero,
-        use-symbolic-message-instead
+        use-symbolic-message-instead,
+        similarities
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
@@ -655,21 +655,3 @@ init-import=no
 # List of qualified module names which can have objects that can redefine
 # builtins.
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
-
-
-[docparams]
-
-# Whether to accept totally missing parameter documentation in the docstring of a function that has parameters.
-accept-no-param-doc=no
-
-# Whether to accept totally missing raises documentation in the docstring of a function that raises an exception.
-accept-no-return-doc=no
-
-# Whether to accept totally missing return documentation in the docstring of a function that returns a statement.
-accept-no-raise-doc=no
-
-# Whether to accept totally missing yields documentation in the docstring of a generator.
-accept-no-yields-doc=no
-
-# If the docstring type cannot be guessed the specified docstring type will be used.
-default-docstring-type=default

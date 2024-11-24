@@ -31,6 +31,7 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
     """
 
     PROTOCOL = constants.MailFetchingProtocols.IMAP_SSL
+    """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.IMAP_SSL`."""
 
     def connectToHost(self):
         """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.connectToHost` to use :class:`imaplib.IMAP4_SSL`."""

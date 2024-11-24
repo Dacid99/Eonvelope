@@ -31,6 +31,7 @@ class POP3_SSL_Fetcher(POP3Fetcher):
     """
 
     PROTOCOL = constants.MailFetchingProtocols.POP3_SSL
+    """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.POP3_SSL`."""
 
 
     def connectToHost(self) -> None:

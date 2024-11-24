@@ -19,6 +19,7 @@
 import os
 from typing import Final
 
+
 class MailFetchingCriteria:
     """Namespace class for all implemented mail fetching criteria constants.
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
@@ -61,14 +62,16 @@ class MailFetchingCriteria:
     ANNUALLY: Final[str] = "ANNUALLY"
     """Filter using "SENTSINCE" for mails sent the previous 52 weeks (counting back from now) or later."""
 
-
     def __iter__(self):
         """Method to allow easier referencing of the members by listing."""
-        return iter((attr, value) for attr, value in self.__class__.__dict__.items() if not attr.startswith("__"))
+        return iter(
+            (attr, value)
+            for attr, value in self.__class__.__dict__.items()
+            if not attr.startswith("__")
+        )
 
     def __getitem__(self, key):
         return getattr(self, key)
-
 
 
 class MailFetchingProtocols:
@@ -90,7 +93,6 @@ class MailFetchingProtocols:
     """Microsofts Exchange protocol."""
 
 
-
 class TestStatusCodes:
     """Namespace class for all status codes for the tests of mailaccounts and mailboxes."""
 
@@ -109,11 +111,61 @@ class TestStatusCodes:
     UNEXPECTED_ERROR: Final[int] = 4
     """An unexpected error occured, try again and check the logs."""
 
-    INFOS: list[str] = [ "Everything worked as expected." ,
-        "The operation was aborted, please try again." ,
-        "The server returned a bad status, the unhealthy flag set." ,
-        "There was an error, the unhealthy flag set." ,
-        "An unexpected error occured, please try again and check the logs." ]
+    INFOS: list[str] = [
+        "Everything worked as expected.",
+        "The operation was aborted, please try again.",
+        "The server returned a bad status, the unhealthy flag set.",
+        "There was an error, the unhealthy flag set.",
+        "An unexpected error occured, please try again and check the logs.",
+    ]
+
+
+class FilterSetups:
+    """Namespace class for all filter setups for different field types."""
+
+    TEXT: Final[list[str]] = [
+        "icontains",
+        "contains",
+        "exact",
+        "iexact",
+        "startswith",
+        "istartswith",
+        "endswith",
+        "iendswith",
+        "regex",
+        "iregex",
+        "in",
+    ]
+    """Standard filter options for text fields."""
+
+    FLOAT: Final[list[str]] = [
+        "lt",
+        "gt",
+        "exact"
+    ]
+    """Standard filter options for float fields."""
+
+
+    INT: Final[list[str]] = ["lte",
+        "gte",
+        "lt",
+        "gt",
+        "exact",
+        "in"
+    ]
+    """Standard filter options for integer fields."""
+
+
+    BOOL: Final[list[str]] = ["exact"]
+    """Standard filter options for boolean fields."""
+
+
+    CHOICE: Final[list[str]] = [
+        "icontains",
+        "iexact",
+        "in"
+    ]
+    """Standard filter options for fields with constant choices."""
 
 
 
@@ -129,7 +181,6 @@ class EMailArchiverDaemonConfiguration:
     """The default restart time for the daemons in case of a crash in seconds."""
 
 
-
 class StorageConfiguration:
     """Namespace class for all configurations constants for the :class:`Emailkasten.Models.StorageModel`."""
 
@@ -139,15 +190,14 @@ class StorageConfiguration:
     STORAGE_PATH: Final[str] = "/mnt/archive"
     """The path to the storage for the saved data. Must match the path in the docker-compose.yml to ensure data safety."""
 
-    PRERENDER_IMAGETYPE: Final[str] = 'jpg'
+    PRERENDER_IMAGETYPE: Final[str] = "jpg"
     """The image format for the prerendered eml files."""
-
 
 
 class LoggerConfiguration:
     """Namespace class for all configurations constants for the application loggers."""
 
-    LOG_DIRECTORY_PATH: Final[str] = "" #/var/log
+    LOG_DIRECTORY_PATH: Final[str] = ""  # /var/log
     """The path to directory with the logs.
     Must match the path in the docker-compose.yml to store the logs outside the container."""
 
@@ -157,22 +207,24 @@ class LoggerConfiguration:
     DJANGO_LOGFILE_NAME: Final[str] = "django.log"
     """The name of the django logfile."""
 
-    APP_LOG_LEVEL: Final[str] = os.environ.get('APP_LOG_LEVEL', 'INFO')
+    APP_LOG_LEVEL: Final[str] = os.environ.get("APP_LOG_LEVEL", "INFO")
     """The loglevel to the Emailkasten logfile.
     Is being set from an environment variable of the same name.
     Defaults to INFO."""
 
-    DJANGO_LOG_LEVEL: Final[str] = os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
+    DJANGO_LOG_LEVEL: Final[str] = os.environ.get("DJANGO_LOG_LEVEL", "INFO")
     """The loglevel to the django logfile.
     Is being set from an environment variable of the same name.
     Defaults to INFO."""
 
-    ROOT_LOG_LEVEL: Final[str] = os.environ.get('ROOT_LOG_LEVEL', 'INFO')
+    ROOT_LOG_LEVEL: Final[str] = os.environ.get("ROOT_LOG_LEVEL", "INFO")
     """The loglevel to the root console logger.
     Is being set from an environment variable of the same name.
     Defaults to INFO."""
 
-    LOGFILE_MAXSIZE: Final[int] = int( os.environ.get('LOGFILE_MAXSIZE', 10 * 1024 * 1024) )
+    LOGFILE_MAXSIZE: Final[int] = int(
+        os.environ.get("LOGFILE_MAXSIZE", 10 * 1024 * 1024)
+    )
     """The maximum file size of a logfile.
     Is being set from an environment variable of the same name.
     Defaults to 10 MB.
@@ -180,7 +232,7 @@ class LoggerConfiguration:
     Todo:
         The int cast it not safe!"""
 
-    LOGFILE_BACKUP_NUMBER: Final[int] = int( os.environ.get('LOGFILE_BACKUP_NUMBER', 5) )
+    LOGFILE_BACKUP_NUMBER: Final[int] = int(os.environ.get("LOGFILE_BACKUP_NUMBER", 5))
     """The maximum number of backup logfiles to keep.
     Is being set from an environment variable of the same name.
     Defaults to 5.
@@ -188,15 +240,14 @@ class LoggerConfiguration:
     Todo:
         The int cast it not safe!"""
 
-    LOG_FORMAT: Final[str] = '{asctime} {levelname} - {name}.{funcName}: {message}'
+    LOG_FORMAT: Final[str] = "{asctime} {levelname} - {name}.{funcName}: {message}"
     """The format of the log messages for all loggers."""
-
 
 
 class ParsingConfiguration:
     """Namespace class for all configurations constants for the parsing of mails."""
 
-    CHARSET_DEFAULT: Final[str] = 'utf-8'
+    CHARSET_DEFAULT: Final[str] = "utf-8"
     """The default charset used for parsing of text."""
 
     STRIP_TEXTS: Final[bool] = True
@@ -205,24 +256,28 @@ class ParsingConfiguration:
     THROW_OUT_SPAM: Final[bool] = True
     """Whether or not to ignore emails that have a spam flag."""
 
-    APPLICATION_TYPES: Final[list[str]] = ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    APPLICATION_TYPES: Final[list[str]] = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ]
     """A list of application types to parse as attachments."""
 
     DATE_DEFAULT: Final[str] = "1971-01-01 00:00:00"
     """The fallback date to use if none is found in a mail."""
 
-    DATE_FORMAT: Final[str] = '%Y-%m-%d %H:%M:%S'
+    DATE_FORMAT: Final[str] = "%Y-%m-%d %H:%M:%S"
     """The mail datetime format as specified in RFC5322. Must match the pattern of :attr:`DATE_DEFAULT`."""
-
 
 
 class ProcessingConfiguration:
     """Namespace class for all configurations constants for the processing, especially the prerendering, of mails."""
 
-    DUMP_DIRECTORY: Final[str] = '/tmp/images'
+    DUMP_DIRECTORY: Final[str] = "/tmp/images"
     """The directory path where temporary images of the prerendering process will be placed."""
 
-    HTML_FORMAT: Final[str] = """
+    HTML_FORMAT: Final[
+        str
+    ] = """
         <html>
         <head>
             <style>
@@ -241,7 +296,6 @@ class ProcessingConfiguration:
     """The html template to wrap around plain text before prerendering."""
 
 
-
 class FetchingConfiguration:
     """Namespace class for all configurations constants for the fetching of mails."""
 
@@ -253,7 +307,6 @@ class FetchingConfiguration:
 
     SAVE_IMAGES_DEFAULT: Final[bool] = True
     """The default setting whether to store images. Initially set to True."""
-
 
 
 class DatabaseConfiguration:
@@ -275,9 +328,9 @@ class DatabaseConfiguration:
     """The delay between reconnect attempt in case of database disconnect."""
 
 
-
 class ParsedMailKeys:
     """Namespace class for all keys to the parsedMail dictionary."""
+
     DATA: Final[str] = "Raw"
     FULL_MESSAGE: Final[str] = "Full"
     SIZE: Final[str] = "Size"
@@ -290,6 +343,7 @@ class ParsedMailKeys:
 
     class Header:
         """For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml."""
+
         MESSAGE_ID: Final[str] = "Message-ID"
         IN_REPLY_TO: Final[str] = "In-Reply-To"
 
@@ -316,7 +370,6 @@ class ParsedMailKeys:
         X_ORIGINATING_CLIENT: Final[str] = "X-Originating-Client"
         X_SPAM_FLAG: Final[str] = "X-Spam-Flag"
 
-
     class Correspondent:
         FROM: Final[str] = "From"
         TO: Final[str] = "To"
@@ -337,27 +390,30 @@ class ParsedMailKeys:
         DISPOSITION_NOTIFICATION_TO: Final[str] = "Disposition-Notification-To"
 
         def __iter__(self):
-            return iter((attr, value) for attr, value in self.__class__.__dict__.items() if not attr.startswith("__"))
+            return iter(
+                (attr, value)
+                for attr, value in self.__class__.__dict__.items()
+                if not attr.startswith("__")
+            )
 
         def __getitem__(self, key):
             return getattr(self, key)
 
-
-    #attachment keys
+    # attachment keys
     class Attachment:
         DATA: Final[str] = "AttachmentData"
         SIZE: Final[str] = "AttachmentSize"
         FILE_NAME: Final[str] = "AttachmentFileName"
         FILE_PATH: Final[str] = "AttachmentFilePath"
 
-    #image keys
+    # image keys
     class Image:
         DATA: Final[str] = "ImageData"
         SIZE: Final[str] = "ImageSize"
         FILE_NAME: Final[str] = "ImageFileName"
         FILE_PATH: Final[str] = "ImageFilePath"
 
-    #mailinglist keys
+    # mailinglist keys
     class MailingList:
         ID: Final[str] = "List-Id"
         OWNER: Final[str] = "List-Owner"

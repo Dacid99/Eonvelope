@@ -18,6 +18,7 @@
 
 import django_filters
 
+from ..constants import FilterSetups
 from ..Models.AttachmentModel import AttachmentModel
 
 
@@ -34,32 +35,8 @@ class AttachmentFilter(django_filters.FilterSet):
     class Meta:
         model = AttachmentModel
         fields = {
-            "file_name": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "datasize": [
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "exact",
-                "in"
-            ],
-            "created": [
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "exact"
-            ],
+            "file_name": FilterSetups.TEXT,
+            "datasize": FilterSetups.INT,
+            "created": FilterSetups.FLOAT,
+            "updated": FilterSetups.FLOAT,
         }

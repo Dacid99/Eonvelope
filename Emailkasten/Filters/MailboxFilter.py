@@ -18,6 +18,7 @@
 
 import django_filters
 
+from ..constants import FilterSetups
 from ..Models.MailboxModel import MailboxModel
 
 
@@ -110,23 +111,11 @@ class MailboxFilter(django_filters.FilterSet):
     class Meta:
         model = MailboxModel
         fields = {
-            "name": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "save_toEML": ["exact"],
-            "save_attachments": ["exact"],
-            "save_images": ["exact"],
-            "is_healthy": ["exact"],
-            "created": ["lte", "gte", "lt", "gt", "exact"],
-            "updated": ["lte", "gte", "lt", "gt", "exact"],
+            "name": FilterSetups.TEXT,
+            "save_toEML": FilterSetups.TEXT,
+            "save_attachments": FilterSetups.TEXT,
+            "save_images": FilterSetups.TEXT,
+            "is_healthy": FilterSetups.TEXT,
+            "created": FilterSetups.FLOAT,
+            "updated": FilterSetups.FLOAT,
         }

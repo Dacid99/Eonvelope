@@ -18,6 +18,7 @@
 
 import django_filters
 
+from ..constants import FilterSetups
 from ..Models.ImageModel import ImageModel
 
 
@@ -35,36 +36,8 @@ class ImageFilter(django_filters.FilterSet):
     class Meta:
         model = ImageModel
         fields = {
-            "file_name": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "datasize": [
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "exact",
-                "in"
-            ],
-            "created": [
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "exact"
-            ],
-            "updated": [
-                "lte",
-                "gte"
-            ],
+            "file_name": FilterSetups.TEXT,
+            "datasize": FilterSetups.INT,
+            "created": FilterSetups.FLOAT,
+            "updated": FilterSetups.FLOAT,
         }

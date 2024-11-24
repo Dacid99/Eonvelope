@@ -18,6 +18,7 @@
 
 import django_filters
 
+from ..constants import FilterSetups
 from ..Models.AccountModel import AccountModel
 
 
@@ -27,61 +28,12 @@ class AccountFilter(django_filters.FilterSet):
     class Meta:
         model = AccountModel
         fields = {
-            "mail_address": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "mail_host": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "mail_host_port": [
-                "exact",
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "in"
-            ],
-            "protocol": [
-                "icontains",
-                "iexact",
-                "in"
-            ],
-            "timeout": [
-                "lte",
-                "gte"
-            ],
-            "is_healthy": [
-                "exact"
-            ],
-            "created": [
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "exact"
-            ],
-            "updated": [
-                "lte",
-                "gte"
-            ],
+            "mail_address": FilterSetups.TEXT,
+            "mail_host": FilterSetups.TEXT,
+            "mail_host_port": FilterSetups.INT,
+            "protocol": FilterSetups.CHOICE,
+            "timeout": FilterSetups.FLOAT,
+            "is_healthy": FilterSetups.BOOL,
+            "created": FilterSetups.FLOAT,
+            "updated": FilterSetups.FLOAT,
         }

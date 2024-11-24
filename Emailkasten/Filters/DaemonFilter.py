@@ -18,6 +18,7 @@
 
 import django_filters
 
+from ..constants import FilterSetups
 from ..Models.DaemonModel import DaemonModel
 
 
@@ -148,10 +149,10 @@ class DaemonFilter(django_filters.FilterSet):
         model = DaemonModel
         fields = {
             "uuid": ["exact", "contains"],
-            "fetching_criterion": ["iexact"],
-            "cycle_interval": ["lte", "gte", "lt", "gt", "exact"],
-            "is_running": ["exact"],
-            "is_healthy": ["exact"],
-            "created": ["lte", "gte", "lt", "gt", "exact"],
-            "updated": ["lte", "gte", "lt", "gt", "exact"],
+            "fetching_criterion": FilterSetups.CHOICE,
+            "cycle_interval": FilterSetups.INT,
+            "is_running": FilterSetups.BOOL,
+            "is_healthy": FilterSetups.BOOL,
+            "created": FilterSetups.FLOAT,
+            "updated": FilterSetups.FLOAT,
         }

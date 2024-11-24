@@ -18,6 +18,7 @@
 
 import django_filters
 
+from ..constants import FilterSetups
 from ..Models.CorrespondentModel import CorrespondentModel
 
 
@@ -119,37 +120,8 @@ class CorrespondentFilter(django_filters.FilterSet):
     class Meta:
         model = CorrespondentModel
         fields = {
-            "email_name": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "email_address": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "created": [
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "exact"
-            ],
+            "email_name": FilterSetups.TEXT,
+            "email_address": FilterSetups.TEXT,
+            "created": FilterSetups.FLOAT,
+            "updated": FilterSetups.FLOAT,
         }

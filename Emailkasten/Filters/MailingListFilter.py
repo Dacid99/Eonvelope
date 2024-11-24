@@ -18,6 +18,7 @@
 
 import django_filters
 
+from ..constants import FilterSetups
 from ..Models.MailingListModel import MailingListModel
 
 
@@ -115,106 +116,13 @@ class MailingListFilter(django_filters.FilterSet):
     class Meta:
         model = MailingListModel
         fields = {
-            "list_id": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "list_owner": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "list_subscribe": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "list_unsubscribe": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "list_post": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "list_help": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "list_archive": [
-                "icontains",
-                "contains",
-                "exact",
-                "iexact",
-                "startswith",
-                "istartswith",
-                "endswith",
-                "iendswith",
-                "regex",
-                "iregex",
-                "in",
-            ],
-            "created": [
-                "lte",
-                "gte",
-                "lt",
-                "gt",
-                "exact"
-            ],
-            "updated": [
-                "lte",
-                "gte"
-            ],
+            "list_id": FilterSetups.TEXT,
+            "list_owner": FilterSetups.TEXT,
+            "list_subscribe": FilterSetups.TEXT,
+            "list_unsubscribe": FilterSetups.TEXT,
+            "list_post": FilterSetups.TEXT,
+            "list_help": FilterSetups.TEXT,
+            "list_archive": FilterSetups.TEXT,
+            "created": FilterSetups.FLOAT,
+            "updated": FilterSetups.FLOAT,
         }

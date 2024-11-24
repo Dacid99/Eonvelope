@@ -16,7 +16,7 @@
 - some fallback for failed emailaddress parsing is required
 - combined filter for correspondent with mention
 - general save decorator in filemanagement
-- refine storage management logging and error correction
+- refine storage management error correction
 - streamable logs for daemons
 - test on insertion
 

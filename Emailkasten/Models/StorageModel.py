@@ -27,7 +27,8 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 class StorageModel(models.Model):
-    """A database model to keep track of and manage the storage status and structure."""
+    """A database model to keep track of and manage the sharded storage's status and structure.
+    Use the custom methods to create new instances, never use :func:`create`!"""
 
     directory_number = models.PositiveIntegerField(unique=True)
     """The number of the directory tracked by this entry. Unique."""
@@ -64,9 +65,9 @@ class StorageModel(models.Model):
         if not self.path:
             self.path = os.path.join(constants.StorageConfiguration.STORAGE_PATH, str(self.directory_number))
             if not os.path.exists( self.path ):
-                logger.debug("Creating new storage directory %s ...", self.path)
+                logger.info("Creating new storage directory %s ...", self.path)
                 os.makedirs( self.path )
-                logger.debug("Successfully created new storage directory.")
+                logger.info("Successfully created new storage directory.")
 
         super().save(*args, **kwargs)
 
@@ -75,19 +76,27 @@ class StorageModel(models.Model):
         """Increments the :attr:`subdirectory_count` within the limits of :attr:`Emailkasten.constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR`.
         If the result exceeds this limit, creates a new storage directory via :func:`_addNewDirectory`.
         """
+        logger.debug("Incrementing subdirectory count of %s ..", str(self))
+
         self.subdirectory_count += 1
         if self.subdirectory_count >= constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR:
+            logger.debug("Max number of subdirectories in %s reached, adding new storage ...", str(self))
             self._addNewDirectory()
+            logger.debug("Successfully added new storage.")
         else:
             self.save()
 
+        logger.debug("Successfully incrementing subdirectory count.")
+
+
 
     def _addNewDirectory(self) -> None:
-        """Adds a new storage directory by setting this entries :attr:`current` to `False` and creating a new database entry with incremented :attr:`directory_number` and :attr:`current` set to `True`.
+        """Adds a new storage directory by setting this entries :attr:`current` to `False`
+        and creating a new database entry with incremented :attr:`directory_number` and :attr:`current` set to `True`.
         """
+        StorageModel.objects.create(directory_number=self.directory_number+1, current=True, subdirectory_count=0)
         self.current = False
         self.save(update_fields=['current'])
-        StorageModel.objects.create(directory_number=self.directory_number+1, current=True, subdirectory_count=0)
 
 
     class Meta:
@@ -111,7 +120,7 @@ class StorageModel(models.Model):
             if os.listdir(constants.StorageConfiguration.STORAGE_PATH) and not StorageModel.objects.count():
                 logger.critical("The storage is not empty but there is no information about it in the database!!")
 
-            logger.info("The storage is empty, creating first storage directory.")
+            logger.info("Creating first storage directory...")
             storageEntry = StorageModel.objects.create(directory_number=0, current=True, subdirectory_count=0)
             logger.info("Successfully created first storage directory.")
 

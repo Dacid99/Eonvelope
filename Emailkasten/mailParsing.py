@@ -89,7 +89,9 @@ def _decodeHeader(header: str) -> str:
 def _separateRFC2822MailAddressFormat(mailers: list[str]) -> list[tuple[str,str]]:
     """Splits the RFC2822 address fiels into the mailer name mail address.
     Uses :func:`email.utils.getaddresses` to seperate and :func:`email_validator.validate_email` to validate.
-    TODO: If no valid mailaddress is found uses the entire address as fallback.
+
+    Todo:
+        If no valid mailaddress is found uses the entire address as fallback.
 
     Args:
         mailers: A list of address fields to seperate.

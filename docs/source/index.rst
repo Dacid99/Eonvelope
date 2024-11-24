@@ -12,6 +12,7 @@ EMailkasten documentation
    :caption: Contents:
 
    development
+   todo
    Emailkasten
 
 `Latest mypy report <_static/mypy_report/index.html>`_

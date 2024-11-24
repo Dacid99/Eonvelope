@@ -1,5 +1,5 @@
 build/*
-source/[^i]*.rst
+source/Emailkasten*.rst
 apidoc/
 *.log
 *.svg

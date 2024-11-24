@@ -2,7 +2,7 @@ If you have an idea for the project you are very welcome to implement it yoursel
 
 To make it easier for me to read and understand your pull requests please follow these guidelines as closely as possible.
 
-## Guidelines
+# Guidelines
 
 - Adapt to the code style of the repository:
   PascalCase for classes and camelCase for variables and functions. Constants are capitalized.

@@ -39,6 +39,11 @@ extensions = [
     'myst_parser',
 ]
 
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.md': 'markdown',
+}
+
 html_static_path = ['_static']
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -74,6 +79,7 @@ html_theme_options = {
 
 
 # Extension settings
+todo_include_todos = True
 
 apidoc_module_dir = '../../Emailkasten'
 apidoc_output_dir = '../source'
@@ -83,7 +89,6 @@ apidoc_toc_file = False
 apidoc_module_first = True
 
 napoleon_google_docstring = True
-napoleon_numpy_docstring = True
 napoleon_include_init_with_doc = False
 napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = True

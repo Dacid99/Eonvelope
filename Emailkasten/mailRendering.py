@@ -22,6 +22,7 @@
 # Modifications by David & Philipp Aderbauer, licensed under the GNU Affero General Public License version 3 (AGPLv3).
 # This modified code is part of an AGPLv3 project. See the LICENSE file for details.
 
+from __future__ import annotations
 
 import base64
 import email
@@ -30,6 +31,7 @@ import hashlib
 import logging
 import os
 import quopri
+from typing import TYPE_CHECKING
 
 import imgkit
 from PIL import Image
@@ -38,10 +40,13 @@ from .constants import ParsingConfiguration, ProcessingConfiguration
 from .fileManagment import getPrerenderImageStoragePath
 from .mailParsing import ParsedMailKeys
 
+if TYPE_CHECKING:
+    from PIL import ImageFile
+
 
 logger = logging.getLogger(__name__)
 
-def _combineImages(imagesFileList: list[Image.ImageFile.ImageFile]) -> Image.Image:
+def _combineImages(imagesFileList: list[ImageFile.ImageFile]) -> Image.Image:
     """Combining multiple images into one with attention to their sizes.
 
     Args:

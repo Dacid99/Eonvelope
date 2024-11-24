@@ -28,7 +28,9 @@ logger = logging.getLogger(__name__)
 
 class StorageModel(models.Model):
     """A database model to keep track of and manage the sharded storage's status and structure.
-    Use the custom methods to create new instances, never use :func:`create`!"""
+
+    Important:
+        Use the custom methods to create new instances, never use :func:`create`!"""
 
     directory_number = models.PositiveIntegerField(unique=True)
     """The number of the directory tracked by this entry. Unique."""

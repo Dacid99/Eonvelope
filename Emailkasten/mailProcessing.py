@@ -138,7 +138,11 @@ def testMailbox(mailbox: MailboxModel) -> int:
 def scanMailboxes(account: AccountModel) -> None:
     """Scans the given mailaccount for mailboxes, parses and inserts them into the database.
     For POP3 accounts, there is only one mailbox, it defaults to INBOX.
-    Relies on the :func:`fetchMailboxes` method of the :mod:`Emailkasten.Fetchers` classes, :func:`parseMailbox` from :mod:`Emailkasten.mailParsing` and :func:`insertMailbox` from :mod:`Emailkasten.emailDBFeeding`.
+
+    Note:
+        Relies on :func:`fetchMailboxes` of the :mod:`Emailkasten.Fetchers` classes,
+        :func:`Emailkasten.mailParsing.parseMailbox` and
+        :func:`Emailkasten.emailDBFeeding.insertMailbox`.
 
     Args:
         account: The data of the account to scan for mailboxes.
@@ -178,13 +182,16 @@ def scanMailboxes(account: AccountModel) -> None:
 def fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> None:
     """Fetches maildata from a given mailbox in a mailaccount based on a search criterion and stores them in the database and storage.
     For POP3 accounts, there is only one mailbox and no options for specific queries, so all messages are fetched.
-    Relies on the :func:`fetchBySearch` and :func:`fetchAll` methods of the :mod:`Emailkasten.Fetchers` classes, the methods from :mod:`Emailkasten.mailParsing` and :mod:`Emailkasten.emailDBFeeding`.
+
+    Note:
+        Relies on :func:`fetchBySearch` and :func:`fetchAll` methods of the :mod:`Emailkasten.Fetchers` classes,
+        the methods from :mod:`Emailkasten.mailParsing` and :mod:`Emailkasten.emailDBFeeding`.
 
     Args:
         mailbox: The data of the mailbox to fetch from.
         account: The data of the mailaccount to fetch from.
         criterion: A formatted criterion for message filtering as returned by :func:`Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
-            If none is given, defaults to RECENT inside :func:`Emailkasten.Fetchers.IMAPFetcher.fetchBySearch`.
+            If none is given, defaults to RECENT inside `Emailkasten.Fetchers.IMAPFetcher.fetchBySearch`.
     """
 
     logger.info(

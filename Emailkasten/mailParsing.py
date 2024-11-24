@@ -65,9 +65,11 @@ def _decodeText(text: email.message.Message) -> str:
 
 def _decodeHeader(header: str) -> str:
     """Decodes an email header field encoded as bytes.
-    Uses the :func:`email.header.decode_header` function.
     Checks for a specific charset to use.
     If none is found uses the default :attr:`Emailkasten.constants.MailParsingConfiguration.CHARSET_DEFAULT`.
+
+    Note:
+        Uses :func:`email.header.decode_header`.
 
     Args:
         header: The mail header to decode.
@@ -88,7 +90,9 @@ def _decodeHeader(header: str) -> str:
 
 def _separateRFC2822MailAddressFormat(mailers: list[str]) -> list[tuple[str,str]]:
     """Splits the RFC2822 address fiels into the mailer name mail address.
-    Uses :func:`email.utils.getaddresses` to seperate and :func:`email_validator.validate_email` to validate.
+
+    Note:
+        Uses :func:`email.utils.getaddresses` to seperate and :func:`email_validator.validate_email` to validate.
 
     Todo:
         If no valid mailaddress is found uses the entire address as fallback.
@@ -135,8 +139,10 @@ def _parseMessageID(mailMessage: email.message.Message) -> str:
 
 def _parseDate(mailMessage: email.message.Message) -> datetime.datetime:
     """Parses the date header of the given mailmessage.
-    Uses :func:`email.utils.parsedate_to_datetime`.
     If none is found uses :attr:`Emailkasten.constants.ParsingConfiguration.DATE_DEFAULT` as a fallback.
+
+    Note:
+        Uses :func:`email.utils.parsedate_to_datetime`.
 
     Args:
         mailMessage: The mailmessage to be parsed.
@@ -434,7 +440,9 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
 
 def parseMailbox(mailboxBytes: bytes) -> str:
     """Parses the mailbox name as received by the scanMailboxes method in :mod:`Emailkasten.Fetchers`.
-    Uses :func:`imap_tools.imap_utf7.utf7_decode` to decode IMAPs modified utf7 encoding.
+
+    Note:
+        Uses :func:`imap_tools.imap_utf7.utf7_decode` to decode IMAPs modified utf7 encoding.
 
     Args:
         mailboxBytes: The mailbox name in bytes as received from the mail server.

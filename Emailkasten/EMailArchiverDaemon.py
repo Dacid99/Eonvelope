@@ -35,7 +35,7 @@ class EMailArchiverDaemon:
     Attributes:
         logger (:class:`logging.Logger`): Logger for this instance with a filehandler for the daemons own logfile.
         thread (:class:`threading.Thread`): The thread that the daemon runs on.
-        isRunning (bool): Whether this daemon instance is active.
+        isRunning (bool): Parameter to control whether this daemon instance is running.
         daemon (:class:`Emailkasten.Models.DaemonModel`): The database model of this daemon.
         mailbox (:class:`Emailkasten.Models.MailboxModel`): The database model of the mailbox this instance fetches from.
         account (:class:`Emailkasten.Models.AccountModel`): The database model of the account this instance fetches from.
@@ -84,23 +84,14 @@ class EMailArchiverDaemon:
             A response detailing what has been done.
         """
         if daemonModel.id not in EMailArchiverDaemon.runningDaemons:
-            try:
-                newDaemon = EMailArchiverDaemon(daemonModel)
-                newDaemon.start()
-                EMailArchiverDaemon.runningDaemons[daemonModel.id] = newDaemon
-                daemonModel.is_running = True
-                daemonModel.save(update_fields=['is_running'])
-                return Response({
-                    'status': 'Daemon started',
-                    'account': daemonModel.mailbox.account.mail_address,
-                    'mailbox': daemonModel.mailbox.name
-                    })
-            except Exception:
-                return Response({
-                    'status': 'Daemon failed to start!',
-                    'account': daemonModel.mailbox.account.mail_address,
-                    'mailbox': daemonModel.mailbox.name
-                    })
+            newDaemon = EMailArchiverDaemon(daemonModel)
+            newDaemon.start()
+            EMailArchiverDaemon.runningDaemons[daemonModel.id] = newDaemon
+            return Response({
+                'status': 'Daemon started',
+                'account': daemonModel.mailbox.account.mail_address,
+                'mailbox': daemonModel.mailbox.name
+                })
         else:
             return Response({
                 'status':
@@ -168,7 +159,12 @@ class EMailArchiverDaemon:
         """
         if not self.isRunning:
             self.logger.info("Starting %s ...", str(self.daemon))
+
             self.isRunning = True
+
+            self.daemon.is_running = True
+            self.daemon.save(update_fields=['is_running'])
+
             self.thread = threading.Thread(target = self.run)
             self.thread.start()
             self.logger.info("Successfully started daemon.")
@@ -182,7 +178,11 @@ class EMailArchiverDaemon:
         """
         if self.isRunning:
             self.logger.info("Stopping %s ...", str(self.daemon))
+
             self.isRunning = False
+
+            self.daemon.is_running = False
+            self.daemon.save(update_fields=['is_running'])
         else:
             self.logger.info("EMailArchiverDaemon is not running.")
 

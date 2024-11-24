@@ -40,7 +40,10 @@ services:
       - DB_USER=user
       - DB_PASSWORD=passwd
       - APP_LOG_LEVEL=DEBUG
+      - DJANGO_LOG_LEVEL=INFO
       - ROOT_LOG_LEVEL=DEBUG
+      - LOGFILE_MAXSIZE=10485760
+      - LOGFILE_BACKUP_NUMBER=5
     restart: unless-stopped
     depends_on:
       db:

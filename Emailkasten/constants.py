@@ -117,6 +117,8 @@ class TestStatusCodes:
 
 
 
+# Configurations
+
 class EMailArchiverDaemonConfiguration:
     """Namespace class for all configurations constants for the :class:`Emailkasten.EMailArchiverDaemon` instances."""
 
@@ -146,28 +148,45 @@ class LoggerConfiguration:
     """Namespace class for all configurations constants for the application loggers."""
 
     LOG_DIRECTORY_PATH: Final[str] = "" #/var/log
-    """The path to directory with the logs.  Must match the path in the docker-compose.yml to store the logs outside the container."""
+    """The path to directory with the logs.
+    Must match the path in the docker-compose.yml to store the logs outside the container."""
 
     APP_LOGFILE_NAME: Final[str] = "Emailkasten.log"
     """The name of the Emailkasten logfile."""
 
     DJANGO_LOGFILE_NAME: Final[str] = "django.log"
-    """The naeme of the django logfile."""
+    """The name of the django logfile."""
 
     APP_LOG_LEVEL: Final[str] = os.environ.get('APP_LOG_LEVEL', 'INFO')
-    """The loglevel to the Emailkasten logfile. Is being set from an environment variable of the same name."""
+    """The loglevel to the Emailkasten logfile.
+    Is being set from an environment variable of the same name.
+    Defaults to INFO."""
 
     DJANGO_LOG_LEVEL: Final[str] = os.environ.get('DJANGO_LOG_LEVEL', 'INFO')
-    """The loglevel to the django logfile. Is being set from an environment variable of the same name."""
+    """The loglevel to the django logfile.
+    Is being set from an environment variable of the same name.
+    Defaults to INFO."""
 
     ROOT_LOG_LEVEL: Final[str] = os.environ.get('ROOT_LOG_LEVEL', 'INFO')
-    """The loglevel to the root console logger. Is being set from an environment variable of the same name."""
+    """The loglevel to the root console logger.
+    Is being set from an environment variable of the same name.
+    Defaults to INFO."""
 
-    LOGFILE_MAXSIZE: Final[int] = 10 * 1024 * 1024 # 10 MiB
-    """The maximum file size of a logfile."""
+    LOGFILE_MAXSIZE: Final[int] = int( os.environ.get('LOGFILE_MAXSIZE', 10 * 1024 * 1024) )
+    """The maximum file size of a logfile.
+    Is being set from an environment variable of the same name.
+    Defaults to 10 MB.
 
-    LOGFILE_BACKUP_NUMBER: Final[int] = 3
-    """The maximum number of backup logfiles to keep."""
+    Todo:
+        The int cast it not safe!"""
+
+    LOGFILE_BACKUP_NUMBER: Final[int] = int( os.environ.get('LOGFILE_BACKUP_NUMBER', 5) )
+    """The maximum number of backup logfiles to keep.
+    Is being set from an environment variable of the same name.
+    Defaults to 5.
+
+    Todo:
+        The int cast it not safe!"""
 
     LOG_FORMAT: Final[str] = '{asctime} {levelname} - {name}.{funcName}: {message}'
     """The format of the log messages for all loggers."""

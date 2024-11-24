@@ -25,6 +25,7 @@
 - type annotations
 
 ## To test
+- filters set dynamically
 - daemonsviewset and manual adding
 - logfile for daemons
 - health flagging in fetchers

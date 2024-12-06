@@ -334,6 +334,9 @@ class APIConfiguration:
     DEFAULT_PAGE_SIZE: Final[int] = 20
     """The default number of entries per paginated response."""
 
+    REGISTRATION_ENABLED: Final[bool] = True
+    """Whether reegistration of new users is enabled."""
+
 
 class ParsedMailKeys:
     """Namespace class for all keys to the parsedMail dictionary."""

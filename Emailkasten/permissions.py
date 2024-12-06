@@ -42,6 +42,7 @@ class IsAdminOrSelf(IsAuthenticated):
 
         Returns:
             True if `request` is sent by a user
-            that is either staff or the owner of `obj`, else false.
+            that is either staff or the owner of `obj`,
+            else false.
         """
         return bool(request.user and request.user.is_staff) or request.user == obj

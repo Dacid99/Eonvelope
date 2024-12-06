@@ -24,6 +24,7 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
+from ..constants import APIConfiguration
 from ..permissions import IsAdminOrSelf
 from ..Serializers.UserSerializers.UserSerializer import UserSerializer
 
@@ -41,17 +42,19 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self) -> Sequence[_SupportsHasPermission]:
         """Gets the permission for different request methods.
-        Allows POST (registration) for all
-        and all others only for authenticated and admin users.
-
-        Todo:
-            Option to disable registration for all.
+        Allows POST and PUT (registration) for all
+        and all other methods only for authenticated and admin users.
 
         Returns:
             The permission class(es) for the request.
         """
-        if self.request.method in ['POST']:
-            return [AllowAny()]
-        elif self.request.method in ['PUT','PATCH','DELETE','GET']:
+        if self.request.method in ['POST','PUT']:
+            if APIConfiguration.REGISTRATION_ENABLED:
+                return [AllowAny()]
+            else:
+                return [IsAdminOrSelf(), IsAuthenticated()]
+
+        elif self.request.method in ['PATCH','DELETE','GET']:
             return [IsAdminOrSelf(), IsAuthenticated()]
+
         return super().get_permissions()

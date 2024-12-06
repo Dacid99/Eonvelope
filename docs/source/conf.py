@@ -10,7 +10,7 @@ import django
 
 sys.path.insert(0, os.path.abspath('../..'))
 
-os.environ['DJANGO_SETTINGS_MODULE'] = 'Emailkasten.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'project.settings'
 django.setup()
 
 # -- Project information -----------------------------------------------------

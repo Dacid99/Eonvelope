@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-URL configuration for Emailkasten app.
+URL configuration for Emailkasten project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -31,36 +31,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-
-from .Views.AccountViewSet import AccountViewSet
-from .Views.AttachmentViewSet import AttachmentViewSet
-from .Views.ConfigurationViewSet import ConfigurationViewSet
-from .Views.CorrespondentViewSet import CorrespondentViewSet
-from .Views.DaemonViewSet import DaemonViewSet
-from .Views.DatabaseStatsView import DatabaseStatsView
-from .Views.EMailViewSet import EMailViewSet
-from .Views.ImageViewSet import ImageViewSet
-from .Views.LoginOutView import CSRFCookieView, LoginView, LogoutView
-from .Views.MailboxViewSet import MailboxViewSet
-from .Views.UserCreateView import UserViewSet
-
-router = DefaultRouter()
-router.register(r'accounts', AccountViewSet)
-router.register(r'mailboxes', MailboxViewSet)
-router.register(r'daemons', DaemonViewSet)
-router.register(r'emails', EMailViewSet)
-router.register(r'correspondents', CorrespondentViewSet)
-router.register(r'attachments', AttachmentViewSet)
-router.register(r'images', ImageViewSet)
-router.register(r'config', ConfigurationViewSet)
-router.register(r'users', UserViewSet)
+from drf_spectacular.views import (SpectacularAPIView, SpectacularRedocView,
+                                   SpectacularSwaggerView)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('stats/', DatabaseStatsView.as_view(), name = 'stats'),
-    path('login/', LoginView.as_view(), name = 'login'),
-    path('logout/', LogoutView.as_view(), name = 'logout'),
-    path('csrf-token/', CSRFCookieView.as_view(), name = 'csrf-token'),
+    path('admin/', admin.site.urls),
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    path('health/', include('health_check.urls')),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('', include('Emailkasten.urls')),
 ]

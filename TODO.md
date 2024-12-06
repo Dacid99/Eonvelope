@@ -25,6 +25,7 @@
 - type annotations
 
 ## To test
+- restructured project files
 - filters set dynamically
 - daemonsviewset and manual adding
 - logfile for daemons

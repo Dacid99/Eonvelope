@@ -1,5 +1,8 @@
 build/*
-source/Emailkasten*.rst
+source/*.rst
+!index.rst
+!development.rst
+!todo.rst
 apidoc/
 *.log
 *.svg

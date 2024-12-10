@@ -81,9 +81,9 @@ html_theme_options = {
 # Extension settings
 todo_include_todos = True
 
-apidoc_module_dir = '../../Emailkasten'
+apidoc_module_dir = '../../'
 apidoc_output_dir = '../source'
-apidoc_excluded_paths = ['../Emailkasten/migrations']
+apidoc_excluded_paths = ['Emailkasten/migrations']
 apidoc_separate_modules = True
 apidoc_toc_file = False
 apidoc_module_first = True

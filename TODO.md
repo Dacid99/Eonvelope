@@ -19,8 +19,11 @@
 - refine storage management error correction
 - streamable logs for daemons
 - api versioning
+- get non mandatory fields in parsedMail with get
+- add os.access check to filemanagement
 
 ### Work in progress
+- tests
 - documentation
 - type annotations
 

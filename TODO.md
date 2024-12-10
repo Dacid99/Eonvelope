@@ -19,7 +19,8 @@
 - refine storage management error correction
 - streamable logs for daemons
 - api versioning
-- get non mandatory fields in parsedMail with get
+- assign elements to parsedMailDict in individual parser functions, leave all Null fields None, but always set all fields
+- check filepath before saving files
 
 ### Work in progress
 - tests

@@ -20,7 +20,9 @@
 
 Fixtures:
     mock_logger: Mocks :attr:`logger` of the module.
-    mock_parsedMailDict: Mocks the parsedMail dictionary used to transport the mail data.
+    mock_good_parsedMailDict: Mocks a valid parsedMail dictionary used to transport the mail data.
+    mock_empty_parsedMailDict: Mocks a valid parsedMail dictionary without images or attachments.
+    mock_empty_parsedMailDict: Mocks an invalid parsedMail dictionary.
     mock_filesystem: Mocks a Linux filesystem for realistic testing.
 """
 from __future__ import annotations
@@ -52,7 +54,7 @@ def mock_logger(mocker: MockerFixture) -> MagicMock:
     return mocker.patch('Emailkasten.fileManagment.logger')
 
 @pytest.fixture
-def mock_parsedMailDict() -> dict:
+def mock_good_parsedMailDict() -> dict:
     """Mocks the parsedMail dictionary used to transport the mail data."""
     message = email.message.Message()
     message.add_header('test', "Test message")
@@ -79,6 +81,26 @@ def mock_parsedMailDict() -> dict:
         ParsedMailKeys.IMAGES: [mock_imageDict],
     }
     return mock_parsedMailDict
+
+@pytest.fixture
+def mock_empty_parsedMailDict() -> dict:
+    """Mocks the parsedMail dictionary used to transport the mail data."""
+    message = email.message.Message()
+    message.add_header('test', "Test message")
+    message.set_payload('This is a test mail message.')
+
+    mock_parsedMailDict = {
+        ParsedMailKeys.Header.MESSAGE_ID: mock_messageIDValue,
+        ParsedMailKeys.FULL_MESSAGE: message,
+        ParsedMailKeys.ATTACHMENTS: [],
+        ParsedMailKeys.IMAGES: [],
+    }
+    return mock_parsedMailDict
+
+@pytest.fixture
+def mock_bad_parsedMailDict() -> dict:
+    """Mocks the parsedMail dictionary used to transport the mail data."""
+    return {}
 
 @pytest.fixture
 def mock_filesystem() -> Generator[FakeFilesystem, None, None]:
@@ -144,12 +166,12 @@ def mock_filesystem() -> Generator[FakeFilesystem, None, None]:
     "Emailkasten.fileManagment.StorageModel.getSubdirectory",
     return_value=patch_getSubDirectory_returnValue,
 )
-def test_storeMessageAsEML(
+def test_storeMessageAsEML_goodDict(
     mock_storageModel: MagicMock,
     mocker: MockerFixture,
     mock_logger: MagicMock,
     mock_filesystem: FakeFilesystem,
-    mock_parsedMailDict: dict,
+    mock_good_parsedMailDict: dict,
     fakeFile: str,
     expectedFileExists: bool,
     expectedFileSize: int,
@@ -180,7 +202,7 @@ def test_storeMessageAsEML(
     mock_ospathjoin = mocker.patch('os.path.join', return_value = fakeFile)
     spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
 
-    Emailkasten.fileManagment.storeMessageAsEML(mock_parsedMailDict)
+    Emailkasten.fileManagment.storeMessageAsEML(mock_good_parsedMailDict)
 
     mock_storageModel.assert_called_once()
     mock_ospathjoin.assert_called_once_with(patch_getSubDirectory_returnValue, mock_messageIDValue + '.eml')
@@ -191,7 +213,7 @@ def test_storeMessageAsEML(
         mock_filesystem.chmod(fakeFile, 0o666)
         assert mock_filesystem.get_object(fakeFile).size == expectedFileSize
 
-    assert mock_parsedMailDict.get(ParsedMailKeys.EML_FILE_PATH) == expectedEMLFilePath
+    assert mock_good_parsedMailDict.get(ParsedMailKeys.EML_FILE_PATH) == expectedEMLFilePath
     assert spy_open.call_count == expectedCallsToOpen
     spy_open.assert_has_calls( [call(fakeFile, "wb")] * expectedCallsToOpen )
     assert mock_logger.error.call_count == expectedErrors
@@ -219,12 +241,12 @@ def test_storeMessageAsEML(
     "Emailkasten.fileManagment.StorageModel.getSubdirectory",
     return_value=patch_getSubDirectory_returnValue,
 )
-def test_storeImages(
+def test_storeImages_goodDict(
     mock_storageModel: MagicMock,
     mocker: MockerFixture,
     mock_logger: MagicMock,
     mock_filesystem: FakeFilesystem,
-    mock_parsedMailDict: dict,
+    mock_good_parsedMailDict: dict,
     fakeFile: str,
     expectedFileExists: bool,
     expectedFileSize: int,
@@ -240,7 +262,7 @@ def test_storeImages(
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
         mock_filesystem : The fakefs fixture.
-        mock_parsedMailDict: The parsedMail dictionary fixture.
+        mock_good_parsedMailDict: The parsedMail dictionary fixture.
         fakeFile: The fakeFilePath parameter.
         expectedFileExists: The expectedFileExists parameter.
         expectedFileSize: The expectedFileSize parameter.
@@ -255,7 +277,7 @@ def test_storeImages(
     mock_ospathjoin = mocker.patch('os.path.join', return_value = fakeFile)
     spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
 
-    Emailkasten.fileManagment.storeImages(mock_parsedMailDict)
+    Emailkasten.fileManagment.storeImages(mock_good_parsedMailDict)
 
     mock_storageModel.assert_called_once()
     mock_ospathjoin.assert_called_once_with(patch_getSubDirectory_returnValue, 'test_imagefilename.png')
@@ -266,12 +288,100 @@ def test_storeImages(
         mock_filesystem.chmod(fakeFile, 0o666)
         assert mock_filesystem.get_object(fakeFile).size == expectedFileSize
 
-    assert mock_parsedMailDict[ParsedMailKeys.IMAGES][0].get(ParsedMailKeys.Image.FILE_PATH) == expectedFilePath
+    assert mock_good_parsedMailDict[ParsedMailKeys.IMAGES][0].get(ParsedMailKeys.Image.FILE_PATH) == expectedFilePath
     assert spy_open.call_count == expectedCallsToOpen
     spy_open.assert_has_calls( [call(fakeFile, "wb")] * expectedCallsToOpen )
     assert mock_logger.error.call_count == expectedErrors
 
     mock_logger.debug.assert_called()
+
+
+@patch(
+    "Emailkasten.fileManagment.StorageModel.getSubdirectory",
+    return_value=patch_getSubDirectory_returnValue,
+)
+def test_storeImages_emptyDict(
+    mock_storageModel: MagicMock,
+    mocker: MockerFixture,
+    mock_logger: MagicMock,
+    mock_filesystem: FakeFilesystem,
+    mock_empty_parsedMailDict: dict
+) -> None:
+    """Tests :func:`Emailkasten.fileManagment.storeImages` with the help of a fakefs.
+
+    Args:
+        mock_storageModel: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+            Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
+        mocker: The general mocker instance.
+        mock_logger: The mocked logger fixture.
+        mock_filesystem : The fakefs fixture.
+        mock_bad_parsedMailDict: The parsedMail dictionary fixture.
+
+    Note:
+        Fakefs is overly restrictive with os.path.getsize for no-read files!
+        Cannot test the behaviour for non-empty no-read files.
+    """
+    fakeFile = '/dir/new_file'
+    mock_ospathjoin = mocker.patch('os.path.join', return_value = fakeFile)
+    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
+
+    Emailkasten.fileManagment.storeImages(mock_empty_parsedMailDict)
+
+    mock_storageModel.assert_not_called()
+    mock_ospathjoin.assert_not_called()
+
+    mock_filesystem.chmod(os.path.dirname(fakeFile), 0o777)
+    assert mock_filesystem.exists(fakeFile) is False
+
+    assert mock_empty_parsedMailDict[ParsedMailKeys.IMAGES] == []
+    assert spy_open.call_count == 0
+
+    mock_logger.debug.assert_called()
+
+
+@patch(
+    "Emailkasten.fileManagment.StorageModel.getSubdirectory",
+    return_value=patch_getSubDirectory_returnValue,
+)
+def test_storeImages_badDict(
+    mock_storageModel: MagicMock,
+    mocker: MockerFixture,
+    mock_logger: MagicMock,
+    mock_filesystem: FakeFilesystem,
+    mock_bad_parsedMailDict: dict
+) -> None:
+    """Tests :func:`Emailkasten.fileManagment.storeImages` with the help of a fakefs.
+
+    Args:
+        mock_storageModel: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+            Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
+        mocker: The general mocker instance.
+        mock_logger: The mocked logger fixture.
+        mock_filesystem : The fakefs fixture.
+        mock_bad_parsedMailDict: The parsedMail dictionary fixture.
+
+    Note:
+        Fakefs is overly restrictive with os.path.getsize for no-read files!
+        Cannot test the behaviour for non-empty no-read files.
+    """
+    fakeFile = '/dir/new_file'
+    mock_ospathjoin = mocker.patch('os.path.join', return_value = fakeFile)
+
+    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
+
+    with pytest.raises(KeyError):
+        Emailkasten.fileManagment.storeImages(mock_bad_parsedMailDict)
+
+    mock_storageModel.assert_not_called()
+    mock_ospathjoin.assert_not_called()
+
+    mock_filesystem.chmod(os.path.dirname(fakeFile), 0o777)
+    assert mock_filesystem.exists(fakeFile) is False
+
+    with pytest.raises(KeyError):
+        mock_bad_parsedMailDict[ParsedMailKeys.IMAGES]
+
+    assert spy_open.call_count == 0
 
 
 @pytest.mark.parametrize(
@@ -293,12 +403,12 @@ def test_storeImages(
     "Emailkasten.fileManagment.StorageModel.getSubdirectory",
     return_value=patch_getSubDirectory_returnValue,
 )
-def test_storeAttachments(
+def test_storeAttachments_goodDict(
     mock_storageModel: MagicMock,
     mocker: MockerFixture,
     mock_logger: MagicMock,
     mock_filesystem: FakeFilesystem,
-    mock_parsedMailDict: dict,
+    mock_good_parsedMailDict: dict,
     fakeFile: str,
     expectedFileExists: bool,
     expectedFileSize: int,
@@ -329,7 +439,7 @@ def test_storeAttachments(
     mock_ospathjoin = mocker.patch('os.path.join', return_value = fakeFile)
     spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
 
-    Emailkasten.fileManagment.storeAttachments(mock_parsedMailDict)
+    Emailkasten.fileManagment.storeAttachments(mock_good_parsedMailDict)
 
     mock_storageModel.assert_called_once()
     mock_ospathjoin.assert_called_once_with(patch_getSubDirectory_returnValue, 'test_attachmentfilename.pdf')
@@ -340,9 +450,97 @@ def test_storeAttachments(
         mock_filesystem.chmod(fakeFile, 0o666)
         assert mock_filesystem.get_object(fakeFile).size == expectedFileSize
 
-    assert mock_parsedMailDict[ParsedMailKeys.ATTACHMENTS][0].get(ParsedMailKeys.Attachment.FILE_PATH) == expectedFilePath
+    assert mock_good_parsedMailDict[ParsedMailKeys.ATTACHMENTS][0].get(ParsedMailKeys.Attachment.FILE_PATH) == expectedFilePath
     assert spy_open.call_count == expectedCallsToOpen
     spy_open.assert_has_calls( [call(fakeFile, "wb")] * expectedCallsToOpen )
     assert mock_logger.error.call_count == expectedErrors
 
     mock_logger.debug.assert_called()
+
+
+@patch(
+    "Emailkasten.fileManagment.StorageModel.getSubdirectory",
+    return_value=patch_getSubDirectory_returnValue,
+)
+def test_storeAttachments_emptyDict(
+    mock_storageModel: MagicMock,
+    mocker: MockerFixture,
+    mock_logger: MagicMock,
+    mock_filesystem: FakeFilesystem,
+    mock_empty_parsedMailDict: dict
+) -> None:
+    """Tests :func:`Emailkasten.fileManagment.storeAttachments` with the help of a fakefs.
+
+    Args:
+        mock_storageModel: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+            Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
+        mocker: The general mocker instance.
+        mock_logger: The mocked logger fixture.
+        mock_filesystem : The fakefs fixture.
+        mock_bad_parsedMailDict: The parsedMail dictionary fixture.
+
+    Note:
+        Fakefs is overly restrictive with os.path.getsize for no-read files!
+        Cannot test the behaviour for non-empty no-read files.
+    """
+    fakeFile = '/dir/new_file'
+    mock_ospathjoin = mocker.patch('os.path.join', return_value = fakeFile)
+    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
+
+    Emailkasten.fileManagment.storeAttachments(mock_empty_parsedMailDict)
+
+    mock_storageModel.assert_not_called()
+    mock_ospathjoin.assert_not_called()
+
+    mock_filesystem.chmod(os.path.dirname(fakeFile), 0o777)
+    assert mock_filesystem.exists(fakeFile) is False
+
+    assert mock_empty_parsedMailDict[ParsedMailKeys.ATTACHMENTS] == []
+    assert spy_open.call_count == 0
+
+    mock_logger.debug.assert_called()
+
+
+@patch(
+    "Emailkasten.fileManagment.StorageModel.getSubdirectory",
+    return_value=patch_getSubDirectory_returnValue,
+)
+def test_storeAttachments_badDict(
+    mock_storageModel: MagicMock,
+    mocker: MockerFixture,
+    mock_logger: MagicMock,
+    mock_filesystem: FakeFilesystem,
+    mock_bad_parsedMailDict: dict
+) -> None:
+    """Tests :func:`Emailkasten.fileManagment.storeAttachments` with the help of a fakefs.
+
+    Args:
+        mock_storageModel: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+            Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
+        mocker: The general mocker instance.
+        mock_logger: The mocked logger fixture.
+        mock_filesystem : The fakefs fixture.
+        mock_bad_parsedMailDict: The parsedMail dictionary fixture.
+
+    Note:
+        Fakefs is overly restrictive with os.path.getsize for no-read files!
+        Cannot test the behaviour for non-empty no-read files.
+    """
+    fakeFile = '/dir/new_file'
+    mock_ospathjoin = mocker.patch('os.path.join', return_value = fakeFile)
+
+    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
+
+    with pytest.raises(KeyError):
+        Emailkasten.fileManagment.storeAttachments(mock_bad_parsedMailDict)
+
+    mock_storageModel.assert_not_called()
+    mock_ospathjoin.assert_not_called()
+
+    mock_filesystem.chmod(os.path.dirname(fakeFile), 0o777)
+    assert mock_filesystem.exists(fakeFile) is False
+
+    with pytest.raises(KeyError):
+        mock_bad_parsedMailDict[ParsedMailKeys.ATTACHMENTS]
+
+    assert spy_open.call_count == 0

@@ -107,16 +107,19 @@ def storeMessageAsEML(parsedEMail: dict[str,Any]) -> None:
         emlGenerator = email.generator.BytesGenerator(emlFile)
         emlGenerator.flatten(parsedEMail[ParsedMailKeys.FULL_MESSAGE])
 
+    logger.debug("Saving mail in .eml format.")
+
     emlDirPath = StorageModel.getSubdirectory(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
     emlFilePath = os.path.join(emlDirPath, parsedEMail[ParsedMailKeys.Header.MESSAGE_ID] + ".eml")
-
     logger.debug("Storing mail in .eml file %s ...", emlFilePath)
+
     storageFilePath = writeMessageToEML(emlFilePath)
-    if not storageFilePath:
-        logger.debug("Successfully stored in .eml file.")
-    else:
-        logger.debug("Stored mail in .eml file with error.")
     parsedEMail[ParsedMailKeys.EML_FILE_PATH] = storageFilePath
+
+    if not storageFilePath:
+        logger.debug("Successfully saved mail in .eml format.")
+    else:
+        logger.debug("Saved mail in .eml format with error.")
 
 
 def storeAttachments(parsedEMail: dict[str,Any]) -> None:
@@ -132,13 +135,13 @@ def storeAttachments(parsedEMail: dict[str,Any]) -> None:
     def writeAttachment(file: BufferedWriter, attachmentData: dict) -> None:
         file.write(attachmentData[ParsedMailKeys.Attachment.DATA].get_payload(decode=True))
 
+    logger.debug("Saving attachments from mail ...")
+
     if not parsedEMail[ParsedMailKeys.ATTACHMENTS]:
         logger.debug("No attachments in mail.")
         return
 
-    logger.debug("Saving attachments from mail ...")
     status = True
-
     dirPath = StorageModel.getSubdirectory(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
     for attachmentData in parsedEMail[ParsedMailKeys.ATTACHMENTS]:
         fileName = attachmentData[ParsedMailKeys.Attachment.FILE_NAME]
@@ -173,13 +176,13 @@ def storeImages(parsedEMail: dict[str,Any]) -> None:
     def writeImage(file: BufferedWriter, imageData: dict) -> None:
         file.write(imageData[ParsedMailKeys.Image.DATA].get_payload(decode=True))
 
+    logger.debug("Saving images from mail ...")
+
     if not parsedEMail[ParsedMailKeys.IMAGES]:
         logger.debug("No images in mail.")
         return
 
-    logger.debug("Saving images from mail ...")
     status = True
-
     dirPath = StorageModel.getSubdirectory(parsedEMail[ParsedMailKeys.Header.MESSAGE_ID])
     for imageData in parsedEMail[ParsedMailKeys.IMAGES]:
         fileName = imageData[ParsedMailKeys.Image.FILE_NAME]
@@ -207,6 +210,7 @@ def getPrerenderImageStoragePath(parsedMail: dict[str,Any]) -> str:
     Returns:
         The path in the storage where the prerender image should be saved.
     """
+    logger.debug("Getting storage path for prerender image ...")
     dirPath = StorageModel.getSubdirectory(parsedMail[ParsedMailKeys.Header.MESSAGE_ID])
 
     filePath = os.path.join(
@@ -214,4 +218,6 @@ def getPrerenderImageStoragePath(parsedMail: dict[str,Any]) -> str:
         f"{parsedMail[ParsedMailKeys.Header.MESSAGE_ID]}.{StorageConfiguration.PRERENDER_IMAGETYPE}",
     )
     parsedMail[ParsedMailKeys.PRERENDER_FILE_PATH] = filePath
+    logger.debug("Successfully got storage path for prerender image.")
+
     return filePath

@@ -8,3 +8,5 @@ debug.txt
 helperlog.log
 django.log
 Emailkasten.log
+daemon*.log
+reports/

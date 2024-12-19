@@ -55,6 +55,10 @@ def mock_no_mailMessage():
     testMessage = None
     return testMessage
 
+@pytest.fixture
+def mock_empty_parsedMailDict():
+    return {}
+
 
 @pytest.mark.parametrize(
     'testHeader, expectedResult',
@@ -79,47 +83,51 @@ def test__separateRFC2822MailAddressFormat(mock_logger, testMailers, expectedRes
     assert separatedMailers == expectedResult
 
 
-def test__parseMessageID_success(mock_logger, mock_good_mailMessage):
-    messageID = Emailkasten.mailParsing._parseMessageID(mock_good_mailMessage)
-    assert messageID == 'abcdefgäöüß§'
+def test__parseMessageID_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseMessageID(mock_good_mailMessage, mock_empty_parsedMailDict)
+    assert Emailkasten.constants.ParsedMailKeys.Header.MESSAGE_ID in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict[Emailkasten.constants.ParsedMailKeys.Header.MESSAGE_ID] == 'abcdefgäöüß§'
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseMessageID_emptyMessage(mock_logger, mock_bad_mailMessage):
-    messageID = Emailkasten.mailParsing._parseMessageID(mock_bad_mailMessage)
-    assert messageID == str(hash(mock_bad_mailMessage))
+def test__parseMessageID_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseMessageID(mock_bad_mailMessage, mock_empty_parsedMailDict)
+    assert Emailkasten.constants.ParsedMailKeys.Header.MESSAGE_ID in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict[Emailkasten.constants.ParsedMailKeys.Header.MESSAGE_ID] == str(hash(mock_bad_mailMessage))
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseMessageID_noMessage(mock_logger, mock_no_mailMessage):
+def test__parseMessageID_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
     with pytest.raises(AttributeError):
-        messageID = Emailkasten.mailParsing._parseMessageID(mock_no_mailMessage)
+        Emailkasten.mailParsing._parseMessageID(mock_no_mailMessage, mock_empty_parsedMailDict)
 
 
 
-def test__parseDate_success(mock_logger, mock_good_mailMessage):
-    date = Emailkasten.mailParsing._parseDate(mock_good_mailMessage)
-    assert date == datetime.datetime(2001, 11, 9, 1, 8, 47)
+def test__parseDate_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseDate(mock_good_mailMessage, mock_empty_parsedMailDict)
+    assert Emailkasten.constants.ParsedMailKeys.Header.DATE in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict[Emailkasten.constants.ParsedMailKeys.Header.DATE] == datetime.datetime(2001, 11, 9, 1, 8, 47)
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseDate_emptyMessage(mock_logger, mock_bad_mailMessage):
-    date = Emailkasten.mailParsing._parseDate(mock_bad_mailMessage)
-    assert date == datetime.datetime(1971, 1, 1, 0, 0, 0)
+def test__parseDate_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseDate(mock_bad_mailMessage, mock_empty_parsedMailDict)
+    assert Emailkasten.constants.ParsedMailKeys.Header.DATE in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict[Emailkasten.constants.ParsedMailKeys.Header.DATE] == datetime.datetime(1971, 1, 1, 0, 0, 0)
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseDate_noMessage(mock_logger, mock_no_mailMessage):
+def test__parseDate_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
     with pytest.raises(AttributeError):
-        date = Emailkasten.mailParsing._parseDate(mock_no_mailMessage)
+        Emailkasten.mailParsing._parseDate(mock_no_mailMessage, mock_empty_parsedMailDict)
 
 
 @pytest.mark.parametrize(
@@ -128,67 +136,73 @@ def test__parseDate_noMessage(mock_logger, mock_no_mailMessage):
 )
 @patch("Emailkasten.mailParsing.ParsingConfiguration")
 @patch("Emailkasten.mailParsing.logger")
-def test__parseSubject_success(mock_logger, mock_parsingConfiguration, stripTexts, expectedResult, mock_special_mailMessage):
+def test__parseSubject_success(mock_logger, mock_parsingConfiguration, stripTexts, expectedResult, mock_special_mailMessage, mock_empty_parsedMailDict):
     mock_parsingConfiguration.STRIP_TEXTS = stripTexts
-    subject = Emailkasten.mailParsing._parseSubject(mock_special_mailMessage)
-    assert subject == expectedResult
+    Emailkasten.mailParsing._parseSubject(mock_special_mailMessage, mock_empty_parsedMailDict)
+    assert Emailkasten.constants.ParsedMailKeys.Header.SUBJECT in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict[Emailkasten.constants.ParsedMailKeys.Header.SUBJECT] == expectedResult
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseSubject_emptyMessage(mock_logger, mock_bad_mailMessage):
-    subject = Emailkasten.mailParsing._parseSubject(mock_bad_mailMessage)
-    assert subject == ''
+def test__parseSubject_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseSubject(mock_bad_mailMessage, mock_empty_parsedMailDict)
+    assert Emailkasten.constants.ParsedMailKeys.Header.SUBJECT in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict[Emailkasten.constants.ParsedMailKeys.Header.SUBJECT] == ''
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseSubject_noMessage(mock_logger, mock_no_mailMessage):
+def test__parseSubject_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
     with pytest.raises(AttributeError):
-        subject = Emailkasten.mailParsing._parseSubject(mock_no_mailMessage)
+        Emailkasten.mailParsing._parseSubject(mock_no_mailMessage, mock_empty_parsedMailDict)
 
 
 
-def test__parseHeader_success(mock_logger, mock_good_mailMessage):
-    header = Emailkasten.mailParsing._parseHeader(mock_good_mailMessage, "test")
-    assert header == "test äöüß§"
+def test__parseHeader_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseHeader(mock_good_mailMessage, "test", mock_empty_parsedMailDict)
+    assert "test" in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict["test"] == "test äöüß§"
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseHeader_emptyMessage(mock_logger, mock_bad_mailMessage):
-    header = Emailkasten.mailParsing._parseHeader(mock_bad_mailMessage, "test")
-    assert header == ''
+def test__parseHeader_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseHeader(mock_bad_mailMessage, "test", mock_empty_parsedMailDict)
+    assert "test" in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict["test"] == ''
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseHeader_noMessage(mock_logger, mock_no_mailMessage):
+def test__parseHeader_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
     with pytest.raises(AttributeError):
-        header = Emailkasten.mailParsing._parseHeader(mock_no_mailMessage, "test")
+        Emailkasten.mailParsing._parseHeader(mock_no_mailMessage, "test", mock_empty_parsedMailDict)
 
 
 
-def test__parseMultipleHeader_success(mock_logger, mock_good_mailMessage):
-    header = Emailkasten.mailParsing._parseMultipleHeader(mock_good_mailMessage, "multi")
-    assert header == "test\näöüß§\t\n123456"
+def test__parseMultipleHeader_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseMultipleHeader(mock_good_mailMessage, "multi", mock_empty_parsedMailDict)
+    assert "multi" in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict["multi"] == "test\näöüß§\t\n123456"
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseMultipleHeader_emptyMessage(mock_logger, mock_bad_mailMessage):
-    header = Emailkasten.mailParsing._parseMultipleHeader(mock_bad_mailMessage, "multi")
-    assert header == ''
+def test__parseMultipleHeader_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
+    Emailkasten.mailParsing._parseMultipleHeader(mock_bad_mailMessage, "multi", mock_empty_parsedMailDict)
+    assert "multi" in mock_empty_parsedMailDict
+    assert mock_empty_parsedMailDict["multi"] == ''
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
-def test__parseMultipleHeader_noMessage(mock_logger, mock_no_mailMessage):
+def test__parseMultipleHeader_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
     with pytest.raises(AttributeError):
-        header = Emailkasten.mailParsing._parseMultipleHeader(mock_no_mailMessage, "multi")
+        Emailkasten.mailParsing._parseMultipleHeader(mock_no_mailMessage, "multi", mock_empty_parsedMailDict)

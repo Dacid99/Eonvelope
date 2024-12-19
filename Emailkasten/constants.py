@@ -380,6 +380,17 @@ class ParsedMailKeys:
         X_ORIGINATING_CLIENT: Final[str] = "X-Originating-Client"
         X_SPAM_FLAG: Final[str] = "X-Spam-Flag"
 
+        def __iter__(self):
+            """Method to allow easier referencing of the members by listing."""
+            return iter(
+                (attr, value)
+                for attr, value in self.__class__.__dict__.items()
+                if not attr.startswith("__")
+            )
+
+        def __getitem__(self, key):
+            return getattr(self, key)
+
 
     class Correspondent:
         """Headers that are treated as correspondents."""

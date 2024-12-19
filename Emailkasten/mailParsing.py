@@ -427,8 +427,8 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
     """Parses a mail returned by a mail server for its features.
     Uses the various private functions in :mod:`Emailkasten.mailParsing`.
 
-    Todo:
-        Use iteration over :class:`Emailkasten.constants.ParsedMailKeys` to keep it concise and safe.
+    Note:
+        Using _parseMultipleHeader for all none-mandatory headers. Could raise issues with In-Reply-To.
 
     Args:
         mailToParse: The mail data as supplied by the mailhost.
@@ -460,25 +460,9 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
     parsedEMail[ParsedMailKeys.PRERENDER_FILE_PATH] = None
 
     _parseMailinglist(mailMessage, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.IN_REPLY_TO, parsedEMail)
 
-    _parseHeader(mailMessage, ParsedMailKeys.Header.COMMENTS, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.LANGUAGE, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.CONTENT_LANGUAGE, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.CONTENT_TYPE, parsedEMail)
-
-    _parseHeader(mailMessage, ParsedMailKeys.Header.KEYWORDS, parsedEMail)
-    _parseMultipleHeader(mailMessage, ParsedMailKeys.Header.RECEIVED, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.IMPORTANCE, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.PRIORITY, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.PRECEDENCE, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.CONTENT_LOCATION, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.ARCHIVED_AT, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.USER_AGENT, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.X_PRIORITY, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.X_ORIGINATING_CLIENT, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.X_SPAM_FLAG, parsedEMail)
-    _parseHeader(mailMessage, ParsedMailKeys.Header.AUTO_SUBMITTED, parsedEMail)
+    for _, headerName in ParsedMailKeys.Header():
+        _parseMultipleHeader(mailMessage, headerName, parsedEMail)
 
     logger.debug("Successfully parsed mail")
     return parsedEMail

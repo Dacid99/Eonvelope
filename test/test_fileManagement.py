@@ -19,12 +19,12 @@
 """Test module for :mod:`Emailkasten.fileManagment`.
 
 Fixtures:
-    fixture_mock_logger: Mocks :attr:`logger` of the module.
-    fixture_mock_good_parsedMailDict: Mocks a valid parsedMail dictionary used to transport the mail data.
-    fixture_mock_empty_parsedMailDict: Mocks a valid parsedMail dictionary without images or attachments.
-    fixture_mock_empty_parsedMailDict: Mocks an invalid parsedMail dictionary.
-    fixture_mock_getSubdirectory: Mocks the :func:`Emailkasten.Models.StorageModel.getSubdirectory` function call.
-    fixture_mock_filesystem: Mocks a Linux filesystem for realistic testing.
+    :func:`fixture_mock_logger`: Mocks :attr:`logger` of the module.
+    :func:`fixture_mock_good_parsedMailDict`: Mocks a valid parsedMail dictionary used to transport the mail data.
+    :func:`fixture_mock_empty_parsedMailDict`: Mocks a valid parsedMail dictionary without images or attachments.
+    :func:`fixture_mock_empty_parsedMailDict`: Mocks an invalid parsedMail dictionary.
+    :func:`fixture_mock_getSubdirectory`: Mocks the :func:`Emailkasten.Models.StorageModel.getSubdirectory` function call.
+    :func:`fixture_mock_filesystem`: Mocks a Linux filesystem for realistic testing.
 """
 from __future__ import annotations
 

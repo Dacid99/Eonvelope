@@ -20,11 +20,18 @@
 """Test module for :mod:`Emailkasten.Models.CorrespondentModel`."""
 
 import datetime
-
+import factory
 import pytest
 
 from django.db import IntegrityError
 import Emailkasten.Models.CorrespondentModel
+
+class CorrespondentModelFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Emailkasten.Models.CorrespondentModel.CorrespondentModel
+
+    email_name = factory.Faker('name')
+    email_address = factory.Faker('email')
 
 
 @pytest.mark.django_db
@@ -42,7 +49,7 @@ def test_CorrespondentModel_creation(email_name: str, email_address: str):
         email_name: The email_name parameter.
         email_address: The email_address parameter.
     """
-    correspondent = Emailkasten.Models.CorrespondentModel.CorrespondentModel.objects.create(email_name=email_name, email_address=email_address)
+    correspondent = CorrespondentModelFactory(email_name=email_name, email_address=email_address)
     assert correspondent.email_name == email_name
     assert correspondent.email_address == email_address
     assert correspondent.is_favorite is False
@@ -56,6 +63,6 @@ def test_CorrespondentModel_creation(email_name: str, email_address: str):
 @pytest.mark.django_db
 def test_CorrespondentModel_unique():
     """Tests the unique constraint in :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`"""
-    Emailkasten.Models.CorrespondentModel.CorrespondentModel.objects.create(email_name="test name", email_address="test@mail.com")
+    CorrespondentModelFactory(email_name="test name", email_address="test@mail.com")
     with pytest.raises(IntegrityError):
-        Emailkasten.Models.CorrespondentModel.CorrespondentModel.objects.create(email_name="another test", email_address="test@mail.com")
+        CorrespondentModelFactory(email_name="another test", email_address="test@mail.com")

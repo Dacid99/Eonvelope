@@ -21,22 +21,11 @@
 
 import datetime
 
-import factory
 import pytest
 from django.db import IntegrityError
 
-import Emailkasten.Models.MailingListModel
-
-from .test_CorrespondentModel import CorrespondentModelFactory
-
-
-class MailingListModelFactory(factory.django.DjangoModelFactory):
-    """Factory class for :class:`Emailkasten.Models.CorrespondentModel`."""
-    class Meta:
-        model = Emailkasten.Models.MailingListModel.MailingListModel
-
-    list_id = factory.Faker('password')
-    correspondent = factory.SubFactory(CorrespondentModelFactory)
+from .ModelFactories.MailingListModelFactory import MailingListModelFactory
+from .ModelFactories.CorrespondentModelFactory import CorrespondentModelFactory
 
 
 @pytest.mark.django_db

@@ -79,7 +79,7 @@ class AccountModel(models.Model):
 
 
     def __str__(self):
-        return f"Account {self.mail_address} at host {self.mail_host}:{self.mail_host_port} with protocol {self.protocol}"
+        return f"Account {self.mail_address} at host {self.mail_host} with protocol {self.protocol}"
 
     class Meta:
         db_table = "accounts"

@@ -16,14 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import factory
 import pytest
-from django.contrib.auth.models import User
 
 import Emailkasten.EMailArchiverDaemon
-from Emailkasten.Models.AccountModel import AccountModel
-from Emailkasten.Models.DaemonModel import DaemonModel
-from Emailkasten.Models.MailboxModel import MailboxModel
+
+from .ModelFactories.DaemonModelFactory import DaemonModelFactory
 
 
 @pytest.fixture(name='mock_getLogger', autouse=True)
@@ -34,37 +31,6 @@ def fixture_mock_getLogger(mocker):
 @pytest.fixture(name='mock_runningDaemons')
 def fixture_mock_runningDaemons():
     return {}
-
-class UserFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = User
-
-    username = factory.Faker('user_name')
-    email = factory.Faker('email')
-    password = factory.PostGenerationMethodCall('set_password', 'password123')
-
-class AccountModelFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = AccountModel
-
-    mail_address = factory.Faker("email")
-    password = factory.Faker("password")
-    mail_host = factory.Faker("domain_name")
-    protocol = factory.Faker("random_element", elements = AccountModel.PROTOCOL_CHOICES.keys())
-    user = factory.SubFactory(UserFactory)
-
-class MailboxModelFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = MailboxModel
-
-    name = factory.Faker("name")
-    account = factory.SubFactory(AccountModelFactory)
-
-class DaemonModelFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = DaemonModel
-
-    mailbox = factory.SubFactory(MailboxModelFactory)
 
 
 @pytest.mark.django_db

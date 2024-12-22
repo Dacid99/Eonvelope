@@ -96,7 +96,7 @@ class MailboxModel(models.Model):
 def post_save_is_healthy(sender: MailboxModel, instance: MailboxModel, **kwargs) -> None:
     """Receiver function doing twofold:
     - once that mailbox becomes healthy again flags the account of that mailbox as healthy
-    - if a mailbox becomed unhealthy flags its daemon as unhealthy as well.
+    - if a mailbox becomed unhealthy flags its daemons as unhealthy as well.
 
     Args:
         sender: The class type that sent the post_save signal.

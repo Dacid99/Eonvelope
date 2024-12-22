@@ -20,18 +20,11 @@
 """Test module for :mod:`Emailkasten.Models.CorrespondentModel`."""
 
 import datetime
-import factory
 import pytest
 
 from django.db import IntegrityError
-import Emailkasten.Models.CorrespondentModel
 
-class CorrespondentModelFactory(factory.django.DjangoModelFactory):
-    class Meta:
-        model = Emailkasten.Models.CorrespondentModel.CorrespondentModel
-
-    email_name = factory.Faker('name')
-    email_address = factory.Faker('email')
+from .ModelFactories.CorrespondentModelFactory import CorrespondentModelFactory
 
 
 @pytest.mark.django_db

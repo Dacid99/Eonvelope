@@ -17,11 +17,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
-import os
 
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
 from .. import constants
 from .AccountModel import AccountModel
@@ -61,7 +58,7 @@ class EMailModel(models.Model):
     """The path where the mail is stored in .eml format.
     Can be null if the mail has not been saved.
     Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH` and end on .eml .
-    When this entry is deleted, the file will be removed by :func:`post_delete_email_files`.
+    When this entry is deleted, the file will be removed by :func:`Emailkasten.signals.delete_EMailModel.post_delete_email_files`.
     """
 
     prerender_filepath = models.FilePathField(
@@ -74,7 +71,7 @@ class EMailModel(models.Model):
     """The path where the prerender image of the mail is stored.
     Can be null if the prerendering process was no successful.
     Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH` and end on :attr:`Emailkasten.constants.StorageConfiguration.PRERENDER_IMAGETYPE`.
-    When this entry is deleted, the file will be removed by :func:`post_delete_email_files`."""
+    When this entry is deleted, the file will be removed by :func:`Emailkasten.signals.delete_EMailModel.post_delete_email_files`."""
 
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mails. False by default."""
@@ -146,45 +143,3 @@ class EMailModel(models.Model):
 
         unique_together = ("message_id", "account")
         """`message_id` and :attr:`account` in combination are unique."""
-
-
-
-@receiver(post_delete, sender=EMailModel)
-def post_delete_email_files(sender: EMailModel, instance:EMailModel, **kwargs) -> None:
-    """Receiver function removing the files for an email from the storage when its db entry is deleted.
-
-    Args:
-        sender: The class type that sent the post_delete signal.
-        instance: The instance that has been deleted.
-        **kwargs: Other keyword arguments.
-    """
-    logger.debug("Removing files for %s from storage ...", str(instance))
-    if instance.eml_filepath:
-        try:
-            os.remove(instance.eml_filepath)
-            logger.debug("Successfully removed the emails .eml file from storage.", exc_info=True)
-        except FileNotFoundError:
-            logger.error("%s was not found!", instance.eml_filepath, exc_info=True)
-        except PermissionError:
-            logger.error("Permission to remove %s was denied!", instance.eml_filepath, exc_info=True)
-        except IsADirectoryError:
-            logger.error("%s is a directory, not a file!", instance.eml_filepath, exc_info=True)
-        except OSError:
-            logger.error("An OS error occured removing %s!", instance.eml_filepath, exc_info=True)
-        except Exception:
-            logger.error("An unexpected error occured removing %s!", instance.eml_filepath, exc_info=True)
-
-    if instance.prerender_filepath:
-        try:
-            os.remove(instance.prerender_filepath)
-            logger.debug("Successfully removed the emails .eml file from storage.", exc_info=True)
-        except FileNotFoundError:
-            logger.error("%s was not found!", instance.prerender_filepath, exc_info=True)
-        except PermissionError:
-            logger.error("Permission to remove %s was denied!", instance.prerender_filepath, exc_info=True)
-        except IsADirectoryError:
-            logger.error("%s is a directory, not a file!", instance.prerender_filepath, exc_info=True)
-        except OSError:
-            logger.error("An OS error occured removing %s!", instance.prerender_filepath, exc_info=True)
-        except Exception:
-            logger.error("An unexpected error occured removing %s!", instance.prerender_filepath, exc_info=True)

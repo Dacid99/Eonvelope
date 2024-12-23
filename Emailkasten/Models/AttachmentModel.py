@@ -16,12 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
 import logging
 
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
 from .. import constants
 from .EMailModel import EMailModel
@@ -43,7 +40,7 @@ class AttachmentModel(models.Model):
     """The path where the attachment is stored. Unique together with :attr:`email`.
     Can be null if the attachment has not been saved (null does not collide with the unique constraint.).
     Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`.
-    When this entry is deleted, the file will be removed by :func:`post_delete_attachment`."""
+    When this entry is deleted, the file will be removed by :func:`Emailkasten.signals.delete_AttachmentModel.post_delete_attachment`."""
 
     datasize = models.IntegerField()
     """The filesize of the attachment."""
@@ -71,30 +68,3 @@ class AttachmentModel(models.Model):
 
         unique_together = ("file_path", "email")
         """:attr:`file_path` and :attr:`email` in combination are unique."""
-
-
-
-@receiver(post_delete, sender=AttachmentModel)
-def post_delete_attachment(sender: AttachmentModel, instance: AttachmentModel, **kwargs) -> None:
-    """Receiver function removing an attachment from the storage when its db entry is deleted.
-
-    Args:
-        sender: The class type that sent the post_delete signal.
-        instance: The instance that has been deleted.
-        **kwargs: Other keyword arguments.
-    """
-    if instance.file_path:
-        logger.debug("Removing %s from storage ...", str(instance))
-        try:
-            os.remove(instance.file_path)
-            logger.debug("Successfully removed the attachment file from storage.", exc_info=True)
-        except FileNotFoundError:
-            logger.error("%s was not found!", instance.file_path, exc_info=True)
-        except PermissionError:
-            logger.error("Permission to remove %s was denied!", instance.file_path, exc_info=True)
-        except IsADirectoryError:
-            logger.error("%s is a directory, not a file!", instance.file_path, exc_info=True)
-        except OSError:
-            logger.error("An OS error occured removing %s!", instance.file_path, exc_info=True)
-        except Exception:
-            logger.error("An unexpected error occured removing %s!", instance.file_path, exc_info=True)

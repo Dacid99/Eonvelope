@@ -20,8 +20,6 @@ import logging
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from ..constants import FetchingConfiguration
 from ..Fetchers.IMAPFetcher import IMAPFetcher
@@ -89,31 +87,3 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
 
         unique_together = ('name', 'account')
         """:attr:`name` and :attr:`account` in combination are unique."""
-
-
-
-@receiver(post_save, sender=MailboxModel)
-def post_save_is_healthy(sender: MailboxModel, instance: MailboxModel, created: bool, **kwargs) -> None:
-    """Receiver function doing twofold:
-    - once that mailbox becomes healthy again flags the account of that mailbox as healthy
-    - if a mailbox becomed unhealthy flags its daemons as unhealthy as well.
-
-    Args:
-        sender: The class type that sent the post_save signal.
-        instance: The instance that has been saved.
-        created: Whether the instance was newly created.
-        **kwargs: Other keyword arguments.
-    """
-    if created:
-        return
-
-    if instance.is_healthy:
-        if 'is_healthy' in instance.get_dirty_fields():
-            logger.debug("%s has become healthy, flagging its account as healthy ...", str(instance))
-            instance.account.update(is_healthy=True)
-            logger.debug("Successfully flagged account as healthy.")
-    else:
-        if 'is_healthy' in instance.get_dirty_fields():
-            logger.debug("%s has become unhealthy, flagging its daemons as unhealthy ...", str(instance))
-            instance.daemons.update(is_healthy=False)
-            logger.debug("Successfully flagged account as healthy.")

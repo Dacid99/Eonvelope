@@ -22,13 +22,10 @@ import uuid
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
-from django.db.models.signals import post_save, pre_delete
-from django.dispatch import receiver
 
 from .. import constants
 from ..constants import MailFetchingCriteria
 from .MailboxModel import MailboxModel
-from ..EMailArchiverDaemon import EMailArchiverDaemon
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -89,32 +86,3 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
                 with open(self.log_filepath, 'w'):
                     pass
         super().save(*args,**kwargs)
-
-
-
-@receiver(post_save, sender=DaemonModel)
-def post_save_is_healthy(sender: DaemonModel, instance: DaemonModel, created: bool, **kwargs) -> None:
-    """Receiver function flagging the mailbox of a daemon as healthy once that daemon becomes healthy again.
-
-    Args:
-        sender: The class type that sent the post_save signal.
-        instance: The instance that has been saved.
-        created: Whether the instance was newly created.
-        **kwargs: Other keyword arguments.
-    """
-    if created:
-        return
-
-    if instance.is_healthy:
-        if 'is_healthy' in instance.get_dirty_fields():
-            logger.debug("%s has become healthy, flagging its mailbox as healthy ...", str(instance))
-            instance.mailbox.is_healthy=True
-            instance.mailbox.save(update_fields=['is_healthy'])
-            logger.debug("Successfully flagged mailbox as healthy.")
-
-
-@receiver(pre_delete, sender=DaemonModel)
-def pre_delete_stop_daemon(sender: DaemonModel, instance: DaemonModel, **kwargs):
-    logger.debug("Stopping daemon of deleted daemon %s ..", str(instance))
-    EMailArchiverDaemon.stopDaemon(instance)
-    logger.debug("Successfully stopped daemon of deleted daemon %s.", str(instance))

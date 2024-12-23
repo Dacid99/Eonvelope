@@ -21,8 +21,6 @@ import logging
 from dirtyfields import DirtyFieldsMixin
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 from .. import constants
 
@@ -87,26 +85,3 @@ class AccountModel(DirtyFieldsMixin, models.Model):
 
         unique_together = ("mail_address", "user")
         """`mail_address` and :attr:`user` in combination are unique fields."""
-
-
-
-@receiver(post_save, sender=AccountModel)
-def post_save_is_healthy(sender: AccountModel, instance: AccountModel, created: bool, **kwargs) -> None:
-    """Receiver function flagging all mailboxes of an account as unhealthy once that account becomes unhealthy.
-
-    Args:
-        sender: The class type that sent the post_save signal.
-        instance: The instance that has been saved.
-        created: Whether the instance was newly created.
-        **kwargs: Other keyword arguments.
-    """
-    if created:
-        return
-
-    if not instance.is_healthy and 'is_healthy' in instance.get_dirty_fields():
-        logger.debug("%s has become unhealthy, flagging all its mailboxes as unhealthy ...", str(instance))
-        mailboxEntries = instance.mailboxes.all()
-        for mailboxEntry in mailboxEntries:
-            mailboxEntry.is_healthy = False
-            mailboxEntry.save(update_fields=['is_healthy'])
-        logger.debug("Successfully flagged mailboxes as unhealthy.")

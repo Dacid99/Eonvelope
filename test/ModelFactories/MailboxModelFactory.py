@@ -28,5 +28,5 @@ class MailboxModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = MailboxModel
 
-    name = factory.Faker("name")
+    name = factory.Faker("first_name")
     account = factory.SubFactory(AccountModelFactory)

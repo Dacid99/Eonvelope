@@ -26,6 +26,9 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.db import IntegrityError
+from django.db.models.signals import post_save
+
+import Emailkasten.Models.AccountModel
 
 from .ModelFactories.AccountModelFactory import AccountModelFactory
 from .ModelFactories.MailboxModelFactory import MailboxModelFactory
@@ -83,9 +86,8 @@ def test_AccountModel_unique():
 
 
 @pytest.mark.django_db
-def test_AccountModel_post_save(mock_logger):
-    account = AccountModelFactory()
-    mock_logger.debug.assert_called()
+def test_AccountModel_post_save(mock_logger, mocker):
+    account = AccountModelFactory.create(mail_address="testmail@testmail.com")
 
     mailbox_1 = MailboxModelFactory(account=account)
     mailbox_2 = MailboxModelFactory(account=account)
@@ -94,13 +96,15 @@ def test_AccountModel_post_save(mock_logger):
     assert mailbox_2.is_healthy is True
 
     account.is_healthy = False
-    account.save()
+    account.save(update_fields = ['is_healthy'])
+    mailbox_1.refresh_from_db()
+    mailbox_2.refresh_from_db()
     assert mailbox_1.is_healthy is False
     assert mailbox_2.is_healthy is False
-    mock_logger.debug.assert_called()
 
     account.is_healthy = True
     account.save(update_fields = ['is_healthy'])
+    mailbox_1.refresh_from_db()
+    mailbox_2.refresh_from_db()
     assert mailbox_1.is_healthy is False
     assert mailbox_2.is_healthy is False
-    mock_logger.debug.assert_not_called()

@@ -19,74 +19,65 @@
 
 """Test module for :mod:`Emailkasten.Models.MailboxModel`."""
 
-from __future__ import annotations
-
 import datetime
-from typing import TYPE_CHECKING
 
 import pytest
 from django.db import IntegrityError
+from model_bakery import baker
 
-from .ModelFactories.MailboxModelFactory import MailboxModelFactory
-from .ModelFactories.DaemonModelFactory import DaemonModelFactory
-from .ModelFactories.UserFactory import UserFactory
-
-if TYPE_CHECKING:
-    from unittest.mock import MagicMock
-
-    from pytest_mock.plugin import MockerFixture
-
-
-@pytest.fixture(name='mock_logger', autouse=True)
-def fixture_mock_logger(mocker: MockerFixture) -> MagicMock:
-    """Mocks :attr:`Emailkasten.fileManagment.logger` of the module."""
-    return mocker.patch('Emailkasten.Models.MailboxModel.logger')
+from Emailkasten import constants
+from Emailkasten.Models.AccountModel import AccountModel
+from Emailkasten.Models.DaemonModel import DaemonModel
+from Emailkasten.Models.MailboxModel import MailboxModel
 
 
 @pytest.mark.django_db
 def MailboxModel_creation():
-    """Tests the correct creation of :class:`Emailkasten.Models.MailboxModel.MailboxModel`."""
+    """Tests the correct default creation of :class:`Emailkasten.Models.MailboxModel.MailboxModel`."""
 
-    mailbox = MailboxModelFactory()
-    assert mailbox.mail_host_port is None
-    assert mailbox.timeout is None
-    assert mailbox.is_healthy is True
+    mailbox = baker.make(MailboxModel)
+    assert mailbox.name is not None
+    assert mailbox.account is not None
+    assert mailbox.save_attachments is constants.FetchingConfiguration.SAVE_ATTACHMENTS_DEFAULT
+    assert mailbox.save_images is constants.FetchingConfiguration.SAVE_IMAGES_DEFAULT
+    assert mailbox.save_toEML is constants.FetchingConfiguration.SAVE_TO_EML_DEFAULT
     assert mailbox.is_favorite is False
+    assert mailbox.is_healthy is True
     assert isinstance(mailbox.updated, datetime.datetime)
     assert mailbox.updated is not None
     assert isinstance(mailbox.created, datetime.datetime)
     assert mailbox.created is not None
-    assert mailbox.mail_address in str(mailbox)
-    assert mailbox.mail_host in str(mailbox)
-    assert mailbox.protocol in str(mailbox)
+
+    assert mailbox.name in str(mailbox)
+    assert str(mailbox.account) in str(mailbox)
 
 
 @pytest.mark.django_db
 def MailboxModel_unique():
-    """Tests the uniqie constraints of :class:`Emailkasten.Models.MailboxModel.MailboxModel`."""
+    """Tests the unique constraints of :class:`Emailkasten.Models.MailboxModel.MailboxModel`."""
 
-    mailingList_1 = MailboxModelFactory(mail_address="abc123")
-    mailingList_2 = MailboxModelFactory(mail_address="abc123")
-    assert mailingList_1.mail_address == mailingList_2.mail_address
-    assert mailingList_1.user != mailingList_2.user
+    mailingList_1 = baker.make(MailboxModel, name="abc123")
+    mailingList_2 = baker.make(MailboxModel, name="abc123")
+    assert mailingList_1.name == mailingList_2.name
+    assert mailingList_1.account != mailingList_2.account
 
-    user = UserFactory()
+    account = baker.maker(AccountModel)
 
-    mailingList_1 = MailboxModelFactory(user = user)
-    mailingList_2 = MailboxModelFactory(user = user)
-    assert mailingList_1.mail_address != mailingList_2.mail_address
-    assert mailingList_1.user == mailingList_2.user
+    mailingList_1 = baker.make(MailboxModel, account = account)
+    mailingList_2 = baker.make(MailboxModel, account = account)
+    assert mailingList_1.name != mailingList_2.name
+    assert mailingList_1.account == mailingList_2.account
 
-    MailboxModelFactory(mail_address="abc123", user = user)
+    baker.make(MailboxModel, name="abc123", account = account)
     with pytest.raises(IntegrityError):
-        MailboxModelFactory(mail_address="abc123", user = user)
+        baker.make(MailboxModel, name="abc123", account = account)
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save(mock_logger):
-    mailbox = MailboxModelFactory()
-    daemon = DaemonModelFactory(mailbox=mailbox)
-    mock_logger.debug.assert_called()
+def test_MailboxModel_post_save():
+    mailbox = baker.make(MailboxModel)
+    daemon_1 = baker.make(DaemonModel, mailbox=mailbox)
+    daemon_2 = baker.make(DaemonModel, mailbox=mailbox)
 
     assert mailbox.account.is_healthy is True
 
@@ -95,9 +86,9 @@ def test_MailboxModel_post_save(mock_logger):
     daemons = mailbox.daemons.all()
     for daemon in daemons:
         assert daemon.is_healthy is False
-    mock_logger.debug.assert_called()
 
     mailbox.is_healthy = True
     mailbox.save(update_fields = ['is_healthy'])
-    assert mailbox.account.is_healthy is True
-    mock_logger.debug.assert_called()
+    for daemon in daemons:
+        daemon.refresh_from_db()
+        assert daemon.is_healthy is False

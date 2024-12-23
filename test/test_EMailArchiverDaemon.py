@@ -17,10 +17,10 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from model_bakery import baker
 
 import Emailkasten.EMailArchiverDaemon
-
-from .ModelFactories.DaemonModelFactory import DaemonModelFactory
+from Emailkasten.Models.DaemonModel import DaemonModel
 
 
 @pytest.fixture(name='mock_getLogger', autouse=True)
@@ -36,7 +36,7 @@ def fixture_mock_runningDaemons():
 @pytest.mark.django_db
 @pytest.fixture(name='mock_daemonModel')
 def fixture_mock_daemonModel():
-    return DaemonModelFactory()
+    return baker.make(DaemonModel)
 
 
 @pytest.mark.django_db
@@ -57,7 +57,7 @@ def test___init__(mock_daemonModel):
 @pytest.mark.django_db
 def test_start(mocker, is_running):
     mock_threading = mocker.patch('Emailkasten.EMailArchiverDaemon.threading.Thread')
-    daemonEntry = DaemonModelFactory(is_running = is_running)
+    daemonEntry = baker.make(DaemonModel, is_running = is_running)
     daemonInstance = Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon(daemonEntry)
     daemonInstance.isRunning = is_running
 

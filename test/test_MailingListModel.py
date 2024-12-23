@@ -16,24 +16,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 """Test module for :mod:`Emailkasten.Models.MailingListModel`."""
 
 import datetime
 
 import pytest
 from django.db import IntegrityError
+from model_bakery import baker
 
-from .ModelFactories.MailingListModelFactory import MailingListModelFactory
-from .ModelFactories.CorrespondentModelFactory import CorrespondentModelFactory
+from Emailkasten.Models.CorrespondentModel import CorrespondentModel
+from Emailkasten.Models.MailingListModel import MailingListModel
 
 
 @pytest.mark.django_db
 def test_MailingListModel_creation():
-    """Tests the correct creation of :class:`Emailkasten.Models.MailingListModel.MailingListModel`."""
+    """Tests the correct default creation of :class:`Emailkasten.Models.MailingListModel.MailingListModel`."""
 
-    mailingList = MailingListModelFactory(list_id="abc123")
-    assert mailingList.list_id == "abc123"
+    mailingList = baker.make(MailingListModel)
+    assert mailingList.list_id is not None
+    assert isinstance(mailingList.list_id, str)
     assert mailingList.list_owner is None
     assert mailingList.list_subscribe is None
     assert mailingList.list_unsubscribe is None
@@ -42,29 +43,31 @@ def test_MailingListModel_creation():
     assert mailingList.list_archive is None
     assert mailingList.is_favorite is False
     assert mailingList.correspondent is not None
-    assert isinstance(mailingList.updated, datetime.datetime)
+    assert isinstance(mailingList.correspondent, CorrespondentModel)
     assert mailingList.updated is not None
-    assert isinstance(mailingList.created, datetime.datetime)
+    assert isinstance(mailingList.updated, datetime.datetime)
     assert mailingList.created is not None
+    assert isinstance(mailingList.created, datetime.datetime)
+
     assert mailingList.list_id in str(mailingList)
 
 
 @pytest.mark.django_db
 def test_MailingListModel_unique():
-    """Tests the uniqie constraints of :class:`Emailkasten.Models.MailingListModel.MailingListModel`."""
+    """Tests the unique constraints of :class:`Emailkasten.Models.MailingListModel.MailingListModel`."""
 
-    mailingList_1 = MailingListModelFactory(list_id="abc123")
-    mailingList_2 = MailingListModelFactory(list_id="abc123")
+    mailingList_1 = baker.make(MailingListModel, list_id="abc123")
+    mailingList_2 = baker.make(MailingListModel, list_id="abc123")
     assert mailingList_1.list_id == mailingList_2.list_id
     assert mailingList_1.correspondent != mailingList_2.correspondent
 
-    correspondent = CorrespondentModelFactory()
+    correspondent = baker.make(CorrespondentModel)
 
-    mailingList_1 = MailingListModelFactory(correspondent = correspondent)
-    mailingList_2 = MailingListModelFactory(correspondent = correspondent)
+    mailingList_1 = baker.make(MailingListModel, correspondent = correspondent)
+    mailingList_2 = baker.make(MailingListModel, correspondent = correspondent)
     assert mailingList_1.list_id != mailingList_2.list_id
     assert mailingList_1.correspondent == mailingList_2.correspondent
 
-    MailingListModelFactory(list_id="abc123", correspondent = correspondent)
+    baker.make(MailingListModel, list_id="abc123", correspondent = correspondent)
     with pytest.raises(IntegrityError):
-        MailingListModelFactory(list_id="abc123", correspondent = correspondent)
+        baker.make(MailingListModel, list_id="abc123", correspondent = correspondent)

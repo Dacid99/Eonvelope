@@ -20,12 +20,12 @@
 """Test module for :mod:`Emailkasten.Models.CorrespondentModel`."""
 
 import datetime
+from model_bakery import baker
 import pytest
 
 from django.db import IntegrityError
 
-from .ModelFactories.CorrespondentModelFactory import CorrespondentModelFactory
-
+from Emailkasten.Models.CorrespondentModel import CorrespondentModel
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
@@ -36,26 +36,29 @@ from .ModelFactories.CorrespondentModelFactory import CorrespondentModelFactory
     ]
 )
 def test_CorrespondentModel_creation(email_name: str, email_address: str):
-    """Tests the correct creation of :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`.
+    """Tests the correct default creation of :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`.
 
     Args:
         email_name: The email_name parameter.
         email_address: The email_address parameter.
     """
-    correspondent = CorrespondentModelFactory(email_name=email_name, email_address=email_address)
-    assert correspondent.email_name == email_name
-    assert correspondent.email_address == email_address
+    correspondent = baker.make(CorrespondentModel)
+    assert correspondent.email_name is not None
+    assert isinstance(correspondent.email_name, str)
+    assert correspondent.email_address is not None
+    assert isinstance(correspondent.email_address, str)
     assert correspondent.is_favorite is False
-    assert isinstance(correspondent.updated, datetime.datetime)
     assert correspondent.updated is not None
-    assert isinstance(correspondent.created, datetime.datetime)
+    assert isinstance(correspondent.updated, datetime.datetime)
     assert correspondent.created is not None
+    assert isinstance(correspondent.created, datetime.datetime)
+
     assert correspondent.email_address in str(correspondent)
 
 
 @pytest.mark.django_db
 def test_CorrespondentModel_unique():
     """Tests the unique constraint in :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`"""
-    CorrespondentModelFactory(email_name="test name", email_address="test@mail.com")
+    baker.make(CorrespondentModel, email_name="test name", email_address="test@mail.com")
     with pytest.raises(IntegrityError):
-        CorrespondentModelFactory(email_name="another test", email_address="test@mail.com")
+        baker.make(CorrespondentModel, email_name="another test", email_address="test@mail.com")

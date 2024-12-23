@@ -25,14 +25,12 @@ import datetime
 from typing import TYPE_CHECKING
 
 import pytest
+from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.db.models.signals import post_save
+from model_bakery import baker
 
-import Emailkasten.Models.AccountModel
-
-from .ModelFactories.AccountModelFactory import AccountModelFactory
-from .ModelFactories.MailboxModelFactory import MailboxModelFactory
-from .ModelFactories.UserFactory import UserFactory
+from Emailkasten.Models.AccountModel import AccountModel
+from Emailkasten.Models.MailboxModel import MailboxModel
 
 if TYPE_CHECKING:
     from unittest.mock import MagicMock
@@ -48,17 +46,29 @@ def fixture_mock_logger(mocker: MockerFixture) -> MagicMock:
 
 @pytest.mark.django_db
 def test_AccountModel_creation():
-    """Tests the correct creation of :class:`Emailkasten.Models.AccountModel.AccountModel`."""
+    """Tests the correct default creation of :class:`Emailkasten.Models.AccountModel.AccountModel`."""
 
-    account = AccountModelFactory()
+    account = baker.make(AccountModel)
+    assert account.mail_address is not None
+    assert isinstance(account.mail_address, str)
+    assert account.password is not None
+    assert isinstance(account.password, str)
+    assert account.mail_host is not None
+    assert isinstance(account.mail_host, str)
     assert account.mail_host_port is None
+    assert account.protocol is not None
+    assert isinstance(account.protocol, str)
+    assert account.protocol in AccountModel.PROTOCOL_CHOICES
     assert account.timeout is None
     assert account.is_healthy is True
     assert account.is_favorite is False
-    assert isinstance(account.updated, datetime.datetime)
+    assert account.user is not None
+    assert isinstance(account.user, User)
     assert account.updated is not None
-    assert isinstance(account.created, datetime.datetime)
+    assert isinstance(account.updated, datetime.datetime)
     assert account.created is not None
+    assert isinstance(account.created, datetime.datetime)
+
     assert account.mail_address in str(account)
     assert account.mail_host in str(account)
     assert account.protocol in str(account)
@@ -66,31 +76,33 @@ def test_AccountModel_creation():
 
 @pytest.mark.django_db
 def test_AccountModel_unique():
-    """Tests the uniqie constraints of :class:`Emailkasten.Models.AccountModel.AccountModel`."""
+    """Tests the unique constraints of :class:`Emailkasten.Models.AccountModel.AccountModel`."""
 
-    mailingList_1 = AccountModelFactory(mail_address="abc123")
-    mailingList_2 = AccountModelFactory(mail_address="abc123")
+    mailingList_1 = baker.make(AccountModel, mail_address="abc123")
+    mailingList_2 = baker.make(AccountModel, mail_address="abc123")
     assert mailingList_1.mail_address == mailingList_2.mail_address
     assert mailingList_1.user != mailingList_2.user
 
-    user = UserFactory()
+    user = baker.make(User)
 
-    mailingList_1 = AccountModelFactory(user = user)
-    mailingList_2 = AccountModelFactory(user = user)
+    mailingList_1 = baker.make(AccountModel, user = user)
+    mailingList_2 = baker.make(AccountModel, user = user)
     assert mailingList_1.mail_address != mailingList_2.mail_address
     assert mailingList_1.user == mailingList_2.user
 
-    AccountModelFactory(mail_address="abc123", user = user)
+    baker.make(AccountModel, mail_address="abc123", user = user)
     with pytest.raises(IntegrityError):
-        AccountModelFactory(mail_address="abc123", user = user)
+        baker.make(AccountModel, mail_address="abc123", user = user)
 
 
 @pytest.mark.django_db
 def test_AccountModel_post_save(mock_logger, mocker):
-    account = AccountModelFactory.create(mail_address="testmail@testmail.com")
+    """Tests the post_save function of :class:`Emailkasten.Models.AccountModel.AccountModel`."""
 
-    mailbox_1 = MailboxModelFactory(account=account)
-    mailbox_2 = MailboxModelFactory(account=account)
+    account = baker.make(AccountModel)
+
+    mailbox_1 = baker.make(MailboxModel, account=account)
+    mailbox_2 = baker.make(MailboxModel, account=account)
 
     assert mailbox_1.is_healthy is True
     assert mailbox_2.is_healthy is True

@@ -36,10 +36,10 @@ extension-pkg-whitelist=
 # Return non-zero exit code if any of these messages/categories are detected,
 # even if score is above --fail-under value. Syntax same as enable. Messages
 # specified are enabled, while categories only check already-enabled messages.
-fail-on=
+fail-on=F,E
 
 # Specify a score threshold under which the program will exit with error.
-fail-under=10
+fail-under=1
 
 # Interpret the stdin as a python script, whose filename needs to be passed as
 # the module_or_package argument.
@@ -134,16 +134,16 @@ deprecated-modules=
 
 # Output a graph (.gv or any supported image format) of external dependencies
 # to the given file (report RP0402 must not be disabled).
-ext-import-graph=../docs/external-import-graph.svg
+ext-import-graph=
 
 # Output a graph (.gv or any supported image format) of all (i.e. internal and
 # external) dependencies to the given file (report RP0402 must not be
 # disabled).
-import-graph=../docs/import-graph.svg
+import-graph=
 
 # Output a graph (.gv or any supported image format) of internal dependencies
 # to the given file (report RP0402 must not be disabled).
-int-import-graph=../docs/internal-import-graph.svg
+int-import-graph=
 
 # Force import order to recognize a module as part of the standard
 # compatibility libraries.

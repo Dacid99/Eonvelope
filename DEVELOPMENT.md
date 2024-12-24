@@ -33,3 +33,9 @@ pip install -Ur docs/dependencies.txt
 # Validation and Linting
 
 You can use the tools in validation/ to lint and check your changes.
+There are preconfigured githooks in validation/githooks that run check and lint jobs before every commit
+Set them for your local repository via
+
+```bash
+git config core.hooksPath validation/githooks/
+```

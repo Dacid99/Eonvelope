@@ -36,10 +36,10 @@ extension-pkg-whitelist=
 # Return non-zero exit code if any of these messages/categories are detected,
 # even if score is above --fail-under value. Syntax same as enable. Messages
 # specified are enabled, while categories only check already-enabled messages.
-fail-on=
+fail-on=F,E
 
 # Specify a score threshold under which the program will exit with error.
-fail-under=10
+fail-under=1
 
 # Interpret the stdin as a python script, whose filename needs to be passed as
 # the module_or_package argument.

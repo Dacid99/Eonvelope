@@ -1,0 +1,27 @@
+#!/bin/sh
+set -o pipefail
+
+CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.py$')
+
+if [ -z "$CHANGED_FILES" ]; then
+  echo "No Python files in commit. Skipping pylint."
+  exit 0
+fi
+
+pylint --rcfile=validation/pylintrc_code $CHANGED_FILES > validation/reports/pylint_code_precommit.ansi
+CODE_EXIT_CODE=$?
+
+pylint --rcfile=validation/pylintrc_docs $CHANGED_FILES > validation/reports/pylint_docs_precommit.ansi
+DOCS_EXIT_CODE=$?
+
+pylint --rcfile=validation/pylintrc_style $CHANGED_FILES > validation/reports/pylint_style_precommit.ansi
+STYLE_EXIT_CODE=$?
+
+# Combine exit codes: worst exit code (any non-zero means failure)
+if [ $CODE_EXIT_CODE -ne 0 ] || [ $DOCS_EXIT_CODE -ne 0 ] || [ $STYLE_EXIT_CODE -ne 0 ]; then
+    echo "Pylint failed, please check validation/reports/ ."
+    exit 1
+else
+    echo "All pylints passed successfully."
+    exit 0
+fi

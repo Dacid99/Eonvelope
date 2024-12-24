@@ -2,19 +2,19 @@
 #
 # Emailkasten - a open-source self-hostable email archiving server
 # Copyright (C) 2024  David & Philipp Aderbauer
-
+#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
 # published by the Free Software Foundation, either version 3 of the
 # License, or (at your option) any later version.
-
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Affero General Public License for more details.
-
+#
 # You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Provides functions for processing the mails by fetching and storing them.
 Combines functions from
@@ -90,8 +90,8 @@ def testAccount(account: AccountModel) -> int:
     elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
         result = POP3_SSL_Fetcher.testAccount(account)
 
-    elif account.protocol == ExchangeFetcher.PROTOCOL:
-        result = ExchangeFetcher.testAccount(account)
+    # elif account.protocol == ExchangeFetcher.PROTOCOL:
+    #     result = ExchangeFetcher.testAccount(account)
 
     else:
         logger.error("Account %s has unknown protocol!", str(account))
@@ -131,8 +131,8 @@ def testMailbox(mailbox: MailboxModel) -> int:
     elif mailbox.account.protocol == POP3_SSL_Fetcher.PROTOCOL:
         result = POP3_SSL_Fetcher.testMailbox(mailbox)
 
-    elif mailbox.account.protocol == ExchangeFetcher.PROTOCOL:
-        result = ExchangeFetcher.testMailbox(mailbox)
+    # elif mailbox.account.protocol == ExchangeFetcher.PROTOCOL:
+    #     result = ExchangeFetcher.testMailbox(mailbox)
 
     else:
         logger.error("Account %s has unknown protocol!", str(mailbox.account))
@@ -174,9 +174,9 @@ def scanMailboxes(account: AccountModel) -> None:
     elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
         mailboxes = [b'INBOX']
 
-    elif account.protocol == ExchangeFetcher.PROTOCOL:
-        with ExchangeFetcher(account) as exchangeMail:
-            mailboxes = exchangeMail.fetchMailboxes()
+    # elif account.protocol == ExchangeFetcher.PROTOCOL:
+    #     with ExchangeFetcher(account) as exchangeMail:
+    #         mailboxes = exchangeMail.fetchMailboxes()
 
     else:
         logger.error("Can not fetch mails, protocol is not or incorrectly specified!")
@@ -235,10 +235,10 @@ def _fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) ->
 
             mailDataList = popSSLFetcher.fetchAll(mailbox)
 
-    elif account.protocol == ExchangeFetcher.PROTOCOL:
-        with ExchangeFetcher(account) as exchangeFetcher:
+    # elif account.protocol == ExchangeFetcher.PROTOCOL:
+    #     with ExchangeFetcher(account) as exchangeFetcher:
 
-            mailDataList = exchangeFetcher.fetchBySearch()  # incomplete
+    #         mailDataList = exchangeFetcher.fetchBySearch()  # incomplete
 
     else:
         logger.error("Can not fetch mails, protocol is not or incorrectly specified!")

@@ -19,10 +19,12 @@ pip install -Ur docs/dependencies.txt
 
 ## VSCode extensions
 
-- pylint ( "pylint.args": ["--rcfile=validation/pylintrc(_strict)"] )
-- mypy ( "mypy-type-checker.args": ["--config-file=validation/mypy_extension.ini"] )
+- everything for python and django
+- pylint (with setting "pylint.args": ["--rcfile=validation/pylintrc(_strict)"] )
+- mypy (with setting "mypy-type-checker.args": ["--config-file=validation/mypy_extension.ini"] )
 - isort
-- other python extension packs
+- ANSI colors (iliazeus.vscode-ansi) (for validation reports)
+- reStructuredText (lextudio.restructuredtext) for docs
 
 ## VSCode settings
 

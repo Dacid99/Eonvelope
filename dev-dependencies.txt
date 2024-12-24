@@ -9,3 +9,4 @@ pytest-mypy
 pyfakefs
 factory_boy
 model-bakery
+pylintfileheader

@@ -74,21 +74,19 @@ def MailboxModel_unique():
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save():
-    mailbox = baker.make(MailboxModel)
-    daemon_1 = baker.make(DaemonModel, mailbox=mailbox)
-    daemon_2 = baker.make(DaemonModel, mailbox=mailbox)
+@pytest.mark.parametrize(
+        'protocol, expectedFetchingCriteria',
+        [
+            (IMAPFetcher.PROTOCOL, IMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
+            (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
+            (IMAP_SSL_Fetcher.PROTOCOL, IMAP_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+            (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+            ('EXCHANGE', [])
+        ]
+)
+def test_MailboxModel_getAvailableFetchingCriteria(protocol, expectedFetchingCriteria):
+    """Tests :func:`Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria`."""
 
-    assert mailbox.account.is_healthy is True
-
-    mailbox.is_healthy = False
-    mailbox.save(update_fields = ['is_healthy'])
-    daemons = mailbox.daemons.all()
-    for daemon in daemons:
-        assert daemon.is_healthy is False
-
-    mailbox.is_healthy = True
-    mailbox.save(update_fields = ['is_healthy'])
-    for daemon in daemons:
-        daemon.refresh_from_db()
-        assert daemon.is_healthy is False
+    account = baker.make(AccountModel, protocol = protocol)
+    mailbox = baker.make(MailboxModel, account = account)
+    assert mailbox.getAvailableFetchingCriteria() == expectedFetchingCriteria

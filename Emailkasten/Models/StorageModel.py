@@ -71,7 +71,7 @@ class StorageModel(models.Model):
         """Extended :django::func:`django.models.Model.save` method with additional check for unique current directory and storage directory creation for new entries."""
 
         if StorageModel.objects.filter(current=True).count() > 1:
-            logger.critical("More than one current storage directory!!")
+            logger.critical("More than one current storage directory!!!")
         if not self.path:
             self.path = os.path.join(StorageConfiguration.STORAGE_PATH, str(self.directory_number))
             if not os.path.exists( self.path ):
@@ -89,12 +89,11 @@ class StorageModel(models.Model):
         logger.debug("Incrementing subdirectory count of %s ..", str(self))
 
         self.subdirectory_count += 1
+        self.save(update_fields=['subdirectory_count'])
         if self.subdirectory_count >= StorageConfiguration.MAX_SUBDIRS_PER_DIR:
             logger.debug("Max number of subdirectories in %s reached, adding new storage ...", str(self))
             self._addNewDirectory()
             logger.debug("Successfully added new storage.")
-        else:
-            self.save()
 
         logger.debug("Successfully incrementing subdirectory count.")
 

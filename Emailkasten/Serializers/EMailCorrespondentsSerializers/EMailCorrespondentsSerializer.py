@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`EMailCorrespondentsSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
@@ -32,6 +34,8 @@ class EMailCorrespondentSerializer(serializers.ModelSerializer):
     """The email is serialized by :class:`Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`."""
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = EMailCorrespondentsModel
 
         fields = ['correspondent', 'mention']

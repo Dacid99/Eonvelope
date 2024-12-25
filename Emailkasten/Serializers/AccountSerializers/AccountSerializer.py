@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`AccountSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.AccountModel import AccountModel
@@ -37,6 +39,8 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = AccountModel
 
         exclude = ['user']

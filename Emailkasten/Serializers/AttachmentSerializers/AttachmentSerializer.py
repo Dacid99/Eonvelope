@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`AttachmentSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.AttachmentModel import AttachmentModel
@@ -27,6 +29,8 @@ class AttachmentSerializer(serializers.ModelSerializer):
     Use exclusively in a :restframework::class:`viewsets.ReadOnlyModelViewSet`."""
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = AttachmentModel
 
         exclude = ['file_path']

@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`AccountFilter` filter provider class."""
+
 import django_filters
 
 from ..constants import FilterSetups
@@ -26,6 +28,8 @@ class AccountFilter(django_filters.FilterSet):
     """The filter class for :class:`Emailkasten.Models.AccountModel`."""
 
     class Meta:
+        """Metadata class for the filter."""
+
         model = AccountModel
         fields = {
             "mail_address": FilterSetups.TEXT,

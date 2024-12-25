@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the views for login, logout and csrf cookie."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -34,6 +36,7 @@ if TYPE_CHECKING:
 
 
 class LoginView(APIView):
+    """APIView for login."""
     permission_classes = [AllowAny]
 
     def post(self, request: Request) -> Response:
@@ -77,6 +80,7 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """APIView for logout."""
     def post(self, request: Request) -> Response:
         """View method to log the user out.
 
@@ -94,6 +98,7 @@ class LogoutView(APIView):
 
 
 class CSRFCookieView(APIView):
+    """APIView for fetching of a new CSRF cookie."""
     permission_classes = [AllowAny]
 
     @ensure_csrf_cookie

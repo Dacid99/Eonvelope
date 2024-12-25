@@ -16,10 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""The apps module for Emailkasten with the app config."""
+
 from django.apps import AppConfig
 
 
 class EmailkastenConfig(AppConfig):
+    """App config for Emailkasten."""
+
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'Emailkasten'
 

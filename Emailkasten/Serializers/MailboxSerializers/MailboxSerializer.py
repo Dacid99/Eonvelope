@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`MailboxSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.MailboxModel import MailboxModel
@@ -26,6 +28,8 @@ class MailboxSerializer(serializers.ModelSerializer):
     Uses all fields except the daemon."""
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = MailboxModel
 
         fields = '__all__'

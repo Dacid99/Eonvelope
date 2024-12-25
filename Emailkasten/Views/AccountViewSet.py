@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`AccountViewSet` viewset."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -28,16 +30,17 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from ..constants import TestStatusCodes
 from ..Filters.AccountFilter import AccountFilter
 from ..mailProcessing import scanMailboxes, testAccount
 from ..Models.AccountModel import AccountModel
 from ..Serializers.AccountSerializers.AccountSerializer import \
     AccountSerializer
-from ..constants import TestStatusCodes
 
 if TYPE_CHECKING:
-    from rest_framework.request import Request
     from django.db.models import BaseManager
+    from rest_framework.request import Request
+    from rest_framework.serializers import BaseSerializer
 
 
 class AccountViewSet(viewsets.ModelViewSet):
@@ -60,8 +63,9 @@ class AccountViewSet(viewsets.ModelViewSet):
         return AccountModel.objects.filter(user = self.request.user)
 
 
-    def perform_create(self, serializer):
+    def perform_create(self, serializer: BaseSerializer):
         """Adds the request user to the serializer data of the create request.
+
         Args:
             serializer: The serializer data of the create request.
         """

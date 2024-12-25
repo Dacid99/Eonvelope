@@ -16,11 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`ConfigurationModel` model class."""
 
 from django.db import models
 
 
 class ConfigurationModel(models.Model):
+    """Database model for the configuration of the Emailkasten instance."""
+
     CATEGORY_CHOICES = [
         ('DAEMON', 'Daemon Config'),
         ('PARSING', 'Parsing Config'),
@@ -40,14 +43,21 @@ class ConfigurationModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    class Meta:
-        db_table = "config"
-        unique_together = ('category', 'key')
-
     def __str__(self):
         return f"Setting {self.category}.{self.key}"
 
+    class Meta:
+        """Metadata class for the model."""
+
+        db_table = "config"
+        """The name of the database table for the configuations."""
+
+        unique_together = ('category', 'key')
+        """:attr:`category` and :attr:`key` in combination are unique."""
+
+
     def get_value(self):
+        """Get the value for a configuration."""
         if self.value_bool is not None:
             return self.value_bool
         elif self.value_int is not None:

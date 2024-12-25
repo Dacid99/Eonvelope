@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`DaemonSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.DaemonModel import DaemonModel
@@ -26,6 +28,8 @@ class DaemonSerializer(serializers.ModelSerializer):
     Uses all fields except :attr:`Emailkasten.Models.DaemonModel.mailbox` and :attr:`Emailkasten.Models.DaemonModel.log_filepath` fields."""
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = DaemonModel
 
         exclude = ['log_filepath']

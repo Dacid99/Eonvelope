@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`FullEMailSerializer` serializer class."""
+
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
 
@@ -48,6 +50,8 @@ class FullEMailSerializer(serializers.ModelSerializer):
 
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = EMailModel
         exclude = ['eml_filepath', 'prerender_filepath']
         """Exclude the :attr:`Emailkasten.Models.EMailModel.eml_filepath` and :attr:`Emailkasten.Models.EMailModel.prerender_filepath` fields."""

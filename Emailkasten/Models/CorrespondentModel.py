@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`CorrespondentModel` model class."""
 
 from django.db import models
 
@@ -42,5 +43,7 @@ class CorrespondentModel(models.Model):
         return f"Correspondent with address {self.email_address}"
 
     class Meta:
+        """Metadata class for the model."""
+
         db_table = "correspondents"
         """The name of the database table for the correspondents."""

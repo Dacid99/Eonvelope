@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`ConfigurationViewSet` viewset."""
+
 from rest_framework import viewsets
 from rest_framework.permissions import IsAdminUser
 
@@ -25,6 +27,8 @@ from ..Serializers.ConfigurationSerializers.ConfigurationSerializer import \
 
 
 class ConfigurationViewSet(viewsets.ModelViewSet):
+    """Viewset for the :class:`Emailkasten.Models.ConfigurationModel.ConfigurationModel`."""
+
     queryset = ConfigurationModel.objects.all()
     serializer_class = ConfigurationSerializer
     permission_classes = [IsAdminUser]

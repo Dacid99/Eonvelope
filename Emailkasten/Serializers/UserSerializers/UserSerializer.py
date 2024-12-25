@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`UserSerializer` serializer class."""
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
@@ -29,6 +31,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = User
 
         fields = ['username', 'password', 'is_staff']

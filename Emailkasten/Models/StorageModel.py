@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`StorageModel` model class."""
+
 import logging
 import os
 
@@ -58,6 +60,12 @@ class StorageModel(models.Model):
         state = "Current" if self.current else "Archived"
         return f"{state} storage directory {self.path}"
 
+    class Meta:
+        """Metadata class for the model."""
+
+        db_table = "storage"
+        """The name of the database table for the storage status."""
+
 
     def save(self, *args, **kwargs) -> None:
         """Extended :django::func:`django.models.Model.save` method with additional check for unique current directory and storage directory creation for new entries."""
@@ -99,11 +107,6 @@ class StorageModel(models.Model):
         StorageModel.objects.create(directory_number=self.directory_number+1, current=True, subdirectory_count=0)
         self.current = False
         self.save(update_fields=['current'])
-
-
-    class Meta:
-        db_table = "storage"
-        """The name of the database table for the storage status."""
 
 
     @staticmethod

@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`MailingListViewSet` viewset."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -55,7 +57,8 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
             The mailingslist entries matching the request user."""
         return MailingListModel.objects.filter(correspondent__emails__account__user = self.request.user).distinct()
 
-    def destroy(self, request, pk=None):
+    def destroy(self, request: Request, pk: int|None = None) -> Response:
+        """Adds the `delete` action to the viewset."""
         try:
             instance = self.get_object()
             instance.delete()

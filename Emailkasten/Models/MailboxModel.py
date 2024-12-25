@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`MailboxModel` model class."""
+
 import logging
 
 from dirtyfields import DirtyFieldsMixin
@@ -82,6 +84,8 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
 
 
     class Meta:
+        """Metadata class for the model."""
+
         db_table = "mailboxes"
         """The name of the database table for the mailboxes."""
 

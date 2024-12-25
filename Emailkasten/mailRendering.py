@@ -22,6 +22,10 @@
 # Modifications by David & Philipp Aderbauer, licensed under the GNU Affero General Public License version 3 (AGPLv3).
 # This modified code is part of an AGPLv3 project. See the LICENSE file for details.
 
+"""Provides functions to render images from .eml files.
+Functions starting with _ are helpers and are used only within the scope of this module.
+"""
+
 from __future__ import annotations
 
 import base64

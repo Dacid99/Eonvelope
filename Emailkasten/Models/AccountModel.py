@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`AccountModel` model class."""
+
 import logging
 
 from dirtyfields import DirtyFieldsMixin
@@ -74,6 +76,8 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         return f"Account {self.mail_address} at host {self.mail_host} with protocol {self.protocol}"
 
     class Meta:
+        """Metadata class for the model."""
+
         db_table = "accounts"
         """The name of the database table for the mail accounts."""
 

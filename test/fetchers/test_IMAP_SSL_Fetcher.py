@@ -16,20 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Test file for the :class:`Emailkasten.Fetchers.IMAP_SSL_Fetcher`."""
+
 import imaplib
-import logging
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-from Emailkasten.Fetchers.IMAPFetcher import \
-    IMAPFetcher
-from Emailkasten.Models.AccountModel import \
-    AccountModel
+from Emailkasten.Fetchers.IMAPFetcher import IMAPFetcher
+from Emailkasten.Models.AccountModel import AccountModel
 
 
 @pytest.fixture(name='mock_account')
 def fixture_mock_account():
+    """Fixture for a mocked AccountModel.
+
+    Todo:
+        Needs to be replaced by model_bakery.
+    """
     account = MagicMock(spec=AccountModel)
     account.mail_host = "imap.example.com"
     account.mail_host_port = 993

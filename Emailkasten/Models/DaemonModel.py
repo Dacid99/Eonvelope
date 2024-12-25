@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`DaemonModel` model class."""
+
 import logging
 import os
 import uuid
@@ -67,13 +69,15 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     """The datetime this entry was last updated. Is set automatically."""
 
 
-    class Meta:
-        db_table = 'daemons'
-        """The name of the database table for the daemons."""
-
-
     def __str__(self):
         return f"Mailfetcher daemon configuration for mailbox {self.mailbox}"
+
+
+    class Meta:
+        """Metadata class for the model."""
+
+        db_table = 'daemons'
+        """The name of the database table for the daemons."""
 
 
     def save(self, *args, **kwargs):

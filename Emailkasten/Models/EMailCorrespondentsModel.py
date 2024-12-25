@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`EMailCorrespondentsModel` model class."""
+
 from django.db import models
 
 from ..constants import ParsedMailKeys
@@ -49,6 +51,8 @@ class EMailCorrespondentsModel(models.Model):
         return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"
 
     class Meta:
+        """Metadata class for the model."""
+
         db_table = "email_correspondents"
         """The name of the database table for the images."""
 

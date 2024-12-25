@@ -82,7 +82,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint.extensions.bad_builtin,pylintfileheader
+load-plugins=pylint.extensions.docparams,pylint.extensions.bad_builtin,pylintfileheader
 
 
 # Pickle collected data for later comparisons.

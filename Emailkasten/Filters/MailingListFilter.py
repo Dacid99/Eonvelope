@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`MailingListFilter` filter provider class."""
+
 import django_filters
 
 from ..constants import FilterSetups
@@ -50,6 +52,8 @@ class MailingListFilter(django_filters.FilterSet):
 
 
     class Meta:
+        """Metadata class for the filter."""
+
         model = MailingListModel
         fields = {
             "list_id": FilterSetups.TEXT,

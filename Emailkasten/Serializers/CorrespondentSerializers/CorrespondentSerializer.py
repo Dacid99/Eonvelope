@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`CorrespondentSerializer` serializer class."""
+
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
 
@@ -40,6 +42,8 @@ class CorrespondentSerializer(serializers.ModelSerializer):
 
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = CorrespondentModel
 
         fields = '__all__'

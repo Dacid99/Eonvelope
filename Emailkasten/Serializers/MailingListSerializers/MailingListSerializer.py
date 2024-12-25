@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`MailingListSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.MailingListModel import MailingListModel
@@ -39,6 +41,8 @@ class MailingListSerializer(serializers.ModelSerializer):
 
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = MailingListModel
 
         fields = '__all__'

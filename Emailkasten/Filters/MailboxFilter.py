@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`MailboxFilter` filter provider class."""
+
 import django_filters
 
 from ..constants import FilterSetups
@@ -109,6 +111,8 @@ class MailboxFilter(django_filters.FilterSet):
 
 
     class Meta:
+        """Metadata class for the filter."""
+
         model = MailboxModel
         fields = {
             "name": FilterSetups.TEXT,

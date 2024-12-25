@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`SimpleEMailSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.EMailModel import EMailModel
@@ -27,6 +29,8 @@ class SimpleEMailSerializer(serializers.ModelSerializer):
     Use exclusively in a :restframework::class:`viewsets.ReadOnlyModelViewSet`."""
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = EMailModel
 
         exclude = ['eml_filepath', 'prerender_filepath']

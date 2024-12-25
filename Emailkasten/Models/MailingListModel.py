@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`MailingListModel` model class."""
+
 from django.db import models
 
 from .CorrespondentModel import CorrespondentModel
@@ -62,6 +64,8 @@ class MailingListModel(models.Model):
         return f"Mailinglist {self.list_id}"
 
     class Meta:
+        """Metadata class for the model."""
+
         db_table = "mailinglists"
         """The name of the database table for the mailinglists."""
 

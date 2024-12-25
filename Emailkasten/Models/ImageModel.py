@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`ImageModel` model class."""
 
 import logging
 
@@ -62,6 +63,8 @@ class ImageModel(models.Model):
         return f"Image {self.file_name}"
 
     class Meta:
+        """Metadata class for the model."""
+
         db_table = "images"
         """The name of the database table for the images."""
 

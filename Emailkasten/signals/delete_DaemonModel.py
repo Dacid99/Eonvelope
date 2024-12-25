@@ -30,6 +30,13 @@ logger = logging.getLogger(__name__)
 
 @receiver(pre_delete, sender=DaemonModel)
 def pre_delete_stop_daemon(sender: DaemonModel, instance: DaemonModel, **kwargs):
+    """Receiver function stopping the daemon once its daemon database entry is deleted.
+
+    Args:
+        sender: The class type that sent the pre_delete signal.
+        instance: The instance that has been saved.
+        **kwargs: Other keyword arguments.
+    """
     logger.debug("Stopping daemon of deleted daemon %s ..", str(instance))
     EMailArchiverDaemon.stopDaemon(instance)
     logger.debug("Successfully stopped daemon of deleted daemon %s.", str(instance))

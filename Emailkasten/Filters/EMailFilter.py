@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`EMailFilter` filter provider class."""
+
 import django_filters
 
 from ..constants import FilterSetups
@@ -346,6 +348,8 @@ class EMailFilter(django_filters.FilterSet):
     )
 
     class Meta:
+        """Metadata class for the filter."""
+
         model = EMailModel
         fields = {
             "message_id": FilterSetups.TEXT,

@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Test file for :mod:`Emailkasten.signals.saveMailboxModel`."""
+
 import pytest
 from model_bakery import baker
 
@@ -24,6 +26,7 @@ from Emailkasten.Models.MailboxModel import MailboxModel
 
 @pytest.mark.django_db
 def test_MailboxModel_post_save():
+    """Tests behaviour of :func:`Emailkasten.signals.saveMailboxModel.post_save_is_healthy`."""
     mailbox = baker.make(MailboxModel)
     daemon_1 = baker.make(DaemonModel, mailbox=mailbox)
     daemon_2 = baker.make(DaemonModel, mailbox=mailbox)

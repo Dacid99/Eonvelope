@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`ImageSerializer` serializer class."""
+
 from rest_framework import serializers
 
 from ...Models.ImageModel import ImageModel
@@ -27,6 +29,8 @@ class ImageSerializer(serializers.ModelSerializer):
     Use exclusively in a :restframework::class:`viewsets.ReadOnlyModelViewSet`."""
 
     class Meta:
+        """Metadata class for the serializer."""
+
         model = ImageModel
 
         exclude = ['file_path']

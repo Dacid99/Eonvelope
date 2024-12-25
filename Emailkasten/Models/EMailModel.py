@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`EMailModel` model class."""
+
 from __future__ import annotations
 
 import logging
@@ -145,6 +147,8 @@ class EMailModel(models.Model):
         return f"Email with ID {self.message_id}, received on {self.datetime} with subject {self.email_subject}"
 
     class Meta:
+        """Metadata class for the model."""
+
         db_table = "emails"
         """The name of the database table for the emails."""
 

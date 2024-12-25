@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`CorrespondentViewSet` viewset."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -58,6 +60,7 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
         return CorrespondentModel.objects.filter(emails__account__user = self.request.user).distinct()
 
     def get_serializer_class(self):
+        """Sets the serializer for `list` requests to the simplified version."""
         if self.action == 'list':
             return SimpleCorrespondentSerializer
         return super().get_serializer_class()

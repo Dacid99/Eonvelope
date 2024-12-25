@@ -23,7 +23,7 @@ import os
 
 from django.db import models
 
-from .. import constants
+from ..constants import StorageConfiguration
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -37,7 +37,7 @@ class StorageModel(models.Model):
     directory_number = models.PositiveIntegerField(unique=True)
     """The number of the directory tracked by this entry. Unique."""
 
-    path = models.FilePathField(unique=True, path=constants.StorageConfiguration.STORAGE_PATH)
+    path = models.FilePathField(unique=True, path=StorageConfiguration.STORAGE_PATH)
     """The path of the tracked directory. Unique.
     Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`."""
 
@@ -73,7 +73,7 @@ class StorageModel(models.Model):
         if StorageModel.objects.filter(current=True).count() > 1:
             logger.critical("More than one current storage directory!!")
         if not self.path:
-            self.path = os.path.join(constants.StorageConfiguration.STORAGE_PATH, str(self.directory_number))
+            self.path = os.path.join(StorageConfiguration.STORAGE_PATH, str(self.directory_number))
             if not os.path.exists( self.path ):
                 logger.info("Creating new storage directory %s ...", self.path)
                 os.makedirs( self.path )
@@ -89,7 +89,7 @@ class StorageModel(models.Model):
         logger.debug("Incrementing subdirectory count of %s ..", str(self))
 
         self.subdirectory_count += 1
-        if self.subdirectory_count >= constants.StorageConfiguration.MAX_SUBDIRS_PER_DIR:
+        if self.subdirectory_count >= StorageConfiguration.MAX_SUBDIRS_PER_DIR:
             logger.debug("Max number of subdirectories in %s reached, adding new storage ...", str(self))
             self._addNewDirectory()
             logger.debug("Successfully added new storage.")
@@ -115,15 +115,15 @@ class StorageModel(models.Model):
         If that subdirectory does not exist yet, creates it and increments the :attr:`subdirectory_count` of the current storage directory.
 
         Args:
-            subdirectoryName: The name of subdirectory to be stored.
+            subdirectoryName: The name of the subdirectory to be stored.
 
         Returns:
-            str: The path of the subdirectory in the storage.
+            The path of the subdirectory in the storage.
         """
         storageEntry = StorageModel.objects.filter(current=True).first()
         if not storageEntry:
-            if os.listdir(constants.StorageConfiguration.STORAGE_PATH) and not StorageModel.objects.count():
-                logger.critical("The storage is not empty but there is no information about it in the database!!")
+            if os.listdir(StorageConfiguration.STORAGE_PATH) and not StorageModel.objects.count():
+                logger.critical("The storage is not empty but there is no information about it in the database!!!")
 
             logger.info("Creating first storage directory...")
             storageEntry = StorageModel.objects.create(directory_number=0, current=True, subdirectory_count=0)
@@ -137,5 +137,26 @@ class StorageModel(models.Model):
             storageEntry.incrementSubdirectoryCount()
             logger.debug("Successfully created new subdirectory in the current storage directory.")
 
-
         return subdirectoryPath
+
+
+    @staticmethod
+    def healthcheck() -> bool:
+        """Provides a healthcheck for the storage.
+
+        Returns:
+            True if storage is healthy,
+            False if there is no unique current storage directory
+            or the count of subdirectories for one of the directories is wrong.
+        """
+        uniqueCurrent = StorageModel.objects.filter(current=True).count() == 1
+        if not uniqueCurrent:
+            logger.critical("More than one currently used storage direcory!!!")
+
+        correctSubdirCount = all(
+            storage.subdirectory_count == len(os.listdir(storage.path)) for storage in StorageModel.objects.all()
+        )
+        if not correctSubdirCount:
+            logger.critical("More subdirectories in a storage directory than indexed in database!!!")
+
+        return uniqueCurrent and correctSubdirCount

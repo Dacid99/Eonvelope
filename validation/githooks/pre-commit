@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+source .venv/bin/activate
+
 set -o pipefail
 
 CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.py$')

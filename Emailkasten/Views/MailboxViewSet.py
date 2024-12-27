@@ -81,7 +81,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         DaemonModel.objects.create(mailbox=mailbox)
 
         mailboxSerializer = self.get_serializer(mailbox)
-        return Response({'status': 'Added daemon for mailbox', 'mailbox': mailboxSerializer.data})
+        return Response({'detail': 'Added daemon for mailbox', 'mailbox': mailboxSerializer.data})
 
 
     URL_PATH_TEST = 'test'
@@ -101,7 +101,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         result = testMailbox(mailbox)
 
         mailboxSerializer = self.get_serializer(mailbox)
-        return Response({'status': 'Tested mailbox', 'mailbox': mailboxSerializer.data, 'result': TestStatusCodes.INFOS[result]})
+        return Response({'detail': 'Tested mailbox', 'mailbox': mailboxSerializer.data, 'result': TestStatusCodes.INFOS[result]})
 
 
     URL_PATH_FETCH_ALL = 'fetch-all'
@@ -122,7 +122,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         fetchAndProcessMails(mailbox, mailbox.account, constants.MailFetchingCriteria.ALL)
 
         mailboxSerializer = self.get_serializer(mailbox)
-        return Response({'status': 'All mails fetched', "mailbox": mailboxSerializer.data})
+        return Response({'detail': 'All mails fetched', "mailbox": mailboxSerializer.data})
 
 
     URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
@@ -141,7 +141,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         mailbox = self.get_object()
         mailbox.is_favorite = not mailbox.is_favorite
         mailbox.save(update_fields=['is_favorite'])
-        return Response({'status': 'Mailbox marked as favorite'})
+        return Response({'detail': 'Mailbox marked as favorite'})
 
 
     URL_PATH_FAVORITES = 'favorites'

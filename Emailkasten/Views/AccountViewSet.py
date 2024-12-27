@@ -114,7 +114,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         result = testAccount(account)
 
         accountSerializer = self.get_serializer(account)
-        return Response({'status': 'Tested mailaccount', 'account': accountSerializer.data, 'result': TestStatusCodes.INFOS[result]})
+        return Response({'detail': 'Tested mailaccount', 'account': accountSerializer.data, 'result': TestStatusCodes.INFOS[result]})
 
 
     URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
@@ -133,7 +133,7 @@ class AccountViewSet(viewsets.ModelViewSet):
         account = self.get_object()
         account.is_favorite = not account.is_favorite
         account.save(update_fields=['is_favorite'])
-        return Response({'status': 'Account marked as favorite'})
+        return Response({'detail': 'Account marked as favorite'})
 
 
     URL_PATH_FAVORITES = 'favorites'

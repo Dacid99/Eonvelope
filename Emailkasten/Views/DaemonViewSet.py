@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING
 
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
+from mdurl import URL
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
@@ -63,7 +64,9 @@ class DaemonViewSet(viewsets.ModelViewSet):
         return DaemonModel.objects.filter(mailbox__account__user = self.request.user)
 
 
-    @action(detail=True, methods=['get'])
+    URL_PATH_FETCHING_OPTIONS = 'fetching-options'
+    URL_NAME_FETCHING_OPTIONS = 'fetching-options'
+    @action(detail=True, methods=['get'], url_path=URL_PATH_FETCHING_OPTIONS, url_name=URL_NAME_FETCHING_OPTIONS)
     def fetching_options(self, request: Request, pk: int|None = None) -> Response:
         """Action method returning all fetching options for the daemon.
 
@@ -83,7 +86,9 @@ class DaemonViewSet(viewsets.ModelViewSet):
             return Response({'error': "No fetching options available for this mailbox!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-    @action(detail=True, methods=['post'], url_path='test')
+    URL_PATH_TEST = 'test'
+    URL_NAME_TEST = 'test'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST)
     def test(self, request: Request, pk:int|None = None) -> Response:
         """Action method testing the daemon data of the mailbox.
 
@@ -98,7 +103,9 @@ class DaemonViewSet(viewsets.ModelViewSet):
         return EMailArchiverDaemon.testDaemon(daemon)
 
 
-    @action(detail=True, methods=['post'], url_path='start')
+    URL_PATH_START = 'start'
+    URL_NAME_START = 'start'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_START, url_name=URL_NAME_START)
     def start(self, request: Request, pk: int|None = None) -> Response:
         """Action method starting the daemon for the mailbox.
 
@@ -113,7 +120,9 @@ class DaemonViewSet(viewsets.ModelViewSet):
         return EMailArchiverDaemon.startDaemon(daemon)
 
 
-    @action(detail=True, methods=['post'], url_path='stop')
+    URL_PATH_STOP = 'stop'
+    URL_NAME_STOP = 'stop'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_STOP, url_name=URL_NAME_STOP)
     def stop(self, request: Request, pk: int|None = None) -> Response:
         """Action method stopping the daemon data of the mailbox.
 
@@ -128,7 +137,9 @@ class DaemonViewSet(viewsets.ModelViewSet):
         return EMailArchiverDaemon.stopDaemon(daemon)
 
 
-    @action(detail=True, methods=['get'], url_path='log/download')
+    URL_PATH_LOG_DOWNLOAD = 'log/download'
+    URL_NAME_LOG_DOWNLOAD = 'log-download'
+    @action(detail=True, methods=['get'], url_path=URL_PATH_LOG_DOWNLOAD, url_name=URL_NAME_LOG_DOWNLOAD)
     def log_download(self, request: Request, pk: int|None = None) -> FileResponse:
         """Action method downloading the log file of the daemon.
 

@@ -77,7 +77,9 @@ class AccountViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'This account already exists!'}, status=status.HTTP_409_CONFLICT)
 
 
-    @action(detail=True, methods=['post'])
+    URL_PATH_SCAN_MAILBOXES = 'scan-mailboxes'
+    URL_NAME_SCAN_MAILBOXES = 'scan-mailboxes'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_SCAN_MAILBOXES, url_name=URL_NAME_SCAN_MAILBOXES)
     def scan_mailboxes(self, request: Request, pk: int|None=None) -> Response:
         """Action method scanning for mailboxes in the account.
 
@@ -95,7 +97,9 @@ class AccountViewSet(viewsets.ModelViewSet):
         return Response(data = {'status': 'Scanned for mailboxes', 'account': accountSerializer.data})
 
 
-    @action(detail=True, methods=['post'], url_path='test')
+    URL_PATH_TEST = 'test'
+    URL_NAME_TEST = 'test'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST)
     def test(self, request: Request, pk: int|None =None) -> Response:
         """Action method testing the account data.
 
@@ -113,7 +117,9 @@ class AccountViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Tested mailaccount', 'account': accountSerializer.data, 'result': TestStatusCodes.INFOS[result]})
 
 
-    @action(detail=True, methods=['post'], url_path='toggle_favorite')
+    URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
+    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
     def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
         """Action method toggling the favorite flag of the account.
 
@@ -130,7 +136,9 @@ class AccountViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Account marked as favorite'})
 
 
-    @action(detail=False, methods=['get'], url_path='favorites')
+    URL_PATH_FAVORITES = 'favorites'
+    URL_NAME_FAVORITES = 'favorites'
+    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
     def favorites(self, request: Request) -> Response:
         """Action method returning all accounts with favorite flag.
 

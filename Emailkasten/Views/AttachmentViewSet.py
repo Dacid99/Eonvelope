@@ -61,7 +61,9 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
         return AttachmentModel.objects.filter(email__account__user = self.request.user)
 
 
-    @action(detail=True, methods=['get'], url_path='download')
+    URL_PATH_DOWNLOAD = 'download'
+    URL_NAME_DOWNLOAD = 'download'
+    @action(detail=True, methods=['get'], url_path=URL_PATH_DOWNLOAD, url_name=URL_NAME_DOWNLOAD)
     def download(self, request: Request, pk: int|None = None) -> FileResponse:
         """Action method downloading the attachment.
 
@@ -87,7 +89,9 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
             return response
 
 
-    @action(detail=True, methods=['post'], url_path='toggle_favorite')
+    URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
+    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
     def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
         """Action method toggling the favorite flag of the attachment.
 
@@ -104,7 +108,9 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({'status': 'Attachment marked as favorite'})
 
 
-    @action(detail=False, methods=['get'], url_path='favorites')
+    URL_PATH_FAVORITES = 'favorites'
+    URL_NAME_FAVORITES = 'favorites'
+    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
     def favorites(self, request: Request) -> Response:
         """Action method returning all attachments with favorite flag.
 

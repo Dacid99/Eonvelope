@@ -64,7 +64,9 @@ class MailboxViewSet(viewsets.ModelViewSet):
         return MailboxModel.objects.filter(account__user = self.request.user)
 
 
-    @action(detail=True, methods=['POST'])
+    URL_PATH_ADD_DAEMON = 'add-daemon'
+    URL_NAME_ADD_DAEMON = 'add-daemon'
+    @action(detail=True, methods=['POST'], url_path=URL_PATH_ADD_DAEMON, url_name=URL_NAME_ADD_DAEMON)
     def add_daemon(self, request: Request, pk: int|None = None) -> Response:
         """Action method creating a new daemon for the mailbox.
 
@@ -82,7 +84,9 @@ class MailboxViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Added daemon for mailbox', 'mailbox': mailboxSerializer.data})
 
 
-    @action(detail=True, methods=['post'], url_path='test')
+    URL_PATH_TEST = 'test'
+    URL_NAME_TEST = 'test'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST)
     def test_mailbox(self, request: Request, pk:int|None = None) -> Response:
         """Action method testing the mailbox data.
 
@@ -100,7 +104,9 @@ class MailboxViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Tested mailbox', 'mailbox': mailboxSerializer.data, 'result': TestStatusCodes.INFOS[result]})
 
 
-    @action(detail=True, methods=['post'])
+    URL_PATH_FETCH_ALL = 'fetch-all'
+    URL_NAME_FETCH_ALL = 'fetch-all'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_FETCH_ALL, url_name=URL_NAME_FETCH_ALL)
     def fetch_all(self, request: Request, pk: int|None = None) -> Response:
         """Action method fetching all mails from the mailbox.
 
@@ -119,7 +125,9 @@ class MailboxViewSet(viewsets.ModelViewSet):
         return Response({'status': 'All mails fetched', "mailbox": mailboxSerializer.data})
 
 
-    @action(detail=True, methods=['post'], url_path='toggle_favorite')
+    URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
+    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
     def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
         """Action method toggling the favorite flag of the mailbox.
 
@@ -136,7 +144,9 @@ class MailboxViewSet(viewsets.ModelViewSet):
         return Response({'status': 'Mailbox marked as favorite'})
 
 
-    @action(detail=False, methods=['get'], url_path='favorites')
+    URL_PATH_FAVORITES = 'favorites'
+    URL_NAME_FAVORITES = 'favorites'
+    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
     def favorites(self, request: Request) -> Response:
         """Action method returning all mailboxes with favorite flag.
 

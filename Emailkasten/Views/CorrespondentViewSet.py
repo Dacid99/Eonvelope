@@ -67,7 +67,9 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
         return super().get_serializer_class()
 
 
-    @action(detail=True, methods=['post'], url_path='toggle_favorite')
+    URL_PATH_TOGGLE_FAVORITE = 'toggle_favorite'
+    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
     def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
         """Action method toggling the favorite flag of the correspondent.
 
@@ -84,7 +86,9 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({'status': 'Correspondent marked as favorite'})
 
 
-    @action(detail=False, methods=['get'], url_path='favorites')
+    URL_PATH_FAVORITES = 'favorites'
+    URL_NAME_FAVORITES = 'favorites'
+    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
     def favorites(self, request: Request)-> Response:
         """Action method returning all correspondent with favorite flag.
 

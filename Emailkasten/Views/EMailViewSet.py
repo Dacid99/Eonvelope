@@ -61,7 +61,9 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         return EMailModel.objects.filter(account__user = self.request.user)
 
 
-    @action(detail=True, methods=['get'], url_path='download')
+    URL_PATH_DOWNLOAD = 'download'
+    URL_NAME_DOWNLOAD = 'download'
+    @action(detail=True, methods=['get'], url_path=URL_PATH_DOWNLOAD, url_name=URL_NAME_DOWNLOAD)
     def download(self, request: Request, pk: int|None = None) -> FileResponse:
         """Action method downloading the eml file of the email.
 
@@ -87,7 +89,9 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
             return response
 
 
-    @action(detail=True, methods=['get'], url_path='prerender')
+    URL_PATH_PRERENDER = 'prerender'
+    URL_NAME_PRERENDER = 'prerender'
+    @action(detail=True, methods=['get'], url_path=URL_PATH_PRERENDER, url_name=URL_NAME_PRERENDER)
     def prerender(self, request: Request, pk: int|None = None) -> FileResponse:
         """Action method downloading the prerender image of the mail.
 
@@ -113,7 +117,9 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
             return response
 
 
-    @action(detail=True, methods=['post'], url_path='toggle_favorite')
+    URL_PATH_TOGGLE_FAVORITE = 'toggle_favorite'
+    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
+    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
     def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
         """Action method toggling the favorite flag of the email.
 
@@ -130,7 +136,9 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         return Response({'status': 'Email marked as favorite'})
 
 
-    @action(detail=False, methods=['get'], url_path='favorites')
+    URL_PATH_FAVORITES = 'favorites'
+    URL_NAME_FAVORITES = 'favorites'
+    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
     def favorites(self, request: Request) -> Response:
         """Action method returning all emails with favorite flag.
 

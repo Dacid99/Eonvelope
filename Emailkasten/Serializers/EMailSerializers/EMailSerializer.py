@@ -20,6 +20,7 @@
 
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
+from rest_framework.validators import UniqueTogetherValidator
 
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from ...Models.EMailModel import EMailModel
@@ -53,8 +54,17 @@ class EMailSerializer(serializers.ModelSerializer):
         """Metadata class for the serializer."""
 
         model = EMailModel
+
         fields = ['message_id', 'datetime', 'email_subject', 'bodytext', 'is_favorite', 'account', 'created', 'updated']
         """Includes only the most relevant fields."""
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=EMailModel.objects.all(),
+                fields=['message_id', 'account'],
+                message='This email already exists!'
+            )
+        ]
 
 
     def get_correspondents(self, object: EMailModel) -> ReturnDict|None:

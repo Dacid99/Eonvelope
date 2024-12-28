@@ -19,6 +19,7 @@
 """Module with the :class:`ConfigurationSerializer` serializer class."""
 
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from ...Models.ConfigurationModel import ConfigurationModel
 
@@ -36,3 +37,11 @@ class ConfigurationSerializer(serializers.ModelSerializer):
 
         read_only_fields = ['created', 'updated']
         """The :attr:`Emailkasten.Models.AccountModel.created`, and :attr:`Emailkasten.Models.AccountModel.updated` fields are read-only."""
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=ConfigurationModel.objects.all(),
+                fields=['category', 'key'],
+                message='This configuration already exists!'
+            )
+        ]

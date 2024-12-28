@@ -19,6 +19,7 @@
 """Module with the :class:`MailboxWithDaemonsSerializer` serializer class."""
 
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from ...Models.MailboxModel import MailboxModel
 from ..DaemonSerializers.DaemonSerializer import DaemonSerializer
@@ -42,3 +43,11 @@ class MailboxWithDaemonSerializer(serializers.ModelSerializer):
 
         read_only_fields = ['name', 'account', 'created', 'updated']
         """The :attr:`Emailkasten.Models.MailboxModel.name`, :attr:`Emailkasten.Models.MailboxModel.account`, :attr:`Emailkasten.Models.MailboxModel.created`, and :attr:`Emailkasten.Models.MailboxModel.updated` fields are read-only."""
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=MailboxModel.objects.all(),
+                fields=['name', 'account'],
+                message='This mailbox already exists!'
+            )
+        ]

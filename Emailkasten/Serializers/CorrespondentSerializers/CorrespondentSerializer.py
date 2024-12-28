@@ -20,6 +20,7 @@
 
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
+from rest_framework.validators import UniqueTogetherValidator
 
 from ...Models.CorrespondentModel import CorrespondentModel
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel

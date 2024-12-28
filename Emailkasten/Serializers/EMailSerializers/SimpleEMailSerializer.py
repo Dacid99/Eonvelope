@@ -19,6 +19,7 @@
 """Module with the :class:`SimpleEMailSerializer` serializer class."""
 
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from ...Models.EMailModel import EMailModel
 
@@ -35,3 +36,11 @@ class SimpleEMailSerializer(serializers.ModelSerializer):
 
         exclude = ['eml_filepath', 'prerender_filepath']
         """Exclude the :attr:`Emailkasten.Models.EMailModel.eml_filepath` and :attr:`Emailkasten.Models.EMailModel.prerender_filepath` fields."""
+
+        validators = [
+            UniqueTogetherValidator(
+                queryset=EMailModel.objects.all(),
+                fields=['message_id', 'account'],
+                message='This email already exists!'
+            )
+        ]

@@ -85,20 +85,3 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
         mailinglist.is_favorite = not mailinglist.is_favorite
         mailinglist.save(update_fields=['is_favorite'])
         return Response({'detail': 'Mailinglist marked as favorite'})
-
-
-    URL_PATH_FAVORITES = 'favorites'
-    URL_NAME_FAVORITES = 'favorites'
-    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
-    def favorites(self, request: Request) -> Response:
-        """Action method returning all mailinglist with favorite flag.
-
-        Args:
-            request: The request triggering the action.
-
-        Returns:
-            A response containing all mailinglist data with favorite flag.
-        """
-        favoriteMailinglists = MailingListModel.objects.filter(is_favorite=True)
-        serializer = self.get_serializer(favoriteMailinglists, many=True)
-        return Response(serializer.data)

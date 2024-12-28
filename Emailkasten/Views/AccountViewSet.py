@@ -134,20 +134,3 @@ class AccountViewSet(viewsets.ModelViewSet):
         account.is_favorite = not account.is_favorite
         account.save(update_fields=['is_favorite'])
         return Response({'detail': 'Account marked as favorite'})
-
-
-    URL_PATH_FAVORITES = 'favorites'
-    URL_NAME_FAVORITES = 'favorites'
-    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
-    def favorites(self, request: Request) -> Response:
-        """Action method returning all accounts with favorite flag.
-
-        Args:
-            request: The request triggering the action.
-
-        Returns:
-            A response containing all account data with favorite flag.
-        """
-        favoriteAccounts = AccountModel.objects.filter(is_favorite=True)
-        serializer = self.get_serializer(favoriteAccounts, many=True)
-        return Response(serializer.data)

@@ -127,6 +127,7 @@ class MailingListFilter(django_filters.FilterSet):
             "list_post": FilterSetups.TEXT,
             "list_help": FilterSetups.TEXT,
             "list_archive": FilterSetups.TEXT,
+            "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.FLOAT,
             "updated": FilterSetups.FLOAT,
         }

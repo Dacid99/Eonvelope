@@ -147,20 +147,3 @@ class MailboxViewSet(viewsets.ModelViewSet):
         mailbox.is_favorite = not mailbox.is_favorite
         mailbox.save(update_fields=['is_favorite'])
         return Response({'detail': 'Mailbox marked as favorite'})
-
-
-    URL_PATH_FAVORITES = 'favorites'
-    URL_NAME_FAVORITES = 'favorites'
-    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
-    def favorites(self, request: Request) -> Response:
-        """Action method returning all mailboxes with favorite flag.
-
-        Args:
-            request: The request triggering the action.
-
-        Returns:
-            A response containing all mailbox data with favorite flag.
-        """
-        favoriteMailboxes = MailboxModel.objects.filter(is_favorite=True)
-        serializer = self.get_serializer(favoriteMailboxes, many=True)
-        return Response(serializer.data)

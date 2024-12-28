@@ -105,20 +105,3 @@ class ImageViewSet(viewsets.ReadOnlyModelViewSet):
         image.is_favorite = not image.is_favorite
         image.save(update_fields=['is_favorite'])
         return Response({'detail': 'Image marked as favorite'})
-
-
-    URL_PATH_FAVORITES = 'favorites'
-    URL_NAME_FAVORITES = 'favorites'
-    @action(detail=False, methods=['get'], url_path=URL_PATH_FAVORITES, url_name=URL_NAME_FAVORITES)
-    def favorites(self, request: Request) -> Response:
-        """Action method returning all image with favorite flag.
-
-        Args:
-            request: The request triggering the action.
-
-        Returns:
-            A response containing all image data with favorite flag.
-        """
-        favoriteImages = ImageModel.objects.filter(is_favorite=True)
-        serializer = self.get_serializer(favoriteImages, many=True)
-        return Response(serializer.data)

@@ -120,6 +120,7 @@ class MailboxFilter(django_filters.FilterSet):
             "save_attachments": FilterSetups.TEXT,
             "save_images": FilterSetups.TEXT,
             "is_healthy": FilterSetups.TEXT,
+            "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.FLOAT,
             "updated": FilterSetups.FLOAT,
         }

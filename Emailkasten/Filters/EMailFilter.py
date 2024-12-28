@@ -370,6 +370,7 @@ class EMailFilter(django_filters.FilterSet):
             "x_priority": FilterSetups.TEXT,
             "x_originated_client": FilterSetups.TEXT,
             "x_spam": FilterSetups.TEXT,
+            "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.FLOAT,
             "updated": FilterSetups.FLOAT,
         }

@@ -126,6 +126,7 @@ class CorrespondentFilter(django_filters.FilterSet):
         fields = {
             "email_name": FilterSetups.TEXT,
             "email_address": FilterSetups.TEXT,
+            "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.FLOAT,
             "updated": FilterSetups.FLOAT,
         }

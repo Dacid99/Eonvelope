@@ -27,14 +27,6 @@ from Emailkasten.Models.MailingListModel import MailingListModel
 from Emailkasten.Views.MailingListViewSet import MailingListViewSet
 
 
-@pytest.fixture(name='owner_user')
-def fixture_owner_user():
-    return baker.make(User)
-
-@pytest.fixture(name='other_user')
-def fixture_other_user():
-    return baker.make(User)
-
 @pytest.fixture(name='noauth_apiClient')
 def fixture_noauth_apiClient():
     return APIClient()

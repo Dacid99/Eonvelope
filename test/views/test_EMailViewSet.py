@@ -103,7 +103,7 @@ def fixture_emailPayload(accountModel) -> dict[str, Any]:
     """Creates clean :class:`Emailkasten.Models.EMailModel.EMailModel` payload for a post or put request.
 
     Args:
-        owner_user: Depends on :func:`fixture_owner_user`.
+        accountModel: Depends on :func:`fixture_accountModel`.
 
     Returns:
         The clean payload.

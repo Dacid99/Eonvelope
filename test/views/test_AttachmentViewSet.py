@@ -55,27 +55,6 @@ from Emailkasten.Views.AttachmentViewSet import AttachmentViewSet
 if TYPE_CHECKING:
     from typing import Any, Callable
 
-@pytest.fixture(name='owner_user')
-def fixture_owner_user() -> User:
-    """Creates a :class:`django.contrib.auth.models.User`
-    that represents the owner of the data.
-    Invoked as owner_user.
-
-    Returns:
-        The owner user instance.
-    """
-    return baker.make(User)
-
-@pytest.fixture(name='other_user')
-def fixture_other_user() -> User:
-    """Creates a :class:`django.contrib.auth.models.User`
-    that represents another user that is not the owner of the data.
-    Invoked as other_user.
-
-    Returns:
-       The other user instance.
-    """
-    return baker.make(User)
 
 @pytest.fixture(name='accountModel')
 def fixture_accountModel(owner_user) -> AccountModel:
@@ -186,45 +165,6 @@ def fixture_custom_detail_action_url(attachmentModel)-> Callable[[str],str]:
     return lambda custom_detail_action_url_name: (
         reverse(f'{AttachmentViewSet.BASENAME}-{custom_detail_action_url_name}', args=[attachmentModel.id])
     )
-
-@pytest.fixture(name='noauth_apiClient')
-def fixture_noauth_apiClient() -> APIClient:
-    """Creates an unauthenticated :class:`rest_framework.test.APIClient` instance.
-
-    Returns:
-        The unauthenticated APIClient.
-    """
-    return APIClient()
-
-@pytest.fixture(name='other_apiClient')
-def fixture_other_apiClient(noauth_apiClient, other_user) -> APIClient:
-    """Creates a :class:`rest_framework.test.APIClient` instance
-    that is authenticated as :attr:`other_user`.
-
-    Args:
-        noauth_apiClient: Depends on :func:`fixture_noauth_apiClient`.
-        other_user: Depends on :func:`fixture_other_user`.
-
-    Returns:
-        The authenticated APIClient.
-    """
-    noauth_apiClient.force_authenticate(user=other_user)
-    return noauth_apiClient
-
-@pytest.fixture(name='owner_apiClient')
-def fixture_owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
-    """Creates a :class:`rest_framework.test.APIClient` instance
-    that is authenticated as :attr:`owner_user`.
-
-    Args:
-        noauth_apiClient: Depends on :func:`fixture_noauth_apiClient`.
-        owner_user: Depends on :func:`fixture_owner_user`.
-
-    Returns:
-        The authenticated APIClient.
-    """
-    noauth_apiClient.force_authenticate(user=owner_user)
-    return noauth_apiClient
 
 
 @pytest.mark.django_db

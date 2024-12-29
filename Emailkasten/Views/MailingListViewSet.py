@@ -43,12 +43,24 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.MailingListModel.MailingListModel`."""
 
     BASENAME = 'mailinglists'
-    queryset = MailingListModel.objects.all()
     serializer_class = MailingListSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailingListFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['list_id', 'list_owner', 'list_subscribe', 'list_unsubscribe', 'list_post', 'list_help', 'list_archive', 'correspondent__email_name', 'correspondent__email_address', 'created', 'updated']
+    ordering_fields = [
+        'list_id',
+        'list_owner',
+        'list_subscribe',
+        'list_unsubscribe',
+        'list_post',
+        'list_help',
+        'list_archive',
+        'is_favorite',
+        'correspondent__email_name',
+        'correspondent__email_address',
+        'created',
+        'updated'
+    ]
     ordering = ['id']
 
     def get_queryset(self) -> BaseManager[MailingListModel]:

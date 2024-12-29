@@ -44,12 +44,11 @@ class ImageViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.ImageModel.ImageModel`."""
 
     BASENAME = 'images'
-    queryset = ImageModel.objects.all()
     serializer_class = ImageSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = ImageFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['file_name', 'datasize', 'email__datetime', 'created', 'updated']
+    ordering_fields = ['file_name', 'datasize', 'email__datetime', 'is_favorite', 'created', 'updated']
     ordering = ['id']
 
     def get_queryset(self) -> BaseManager[ImageModel]:

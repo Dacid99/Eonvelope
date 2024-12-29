@@ -47,17 +47,26 @@ class AccountViewSet(viewsets.ModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.AccountModel.AccountModel`."""
 
     BASENAME = 'accounts'
-    queryset = AccountModel.objects.all()
     serializer_class = AccountSerializer
-    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AccountFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['mail_address', 'mail_host', 'protocol', 'created', 'updated']
+    ordering_fields = [
+        'mail_address',
+        'mail_host',
+        'mail_host_port',
+        'protocol',
+        'timeout',
+        'is_healthy',
+        'is_favorite',
+        'created',
+        'updated'
+    ]
     ordering = ['id']
 
 
     def get_queryset(self) -> BaseManager[AccountModel]:
-        """Filters the data for entries connected to the request user.
+        """Fetches the queryset by filtering the data for entries connected to the request user.
 
         Returns:
             The account entries matching the request user."""

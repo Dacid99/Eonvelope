@@ -45,12 +45,11 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.AttachmentModel.AttachmentModel`."""
 
     BASENAME = 'attachments'
-    queryset = AttachmentModel.objects.all()
     serializer_class = AttachmentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AttachmentFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['file_name', 'datasize', 'email__datetime', 'created']
+    ordering_fields = ['file_name', 'datasize', 'email__datetime', 'is_favorite', 'created', 'updated']
     ordering = ['id']
 
     def get_queryset(self) -> BaseManager[AttachmentModel]:

@@ -47,12 +47,23 @@ class DaemonViewSet(viewsets.ModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.DaemonModel.DaemonModel`."""
 
     BASENAME = 'daemons'
-    queryset = DaemonModel.objects.all()
     serializer_class = DaemonSerializer
-    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = DaemonFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['fetching_criterion', 'is_running', 'is_healthy', 'mailbox__fetching_criterion', 'mailbox__name', 'mailbox__account__mail_address', 'mailbox__account__mail_host', 'mailbox__account__protocol', 'created', 'updated']
+    ordering_fields = [
+        'fetching_criterion',
+        'cycle_interval',
+        'is_running',
+        'is_healthy',
+        'mailbox__fetching_criterion',
+        'mailbox__name',
+        'mailbox__account__mail_address',
+        'mailbox__account__mail_host',
+        'mailbox__account__protocol',
+        'created',
+        'updated'
+    ]
     ordering = ['id']
 
 
@@ -63,6 +74,11 @@ class DaemonViewSet(viewsets.ModelViewSet):
             The daemon entries matching the request user."""
         return DaemonModel.objects.filter(mailbox__account__user = self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        return Response(
+            {"detail": "POST method is not allowed on this endpoint."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
     URL_PATH_FETCHING_OPTIONS = 'fetching-options'
     URL_NAME_FETCHING_OPTIONS = 'fetching-options'

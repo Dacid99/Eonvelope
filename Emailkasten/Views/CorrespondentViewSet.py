@@ -45,12 +45,11 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`."""
 
     BASENAME = 'correspondents'
-    queryset = CorrespondentModel.objects.all()
     serializer_class = CorrespondentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = CorrespondentFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['email_name', 'email_address', 'created']
+    ordering_fields = ['email_name', 'email_address', 'is_favorite','created', 'updated']
     ordering = ['id']
 
     def get_queryset(self) -> BaseManager[CorrespondentModel]:

@@ -45,12 +45,11 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.EMailModel.EMailModel`."""
 
     BASENAME = 'emails'
-    queryset = EMailModel.objects.all()
     serializer_class = FullEMailSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = EMailFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['datetime', 'email_subject', 'datasize', 'created', 'updated', 'user_agent', 'language', 'content_language', 'importance', 'priority', 'precedence', 'x_priority', 'x_originated_client']
+    ordering_fields = ['datetime', 'email_subject', 'datasize', 'is_favorite','created', 'updated', 'user_agent', 'language', 'content_language', 'importance', 'priority', 'precedence', 'x_priority', 'x_originated_client']
     ordering = ['id']
 
     def get_queryset(self) -> BaseManager[EMailModel]:

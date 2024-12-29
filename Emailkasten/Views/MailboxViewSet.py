@@ -47,12 +47,23 @@ class MailboxViewSet(viewsets.ModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.MailboxModel.MailboxModel`."""
 
     BASENAME = 'mailboxes'
-    queryset = MailboxModel.objects.all()
     serializer_class = MailboxWithDaemonSerializer
-    filter_backends = [OrderingFilter, DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailboxFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['name', 'account__mail_address', 'account__mail_host', 'account__protocol', 'created', 'updated']
+    ordering_fields = [
+        'name',
+        'account__mail_address',
+        'account__mail_host',
+        'account__protocol',
+        'save_attachments',
+        'save_images',
+        'save_toEML',
+        'is_favorite',
+        'is_healthy',
+        'created',
+        'updated'
+    ]
     ordering = ['id']
 
 

@@ -38,7 +38,7 @@ class MailboxWithDaemonSerializer(serializers.ModelSerializer):
 
         model = MailboxModel
 
-        fields = '__all__' + ['daemons']
+        fields = '__all__'
         """Includes all fields."""
 
         read_only_fields = ['name', 'account', 'is_healthy', 'created', 'updated', 'daemons']

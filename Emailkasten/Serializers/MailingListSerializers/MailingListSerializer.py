@@ -46,7 +46,7 @@ class MailingListSerializer(serializers.ModelSerializer):
 
         model = MailingListModel
 
-        fields = '__all__' + ['email_number']
+        fields = '__all__'
         """Include all fields."""
 
         read_only_fields = [

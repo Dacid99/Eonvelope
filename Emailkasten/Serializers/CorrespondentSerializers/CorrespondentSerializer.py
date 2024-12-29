@@ -47,7 +47,7 @@ class CorrespondentSerializer(serializers.ModelSerializer):
 
         model = CorrespondentModel
 
-        fields = '__all__' + ['emails']
+        fields = '__all__'
         """Include all fields plus the emails."""
 
         read_only_fields = [

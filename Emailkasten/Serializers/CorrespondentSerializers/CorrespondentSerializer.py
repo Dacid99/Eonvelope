@@ -35,7 +35,7 @@ class CorrespondentSerializer(serializers.ModelSerializer):
     Uses all fields including all emails and mailinglists mentioning the correspondent.
     Use exclusively in a :restframework::class:`viewsets.ReadOnlyModelViewSet`."""
 
-    emails = serializers.SerializerMethodField()
+    emails = serializers.SerializerMethodField(read_only=True)
     """The emails are set from the :class:`Emailkasten.Models.EMailCorrespondentsModel` via :func:`get_emails`."""
 
     mailinglist = SimpleMailingListSerializer(many=True, read_only=True)
@@ -47,8 +47,16 @@ class CorrespondentSerializer(serializers.ModelSerializer):
 
         model = CorrespondentModel
 
-        fields = '__all__'
-        """Include all fields."""
+        fields = '__all__' + ['emails']
+        """Include all fields plus the emails."""
+
+        read_only_fields = [
+                'email_address',
+                'created',
+                'updated',
+                'emails',
+                'mailinglist'
+            ]
 
 
     def get_emails(self, object: CorrespondentModel) -> ReturnDict|None:

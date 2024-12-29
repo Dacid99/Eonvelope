@@ -44,3 +44,30 @@ class SimpleEMailSerializer(serializers.ModelSerializer):
                 message='This email already exists!'
             )
         ]
+
+        read_only_fields = [
+            'message_id',
+            'datetime',
+            'email_subject',
+            'bodytext',
+            'inReplyTo',
+            'datasize',
+            'is_favorite',
+            'account',
+            'comments',
+            'keywords',
+            'importance',
+            'priority',
+            'precedence',
+            'received',
+            'user_agent',
+            'auto_submitted',
+            'content_type',
+            'content_language',
+            'content_location',
+            'x_priority',
+            'x_originated_client',
+            'x_spam',
+            'created',
+            'updated'
+        ]

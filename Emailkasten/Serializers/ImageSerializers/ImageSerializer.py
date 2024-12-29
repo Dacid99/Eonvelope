@@ -35,3 +35,11 @@ class ImageSerializer(serializers.ModelSerializer):
 
         exclude = ['file_path']
         """Exclude the :attr:`Emailkasten.Models.ImageModel.file_path` field."""
+
+        read_only_fields = [
+                'file_name',
+                'datasize',
+                'email',
+                'created',
+                'updated'
+            ]

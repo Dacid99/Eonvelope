@@ -46,5 +46,4 @@ class AccountSerializer(serializers.ModelSerializer):
         exclude = ['user']
         """Exclude the :attr:`Emailkasten.Models.AccountModel.user` field."""
 
-        read_only_fields = ['is_healthy', 'created', 'updated']
-        """The :attr:`Emailkasten.Models.AccountModel.is_healthy`, :attr:`Emailkasten.Models.AccountModel.created`, and :attr:`Emailkasten.Models.AccountModel.updated` fields are read-only."""
+        read_only_fields = ['is_healthy', 'created', 'updated', 'mailboxes']

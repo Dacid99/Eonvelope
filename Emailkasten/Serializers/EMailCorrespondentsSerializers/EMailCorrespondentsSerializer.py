@@ -30,7 +30,7 @@ class EMailCorrespondentSerializer(serializers.ModelSerializer):
     Used to serialize the correspondent belonging to an email. Does not include this email.
     Use exclusively as read-only."""
 
-    correspondent = SimpleCorrespondentSerializer()
+    correspondent = SimpleCorrespondentSerializer(read_only=True)
     """The email is serialized by :class:`Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`."""
 
     class Meta:
@@ -40,3 +40,5 @@ class EMailCorrespondentSerializer(serializers.ModelSerializer):
 
         fields = ['correspondent', 'mention']
         """Includes only :attr:`correspondent` and :attr:`Emailkasten.Models.EMailCorrespondentsModel.mention`."""
+
+        read_only_fields = ['correspondent', 'mention']

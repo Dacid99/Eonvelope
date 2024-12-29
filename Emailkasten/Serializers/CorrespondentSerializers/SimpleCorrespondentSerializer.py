@@ -35,3 +35,9 @@ class SimpleCorrespondentSerializer(serializers.ModelSerializer):
 
         fields = '__all__'
         """Include all fields."""
+
+        read_only_fields = [
+                'email_address',
+                'created',
+                'updated'
+            ]

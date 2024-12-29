@@ -41,6 +41,20 @@ class SimpleMailingListSerializer(serializers.ModelSerializer):
         fields = '__all__'
         """Include all fields."""
 
+        read_only_fields = [
+            'list_id',
+            'list_owner',
+            'list_subscribe',
+            'list_unsubscribe',
+            'list_post',
+            'list_help',
+            'list_archive',
+            'correspondent',
+            'created',
+            'updated',
+            'email_number'
+        ]
+
         validators = [
             UniqueTogetherValidator(
                 queryset=MailingListModel.objects.all(),

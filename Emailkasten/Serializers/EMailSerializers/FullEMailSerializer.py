@@ -46,7 +46,7 @@ class FullEMailSerializer(serializers.ModelSerializer):
     mailinglist = SimpleMailingListSerializer(read_only=True)
     """The attachments are serialized by :class:`Emailkasten.MailingListSerializers.SimpleMailingListSerializer.SimpleMailingListSerializer`."""
 
-    correspondents = serializers.SerializerMethodField()
+    correspondents = serializers.SerializerMethodField(read_only=True)
     """The emails are set from the :class:`Emailkasten.Models.EMailCorrespondentsModel` via :func:`get_emails`."""
 
 
@@ -64,6 +64,37 @@ class FullEMailSerializer(serializers.ModelSerializer):
                 fields=['message_id', 'account'],
                 message='This email already exists!'
             )
+        ]
+
+        read_only_fields = [
+            'message_id',
+            'datetime',
+            'email_subject',
+            'bodytext',
+            'inReplyTo',
+            'datasize',
+            'is_favorite',
+            'account',
+            'comments',
+            'keywords',
+            'importance',
+            'priority',
+            'precedence',
+            'received',
+            'user_agent',
+            'auto_submitted',
+            'content_type',
+            'content_language',
+            'content_location',
+            'x_priority',
+            'x_originated_client',
+            'x_spam',
+            'created',
+            'updated',
+            'attachments',
+            'images',
+            'mailinglist',
+            'correspondents'
         ]
 
 

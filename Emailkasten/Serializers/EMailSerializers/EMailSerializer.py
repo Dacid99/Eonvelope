@@ -46,7 +46,7 @@ class EMailSerializer(serializers.ModelSerializer):
     mailinglist = SimpleMailingListSerializer(read_only=True)
     """The attachments are serialized by :class:`Emailkasten.MailingListSerializers.SimpleMailingListSerializer.SimpleMailingListSerializer`."""
 
-    correspondents = serializers.SerializerMethodField()
+    correspondents = serializers.SerializerMethodField(read_only=True)
     """The emails are set from the :class:`Emailkasten.Models.EMailCorrespondentsModel` via :func:`get_emails`."""
 
 
@@ -55,8 +55,40 @@ class EMailSerializer(serializers.ModelSerializer):
 
         model = EMailModel
 
-        fields = ['message_id', 'datetime', 'email_subject', 'bodytext', 'is_favorite', 'account', 'created', 'updated']
+        fields = [
+            'message_id',
+            'datetime',
+            'email_subject',
+            'bodytext',
+            'inReplyTo',
+            'datasize',
+            'is_favorite',
+            'account',
+            'created',
+            'updated',
+            'attachments',
+            'images',
+            'mailinglist',
+            'correspondents'
+        ]
         """Includes only the most relevant fields."""
+
+        read_only_fields = [
+            'message_id',
+            'datetime',
+            'email_subject',
+            'bodytext',
+            'inReplyTo',
+            'datasize',
+            'is_favorite',
+            'account',
+            'created',
+            'updated',
+            'attachments',
+            'images',
+            'mailinglist',
+            'correspondents'
+        ]
 
         validators = [
             UniqueTogetherValidator(

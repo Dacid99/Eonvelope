@@ -35,8 +35,14 @@ class DaemonSerializer(serializers.ModelSerializer):
         exclude = ['log_filepath']
         """Exclude the :attr:`Emailkasten.Models.DaemonModel.log_filepath` field."""
 
-        read_only_fields = ['is_running', 'is_healthy', 'created', 'updated']
-        """The :attr:`Emailkasten.Models.DaemonModel.is_running`, :attr:`Emailkasten.Models.DaemonModel.is_healthy`, :attr:`Emailkasten.Models.DaemonModel.created`, and :attr:`Emailkasten.Models.DaemonModel.updated` fields are read-only."""
+        read_only_fields = [
+                'uuid',
+                'mailbox',
+                'is_running',
+                'is_healthy',
+                'created',
+                'updated'
+            ]
 
 
     def validate_fetching_criterion(self, value: str) -> str:

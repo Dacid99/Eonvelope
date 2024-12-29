@@ -36,8 +36,7 @@ class MailboxSerializer(serializers.ModelSerializer):
         fields = '__all__'
         """Includes all fields."""
 
-        read_only_fields = ['name', 'account', 'created', 'updated']
-        """The :attr:`Emailkasten.Models.MailboxModel.name`, :attr:`Emailkasten.Models.MailboxModel.account`, :attr:`Emailkasten.Models.MailboxModel.created`, and :attr:`Emailkasten.Models.MailboxModel.updated` fields are read-only."""
+        read_only_fields = ['name', 'account', 'is_healthy', 'created', 'updated']
 
         validators = [
             UniqueTogetherValidator(

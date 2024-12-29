@@ -37,7 +37,7 @@ class MailingListSerializer(serializers.ModelSerializer):
     correspondent = SimpleCorrespondentSerializer(read_only=True)
     """The correspondent sending the mailinglist are serialized by :class:`Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`."""
 
-    email_number = serializers.SerializerMethodField()
+    email_number = serializers.SerializerMethodField(read_only=True)
     """The number of mails by the mailinglist. Set via :func:`get_email_number`."""
 
 
@@ -46,8 +46,23 @@ class MailingListSerializer(serializers.ModelSerializer):
 
         model = MailingListModel
 
-        fields = '__all__'
+        fields = '__all__' + ['email_number']
         """Include all fields."""
+
+        read_only_fields = [
+            'list_id',
+            'list_owner',
+            'list_subscribe',
+            'list_unsubscribe',
+            'list_post',
+            'list_help',
+            'list_archive',
+            'correspondent',
+            'created',
+            'updated',
+            'emails',
+            'email_number'
+        ]
 
         validators = [
             UniqueTogetherValidator(

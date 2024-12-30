@@ -39,38 +39,15 @@ from django.urls import reverse
 from faker import Faker
 from model_bakery import baker
 from rest_framework import status
+from test_AccountViewSet import fixture_accountModel
+from test_MailboxViewSet import fixture_mailboxModel
 
-from Emailkasten.Models.AccountModel import AccountModel
-from Emailkasten.Models.DaemonModel import DaemonModel, MailboxModel
+from Emailkasten.Models.DaemonModel import DaemonModel
 from Emailkasten.Views.DaemonViewSet import DaemonViewSet
 
 if TYPE_CHECKING:
     from typing import Any, Callable
 
-
-@pytest.fixture(name='accountModel')
-def fixture_accountModel(owner_user) -> AccountModel:
-    """Creates an :class:`Emailkasten.Models.AccountModel.AccountModel` owned by :attr:`owner_user`.
-
-    Args:
-        owner_user: Depends on :func:`fixture_owner_user`.
-
-    Returns:
-        The account instance for testing.
-    """
-    return baker.make(AccountModel, user = owner_user)
-
-@pytest.fixture(name='mailboxModel')
-def fixture_mailboxModel(accountModel) -> MailboxModel:
-    """Creates an :class:`Emailkasten.Models.MailboxModel.MailboxModel` owned by :attr:`owner_user`.
-
-    Args:
-        accountModel: Depends on :func:`fixture_accountModel`.
-
-    Returns:
-        The mailbox instance for testing.
-    """
-    return baker.make(MailboxModel, account=accountModel)
 
 @pytest.fixture(name='daemonModel')
 def fixture_daemonModel(mailboxModel) -> DaemonModel:
@@ -206,7 +183,7 @@ def test_get_auth_owner(daemonModel, owner_apiClient, detail_url):
     response = owner_apiClient.get(detail_url)
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['cycle_interval'] == str(daemonModel.cycle_interval)
+    assert response.data['cycle_interval'] == daemonModel.cycle_interval
 
 
 @pytest.mark.django_db

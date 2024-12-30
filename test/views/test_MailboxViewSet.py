@@ -37,9 +37,9 @@ from django.forms.models import model_to_dict
 from django.urls import reverse
 from model_bakery import baker
 from rest_framework import status
+from test_AccountViewSet import fixture_accountModel
 
 import Emailkasten.Views.MailboxViewSet
-from Emailkasten.Models.AccountModel import AccountModel
 from Emailkasten.Models.DaemonModel import DaemonModel
 from Emailkasten.Models.EMailModel import EMailModel
 from Emailkasten.Models.MailboxModel import MailboxModel
@@ -48,18 +48,6 @@ from Emailkasten.Views.MailboxViewSet import MailboxViewSet
 if TYPE_CHECKING:
     from typing import Any, Callable
 
-
-@pytest.fixture(name='accountModel')
-def fixture_accountModel(owner_user) -> AccountModel:
-    """Creates an :class:`Emailkasten.Models.AccountModel.AccountModel` owned by :attr:`owner_user`.
-
-    Args:
-        owner_user: Depends on :func:`fixture_owner_user`.
-
-    Returns:
-        The account instance for testing.
-    """
-    return baker.make(AccountModel, user = owner_user)
 
 @pytest.fixture(name='mailboxModel')
 def fixture_mailboxModel(accountModel) -> MailboxModel:

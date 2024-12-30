@@ -39,26 +39,14 @@ from django.urls import reverse
 from faker import Faker
 from model_bakery import baker
 from rest_framework import status
+from test_AccountViewSet import fixture_accountModel
 
-from Emailkasten.Models.AccountModel import AccountModel
 from Emailkasten.Models.EMailModel import EMailModel
 from Emailkasten.Views.EMailViewSet import EMailViewSet
 
 if TYPE_CHECKING:
     from typing import Any, Callable
 
-
-@pytest.fixture(name='accountModel')
-def fixture_accountModel(owner_user) -> AccountModel:
-    """Creates an :class:`Emailkasten.Models.AccountModel.AccountModel` owned by :attr:`owner_user`.
-
-    Args:
-        owner_user: Depends on :func:`fixture_owner_user`.
-
-    Returns:
-        The account instance for testing.
-    """
-    return baker.make(AccountModel, user = owner_user)
 
 @pytest.fixture(name='emailModel')
 def fixture_emailModel(accountModel) -> EMailModel:
@@ -198,7 +186,7 @@ def test_patch_noauth(emailModel, noauth_apiClient, detail_url):
     with pytest.raises(KeyError):
         response.data['message_id']
     emailModel.refresh_from_db()
-    assert emailModel.message_id is not 'abc123'
+    assert emailModel.message_id != 'abc123'
 
 
 @pytest.mark.django_db
@@ -210,7 +198,7 @@ def test_patch_auth_other(emailModel, other_apiClient, detail_url):
     with pytest.raises(KeyError):
         response.data['message_id']
     emailModel.refresh_from_db()
-    assert emailModel.message_id is not 'abc123'
+    assert emailModel.message_id != 'abc123'
 
 
 @pytest.mark.django_db
@@ -222,7 +210,7 @@ def test_patch_auth_owner(emailModel, owner_apiClient, detail_url):
     with pytest.raises(KeyError):
         response.data['message_id']
     emailModel.refresh_from_db()
-    assert emailModel.message_id is not 'abc123'
+    assert emailModel.message_id != 'abc123'
 
 
 @pytest.mark.django_db

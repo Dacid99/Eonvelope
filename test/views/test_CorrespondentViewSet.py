@@ -30,50 +30,24 @@ Fixtures:
 
 from __future__ import annotations
 
-import os
 from typing import TYPE_CHECKING
 
 import pytest
 from django.forms.models import model_to_dict
 from django.urls import reverse
-from faker import Faker
 from model_bakery import baker
 from rest_framework import status
+from test_AccountViewSet import fixture_accountModel
+from test_EMailViewSet import fixture_emailModel
 
-from Emailkasten.Models.AccountModel import AccountModel
 from Emailkasten.Models.CorrespondentModel import CorrespondentModel
-from Emailkasten.Models.EMailModel import EMailModel
-from Emailkasten.Views.CorrespondentViewSet import CorrespondentViewSet
 from Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer import \
     SimpleCorrespondentSerializer
+from Emailkasten.Views.CorrespondentViewSet import CorrespondentViewSet
 
 if TYPE_CHECKING:
     from typing import Any, Callable
 
-
-@pytest.fixture(name='accountModel')
-def fixture_accountModel(owner_user) -> AccountModel:
-    """Creates an :class:`Emailkasten.Models.AccountModel.AccountModel` owned by :attr:`owner_user`.
-
-    Args:
-        owner_user: Depends on :func:`fixture_owner_user`.
-
-    Returns:
-        The account instance for testing.
-    """
-    return baker.make(AccountModel, user = owner_user)
-
-@pytest.fixture(name='emailModel')
-def fixture_emailModel(accountModel) -> EMailModel:
-    """Creates an :class:`Emailkasten.Models.EMailModel.EMailModel` owned by :attr:`owner_user`.
-
-    Args:
-        accountModel: Depends on :func:`fixture_accountModel`.
-
-    Returns:
-        The email instance for testing.
-    """
-    return baker.make(EMailModel, account=accountModel, eml_filepath=Faker().file_path(extension='eml'), prerender_filepath=Faker().file_path(extension='png'))
 
 @pytest.fixture(name='correspondentModel')
 def fixture_correspondentModel(emailModel) -> CorrespondentModel:

@@ -33,7 +33,7 @@ from Emailkasten.Models.CorrespondentModel import CorrespondentModel
 
 @pytest.fixture(name='correspondent')
 def fixture_correspondentModel() -> CorrespondentModel:
-    """Creates an :class:`Emailkasten.Models.EMailModel.EMailModel`.
+    """Creates an :class:`Emailkasten.Models.EMailModel.EMailModel` instance for testing.
 
     Returns:
         The email instance for testing.

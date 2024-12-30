@@ -60,7 +60,7 @@ class ImageModel(models.Model):
 
 
     def __str__(self):
-        return f"Image {self.file_name}"
+        return f"Image {self.file_name} from {str(self.email)}"
 
     class Meta:
         """Metadata class for the model."""

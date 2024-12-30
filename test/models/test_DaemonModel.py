@@ -16,12 +16,18 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.Models.DaemonModel`."""
+"""Test module for :mod:`Emailkasten.Models.DaemonModel`.
+
+Fixtures:
+    :func:`fixture_daemonModel`: Creates an :class:`Emailkasten.Models.DaemonModel.DaemonModel` instance for testing.
+"""
 
 import datetime
 
 import pytest
+from uuid import UUID
 from django.db import IntegrityError
+from faker import Faker
 from model_bakery import baker
 
 from Emailkasten import constants
@@ -29,13 +35,22 @@ from Emailkasten.Models.DaemonModel import DaemonModel
 from Emailkasten.Models.MailboxModel import MailboxModel
 
 
+@pytest.fixture(name='daemon')
+def fixture_daemonModel() -> DaemonModel:
+    """Creates an :class:`Emailkasten.Models.DaemonModel.DaemonModel`.
+
+    Returns:
+        The daemon instance for testing.
+    """
+    return baker.make(DaemonModel, log_filepath=Faker().file_path(extension='log'))
+
+
 @pytest.mark.django_db
-def test_DaemonModel_creation():
+def test_DaemonModel_creation(daemon):
     """Tests the correct default creation of :class:`Emailkasten.Models.DaemonModel.DaemonModel`."""
 
-    daemon = baker.make(DaemonModel)
     assert daemon.uuid is not None
-    assert isinstance(daemon.uuid, str)
+    assert isinstance(daemon.uuid, UUID)
     assert daemon.mailbox is not None
     assert isinstance(daemon.mailbox, MailboxModel)
     assert daemon.fetching_criterion is constants.MailFetchingCriteria.ALL
@@ -49,30 +64,23 @@ def test_DaemonModel_creation():
     assert daemon.created is not None
     assert isinstance(daemon.created, datetime.datetime)
 
-    assert daemon.uuid in str(daemon)
+    assert str(daemon.uuid) in str(daemon)
     assert str(daemon.mailbox) in str(daemon)
 
 
 @pytest.mark.django_db
-def test_MailboxModel_foreign_key_deletion():
+def test_MailboxModel_foreign_key_deletion(daemon):
     """Tests the on_delete foreign key constraint in :class:`Emailkasten.Models.AccountModel.AccountModel`."""
 
-    mailbox = baker.make(MailboxModel)
-    daemon = baker.make(DaemonModel, mailbox = mailbox)
     assert daemon is not None
-    mailbox.delete()
+    daemon.mailbox.delete()
     with pytest.raises(DaemonModel.DoesNotExist):
         daemon.refresh_from_db()
 
 
 @pytest.mark.django_db
-def test_DaemonModel_unique():
+def test_DaemonModel_unique(daemon):
     """Tests the unique constraints of :class:`Emailkasten.Models.DaemonModel.DaemonModel`."""
 
-    baker.make(DaemonModel, uuid="abc123")
     with pytest.raises(IntegrityError):
-        baker.make(DaemonModel, uuid="abc123")
-
-    baker.make(DaemonModel, log_filepath="test")
-    with pytest.raises(IntegrityError):
-        baker.make(DaemonModel, log_filepath="test")
+        baker.make(DaemonModel, log_filepath=daemon.log_filepath)

@@ -16,7 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.Models.MailingListModel`."""
+"""Test module for :mod:`Emailkasten.Models.MailingListModel`.
+
+Fixtures:
+    :func:`fixture_mailingListModel`: Creates an :class:`Emailkasten.Models.MailingListModel.MailingListModel` instance for testing.
+"""
 
 import datetime
 
@@ -27,12 +31,20 @@ from model_bakery import baker
 from Emailkasten.Models.CorrespondentModel import CorrespondentModel
 from Emailkasten.Models.MailingListModel import MailingListModel
 
+@pytest.fixture(name='mailingList')
+def fixture_mailingListModel() -> MailingListModel:
+    """Creates an :class:`Emailkasten.Models.MailboxModel.MailboxModel`.
+
+    Returns:
+        The mailingList instance for testing.
+    """
+    return baker.make(MailingListModel)
+
 
 @pytest.mark.django_db
-def test_MailingListModel_creation():
+def test_MailingListModel_creation(mailingList):
     """Tests the correct default creation of :class:`Emailkasten.Models.MailingListModel.MailingListModel`."""
 
-    mailingList = baker.make(MailingListModel)
     assert mailingList.list_id is not None
     assert isinstance(mailingList.list_id, str)
     assert mailingList.list_owner is None
@@ -53,13 +65,11 @@ def test_MailingListModel_creation():
 
 
 @pytest.mark.django_db
-def test_MailingListModel_foreign_key_deletion():
+def test_MailingListModel_foreign_key_deletion(mailingList):
     """Tests the on_delete foreign key constraint in :class:`Emailkasten.Models.MailingListModel.MailingListModel`."""
 
-    correspondent = baker.make(CorrespondentModel)
-    mailingList = baker.make(MailingListModel, correspondent = correspondent)
     assert mailingList is not None
-    correspondent.delete()
+    mailingList.correspondent.delete()
     with pytest.raises(MailingListModel.DoesNotExist):
         mailingList.refresh_from_db()
 

@@ -61,7 +61,7 @@ class AttachmentModel(models.Model):
 
 
     def __str__(self):
-        return f"Attachment {self.file_name}"
+        return f"Attachment {self.file_name} from {str(self.email)}"
 
 
     class Meta:

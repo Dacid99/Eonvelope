@@ -17,7 +17,11 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
-"""Test module for :mod:`Emailkasten.Models.EMailModel`."""
+"""Test module for :mod:`Emailkasten.Models.EMailModel`.
+
+Fixtures:
+    :func:`fixture_emailModel`: Creates an :class:`Emailkasten.Models.EMailModel.EMailModel` instance for testing.
+"""
 
 import datetime
 
@@ -29,12 +33,19 @@ from Emailkasten.Models.AccountModel import AccountModel
 from Emailkasten.Models.EMailModel import EMailModel
 from Emailkasten.Models.MailingListModel import MailingListModel
 
+@pytest.fixture(name='email')
+def fixture_emailModel() -> EMailModel:
+    """Creates an :class:`Emailkasten.Models.EMailModel.EMailModel`.
+
+    Returns:
+        The email instance for testing.
+    """
+    return baker.make(EMailModel)
 
 @pytest.mark.django_db
-def test_EMailModel_creation():
+def test_EMailModel_creation(email):
     """Tests the correct default creation of :class:`Emailkasten.Models.EMailModel.EMailModel`."""
 
-    email = baker.make(EMailModel)
     assert email.message_id is not None
     assert isinstance(email.message_id, str)
     assert email.datetime is not None
@@ -50,9 +61,7 @@ def test_EMailModel_creation():
     assert email.prerender_filepath is None
     assert email.is_favorite is False
 
-
-    assert email.mailinglist is not None
-    assert isinstance(email.mailinglist, MailingListModel)
+    assert email.mailinglist is None
     assert email.account is not None
     assert isinstance(email.account, AccountModel)
     assert email.comments is None
@@ -82,20 +91,25 @@ def test_EMailModel_creation():
 
 
 @pytest.mark.django_db
-def test_EMailModel_foreign_key_deletion():
-    """Tests the on_delete foreign key constraint in :class:`Emailkasten.Models.EMailModel.EMailModel`."""
+def test_EMailModel_foreign_key_account_deletion(email):
+    """Tests the on_delete foreign key constraint on account in :class:`Emailkasten.Models.EMailModel.EMailModel`."""
 
-    account = baker.make(AccountModel)
-    email = baker.make(EMailModel, account = account)
-    assert email is not None
-    account.delete()
+    email.account.delete()
+
     with pytest.raises(EMailModel.DoesNotExist):
         email.refresh_from_db()
 
+
+@pytest.mark.django_db
+def test_EMailModel_foreign_key_mailingList_deletion(email):
+    """Tests the on_delete foreign key constraint on mailinglist in :class:`Emailkasten.Models.EMailModel.EMailModel`."""
+
     mailingList = baker.make(MailingListModel)
-    email = baker.make(EMailModel, mailingList = mailingList)
-    assert email is not None
+    email.mailinglist = mailingList
+    email.save()
+
     mailingList.delete()
+
     with pytest.raises(EMailModel.DoesNotExist):
         email.refresh_from_db()
 

@@ -144,7 +144,7 @@ class EMailModel(models.Model):
 
 
     def __str__(self):
-        return f"Email with ID {self.message_id}, received on {self.datetime} with subject {self.email_subject}"
+        return f"Email with ID {self.message_id}, received on {self.datetime} with subject {self.email_subject} from {str(self.account)}"
 
     class Meta:
         """Metadata class for the model."""

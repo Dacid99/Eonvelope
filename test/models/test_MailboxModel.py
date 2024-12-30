@@ -17,7 +17,11 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
-"""Test module for :mod:`Emailkasten.Models.MailboxModel`."""
+"""Test module for :mod:`Emailkasten.Models.MailboxModel`.
+
+Fixtures:
+    :func:`fixture_mailboxModel`: Creates an :class:`Emailkasten.Models.MailboxModel.MailboxModel` instance for testing.
+"""
 
 import datetime
 
@@ -34,11 +38,20 @@ from Emailkasten.Models.AccountModel import AccountModel
 from Emailkasten.Models.MailboxModel import MailboxModel
 
 
+@pytest.fixture(name='mailbox')
+def fixture_mailboxModel() -> MailboxModel:
+    """Creates an :class:`Emailkasten.Models.MailboxModel.MailboxModel`.
+
+    Returns:
+        The mailbox instance for testing.
+    """
+    return baker.make(MailboxModel)
+
+
 @pytest.mark.django_db
-def test_MailboxModel_creation():
+def test_MailboxModel_creation(mailbox):
     """Tests the correct default creation of :class:`Emailkasten.Models.MailboxModel.MailboxModel`."""
 
-    mailbox = baker.make(MailboxModel)
     assert mailbox.name is not None
     assert mailbox.account is not None
     assert isinstance(mailbox.account, AccountModel)
@@ -57,13 +70,11 @@ def test_MailboxModel_creation():
 
 
 @pytest.mark.django_db
-def test_MailboxModel_foreign_key_deletion():
+def test_MailboxModel_foreign_key_deletion(mailbox):
     """Tests the on_delete foreign key constraint in :class:`Emailkasten.Models.MailboxModel.MailboxModel`."""
 
-    account = baker.make(AccountModel)
-    mailbox = baker.make(MailboxModel, account = account)
     assert mailbox is not None
-    account.delete()
+    mailbox.account.delete()
     with pytest.raises(MailboxModel.DoesNotExist):
         mailbox.refresh_from_db()
 
@@ -100,7 +111,7 @@ def test_MailboxModel_unique():
             ('EXCHANGE', [])
         ]
 )
-def test_MailboxModel_getAvailableFetchingCriteria(protocol: str, expectedFetchingCriteria: list[str]):
+def test_MailboxModel_getAvailableFetchingCriteria(mailbox, protocol: str, expectedFetchingCriteria: list[str]):
     """Tests :func:`Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria`.
 
     Args:
@@ -108,6 +119,6 @@ def test_MailboxModel_getAvailableFetchingCriteria(protocol: str, expectedFetchi
         expectedFetchingCriteria: The expected fetchingCriteria result parameter.
     """
 
-    account = baker.make(AccountModel, protocol = protocol)
-    mailbox = baker.make(MailboxModel, account = account)
+    mailbox.account.protocol = protocol
+    mailbox.account.save()
     assert mailbox.getAvailableFetchingCriteria() == expectedFetchingCriteria

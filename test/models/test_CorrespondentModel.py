@@ -17,7 +17,11 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
-"""Test module for :mod:`Emailkasten.Models.CorrespondentModel`."""
+"""Test module for :mod:`Emailkasten.Models.CorrespondentModel`.
+
+Fixtures:
+    :func:`fixture_correspondentModel`: Creates an :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel` instance for testing.
+"""
 
 import datetime
 from model_bakery import baker
@@ -27,11 +31,19 @@ from django.db import IntegrityError
 
 from Emailkasten.Models.CorrespondentModel import CorrespondentModel
 
+@pytest.fixture(name='correspondent')
+def fixture_correspondentModel() -> CorrespondentModel:
+    """Creates an :class:`Emailkasten.Models.EMailModel.EMailModel`.
+
+    Returns:
+        The email instance for testing.
+    """
+    return baker.make(CorrespondentModel)
+
 @pytest.mark.django_db
-def test_CorrespondentModel_creation():
+def test_CorrespondentModel_creation(correspondent):
     """Tests the correct default creation of :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`."""
 
-    correspondent = baker.make(CorrespondentModel)
     assert correspondent.email_name is not None
     assert isinstance(correspondent.email_name, str)
     assert correspondent.email_address is not None
@@ -46,9 +58,8 @@ def test_CorrespondentModel_creation():
 
 
 @pytest.mark.django_db
-def test_CorrespondentModel_unique():
+def test_CorrespondentModel_unique(correspondent):
     """Tests the unique constraint in :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`."""
 
-    baker.make(CorrespondentModel, email_name="test name", email_address="test@mail.com")
     with pytest.raises(IntegrityError):
-        baker.make(CorrespondentModel, email_name="another test", email_address="test@mail.com")
+        baker.make(CorrespondentModel, email_name=correspondent.email_name, email_address=correspondent.email_address)

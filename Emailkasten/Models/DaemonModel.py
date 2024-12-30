@@ -70,7 +70,7 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
 
 
     def __str__(self):
-        return f"Mailfetcher daemon configuration for mailbox {self.mailbox}"
+        return f"Mailfetcher daemon configuration {str(self.uuid)} for mailbox {self.mailbox}"
 
 
     class Meta:

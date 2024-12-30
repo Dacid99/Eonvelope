@@ -16,7 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.Models.AccountModel`."""
+"""Test module for :mod:`Emailkasten.Models.AccountModel`.
+
+Fixtures:
+    :func:`fixture_accountModel`: Creates an :class:`Emailkasten.Models.AccountModel.AccountModel` instance for testing.
+"""
 
 import datetime
 
@@ -27,12 +31,19 @@ from model_bakery import baker
 
 from Emailkasten.Models.AccountModel import AccountModel
 
+@pytest.fixture(name='account')
+def fixture_accountModel() -> AccountModel:
+    """Creates an :class:`Emailkasten.Models.AccountModel.AccountModel` .
+
+    Returns:
+        The account instance for testing.
+    """
+    return baker.make(AccountModel)
 
 @pytest.mark.django_db
-def test_AccountModel_creation():
+def test_AccountModel_creation(account):
     """Tests the correct default creation of :class:`Emailkasten.Models.AccountModel.AccountModel`."""
 
-    account = baker.make(AccountModel)
     assert account.mail_address is not None
     assert isinstance(account.mail_address, str)
     assert account.password is not None
@@ -61,13 +72,11 @@ def test_AccountModel_creation():
 
 
 @pytest.mark.django_db
-def test_AccountModel_foreign_key_deletion():
+def test_AccountModel_foreign_key_deletion(account):
     """Tests the on_delete foreign key constraint in :class:`Emailkasten.Models.AccountModel.AccountModel`."""
 
-    user = baker.make(User)
-    account = baker.make(AccountModel, user = user)
     assert account is not None
-    user.delete()
+    account.user.delete()
     with pytest.raises(AccountModel.DoesNotExist):
         account.refresh_from_db()
 

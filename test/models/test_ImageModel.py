@@ -17,23 +17,41 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
-"""Test module for :mod:`Emailkasten.Models.ImageModel`."""
+"""Test module for :mod:`Emailkasten.Models.ImageModel`.
+
+Fixtures:
+    :func:`fixture_imageModel`: Creates an :class:`Emailkasten.Models.ImageModel.ImageModel` instance for testing.
+"""
 
 import datetime
 
 import pytest
 from django.db import IntegrityError
+from faker import Faker
 from model_bakery import baker
 
 from Emailkasten.Models.EMailModel import EMailModel
 from Emailkasten.Models.ImageModel import ImageModel
 
 
+@pytest.fixture(name='image')
+def fixture_imageModel() -> ImageModel:
+    """Creates an :class:`Emailkasten.Models.ImageModel.ImageModel` instance for testing.
+
+
+    Returns:
+        The image instance for testing.
+    """
+    return baker.make(
+        ImageModel,
+        file_path=Faker().file_path(extension='pdf')
+    )
+
+
 @pytest.mark.django_db
-def test_ImageModel_creation():
+def test_ImageModel_creation(image):
     """Tests the correct default creation of :class:`Emailkasten.Models.ImageModel.ImageModel`."""
 
-    image = baker.make(ImageModel)
     assert image.file_name is not None
     assert isinstance(image.file_name, str)
     assert image.file_path is not None
@@ -48,18 +66,16 @@ def test_ImageModel_creation():
     assert image.created is not None
     assert isinstance(image.created, datetime.datetime)
 
-    assert image.file_path in str(image)
+    assert image.file_name in str(image)
     assert str(image.email) in str(image)
 
 
 @pytest.mark.django_db
-def test_ImageModel_foreign_key_deletion():
+def test_ImageModel_foreign_key_deletion(image):
     """Tests the on_delete foreign key constraint in :class:`Emailkasten.Models.ImageModel.ImageModel`."""
 
-    email = baker.make(EMailModel)
-    image = baker.make(ImageModel, account = email)
     assert image is not None
-    email.delete()
+    image.email.delete()
     with pytest.raises(ImageModel.DoesNotExist):
         image.refresh_from_db()
 

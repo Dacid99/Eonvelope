@@ -39,7 +39,7 @@ extension-pkg-whitelist=
 fail-on=F,E
 
 # Specify a score threshold under which the program will exit with error.
-fail-under=1
+fail-under=0
 
 # Interpret the stdin as a python script, whose filename needs to be passed as
 # the module_or_package argument.

@@ -30,6 +30,7 @@ Fixtures:
 
 from __future__ import annotations
 
+import os
 from typing import TYPE_CHECKING
 
 import pytest
@@ -39,10 +40,8 @@ from faker import Faker
 from model_bakery import baker
 from rest_framework import status
 
-import Emailkasten.Views.DaemonViewSet
 from Emailkasten.Models.AccountModel import AccountModel
 from Emailkasten.Models.DaemonModel import DaemonModel, MailboxModel
-from Emailkasten.Models.EMailModel import EMailModel
 from Emailkasten.Views.DaemonViewSet import DaemonViewSet
 
 if TYPE_CHECKING:
@@ -71,7 +70,7 @@ def fixture_mailboxModel(accountModel) -> MailboxModel:
     Returns:
         The mailbox instance for testing.
     """
-    return baker.make(DaemonModel, account=accountModel)
+    return baker.make(MailboxModel, account=accountModel)
 
 @pytest.fixture(name='daemonModel')
 def fixture_daemonModel(mailboxModel) -> DaemonModel:
@@ -83,10 +82,10 @@ def fixture_daemonModel(mailboxModel) -> DaemonModel:
     Returns:
         The daemon instance for testing.
     """
-    return baker.make(DaemonModel, mailbox=mailboxModel, log_filepath=Faker().file_path(extension='log'))
+    return baker.make(DaemonModel, log_filepath=Faker().file_path(extension='log'), mailbox=mailboxModel)
 
-@pytest.fixture(name='daemonPayload')
-def fixture_daemonPayload(mailboxModel) -> dict[str, Any]:
+@pytest.fixture(name='postputDaemonPayload')
+def fixture_postputDaemonPayload(mailboxModel) -> dict[str, Any]:
     """Creates clean :class:`Emailkasten.Models.DaemonModel.DaemonModel` payload for a post or put request.
 
     Args:
@@ -95,11 +94,21 @@ def fixture_daemonPayload(mailboxModel) -> dict[str, Any]:
     Returns:
         The clean payload.
     """
-    mailboxData = baker.prepare(DaemonModel, mailbox=mailboxModel, log_filepath=Faker().file_path(extension='log'))
+    mailboxData = baker.prepare(DaemonModel, mailbox=mailboxModel, log_filepath=Faker().file_path(extension='log'), cycle_interval = 1234)
     payload = model_to_dict(mailboxData)
     payload.pop('id')
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
     return cleanPayload
+
+@pytest.fixture(name='patchDaemonPayload')
+def fixture_patchDaemonPayload() -> dict[str, Any]:
+    """Creates clean :class:`Emailkasten.Models.DaemonModel.DaemonModel` payload for a post or put request.
+
+    Returns:
+        The clean payload.
+    """
+
+    return {'cycle_interval': 1234}
 
 @pytest.fixture(name='list_url')
 def fixture_list_url() -> str:
@@ -180,7 +189,7 @@ def test_get_noauth(daemonModel, noauth_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['name']
+        response.data['cycle_interval']
 
 
 @pytest.mark.django_db
@@ -197,111 +206,111 @@ def test_get_auth_owner(daemonModel, owner_apiClient, detail_url):
     response = owner_apiClient.get(detail_url)
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['name'] == daemonModel.name
+    assert response.data['cycle_interval'] == str(daemonModel.cycle_interval)
 
 
 @pytest.mark.django_db
-def test_patch_noauth(daemonModel, noauth_apiClient, detail_url):
+def test_patch_noauth(daemonModel, noauth_apiClient, detail_url, patchDaemonPayload):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url, data={'save_attachments': False})
+    response = noauth_apiClient.patch(detail_url, data=patchDaemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['save_attachments']
+        response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.save_attachments is True
+    assert daemonModel.cycle_interval != patchDaemonPayload['cycle_interval']
 
 @pytest.mark.django_db
-def test_patch_auth_other(daemonModel, other_apiClient, detail_url):
+def test_patch_auth_other(daemonModel, other_apiClient, detail_url, patchDaemonPayload):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url, data={'save_attachments': False})
+    response = other_apiClient.patch(detail_url, data=patchDaemonPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
-        response.data['save_attachments']
+        response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.save_attachments is True
+    assert daemonModel.cycle_interval != patchDaemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(daemonModel, owner_apiClient, detail_url):
+def test_patch_auth_owner(daemonModel, owner_apiClient, detail_url, patchDaemonPayload):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url, data={'save_attachments': False})
+    response = owner_apiClient.patch(detail_url, data=patchDaemonPayload)
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['save_attachments'] is False
+    assert response.data['cycle_interval'] == patchDaemonPayload['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.save_attachments is False
+    assert daemonModel.cycle_interval == patchDaemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_put_noauth(daemonModel, noauth_apiClient, mailboxPayload, detail_url):
+def test_put_noauth(daemonModel, noauth_apiClient, postputDaemonPayload, detail_url):
     """Tests the put method with an unauthenticated user client."""
-    response = noauth_apiClient.put(detail_url, data=mailboxPayload)
+    response = noauth_apiClient.put(detail_url, data=postputDaemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['save_attachments']
+        response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.save_attachments != mailboxPayload['save_attachments']
+    assert daemonModel.cycle_interval != postputDaemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_put_auth_other(daemonModel, other_apiClient, mailboxPayload, detail_url):
+def test_put_auth_other(daemonModel, other_apiClient, postputDaemonPayload, detail_url):
     """Tests the put method with the authenticated other user client."""
-    response = other_apiClient.put(detail_url, data=mailboxPayload)
+    response = other_apiClient.put(detail_url, data=postputDaemonPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
-        response.data['save_attachments']
+        response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.save_attachments != mailboxPayload['save_attachments']
+    assert daemonModel.cycle_interval != postputDaemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(daemonModel, owner_apiClient, mailboxPayload, detail_url):
+def test_put_auth_owner(daemonModel, owner_apiClient, postputDaemonPayload, detail_url):
     """Tests the put method with the authenticated owner user client."""
-    response = owner_apiClient.put(detail_url, data=mailboxPayload)
+    response = owner_apiClient.put(detail_url, data=postputDaemonPayload)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['save_attachments'] == mailboxPayload['save_attachments']
+    assert response.data['cycle_interval'] == postputDaemonPayload['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.save_attachments == mailboxPayload['save_attachments']
+    assert daemonModel.cycle_interval == postputDaemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_post_noauth(noauth_apiClient, mailboxPayload, list_url):
+def test_post_noauth(noauth_apiClient, postputDaemonPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url, data=mailboxPayload)
+    response = noauth_apiClient.post(list_url, data=postputDaemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['save_attachments']
+        response.data['cycle_interval']
     with pytest.raises(DaemonModel.DoesNotExist):
-        MailboxModel.objects.get(save_attachments = mailboxPayload['save_attachments'])
+        DaemonModel.objects.get(cycle_interval = postputDaemonPayload['cycle_interval'])
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_apiClient, mailboxPayload, list_url):
+def test_post_auth_other(other_apiClient, postputDaemonPayload, list_url):
     """Tests the post method with the authenticated other user client."""
-    response = other_apiClient.post(list_url, data=mailboxPayload)
+    response = other_apiClient.post(list_url, data=postputDaemonPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['save_attachments']
+        response.data['cycle_interval']
     with pytest.raises(DaemonModel.DoesNotExist):
-        MailboxModel.objects.get(save_attachments = mailboxPayload['save_attachments'])
+        DaemonModel.objects.get(cycle_interval = postputDaemonPayload['cycle_interval'])
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_apiClient, mailboxPayload, list_url):
+def test_post_auth_owner(owner_apiClient, postputDaemonPayload, list_url):
     """Tests the post method with the authenticated owner user client."""
-    response = owner_apiClient.post(list_url, data=mailboxPayload)
+    response = owner_apiClient.post(list_url, data=postputDaemonPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['save_attachments']
+        response.data['cycle_interval']
     with pytest.raises(DaemonModel.DoesNotExist):
-        MailboxModel.objects.get(save_attachments = mailboxPayload['save_attachments'])
+        DaemonModel.objects.get(cycle_interval = postputDaemonPayload['cycle_interval'])
 
 
 @pytest.mark.django_db
@@ -311,7 +320,7 @@ def test_delete_noauth(daemonModel, noauth_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     daemonModel.refresh_from_db()
-    assert daemonModel.name is not None
+    assert daemonModel.cycle_interval is not None
 
 
 @pytest.mark.django_db
@@ -321,7 +330,7 @@ def test_delete_auth_other(daemonModel, other_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     daemonModel.refresh_from_db()
-    assert daemonModel.name is not None
+    assert daemonModel.cycle_interval is not None
 
 
 @pytest.mark.django_db
@@ -333,156 +342,250 @@ def test_delete_auth_owner(daemonModel, owner_apiClient, detail_url):
     with pytest.raises(daemonModel.DoesNotExist):
         daemonModel.refresh_from_db()
 
-
-
 @pytest.mark.django_db
-def test_add_daemon_noauth(daemonModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.add_daemon` action with an unauthenticated user client."""
-    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_ADD_DAEMON))
+def test_fetching_options_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with an unauthenticated user client."""
+    mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = ['ALL'])
+
+    response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    with pytest.raises(KeyError):
-        response.data['save_attachments']
-    with pytest.raises(DaemonModel.DoesNotExist):
-        DaemonModel.objects.get(mailbox=daemonModel)
-    assert DaemonModel.objects.all().count() == 0
 
 
 @pytest.mark.django_db
-def test_add_daemon_auth_other(daemonModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.add_daemon` action with the authenticated other user client."""
-    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_ADD_DAEMON))
+def test_fetching_options_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated other user client."""
+    mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = ['ALL'])
+
+    response = other_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    with pytest.raises(KeyError):
-        response.data['save_attachments']
-    with pytest.raises(DaemonModel.DoesNotExist):
-        DaemonModel.objects.get(mailbox=daemonModel)
-    assert DaemonModel.objects.all().count() == 0
 
 
 @pytest.mark.django_db
-def test_add_daemon_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.add_daemon` action with the authenticated owner user client."""
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_ADD_DAEMON))
+def test_fetching_options_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated owner user client."""
+    mock_fetchingCriteria = ['ALL']
+    mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = mock_fetchingCriteria)
+
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['mailbox'] == DaemonViewSet.serializer_class(daemonModel).data
+    assert response.data['options'] == mock_fetchingCriteria
 
-    daemonModel = DaemonModel.objects.get(mailbox=daemonModel)
-    assert daemonModel is not None
-    assert DaemonModel.objects.all().count() == 1
+@pytest.mark.django_db
+def test_fetching_options_error_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated owner user client."""
+    mock_fetchingCriteria = []
+    mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = mock_fetchingCriteria)
+
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
+
+    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
 
 
 @pytest.mark.django_db
-def test_test_mailbox_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test_mailbox` action with an unauthenticated user client."""
-    mock_testMailbox = mocker.patch('Emailkasten.Views.DaemonViewSet.testMailbox')
-    previous_is_healthy = daemonModel.is_healthy
+def test_test_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with an unauthenticated user client."""
+    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=True)
 
     response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_testMailbox.assert_not_called()
-    daemonModel.refresh_from_db()
-    assert daemonModel.is_healthy is previous_is_healthy
     with pytest.raises(KeyError):
-        response.data['name']
+        response.data['daemon']
+    mock_testDaemon.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_test_mailbox_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test_mailbox` action with the authenticated other user client."""
-    mock_testMailbox = mocker.patch('Emailkasten.Views.DaemonViewSet.testMailbox')
-    previous_is_healthy = daemonModel.is_healthy
+def test_test_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated other user client."""
+    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=True)
 
     response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_testMailbox.assert_not_called()
-    daemonModel.refresh_from_db()
-    assert daemonModel.is_healthy is previous_is_healthy
     with pytest.raises(KeyError):
-        response.data['name']
+        response.data['daemon']
+    mock_testDaemon.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_test_mailbox_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test_mailbox` action with the authenticated owner user client."""
-    mock_testMailbox = mocker.patch('Emailkasten.Views.DaemonViewSet.testMailbox')
+def test_test_success_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
+    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=True)
 
     response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['mailbox'] == DaemonViewSet.serializer_class(daemonModel).data
-    mock_testMailbox.assert_called_once_with(daemonModel)
-
-
-@pytest.mark.django_db
-def test_fetch_all_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetch_all` action with an unauthenticated user client."""
-    mock_fetchAndProcessMails = mocker.patch('Emailkasten.Views.DaemonViewSet.fetchAndProcessMails')
-
-    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCH_ALL))
-
-    assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_fetchAndProcessMails.assert_not_called()
-    assert EMailModel.objects.all().count() == 0
-    with pytest.raises(KeyError):
-        response.data['name']
-
+    assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
+    assert response.data['result'] is True
+    mock_testDaemon.assert_called_once_with(daemonModel)
 
 @pytest.mark.django_db
-def test_fetch_all_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetch_all` action with the authenticated other user client."""
-    mock_fetchAndProcessMails = mocker.patch('Emailkasten.Views.DaemonViewSet.fetchAndProcessMails')
+def test_test_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
+    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=False)
 
-    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCH_ALL))
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_fetchAndProcessMails.assert_not_called()
-    assert EMailModel.objects.all().count() == 0
-    with pytest.raises(KeyError):
-        response.data['name']
-
-
-@pytest.mark.django_db
-def test_fetch_all_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetch_all` action with the authenticated owner user client."""
-    mock_fetchAndProcessMails = mocker.patch('Emailkasten.Views.DaemonViewSet.fetchAndProcessMails')
-
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCH_ALL))
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['mailbox'] == DaemonViewSet.serializer_class(daemonModel).data
-    mock_fetchAndProcessMails.assert_called_once_with(daemonModel, daemonModel.account, Emailkasten.Views.DaemonViewSet.constants.MailFetchingCriteria.ALL)
+    assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
+    assert response.data['result'] is False
+    mock_testDaemon.assert_called_once_with(daemonModel)
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(daemonModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.toggle_favorite` action with an unauthenticated user client."""
-    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TOGGLE_FAVORITE))
+def test_start_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with an unauthenticated user client."""
+    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=True)
+
+    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    daemonModel.refresh_from_db()
-    assert daemonModel.is_favorite is False
+    mock_startDaemon.assert_not_called()
+    with pytest.raises(KeyError):
+        response.data['daemon']
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(daemonModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.toggle_favorite` action with the authenticated other user client."""
-    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TOGGLE_FAVORITE))
+def test_start_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated other user client."""
+    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=True)
+
+    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    daemonModel.refresh_from_db()
-    assert daemonModel.is_favorite is False
+    mock_startDaemon.assert_not_called()
+    with pytest.raises(KeyError):
+        response.data['daemon']
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.toggle_favorite` action with the authenticated owner user client."""
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TOGGLE_FAVORITE))
+def test_start_success_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
+    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=True)
+
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
 
     assert response.status_code == status.HTTP_200_OK
-    daemonModel.refresh_from_db()
-    assert daemonModel.is_favorite is True
+    assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
+    mock_startDaemon.assert_called_once_with(daemonModel)
+
+
+@pytest.mark.django_db
+def test_start_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
+    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=False)
+
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
+    mock_startDaemon.assert_called_once_with(daemonModel)
+
+
+@pytest.mark.django_db
+def test_stop_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with an unauthenticated user client."""
+    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=True)
+
+    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    mock_stopDaemon.assert_not_called()
+    with pytest.raises(KeyError):
+        response.data['daemon']
+
+
+@pytest.mark.django_db
+def test_stop_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated other user client."""
+    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=True)
+
+    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_stopDaemon.assert_not_called()
+    with pytest.raises(KeyError):
+        response.data['daemon']
+
+
+@pytest.mark.django_db
+def test_stop_success_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
+    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=True)
+
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
+    mock_stopDaemon.assert_called_once_with(daemonModel)
+
+@pytest.mark.django_db
+def test_stop_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
+    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=False)
+
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
+    mock_stopDaemon.assert_called_once_with(daemonModel)
+
+
+@pytest.mark.django_db
+def test_download_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
+    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with an unauthenticated user client."""
+    mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
+    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
+
+    response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    mock_open.assert_not_called()
+    mock_os_path_exists.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_download_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
+    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated other user client."""
+    mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
+    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
+
+    response = other_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_open.assert_not_called()
+    mock_os_path_exists.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_download_no_file_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated owner user client."""
+    mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
+    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=False)
+
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_open.assert_not_called()
+    mock_os_path_exists.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_download_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
+    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated owner user client."""
+    mockedFileContent = b'This is a 24 bytes file.'
+    mock_open = mocker.mock_open(read_data=mockedFileContent)
+    mocker.patch('Emailkasten.Views.DaemonViewSet.open', mock_open)
+    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
+
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+
+    assert response.status_code == status.HTTP_200_OK
+    mock_os_path_exists.assert_called_once()
+    mock_open.assert_called_once_with(daemonModel.log_filepath, 'rb')
+    assert 'Content-Disposition' in response.headers
+    assert f'filename="{os.path.basename(daemonModel.log_filepath)}"' in response['Content-Disposition']
+    assert b''.join(response.streaming_content) == mockedFileContent

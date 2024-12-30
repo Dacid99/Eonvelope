@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from django.forms.models import model_to_dict
 
 from Emailkasten.Serializers.EMailSerializers.SimpleEMailSerializer import \
     SimpleEMailSerializer

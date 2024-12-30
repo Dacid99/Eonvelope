@@ -17,7 +17,36 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from django.forms.models import model_to_dict
 
-from Emailkasten.Serializers.AttachmentSerializers import AttachmentSerializer
+from Emailkasten.Serializers.AttachmentSerializers.AttachmentSerializer import AttachmentSerializer
 
 from ...models.test_AttachmentModel import fixture_attachmentModel
+
+
+@pytest.mark.django_db
+def test_output(attachment):
+    serializerData = AttachmentSerializer(instance=attachment).data
+
+    assert 'file_path' not in serializerData
+    assert 'file_name' in serializerData
+    assert 'datasize' in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'email' in serializerData
+    assert 'created' in serializerData
+    assert 'updated' in serializerData
+
+
+@pytest.mark.django_db
+def test_input(attachment):
+    serializer = AttachmentSerializer(data=model_to_dict(attachment))
+    assert serializer.is_valid()
+    serializerData = serializer.validated_data
+
+    assert 'file_path' not in serializerData
+    assert 'file_name' not in serializerData
+    assert 'datasize' not in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'email' not in serializerData
+    assert 'created' not in serializerData
+    assert 'updated' not in serializerData

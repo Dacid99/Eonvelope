@@ -17,8 +17,37 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from django.forms.models import model_to_dict
 
 from Emailkasten.Serializers.CorrespondentSerializers.CorrespondentSerializer import \
     CorrespondentSerializer
 
 from ...models.test_CorrespondentModel import fixture_correspondentModel
+
+
+@pytest.mark.django_db
+def test_output(correspondent):
+    serializerData = CorrespondentSerializer(instance=correspondent).data
+
+    assert 'emails' in serializerData
+    assert 'mailinglist' in serializerData
+    assert 'email_name' in serializerData
+    assert 'email_address' in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'created' in serializerData
+    assert 'updated' in serializerData
+
+
+@pytest.mark.django_db
+def test_input(correspondent):
+    serializer = CorrespondentSerializer(data=model_to_dict(correspondent))
+    assert serializer.is_valid()
+    serializerData = serializer.validated_data
+
+    assert 'emails' not in serializerData
+    assert 'mailinglist' not in serializerData
+    assert 'email_name' in serializerData
+    assert 'email_address' not in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'created' not in serializerData
+    assert 'updated' not in serializerData

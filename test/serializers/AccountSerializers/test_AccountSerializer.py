@@ -17,8 +17,47 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from django.forms.models import model_to_dict
 
 from Emailkasten.Serializers.AccountSerializers.AccountSerializer import \
     AccountSerializer
 
 from ...models.test_AccountModel import fixture_accountModel
+
+
+@pytest.mark.django_db
+def test_output(account):
+    serializerData = AccountSerializer(instance=account).data
+
+    assert 'password' not in serializerData
+    assert 'mail_address' in serializerData
+    assert 'mailboxes' in serializerData
+    assert 'mail_host' in serializerData
+    assert 'mail_host_port' in serializerData
+    assert 'protocol' in serializerData
+    assert 'timeout' in serializerData
+    assert 'is_healthy' in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'created' in serializerData
+    assert 'updated' in serializerData
+    assert 'user' not in serializerData
+
+
+@pytest.mark.django_db
+def test_input(account):
+    serializer = AccountSerializer(data=model_to_dict(account))
+    assert serializer.is_valid()
+    serializerData = serializer.validated_data
+
+    assert 'password' in serializerData
+    assert 'mail_address' in serializerData
+    assert 'mailboxes' not in serializerData
+    assert 'mail_host' in serializerData
+    assert 'mail_host_port' in serializerData
+    assert 'protocol' in serializerData
+    assert 'timeout' in serializerData
+    assert 'is_healthy' not in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'created' not in serializerData
+    assert 'updated' not in serializerData
+    assert 'user' not in serializerData

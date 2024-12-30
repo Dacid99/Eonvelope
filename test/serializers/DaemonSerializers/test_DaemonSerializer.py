@@ -17,8 +17,40 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from django.forms.models import model_to_dict
 
 from Emailkasten.Serializers.DaemonSerializers.DaemonSerializer import \
     DaemonSerializer
 
 from ...models.test_DaemonModel import fixture_daemonModel
+
+@pytest.mark.django_db
+def test_output(daemon):
+    serializerData = DaemonSerializer(instance=daemon).data
+
+    assert 'log_filepath' not in serializerData
+    assert 'uuid' in serializerData
+    assert 'mailbox' in serializerData
+    assert 'fetching_criterion' in serializerData
+    assert 'cycle_interval' in serializerData
+    assert 'is_running' in serializerData
+    assert 'is_healthy' in serializerData
+    assert 'created' in serializerData
+    assert 'updated' in serializerData
+
+
+@pytest.mark.django_db
+def test_input(daemon):
+    serializer = DaemonSerializer(data=model_to_dict(daemon))
+    assert serializer.is_valid()
+    serializerData = serializer.validated_data
+
+    assert 'log_filepath' not in serializerData
+    assert 'uuid' not in serializerData
+    assert 'mailbox' not in serializerData
+    assert 'fetching_criterion' in serializerData
+    assert 'cycle_interval' in serializerData
+    assert 'is_running' not in serializerData
+    assert 'is_healthy' not in serializerData
+    assert 'created' not in serializerData
+    assert 'updated' not in serializerData

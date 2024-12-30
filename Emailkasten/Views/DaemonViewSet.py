@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING
 
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
-from mdurl import URL
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
@@ -116,7 +115,14 @@ class DaemonViewSet(viewsets.ModelViewSet):
             A response detailing the test result for the daemon.
         """
         daemon = self.get_object()
-        return EMailArchiverDaemon.testDaemon(daemon)
+        daemonData = self.get_serializer(daemon).data
+        result = EMailArchiverDaemon.testDaemon(daemon)
+
+        return Response({
+            'detail': 'Daemon testrun was successful.' if result else 'Daemon testrun failed!',
+            'daemon': daemonData,
+            'result': result
+        })
 
 
     URL_PATH_START = 'start'
@@ -133,7 +139,19 @@ class DaemonViewSet(viewsets.ModelViewSet):
             A response detailing the start result of the daemon.
         """
         daemon = self.get_object()
-        return EMailArchiverDaemon.startDaemon(daemon)
+        daemonData = self.get_serializer(daemon).data
+        result = EMailArchiverDaemon.startDaemon(daemon)
+        if result:
+            return Response({
+                'detail': 'Daemon started',
+                'daemon': daemonData
+            })
+        else:
+            return Response({
+                'detail': 'Daemon already running',
+                'daemon': daemonData
+            },
+            status=status.HTTP_400_BAD_REQUEST)
 
 
     URL_PATH_STOP = 'stop'
@@ -150,7 +168,19 @@ class DaemonViewSet(viewsets.ModelViewSet):
             A response detailing the stop result for the daemon.
         """
         daemon = self.get_object()
-        return EMailArchiverDaemon.stopDaemon(daemon)
+        daemonData = self.get_serializer(daemon).data
+        result = EMailArchiverDaemon.stopDaemon(daemon)
+        if result:
+            return Response({
+                'status': 'Daemon stopped',
+                'daemon': daemonData
+            })
+        else:
+            return Response({
+                'status': 'Daemon not running',
+                'daemon': daemonData
+            },
+            status=status.HTTP_400_BAD_REQUEST)
 
 
     URL_PATH_LOG_DOWNLOAD = 'log/download'

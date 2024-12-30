@@ -48,35 +48,28 @@ class EMailArchiverDaemon:
 
 
     @staticmethod
-    def testDaemon(daemonModel: DaemonModel) -> Response:
+    def testDaemon(daemonModel: DaemonModel) -> bool:
         """Static method to test data for a daemon.
 
         Args:
             daemonModel: The data for the daemon to be tested.
 
         Returns:
-            A response detailing what has happened.
+            Whether the test was successful.
         """
         try:
             newDaemon = EMailArchiverDaemon(daemonModel)
+            newDaemon.logger.debug("Testing daemon %s ...", str(daemonModel))
             newDaemon.cycle()
-            return Response({
-                'status': 'Daemon testrun was successful.',
-                'account': daemonModel.mailbox.account.mail_address,
-                'mailbox': daemonModel.mailbox.name,
-                'info': "Success"
-            })
-        except Exception as error:
-            return Response({
-                'status': 'Daemon testrun failed!',
-                'account': daemonModel.mailbox.account.mail_address,
-                'mailbox': daemonModel.mailbox.name,
-                'info': str(error)
-            })
+            newDaemon.logger.debug("Successfully tested daemon %s.", str(daemonModel))
+            return daemonModel.is_healthy
+        except Exception:
+            newDaemon.logger.error("Error while testing daemon %s!", str(daemonModel), exc_info=True)
+            return False
 
 
     @staticmethod
-    def startDaemon(daemonModel: DaemonModel) -> Response:
+    def startDaemon(daemonModel: DaemonModel) -> bool:
         """Static method to create, start and add a new daemon to :attr:`runningDaemons`.
         If it is already in the dict does nothing.
 
@@ -84,27 +77,19 @@ class EMailArchiverDaemon:
             daemonModel: The data for the daemon.
 
         Returns:
-            A response detailing what has been done.
+            `True` if the daemon was started, `False` if it was already running.
         """
         if daemonModel.id not in EMailArchiverDaemon.runningDaemons:
             newDaemon = EMailArchiverDaemon(daemonModel)
             newDaemon.start()
             EMailArchiverDaemon.runningDaemons[daemonModel.id] = newDaemon
-            return Response({
-                'status': 'Daemon started',
-                'account': daemonModel.mailbox.account.mail_address,
-                'mailbox': daemonModel.mailbox.name
-            })
+            return True
         else:
-            return Response({
-                'status': 'Daemon already running',
-                'account': daemonModel.mailbox.account.mail_address,
-                'mailbox': daemonModel.mailbox.name
-            })
+            return False
 
 
     @staticmethod
-    def stopDaemon(daemonModel: DaemonModel) -> Response:
+    def stopDaemon(daemonModel: DaemonModel) -> bool:
         """Static method to stop and remove a daemon from :attr:`runningDaemons`.
         If it is not in the dict does nothing.
 
@@ -112,24 +97,16 @@ class EMailArchiverDaemon:
             daemonModel: The data of the daemon.
 
         Returns:
-            A response detailing what has been done.
+            `True` if the daemon was stopped, `False` if it wasnt running.
         """
         if daemonModel.id in EMailArchiverDaemon.runningDaemons:
             oldDaemon = EMailArchiverDaemon.runningDaemons.pop(daemonModel.id)
             oldDaemon.stop()
             daemonModel.is_running = False
             daemonModel.save(update_fields=['is_running'])
-            return Response({
-                'status': 'Daemon stopped',
-                'account': daemonModel.mailbox.account.mail_address,
-                'mailbox': daemonModel.mailbox.name
-            })
+            return True
         else:
-            return Response({
-                'status': 'Daemon not running',
-                'account': daemonModel.mailbox.account.mail_address,
-                'mailbox': daemonModel.mailbox.name
-            })
+            return False
 
 
     def __init__(self, daemon: DaemonModel) -> None:

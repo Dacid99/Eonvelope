@@ -21,7 +21,7 @@
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
     :func:`fixture_mailingListModel`: Creates an email in `accountModel`.
-    :func:`fixture_mailingListPayload`: Creates clean :class:`Emailkasten.Models.MailingListModel.MailingListModel` payload for a post or put request.
+    :func:`fixture_mailingListPayload`: Creates clean :class:`Emailkasten.Models.MailingListModel.MailingListModel` payload for a patch, post or put request.
     :func:`fixture_list_url`: Gets the viewsets url for list actions.
     :func:`fixture_detail_url`: Gets the viewsets url for detail actions.
     :func:`fixture_custom_detail_list_url`: Gets the viewsets url for custom list actions.
@@ -63,7 +63,7 @@ def fixture_mailingListModel(correspondentModel, emailModel) -> MailingListModel
 
 @pytest.fixture(name='mailingListPayload')
 def fixture_mailingListPayload(correspondentModel, emailModel) -> dict[str, Any]:
-    """Creates clean :class:`Emailkasten.Models.MailingListModel.MailingListModel` payload for a post or put request.
+    """Creates clean :class:`Emailkasten.Models.MailingListModel.MailingListModel` payload for a patch, post or put request.
 
     Args:
         correspondentModel: Depends on :func:`fixture_correspondentModel`.
@@ -180,39 +180,39 @@ def test_get_auth_owner(mailingListModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(mailingListModel, noauth_apiClient, detail_url):
+def test_patch_noauth(mailingListModel, noauth_apiClient, mailingListPayload, detail_url):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url, data={'list_id': 'abc123'})
+    response = noauth_apiClient.patch(detail_url, data=mailingListPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data['list_id']
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != 'abc123'
+    assert mailingListModel.list_id != mailingListPayload['list_id']
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(mailingListModel, other_apiClient, detail_url):
+def test_patch_auth_other(mailingListModel, other_apiClient, mailingListPayload, detail_url):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url, data={'list_id': 'abc123'})
+    response = other_apiClient.patch(detail_url, data=mailingListPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
         response.data['list_id']
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != 'abc123'
+    assert mailingListModel.list_id != mailingListPayload['list_id']
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(mailingListModel, owner_apiClient, detail_url):
+def test_patch_auth_owner(mailingListModel, owner_apiClient, mailingListPayload, detail_url):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url, data={'list_id': 'abc123'})
+    response = owner_apiClient.patch(detail_url, data=mailingListPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
         response.data['list_id']
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != 'abc123'
+    assert mailingListModel.list_id != mailingListPayload['list_id']
 
 
 @pytest.mark.django_db

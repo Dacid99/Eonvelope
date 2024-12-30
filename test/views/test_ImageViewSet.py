@@ -22,7 +22,7 @@ Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
     :func:`fixture_emailModel`: Creates an email in `accountModel`.
     :func:`fixture_imageModel`: Creates an image in `emailModel`.
-    :func:`fixture_emailPayload`: Creates clean :class:`Emailkasten.Models.ImageModel.ImageModel` payload for a post or put request.
+    :func:`fixture_emailPayload`: Creates clean :class:`Emailkasten.Models.ImageModel.ImageModel` payload for a patch, post or put request.
     :func:`fixture_list_url`: Gets the viewsets url for list actions.
     :func:`fixture_detail_url`: Gets the viewsets url for detail actions.
     :func:`fixture_custom_detail_list_url`: Gets the viewsets url for custom list actions.
@@ -188,39 +188,39 @@ def test_get_auth_owner(imageModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(imageModel, noauth_apiClient, detail_url):
+def test_patch_noauth(imageModel, noauth_apiClient, imagePayload, detail_url):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url, data={'file_name': 'abc123'})
+    response = noauth_apiClient.patch(detail_url, data=imagePayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data['file_name']
     imageModel.refresh_from_db()
-    assert imageModel.file_name != 'abc123'
+    assert imageModel.file_name != imagePayload['file_name']
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(imageModel, other_apiClient, detail_url):
+def test_patch_auth_other(imageModel, other_apiClient, imagePayload, detail_url):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url, data={'file_name': 'abc123'})
+    response = other_apiClient.patch(detail_url, data=imagePayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
         response.data['file_name']
     imageModel.refresh_from_db()
-    assert imageModel.file_name != 'abc123'
+    assert imageModel.file_name != imagePayload['file_name']
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(imageModel, owner_apiClient, detail_url):
+def test_patch_auth_owner(imageModel, owner_apiClient, imagePayload, detail_url):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url, data={'file_name': 'abc123'})
+    response = owner_apiClient.patch(detail_url, data=imagePayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
         response.data['file_name']
     imageModel.refresh_from_db()
-    assert imageModel.file_name != 'abc123'
+    assert imageModel.file_name != imagePayload['file_name']
 
 
 @pytest.mark.django_db

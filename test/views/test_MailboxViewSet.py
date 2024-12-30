@@ -21,7 +21,7 @@
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
     :func:`fixture_mailboxModel`: Creates an mailbox in `accountModel`.
-    :func:`fixture_mailboxPayload`: Creates clean :class:`Emailkasten.Models.MailboxModel.MailboxModel` payload for a post or put request.
+    :func:`fixture_mailboxPayload`: Creates clean :class:`Emailkasten.Models.MailboxModel.MailboxModel` payload for a patch, post or put request.
     :func:`fixture_list_url`: Gets the viewsets url for list actions.
     :func:`fixture_detail_url`: Gets the viewsets url for detail actions.
     :func:`fixture_custom_detail_list_url`: Gets the viewsets url for custom list actions.
@@ -63,7 +63,7 @@ def fixture_mailboxModel(accountModel) -> MailboxModel:
 
 @pytest.fixture(name='mailboxPayload')
 def fixture_mailboxPayload(accountModel) -> dict[str, Any]:
-    """Creates clean :class:`Emailkasten.Models.MailboxModel.MailboxModel` payload for a post or put request.
+    """Creates clean :class:`Emailkasten.Models.MailboxModel.MailboxModel` payload for a patch, post or put request.
 
     Args:
         accountModel: Depends on :func:`fixture_accountModel`.
@@ -177,37 +177,37 @@ def test_get_auth_owner(mailboxModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(mailboxModel, noauth_apiClient, detail_url):
+def test_patch_noauth(mailboxModel, noauth_apiClient, mailboxPayload, detail_url):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url, data={'save_attachments': False})
+    response = noauth_apiClient.patch(detail_url, data=mailboxPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data['save_attachments']
     mailboxModel.refresh_from_db()
-    assert mailboxModel.save_attachments is True
+    assert mailboxModel.save_attachments is not mailboxPayload['save_attachments']
 
 @pytest.mark.django_db
-def test_patch_auth_other(mailboxModel, other_apiClient, detail_url):
+def test_patch_auth_other(mailboxModel, other_apiClient, mailboxPayload, detail_url):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url, data={'save_attachments': False})
+    response = other_apiClient.patch(detail_url, data=mailboxPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data['save_attachments']
     mailboxModel.refresh_from_db()
-    assert mailboxModel.save_attachments is True
+    assert mailboxModel.save_attachments is not mailboxPayload['save_attachments']
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(mailboxModel, owner_apiClient, detail_url):
+def test_patch_auth_owner(mailboxModel, owner_apiClient, mailboxPayload, detail_url):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url, data={'save_attachments': False})
+    response = owner_apiClient.patch(detail_url, data=mailboxPayload)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['save_attachments'] is False
     mailboxModel.refresh_from_db()
-    assert mailboxModel.save_attachments is False
+    assert mailboxModel.save_attachments is mailboxPayload['save_attachments']
 
 
 @pytest.mark.django_db

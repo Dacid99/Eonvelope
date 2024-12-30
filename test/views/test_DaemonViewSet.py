@@ -21,7 +21,7 @@
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
     :func:`fixture_daemonModel`: Creates an mailbox in `accountModel`.
-    :func:`fixture_mailboxPayload`: Creates clean :class:`Emailkasten.Models.DaemonModel.DaemonModel` payload for a post or put request.
+    :func:`fixture_mailboxPayload`: Creates clean :class:`Emailkasten.Models.DaemonModel.DaemonModel` payload for a patch, post or put request.
     :func:`fixture_list_url`: Gets the viewsets url for list actions.
     :func:`fixture_detail_url`: Gets the viewsets url for detail actions.
     :func:`fixture_custom_detail_list_url`: Gets the viewsets url for custom list actions.
@@ -61,9 +61,9 @@ def fixture_daemonModel(mailboxModel) -> DaemonModel:
     """
     return baker.make(DaemonModel, log_filepath=Faker().file_path(extension='log'), mailbox=mailboxModel)
 
-@pytest.fixture(name='postputDaemonPayload')
-def fixture_postputDaemonPayload(mailboxModel) -> dict[str, Any]:
-    """Creates clean :class:`Emailkasten.Models.DaemonModel.DaemonModel` payload for a post or put request.
+@pytest.fixture(name='daemonPayload')
+def fixture_daemonPayload(mailboxModel) -> dict[str, Any]:
+    """Creates clean :class:`Emailkasten.Models.DaemonModel.DaemonModel` payload for a patch, post or put request.
 
     Args:
         mailboxModel: Depends on :func:`fixture_mailboxModel`.
@@ -77,15 +77,6 @@ def fixture_postputDaemonPayload(mailboxModel) -> dict[str, Any]:
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
     return cleanPayload
 
-@pytest.fixture(name='patchDaemonPayload')
-def fixture_patchDaemonPayload() -> dict[str, Any]:
-    """Creates clean :class:`Emailkasten.Models.DaemonModel.DaemonModel` payload for a post or put request.
-
-    Returns:
-        The clean payload.
-    """
-
-    return {'cycle_interval': 1234}
 
 @pytest.fixture(name='list_url')
 def fixture_list_url() -> str:
@@ -187,107 +178,107 @@ def test_get_auth_owner(daemonModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(daemonModel, noauth_apiClient, detail_url, patchDaemonPayload):
+def test_patch_noauth(daemonModel, noauth_apiClient, daemonPayload, detail_url):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url, data=patchDaemonPayload)
+    response = noauth_apiClient.patch(detail_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.cycle_interval != patchDaemonPayload['cycle_interval']
+    assert daemonModel.cycle_interval != daemonPayload['cycle_interval']
 
 @pytest.mark.django_db
-def test_patch_auth_other(daemonModel, other_apiClient, detail_url, patchDaemonPayload):
+def test_patch_auth_other(daemonModel, other_apiClient, daemonPayload, detail_url):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url, data=patchDaemonPayload)
+    response = other_apiClient.patch(detail_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.cycle_interval != patchDaemonPayload['cycle_interval']
+    assert daemonModel.cycle_interval != daemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(daemonModel, owner_apiClient, detail_url, patchDaemonPayload):
+def test_patch_auth_owner(daemonModel, owner_apiClient, daemonPayload, detail_url):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url, data=patchDaemonPayload)
+    response = owner_apiClient.patch(detail_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['cycle_interval'] == patchDaemonPayload['cycle_interval']
+    assert response.data['cycle_interval'] == daemonPayload['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.cycle_interval == patchDaemonPayload['cycle_interval']
+    assert daemonModel.cycle_interval == daemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_put_noauth(daemonModel, noauth_apiClient, postputDaemonPayload, detail_url):
+def test_put_noauth(daemonModel, noauth_apiClient, daemonPayload, detail_url):
     """Tests the put method with an unauthenticated user client."""
-    response = noauth_apiClient.put(detail_url, data=postputDaemonPayload)
+    response = noauth_apiClient.put(detail_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.cycle_interval != postputDaemonPayload['cycle_interval']
+    assert daemonModel.cycle_interval != daemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_put_auth_other(daemonModel, other_apiClient, postputDaemonPayload, detail_url):
+def test_put_auth_other(daemonModel, other_apiClient, daemonPayload, detail_url):
     """Tests the put method with the authenticated other user client."""
-    response = other_apiClient.put(detail_url, data=postputDaemonPayload)
+    response = other_apiClient.put(detail_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.cycle_interval != postputDaemonPayload['cycle_interval']
+    assert daemonModel.cycle_interval != daemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(daemonModel, owner_apiClient, postputDaemonPayload, detail_url):
+def test_put_auth_owner(daemonModel, owner_apiClient, daemonPayload, detail_url):
     """Tests the put method with the authenticated owner user client."""
-    response = owner_apiClient.put(detail_url, data=postputDaemonPayload)
+    response = owner_apiClient.put(detail_url, data=daemonPayload)
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['cycle_interval'] == postputDaemonPayload['cycle_interval']
+    assert response.data['cycle_interval'] == daemonPayload['cycle_interval']
     daemonModel.refresh_from_db()
-    assert daemonModel.cycle_interval == postputDaemonPayload['cycle_interval']
+    assert daemonModel.cycle_interval == daemonPayload['cycle_interval']
 
 
 @pytest.mark.django_db
-def test_post_noauth(noauth_apiClient, postputDaemonPayload, list_url):
+def test_post_noauth(noauth_apiClient, daemonPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url, data=postputDaemonPayload)
+    response = noauth_apiClient.post(list_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data['cycle_interval']
     with pytest.raises(DaemonModel.DoesNotExist):
-        DaemonModel.objects.get(cycle_interval = postputDaemonPayload['cycle_interval'])
+        DaemonModel.objects.get(cycle_interval = daemonPayload['cycle_interval'])
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_apiClient, postputDaemonPayload, list_url):
+def test_post_auth_other(other_apiClient, daemonPayload, list_url):
     """Tests the post method with the authenticated other user client."""
-    response = other_apiClient.post(list_url, data=postputDaemonPayload)
+    response = other_apiClient.post(list_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
         response.data['cycle_interval']
     with pytest.raises(DaemonModel.DoesNotExist):
-        DaemonModel.objects.get(cycle_interval = postputDaemonPayload['cycle_interval'])
+        DaemonModel.objects.get(cycle_interval = daemonPayload['cycle_interval'])
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_apiClient, postputDaemonPayload, list_url):
+def test_post_auth_owner(owner_apiClient, daemonPayload, list_url):
     """Tests the post method with the authenticated owner user client."""
-    response = owner_apiClient.post(list_url, data=postputDaemonPayload)
+    response = owner_apiClient.post(list_url, data=daemonPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
         response.data['cycle_interval']
     with pytest.raises(DaemonModel.DoesNotExist):
-        DaemonModel.objects.get(cycle_interval = postputDaemonPayload['cycle_interval'])
+        DaemonModel.objects.get(cycle_interval = daemonPayload['cycle_interval'])
 
 
 @pytest.mark.django_db

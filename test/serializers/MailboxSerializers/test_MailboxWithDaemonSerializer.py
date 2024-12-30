@@ -16,4 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-from Emailkasten.Serializers.MailboxSerializers.MailboxWithDaemonSerializer import MailboxWithDaemonSerializer
+import pytest
+
+from Emailkasten.Serializers.MailboxSerializers.MailboxWithDaemonSerializer import \
+    MailboxWithDaemonSerializer
+
+from ...models.test_MailboxModel import fixture_mailboxModel

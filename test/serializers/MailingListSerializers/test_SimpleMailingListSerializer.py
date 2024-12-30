@@ -16,4 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-from Emailkasten.Serializers.MailingListSerializers.SimpleMailingListSerializer import SimpleMailingListSerializer
+import pytest
+
+from Emailkasten.Serializers.MailingListSerializers.SimpleMailingListSerializer import \
+    SimpleMailingListSerializer
+
+from ...models.test_MailingListModel import fixture_mailingListModel

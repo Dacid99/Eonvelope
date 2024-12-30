@@ -16,4 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-from Emailkasten.Serializers.UserSerializers.UserSerializer import UserSerializer
+import pytest
+from django.contrib.auth.models import User
+
+from Emailkasten.Serializers.UserSerializers.UserSerializer import \
+    UserSerializer

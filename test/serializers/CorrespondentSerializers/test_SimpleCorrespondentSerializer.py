@@ -16,4 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-from Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer import SimpleCorrespondentSerializer
+import pytest
+
+from Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer import \
+    SimpleCorrespondentSerializer
+
+from ...models.test_CorrespondentModel import fixture_correspondentModel

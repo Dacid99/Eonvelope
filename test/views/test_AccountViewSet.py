@@ -72,52 +72,11 @@ def fixture_accountPayload(owner_user) -> dict[str, Any]:
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
     return cleanPayload
 
-@pytest.fixture(name='list_url')
-def fixture_list_url() -> str:
-    """Gets the viewsets url for list actions.
-
-    Returns:
-        The list url.
-    """
-    return reverse(f'{AccountViewSet.BASENAME}-list')
-
-@pytest.fixture(name='detail_url')
-def fixture_detail_url(accountModel) -> str:
-    """Gets the viewsets url for detail actions.
-
-    Args:
-        accountModel: Depends on :func:`fixture_accountModel`.
-
-    Returns:
-        The detail url."""
-    return reverse(f'{AccountViewSet.BASENAME}-detail', args=[accountModel.id])
-
-@pytest.fixture(name='custom_list_action_url')
-def fixture_custom_list_action_url() -> Callable[[str],str]:
-    """Gets the viewsets url for custom list actions.
-
-    Returns:
-        A callable that gets the list url of the viewset from the custom action name.
-    """
-    return lambda viewset, custom_list_action_url_name: reverse(f'{AccountViewSet.BASENAME}-{custom_list_action_url_name}')
-
-@pytest.fixture(name='custom_detail_action_url')
-def fixture_custom_detail_action_url(accountModel) -> Callable[[str],str]:
-    """Gets the viewsets url for custom detail actions.
-
-    Args:
-        accountModel: Depends on :func:`fixture_accountModel`.
-
-    Returns:
-        A callable that gets the detail url of the viewset from the custom action name.
-    """
-    return lambda custom_detail_action_url_name: reverse(f'{AccountViewSet.BASENAME}-{custom_detail_action_url_name}', args=[accountModel.id])
-
 
 @pytest.mark.django_db
 def test_list_noauth(accountModel, noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
-    response = noauth_apiClient.get(list_url)
+    response = noauth_apiClient.get(list_url(AccountViewSet))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -127,7 +86,7 @@ def test_list_noauth(accountModel, noauth_apiClient, list_url):
 @pytest.mark.django_db
 def test_list_auth_other(accountModel, other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
-    response = other_apiClient.get(list_url)
+    response = other_apiClient.get(list_url(AccountViewSet))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['count'] == 0
@@ -137,7 +96,7 @@ def test_list_auth_other(accountModel, other_apiClient, list_url):
 @pytest.mark.django_db
 def test_list_auth_owner(accountModel, owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
-    response = owner_apiClient.get(list_url)
+    response = owner_apiClient.get(list_url(AccountViewSet))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['count'] == 1
@@ -149,7 +108,7 @@ def test_list_auth_owner(accountModel, owner_apiClient, list_url):
 @pytest.mark.django_db
 def test_get_noauth(accountModel, noauth_apiClient, detail_url):
     """Tests the get method with an unauthenticated user client."""
-    response = noauth_apiClient.get(detail_url)
+    response = noauth_apiClient.get(detail_url(AccountViewSet, accountModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -159,7 +118,7 @@ def test_get_noauth(accountModel, noauth_apiClient, detail_url):
 @pytest.mark.django_db
 def test_get_auth_other(accountModel, other_apiClient, detail_url):
     """Tests the get method with the authenticated other user client."""
-    response = other_apiClient.get(detail_url)
+    response = other_apiClient.get(detail_url(AccountViewSet, accountModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
@@ -169,7 +128,7 @@ def test_get_auth_other(accountModel, other_apiClient, detail_url):
 @pytest.mark.django_db
 def test_get_auth_owner(accountModel, owner_apiClient, detail_url):
     """Tests the list method with the authenticated owner user client."""
-    response = owner_apiClient.get(detail_url)
+    response = owner_apiClient.get(detail_url(AccountViewSet, accountModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['mail_address'] == accountModel.mail_address
@@ -180,7 +139,7 @@ def test_get_auth_owner(accountModel, owner_apiClient, detail_url):
 @pytest.mark.django_db
 def test_patch_noauth(accountModel, noauth_apiClient, accountPayload, detail_url):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url, data=accountPayload)
+    response = noauth_apiClient.patch(detail_url(AccountViewSet, accountModel), data=accountPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -195,7 +154,7 @@ def test_patch_noauth(accountModel, noauth_apiClient, accountPayload, detail_url
 @pytest.mark.django_db
 def test_patch_auth_other(accountModel, other_apiClient, accountPayload, detail_url):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url, data=accountPayload)
+    response = other_apiClient.patch(detail_url(AccountViewSet, accountModel), data=accountPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
@@ -210,7 +169,7 @@ def test_patch_auth_other(accountModel, other_apiClient, accountPayload, detail_
 @pytest.mark.django_db
 def test_patch_auth_owner(accountModel, owner_apiClient, accountPayload, detail_url):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url, data=accountPayload)
+    response = owner_apiClient.patch(detail_url(AccountViewSet, accountModel), data=accountPayload)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['mail_address'] == accountPayload['mail_address']
@@ -224,7 +183,7 @@ def test_patch_auth_owner(accountModel, owner_apiClient, accountPayload, detail_
 @pytest.mark.django_db
 def test_put_noauth(accountModel, noauth_apiClient, accountPayload, detail_url):
     """Tests the put method with an unauthenticated user client."""
-    response = noauth_apiClient.put(detail_url, data=accountPayload)
+    response = noauth_apiClient.put(detail_url(AccountViewSet, accountModel), data=accountPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -238,7 +197,7 @@ def test_put_noauth(accountModel, noauth_apiClient, accountPayload, detail_url):
 @pytest.mark.django_db
 def test_put_auth_other(accountModel, other_apiClient, accountPayload, detail_url):
     """Tests the put method with the authenticated other user client."""
-    response = other_apiClient.put(detail_url, data=accountPayload)
+    response = other_apiClient.put(detail_url(AccountViewSet, accountModel), data=accountPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
@@ -252,7 +211,7 @@ def test_put_auth_other(accountModel, other_apiClient, accountPayload, detail_ur
 @pytest.mark.django_db
 def test_put_auth_owner(accountModel, owner_apiClient, accountPayload, detail_url):
     """Tests the put method with the authenticated owner user client."""
-    response = owner_apiClient.put(detail_url, data=accountPayload)
+    response = owner_apiClient.put(detail_url(AccountViewSet, accountModel), data=accountPayload)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['mail_host'] == accountPayload['mail_host']
@@ -265,7 +224,7 @@ def test_put_auth_owner(accountModel, owner_apiClient, accountPayload, detail_ur
 @pytest.mark.django_db
 def test_post_noauth(noauth_apiClient, accountPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url, data=accountPayload)
+    response = noauth_apiClient.post(list_url(AccountViewSet), data=accountPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -279,7 +238,7 @@ def test_post_noauth(noauth_apiClient, accountPayload, list_url):
 @pytest.mark.django_db
 def test_post_auth_other(other_user, other_apiClient, accountPayload, list_url):
     """Tests the post method with the authenticated other user client."""
-    response = other_apiClient.post(list_url, data=accountPayload)
+    response = other_apiClient.post(list_url(AccountViewSet), data=accountPayload)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data['mail_host'] == accountPayload['mail_host']
@@ -293,7 +252,7 @@ def test_post_auth_other(other_user, other_apiClient, accountPayload, list_url):
 @pytest.mark.django_db
 def test_post_auth_owner(owner_user, owner_apiClient, accountPayload, list_url):
     """Tests the post method with the authenticated owner user client."""
-    response = owner_apiClient.post(list_url, data=accountPayload)
+    response = owner_apiClient.post(list_url(AccountViewSet), data=accountPayload)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data['mail_host'] == accountPayload['mail_host']
@@ -311,7 +270,7 @@ def test_post_duplicate_auth_owner(accountModel, owner_apiClient, list_url):
     payload.pop('id')
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
 
-    response = owner_apiClient.post(list_url, data=cleanPayload)
+    response = owner_apiClient.post(list_url(AccountViewSet), data=cleanPayload)
 
     assert cleanPayload['mail_address'] == accountModel.mail_address
     AccountModel.objects.get(mail_address = cleanPayload['mail_address'])
@@ -323,7 +282,7 @@ def test_post_duplicate_auth_owner(accountModel, owner_apiClient, list_url):
 @pytest.mark.django_db
 def test_delete_noauth(accountModel, noauth_apiClient, detail_url):
     """Tests the delete method with an unauthenticated user client."""
-    response = noauth_apiClient.delete(detail_url)
+    response = noauth_apiClient.delete(detail_url(AccountViewSet, accountModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     accountModel.refresh_from_db()
@@ -333,7 +292,7 @@ def test_delete_noauth(accountModel, noauth_apiClient, detail_url):
 @pytest.mark.django_db
 def test_delete_auth_other(accountModel, other_apiClient, detail_url):
     """Tests the delete method with the authenticated other user client."""
-    response = other_apiClient.delete(detail_url)
+    response = other_apiClient.delete(detail_url(AccountViewSet, accountModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     accountModel.refresh_from_db()
@@ -343,7 +302,7 @@ def test_delete_auth_other(accountModel, other_apiClient, detail_url):
 @pytest.mark.django_db
 def test_delete_auth_owner(accountModel, owner_apiClient, detail_url):
     """Tests the delete method with the authenticated owner user client."""
-    response = owner_apiClient.delete(detail_url)
+    response = owner_apiClient.delete(detail_url(AccountViewSet, accountModel))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     with pytest.raises(AccountModel.DoesNotExist):
@@ -355,7 +314,7 @@ def test_scan_mailboxes_noauth(accountModel, noauth_apiClient, custom_detail_act
     """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.scan_mailboxes` action with an unauthenticated user client."""
     mock_scanMailboxes = mocker.patch('Emailkasten.Views.AccountViewSet.scanMailboxes')
 
-    response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_SCAN_MAILBOXES))
+    response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_SCAN_MAILBOXES, accountModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_scanMailboxes.assert_not_called()
@@ -368,7 +327,7 @@ def test_scan_mailboxes_auth_other(accountModel, other_apiClient, custom_detail_
     """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated other user client."""
     mock_scanMailboxes = mocker.patch('Emailkasten.Views.AccountViewSet.scanMailboxes')
 
-    response = other_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_SCAN_MAILBOXES))
+    response = other_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_SCAN_MAILBOXES, accountModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_scanMailboxes.assert_not_called()
@@ -381,7 +340,7 @@ def test_scan_mailboxes_auth_owner(accountModel, owner_apiClient, custom_detail_
     """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated owner user client."""
     mock_scanMailboxes = mocker.patch('Emailkasten.Views.AccountViewSet.scanMailboxes')
 
-    response = owner_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_SCAN_MAILBOXES))
+    response = owner_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_SCAN_MAILBOXES, accountModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['account'] == AccountViewSet.serializer_class(accountModel).data
@@ -394,7 +353,7 @@ def test_test_noauth(accountModel, noauth_apiClient, custom_detail_action_url, m
     mock_testAccount = mocker.patch('Emailkasten.Views.AccountViewSet.testAccount')
     previous_is_healthy = accountModel.is_healthy
 
-    response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_TEST))
+    response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TEST, accountModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_testAccount.assert_not_called()
@@ -410,7 +369,7 @@ def test_test_auth_other(accountModel, other_apiClient, custom_detail_action_url
     mock_testAccount = mocker.patch('Emailkasten.Views.AccountViewSet.testAccount')
     previous_is_healthy = accountModel.is_healthy
 
-    response = other_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_TEST))
+    response = other_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TEST, accountModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_testAccount.assert_not_called()
@@ -424,7 +383,7 @@ def test_test_auth_owner(accountModel, owner_apiClient, custom_detail_action_url
     """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
     mock_testAccount = mocker.patch('Emailkasten.Views.AccountViewSet.testAccount')
 
-    response = owner_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_TEST))
+    response = owner_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TEST, accountModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['account'] == AccountViewSet.serializer_class(accountModel).data
@@ -434,7 +393,7 @@ def test_test_auth_owner(accountModel, owner_apiClient, custom_detail_action_url
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(accountModel, noauth_apiClient, custom_detail_action_url):
     """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.toggle_favorite` action with an unauthenticated user client."""
-    response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_TOGGLE_FAVORITE))
+    response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TOGGLE_FAVORITE, accountModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     accountModel.refresh_from_db()
@@ -444,7 +403,7 @@ def test_toggle_favorite_noauth(accountModel, noauth_apiClient, custom_detail_ac
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(accountModel, other_apiClient, custom_detail_action_url):
     """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated other user client."""
-    response = other_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_TOGGLE_FAVORITE))
+    response = other_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TOGGLE_FAVORITE, accountModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     accountModel.refresh_from_db()
@@ -454,7 +413,7 @@ def test_toggle_favorite_auth_other(accountModel, other_apiClient, custom_detail
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(accountModel, owner_apiClient, custom_detail_action_url):
     """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated owner user client."""
-    response = owner_apiClient.post(custom_detail_action_url(AccountViewSet.URL_NAME_TOGGLE_FAVORITE))
+    response = owner_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TOGGLE_FAVORITE, accountModel))
 
     assert response.status_code == status.HTTP_200_OK
     accountModel.refresh_from_db()

@@ -32,8 +32,11 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.contrib.auth.models import User
+from django.db.models import Model
+from django.urls import reverse
 from model_bakery import baker
 from rest_framework.test import APIClient
+from rest_framework.viewsets import ModelViewSet
 
 if TYPE_CHECKING:
     from typing import Callable
@@ -101,3 +104,43 @@ def fixture_owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
     """
     noauth_apiClient.force_authenticate(user=owner_user)
     return noauth_apiClient
+
+
+@pytest.fixture(name='list_url')
+def fixture_list_url() -> Callable[[type[ModelViewSet]],str]:
+    """Gets the viewsets url for list actions.
+
+    Returns:
+        The list url.
+    """
+    return lambda viewsetClass: reverse(f'{viewsetClass.BASENAME}-list')
+
+@pytest.fixture(name='detail_url')
+def fixture_detail_url() -> Callable[[type[ModelViewSet], Model],str]:
+    """Gets the viewsets url for detail actions.
+
+    Returns:
+        The detail url."""
+    return lambda viewsetClass, instance: reverse(f'{viewsetClass.BASENAME}-detail', args=[instance.id])
+
+@pytest.fixture(name='custom_list_action_url')
+def fixture_custom_list_action_url() -> Callable[[type[ModelViewSet], str],str]:
+    """Gets the viewsets url for custom list actions.
+
+    Returns:
+        A callable that gets the list url of the viewset from the custom action name.
+    """
+    return lambda viewsetClass, custom_list_action_url_name: (
+        reverse(f'{viewsetClass.BASENAME}-{custom_list_action_url_name}')
+    )
+
+@pytest.fixture(name='custom_detail_action_url')
+def fixture_custom_detail_action_url() -> Callable[[type[ModelViewSet], str, Model],str]:
+    """Gets the viewsets url for custom detail actions.
+
+    Returns:
+        A callable that gets the detail url of the viewset from the custom action name.
+    """
+    return lambda viewsetClass, custom_detail_action_url_name, instance: (
+        reverse(f'{viewsetClass.BASENAME}-{custom_detail_action_url_name}', args=[instance.id])
+    )

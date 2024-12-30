@@ -78,52 +78,10 @@ def fixture_daemonPayload(mailboxModel) -> dict[str, Any]:
     return cleanPayload
 
 
-@pytest.fixture(name='list_url')
-def fixture_list_url() -> str:
-    """Gets the viewsets url for list actions.
-
-    Returns:
-        The list url.
-    """
-    return reverse(f'{DaemonViewSet.BASENAME}-list')
-
-@pytest.fixture(name='detail_url')
-def fixture_detail_url(daemonModel) -> str:
-    """Gets the viewsets url for detail actions.
-
-    Args:
-        daemonModel: Depends on :func:`fixture_daemonModel`.
-
-    Returns:
-        The detail url."""
-    return reverse(f'{DaemonViewSet.BASENAME}-detail', args=[daemonModel.id])
-
-@pytest.fixture(name='custom_list_action_url')
-def fixture_custom_list_action_url() -> Callable[[str],str]:
-    """Gets the viewsets url for custom list actions.
-
-    Returns:
-        A callable that gets the list url of the viewset from the custom action name.
-    """
-    return lambda custom_list_action_url_name: reverse(f'{DaemonViewSet.BASENAME}-{custom_list_action_url_name}')
-
-@pytest.fixture(name='custom_detail_action_url')
-def fixture_custom_detail_action_url(daemonModel)-> Callable[[str],str]:
-    """Gets the viewsets url for custom detail actions.
-
-    Args:
-        daemonModel: Depends on :func:`fixture_daemonModel`.
-
-    Returns:
-        A callable that gets the detail url of the viewset from the custom action name.
-    """
-    return lambda custom_detail_action_url_name: reverse(f'{DaemonViewSet.BASENAME}-{custom_detail_action_url_name}', args=[daemonModel.id])
-
-
 @pytest.mark.django_db
 def test_list_noauth(daemonModel, noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
-    response = noauth_apiClient.get(list_url)
+    response = noauth_apiClient.get(list_url(DaemonViewSet))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -133,7 +91,7 @@ def test_list_noauth(daemonModel, noauth_apiClient, list_url):
 @pytest.mark.django_db
 def test_list_auth_other(daemonModel, other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
-    response = other_apiClient.get(list_url)
+    response = other_apiClient.get(list_url(DaemonViewSet))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['count'] == 0
@@ -143,7 +101,7 @@ def test_list_auth_other(daemonModel, other_apiClient, list_url):
 @pytest.mark.django_db
 def test_list_auth_owner(daemonModel, owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
-    response = owner_apiClient.get(list_url)
+    response = owner_apiClient.get(list_url(DaemonViewSet))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['count'] == 1
@@ -153,7 +111,7 @@ def test_list_auth_owner(daemonModel, owner_apiClient, list_url):
 @pytest.mark.django_db
 def test_get_noauth(daemonModel, noauth_apiClient, detail_url):
     """Tests the get method with an unauthenticated user client."""
-    response = noauth_apiClient.get(detail_url)
+    response = noauth_apiClient.get(detail_url(DaemonViewSet, daemonModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -163,7 +121,7 @@ def test_get_noauth(daemonModel, noauth_apiClient, detail_url):
 @pytest.mark.django_db
 def test_get_auth_other(daemonModel, other_apiClient, detail_url):
     """Tests the get method with the authenticated other user client."""
-    response = other_apiClient.get(detail_url)
+    response = other_apiClient.get(detail_url(DaemonViewSet, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -171,7 +129,7 @@ def test_get_auth_other(daemonModel, other_apiClient, detail_url):
 @pytest.mark.django_db
 def test_get_auth_owner(daemonModel, owner_apiClient, detail_url):
     """Tests the list method with the authenticated owner user client."""
-    response = owner_apiClient.get(detail_url)
+    response = owner_apiClient.get(detail_url(DaemonViewSet, daemonModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['cycle_interval'] == daemonModel.cycle_interval
@@ -180,7 +138,7 @@ def test_get_auth_owner(daemonModel, owner_apiClient, detail_url):
 @pytest.mark.django_db
 def test_patch_noauth(daemonModel, noauth_apiClient, daemonPayload, detail_url):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url, data=daemonPayload)
+    response = noauth_apiClient.patch(detail_url(DaemonViewSet, daemonModel), data=daemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -191,7 +149,7 @@ def test_patch_noauth(daemonModel, noauth_apiClient, daemonPayload, detail_url):
 @pytest.mark.django_db
 def test_patch_auth_other(daemonModel, other_apiClient, daemonPayload, detail_url):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url, data=daemonPayload)
+    response = other_apiClient.patch(detail_url(DaemonViewSet, daemonModel), data=daemonPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
@@ -202,8 +160,12 @@ def test_patch_auth_other(daemonModel, other_apiClient, daemonPayload, detail_ur
 
 @pytest.mark.django_db
 def test_patch_auth_owner(daemonModel, owner_apiClient, daemonPayload, detail_url):
-    """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url, data=daemonPayload)
+    """Tests the patch method with the authenticated owner user client.
+
+    Note:
+        Has a tendency to fail when not executed individually.
+    """
+    response = owner_apiClient.patch(detail_url(DaemonViewSet, daemonModel), data=daemonPayload)
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['cycle_interval'] == daemonPayload['cycle_interval']
@@ -214,7 +176,7 @@ def test_patch_auth_owner(daemonModel, owner_apiClient, daemonPayload, detail_ur
 @pytest.mark.django_db
 def test_put_noauth(daemonModel, noauth_apiClient, daemonPayload, detail_url):
     """Tests the put method with an unauthenticated user client."""
-    response = noauth_apiClient.put(detail_url, data=daemonPayload)
+    response = noauth_apiClient.put(detail_url(DaemonViewSet, daemonModel), data=daemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -226,7 +188,7 @@ def test_put_noauth(daemonModel, noauth_apiClient, daemonPayload, detail_url):
 @pytest.mark.django_db
 def test_put_auth_other(daemonModel, other_apiClient, daemonPayload, detail_url):
     """Tests the put method with the authenticated other user client."""
-    response = other_apiClient.put(detail_url, data=daemonPayload)
+    response = other_apiClient.put(detail_url(DaemonViewSet, daemonModel), data=daemonPayload)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
@@ -237,8 +199,12 @@ def test_put_auth_other(daemonModel, other_apiClient, daemonPayload, detail_url)
 
 @pytest.mark.django_db
 def test_put_auth_owner(daemonModel, owner_apiClient, daemonPayload, detail_url):
-    """Tests the put method with the authenticated owner user client."""
-    response = owner_apiClient.put(detail_url, data=daemonPayload)
+    """Tests the put method with the authenticated owner user client.
+
+    Note:
+        Has a tendency to fail when not executed individually.
+    """
+    response = owner_apiClient.put(detail_url(DaemonViewSet, daemonModel), data=daemonPayload)
     assert response.status_code == status.HTTP_200_OK
     assert response.data['cycle_interval'] == daemonPayload['cycle_interval']
     daemonModel.refresh_from_db()
@@ -248,7 +214,7 @@ def test_put_auth_owner(daemonModel, owner_apiClient, daemonPayload, detail_url)
 @pytest.mark.django_db
 def test_post_noauth(noauth_apiClient, daemonPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url, data=daemonPayload)
+    response = noauth_apiClient.post(list_url(DaemonViewSet), data=daemonPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -260,7 +226,7 @@ def test_post_noauth(noauth_apiClient, daemonPayload, list_url):
 @pytest.mark.django_db
 def test_post_auth_other(other_apiClient, daemonPayload, list_url):
     """Tests the post method with the authenticated other user client."""
-    response = other_apiClient.post(list_url, data=daemonPayload)
+    response = other_apiClient.post(list_url(DaemonViewSet), data=daemonPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
@@ -272,7 +238,7 @@ def test_post_auth_other(other_apiClient, daemonPayload, list_url):
 @pytest.mark.django_db
 def test_post_auth_owner(owner_apiClient, daemonPayload, list_url):
     """Tests the post method with the authenticated owner user client."""
-    response = owner_apiClient.post(list_url, data=daemonPayload)
+    response = owner_apiClient.post(list_url(DaemonViewSet), data=daemonPayload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
@@ -284,7 +250,7 @@ def test_post_auth_owner(owner_apiClient, daemonPayload, list_url):
 @pytest.mark.django_db
 def test_delete_noauth(daemonModel, noauth_apiClient, detail_url):
     """Tests the delete method with an unauthenticated user client."""
-    response = noauth_apiClient.delete(detail_url)
+    response = noauth_apiClient.delete(detail_url(DaemonViewSet, daemonModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     daemonModel.refresh_from_db()
@@ -294,7 +260,7 @@ def test_delete_noauth(daemonModel, noauth_apiClient, detail_url):
 @pytest.mark.django_db
 def test_delete_auth_other(daemonModel, other_apiClient, detail_url):
     """Tests the delete method with the authenticated other user client."""
-    response = other_apiClient.delete(detail_url)
+    response = other_apiClient.delete(detail_url(DaemonViewSet, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     daemonModel.refresh_from_db()
@@ -304,7 +270,7 @@ def test_delete_auth_other(daemonModel, other_apiClient, detail_url):
 @pytest.mark.django_db
 def test_delete_auth_owner(daemonModel, owner_apiClient, detail_url):
     """Tests the delete method with the authenticated owner user client."""
-    response = owner_apiClient.delete(detail_url)
+    response = owner_apiClient.delete(detail_url(DaemonViewSet, daemonModel))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     with pytest.raises(daemonModel.DoesNotExist):
@@ -315,7 +281,7 @@ def test_fetching_options_noauth(daemonModel, noauth_apiClient, custom_detail_ac
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with an unauthenticated user client."""
     mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = ['ALL'])
 
-    response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
+    response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_FETCHING_OPTIONS, daemonModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -325,7 +291,7 @@ def test_fetching_options_auth_other(daemonModel, other_apiClient, custom_detail
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated other user client."""
     mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = ['ALL'])
 
-    response = other_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
+    response = other_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_FETCHING_OPTIONS, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
 
@@ -336,7 +302,7 @@ def test_fetching_options_auth_owner(daemonModel, owner_apiClient, custom_detail
     mock_fetchingCriteria = ['ALL']
     mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = mock_fetchingCriteria)
 
-    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_FETCHING_OPTIONS, daemonModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['options'] == mock_fetchingCriteria
@@ -347,7 +313,7 @@ def test_fetching_options_error_auth_owner(daemonModel, owner_apiClient, custom_
     mock_fetchingCriteria = []
     mocker.patch('Emailkasten.Models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = mock_fetchingCriteria)
 
-    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_FETCHING_OPTIONS))
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_FETCHING_OPTIONS, daemonModel))
 
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
 
@@ -357,7 +323,7 @@ def test_test_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mo
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with an unauthenticated user client."""
     mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=True)
 
-    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
+    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -370,7 +336,7 @@ def test_test_auth_other(daemonModel, other_apiClient, custom_detail_action_url,
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated other user client."""
     mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=True)
 
-    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
+    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
@@ -383,7 +349,7 @@ def test_test_success_auth_owner(daemonModel, owner_apiClient, custom_detail_act
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
     mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=True)
 
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
@@ -395,7 +361,7 @@ def test_test_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_act
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
     mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.testDaemon', return_value=False)
 
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_TEST))
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
@@ -408,7 +374,7 @@ def test_start_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, m
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with an unauthenticated user client."""
     mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=True)
 
-    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
+    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_startDaemon.assert_not_called()
@@ -421,7 +387,7 @@ def test_start_auth_other(daemonModel, other_apiClient, custom_detail_action_url
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated other user client."""
     mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=True)
 
-    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
+    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_startDaemon.assert_not_called()
@@ -434,7 +400,7 @@ def test_start_success_auth_owner(daemonModel, owner_apiClient, custom_detail_ac
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
     mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=True)
 
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
@@ -446,7 +412,7 @@ def test_start_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_ac
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
     mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.startDaemon', return_value=False)
 
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_START))
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
@@ -458,7 +424,7 @@ def test_stop_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mo
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with an unauthenticated user client."""
     mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=True)
 
-    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+    response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_stopDaemon.assert_not_called()
@@ -471,7 +437,7 @@ def test_stop_auth_other(daemonModel, other_apiClient, custom_detail_action_url,
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated other user client."""
     mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=True)
 
-    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+    response = other_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_stopDaemon.assert_not_called()
@@ -484,7 +450,7 @@ def test_stop_success_auth_owner(daemonModel, owner_apiClient, custom_detail_act
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
     mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=True)
 
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
@@ -495,7 +461,7 @@ def test_stop_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_act
     """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
     mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemon.stopDaemon', return_value=False)
 
-    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet.URL_NAME_STOP))
+    response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data['daemon'] == DaemonViewSet.serializer_class(daemonModel).data
@@ -508,7 +474,7 @@ def test_download_noauth(daemonModel, noauth_apiClient, custom_detail_action_url
     mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
     mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
 
-    response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+    response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_open.assert_not_called()
@@ -521,7 +487,7 @@ def test_download_auth_other(daemonModel, other_apiClient, custom_detail_action_
     mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
     mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
 
-    response = other_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+    response = other_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_open.assert_not_called()
@@ -534,7 +500,7 @@ def test_download_no_file_auth_owner(daemonModel, owner_apiClient, custom_detail
     mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
     mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=False)
 
-    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_open.assert_not_called()
@@ -549,7 +515,7 @@ def test_download_auth_owner(daemonModel, owner_apiClient, custom_detail_action_
     mocker.patch('Emailkasten.Views.DaemonViewSet.open', mock_open)
     mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
 
-    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet.URL_NAME_LOG_DOWNLOAD))
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 
     assert response.status_code == status.HTTP_200_OK
     mock_os_path_exists.assert_called_once()

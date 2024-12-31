@@ -18,26 +18,24 @@
 
 """Module with the :class:`CorrespondentEMailSerializer` serializer class."""
 
-from rest_framework import serializers
-
-from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from ..EMailSerializers.SimpleEMailSerializer import SimpleEMailSerializer
+from ..EMailSerializers.BaseEMailSerializer import BaseEMailSerializer
+from .BaseEMailCorrespondentSerializer import BaseEMailCorrespondentSerializer
 
 
-class CorrespondentEMailSerializer(serializers.ModelSerializer):
-    """The serializer for emails from :class:`Emailkasten.Models.EMailCorrespondentsModel`.
+class CorrespondentEMailSerializer(BaseEMailCorrespondentSerializer):
+    """The serializer for emails from :class:`Emailkasten.Models.EMailCorrespondentsModel.EMailCorrespondentsModel`.
     Used to serialize the emails belonging to a correspondent. Does not include this correpondent.
     """
 
-    email = SimpleEMailSerializer(read_only=True)
-    """The email is serialized by :class:`Emailkasten.Serializers.EMailSerializers.SimpleEMailSerializer.SimpleEMailSerializer`."""
+    email = BaseEMailSerializer(read_only=True)
+    """The email is serialized
+    by :class:`Emailkasten.Serializers.EMailSerializers.SimpleEMailSerializer.SimpleEMailSerializer`.
+    """
 
-    class Meta:
+    class Meta(BaseEMailCorrespondentSerializer.Meta):
         """Metadata class for the serializer."""
 
-        model = EMailCorrespondentsModel
-
         fields = ['email', 'mention']
-        """Includes only :attr:`email` and :attr:`Emailkasten.Models.EMailCorrespondentsModel.mention`."""
-
-        read_only_fields = ['email', 'mention']
+        """Includes only :attr:`Emailkasten.Models.EMailCorrespondentsModel.EMailCorrespondentsModel.email`
+        and :attr:`Emailkasten.Models.EMailCorrespondentsModel.EMailCorrespondentsModel.mention`.
+        """

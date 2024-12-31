@@ -18,32 +18,20 @@
 
 """Module with the :class:`AccountSerializer` serializer class."""
 
-from rest_framework import serializers
-
-from ...Models.AccountModel import AccountModel
-from ..MailboxSerializers.MailboxSerializer import MailboxSerializer
+from .BaseAccountSerializer import BaseAccountSerializer
+from ..MailboxSerializers.BaseMailboxSerializer import BaseMailboxSerializer
 
 
-class AccountSerializer(serializers.ModelSerializer):
+class AccountSerializer(BaseAccountSerializer):
     """The standard serializer for a :class:`Emailkasten.Models.AccountModel`.
-    Uses all fields except :attr:`Emailkasten.Models.AccountModel.user`."""
+    Includes a nested serializer for the related field `mailboxes`.
+    """
 
-    password = serializers.CharField(max_length=255, write_only=True)
-    """The password field is set to write-only for security reasons."""
-
-    mail_address = serializers.EmailField()
-    """The password field is a :restframework::class:`serializers.EmailField` for automatic validation of input."""
-
-    mailboxes = MailboxSerializer(many=True, read_only=True)
-    """The mailboxes of the account are serialized by :class:`Emailkasten.Models.MailboxSerializer`."""
+    mailboxes = BaseMailboxSerializer(many=True, read_only=True)
+    """The mailboxes of the account are serialized
+    by :class:`Emailkasten.Models.MailboxSerializers.BaseMailboxSerializer.BaseMailboxSerializer`.
+    """
 
 
-    class Meta:
+    class Meta(BaseAccountSerializer.Meta):
         """Metadata class for the serializer."""
-
-        model = AccountModel
-
-        exclude = ['user']
-        """Exclude the :attr:`Emailkasten.Models.AccountModel.user` field."""
-
-        read_only_fields = ['is_healthy', 'created', 'updated', 'mailboxes']

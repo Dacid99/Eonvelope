@@ -33,8 +33,8 @@ from rest_framework.response import Response
 
 from ..Filters.AttachmentsFilter import AttachmentFilter
 from ..Models.AttachmentModel import AttachmentModel
-from ..Serializers.AttachmentSerializers.AttachmentSerializer import \
-    AttachmentSerializer
+from ..Serializers.AttachmentSerializers.BaseAttachmentSerializer import \
+    BaseAttachmentSerializer
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
@@ -45,7 +45,7 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.AttachmentModel.AttachmentModel`."""
 
     BASENAME = 'attachments'
-    serializer_class = AttachmentSerializer
+    serializer_class = BaseAttachmentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AttachmentFilter
     permission_classes = [IsAuthenticated]

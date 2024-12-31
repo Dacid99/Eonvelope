@@ -33,7 +33,7 @@ from rest_framework.response import Response
 
 from ..Filters.ImageFilter import ImageFilter
 from ..Models.ImageModel import ImageModel
-from ..Serializers.ImageSerializers.ImageSerializer import ImageSerializer
+from ..Serializers.ImageSerializers.BaseImageSerializer import BaseImageSerializer
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
@@ -44,7 +44,7 @@ class ImageViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.ImageModel.ImageModel`."""
 
     BASENAME = 'images'
-    serializer_class = ImageSerializer
+    serializer_class = BaseImageSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = ImageFilter
     permission_classes = [IsAuthenticated]

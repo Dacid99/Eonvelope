@@ -23,14 +23,22 @@ from rest_framework import serializers
 from ...Models.DaemonModel import DaemonModel
 
 
-class DaemonSerializer(serializers.ModelSerializer):
-    """The standard serializer for a :class:`Emailkasten.Models.DaemonModel`.
-    Uses all fields except :attr:`Emailkasten.Models.DaemonModel.mailbox` and :attr:`Emailkasten.Models.DaemonModel.log_filepath` fields."""
+class BaseDaemonSerializer(serializers.ModelSerializer):
+    """The base serializer for :class:`Emailkasten.Models.DaemonModel.DaemonModel`.
+    Includes all viable fields from the model.
+    Sets all constraints that must be implemented in all serializers.
+    Other serializers for :class:`Emailkasten.Models.DaemonModel.DaemonModel` should inherit from this.
+    """
 
     class Meta:
-        """Metadata class for the serializer."""
+        """Metadata class for the base serializer.
+        Contains constraints that must be implemented by all serializers.
+        Other serializer metaclasses should inherit from this.
+        The read_only_fields must not be shortened in subclasses.
+        """
 
         model = DaemonModel
+        """The model to serialize."""
 
         exclude = ['log_filepath']
         """Exclude the :attr:`Emailkasten.Models.DaemonModel.log_filepath` field."""
@@ -43,6 +51,13 @@ class DaemonSerializer(serializers.ModelSerializer):
                 'created',
                 'updated'
             ]
+        """The :attr:`Emailkasten.Models.DaemonModel.DaemonModel.uuid`,
+        :attr:`Emailkasten.Models.DaemonModel.DaemonModel.mailbox`,
+        :attr:`Emailkasten.Models.DaemonModel.DaemonModel.is_running`,
+        :attr:`Emailkasten.Models.DaemonModel.DaemonModel.is_healthy`,
+        :attr:`Emailkasten.Models.DaemonModel.DaemonModel.created` and
+        :attr:`Emailkasten.Models.DaemonModel.DaemonModel.updated` fields are read-only.
+        """
 
 
     def validate_fetching_criterion(self, value: str) -> str:

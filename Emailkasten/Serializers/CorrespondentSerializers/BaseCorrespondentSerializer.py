@@ -23,15 +23,22 @@ from rest_framework import serializers
 from ...Models.CorrespondentModel import CorrespondentModel
 
 
-class SimpleCorrespondentSerializer(serializers.ModelSerializer):
-    """A simplified serializer for a :class:`Emailkasten.Models.CorrespondentModel`.
-    Uses all fields except for the emails mentioning the correspondent.
-    Use exclusively in a :restframework::class:`viewsets.ReadOnlyModelViewSet`."""
+class BaseCorrespondentSerializer(serializers.ModelSerializer):
+    """The base serializer for :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel`.
+    Includes all viable fields from the model.
+    Sets all constraints that must be implemented in all serializers.
+    Other serializers for :class:`Emailkasten.Models.CorrespondentModel.CorrespondentModel` should inherit from this.
+    """
 
     class Meta:
-        """Metadata class for the serializer."""
+        """Metadata class for the base serializer.
+        Contains constraints that must be implemented by all serializers.
+        Other serializer metaclasses should inherit from this.
+        The read_only_fields must not be shortened in subclasses.
+        """
 
         model = CorrespondentModel
+        """The model to serialize."""
 
         fields = '__all__'
         """Include all fields."""
@@ -41,3 +48,7 @@ class SimpleCorrespondentSerializer(serializers.ModelSerializer):
                 'created',
                 'updated'
             ]
+        """The :attr:`Emailkasten.Models.CorrespondentModel.CorrespondentModel.email_address`,
+        :attr:`Emailkasten.Models.CorrespondentModel.CorrespondentModel.created` and
+        :attr:`Emailkasten.Models.CorrespondentModel.CorrespondentModel.updated` fields are read-only.
+        """

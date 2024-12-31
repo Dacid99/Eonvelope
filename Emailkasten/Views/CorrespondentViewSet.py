@@ -33,8 +33,8 @@ from ..Filters.CorrespondentFilter import CorrespondentFilter
 from ..Models.CorrespondentModel import CorrespondentModel
 from ..Serializers.CorrespondentSerializers.CorrespondentSerializer import \
     CorrespondentSerializer
-from ..Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer import \
-    SimpleCorrespondentSerializer
+from ..Serializers.CorrespondentSerializers.BaseCorrespondentSerializer import \
+    BaseCorrespondentSerializer
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
@@ -62,7 +62,7 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
     def get_serializer_class(self):
         """Sets the serializer for `list` requests to the simplified version."""
         if self.action == 'list':
-            return SimpleCorrespondentSerializer
+            return BaseCorrespondentSerializer
         return super().get_serializer_class()
 
 

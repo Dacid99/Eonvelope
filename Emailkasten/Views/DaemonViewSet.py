@@ -34,8 +34,8 @@ from rest_framework.response import Response
 from ..EMailArchiverDaemon import EMailArchiverDaemon
 from ..Filters.DaemonFilter import DaemonFilter
 from ..Models.DaemonModel import DaemonModel
-from ..Serializers.DaemonSerializers.DaemonSerializer import \
-    DaemonSerializer
+from ..Serializers.DaemonSerializers.BaseDaemonSerializer import \
+    BaseDaemonSerializer
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
@@ -46,7 +46,7 @@ class DaemonViewSet(viewsets.ModelViewSet):
     """Viewset for the :class:`Emailkasten.Models.DaemonModel.DaemonModel`."""
 
     BASENAME = 'daemons'
-    serializer_class = DaemonSerializer
+    serializer_class = BaseDaemonSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = DaemonFilter
     permission_classes = [IsAuthenticated]

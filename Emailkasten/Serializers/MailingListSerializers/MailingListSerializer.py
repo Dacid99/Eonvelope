@@ -20,49 +20,36 @@
 
 from rest_framework import serializers
 
-
 from ...Models.MailingListModel import MailingListModel
-from ..EMailSerializers.SimpleEMailSerializer import SimpleEMailSerializer
-from ..CorrespondentSerializers.SimpleCorrespondentSerializer import SimpleCorrespondentSerializer
+from ..CorrespondentSerializers.BaseCorrespondentSerializer import \
+    BaseCorrespondentSerializer
+from ..EMailSerializers.BaseEMailSerializer import BaseEMailSerializer
+from .BaseMailingListSerializer import BaseMailingListSerializer
 
 
-class MailingListSerializer(serializers.ModelSerializer):
-    """The standard serializer for a :class:`Emailkasten.Models.MailingListModel`.
-    Uses all fields including all mails and the correspondent.
-    Use exclusively in a :restframework::class:`viewsets.ReadOnlyModelViewSet`."""
+class MailingListSerializer(BaseMailingListSerializer):
+    """The standard serializer for a :class:`Emailkasten.Models.MailingList`.
+    Includes nested serializers for the :attr:`Emailkasten.Models.MailingList.MailingList.emails`,
+    :attr:`Emailkasten.Models.MailingList.MailingList.correspondent` foreign key fields
+    as well as a method field for the count of elements in :attr:`Emailkasten.Models.MailingList.MailingList.emails`.
+    """
 
-    emails = SimpleEMailSerializer(many=True, read_only=True)
-    """The emails from the mailinglist are serialized by :class:`Emailkasten.Serializers.EMailSerializers.SimpleEMailSerializer.SimpleEMailSerializer`."""
+    emails = BaseEMailSerializer(many=True, read_only=True)
+    """The emails from the mailinglist are serialized
+    by :class:`Emailkasten.Serializers.EMailSerializers.BaseEMailSerializer.BaseEMailSerializer`.
+    """
 
-    correspondent = SimpleCorrespondentSerializer(read_only=True)
-    """The correspondent sending the mailinglist are serialized by :class:`Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`."""
+    correspondent = BaseCorrespondentSerializer(read_only=True)
+    """The correspondent sending the mailinglist are serialized
+    by :class:`Emailkasten.Serializers.CorrespondentSerializers.BaseCorrespondentSerializer.BaseCorrespondentSerializer`.
+    """
 
     email_number = serializers.SerializerMethodField(read_only=True)
     """The number of mails by the mailinglist. Set via :func:`get_email_number`."""
 
 
-    class Meta:
+    class Meta(BaseMailingListSerializer.Meta):
         """Metadata class for the serializer."""
-
-        model = MailingListModel
-
-        fields = '__all__'
-        """Include all fields."""
-
-        read_only_fields = [
-            'list_id',
-            'list_owner',
-            'list_subscribe',
-            'list_unsubscribe',
-            'list_post',
-            'list_help',
-            'list_archive',
-            'correspondent',
-            'created',
-            'updated',
-            'emails',
-            'email_number'
-        ]
 
 
     def get_email_number(self, object: MailingListModel) -> int:

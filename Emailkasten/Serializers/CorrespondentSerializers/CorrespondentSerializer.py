@@ -21,42 +21,35 @@
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
 
-
 from ...Models.CorrespondentModel import CorrespondentModel
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from ..EMailCorrespondentsSerializers.CorrespondentEMailSerializer import \
     CorrespondentEMailSerializer
 from ..MailingListSerializers.SimpleMailingListSerializer import \
     SimpleMailingListSerializer
+from .BaseCorrespondentSerializer import BaseCorrespondentSerializer
 
 
-class CorrespondentSerializer(serializers.ModelSerializer):
+class CorrespondentSerializer(BaseCorrespondentSerializer):
     """The standard serializer for a :class:`Emailkasten.Models.CorrespondentModel`.
-    Uses all fields including all emails and mailinglists mentioning the correspondent.
-    Use exclusively in a :restframework::class:`viewsets.ReadOnlyModelViewSet`."""
+    Includes a nested serializer for
+    the :attr:`Emailkasten.Models.CorrespondentModel.CorrespondentModel.emails`
+    and :attr:`Emailkasten.Models.CorrespondentModel.CorrespondentModel.mailinglist` fields.
+    """
 
     emails = serializers.SerializerMethodField(read_only=True)
-    """The emails are set from the :class:`Emailkasten.Models.EMailCorrespondentsModel` via :func:`get_emails`."""
+    """The emails are set from the
+    :class:`Emailkasten.Models.EMailCorrespondentsModel.EMailCorrespondentsModel`
+    via :func:`get_emails`.
+    """
 
     mailinglist = SimpleMailingListSerializer(many=True, read_only=True)
-    """The mailinglists are serialized by :class:`Emailkasten.MailingListSerializers.MailingListSerializer`."""
+    """The mailinglists are serialized
+    by :class:`Emailkasten.MailingListSerializers.SimpleMailingListSerializer.SimpleMailingListSerializer`.
+    """
 
-
-    class Meta:
+    class Meta(BaseCorrespondentSerializer.Meta):
         """Metadata class for the serializer."""
-
-        model = CorrespondentModel
-
-        fields = '__all__'
-        """Include all fields plus the emails."""
-
-        read_only_fields = [
-                'email_address',
-                'created',
-                'updated',
-                'emails',
-                'mailinglist'
-            ]
 
 
     def get_emails(self, object: CorrespondentModel) -> ReturnDict|None:

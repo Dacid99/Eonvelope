@@ -19,42 +19,38 @@
 import pytest
 from django.forms.models import model_to_dict
 
-from Emailkasten.Serializers.DaemonSerializers.DaemonSerializer import \
-    DaemonSerializer
+from Emailkasten.Serializers.CorrespondentSerializers.BaseCorrespondentSerializer import \
+    BaseCorrespondentSerializer
 
-from ...models.test_DaemonModel import fixture_daemonModel
+from ...models.test_CorrespondentModel import fixture_correspondentModel
 
 @pytest.mark.django_db
-def test_output(daemon):
-    serializerData = DaemonSerializer(instance=daemon).data
+def test_output(correspondent):
+    serializerData = BaseCorrespondentSerializer(instance=correspondent).data
 
     assert 'id' in serializerData
-    assert 'log_filepath' not in serializerData
-    assert 'uuid' in serializerData
-    assert 'mailbox' in serializerData
-    assert 'fetching_criterion' in serializerData
-    assert 'cycle_interval' in serializerData
-    assert 'is_running' in serializerData
-    assert 'is_healthy' in serializerData
+    assert 'emails' not in serializerData
+    assert 'mailinglist' not in serializerData
+    assert 'email_name' in serializerData
+    assert 'email_address' in serializerData
+    assert 'is_favorite' in serializerData
     assert 'created' in serializerData
     assert 'updated' in serializerData
-    assert len(serializerData) == 9
+    assert len(serializerData) == 6
 
 
 @pytest.mark.django_db
-def test_input(daemon):
-    serializer = DaemonSerializer(data=model_to_dict(daemon))
+def test_input(correspondent):
+    serializer = BaseCorrespondentSerializer(data=model_to_dict(correspondent))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
     assert 'id' not in serializerData
-    assert 'log_filepath' not in serializerData
-    assert 'uuid' not in serializerData
-    assert 'mailbox' not in serializerData
-    assert 'fetching_criterion' in serializerData
-    assert 'cycle_interval' in serializerData
-    assert 'is_running' not in serializerData
-    assert 'is_healthy' not in serializerData
+    assert 'emails' not in serializerData
+    assert 'mailinglist' not in serializerData
+    assert 'email_name' in serializerData
+    assert 'email_address' not in serializerData
+    assert 'is_favorite' in serializerData
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
     assert len(serializerData) == 2

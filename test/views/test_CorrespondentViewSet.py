@@ -41,8 +41,8 @@ from test_AccountViewSet import fixture_accountModel
 from test_EMailViewSet import fixture_emailModel
 
 from Emailkasten.Models.CorrespondentModel import CorrespondentModel
-from Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer import \
-    SimpleCorrespondentSerializer
+from Emailkasten.Serializers.CorrespondentSerializers.BaseCorrespondentSerializer import \
+    BaseCorrespondentSerializer
 from Emailkasten.Views.CorrespondentViewSet import CorrespondentViewSet
 
 if TYPE_CHECKING:
@@ -105,7 +105,7 @@ def test_list_auth_owner(correspondentModel, owner_apiClient, list_url):
     response = owner_apiClient.get(list_url(CorrespondentViewSet))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['results'] == [SimpleCorrespondentSerializer(correspondentModel).data]
+    assert response.data['results'] == [BaseCorrespondentSerializer(correspondentModel).data]
     assert response.data['count'] == 1
     assert len(response.data['results']) == 1
 

@@ -19,14 +19,14 @@
 import pytest
 from django.forms.models import model_to_dict
 
-from Emailkasten.Serializers.EMailSerializers.SimpleEMailSerializer import \
-    SimpleEMailSerializer
+from Emailkasten.Serializers.EMailSerializers.BaseEMailSerializer import \
+    BaseEMailSerializer
 
 from ...models.test_EMailModel import fixture_emailModel
 
 @pytest.mark.django_db
 def test_output(email):
-    serializerData = SimpleEMailSerializer(instance=email).data
+    serializerData = BaseEMailSerializer(instance=email).data
 
     assert 'id' in serializerData
     assert 'message_id' in serializerData
@@ -65,7 +65,7 @@ def test_output(email):
 
 @pytest.mark.django_db
 def test_input(email):
-    serializer = SimpleEMailSerializer(data=model_to_dict(email))
+    serializer = BaseEMailSerializer(data=model_to_dict(email))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

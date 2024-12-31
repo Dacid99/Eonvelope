@@ -20,20 +20,33 @@
 
 from rest_framework import serializers
 
-
 from ...Models.MailboxModel import MailboxModel
 
 
-class MailboxSerializer(serializers.ModelSerializer):
-    """The standard serializer for a :class:`Emailkasten.Models.MailboxModel`.
-    Uses all fields except the daemon."""
+class BaseMailboxSerializer(serializers.ModelSerializer):
+    """The base serializer for :class:`Emailkasten.Models.MailboxModel.MailboxModel`.
+    Includes all viable fields from the model.
+    Sets all constraints that must be implemented in all serializers.
+    Other serializers for :class:`Emailkasten.Models.MailboxModel.MailboxModel` should inherit from this.
+    """
 
     class Meta:
-        """Metadata class for the serializer."""
+        """Metadata class for the base serializer.
+        Contains constraints that must be implemented by all serializers.
+        Other serializer metaclasses should inherit from this.
+        The read_only_fields must not be shortened in subclasses.
+        """
 
         model = MailboxModel
+        """The model to serialize."""
 
         fields = '__all__'
         """Includes all fields."""
 
         read_only_fields = ['name', 'account', 'is_healthy', 'created', 'updated']
+        """The :attr:`Emailkasten.Models.MailboxModel.MailboxModel.name`,
+        :attr:`Emailkasten.Models.MailboxModel.MailboxModel.account`,
+        :attr:`Emailkasten.Models.MailboxModel.MailboxModel.is_healthy`,
+        :attr:`Emailkasten.Models.MailboxModel.MailboxModel.created` and
+        :attr:`Emailkasten.Models.MailboxModel.MailboxModel.updated` fields are read-only.
+        """

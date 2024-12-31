@@ -19,12 +19,12 @@
 import pytest
 from django.forms.models import model_to_dict
 
-from Emailkasten.Serializers.ImageSerializers.ImageSerializer import ImageSerializer
+from Emailkasten.Serializers.ImageSerializers.BaseImageSerializer import BaseImageSerializer
 from ...models.test_ImageModel import fixture_imageModel
 
 @pytest.mark.django_db
 def test_output(image):
-    serializerData = ImageSerializer(instance=image).data
+    serializerData = BaseImageSerializer(instance=image).data
 
     assert 'id' in serializerData
     assert 'file_path' not in serializerData
@@ -39,7 +39,7 @@ def test_output(image):
 
 @pytest.mark.django_db
 def test_input(image):
-    serializer = ImageSerializer(data=model_to_dict(image))
+    serializer = BaseImageSerializer(data=model_to_dict(image))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

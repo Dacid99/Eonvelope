@@ -18,27 +18,26 @@
 
 """Module with the :class:`EMailCorrespondentsSerializer` serializer class."""
 
-from rest_framework import serializers
-
-from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from ..CorrespondentSerializers.SimpleCorrespondentSerializer import \
-    SimpleCorrespondentSerializer
+from ..CorrespondentSerializers.BaseCorrespondentSerializer import \
+    BaseCorrespondentSerializer
+from .BaseEMailCorrespondentSerializer import BaseEMailCorrespondentSerializer
 
 
-class EMailCorrespondentSerializer(serializers.ModelSerializer):
+class EMailCorrespondentSerializer(BaseEMailCorrespondentSerializer):
     """The serializer for correspondents from :class:`Emailkasten.Models.EMailCorrespondentsModel`.
-    Used to serialize the correspondent belonging to an email. Does not include this email.
-    Use exclusively as read-only."""
+    Used to serialize the correspondent belonging to an email. Does not include that email.
+    """
 
-    correspondent = SimpleCorrespondentSerializer(read_only=True)
-    """The email is serialized by :class:`Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`."""
+    correspondent = BaseCorrespondentSerializer(read_only=True)
+    """The correspondent is serialized
+    by :class:`Emailkasten.Serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`.
+    """
 
-    class Meta:
+    class Meta(BaseEMailCorrespondentSerializer.Meta):
         """Metadata class for the serializer."""
 
-        model = EMailCorrespondentsModel
-
         fields = ['correspondent', 'mention']
-        """Includes only :attr:`correspondent` and :attr:`Emailkasten.Models.EMailCorrespondentsModel.mention`."""
-
-        read_only_fields = ['correspondent', 'mention']
+        """Includes only
+        :attr:`Emailkasten.Models.EMailCorrespondentsModel.EMailCorrespondentsModel.correspondent`
+        and :attr:`Emailkasten.Models.EMailCorrespondentsModel.EMailCorrespondentsModel.mention`.
+        """

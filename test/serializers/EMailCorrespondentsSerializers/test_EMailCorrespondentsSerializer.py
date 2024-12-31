@@ -29,13 +29,13 @@ from ...models.test_EMailCorrespondentsModel import \
 def test_output(emailCorrespondent):
     serializerData = EMailCorrespondentSerializer(instance=emailCorrespondent).data
 
-    assert 'id' in serializerData
+    assert 'id' not in serializerData
     assert 'email' not in serializerData
     assert 'correspondent' in serializerData
     assert 'mention' in serializerData
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
-    assert len(serializerData) == 3
+    assert len(serializerData) == 2
 
 
 @pytest.mark.django_db

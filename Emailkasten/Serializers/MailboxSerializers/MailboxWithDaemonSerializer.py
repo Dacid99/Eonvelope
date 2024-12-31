@@ -18,27 +18,20 @@
 
 """Module with the :class:`MailboxWithDaemonsSerializer` serializer class."""
 
-from rest_framework import serializers
+from ..DaemonSerializers.BaseDaemonSerializer import BaseDaemonSerializer
+from .BaseMailboxSerializer import BaseMailboxSerializer
 
 
-from ...Models.MailboxModel import MailboxModel
-from ..DaemonSerializers.DaemonSerializer import DaemonSerializer
-
-
-class MailboxWithDaemonSerializer(serializers.ModelSerializer):
+class MailboxWithDaemonSerializer(BaseMailboxSerializer):
     """The standard serializer for a :class:`Emailkasten.Models.DaemonModel`.
-    Uses all fields including the daemon."""
+    Includes a nested serializer for the :attr:`Emailkasten.Models.DaemonModel.DaemonModel.daemons` related field.
+    """
 
-    daemons = DaemonSerializer(many=True, read_only=True)
-    """The emails are serialized by :class:`Emailkasten.Serializers.DaemonSerializers.DaemonSerializer`."""
+    daemons = BaseDaemonSerializer(many=True, read_only=True)
+    """The emails are serialized by
+    :class:`Emailkasten.Serializers.DaemonSerializers.BaseDaemonSerializer.BaseDaemonSerializer`.
+    """
 
 
-    class Meta:
+    class Meta(BaseMailboxSerializer.Meta):
         """Metadata class for the serializer."""
-
-        model = MailboxModel
-
-        fields = '__all__'
-        """Includes all fields."""
-
-        read_only_fields = ['name', 'account', 'is_healthy', 'created', 'updated', 'daemons']

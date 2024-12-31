@@ -19,7 +19,7 @@
 """Module with the :class:`SimpleMailingListSerializer` serializer class."""
 
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+
 
 from ...Models.MailingListModel import MailingListModel
 
@@ -53,14 +53,6 @@ class SimpleMailingListSerializer(serializers.ModelSerializer):
             'created',
             'updated',
             'email_number'
-        ]
-
-        validators = [
-            UniqueTogetherValidator(
-                queryset=MailingListModel.objects.all(),
-                fields=['list_id', 'correspondent'],
-                message='This mailinglist already exists!'
-            )
         ]
 
 

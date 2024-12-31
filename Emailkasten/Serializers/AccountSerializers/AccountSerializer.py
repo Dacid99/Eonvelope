@@ -19,7 +19,7 @@
 """Module with the :class:`AccountSerializer` serializer class."""
 
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+
 from ...Models.AccountModel import AccountModel
 from ..MailboxSerializers.MailboxSerializer import MailboxSerializer
 

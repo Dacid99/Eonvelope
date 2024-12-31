@@ -19,7 +19,7 @@
 """Module with the :class:`MailingListSerializer` serializer class."""
 
 from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
+
 
 from ...Models.MailingListModel import MailingListModel
 from ..EMailSerializers.SimpleEMailSerializer import SimpleEMailSerializer
@@ -64,13 +64,6 @@ class MailingListSerializer(serializers.ModelSerializer):
             'email_number'
         ]
 
-        validators = [
-            UniqueTogetherValidator(
-                queryset=MailingListModel.objects.all(),
-                fields=['list_id', 'correspondent'],
-                message='This mailinglist already exists!'
-            )
-        ]
 
     def get_email_number(self, object: MailingListModel) -> int:
         """Gets the number of mails sent by the mailinglist.

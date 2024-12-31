@@ -20,7 +20,6 @@
 
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
-from rest_framework.validators import UniqueTogetherValidator
 
 from ...Models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from ...Models.EMailModel import EMailModel
@@ -56,6 +55,7 @@ class EMailSerializer(serializers.ModelSerializer):
         model = EMailModel
 
         fields = [
+            'id',
             'message_id',
             'datetime',
             'email_subject',
@@ -80,7 +80,6 @@ class EMailSerializer(serializers.ModelSerializer):
             'bodytext',
             'inReplyTo',
             'datasize',
-            'is_favorite',
             'account',
             'created',
             'updated',
@@ -88,14 +87,6 @@ class EMailSerializer(serializers.ModelSerializer):
             'images',
             'mailinglist',
             'correspondents'
-        ]
-
-        validators = [
-            UniqueTogetherValidator(
-                queryset=EMailModel.objects.all(),
-                fields=['message_id', 'account'],
-                message='This email already exists!'
-            )
         ]
 
 

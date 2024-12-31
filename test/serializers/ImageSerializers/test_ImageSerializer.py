@@ -21,3 +21,34 @@ from django.forms.models import model_to_dict
 
 from Emailkasten.Serializers.ImageSerializers.ImageSerializer import ImageSerializer
 from ...models.test_ImageModel import fixture_imageModel
+
+@pytest.mark.django_db
+def test_output(image):
+    serializerData = ImageSerializer(instance=image).data
+
+    assert 'id' in serializerData
+    assert 'file_path' not in serializerData
+    assert 'file_name' in serializerData
+    assert 'datasize' in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'email' in serializerData
+    assert 'created' in serializerData
+    assert 'updated' in serializerData
+    assert len(serializerData) == 7
+
+
+@pytest.mark.django_db
+def test_input(image):
+    serializer = ImageSerializer(data=model_to_dict(image))
+    assert serializer.is_valid()
+    serializerData = serializer.validated_data
+
+    assert 'id' not in serializerData
+    assert 'file_path' not in serializerData
+    assert 'file_name' not in serializerData
+    assert 'datasize' not in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'email' not in serializerData
+    assert 'created' not in serializerData
+    assert 'updated' not in serializerData
+    assert len(serializerData) == 1

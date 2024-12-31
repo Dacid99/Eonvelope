@@ -23,3 +23,40 @@ from Emailkasten.Serializers.MailboxSerializers.MailboxWithDaemonSerializer impo
     MailboxWithDaemonSerializer
 
 from ...models.test_MailboxModel import fixture_mailboxModel
+
+@pytest.mark.django_db
+def test_output(mailbox):
+    serializerData = MailboxWithDaemonSerializer(instance=mailbox).data
+
+    assert 'id' in serializerData
+    assert 'daemons' in serializerData
+    assert 'name' in serializerData
+    assert 'account' in serializerData
+    assert 'save_attachments' in serializerData
+    assert 'save_images' in serializerData
+    assert 'save_toEML' in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'is_healthy' in serializerData
+    assert 'created' in serializerData
+    assert 'updated' in serializerData
+    assert len(serializerData) == 11
+
+
+@pytest.mark.django_db
+def test_input(mailbox):
+    serializer = MailboxWithDaemonSerializer(data=model_to_dict(mailbox))
+    assert serializer.is_valid()
+    serializerData = serializer.validated_data
+
+    assert 'id' not in serializerData
+    assert 'daemons' not in serializerData
+    assert 'name' not in serializerData
+    assert 'account' not in serializerData
+    assert 'save_attachments' in serializerData
+    assert 'save_images' in serializerData
+    assert 'save_toEML' in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'is_healthy' not in serializerData
+    assert 'created' not in serializerData
+    assert 'updated' not in serializerData
+    assert len(serializerData) == 4

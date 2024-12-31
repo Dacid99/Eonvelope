@@ -23,3 +23,46 @@ from Emailkasten.Serializers.MailingListSerializers.SimpleMailingListSerializer 
     SimpleMailingListSerializer
 
 from ...models.test_MailingListModel import fixture_mailingListModel
+
+@pytest.mark.django_db
+def test_output(mailingList):
+    serializerData = SimpleMailingListSerializer(instance=mailingList).data
+
+    assert 'id' in serializerData
+    assert 'list_id' in serializerData
+    assert 'list_owner' in serializerData
+    assert 'list_subscribe' in serializerData
+    assert 'list_unsubscribe' in serializerData
+    assert 'list_post' in serializerData
+    assert 'list_help' in serializerData
+    assert 'list_archive' in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'correspondent' in serializerData
+    assert 'created' in serializerData
+    assert 'updated' in serializerData
+    assert 'emails' not in serializerData
+    assert 'email_number' in serializerData
+    assert len(serializerData) == 13
+
+
+@pytest.mark.django_db
+def test_input(mailingList):
+    serializer = SimpleMailingListSerializer(data=model_to_dict(mailingList))
+    assert serializer.is_valid()
+    serializerData = serializer.validated_data
+
+    assert 'id' not in serializerData
+    assert 'list_id' not in serializerData
+    assert 'list_owner' not in serializerData
+    assert 'list_subscribe' not in serializerData
+    assert 'list_unsubscribe' not in serializerData
+    assert 'list_post' not in serializerData
+    assert 'list_help' not in serializerData
+    assert 'list_archive' not in serializerData
+    assert 'is_favorite' in serializerData
+    assert 'correspondent' not in serializerData
+    assert 'created' not in serializerData
+    assert 'updated' not in serializerData
+    assert 'emails' not in serializerData
+    assert 'email_number' not in serializerData
+    assert len(serializerData) == 1

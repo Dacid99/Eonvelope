@@ -28,6 +28,7 @@ from ...models.test_AttachmentModel import fixture_attachmentModel
 def test_output(attachment):
     serializerData = AttachmentSerializer(instance=attachment).data
 
+    assert 'id' in serializerData
     assert 'file_path' not in serializerData
     assert 'file_name' in serializerData
     assert 'datasize' in serializerData
@@ -35,6 +36,7 @@ def test_output(attachment):
     assert 'email' in serializerData
     assert 'created' in serializerData
     assert 'updated' in serializerData
+    assert len(serializerData) == 7
 
 
 @pytest.mark.django_db
@@ -43,6 +45,7 @@ def test_input(attachment):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
+    assert 'id' not in serializerData
     assert 'file_path' not in serializerData
     assert 'file_name' not in serializerData
     assert 'datasize' not in serializerData
@@ -50,3 +53,4 @@ def test_input(attachment):
     assert 'email' not in serializerData
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
+    assert len(serializerData) == 1

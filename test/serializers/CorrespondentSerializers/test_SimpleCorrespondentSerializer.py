@@ -28,6 +28,7 @@ from ...models.test_CorrespondentModel import fixture_correspondentModel
 def test_output(correspondent):
     serializerData = SimpleCorrespondentSerializer(instance=correspondent).data
 
+    assert 'id' in serializerData
     assert 'emails' not in serializerData
     assert 'mailinglist' not in serializerData
     assert 'email_name' in serializerData
@@ -35,6 +36,7 @@ def test_output(correspondent):
     assert 'is_favorite' in serializerData
     assert 'created' in serializerData
     assert 'updated' in serializerData
+    assert len(serializerData) == 6
 
 
 @pytest.mark.django_db
@@ -43,6 +45,7 @@ def test_input(correspondent):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
+    assert 'id' not in serializerData
     assert 'emails' not in serializerData
     assert 'mailinglist' not in serializerData
     assert 'email_name' in serializerData
@@ -50,3 +53,4 @@ def test_input(correspondent):
     assert 'is_favorite' in serializerData
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
+    assert len(serializerData) == 2

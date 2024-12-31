@@ -29,6 +29,7 @@ from ...models.test_AccountModel import fixture_accountModel
 def test_output(account):
     serializerData = AccountSerializer(instance=account).data
 
+    assert 'id' in serializerData
     assert 'password' not in serializerData
     assert 'mail_address' in serializerData
     assert 'mailboxes' in serializerData
@@ -41,6 +42,7 @@ def test_output(account):
     assert 'created' in serializerData
     assert 'updated' in serializerData
     assert 'user' not in serializerData
+    assert len(serializerData) == 11
 
 
 @pytest.mark.django_db
@@ -49,6 +51,7 @@ def test_input(account):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
+    assert 'id' not in serializerData
     assert 'password' in serializerData
     assert 'mail_address' in serializerData
     assert 'mailboxes' not in serializerData
@@ -61,3 +64,4 @@ def test_input(account):
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
     assert 'user' not in serializerData
+    assert len(serializerData) == 7

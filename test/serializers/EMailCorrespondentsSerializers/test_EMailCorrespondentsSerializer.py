@@ -29,11 +29,13 @@ from ...models.test_EMailCorrespondentsModel import \
 def test_output(emailCorrespondent):
     serializerData = EMailCorrespondentSerializer(instance=emailCorrespondent).data
 
+    assert 'id' in serializerData
     assert 'email' not in serializerData
     assert 'correspondent' in serializerData
     assert 'mention' in serializerData
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
+    assert len(serializerData) == 3
 
 
 @pytest.mark.django_db
@@ -42,8 +44,10 @@ def test_input(emailCorrespondent):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
+    assert 'id' not in serializerData
     assert 'email' not in serializerData
     assert 'correspondent' not in serializerData
     assert 'mention' not in serializerData
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
+    assert len(serializerData) == 0

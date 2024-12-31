@@ -28,6 +28,7 @@ from ...models.test_DaemonModel import fixture_daemonModel
 def test_output(daemon):
     serializerData = DaemonSerializer(instance=daemon).data
 
+    assert 'id' in serializerData
     assert 'log_filepath' not in serializerData
     assert 'uuid' in serializerData
     assert 'mailbox' in serializerData
@@ -37,6 +38,7 @@ def test_output(daemon):
     assert 'is_healthy' in serializerData
     assert 'created' in serializerData
     assert 'updated' in serializerData
+    assert len(serializerData) == 9
 
 
 @pytest.mark.django_db
@@ -45,6 +47,7 @@ def test_input(daemon):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
+    assert 'id' not in serializerData
     assert 'log_filepath' not in serializerData
     assert 'uuid' not in serializerData
     assert 'mailbox' not in serializerData
@@ -54,3 +57,4 @@ def test_input(daemon):
     assert 'is_healthy' not in serializerData
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
+    assert len(serializerData) == 2

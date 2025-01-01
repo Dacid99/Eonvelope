@@ -116,10 +116,10 @@ class MailboxFilter(django_filters.FilterSet):
         model = MailboxModel
         fields = {
             "name": FilterSetups.TEXT,
-            "save_toEML": FilterSetups.TEXT,
-            "save_attachments": FilterSetups.TEXT,
-            "save_images": FilterSetups.TEXT,
-            "is_healthy": FilterSetups.TEXT,
+            "save_toEML": FilterSetups.BOOL,
+            "save_attachments": FilterSetups.BOOL,
+            "save_images": FilterSetups.BOOL,
+            "is_healthy": FilterSetups.BOOL,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.FLOAT,
             "updated": FilterSetups.FLOAT,

@@ -153,24 +153,31 @@ class FilterSetups:
         "iendswith",
         "regex",
         "iregex",
-        "in",
+        "in"
     ]
     """Standard filter options for text fields."""
+
+    DATETIME: Final[list[str]] = [
+
+    ]
 
     FLOAT: Final[list[str]] = [
         "lt",
         "gt",
-        "exact"
+        "exact",
+        "range"
     ]
     """Standard filter options for float fields."""
 
 
-    INT: Final[list[str]] = ["lte",
+    INT: Final[list[str]] = [
+        "lte",
         "gte",
         "lt",
         "gt",
         "exact",
-        "in"
+        "in",
+        "range"
     ]
     """Standard filter options for integer fields."""
 

@@ -11,18 +11,23 @@ INT_TEST_PARAMETERS = [
     ("__gt", INT_TEST_ITEMS[1], 1),
     ("", INT_TEST_ITEMS[0], 1),
     ("__in", INT_TEST_ITEMS[0:1], 1),
+    ("__range", INT_TEST_ITEMS[0:1]*2, 1),
+
     ("__lte", INT_TEST_ITEMS[1], 2),
     ("__gte", INT_TEST_ITEMS[1], 2),
     ("__lt", INT_TEST_ITEMS[2], 2),
     ("__gt", INT_TEST_ITEMS[0], 2),
     ("", INT_TEST_ITEMS[1], 1),
     ("__in", INT_TEST_ITEMS[0:2], 2),
+    ("__range", INT_TEST_ITEMS[0:2], 2),
+
     ("__lte", -5, 0),
     ("__gte", 5, 0),
     ("__lt", -5, 0),
     ("__gt", 5, 0),
     ("", 5, 0),
-    ("__in", [-2,3] , 0)
+    ("__in", [-2,3] , 0),
+    ("__range", [-10,-7], 0)
 ]
 
 FLOAT_TEST_ITEMS = [
@@ -38,18 +43,23 @@ FLOAT_TEST_PARAMETERS = [
     ("__gt", FLOAT_TEST_ITEMS[1], 1),
     ("", FLOAT_TEST_ITEMS[0], 1),
     ("__in", FLOAT_TEST_ITEMS[0:1], 1),
+    ("__range", FLOAT_TEST_ITEMS[0:1]*2, 2),
+
     ("__lte", FLOAT_TEST_ITEMS[1], 2),
     ("__gte", FLOAT_TEST_ITEMS[1], 2),
     ("__lt", FLOAT_TEST_ITEMS[2], 2),
     ("__gt", FLOAT_TEST_ITEMS[0], 2),
     ("", FLOAT_TEST_ITEMS[1], 1),
     ("__in", FLOAT_TEST_ITEMS[0:2], 2),
+    ("__range", FLOAT_TEST_ITEMS[0:2], 2),
+
     ("__lte", -5.1, 0),
     ("__gte", 5.1, 0),
     ("__lt", -5.1, 0),
     ("__gt", 5.1, 0),
     ("", 5.1, 0),
-    ("__in", [-2, 3.6] , 0)
+    ("__in", [-2, 3.6] , 0),
+    ("__range", [-10,-7.3], 2),
 ]
 
 BOOL_TEST_ITEMS = [

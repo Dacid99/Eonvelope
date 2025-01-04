@@ -239,9 +239,8 @@ class FilterSetups:
     ]
 
     FLOAT: Final[list[str]] = [
-        "lt",
-        "gt",
-        "exact",
+        "lte",
+        "gte",
         "range"
     ]
     """Standard filter options for float fields."""

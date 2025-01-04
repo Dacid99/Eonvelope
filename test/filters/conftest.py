@@ -42,18 +42,10 @@ DISJOINT_FLOAT_RANGE = [7.3, 10.2]
 FLOAT_TEST_PARAMETERS = [
     ("__lte", FLOAT_TEST_ITEMS[1], [0,1]),
     ("__gte", FLOAT_TEST_ITEMS[1], [1,2]),
-    ("__lt", FLOAT_TEST_ITEMS[2], [0,1]),
-    ("__gt", FLOAT_TEST_ITEMS[0], [1,2]),
-    ("", FLOAT_TEST_ITEMS[1], [1]),
-    ("__in", FLOAT_TEST_ITEMS[0:2], [0,1]),
     ("__range", FLOAT_TEST_ITEMS[0:2], [0,1]),
 
     ("__lte", LESSER_FLOAT, []),
     ("__gte", GREATER_FLOAT, []),
-    ("__lt", LESSER_FLOAT, []),
-    ("__gt", GREATER_FLOAT, []),
-    ("", GREATER_FLOAT, []),
-    ("__in", DISJOINT_FLOAT_RANGE, []),
     ("__range", DISJOINT_FLOAT_RANGE, []),
 ]
 

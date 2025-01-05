@@ -23,43 +23,8 @@ import django_filters
 from ..constants import FilterSetups
 from ..Models.DaemonModel import DaemonModel
 
-
 class DaemonFilter(django_filters.FilterSet):
     """The filter class for :class:`Emailkasten.Models.MailboxModel`."""
-
-    mailbox_name__icontains = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="icontains"
-    )
-    mailbox_name__contains = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="contains"
-    )
-    mailbox_name__iexact = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="iexact"
-    )
-    mailbox_name__exact = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="exact"
-    )
-    mailbox_name__startswith = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="startswith"
-    )
-    mailbox_name__istartswith = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="istartswith"
-    )
-    mailbox_name__endswith = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="endswith"
-    )
-    mailbox_name__iendswith = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="iendswith"
-    )
-    mailbox_name__regex = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="regex"
-    )
-    mailbox_name__iregex = django_filters.CharFilter(
-        field_name="mailbox__name", lookup_expr="iregex"
-    )
-    mailbox_name__in = django_filters.BaseInFilter(
-        field_name="mailbox__name", lookup_expr="in"
-    )
 
     mail_address__icontains = django_filters.CharFilter(
         field_name="mailbox__account__mail_address", lookup_expr="icontains"
@@ -68,7 +33,7 @@ class DaemonFilter(django_filters.FilterSet):
         field_name="mailbox__account__mail_address", lookup_expr="contains"
     )
     mail_address__exact = django_filters.CharFilter(
-        field_name="account__mail_address", lookup_expr="exact"
+        field_name="mailbox__account__mail_address", lookup_expr="exact"
     )
     mail_address__iexact = django_filters.CharFilter(
         field_name="mailbox__account__mail_address", lookup_expr="iexact"
@@ -77,7 +42,7 @@ class DaemonFilter(django_filters.FilterSet):
         field_name="mailbox__account__mail_address", lookup_expr="startswith"
     )
     mail_address__istartswith = django_filters.CharFilter(
-        field_name="account__mail_address", lookup_expr="istartswith"
+        field_name="mailbox__account__mail_address", lookup_expr="istartswith"
     )
     mail_address__endswith = django_filters.CharFilter(
         field_name="mailbox__account__mail_address", lookup_expr="endswith"
@@ -139,10 +104,6 @@ class DaemonFilter(django_filters.FilterSet):
         field_name="mailbox__account__protocol", lookup_expr="in"
     )
 
-    mailbox_is_healthy__exact = django_filters.BooleanFilter(
-        field_name="mailbox__is_healthy", lookup_expr="exact"
-    )
-
     account_is_healthy__exact = django_filters.BooleanFilter(
         field_name="mailbox__account__is_healthy", lookup_expr="exact"
     )
@@ -159,4 +120,6 @@ class DaemonFilter(django_filters.FilterSet):
             "is_healthy": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
+            "mailbox__name": FilterSetups.TEXT,
+            "mailbox__is_healthy": FilterSetups.BOOL
         }

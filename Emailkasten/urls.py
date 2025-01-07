@@ -45,7 +45,7 @@ from .Views.ImageViewSet import ImageViewSet
 from .Views.LoginOutView import CSRFCookieView, LoginView, LogoutView
 from .Views.MailboxViewSet import MailboxViewSet
 from .Views.MailingListViewSet import MailingListViewSet
-from .Views.UserCreateView import UserViewSet
+from .Views.UserViewSet import UserViewSet
 
 router = DefaultRouter()
 router.register(rf'{AccountViewSet.BASENAME}', AccountViewSet, basename=AccountViewSet.BASENAME)

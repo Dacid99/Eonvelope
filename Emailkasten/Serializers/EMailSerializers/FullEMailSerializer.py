@@ -74,7 +74,7 @@ class FullEMailSerializer(BaseEMailSerializer):
 
         Returns:
             The serialized correspondents connected to the instance to be serialized.
-            None if the the user is not authenticated.
+            An empty list if the the user is not authenticated.
         """
         request = self.context.get('request')
         user = request.user if request else None
@@ -82,4 +82,4 @@ class FullEMailSerializer(BaseEMailSerializer):
             emailcorrespondents = EMailCorrespondentsModel.objects.filter(email=object, email__account__user=user).distinct()
             return EMailCorrespondentSerializer(emailcorrespondents, many=True, read_only=True).data
         else:
-            return None
+            return []

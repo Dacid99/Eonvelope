@@ -24,9 +24,10 @@ from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 from ..constants import APIConfiguration
+from ..Pagination import Pagination
 from ..permissions import IsAdminOrSelf
 from ..Serializers.UserSerializers.UserSerializer import UserSerializer
 
@@ -42,6 +43,7 @@ class UserViewSet(viewsets.ModelViewSet):
     BASENAME = 'users'
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    pagination_class = Pagination
 
     def get_permissions(self) -> Sequence[_SupportsHasPermission]:
         """Gets the permission for different request methods.
@@ -55,7 +57,7 @@ class UserViewSet(viewsets.ModelViewSet):
             if APIConfiguration.REGISTRATION_ENABLED:
                 return [AllowAny()]
             else:
-                return [IsAdminOrSelf(), IsAuthenticated()]
+                return [IsAdminUser(), IsAuthenticated()]
 
         elif self.request.method in ['PATCH','PUT','DELETE','GET']:
             return [IsAdminOrSelf(), IsAuthenticated()]

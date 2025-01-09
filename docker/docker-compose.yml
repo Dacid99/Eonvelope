@@ -39,6 +39,7 @@ services:
       - DB_NAME=email_archive_django
       - DB_USER=user
       - DB_PASSWORD=passwd
+      - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
       - APP_LOG_LEVEL=DEBUG
       - DJANGO_LOG_LEVEL=INFO
       - ROOT_LOG_LEVEL=DEBUG

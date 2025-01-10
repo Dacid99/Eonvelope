@@ -45,7 +45,7 @@ class Pagination(PageNumberPagination):
             May be unnecessary.
         """
         if request.query_params.get('all') == 'true':
-            return None
+            return 1
         return super().get_page_size(request)
 
 

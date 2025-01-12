@@ -59,13 +59,14 @@ class EMailArchiverDaemon(threading.Thread):
 
 
     def start(self) -> None:
-        """Starts this daemon instance.
+        """Starts this daemon instance if it is inactive."""
+        try:
+            super().start()
+        except RuntimeError:
+            self.logger.debug("Attempt to start this active daemon recorded.", stack_info=True)
+            return
 
-        Raises:
-            RuntimeError: If called on a running instance.
-        """
-        super().start()
-        self.logger.info("EMailArchiverDaemon started.")
+        self.logger.info("-----------------\nDaemon started\n-----------------")
         self._daemonModel.is_running = True
         self._daemonModel.save(update_fields = ['is_running'])
 
@@ -73,28 +74,21 @@ class EMailArchiverDaemon(threading.Thread):
     def stop(self) -> None:
         """Stops this daemon instance if it is active.
         The thread finishes by itself later.
-
-        Raises:
-            RuntimeError: If called on a stopped thread.
         """
         if self._stopEvent.is_set():
-            raise RuntimeError("threads can only be stopped once")
+            self.logger.debug("Attempt to stop this inactive daemon recorded.", stack_info=True)
+            return
 
         self._stopEvent.set()
-        self.logger.info("EMailArchiverDaemon stopped.")
+        self.logger.info("-----------------\nDaemon stopped\n-----------------")
         self._daemonModel.is_running = False
         self._daemonModel.save(update_fields = ['is_running'])
-
-
-    def reset(self) -> None:
-        """Resets the stop flag, refreshes configuration from database."""
-        self.update()
-        self._stopEvent.clear()
 
 
     def update(self) -> None:
         """Refreshes configuration from database."""
         self._daemonModel.refresh_from_db()
+        self.logger.debug('Daemon updated.')
 
 
     def run(self) -> None:
@@ -109,9 +103,9 @@ class EMailArchiverDaemon(threading.Thread):
             self.logger.info("%s finished successfully", str(self._daemonModel))
         except Exception:
             self.logger.error("%s crashed! Attempting to restart ...", str(self._daemonModel), exc_info=True)
+            time.sleep(EMailArchiverDaemonConfiguration.RESTART_TIME)
             self._daemonModel.is_healthy = False
             self._daemonModel.save(update_fields=['is_healthy'])
-            time.sleep(EMailArchiverDaemonConfiguration.RESTART_TIME)
             self.run()
 
 
@@ -121,12 +115,12 @@ class EMailArchiverDaemon(threading.Thread):
         A successul run sets the daemon to healthy.
 
         Raises:
-            Exception: The exception thrown during execution of the routine.
+            Exception: Any exception thrown during execution of the routine.
         """
         self.logger.debug("---------------------------------------\nNew cycle")
 
         startTime = time.time()
-        fetchAndProcessMails(self._daemonModel.mailbox, self._daemonModel.account, self._daemonModel.fetching_criterion)
+        fetchAndProcessMails(self._daemonModel.mailbox, self._daemonModel.mailbox.account, self._daemonModel.fetching_criterion)
         endtime = time.time()
 
         self._daemonModel.is_healthy = True

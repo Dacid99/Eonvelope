@@ -31,16 +31,13 @@ from .Models.AccountModel import AccountModel
 from .Models.MailboxModel import MailboxModel
 
 
-class EMailArchiverDaemon:
+class EMailArchiverDaemon(threading.Thread):
     """Daemon for continuous fetching and saving of mails to database.
 
     Attributes:
         logger (:class:`logging.Logger`): Logger for this instance with a filehandler for the daemons own logfile.
-        thread (:class:`threading.Thread`): The thread that the daemon runs on.
-        isRunning (bool): Parameter to control whether this daemon instance is running.
-        daemon (:class:`Emailkasten.Models.DaemonModel`): The database model of this daemon.
-        mailbox (:class:`Emailkasten.Models.MailboxModel`): The database model of the mailbox this instance fetches from.
-        account (:class:`Emailkasten.Models.AccountModel`): The database model of the account this instance fetches from.
+        _stopEvent (:class:`threading.Event`): Event flag to control whether this daemon instance is running.
+        _daemon (:class:`Emailkasten.Models.DaemonModel`): The database model of this daemon.
     """
 
     runningDaemons: dict = {}
@@ -101,9 +98,10 @@ class EMailArchiverDaemon:
         """
         if daemonModel.id in EMailArchiverDaemon.runningDaemons:
             oldDaemon = EMailArchiverDaemon.runningDaemons.pop(daemonModel.id)
-            oldDaemon.stop()
-            daemonModel.is_running = False
-            daemonModel.save(update_fields=['is_running'])
+            try:
+                oldDaemon.stop()
+            except RuntimeError:
+                oldDaemon.logger.error("Daemon was already stopped!", exc_info=True)
             return True
         else:
             return False
@@ -115,55 +113,58 @@ class EMailArchiverDaemon:
         Args:
             daemon: The data of the daemon.
         """
-        self.daemon: DaemonModel = daemon
-        self.mailbox: MailboxModel = daemon.mailbox
-        self.account: AccountModel = daemon.mailbox.account
+        super().__init__(daemon=True, name=__name__ + f'_{daemon.uuid}')
+        self._daemon: DaemonModel = daemon
 
-        self.thread: threading.Thread | None = None
-        self.isRunning: bool = False
+        self._stopEvent: threading.Event = threading.Event()
 
-        self.setupLogger()
+        self._setupLogger()
 
 
-    def setupLogger(self) -> None:
+    def _setupLogger(self) -> None:
         """Sets up the logger for the daemon with an additional filehandler for its own logfile."""
-        self.logger = logging.getLogger(__name__ + f".daemon_{self.daemon.id}")
-        fileHandler = logging.FileHandler(self.daemon.log_filepath)
+        self.logger = logging.getLogger(__name__ + f".daemon_{self._daemon.id}")
+        fileHandler = logging.FileHandler(self._daemon.log_filepath)
         self.logger.addHandler(fileHandler)
 
 
     def start(self) -> None:
-        """Starts this daemon instance if it is not active.
-        Creates and starts a new thread performing :func:`run`.
+        """Starts this daemon instance.
+
+        Raises:
+            RuntimeError: If called on a running instance.
         """
-        if not self.isRunning:
-            self.logger.info("Starting %s ...", str(self.daemon))
-
-            self.isRunning = True
-
-            self.daemon.is_running = True
-            self.daemon.save(update_fields=['is_running'])
-
-            self.thread = threading.Thread(target=self.run)
-            self.thread.start()
-            self.logger.info("Successfully started daemon.")
-        else:
-            self.logger.info("EMailArchiverDaemon is already running.")
+        super().start()
+        self.logger.info("EMailArchiverDaemon started.")
+        self.daemon.is_running = True
+        self.daemon.save(update_fields = ['is_running'])
 
 
     def stop(self) -> None:
         """Stops this daemon instance if it is active.
         The thread finishes by itself later.
+
+        Raises:
+            RuntimeError: If called on a stopped thread.
         """
-        if self.isRunning:
-            self.logger.info("Stopping %s ...", str(self.daemon))
+        if self._stopEvent.is_set():
+            raise RuntimeError("threads can only be stopped once")
 
-            self.isRunning = False
+        self._stopEvent.set()
+        self.logger.info("EMailArchiverDaemon stopped.")
+        self.daemon.is_running = False
+        self.daemon.save(update_fields = ['is_running'])
 
-            self.daemon.is_running = False
-            self.daemon.save(update_fields=['is_running'])
-        else:
-            self.logger.info("EMailArchiverDaemon is not running.")
+
+    def reset(self) -> None:
+        """Resets the daemon stop flag, refreshes configuration from database."""
+        self.update()
+        self._stopEvent.clear()
+
+
+    def update(self) -> None:
+        """Refreshes configuration from database."""
+        self._daemon.refresh_from_db()
 
 
     def run(self) -> None:
@@ -172,15 +173,15 @@ class EMailArchiverDaemon:
         and sets health flag of daemon to `False`.
         """
         try:
-            while self.isRunning:
+            while not self._stopEvent.is_set():
                 self.cycle()
-                time.sleep(self.daemon.cycle_interval)
-            self.logger.info("%s finished successfully", str(self.daemon))
+                time.sleep(self._daemon.cycle_interval)
+            self.logger.info("%s finished successfully", str(self._daemon))
         except Exception:
-            self.logger.error("%s crashed! Attempting to restart ...", str(self.daemon), exc_info=True)
+            self.logger.error("%s crashed! Attempting to restart ...", str(self._daemon), exc_info=True)
+            self._daemon.is_healthy = False
+            self._daemon.save(update_fields=['is_healthy'])
             time.sleep(EMailArchiverDaemonConfiguration.RESTART_TIME)
-            self.daemon.is_healthy = False
-            self.daemon.save(update_fields=['is_healthy'])
             self.run()
 
 
@@ -195,11 +196,11 @@ class EMailArchiverDaemon:
         self.logger.debug("---------------------------------------\nNew cycle")
 
         startTime = time.time()
-        fetchAndProcessMails(self.mailbox, self.account, self.mailbox.fetching_criterion)
+        fetchAndProcessMails(self.daemon.mailbox, self.daemon.account, self.daemon.fetching_criterion)
         endtime = time.time()
 
-        self.daemon.is_healthy = True
-        self.daemon.save(update_fields=['is_healthy'])
+        self._daemon.is_healthy = True
+        self._daemon.save(update_fields=['is_healthy'])
 
         self.logger.debug("Cycle complete after %s seconds\n-------------------------------------------",
                           endtime - startTime)

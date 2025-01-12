@@ -120,7 +120,7 @@ class EMailArchiverDaemon(threading.Thread):
         self.logger.debug("---------------------------------------\nNew cycle")
 
         startTime = time.time()
-        fetchAndProcessMails(self._daemonModel.mailbox, self._daemonModel.mailbox.account, self._daemonModel.fetching_criterion)
+        fetchAndProcessMails(self._daemonModel.mailbox, self._daemonModel.fetching_criterion)
         endtime = time.time()
 
         self._daemonModel.is_healthy = True

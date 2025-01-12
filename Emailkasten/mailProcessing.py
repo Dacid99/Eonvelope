@@ -189,7 +189,7 @@ def scanMailboxes(account: AccountModel) -> None:
     logger.info("Successfully searched mailboxes")
 
 
-def _fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> list:
+def _fetchMails(mailbox: MailboxModel, criterion: str) -> list:
     """Fetches maildata from a given mailbox in a mailaccount based on a search criterion.
     For POP3 accounts, there is only one mailbox and no options for specific queries, so all messages are fetched.
 
@@ -198,7 +198,6 @@ def _fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) ->
 
     Args:
         mailbox: The data of the mailbox to fetch from.
-        account: The data of the mailaccount to fetch from.
         criterion: A formatted criterion for message filtering
             as returned by :func:`Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
             If none is given, defaults to RECENT inside `Emailkasten.Fetchers.IMAPFetcher.fetchBySearch`.
@@ -209,29 +208,28 @@ def _fetchMails(mailbox: MailboxModel, account: AccountModel, criterion: str) ->
     """
 
     logger.info(
-        "Fetching emails with criterion %s from mailbox %s in account %s...",
+        "Fetching emails with criterion %s from mailbox %s ...",
         criterion,
-        mailbox,
-        account,
+        mailbox
     )
     mailDataList = []
-    if account.protocol == IMAPFetcher.PROTOCOL:
-        with IMAPFetcher(account) as imapFetcher:
+    if mailbox.account.protocol == IMAPFetcher.PROTOCOL:
+        with IMAPFetcher(mailbox.account) as imapFetcher:
 
             mailDataList = imapFetcher.fetchBySearch(mailbox=mailbox, criterion=criterion)
 
-    elif account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-        with IMAP_SSL_Fetcher(account) as imapSSLFetcher:
+    elif mailbox.account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+        with IMAP_SSL_Fetcher(mailbox.account) as imapSSLFetcher:
 
             mailDataList = imapSSLFetcher.fetchBySearch(mailbox=mailbox, criterion=criterion)
 
-    elif account.protocol == POP3Fetcher.PROTOCOL:
-        with POP3Fetcher(account) as popFetcher:
+    elif mailbox.account.protocol == POP3Fetcher.PROTOCOL:
+        with POP3Fetcher(mailbox.account) as popFetcher:
 
             mailDataList = popFetcher.fetchAll(mailbox)
 
-    elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
-        with POP3_SSL_Fetcher(account) as popSSLFetcher:
+    elif mailbox.account.protocol == POP3_SSL_Fetcher.PROTOCOL:
+        with POP3_SSL_Fetcher(mailbox.account) as popSSLFetcher:
 
             mailDataList = popSSLFetcher.fetchAll(mailbox)
 
@@ -299,7 +297,7 @@ def _saveImages(parsedMail: dict) -> None:
     storeImages(parsedMail)
 
 
-def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel, account: AccountModel) -> None:
+def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel) -> None:
     """Parses and stores raw maildata in the database and storage.
 
     Note:
@@ -309,7 +307,6 @@ def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel, account: Acco
     Args:
         mailDataList: The maildata to parse and store.
         mailbox: The data of the mailbox the data was fetched from.
-        account: The data of the mailaccount the data was fetched from.
     """
 
     logger.info("Parsing emails from data and saving to db ...")
@@ -338,7 +335,7 @@ def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel, account: Acco
             else:
                 logger.debug("Not saving images for mailbox %s", mailbox.name)
 
-            insertEMail(parsedMail, account)
+            insertEMail(parsedMail, mailbox.account)
 
         except Exception:
             status = False
@@ -356,18 +353,17 @@ def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel, account: Acco
         logger.info("Parsed emails from data and saved to db with error.")
 
 
-def fetchAndProcessMails(mailbox: MailboxModel, account: AccountModel, criterion: str) -> None:
+def fetchAndProcessMails(mailbox: MailboxModel, criterion: str) -> None:
     """Parses and stores raw maildata in the database and storage.
 
     Args:
         mailbox: The data of the mailbox to fetch from.
-        account: The data of the mailaccount to fetch from.
         criterion: A formatted criterion for message filtering
             as returned by :func:`Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
     """
 
-    mailDataList = _fetchMails(mailbox, account, criterion)
-    _parseAndStoreMails(mailDataList, mailbox, account)
+    mailDataList = _fetchMails(mailbox, criterion)
+    _parseAndStoreMails(mailDataList, mailbox)
 
 
 def _isSpam(parsedMail: dict[str, Any]) -> bool:

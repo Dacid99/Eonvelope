@@ -20,7 +20,6 @@
 - api versioning
 - check database before saving attachments and images
 - registration toggling
-- remove redundant account arg from fetchAndProcessMails
 - get rid of parsedmaildict, use models directly
 - disable all signals in tests
 - threadsafe db operations in daemons

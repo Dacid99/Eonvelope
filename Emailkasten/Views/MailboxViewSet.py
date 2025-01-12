@@ -135,7 +135,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         """
         mailbox = self.get_object()
 
-        fetchAndProcessMails(mailbox, mailbox.account, constants.MailFetchingCriteria.ALL)
+        fetchAndProcessMails(mailbox, constants.MailFetchingCriteria.ALL)
 
         mailboxSerializer = self.get_serializer(mailbox)
         return Response({'detail': 'All mails fetched', "mailbox": mailboxSerializer.data})

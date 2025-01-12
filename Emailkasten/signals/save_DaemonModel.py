@@ -24,11 +24,12 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from ..Models.DaemonModel import DaemonModel
+from ..EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 
 logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=DaemonModel)
-def post_save_is_healthy(sender: DaemonModel, instance: DaemonModel, created: bool, **kwargs) -> None:
+def post_save_daemon(sender: DaemonModel, instance: DaemonModel, created: bool, **kwargs) -> None:
     """Receiver function flagging the mailbox of a daemon as healthy once that daemon becomes healthy again.
 
     Args:
@@ -39,6 +40,8 @@ def post_save_is_healthy(sender: DaemonModel, instance: DaemonModel, created: bo
     """
     if created:
         return
+
+    EMailArchiverDaemonRegistry.updateDaemon(instance)
 
     if instance.is_healthy:
         if 'is_healthy' in instance.get_dirty_fields():

@@ -51,7 +51,11 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     """The period with which the daemon is running. :attr:`Emailkasten.constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT` by default."""
 
     is_running = models.BooleanField(default=False)
-    """Flags whether the daemon is active. `False` by default."""
+    """Flags whether the daemon is active. `False` by default.
+
+    Important:
+        This must only be changed by internal mechanism, never by the user!
+    """
 
     is_healthy = models.BooleanField(default=True)
     """Flags whether the daemon is healthy. `True` by default."""

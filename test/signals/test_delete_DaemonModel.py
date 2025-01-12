@@ -27,7 +27,7 @@ def fixture_mock_logger(mocker):
 
 @pytest.mark.django_db
 def test_pre_delete_stop_daemon(mocker, mock_logger, daemon):
-    mock_EMailArchiverDaemon_stopDaemon = mocker.patch('Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon.stopDaemon')
+    mock_EMailArchiverDaemon_stopDaemon = mocker.patch('Emailkasten.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.stopDaemon')
 
     daemon.delete()
 

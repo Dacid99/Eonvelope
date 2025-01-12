@@ -26,6 +26,10 @@ from Emailkasten.Models.DaemonModel import DaemonModel
 from Emailkasten.Models.MailboxModel import MailboxModel
 
 
+@pytest.fixture(name='mock_updateDaemon')
+def fixture_mock_updateDaemon(mocker):
+    return mocker.patch('Emailkasten.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon')
+
 @pytest.fixture(name='mock_logger', autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`Emailkasten.signals.save_DaemonModel.logger` of the module."""
@@ -33,7 +37,7 @@ def fixture_mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_is_healthy_from_healthy(mock_logger):
+def test_MailboxModel_post_save_daemon_from_healthy(mock_logger, mock_updateDaemon):
     """Tests behaviour of :func:`Emailkasten.signals.saveMailboxModel.post_save_is_healthy`."""
     mailbox = baker.make(MailboxModel, is_healthy=True)
     daemon = baker.make(DaemonModel, mailbox=mailbox, is_healthy=True, log_filepath=Faker().file_path(extension='log'))
@@ -42,12 +46,13 @@ def test_MailboxModel_post_save_is_healthy_from_healthy(mock_logger):
     daemon.save(update_fields = ['is_healthy'])
 
     mailbox.refresh_from_db()
+    mock_updateDaemon.assert_called_once_with(daemon)
     assert mailbox.is_healthy is True
     mock_logger.debug.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_is_healthy_from_unhealthy(mock_logger):
+def test_MailboxModel_post_save_daemon_from_unhealthy(mock_logger, mock_updateDaemon):
     """Tests behaviour of :func:`Emailkasten.signals.saveMailboxModel.post_save_is_healthy`."""
     mailbox = baker.make(MailboxModel, is_healthy=False)
     daemon = baker.make(DaemonModel, mailbox=mailbox, is_healthy=False, log_filepath=Faker().file_path(extension='log'))
@@ -56,5 +61,6 @@ def test_MailboxModel_post_save_is_healthy_from_unhealthy(mock_logger):
     daemon.save(update_fields = ['is_healthy'])
 
     mailbox.refresh_from_db()
+    mock_updateDaemon.assert_called_once_with(daemon)
     assert mailbox.is_healthy is True
     mock_logger.debug.assert_called()

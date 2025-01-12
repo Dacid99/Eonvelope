@@ -24,7 +24,7 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
 from ..Models.DaemonModel import DaemonModel
-from ..EMailArchiverDaemon import EMailArchiverDaemon
+from ..EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -38,5 +38,5 @@ def pre_delete_stop_daemon(sender: DaemonModel, instance: DaemonModel, **kwargs)
         **kwargs: Other keyword arguments.
     """
     logger.debug("Stopping daemon of deleted daemon %s ..", str(instance))
-    EMailArchiverDaemon.stopDaemon(instance)
+    EMailArchiverDaemonRegistry.stopDaemon(instance)
     logger.debug("Successfully stopped daemon of deleted daemon %s.", str(instance))

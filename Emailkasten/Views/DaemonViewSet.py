@@ -31,7 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..EMailArchiverDaemon import EMailArchiverDaemon
+from ..EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from ..Filters.DaemonFilter import DaemonFilter
 from ..Models.DaemonModel import DaemonModel
 from ..Serializers.DaemonSerializers.BaseDaemonSerializer import \
@@ -116,7 +116,7 @@ class DaemonViewSet(viewsets.ModelViewSet):
         """
         daemon = self.get_object()
         daemonData = self.get_serializer(daemon).data
-        result = EMailArchiverDaemon.testDaemon(daemon)
+        result = EMailArchiverDaemonRegistry.testDaemon(daemon)
 
         return Response({
             'detail': 'Daemon testrun was successful.' if result else 'Daemon testrun failed!',
@@ -140,7 +140,7 @@ class DaemonViewSet(viewsets.ModelViewSet):
         """
         daemon = self.get_object()
         daemonData = self.get_serializer(daemon).data
-        result = EMailArchiverDaemon.startDaemon(daemon)
+        result = EMailArchiverDaemonRegistry.startDaemon(daemon)
         if result:
             return Response({
                 'detail': 'Daemon started',
@@ -169,7 +169,7 @@ class DaemonViewSet(viewsets.ModelViewSet):
         """
         daemon = self.get_object()
         daemonData = self.get_serializer(daemon).data
-        result = EMailArchiverDaemon.stopDaemon(daemon)
+        result = EMailArchiverDaemonRegistry.stopDaemon(daemon)
         if result:
             return Response({
                 'status': 'Daemon stopped',

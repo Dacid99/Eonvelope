@@ -18,12 +18,7 @@
 
 """Test for :mod:`Emailkasten.EMailArchiverDaemon`."""
 
-import threading
-import time
-
 import pytest
-from faker import Faker
-from model_bakery import baker
 from django.db.models.signals import post_save
 from Emailkasten.signals.save_DaemonModel import post_save_daemon
 from Emailkasten.EMailArchiverDaemon import EMailArchiverDaemon
@@ -43,11 +38,12 @@ def fixture_emailArchiverDaemon(mocker, daemon, mock_setupLogger):
     emailArchiverDaemon.logger = mocker.Mock()
     return emailArchiverDaemon
 
+
 @pytest.mark.django_db
 def test___init__(mock_setupLogger, daemon):
     daemonInstance = EMailArchiverDaemon(daemon)
     assert daemonInstance is not None
-    assert daemonInstance.isDaemon()
+    assert daemonInstance.daemon
     assert str(daemon.uuid) in daemonInstance.name
     assert daemonInstance._daemonModel == daemon
     assert daemonInstance._stopEvent is not None
@@ -122,6 +118,23 @@ def test_stop_dryrun_failure(daemon, emailArchiverDaemon):
 
 
 @pytest.mark.django_db
+def test_start_stop(mocker, daemon, emailArchiverDaemon):
+    mock_cycle = mocker.patch('Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon.cycle')
+    mock_sleep = mocker.patch('Emailkasten.EMailArchiverDaemon.time.sleep')
+    daemon.is_running = False
+    daemon.save(update_fields=['is_running'])
+
+    emailArchiverDaemon.start()
+    emailArchiverDaemon.stop()
+    emailArchiverDaemon.join()
+
+    daemon.refresh_from_db()
+    assert daemon.is_running is False
+    assert not emailArchiverDaemon.is_alive()
+    emailArchiverDaemon.logger.info.assert_called()
+
+
+@pytest.mark.django_db
 def test_update(daemon, emailArchiverDaemon):
     post_save.disconnect(post_save_daemon, DaemonModel)
 
@@ -147,7 +160,7 @@ def test_cycle_success(mocker, emailArchiverDaemon):
 
     emailArchiverDaemon.cycle()
 
-    mock_fetchAndProcessMails.assert_called_once_with(emailArchiverDaemon._daemonModel.mailbox, emailArchiverDaemon._daemonModel.mailbox.account, emailArchiverDaemon._daemonModel.fetching_criterion)
+    mock_fetchAndProcessMails.assert_called_once_with(emailArchiverDaemon._daemonModel.mailbox, emailArchiverDaemon._daemonModel.fetching_criterion)
     assert emailArchiverDaemon._daemonModel.is_healthy is True
     emailArchiverDaemon.logger.debug.assert_called()
 
@@ -161,7 +174,7 @@ def test_cycle_exception(mocker, emailArchiverDaemon):
     with pytest.raises(Exception):
         emailArchiverDaemon.cycle()
 
-    mock_fetchAndProcessMails.assert_called_once_with(emailArchiverDaemon._daemonModel.mailbox, emailArchiverDaemon._daemonModel.mailbox.account, emailArchiverDaemon._daemonModel.fetching_criterion)
+    mock_fetchAndProcessMails.assert_called_once_with(emailArchiverDaemon._daemonModel.mailbox, emailArchiverDaemon._daemonModel.fetching_criterion)
     assert emailArchiverDaemon._daemonModel.is_healthy is False
     emailArchiverDaemon.logger.debug.assert_called()
 
@@ -184,7 +197,7 @@ def test_run_success(mocker, emailArchiverDaemon):
 
 
 @pytest.mark.django_db
-def test_run_failure(mocker, emailArchiverDaemon):
+def test_run_exception(mocker, emailArchiverDaemon):
     mock_cycle = mocker.patch('Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon.cycle', side_effect=Exception)
     mock_sleep = mocker.patch('Emailkasten.EMailArchiverDaemon.time.sleep')
 

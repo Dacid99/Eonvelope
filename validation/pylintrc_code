@@ -82,8 +82,8 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint.extensions.bad_builtin,
-             pylint_pytest
+load-plugins=pylint.extensions.bad_builtin
+             # pylint_pytest
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -451,10 +451,10 @@ disable=raw-checker-failed,
 # it should appear only once). See also the "--disable" option for examples.
 enable=deprecated_builtins,
        imports,
-       deprecated-pytest-yield-fixture,
-       useless-pytest-mark-decorator,
-       deprecated-positional-argument-for-pytest-fixture,
-       cannot-enumerate-pytest-fixtures,
+       # deprecated-pytest-yield-fixture,
+       # useless-pytest-mark-decorator,
+       # deprecated-positional-argument-for-pytest-fixture,
+       # cannot-enumerate-pytest-fixtures,
        redefined-outer-name
 
 

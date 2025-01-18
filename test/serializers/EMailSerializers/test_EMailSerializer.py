@@ -18,6 +18,8 @@
 
 """Test module for :mod:`Emailkasten.Serializers.EMailSerializers.EMailSerializer`."""
 
+from datetime import datetime
+
 import pytest
 from django.forms.models import model_to_dict
 
@@ -25,6 +27,7 @@ from Emailkasten.Serializers.EMailSerializers.EMailSerializer import \
     EMailSerializer
 
 from ...models.test_EMailModel import fixture_emailModel
+
 
 @pytest.mark.django_db
 def test_output(email):
@@ -36,7 +39,7 @@ def test_output(email):
     assert 'message_id' in serializerData
     assert serializerData['message_id'] == email.message_id
     assert 'datetime' in serializerData
-    assert serializerData['datetime'].replace('Z', '+00:00') == email.datetime.isoformat()
+    assert datetime.fromisoformat(serializerData['datetime']) == email.datetime
     assert 'email_subject' in serializerData
     assert serializerData['email_subject'] == email.email_subject
     assert 'bodytext' in serializerData
@@ -50,9 +53,9 @@ def test_output(email):
     assert 'account' in serializerData
     assert serializerData['account'] == email.account.id
     assert 'created' in serializerData
-    assert serializerData['created'].replace('Z', '+00:00') == email.created.isoformat()
+    assert datetime.fromisoformat(serializerData['created']) == email.created
     assert 'updated' in serializerData
-    assert serializerData['updated'].replace('Z', '+00:00') == email.updated.isoformat()
+    assert datetime.fromisoformat(serializerData['updated']) == email.updated
     assert 'attachments' in serializerData
     assert serializerData['attachments'] == []
     assert 'images' in serializerData

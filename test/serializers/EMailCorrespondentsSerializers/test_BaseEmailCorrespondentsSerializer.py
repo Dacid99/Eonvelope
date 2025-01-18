@@ -18,6 +18,8 @@
 
 """Test module for :mod:`Emailkasten.Serializers.EMailCorrespondentsSerializers.BaseEMailCorrespondentSerializer`."""
 
+from datetime import datetime
+
 import pytest
 from django.forms.models import model_to_dict
 
@@ -41,9 +43,9 @@ def test_output(emailCorrespondent):
     assert 'mention' in serializerData
     assert serializerData['mention'] == emailCorrespondent.mention
     assert 'created' in serializerData
-    assert serializerData['created'].replace('Z', '+00:00') == emailCorrespondent.created.isoformat()
+    assert datetime.fromisoformat(serializerData['created']) == emailCorrespondent.created
     assert 'updated' in serializerData
-    assert serializerData['updated'].replace('Z', '+00:00') == emailCorrespondent.updated.isoformat()
+    assert datetime.fromisoformat(serializerData['updated']) == emailCorrespondent.updated
     assert len(serializerData) == 6
 
 

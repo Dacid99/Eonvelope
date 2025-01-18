@@ -18,6 +18,8 @@
 
 """Test module for :mod:`Emailkasten.Serializers.DaemonSerializers.BaseDaemonSerializer`."""
 
+from datetime import datetime
+
 import pytest
 from django.forms.models import model_to_dict
 
@@ -47,9 +49,9 @@ def test_output(daemon):
     assert 'is_healthy' in serializerData
     assert serializerData['is_healthy'] == daemon.is_healthy
     assert 'created' in serializerData
-    assert serializerData['created'].replace('Z', '+00:00') == daemon.created.isoformat()
+    assert datetime.fromisoformat(serializerData['created']) == daemon.created
     assert 'updated' in serializerData
-    assert serializerData['updated'].replace('Z', '+00:00') == daemon.updated.isoformat()
+    assert datetime.fromisoformat(serializerData['updated']) == daemon.updated
     assert len(serializerData) == 9
 
 

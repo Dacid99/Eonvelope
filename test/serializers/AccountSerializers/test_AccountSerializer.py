@@ -18,6 +18,8 @@
 
 """Test module for :mod:`Emailkasten.Serializers.AccountSerializers.AccountSerializer`."""
 
+from datetime import datetime
+
 import pytest
 from django.forms.models import model_to_dict
 
@@ -52,9 +54,9 @@ def test_output(account):
     assert 'is_favorite' in serializerData
     assert serializerData['is_favorite'] == account.is_favorite
     assert 'created' in serializerData
-    assert serializerData['created'].replace('Z', '+00:00') == account.created.isoformat()
+    assert datetime.fromisoformat(serializerData['created']) == account.created
     assert 'updated' in serializerData
-    assert serializerData['updated'].replace('Z', '+00:00') == account.updated.isoformat()
+    assert datetime.fromisoformat(serializerData['updated']) == account.updated
     assert 'user' not in serializerData
     assert len(serializerData) == 11
 

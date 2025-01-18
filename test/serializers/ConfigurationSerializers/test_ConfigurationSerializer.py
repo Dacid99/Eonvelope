@@ -18,6 +18,8 @@
 
 """Test module for :mod:`Emailkasten.Serializers.ConfigurationSerializers.ConfigurationSerializer`."""
 
+from datetime import datetime
+
 import pytest
 
 from Emailkasten.Serializers.ConfigurationSerializers.ConfigurationSerializer import \

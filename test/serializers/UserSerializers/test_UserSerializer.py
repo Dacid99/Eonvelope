@@ -18,6 +18,8 @@
 
 """Test module for :mod:`Emailkasten.Serializers.UserSerializers.UserSerializer`."""
 
+from datetime import datetime
+
 import pytest
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict

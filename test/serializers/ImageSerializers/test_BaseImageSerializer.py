@@ -18,6 +18,8 @@
 
 """Test module for :mod:`Emailkasten.Serializers.ImageSerializers.BaseImageSerializer`."""
 
+from datetime import datetime
+
 import pytest
 from django.forms.models import model_to_dict
 
@@ -41,9 +43,9 @@ def test_output(image):
     assert 'email' in serializerData
     assert serializerData['email'] == image.email.id
     assert 'created' in serializerData
-    assert serializerData['created'].replace('Z', '+00:00') == image.created.isoformat()
+    assert datetime.fromisoformat(serializerData['created']) == image.created
     assert 'updated' in serializerData
-    assert serializerData['updated'].replace('Z', '+00:00') == image.updated.isoformat()
+    assert datetime.fromisoformat(serializerData['updated']) == image.updated
     assert len(serializerData) == 7
 
 

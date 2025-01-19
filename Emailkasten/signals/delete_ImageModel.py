@@ -46,10 +46,6 @@ def post_delete_image(sender: ImageModel, instance: ImageModel, **kwargs) -> Non
             logger.debug("Successfully removed the image file from storage.", exc_info=True)
         except FileNotFoundError:
             logger.error("%s was not found!", instance.file_path, exc_info=True)
-        except PermissionError:
-            logger.error("Permission to remove %s was denied!", instance.file_path, exc_info=True)
-        except IsADirectoryError:
-            logger.error("%s is a directory, not a file!", instance.file_path, exc_info=True)
         except OSError:
             logger.error("An OS error occured removing %s!", instance.file_path, exc_info=True)
         except Exception:

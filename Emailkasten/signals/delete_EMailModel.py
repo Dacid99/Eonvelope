@@ -46,10 +46,6 @@ def post_delete_email_files(sender: EMailModel, instance:EMailModel, **kwargs) -
             logger.debug("Successfully removed the emails .eml file from storage.", exc_info=True)
         except FileNotFoundError:
             logger.error("%s was not found!", instance.eml_filepath, exc_info=True)
-        except PermissionError:
-            logger.error("Permission to remove %s was denied!", instance.eml_filepath, exc_info=True)
-        except IsADirectoryError:
-            logger.error("%s is a directory, not a file!", instance.eml_filepath, exc_info=True)
         except OSError:
             logger.error("An OS error occured removing %s!", instance.eml_filepath, exc_info=True)
         except Exception:
@@ -61,10 +57,6 @@ def post_delete_email_files(sender: EMailModel, instance:EMailModel, **kwargs) -
             logger.debug("Successfully removed the emails .eml file from storage.", exc_info=True)
         except FileNotFoundError:
             logger.error("%s was not found!", instance.prerender_filepath, exc_info=True)
-        except PermissionError:
-            logger.error("Permission to remove %s was denied!", instance.prerender_filepath, exc_info=True)
-        except IsADirectoryError:
-            logger.error("%s is a directory, not a file!", instance.prerender_filepath, exc_info=True)
         except OSError:
             logger.error("An OS error occured removing %s!", instance.prerender_filepath, exc_info=True)
         except Exception:

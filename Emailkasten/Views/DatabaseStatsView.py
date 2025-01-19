@@ -51,21 +51,17 @@ class DatabaseStatsView(APIView):
         Returns:
             A response with the count of the table entries.
         """
-        try:
-            email_count = EMailModel.objects.filter(account__user = request.user).count()
-            correspondent_count = CorrespondentModel.objects.filter(emails__account__user = request.user).distinct().count()
-            attachment_count = AttachmentModel.objects.filter(email__account__user = request.user).count()
-            images_count = ImageModel.objects.filter(email__account__user = request.user).count()
-            account_count = AccountModel.objects.filter(user = request.user).count()
+        email_count = EMailModel.objects.filter(account__user = request.user).count()
+        correspondent_count = CorrespondentModel.objects.filter(emails__account__user = request.user).distinct().count()
+        attachment_count = AttachmentModel.objects.filter(email__account__user = request.user).count()
+        images_count = ImageModel.objects.filter(email__account__user = request.user).count()
+        account_count = AccountModel.objects.filter(user = request.user).count()
 
-            data = {
-                'email_count': email_count,
-                'correspondent_count': correspondent_count,
-                'attachment_count': attachment_count,
-                'images_count': images_count,
-                'account_count': account_count,
-            }
-            return Response(data)
-
-        except Exception as error:
-            return Response({'error': str(error)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        data = {
+            'email_count': email_count,
+            'correspondent_count': correspondent_count,
+            'attachment_count': attachment_count,
+            'images_count': images_count,
+            'account_count': account_count,
+        }
+        return Response(data)

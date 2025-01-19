@@ -31,7 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..Filters.AttachmentsFilter import AttachmentFilter
+from ..Filters.AttachmentFilter import AttachmentFilter
 from ..Models.AttachmentModel import AttachmentModel
 from ..Serializers.AttachmentSerializers.BaseAttachmentSerializer import \
     BaseAttachmentSerializer

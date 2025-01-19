@@ -23,16 +23,8 @@ import django_filters
 from ..constants import FilterSetups
 from ..Models.AttachmentModel import AttachmentModel
 
-
 class AttachmentFilter(django_filters.FilterSet):
     """The filter class for :class:`Emailkasten.Models.AttachmentModel`."""
-
-    datetime__lte = django_filters.DateTimeFilter(
-        field_name="email__datetime", lookup_expr="lte"
-    )
-    datetime__gte = django_filters.DateTimeFilter(
-        field_name="email__datetime", lookup_expr="gte"
-    )
 
     class Meta:
         """Metadata class for the filter."""
@@ -42,6 +34,7 @@ class AttachmentFilter(django_filters.FilterSet):
             "file_name": FilterSetups.TEXT,
             "datasize": FilterSetups.INT,
             "is_favorite": FilterSetups.BOOL,
-            "created": FilterSetups.FLOAT,
-            "updated": FilterSetups.FLOAT,
+            "created": FilterSetups.DATETIME,
+            "updated": FilterSetups.DATETIME,
+            "email__datetime": FilterSetups.DATETIME
         }

@@ -13,3 +13,4 @@ pyfakefs
 factory_boy
 model-bakery
 pylintfileheader
+freezegun

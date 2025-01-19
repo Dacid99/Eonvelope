@@ -39,7 +39,7 @@ class CorrespondentFilter(django_filters.FilterSet):
         field_name="emails__account__mail_address", lookup_expr="contains"
     )
 
-    account_mail_address__exact = django_filters.CharFilter(
+    account_mail_address = django_filters.CharFilter(
         field_name="emails__account__mail_address", lookup_expr="exact"
     )
 
@@ -83,7 +83,7 @@ class CorrespondentFilter(django_filters.FilterSet):
         field_name="emails__account__mail_host", lookup_expr="contains"
     )
 
-    account_mail_host__exact = django_filters.CharFilter(
+    account_mail_host = django_filters.CharFilter(
         field_name="emails__account__mail_host", lookup_expr="exact"
     )
 
@@ -127,6 +127,6 @@ class CorrespondentFilter(django_filters.FilterSet):
             "email_name": FilterSetups.TEXT,
             "email_address": FilterSetups.TEXT,
             "is_favorite": FilterSetups.BOOL,
-            "created": FilterSetups.FLOAT,
-            "updated": FilterSetups.FLOAT,
+            "created": FilterSetups.DATETIME,
+            "updated": FilterSetups.DATETIME,
         }

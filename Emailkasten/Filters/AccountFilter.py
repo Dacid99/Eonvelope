@@ -39,6 +39,6 @@ class AccountFilter(django_filters.FilterSet):
             "timeout": FilterSetups.FLOAT,
             "is_healthy": FilterSetups.BOOL,
             "is_favorite": FilterSetups.BOOL,
-            "created": FilterSetups.FLOAT,
-            "updated": FilterSetups.FLOAT,
+            "created": FilterSetups.DATETIME,
+            "updated": FilterSetups.DATETIME,
         }

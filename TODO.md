@@ -23,6 +23,9 @@
 - get rid of parsedmaildict, use models directly
 - disable all signals in tests
 - threadsafe db operations in daemons
+- more foreign keys should be read_only
+- post might allow for non owners to write data in some viewsets, check create methods
+- filters for choice and datetime
 
 ### Work in progress
 - tests
@@ -46,6 +49,7 @@
 - new migration must include setting of defaults
 - logpath is misconfigured for makemigrations
 - csrf is disabled for debug
+- mailboxviewset.test and accountviewset.test are not fully tested
 
 ## At next db reset
 - start to use configurationmodel

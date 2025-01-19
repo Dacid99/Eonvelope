@@ -28,6 +28,7 @@ from Emailkasten.Serializers.DaemonSerializers.BaseDaemonSerializer import \
 
 from ...models.test_DaemonModel import fixture_daemonModel
 
+
 @pytest.mark.django_db
 def test_output(daemon):
     """Tests for the expected output of the serializer."""
@@ -75,3 +76,11 @@ def test_input(daemon):
     assert 'created' not in serializerData
     assert 'updated' not in serializerData
     assert len(serializerData) == 2
+
+
+@pytest.mark.django_db
+def test_validation_failure(daemon):
+    """Tests validation of :attr:`Emailkasten.Models.DaemonModel.DaemonModel.fetching_criterion`."""
+    daemon.fetching_criterion = 'OTHER'
+    serializer = BaseDaemonSerializer(data=model_to_dict(daemon))
+    assert not serializer.is_valid()

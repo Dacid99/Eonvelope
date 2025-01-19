@@ -272,6 +272,19 @@ def test_delete_auth_owner(mailingListModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
+def test_delete_nonexistant_auth_owner(mailingListModel, owner_apiClient, detail_url):
+    """Tests the delete method with the authenticated owner user client."""
+    old_id = mailingListModel.id
+    mailingListModel.id = 10
+    response = owner_apiClient.delete(detail_url(MailingListViewSet, mailingListModel))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mailingListModel.id = old_id
+    mailingListModel.refresh_from_db()
+    assert mailingListModel.list_id is not None
+
+
+@pytest.mark.django_db
 def test_toggle_favorite_noauth(mailingListModel, noauth_apiClient, custom_detail_action_url):
     """Tests the post method :func:`Emailkasten.Views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with an unauthenticated user client."""
     response = noauth_apiClient.post(custom_detail_action_url(MailingListViewSet, MailingListViewSet.URL_NAME_TOGGLE_FAVORITE, mailingListModel))

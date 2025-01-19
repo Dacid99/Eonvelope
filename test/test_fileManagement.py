@@ -84,6 +84,7 @@ def fixture_mock_good_parsedMailDict() -> dict:
     }
     return mock_parsedMailDict
 
+
 @pytest.fixture(name='mock_empty_parsedMailDict')
 def fixture_mock_empty_parsedMailDict() -> dict:
     """Mocks the parsedMail dictionary used to transport the mail data."""

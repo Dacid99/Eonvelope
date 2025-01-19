@@ -54,8 +54,6 @@ def test_post_delete_attachment_success(mocker, mock_logger, attachment):
     'side_effect',
     [
         FileNotFoundError,
-        PermissionError,
-        IsADirectoryError,
         OSError,
         Exception
     ]

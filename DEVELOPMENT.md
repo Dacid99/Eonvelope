@@ -1,5 +1,7 @@
 # Setup
 
+Your global python version should be at least 3.11.
+
 First install the packages required for the build environment, on debian based distros:
 
 ```bash
@@ -25,7 +27,7 @@ Depending on your OS, the mysqlclient package may cause problems, this can usual
 
 # Workspace Recommendations
 
-# Validation and Linting
+## Validation and Linting
 
 You can use the tools in validation/ to lint and check your changes.
 There are preconfigured githooks in validation/githooks that run check and lint jobs before every commit
@@ -35,13 +37,15 @@ Set them for your local repository via
 git config core.hooksPath validation/githooks/
 ```
 
-## VSCode settings
+## VSCode
+
+### Settings
 
 - Trim final newlines
 - Trim trailing whitespace
 - Insert final newline
 
-## VSCode extensions
+### Extensions
 
 - everything for python and django
 - pylint (with setting "pylint.args": ["--rcfile=validation/pylintrc(_strict)_extension"] )

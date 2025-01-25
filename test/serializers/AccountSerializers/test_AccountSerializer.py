@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.serializers.AccountSerializers.AccountSerializer`."""
+"""Test module for :mod:`api.v1.serializers.AccountSerializers.AccountSerializer`."""
 
 from datetime import datetime
 
 import pytest
 from django.forms.models import model_to_dict
 
-from api.serializers.account_serializers.AccountSerializer import \
+from api.v1.serializers.account_serializers.AccountSerializer import \
     AccountSerializer
 
 from ...models.test_AccountModel import fixture_accountModel

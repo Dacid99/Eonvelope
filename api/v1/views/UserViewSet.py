@@ -26,10 +26,10 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
-from api.constants import APIConfiguration
-from api.pagination import Pagination
-from api.permissions import IsAdminOrSelf
-from api.serializers.user_serializers.UserSerializer import UserSerializer
+from api.constants import APIv1Configuration
+from api.v1.pagination import Pagination
+from api.v1.permissions import IsAdminOrSelf
+from api.v1.serializers.user_serializers.UserSerializer import UserSerializer
 
 if TYPE_CHECKING:
     from typing import Sequence
@@ -54,7 +54,7 @@ class UserViewSet(viewsets.ModelViewSet):
             The permission class(es) for the request.
         """
         if self.request.method in ['POST']:
-            if APIConfiguration.REGISTRATION_ENABLED:
+            if APIv1Configuration.REGISTRATION_ENABLED:
                 return [AllowAny()]
             else:
                 return [IsAdminUser(), IsAuthenticated()]

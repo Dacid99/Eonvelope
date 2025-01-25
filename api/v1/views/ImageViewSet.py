@@ -31,9 +31,9 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.filters.ImageFilter import ImageFilter
+from api.v1.filters.ImageFilter import ImageFilter
 from core.models.ImageModel import ImageModel
-from api.serializers.image_serializers.BaseImageSerializer import BaseImageSerializer
+from api.v1.serializers.image_serializers.BaseImageSerializer import BaseImageSerializer
 
 if TYPE_CHECKING:
     from rest_framework.request import Request

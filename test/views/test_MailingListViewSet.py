@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.views.MailingListViewSet`.
+"""Test module for :mod:`api.v1.views.MailingListViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -38,7 +38,7 @@ from test_EMailViewSet import fixture_emailModel
 from test_CorrespondentViewSet import fixture_correspondentModel
 
 from core.models.MailingListModel import MailingListModel
-from api.views.MailingListViewSet import MailingListViewSet
+from api.v1.views.MailingListViewSet import MailingListViewSet
 
 if TYPE_CHECKING:
     from typing import Any
@@ -286,7 +286,7 @@ def test_delete_nonexistant_auth_owner(mailingListModel, owner_apiClient, detail
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(mailingListModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with an unauthenticated user client."""
+    """Tests the post method :func:`api.v1.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with an unauthenticated user client."""
     response = noauth_apiClient.post(custom_detail_action_url(MailingListViewSet, MailingListViewSet.URL_NAME_TOGGLE_FAVORITE, mailingListModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -296,7 +296,7 @@ def test_toggle_favorite_noauth(mailingListModel, noauth_apiClient, custom_detai
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(mailingListModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with the authenticated other user client."""
+    """Tests the post method :func:`api.v1.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with the authenticated other user client."""
     response = other_apiClient.post(custom_detail_action_url(MailingListViewSet, MailingListViewSet.URL_NAME_TOGGLE_FAVORITE, mailingListModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -306,7 +306,7 @@ def test_toggle_favorite_auth_other(mailingListModel, other_apiClient, custom_de
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(mailingListModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.v1.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with the authenticated owner user client."""
     response = owner_apiClient.post(custom_detail_action_url(MailingListViewSet, MailingListViewSet.URL_NAME_TOGGLE_FAVORITE, mailingListModel))
 
     assert response.status_code == status.HTTP_200_OK

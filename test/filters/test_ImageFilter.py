@@ -18,7 +18,7 @@
 
 import pytest
 
-from api.filters.ImageFilter import ImageFilter
+from api.v1.filters.ImageFilter import ImageFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.serializers.UserSerializers.UserSerializer`."""
+"""Test module for :mod:`api.v1.serializers.UserSerializers.UserSerializer`."""
 
 from datetime import datetime
 
@@ -24,5 +24,5 @@ import pytest
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
-from api.serializers.user_serializers.UserSerializer import \
+from api.v1.serializers.user_serializers.UserSerializer import \
     UserSerializer

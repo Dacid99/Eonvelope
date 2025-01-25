@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.serializers.MailboxSerializers.BaseMailboxSerializer`."""
+"""Test module for :mod:`api.v1.serializers.MailboxSerializers.BaseMailboxSerializer`."""
 
 from datetime import datetime
 
 import pytest
 from django.forms.models import model_to_dict
 
-from api.serializers.mailbox_serializers.BaseMailboxSerializer import \
+from api.v1.serializers.mailbox_serializers.BaseMailboxSerializer import \
     BaseMailboxSerializer
 
 from ...models.test_MailboxModel import fixture_mailboxModel

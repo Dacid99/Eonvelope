@@ -16,28 +16,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`EMailCorrespondentsSerializer` serializer class."""
+"""Module with the :class:`CorrespondentEMailSerializer` serializer class."""
 
-from ..correspondent_serializers.BaseCorrespondentSerializer import \
-    BaseCorrespondentSerializer
+from ..email_serializers.BaseEMailSerializer import BaseEMailSerializer
 from .BaseEMailCorrespondentSerializer import BaseEMailCorrespondentSerializer
 
 
-class EMailCorrespondentSerializer(BaseEMailCorrespondentSerializer):
-    """The serializer for correspondents from :class:`core.models.EMailCorrespondentsModel`.
-    Used to serialize the correspondent belonging to an email. Does not include that email.
+class CorrespondentEMailSerializer(BaseEMailCorrespondentSerializer):
+    """The serializer for emails from :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel`.
+    Used to serialize the emails belonging to a correspondent. Does not include this correpondent.
     """
 
-    correspondent = BaseCorrespondentSerializer(read_only=True)
-    """The correspondent is serialized
-    by :class:`api.serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`.
+    email = BaseEMailSerializer(read_only=True)
+    """The email is serialized
+    by :class:`api.v1.serializers.EMailSerializers.SimpleEMailSerializer.SimpleEMailSerializer`.
     """
 
     class Meta(BaseEMailCorrespondentSerializer.Meta):
         """Metadata class for the serializer."""
 
-        fields = ['correspondent', 'mention']
-        """Includes only
-        :attr:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel.correspondent`
+        fields = ['email', 'mention']
+        """Includes only :attr:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel.email`
         and :attr:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel.mention`.
         """

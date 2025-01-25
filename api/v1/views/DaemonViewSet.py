@@ -32,9 +32,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
-from api.filters.DaemonFilter import DaemonFilter
+from api.v1.filters.DaemonFilter import DaemonFilter
 from core.models.DaemonModel import DaemonModel
-from api.serializers.daemon_serializers.BaseDaemonSerializer import \
+from api.v1.serializers.daemon_serializers.BaseDaemonSerializer import \
     BaseDaemonSerializer
 
 if TYPE_CHECKING:

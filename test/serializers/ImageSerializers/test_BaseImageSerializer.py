@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.serializers.ImageSerializers.BaseImageSerializer`."""
+"""Test module for :mod:`api.v1.serializers.ImageSerializers.BaseImageSerializer`."""
 
 from datetime import datetime
 
 import pytest
 from django.forms.models import model_to_dict
 
-from api.serializers.image_serializers.BaseImageSerializer import BaseImageSerializer
+from api.v1.serializers.image_serializers.BaseImageSerializer import BaseImageSerializer
 from ...models.test_ImageModel import fixture_imageModel
 
 @pytest.mark.django_db

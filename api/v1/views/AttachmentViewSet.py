@@ -31,9 +31,9 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.filters.AttachmentFilter import AttachmentFilter
+from api.v1.filters.AttachmentFilter import AttachmentFilter
 from core.models.AttachmentModel import AttachmentModel
-from api.serializers.attachment_serializers.BaseAttachmentSerializer import \
+from api.v1.serializers.attachment_serializers.BaseAttachmentSerializer import \
     BaseAttachmentSerializer
 
 if TYPE_CHECKING:

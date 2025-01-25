@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.serializers.ConfigurationSerializers.ConfigurationSerializer`."""
+"""Test module for :mod:`api.v1.serializers.ConfigurationSerializers.ConfigurationSerializer`."""
 
 from datetime import datetime
 
 import pytest
 
-from api.serializers.configuration_serializers.ConfigurationSerializer import \
+from api.v1.serializers.configuration_serializers.ConfigurationSerializer import \
     ConfigurationSerializer

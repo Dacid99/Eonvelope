@@ -18,7 +18,7 @@
 
 import pytest
 
-from api.filters.MailingListFilter import MailingListFilter
+from api.v1.filters.MailingListFilter import MailingListFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

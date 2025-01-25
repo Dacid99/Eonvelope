@@ -29,11 +29,11 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from api.filters.CorrespondentFilter import CorrespondentFilter
+from api.v1.filters.CorrespondentFilter import CorrespondentFilter
 from core.models.CorrespondentModel import CorrespondentModel
-from api.serializers.correspondent_serializers.CorrespondentSerializer import \
+from api.v1.serializers.correspondent_serializers.CorrespondentSerializer import \
     CorrespondentSerializer
-from api.serializers.correspondent_serializers.BaseCorrespondentSerializer import \
+from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import \
     BaseCorrespondentSerializer
 
 if TYPE_CHECKING:

@@ -18,7 +18,7 @@
 
 import pytest
 
-from api.filters.EMailFilter import EMailFilter
+from api.v1.filters.EMailFilter import EMailFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

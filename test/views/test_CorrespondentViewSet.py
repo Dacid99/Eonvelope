@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.views.CorrespondentViewSet`.
+"""Test module for :mod:`api.v1.views.CorrespondentViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -37,9 +37,9 @@ from test_AccountViewSet import fixture_accountModel
 from test_EMailViewSet import fixture_emailModel
 
 from core.models.CorrespondentModel import CorrespondentModel
-from api.serializers.correspondent_serializers.BaseCorrespondentSerializer import \
+from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import \
     BaseCorrespondentSerializer
-from api.views.CorrespondentViewSet import CorrespondentViewSet
+from api.v1.views.CorrespondentViewSet import CorrespondentViewSet
 
 if TYPE_CHECKING:
     from typing import Any
@@ -274,7 +274,7 @@ def test_delete_auth_owner(correspondentModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(correspondentModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with an unauthenticated user client."""
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with an unauthenticated user client."""
     response = noauth_apiClient.post(custom_detail_action_url(CorrespondentViewSet, CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE, correspondentModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -284,7 +284,7 @@ def test_toggle_favorite_noauth(correspondentModel, noauth_apiClient, custom_det
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(correspondentModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with the authenticated other user client."""
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with the authenticated other user client."""
     response = other_apiClient.post(custom_detail_action_url(CorrespondentViewSet, CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE, correspondentModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -294,7 +294,7 @@ def test_toggle_favorite_auth_other(correspondentModel, other_apiClient, custom_
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(correspondentModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with the authenticated owner user client."""
     response = owner_apiClient.post(custom_detail_action_url(CorrespondentViewSet, CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE, correspondentModel))
 
     assert response.status_code == status.HTTP_200_OK

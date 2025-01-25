@@ -18,7 +18,7 @@
 
 import pytest
 
-from api.filters.AttachmentFilter import AttachmentFilter
+from api.v1.filters.AttachmentFilter import AttachmentFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

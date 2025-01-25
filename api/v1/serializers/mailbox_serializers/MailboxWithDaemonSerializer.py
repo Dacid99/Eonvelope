@@ -29,7 +29,7 @@ class MailboxWithDaemonSerializer(BaseMailboxSerializer):
 
     daemons = BaseDaemonSerializer(many=True, read_only=True)
     """The emails are serialized by
-    :class:`api.serializers.DaemonSerializers.BaseDaemonSerializer.BaseDaemonSerializer`.
+    :class:`api.v1.serializers.DaemonSerializers.BaseDaemonSerializer.BaseDaemonSerializer`.
     """
 
 

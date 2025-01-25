@@ -36,12 +36,12 @@ class MailingListSerializer(BaseMailingListSerializer):
 
     emails = BaseEMailSerializer(many=True, read_only=True)
     """The emails from the mailinglist are serialized
-    by :class:`api.serializers.EMailSerializers.BaseEMailSerializer.BaseEMailSerializer`.
+    by :class:`api.v1.serializers.EMailSerializers.BaseEMailSerializer.BaseEMailSerializer`.
     """
 
     correspondent = BaseCorrespondentSerializer(read_only=True)
     """The correspondent sending the mailinglist are serialized
-    by :class:`api.serializers.CorrespondentSerializers.BaseCorrespondentSerializer.BaseCorrespondentSerializer`.
+    by :class:`api.v1.serializers.CorrespondentSerializers.BaseCorrespondentSerializer.BaseCorrespondentSerializer`.
     """
 
     email_number = serializers.SerializerMethodField(read_only=True)

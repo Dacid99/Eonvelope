@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.serializers.DaemonSerializers.BaseDaemonSerializer`."""
+"""Test module for :mod:`api.v1.serializers.DaemonSerializers.BaseDaemonSerializer`."""
 
 from datetime import datetime
 
 import pytest
 from django.forms.models import model_to_dict
 
-from api.serializers.daemon_serializers.BaseDaemonSerializer import \
+from api.v1.serializers.daemon_serializers.BaseDaemonSerializer import \
     BaseDaemonSerializer
 
 from ...models.test_DaemonModel import fixture_daemonModel

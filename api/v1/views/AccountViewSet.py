@@ -31,10 +31,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from core.constants import TestStatusCodes
-from api.filters.AccountFilter import AccountFilter
+from api.v1.filters.AccountFilter import AccountFilter
 from core.utils.mailProcessing import scanMailboxes, testAccount
 from core.models.AccountModel import AccountModel
-from api.serializers.account_serializers.AccountSerializer import \
+from api.v1.serializers.account_serializers.AccountSerializer import \
     AccountSerializer
 
 if TYPE_CHECKING:

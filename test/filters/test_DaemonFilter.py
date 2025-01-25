@@ -18,7 +18,7 @@
 
 import pytest
 
-from api.filters.DaemonFilter import DaemonFilter
+from api.v1.filters.DaemonFilter import DaemonFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

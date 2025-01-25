@@ -5,7 +5,7 @@
 - maybe fetcher template superclass
 - maybe get rid of filesizes
 - custom fetching filters with NOT, OR and custom criteria
-- distinguish configs by env, db and user-immutables, migrate db settings to initial settings
+- distinguish configs by env, db and user-immutables, migrate db settings to initial settings, use settings plugin
 - autostart daemons on restart
 - custom additional healthchecks
 - parsing walks multiple times, could be more efficient
@@ -17,15 +17,14 @@
 - combined filter for correspondent with mention
 - refine storage management error correction
 - streamable logs for daemons
-- api versioning
 - check database before saving attachments and images
 - registration toggling
 - get rid of parsedmaildict, use models directly
 - disable all signals in tests
 - threadsafe db operations in daemons
 - more foreign keys should be read_only
-- post might allow for non owners to write data in some viewsets, check create methods
-- filters for choice and datetime
+- filtertest for choices
+- move signals to models where appropriate
 
 ### Work in progress
 - tests

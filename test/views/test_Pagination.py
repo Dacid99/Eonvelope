@@ -20,8 +20,8 @@ import pytest
 from model_bakery import baker
 from test_AccountViewSet import fixture_accountModel
 
-from api.constants import APIConfiguration
-from api.views.EMailViewSet import EMailViewSet
+from api.constants import APIv1Configuration
+from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
 
 
@@ -60,7 +60,7 @@ def test_Pagination(emails, list_url, owner_apiClient, page_query, page_size_que
 
 @pytest.mark.django_db
 def test_Pagination_max(monkeypatch, emails, list_url, owner_apiClient):
-    monkeypatch.setattr("api.pagination.Pagination.max_page_size", len(emails)//2)
+    monkeypatch.setattr("api.v1.pagination.Pagination.max_page_size", len(emails)//2)
     query = {'page': 1, 'page_size': len(emails)}
 
     response = owner_apiClient.get(list_url(EMailViewSet), query)
@@ -76,6 +76,6 @@ def test_Pagination_default(emails, list_url, owner_apiClient):
     response = owner_apiClient.get(list_url(EMailViewSet))
 
     assert response.data['count'] == len(emails)
-    assert len(response.data['results']) == APIConfiguration.DEFAULT_PAGE_SIZE
+    assert len(response.data['results']) == APIv1Configuration.DEFAULT_PAGE_SIZE
     assert min(item['id'] for item in response.data['results']) == 1
-    assert max(item['id'] for item in response.data['results']) == APIConfiguration.DEFAULT_PAGE_SIZE
+    assert max(item['id'] for item in response.data['results']) == APIv1Configuration.DEFAULT_PAGE_SIZE

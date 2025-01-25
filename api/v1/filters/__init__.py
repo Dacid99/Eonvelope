@@ -16,4 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test package for the :mod:`api.v1.serializers` package."""
+"""api.filters
+
+Package containing all filters for the views of the Emailkasten API Version 1 in :mod:`api.v1.views`
+"""

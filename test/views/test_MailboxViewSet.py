@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.views.AccountViewSet`.
+"""Test module for :mod:`api.v1.views.AccountViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -35,11 +35,11 @@ from model_bakery import baker
 from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
 
-import api.views.MailboxViewSet
+import api.v1.views.MailboxViewSet
 from core.models.DaemonModel import DaemonModel
 from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
-from api.views.MailboxViewSet import MailboxViewSet
+from api.v1.views.MailboxViewSet import MailboxViewSet
 
 if TYPE_CHECKING:
     from typing import Any
@@ -268,7 +268,7 @@ def test_delete_auth_owner(mailboxModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_add_daemon_noauth(mailboxModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.add_daemon` action with an unauthenticated user client."""
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with an unauthenticated user client."""
     response = noauth_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, mailboxModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -281,7 +281,7 @@ def test_add_daemon_noauth(mailboxModel, noauth_apiClient, custom_detail_action_
 
 @pytest.mark.django_db
 def test_add_daemon_auth_other(mailboxModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated other user client."""
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated other user client."""
     response = other_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, mailboxModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -294,7 +294,7 @@ def test_add_daemon_auth_other(mailboxModel, other_apiClient, custom_detail_acti
 
 @pytest.mark.django_db
 def test_add_daemon_auth_owner(mailboxModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated owner user client."""
     response = owner_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, mailboxModel))
 
     assert response.status_code == status.HTTP_200_OK
@@ -307,8 +307,8 @@ def test_add_daemon_auth_owner(mailboxModel, owner_apiClient, custom_detail_acti
 
 @pytest.mark.django_db
 def test_test_mailbox_noauth(mailboxModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with an unauthenticated user client."""
-    mock_testMailbox = mocker.patch('api.views.MailboxViewSet.testMailbox')
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with an unauthenticated user client."""
+    mock_testMailbox = mocker.patch('api.v1.views.MailboxViewSet.testMailbox')
     previous_is_healthy = mailboxModel.is_healthy
 
     response = noauth_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_TEST, mailboxModel))
@@ -323,8 +323,8 @@ def test_test_mailbox_noauth(mailboxModel, noauth_apiClient, custom_detail_actio
 
 @pytest.mark.django_db
 def test_test_mailbox_auth_other(mailboxModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated other user client."""
-    mock_testMailbox = mocker.patch('api.views.MailboxViewSet.testMailbox')
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated other user client."""
+    mock_testMailbox = mocker.patch('api.v1.views.MailboxViewSet.testMailbox')
     previous_is_healthy = mailboxModel.is_healthy
 
     response = other_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_TEST, mailboxModel))
@@ -339,8 +339,8 @@ def test_test_mailbox_auth_other(mailboxModel, other_apiClient, custom_detail_ac
 
 @pytest.mark.django_db
 def test_test_mailbox_auth_owner(mailboxModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated owner user client."""
-    mock_testMailbox = mocker.patch('api.views.MailboxViewSet.testMailbox')
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated owner user client."""
+    mock_testMailbox = mocker.patch('api.v1.views.MailboxViewSet.testMailbox')
 
     response = owner_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_TEST, mailboxModel))
 
@@ -351,8 +351,8 @@ def test_test_mailbox_auth_owner(mailboxModel, owner_apiClient, custom_detail_ac
 
 @pytest.mark.django_db
 def test_fetch_all_noauth(mailboxModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.fetch_all` action with an unauthenticated user client."""
-    mock_fetchAndProcessMails = mocker.patch('api.views.MailboxViewSet.fetchAndProcessMails')
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with an unauthenticated user client."""
+    mock_fetchAndProcessMails = mocker.patch('api.v1.views.MailboxViewSet.fetchAndProcessMails')
 
     response = noauth_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_FETCH_ALL, mailboxModel))
 
@@ -365,8 +365,8 @@ def test_fetch_all_noauth(mailboxModel, noauth_apiClient, custom_detail_action_u
 
 @pytest.mark.django_db
 def test_fetch_all_auth_other(mailboxModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.fetch_all` action with the authenticated other user client."""
-    mock_fetchAndProcessMails = mocker.patch('api.views.MailboxViewSet.fetchAndProcessMails')
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with the authenticated other user client."""
+    mock_fetchAndProcessMails = mocker.patch('api.v1.views.MailboxViewSet.fetchAndProcessMails')
 
     response = other_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_FETCH_ALL, mailboxModel))
 
@@ -379,19 +379,19 @@ def test_fetch_all_auth_other(mailboxModel, other_apiClient, custom_detail_actio
 
 @pytest.mark.django_db
 def test_fetch_all_auth_owner(mailboxModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.fetch_all` action with the authenticated owner user client."""
-    mock_fetchAndProcessMails = mocker.patch('api.views.MailboxViewSet.fetchAndProcessMails')
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with the authenticated owner user client."""
+    mock_fetchAndProcessMails = mocker.patch('api.v1.views.MailboxViewSet.fetchAndProcessMails')
 
     response = owner_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_FETCH_ALL, mailboxModel))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data['mailbox'] == MailboxViewSet.serializer_class(mailboxModel).data
-    mock_fetchAndProcessMails.assert_called_once_with(mailboxModel, mailboxModel.account, api.views.MailboxViewSet.constants.MailFetchingCriteria.ALL)
+    mock_fetchAndProcessMails.assert_called_once_with(mailboxModel, mailboxModel.account, api.v1.views.MailboxViewSet.constants.MailFetchingCriteria.ALL)
 
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(mailboxModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with an unauthenticated user client."""
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with an unauthenticated user client."""
     response = noauth_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_TOGGLE_FAVORITE, mailboxModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -401,7 +401,7 @@ def test_toggle_favorite_noauth(mailboxModel, noauth_apiClient, custom_detail_ac
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(mailboxModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated other user client."""
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated other user client."""
     response = other_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_TOGGLE_FAVORITE, mailboxModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -411,7 +411,7 @@ def test_toggle_favorite_auth_other(mailboxModel, other_apiClient, custom_detail
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(mailboxModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated owner user client."""
     response = owner_apiClient.post(custom_detail_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_TOGGLE_FAVORITE, mailboxModel))
 
     assert response.status_code == status.HTTP_200_OK

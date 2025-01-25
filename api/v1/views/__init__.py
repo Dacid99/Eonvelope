@@ -16,20 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`ConfigurationViewSet` viewset."""
+"""api.v1.views
 
-from rest_framework import viewsets
-from rest_framework.permissions import IsAdminUser
-
-from core.models.ConfigurationModel import ConfigurationModel
-from api.serializers.configuration_serializers.ConfigurationSerializer import \
-    ConfigurationSerializer
-
-
-class ConfigurationViewSet(viewsets.ModelViewSet):
-    """Viewset for the :class:`core.models.ConfigurationModel.ConfigurationModel`."""
-
-    BASENAME = 'configs'
-    queryset = ConfigurationModel.objects.all()
-    serializer_class = ConfigurationSerializer
-    permission_classes = [IsAdminUser]
+Package containing all views for the Emailkasten API
+"""

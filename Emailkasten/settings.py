@@ -78,7 +78,7 @@ INSTALLED_APPS = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'api.pagination.Pagination',
+    'DEFAULT_PAGINATION_CLASS': 'api.v1.pagination.Pagination',
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -172,7 +172,7 @@ ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
-REGISTRATION_ENABLED = api.constants.APIConfiguration.REGISTRATION_ENABLED
+REGISTRATION_ENABLED = api.constants.APIv1Configuration.REGISTRATION_ENABLED
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 

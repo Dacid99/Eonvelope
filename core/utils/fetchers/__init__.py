@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""api.views
+"""api.v1.views
 
 Package containing the Fetchers in charge of obtaining the maildata to be archived by the application
 """

@@ -22,7 +22,7 @@ import os
 from typing import Final
 
 
-class APIConfiguration:
+class APIv1Configuration:
     """Namespace class for all configuration constants of the API."""
 
     DEFAULT_PAGE_SIZE: Final[int] = 20

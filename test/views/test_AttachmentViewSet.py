@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.views.AttachmentViewSet`.
+"""Test module for :mod:`api.v1.views.AttachmentViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -39,7 +39,7 @@ from test_AccountViewSet import fixture_accountModel
 from test_EMailViewSet import fixture_emailModel
 
 from core.models.AttachmentModel import AttachmentModel
-from api.views.AttachmentViewSet import AttachmentViewSet
+from api.v1.views.AttachmentViewSet import AttachmentViewSet
 
 if TYPE_CHECKING:
     from typing import Any
@@ -277,11 +277,11 @@ def test_delete_auth_owner(attachmentModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_download_noauth(attachmentModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.AttachmentViewSet.AttachmentViewSet.download` action
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with an unauthenticated user client.
     """
-    mock_open = mocker.patch('api.views.AttachmentViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.AttachmentViewSet.os.path.exists', return_value=True)
+    mock_open = mocker.patch('api.v1.views.AttachmentViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=True)
 
     response = noauth_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
 
@@ -292,11 +292,11 @@ def test_download_noauth(attachmentModel, noauth_apiClient, custom_detail_action
 
 @pytest.mark.django_db
 def test_download_auth_other(attachmentModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.AttachmentViewSet.AttachmentViewSet.download` action
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated other user client.
     """
-    mock_open = mocker.patch('api.views.AttachmentViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.AttachmentViewSet.os.path.exists', return_value=True)
+    mock_open = mocker.patch('api.v1.views.AttachmentViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=True)
 
     response = other_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
 
@@ -307,11 +307,11 @@ def test_download_auth_other(attachmentModel, other_apiClient, custom_detail_act
 
 @pytest.mark.django_db
 def test_download_no_file_auth_owner(attachmentModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.AttachmentViewSet.AttachmentViewSet.download` action
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated owner user client.
     """
-    mock_open = mocker.patch('api.views.AttachmentViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.AttachmentViewSet.os.path.exists', return_value=False)
+    mock_open = mocker.patch('api.v1.views.AttachmentViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=False)
 
     response = owner_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
 
@@ -322,13 +322,13 @@ def test_download_no_file_auth_owner(attachmentModel, owner_apiClient, custom_de
 
 @pytest.mark.django_db
 def test_download_auth_owner(attachmentModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.AttachmentViewSet.AttachmentViewSet.download` action
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated owner user client.
     """
     mockedFileContent = b'This is a 24 bytes file.'
     mock_open = mocker.mock_open(read_data=mockedFileContent)
-    mocker.patch('api.views.AttachmentViewSet.open', mock_open)
-    mock_os_path_exists = mocker.patch('api.views.AttachmentViewSet.os.path.exists', return_value=True)
+    mocker.patch('api.v1.views.AttachmentViewSet.open', mock_open)
+    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=True)
 
     response = owner_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
 
@@ -342,7 +342,7 @@ def test_download_auth_owner(attachmentModel, owner_apiClient, custom_detail_act
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(attachmentModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
+    """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with an unauthenticated user client.
     """
     response = noauth_apiClient.post(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE, attachmentModel))
@@ -354,7 +354,7 @@ def test_toggle_favorite_noauth(attachmentModel, noauth_apiClient, custom_detail
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(attachmentModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
+    """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with the authenticated other user client.
     """
     response = other_apiClient.post(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE, attachmentModel))
@@ -366,7 +366,7 @@ def test_toggle_favorite_auth_other(attachmentModel, other_apiClient, custom_det
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(attachmentModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
+    """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with the authenticated owner user client.
     """
     response = owner_apiClient.post(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE, attachmentModel))

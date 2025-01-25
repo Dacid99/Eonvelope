@@ -18,7 +18,7 @@
 
 import pytest
 
-from api.filters.CorrespondentFilter import CorrespondentFilter
+from api.v1.filters.CorrespondentFilter import CorrespondentFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

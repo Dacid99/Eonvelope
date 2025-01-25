@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.views.EMailViewSet`.
+"""Test module for :mod:`api.v1.views.EMailViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -38,7 +38,7 @@ from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
 
 from core.models.EMailModel import EMailModel
-from api.views.EMailViewSet import EMailViewSet
+from api.v1.views.EMailViewSet import EMailViewSet
 
 if TYPE_CHECKING:
     from typing import Any
@@ -284,9 +284,9 @@ def test_delete_nonexistant_auth_owner(emailModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_download_noauth(emailModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.download` action with an unauthenticated user client."""
-    mock_open = mocker.patch('api.views.EMailViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=False)
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with an unauthenticated user client."""
+    mock_open = mocker.patch('api.v1.views.EMailViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=False)
 
     response = noauth_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD, emailModel))
 
@@ -297,9 +297,9 @@ def test_download_noauth(emailModel, noauth_apiClient, custom_detail_action_url,
 
 @pytest.mark.django_db
 def test_download_auth_other(emailModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.download` action with the authenticated other user client."""
-    mock_open = mocker.patch('api.views.EMailViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=False)
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated other user client."""
+    mock_open = mocker.patch('api.v1.views.EMailViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=False)
 
     response = other_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD, emailModel))
 
@@ -310,9 +310,9 @@ def test_download_auth_other(emailModel, other_apiClient, custom_detail_action_u
 
 @pytest.mark.django_db
 def test_download_no_file_auth_owner(emailModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
-    mock_open = mocker.patch('api.views.EMailViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=False)
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
+    mock_open = mocker.patch('api.v1.views.EMailViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=False)
 
     response = owner_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD, emailModel))
 
@@ -323,11 +323,11 @@ def test_download_no_file_auth_owner(emailModel, owner_apiClient, custom_detail_
 
 @pytest.mark.django_db
 def test_download_auth_owner(emailModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
     mockedFileContent = b'This is a 24 bytes file.'
     mock_open = mocker.mock_open(read_data=mockedFileContent)
-    mocker.patch('api.views.EMailViewSet.open', mock_open)
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=True)
+    mocker.patch('api.v1.views.EMailViewSet.open', mock_open)
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=True)
 
     response = owner_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD, emailModel))
 
@@ -341,9 +341,9 @@ def test_download_auth_owner(emailModel, owner_apiClient, custom_detail_action_u
 
 @pytest.mark.django_db
 def test_prerender_noauth(emailModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.prerender` action with an unauthenticated user client."""
-    mock_open = mocker.patch('api.views.EMailViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=True)
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with an unauthenticated user client."""
+    mock_open = mocker.patch('api.v1.views.EMailViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=True)
 
     response = noauth_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel))
 
@@ -354,9 +354,9 @@ def test_prerender_noauth(emailModel, noauth_apiClient, custom_detail_action_url
 
 @pytest.mark.django_db
 def test_prerender_auth_other(emailModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated other user client."""
-    mock_open = mocker.patch('api.views.EMailViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=True)
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated other user client."""
+    mock_open = mocker.patch('api.v1.views.EMailViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=True)
 
     response = other_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel))
 
@@ -367,9 +367,9 @@ def test_prerender_auth_other(emailModel, other_apiClient, custom_detail_action_
 
 @pytest.mark.django_db
 def test_prerender_no_file_auth_owner(emailModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
-    mock_open = mocker.patch('api.views.EMailViewSet.open')
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=False)
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
+    mock_open = mocker.patch('api.v1.views.EMailViewSet.open')
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=False)
 
     response = owner_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel))
 
@@ -380,11 +380,11 @@ def test_prerender_no_file_auth_owner(emailModel, owner_apiClient, custom_detail
 
 @pytest.mark.django_db
 def test_prerender_auth_owner(emailModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`api.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
     mockedFileContent = b'This is a 24 bytes file.'
     mock_open = mocker.mock_open(read_data=mockedFileContent)
-    mocker.patch('api.views.EMailViewSet.open', mock_open)
-    mock_os_path_exists = mocker.patch('api.views.EMailViewSet.os.path.exists', return_value=True)
+    mocker.patch('api.v1.views.EMailViewSet.open', mock_open)
+    mock_os_path_exists = mocker.patch('api.v1.views.EMailViewSet.os.path.exists', return_value=True)
 
     response = owner_apiClient.get(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel))
 
@@ -398,7 +398,7 @@ def test_prerender_auth_owner(emailModel, owner_apiClient, custom_detail_action_
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(emailModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.EMailViewSet.EMailViewSet.toggle_favorite` action with an unauthenticated user client."""
+    """Tests the post method :func:`api.v1.views.EMailViewSet.EMailViewSet.toggle_favorite` action with an unauthenticated user client."""
     response = noauth_apiClient.post(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_TOGGLE_FAVORITE, emailModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -408,7 +408,7 @@ def test_toggle_favorite_noauth(emailModel, noauth_apiClient, custom_detail_acti
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(emailModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.EMailViewSet.EMailViewSet.toggle_favorite` action with the authenticated other user client."""
+    """Tests the post method :func:`api.v1.views.EMailViewSet.EMailViewSet.toggle_favorite` action with the authenticated other user client."""
     response = other_apiClient.post(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_TOGGLE_FAVORITE, emailModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -418,7 +418,7 @@ def test_toggle_favorite_auth_other(emailModel, other_apiClient, custom_detail_a
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(emailModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`api.views.EMailViewSet.EMailViewSet.toggle_favorite` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.v1.views.EMailViewSet.EMailViewSet.toggle_favorite` action with the authenticated owner user client."""
     response = owner_apiClient.post(custom_detail_action_url(EMailViewSet, EMailViewSet.URL_NAME_TOGGLE_FAVORITE, emailModel))
 
     assert response.status_code == status.HTTP_200_OK

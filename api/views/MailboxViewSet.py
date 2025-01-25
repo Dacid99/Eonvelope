@@ -32,7 +32,7 @@ from rest_framework.response import Response
 from core import constants
 from core.constants import TestStatusCodes
 from api.filters.MailboxFilter import MailboxFilter
-from Emailkasten.mailProcessing import fetchAndProcessMails, testMailbox
+from core.utils.mailProcessing import fetchAndProcessMails, testMailbox
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 from api.serializers.mailbox_serializers.MailboxWithDaemonSerializer import \

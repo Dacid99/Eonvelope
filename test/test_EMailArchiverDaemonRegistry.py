@@ -17,14 +17,14 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
-from Emailkasten.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 
 from .models.test_DaemonModel import fixture_daemonModel
 
 @pytest.fixture(name='mock_logger')
 def fixture_mock_logger(mocker, monkeypatch):
     mock_logger = mocker.Mock()
-    mocker.patch('Emailkasten.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.logger', mock_logger)
+    mocker.patch('core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.logger', mock_logger)
     return mock_logger
 
 @pytest.fixture(name='mock_runningDaemon')
@@ -40,7 +40,7 @@ def fixture_mock_runningDaemon(mocker, daemon):
 
 @pytest.fixture(name='patch_EMailArchiverDaemon')
 def fixture_patch_EMailArchiverDaemon(mocker):
-    return mocker.patch('Emailkasten.EMailArchiverDaemonRegistry.EMailArchiverDaemon', return_value=mocker.Mock())
+    return mocker.patch('core.EMailArchiverDaemonRegistry.EMailArchiverDaemon', return_value=mocker.Mock())
 
 
 @pytest.mark.django_db

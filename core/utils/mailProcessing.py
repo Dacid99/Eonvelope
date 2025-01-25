@@ -18,9 +18,9 @@
 
 """Provides functions for processing the mails by fetching and storing them.
 Combines functions from
-:mod:`Emailkasten.emailDBFeeding`,
-:mod:`Emailkasten.mailParsing` and
-:mod:`Emailkasten.Fetchers`.
+:mod:`core.utils.emailDBFeeding`,
+:mod:`core.utils.mailParsing` and
+:mod:`core.utils.fetchers`.
 Functions starting with _ are helpers and are used only within the scope of this module.
 
 Functions:
@@ -43,11 +43,11 @@ from typing import TYPE_CHECKING
 
 from core.constants import ParsedMailKeys, ParsingConfiguration, TestStatusCodes
 from .emailDBFeeding import insertEMail, insertMailbox
-from .Fetchers.ExchangeFetcher import ExchangeFetcher
-from .Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
-from .Fetchers.IMAPFetcher import IMAPFetcher
-from .Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from .Fetchers.POP3Fetcher import POP3Fetcher
+from core.utils.fetchers.ExchangeFetcher import ExchangeFetcher
+from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+from core.utils.fetchers.IMAPFetcher import IMAPFetcher
+from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
+from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 from .fileManagment import storeAttachments, storeImages, storeMessageAsEML
 from .mailParsing import parseMail, parseMailbox
 from .mailRendering import prerender
@@ -67,8 +67,8 @@ def testAccount(account: AccountModel) -> int:
     """Tests whether the data in an accountmodel is correct
     and allows connecting and logging in to the mailhost and account.
     The :attr:`core.models.AccountModel.is_healthy` flag is set according
-    to the result by the Fetcher class, e.g. :class:`Emailkasten.Fetchers.IMAPFetcher`.
-    Relies on the `test` static method of the :mod:`Emailkasten.Fetchers` classes.
+    to the result by the Fetcher class, e.g. :class:`core.utils.fetchers.IMAPFetcher`.
+    Relies on the `test` static method of the :mod:`core.utils.fetchers` classes.
 
     Args:
         account: The account data to test.
@@ -108,8 +108,8 @@ def testMailbox(mailbox: MailboxModel) -> int:
     """Tests whether the data in a mailboxmodel is correct
     and allows connecting and opening the account and mailbox.
     The :attr:`core.models.MailboxModel.is_healthy` flag is set according
-    to the result by the Fetcher class, e.g. :class:`Emailkasten.Fetchers.IMAPFetcher`.
-    Relies on the `test` static method of the :mod:`Emailkasten.Fetchers` classes.
+    to the result by the Fetcher class, e.g. :class:`core.utils.fetchers.IMAPFetcher`.
+    Relies on the `test` static method of the :mod:`core.utils.fetchers` classes.
 
     Args:
         mailbox: The mailbox data to test.
@@ -150,9 +150,9 @@ def scanMailboxes(account: AccountModel) -> None:
     For POP3 accounts, there is only one mailbox, it defaults to INBOX.
 
     Note:
-        Relies on :func:`fetchMailboxes` of the :mod:`Emailkasten.Fetchers` classes,
-        :func:`Emailkasten.mailParsing.parseMailbox` and
-        :func:`Emailkasten.emailDBFeeding.insertMailbox`.
+        Relies on :func:`fetchMailboxes` of the :mod:`core.utils.fetchers` classes,
+        :func:`core.utils.mailParsing.parseMailbox` and
+        :func:`core.utils.emailDBFeeding.insertMailbox`.
 
     Args:
         account: The data of the account to scan for mailboxes.
@@ -194,13 +194,13 @@ def _fetchMails(mailbox: MailboxModel, criterion: str) -> list:
     For POP3 accounts, there is only one mailbox and no options for specific queries, so all messages are fetched.
 
     Note:
-        Relies on :func:`fetchBySearch` and :func:`fetchAll` methods of the :mod:`Emailkasten.Fetchers` classes.
+        Relies on :func:`fetchBySearch` and :func:`fetchAll` methods of the :mod:`core.utils.fetchers` classes.
 
     Args:
         mailbox: The data of the mailbox to fetch from.
         criterion: A formatted criterion for message filtering
-            as returned by :func:`Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
-            If none is given, defaults to RECENT inside `Emailkasten.Fetchers.IMAPFetcher.fetchBySearch`.
+            as returned by :func:`core.utils.fetchers.IMAPFetcher.makeFetchingCriterion`.
+            If none is given, defaults to RECENT inside `core.utils.fetchers.IMAPFetcher.fetchBySearch`.
 
     Returns:
         The received maildata.
@@ -250,8 +250,8 @@ def _saveToEML(parsedMail: dict) -> None:
     """Save the parsed mail to eml file. Checks the database first.
 
     Note:
-        Uses :func:`Emailkasten.fileManagment.storeMessageAsEML`
-        and :func:`Emailkasten.mailRendering.prerender`.
+        Uses :func:`core.utils.fileManagment.storeMessageAsEML`
+        and :func:`core.utils.mailRendering.prerender`.
 
     Args:
         parsedMail: The parsed mail to save as .eml.
@@ -274,7 +274,7 @@ def _saveAttachments(parsedMail: dict) -> None:
         Should also check the db first.
 
     Note:
-        Relies on :func:`Emailkasten.fileManagment.storeAttachments`.
+        Relies on :func:`core.utils.fileManagment.storeAttachments`.
 
     Args:
         parsedMail: The parsed mail to save attachments.
@@ -289,7 +289,7 @@ def _saveImages(parsedMail: dict) -> None:
         Should also check the db first.
 
     Note:
-        Relies on :func:`Emailkasten.fileManagment.storeImages`.
+        Relies on :func:`core.utils.fileManagment.storeImages`.
 
     Args:
         parsedMail: The parsed mail to save images.
@@ -301,8 +301,8 @@ def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel) -> None:
     """Parses and stores raw maildata in the database and storage.
 
     Note:
-        Relies on the methods from :mod:`Emailkasten.mailParsing`
-        and :mod:`Emailkasten.emailDBFeeding`.
+        Relies on the methods from :mod:`core.utils.mailParsing`
+        and :mod:`core.utils.emailDBFeeding`.
 
     Args:
         mailDataList: The maildata to parse and store.
@@ -359,7 +359,7 @@ def fetchAndProcessMails(mailbox: MailboxModel, criterion: str) -> None:
     Args:
         mailbox: The data of the mailbox to fetch from.
         criterion: A formatted criterion for message filtering
-            as returned by :func:`Emailkasten.Fetchers.IMAPFetcher.makeFetchingCriterion`.
+            as returned by :func:`core.utils.fetchers.IMAPFetcher.makeFetchingCriterion`.
     """
 
     mailDataList = _fetchMails(mailbox, criterion)

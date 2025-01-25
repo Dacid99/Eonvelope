@@ -16,42 +16,45 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`IMAP_SSL_Fetcher` class."""
+"""Module with the :class:`POP3_SSL_Fetcher` class."""
 
-import imaplib
+import poplib
 
 from core import constants
-from .IMAPFetcher import IMAPFetcher
+from .POP3Fetcher import POP3Fetcher
 from core.models.AccountModel import AccountModel
 from core.models.MailboxModel import MailboxModel
 
 
-class IMAP_SSL_Fetcher(IMAPFetcher):
-    """Subclass of :class:`Emailkasten.Fetchers.IMAPFetcher`.
+class POP3_SSL_Fetcher(POP3Fetcher):
+    """Subclass of :class:`core.utils.fetchers.POP3Fetcher`.
 
-    Does the same things, just using IMAP_SSL protocol.
+    Does the same things, just using POP3_SSL protocol.
     """
 
-    PROTOCOL = constants.MailFetchingProtocols.IMAP_SSL
-    """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.IMAP_SSL`."""
+    PROTOCOL = constants.MailFetchingProtocols.POP3_SSL
+    """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.POP3_SSL`."""
 
-    def connectToHost(self):
-        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.connectToHost` to use :class:`imaplib.IMAP4_SSL`."""
+
+    def connectToHost(self) -> None:
+        """Overrides :func:`core.utils.fetchers.POP3Fetcher.connectToHost` to use :class:`poplib.POP3_SSL`."""
         self.logger.debug("Connecting to %s ...", str(self.account))
+
         kwargs = {"host": self.account.mail_host,
-                  "ssl_context": None}
+                  "context": None}
         if (port := self.account.mail_host_port):
             kwargs["port"] = port
         if (timeout := self.account.timeout):
             kwargs["timeout"] = timeout
 
-        self._mailhost = imaplib.IMAP4_SSL(**kwargs)
+        self._mailhost = poplib.POP3_SSL(**kwargs)
+
         self.logger.debug("Successfully connected to %s.", str(self.account))
 
 
     @staticmethod
     def testAccount(account: AccountModel) -> int:
-        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.testAccount` to use :class:`imaplib.IMAP4_SSL`.
+        """Overrides :func:`core.utils.fetchers.POP3Fetcher.testAccount` to use :class:`poplib.POP3_SSL`.
 
         Args:
             account: Data of the account to be tested.
@@ -59,21 +62,20 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
         Returns:
             The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
         """
-        with IMAP_SSL_Fetcher(account) as imapsslFetcher:
-            result = imapsslFetcher.test()
+        with POP3_SSL_Fetcher(account) as pop3sslFetcher:
+            result = pop3sslFetcher.test()
         return result
-
 
     @staticmethod
     def testMailbox(mailbox: MailboxModel) -> int:
-        """Overrides :func:`Emailkasten.Fetchers.IMAPFetcher.testMailbox` to use :class:`imaplib.IMAP4_SSL`.
+        """Overrides :func:`core.utils.fetchers.POP3Fetcher.testMailbox` to use :class:`poplib.POP3_SSL`.
 
         Args:
-            mailbox: Data of the mailbox to be tested.
+            mailbox: Data of the mailboc to be tested.
 
         Returns:
             The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
         """
-        with IMAP_SSL_Fetcher(mailbox.account) as imapsslFetcher:
-            result = imapsslFetcher.test(mailbox)
+        with POP3_SSL_Fetcher(mailbox.account) as pop3sslFetcher:
+            result = pop3sslFetcher.test(mailbox=mailbox)
         return result

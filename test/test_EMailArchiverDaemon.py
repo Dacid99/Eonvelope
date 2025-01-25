@@ -16,12 +16,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test for :mod:`Emailkasten.EMailArchiverDaemon`."""
+"""Test for :mod:`core.EMailArchiverDaemon`."""
 
 import pytest
 from django.db.models.signals import post_save
 from core.signals.save_DaemonModel import post_save_daemon
-from Emailkasten.EMailArchiverDaemon import EMailArchiverDaemon
+from core.EMailArchiverDaemon import EMailArchiverDaemon
 from core.models.DaemonModel import DaemonModel
 from core.constants import EMailArchiverDaemonConfiguration
 
@@ -30,7 +30,7 @@ from .models.test_DaemonModel import fixture_daemonModel
 
 @pytest.fixture(name='mock_setupLogger')
 def fixture_setupLogger(mocker):
-    return mocker.patch('Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon._setupLogger')
+    return mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon._setupLogger')
 
 @pytest.fixture(name='emailArchiverDaemon')
 def fixture_emailArchiverDaemon(mocker, daemon, mock_setupLogger):
@@ -66,7 +66,7 @@ def test_setupLogger(mocker, daemon):
 
 @pytest.mark.django_db
 def test_start_dryrun_success(mocker, daemon, emailArchiverDaemon):
-    mock_thread_start = mocker.patch('Emailkasten.EMailArchiverDaemon.threading.Thread.start')
+    mock_thread_start = mocker.patch('core.EMailArchiverDaemon.threading.Thread.start')
     daemon.is_running = False
     daemon.save(update_fields=['is_running'])
 
@@ -80,7 +80,7 @@ def test_start_dryrun_success(mocker, daemon, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_start_dryrun_failure(mocker, daemon, emailArchiverDaemon):
-    mock_thread_start = mocker.patch('Emailkasten.EMailArchiverDaemon.threading.Thread.start', side_effect=RuntimeError)
+    mock_thread_start = mocker.patch('core.EMailArchiverDaemon.threading.Thread.start', side_effect=RuntimeError)
     daemon.is_running = True
     daemon.save(update_fields=['is_running'])
 
@@ -119,8 +119,8 @@ def test_stop_dryrun_failure(daemon, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_start_stop(mocker, daemon, emailArchiverDaemon):
-    mock_cycle = mocker.patch('Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon.cycle')
-    mock_sleep = mocker.patch('Emailkasten.EMailArchiverDaemon.time.sleep')
+    mock_cycle = mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon.cycle')
+    mock_sleep = mocker.patch('core.EMailArchiverDaemon.time.sleep')
     daemon.is_running = False
     daemon.save(update_fields=['is_running'])
 
@@ -154,7 +154,7 @@ def test_update(daemon, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_cycle_success(mocker, emailArchiverDaemon):
-    mock_fetchAndProcessMails = mocker.patch('Emailkasten.EMailArchiverDaemon.fetchAndProcessMails')
+    mock_fetchAndProcessMails = mocker.patch('core.EMailArchiverDaemon.fetchAndProcessMails')
     emailArchiverDaemon._daemonModel.is_healthy = False
     emailArchiverDaemon._daemonModel.save(update_fields=['is_healthy'])
 
@@ -167,7 +167,7 @@ def test_cycle_success(mocker, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_cycle_exception(mocker, emailArchiverDaemon):
-    mock_fetchAndProcessMails = mocker.patch('Emailkasten.EMailArchiverDaemon.fetchAndProcessMails', side_effect=Exception)
+    mock_fetchAndProcessMails = mocker.patch('core.EMailArchiverDaemon.fetchAndProcessMails', side_effect=Exception)
     emailArchiverDaemon._daemonModel.is_healthy = False
     emailArchiverDaemon._daemonModel.save(update_fields=['is_healthy'])
 
@@ -181,8 +181,8 @@ def test_cycle_exception(mocker, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_run_success(mocker, emailArchiverDaemon):
-    mock_cycle = mocker.patch('Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon.cycle')
-    mock_sleep = mocker.patch('Emailkasten.EMailArchiverDaemon.time.sleep')
+    mock_cycle = mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon.cycle')
+    mock_sleep = mocker.patch('core.EMailArchiverDaemon.time.sleep')
 
     emailArchiverDaemon.start()
 
@@ -198,8 +198,8 @@ def test_run_success(mocker, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_run_exception(mocker, emailArchiverDaemon):
-    mock_cycle = mocker.patch('Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon.cycle', side_effect=Exception)
-    mock_sleep = mocker.patch('Emailkasten.EMailArchiverDaemon.time.sleep')
+    mock_cycle = mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon.cycle', side_effect=Exception)
+    mock_sleep = mocker.patch('core.EMailArchiverDaemon.time.sleep')
 
     emailArchiverDaemon.start()
 

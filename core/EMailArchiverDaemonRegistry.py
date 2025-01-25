@@ -25,7 +25,7 @@ from core.models.DaemonModel import DaemonModel
 
 
 class EMailArchiverDaemonRegistry:
-    """Daemon registry for managment of the running :class:`Emailkasten.EMailArchiverDaemon.EMailArchiverDaemon` instances."""
+    """Daemon registry for managment of the running :class:`core.EMailArchiverDaemon.EMailArchiverDaemon` instances."""
 
     _runningDaemons: dict = {}
     """A static dictionary of all active daemon instances with their database IDs as keys."""

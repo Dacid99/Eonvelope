@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test file for the :class:`Emailkasten.Fetchers.IMAP_SSL_Fetcher`."""
+"""Test file for the :class:`core.utils.fetchers.IMAP_SSL_Fetcher`."""
 
 import imaplib
 from unittest.mock import MagicMock, patch
 
 import pytest
 
-from Emailkasten.Fetchers.IMAPFetcher import IMAPFetcher
+from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.models.AccountModel import AccountModel
 
 

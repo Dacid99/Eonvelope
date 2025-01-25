@@ -32,7 +32,7 @@ from rest_framework.response import Response
 
 from core.constants import TestStatusCodes
 from api.filters.AccountFilter import AccountFilter
-from Emailkasten.mailProcessing import scanMailboxes, testAccount
+from core.utils.mailProcessing import scanMailboxes, testAccount
 from core.models.AccountModel import AccountModel
 from api.serializers.account_serializers.AccountSerializer import \
     AccountSerializer

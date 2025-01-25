@@ -142,7 +142,7 @@ class TestStatusCodes:
 # Configurations
 
 class EMailArchiverDaemonConfiguration:
-    """Namespace class for all configurations constants for the :class:`Emailkasten.EMailArchiverDaemon` instances."""
+    """Namespace class for all configurations constants for the :class:`core.EMailArchiverDaemon` instances."""
 
     CYCLE_PERIOD_DEFAULT: Final[int] = 60
     """The default cycle period of the daemons in seconds."""

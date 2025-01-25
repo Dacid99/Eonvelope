@@ -22,7 +22,7 @@ import logging
 import threading
 import time
 
-from .mailProcessing import fetchAndProcessMails
+from .utils.mailProcessing import fetchAndProcessMails
 from core.models.DaemonModel import DaemonModel
 
 
@@ -110,7 +110,7 @@ class EMailArchiverDaemon(threading.Thread):
 
     def cycle(self) -> None:
         """The routine of this daemon.
-        Fetches and saves mails using :func:`Emailkasten.mailProcessing.fetchAndProcessMails`. Logs the execution time.
+        Fetches and saves mails using :func:`core.utils.mailProcessing.fetchAndProcessMails`. Logs the execution time.
         A successul run sets the daemon to healthy.
 
         Raises:

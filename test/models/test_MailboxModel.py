@@ -30,10 +30,10 @@ from django.db import IntegrityError
 from model_bakery import baker
 
 from core import constants
-from Emailkasten.Fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
-from Emailkasten.Fetchers.IMAPFetcher import IMAPFetcher
-from Emailkasten.Fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from Emailkasten.Fetchers.POP3Fetcher import POP3Fetcher
+from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+from core.utils.fetchers.IMAPFetcher import IMAPFetcher
+from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
+from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 from core.models.AccountModel import AccountModel
 from core.models.MailboxModel import MailboxModel
 

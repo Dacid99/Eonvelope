@@ -18,31 +18,31 @@
 
 
 import pytest
-import Emailkasten.mailProcessing
+import core.utils.mailProcessing
 from .models.test_AccountModel import fixture_accountModel
 from .models.test_MailboxModel import fixture_mailboxModel
 from core.constants import MailFetchingProtocols
 
 @pytest.fixture(name='mock_logger', autouse=True)
 def fixture_mock_logger(mocker):
-    """Mocks :attr:`Emailkasten.fileManagment.logger` of the module."""
-    return mocker.patch('Emailkasten.mailProcessing.logger')
+    """Mocks :attr:`core.utils.fileManagment.logger` of the module."""
+    return mocker.patch('core.utils.mailProcessing.logger')
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'protocol, expected_call',
     [
-        (MailFetchingProtocols.IMAP, 'Emailkasten.mailProcessing.IMAPFetcher.testAccount'),
-        (MailFetchingProtocols.POP3, 'Emailkasten.mailProcessing.POP3Fetcher.testAccount'),
-        (MailFetchingProtocols.IMAP_SSL, 'Emailkasten.mailProcessing.IMAP_SSL_Fetcher.testAccount'),
-        (MailFetchingProtocols.POP3_SSL, 'Emailkasten.mailProcessing.POP3_SSL_Fetcher.testAccount')
+        (MailFetchingProtocols.IMAP, 'core.utils.mailProcessing.IMAPFetcher.testAccount'),
+        (MailFetchingProtocols.POP3, 'core.utils.mailProcessing.POP3Fetcher.testAccount'),
+        (MailFetchingProtocols.IMAP_SSL, 'core.utils.mailProcessing.IMAP_SSL_Fetcher.testAccount'),
+        (MailFetchingProtocols.POP3_SSL, 'core.utils.mailProcessing.POP3_SSL_Fetcher.testAccount')
     ]
 )
 def test_testAccount_success(mocker, mock_logger, account, protocol, expected_call):
     account.protocol = protocol
     mock_testAccount = mocker.patch(expected_call, return_value=1)
 
-    result = Emailkasten.mailProcessing.testAccount(account)
+    result = core.utils.mailProcessing.testAccount(account)
 
     assert result == 1
     mock_testAccount.assert_called_once_with(account)
@@ -53,17 +53,17 @@ def test_testAccount_success(mocker, mock_logger, account, protocol, expected_ca
 @pytest.mark.parametrize(
     'protocol, expected_call',
     [
-        (MailFetchingProtocols.IMAP, 'Emailkasten.mailProcessing.IMAPFetcher.testMailbox'),
-        (MailFetchingProtocols.POP3, 'Emailkasten.mailProcessing.POP3Fetcher.testMailbox'),
-        (MailFetchingProtocols.IMAP_SSL, 'Emailkasten.mailProcessing.IMAP_SSL_Fetcher.testMailbox'),
-        (MailFetchingProtocols.POP3_SSL, 'Emailkasten.mailProcessing.POP3_SSL_Fetcher.testMailbox')
+        (MailFetchingProtocols.IMAP, 'core.utils.mailProcessing.IMAPFetcher.testMailbox'),
+        (MailFetchingProtocols.POP3, 'core.utils.mailProcessing.POP3Fetcher.testMailbox'),
+        (MailFetchingProtocols.IMAP_SSL, 'core.utils.mailProcessing.IMAP_SSL_Fetcher.testMailbox'),
+        (MailFetchingProtocols.POP3_SSL, 'core.utils.mailProcessing.POP3_SSL_Fetcher.testMailbox')
     ]
 )
 def test_testMailbox_success(mocker, mock_logger, mailbox, protocol, expected_call):
     mailbox.account.protocol = protocol
     mock_testAccount = mocker.patch(expected_call, return_value=1)
 
-    result = Emailkasten.mailProcessing.testMailbox(mailbox)
+    result = core.utils.mailProcessing.testMailbox(mailbox)
 
     assert result == 1
     mock_testAccount.assert_called_once_with(mailbox)
@@ -74,7 +74,7 @@ def test_testMailbox_success(mocker, mock_logger, mailbox, protocol, expected_ca
 def test_testAccount_failure(mocker, mock_logger, account):
     account.protocol = 'OTHER'
 
-    result = Emailkasten.mailProcessing.testAccount(account)
+    result = core.utils.mailProcessing.testAccount(account)
 
     assert result == 3
     account.refresh_from_db()

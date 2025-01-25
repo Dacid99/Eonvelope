@@ -28,10 +28,10 @@ from core.models.MailboxModel import MailboxModel
 
 @pytest.fixture(name='mock_updateDaemon')
 def fixture_mock_updateDaemon(mocker):
-    """Patches the :func:`Emailkasten.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon`
+    """Patches the :func:`core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon`
     function called in the signal.
     """
-    return mocker.patch('Emailkasten.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon')
+    return mocker.patch('core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon')
 
 @pytest.fixture(name='mock_logger', autouse=True)
 def fixture_mock_logger(mocker):

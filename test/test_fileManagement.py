@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.fileManagment`.
+"""Test module for :mod:`core.utils.fileManagment`.
 
 Fixtures:
     :func:`fixture_mock_logger`: Mocks :attr:`logger` of the module.
@@ -36,7 +36,7 @@ from unittest.mock import call
 import pytest
 from pyfakefs.fake_filesystem_unittest import Patcher
 
-import Emailkasten.fileManagment
+import core.utils.fileManagment
 from core.constants import ParsedMailKeys
 
 if TYPE_CHECKING:
@@ -52,8 +52,8 @@ mock_messageIDValue = 'abc123'
 
 @pytest.fixture(name='mock_logger', autouse=True)
 def fixture_mock_logger(mocker: MockerFixture) -> MagicMock:
-    """Mocks :attr:`Emailkasten.fileManagment.logger` of the module."""
-    return mocker.patch('Emailkasten.fileManagment.logger')
+    """Mocks :attr:`core.utils.fileManagment.logger` of the module."""
+    return mocker.patch('core.utils.fileManagment.logger')
 
 @pytest.fixture(name='mock_good_parsedMailDict')
 def fixture_mock_good_parsedMailDict() -> dict:
@@ -108,7 +108,7 @@ def fixture_mock_bad_parsedMailDict() -> dict:
 @pytest.fixture(name='mock_getSubdirectory', autouse=True)
 def fixture_mock_getSubdirectory(mocker: MockerFixture) -> MagicMock:
     """Mocks the :func:`core.models.StorageModel.StorageModel.getSubdirectory` function."""
-    return mocker.patch('Emailkasten.fileManagment.StorageModel.getSubdirectory', return_value = patch_getSubDirectory_returnValue)
+    return mocker.patch('core.utils.fileManagment.StorageModel.getSubdirectory', return_value = patch_getSubDirectory_returnValue)
 
 @pytest.fixture(name='mock_filesystem', autouse=True)
 def fixture_mock_filesystem() -> Generator[FakeFilesystem, None, None]:
@@ -183,12 +183,12 @@ def test_storeMessageAsEML_goodDict(
     expectedCallsToOpen: int,
     expectedErrors: int,
 ) -> None:
-    """Tests :func:`Emailkasten.fileManagment.storeMessageAsEML` with the help of a fakefs.
+    """Tests :func:`core.utils.fileManagment.storeMessageAsEML` with the help of a fakefs.
 
     Args:
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mock_good_parsedMailDict: The good parsedMail dictionary fixture.
         mock_filesystem: The fakefs fixture.
@@ -203,10 +203,10 @@ def test_storeMessageAsEML_goodDict(
         Fakefs is overly restrictive with os.path.getsize for no-read files!
         Cannot test the behaviour for non-empty no-read files.
     """
-    mock_ospathjoin = mocker.patch('Emailkasten.fileManagment.os.path.join', return_value = fakeFile)
-    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
-    spy_saveStore = mocker.spy(Emailkasten.fileManagment, '_saveStore')
-    Emailkasten.fileManagment.storeMessageAsEML(mock_good_parsedMailDict)
+    mock_ospathjoin = mocker.patch('core.utils.fileManagment.os.path.join', return_value = fakeFile)
+    spy_open = mocker.spy(core.utils.fileManagment, 'open')
+    spy_saveStore = mocker.spy(core.utils.fileManagment, '_saveStore')
+    core.utils.fileManagment.storeMessageAsEML(mock_good_parsedMailDict)
 
     spy_saveStore.assert_called_once()
     mock_getSubdirectory.assert_called_once()
@@ -255,13 +255,13 @@ def test_storeImages_goodDict(
     expectedCallsToOpen: int,
     expectedErrors: int,
 ) -> None:
-    """Tests :func:`Emailkasten.fileManagment.storeImages` with the help of a fakefs.
+    """Tests :func:`core.utils.fileManagment.storeImages` with the help of a fakefs.
 
     Args:
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
         mock_good_parsedMailDict: The parsedMail dictionary fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mock_filesystem: The fakefs fixture.
         fakeFile: The fakeFilePath parameter.
@@ -275,11 +275,11 @@ def test_storeImages_goodDict(
         Fakefs is overly restrictive with os.path.getsize for no-read files!
         Cannot test the behaviour for non-empty no-read files.
     """
-    mock_ospathjoin = mocker.patch('Emailkasten.fileManagment.os.path.join', return_value = fakeFile)
-    spy_saveStore = mocker.spy(Emailkasten.fileManagment, '_saveStore')
-    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
+    mock_ospathjoin = mocker.patch('core.utils.fileManagment.os.path.join', return_value = fakeFile)
+    spy_saveStore = mocker.spy(core.utils.fileManagment, '_saveStore')
+    spy_open = mocker.spy(core.utils.fileManagment, 'open')
 
-    Emailkasten.fileManagment.storeImages(mock_good_parsedMailDict)
+    core.utils.fileManagment.storeImages(mock_good_parsedMailDict)
 
     spy_saveStore.assert_called_once()
     mock_getSubdirectory.assert_called_once()
@@ -306,13 +306,13 @@ def test_storeImages_emptyDict(
     mock_getSubdirectory: MagicMock,
     mock_filesystem: FakeFilesystem
 ) -> None:
-    """Tests :func:`Emailkasten.fileManagment.storeImages` with the help of a fakefs.
+    """Tests :func:`core.utils.fileManagment.storeImages` with the help of a fakefs.
 
     Args:
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
         mock_empty_parsedMailDict: The empty parsedMail dictionary fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mock_filesystem: The fakefs fixture.
 
@@ -321,11 +321,11 @@ def test_storeImages_emptyDict(
         Cannot test the behaviour for non-empty no-read files.
     """
     fakeFile = '/dir/new_file'
-    mock_ospathjoin = mocker.patch('Emailkasten.fileManagment.os.path.join', return_value = fakeFile)
-    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
-    spy_saveStore = mocker.spy(Emailkasten.fileManagment, '_saveStore')
+    mock_ospathjoin = mocker.patch('core.utils.fileManagment.os.path.join', return_value = fakeFile)
+    spy_open = mocker.spy(core.utils.fileManagment, 'open')
+    spy_saveStore = mocker.spy(core.utils.fileManagment, '_saveStore')
 
-    Emailkasten.fileManagment.storeImages(mock_empty_parsedMailDict)
+    core.utils.fileManagment.storeImages(mock_empty_parsedMailDict)
 
     spy_saveStore.assert_called_once()
     mock_getSubdirectory.assert_not_called()
@@ -347,13 +347,13 @@ def test_storeImages_badDict(
     mock_getSubdirectory: MagicMock,
     mock_filesystem: FakeFilesystem
 ) -> None:
-    """Tests :func:`Emailkasten.fileManagment.storeImages` with the help of a fakefs.
+    """Tests :func:`core.utils.fileManagment.storeImages` with the help of a fakefs.
 
     Args:
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
         mock_bad_parsedMailDict: The parsedMail dictionary fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mock_filesystem: The fakefs fixture.
 
@@ -362,13 +362,13 @@ def test_storeImages_badDict(
         Cannot test the behaviour for non-empty no-read files.
     """
     fakeFile = '/dir/new_file'
-    mock_ospathjoin = mocker.patch('Emailkasten.fileManagment.os.path.join', return_value = fakeFile)
+    mock_ospathjoin = mocker.patch('core.utils.fileManagment.os.path.join', return_value = fakeFile)
 
-    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
-    spy_saveStore = mocker.spy(Emailkasten.fileManagment, '_saveStore')
+    spy_open = mocker.spy(core.utils.fileManagment, 'open')
+    spy_saveStore = mocker.spy(core.utils.fileManagment, '_saveStore')
 
     with pytest.raises(KeyError):
-        Emailkasten.fileManagment.storeImages(mock_bad_parsedMailDict)
+        core.utils.fileManagment.storeImages(mock_bad_parsedMailDict)
 
     mock_logger.debug.assert_called()
     spy_saveStore.assert_called_once()
@@ -410,13 +410,13 @@ def test_storeAttachments_goodDict(
     expectedCallsToOpen: int,
     expectedErrors: int,
 ) -> None:
-    """Tests :func:`Emailkasten.fileManagment.storeAttachments` with the help of a fakefs.
+    """Tests :func:`core.utils.fileManagment.storeAttachments` with the help of a fakefs.
 
     Args:
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
         mock_good_parsedMailDict: The parsedMail dictionary fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mock_filesystem: The fakefs fixture.
         fakeFile: The fakeFilePath parameter.
@@ -430,11 +430,11 @@ def test_storeAttachments_goodDict(
         Fakefs is overly restrictive with os.path.getsize for no-read files!
         Cannot test the behaviour for non-empty no-read files.
     """
-    mock_ospathjoin = mocker.patch('Emailkasten.fileManagment.os.path.join', return_value = fakeFile)
-    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
-    spy_saveStore = mocker.spy(Emailkasten.fileManagment, '_saveStore')
+    mock_ospathjoin = mocker.patch('core.utils.fileManagment.os.path.join', return_value = fakeFile)
+    spy_open = mocker.spy(core.utils.fileManagment, 'open')
+    spy_saveStore = mocker.spy(core.utils.fileManagment, '_saveStore')
 
-    Emailkasten.fileManagment.storeAttachments(mock_good_parsedMailDict)
+    core.utils.fileManagment.storeAttachments(mock_good_parsedMailDict)
 
     mock_getSubdirectory.assert_called_once()
     mock_ospathjoin.assert_called_once_with(patch_getSubDirectory_returnValue, 'test_attachmentfilename.pdf')
@@ -461,13 +461,13 @@ def test_storeAttachments_emptyDict(
     mock_getSubdirectory: MagicMock,
     mock_filesystem: FakeFilesystem
 ) -> None:
-    """Tests :func:`Emailkasten.fileManagment.storeAttachments` with the help of a fakefs.
+    """Tests :func:`core.utils.fileManagment.storeAttachments` with the help of a fakefs.
 
     Args:
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
         mock_empty_parsedMailDict: The empty parsedMail dictionary fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mock_filesystem: The fakefs fixture.
 
@@ -476,11 +476,11 @@ def test_storeAttachments_emptyDict(
         Cannot test the behaviour for non-empty no-read files.
     """
     fakeFile = '/dir/new_file'
-    mock_ospathjoin = mocker.patch('Emailkasten.fileManagment.os.path.join', return_value = fakeFile)
-    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
-    spy_saveStore = mocker.spy(Emailkasten.fileManagment, '_saveStore')
+    mock_ospathjoin = mocker.patch('core.utils.fileManagment.os.path.join', return_value = fakeFile)
+    spy_open = mocker.spy(core.utils.fileManagment, 'open')
+    spy_saveStore = mocker.spy(core.utils.fileManagment, '_saveStore')
 
-    Emailkasten.fileManagment.storeAttachments(mock_empty_parsedMailDict)
+    core.utils.fileManagment.storeAttachments(mock_empty_parsedMailDict)
 
     mock_getSubdirectory.assert_not_called()
     mock_ospathjoin.assert_not_called()
@@ -501,13 +501,13 @@ def test_storeAttachments_badDict(
     mock_getSubdirectory: MagicMock,
     mock_filesystem: FakeFilesystem
 ) -> None:
-    """Tests :func:`Emailkasten.fileManagment.storeAttachments` with the help of a fakefs.
+    """Tests :func:`core.utils.fileManagment.storeAttachments` with the help of a fakefs.
 
     Args:
         mocker: The general mocker instance.
         mock_logger: The mocked logger fixture.
         mock_bad_parsedMailDict: The bad parsedMail dictionary fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mock_filesystem: The fakefs fixture.
 
@@ -516,12 +516,12 @@ def test_storeAttachments_badDict(
         Cannot test the behaviour for non-empty no-read files.
     """
     fakeFile = '/dir/new_file'
-    mock_ospathjoin = mocker.patch('Emailkasten.fileManagment.os.path.join', return_value = fakeFile)
-    spy_saveStore = mocker.spy(Emailkasten.fileManagment, '_saveStore')
-    spy_open = mocker.spy(Emailkasten.fileManagment, 'open')
+    mock_ospathjoin = mocker.patch('core.utils.fileManagment.os.path.join', return_value = fakeFile)
+    spy_saveStore = mocker.spy(core.utils.fileManagment, '_saveStore')
+    spy_open = mocker.spy(core.utils.fileManagment, 'open')
 
     with pytest.raises(KeyError):
-        Emailkasten.fileManagment.storeAttachments(mock_bad_parsedMailDict)
+        core.utils.fileManagment.storeAttachments(mock_bad_parsedMailDict)
 
     mock_logger.debug.assert_called()
     mock_getSubdirectory.assert_not_called()
@@ -545,20 +545,20 @@ def test_storeAttachments_badDict(
     ]
 )
 def test_getPrerenderImageStoragePath_goodDict(mock_logger: MagicMock, mock_getSubdirectory: MagicMock, PRERENDER_IMAGETYPE: str, mocker: MockerFixture, mock_good_parsedMailDict: dict):
-    """Tests :func:`Emailkasten.fileManagment.getPrerenderImageStoragePath`.
+    """Tests :func:`core.utils.fileManagment.getPrerenderImageStoragePath`.
 
     Args:
         mock_logger: The mocked logger fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         PRERENDER_IMAGETYPE: The PRERENDER_IMAGETYPE parameter.
         mocker: The general mocker instance.
         mock_good_parsedMailDict: The bad parsedMail dictionary fixture.
     """
     spy_ospathjoin = mocker.spy(os.path, "join")
-    mock_StorageConfiguration = mocker.patch("Emailkasten.fileManagment.StorageConfiguration")
+    mock_StorageConfiguration = mocker.patch("core.utils.fileManagment.StorageConfiguration")
     mock_StorageConfiguration.PRERENDER_IMAGETYPE = PRERENDER_IMAGETYPE
-    prerenderFilePath = Emailkasten.fileManagment.getPrerenderImageStoragePath(mock_good_parsedMailDict)
+    prerenderFilePath = core.utils.fileManagment.getPrerenderImageStoragePath(mock_good_parsedMailDict)
 
     assert prerenderFilePath == f"{patch_getSubDirectory_returnValue}/{mock_messageIDValue}.{PRERENDER_IMAGETYPE}"
     mock_getSubdirectory.assert_called_once()
@@ -568,21 +568,21 @@ def test_getPrerenderImageStoragePath_goodDict(mock_logger: MagicMock, mock_getS
 
 
 def test_getPrerenderImageStoragePath_badDict(mock_logger: MagicMock, mock_getSubdirectory: MagicMock, mocker: MockerFixture, mock_bad_parsedMailDict: dict):
-    """Tests :func:`Emailkasten.fileManagment.getPrerenderImageStoragePath`.
+    """Tests :func:`core.utils.fileManagment.getPrerenderImageStoragePath`.
 
     Args:
         mock_logger: The mocked logger fixture.
-        mock_getSubdirectory: The patched call to :func:`Emailkasten.fileManagment.StorageModel.getSubdirectory`.
+        mock_getSubdirectory: The patched call to :func:`core.utils.fileManagment.StorageModel.getSubdirectory`.
             Returns the constant value set in :attr:`getSubDirectoryReturnValue`.
         mocker: The general mocker instance.
         mock_bad_parsedMailDict: The bad parsedMail dictionary fixture.
     """
     spy_ospathjoin = mocker.spy(os.path, "join")
-    mock_StorageConfiguration = mocker.patch("Emailkasten.fileManagment.StorageConfiguration")
+    mock_StorageConfiguration = mocker.patch("core.utils.fileManagment.StorageConfiguration")
     mock_StorageConfiguration.PRERENDER_IMAGETYPE = 'jpg'
 
     with pytest.raises(KeyError):
-        prerenderFilePath = Emailkasten.fileManagment.getPrerenderImageStoragePath(mock_bad_parsedMailDict)
+        prerenderFilePath = core.utils.fileManagment.getPrerenderImageStoragePath(mock_bad_parsedMailDict)
 
     mock_getSubdirectory.assert_not_called()
     spy_ospathjoin.assert_not_called()

@@ -425,7 +425,7 @@ def _parseCorrespondents(mailMessage: email.message.Message, mentionHeaderKey: s
 
 def parseMail(mailToParse: bytes) -> dict[str, Any]:
     """Parses a mail returned by a mail server for its features.
-    Uses the various private functions in :mod:`Emailkasten.mailParsing`.
+    Uses the various private functions in :mod:`core.utils.mailParsing`.
 
     Note:
         Using _parseMultipleHeader for all none-mandatory headers. Could raise issues with In-Reply-To.
@@ -469,7 +469,7 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
 
 
 def parseMailbox(mailboxBytes: bytes) -> str:
-    """Parses the mailbox name as received by the scanMailboxes method in :mod:`Emailkasten.Fetchers`.
+    """Parses the mailbox name as received by the scanMailboxes method in :mod:`core.utils.fetchers`.
 
     Note:
         Uses :func:`imap_tools.imap_utf7.utf7_decode` to decode IMAPs modified utf7 encoding.

@@ -24,8 +24,8 @@ from dirtyfields import DirtyFieldsMixin
 from django.db import models
 
 from core.constants import FetchingConfiguration
-from Emailkasten.Fetchers.IMAPFetcher import IMAPFetcher
-from Emailkasten.Fetchers.POP3Fetcher import POP3Fetcher
+from core.utils.fetchers.IMAPFetcher import IMAPFetcher
+from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 from .AccountModel import AccountModel
 
 logger = logging.getLogger(__name__)

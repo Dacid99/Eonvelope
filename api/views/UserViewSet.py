@@ -28,7 +28,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
 from api.constants import APIConfiguration
 from api.pagination import Pagination
-from Emailkasten.permissions import IsAdminOrSelf
+from api.permissions import IsAdminOrSelf
 from api.serializers.user_serializers.UserSerializer import UserSerializer
 
 if TYPE_CHECKING:

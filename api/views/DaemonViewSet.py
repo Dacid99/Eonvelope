@@ -31,7 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from Emailkasten.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from api.filters.DaemonFilter import DaemonFilter
 from core.models.DaemonModel import DaemonModel
 from api.serializers.daemon_serializers.BaseDaemonSerializer import \

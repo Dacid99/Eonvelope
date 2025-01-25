@@ -29,13 +29,13 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .. import constants
-from ..constants import TestStatusCodes
-from ..Filters.MailboxFilter import MailboxFilter
-from ..mailProcessing import fetchAndProcessMails, testMailbox
+from Emailkasten import constants
+from Emailkasten.constants import TestStatusCodes
+from Emailkasten.Filters.MailboxFilter import MailboxFilter
+from Emailkasten.mailProcessing import fetchAndProcessMails, testMailbox
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
-from ..Serializers.MailboxSerializers.MailboxWithDaemonSerializer import \
+from Emailkasten.Serializers.MailboxSerializers.MailboxWithDaemonSerializer import \
     MailboxWithDaemonSerializer
 
 if TYPE_CHECKING:

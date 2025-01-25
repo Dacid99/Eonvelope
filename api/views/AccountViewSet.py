@@ -30,11 +30,11 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..constants import TestStatusCodes
-from ..Filters.AccountFilter import AccountFilter
-from ..mailProcessing import scanMailboxes, testAccount
+from Emailkasten.constants import TestStatusCodes
+from Emailkasten.Filters.AccountFilter import AccountFilter
+from Emailkasten.mailProcessing import scanMailboxes, testAccount
 from core.models.AccountModel import AccountModel
-from ..Serializers.AccountSerializers.AccountSerializer import \
+from Emailkasten.Serializers.AccountSerializers.AccountSerializer import \
     AccountSerializer
 
 if TYPE_CHECKING:

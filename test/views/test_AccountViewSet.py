@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.Views.AccountViewSet`.
+"""Test module for :mod:`api.views.AccountViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -34,7 +34,7 @@ from model_bakery import baker
 from rest_framework import status
 
 from core.models.AccountModel import AccountModel
-from Emailkasten.Views.AccountViewSet import AccountViewSet
+from api.views.AccountViewSet import AccountViewSet
 
 if TYPE_CHECKING:
     from typing import Any
@@ -307,8 +307,8 @@ def test_delete_auth_owner(accountModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_scan_mailboxes_noauth(accountModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.scan_mailboxes` action with an unauthenticated user client."""
-    mock_scanMailboxes = mocker.patch('Emailkasten.Views.AccountViewSet.scanMailboxes')
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.scan_mailboxes` action with an unauthenticated user client."""
+    mock_scanMailboxes = mocker.patch('api.views.AccountViewSet.scanMailboxes')
 
     response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_SCAN_MAILBOXES, accountModel))
 
@@ -320,8 +320,8 @@ def test_scan_mailboxes_noauth(accountModel, noauth_apiClient, custom_detail_act
 
 @pytest.mark.django_db
 def test_scan_mailboxes_auth_other(accountModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated other user client."""
-    mock_scanMailboxes = mocker.patch('Emailkasten.Views.AccountViewSet.scanMailboxes')
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated other user client."""
+    mock_scanMailboxes = mocker.patch('api.views.AccountViewSet.scanMailboxes')
 
     response = other_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_SCAN_MAILBOXES, accountModel))
 
@@ -333,8 +333,8 @@ def test_scan_mailboxes_auth_other(accountModel, other_apiClient, custom_detail_
 
 @pytest.mark.django_db
 def test_scan_mailboxes_auth_owner(accountModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated owner user client."""
-    mock_scanMailboxes = mocker.patch('Emailkasten.Views.AccountViewSet.scanMailboxes')
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated owner user client."""
+    mock_scanMailboxes = mocker.patch('api.views.AccountViewSet.scanMailboxes')
 
     response = owner_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_SCAN_MAILBOXES, accountModel))
 
@@ -345,8 +345,8 @@ def test_scan_mailboxes_auth_owner(accountModel, owner_apiClient, custom_detail_
 
 @pytest.mark.django_db
 def test_test_noauth(accountModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.test` action with an unauthenticated user client."""
-    mock_testAccount = mocker.patch('Emailkasten.Views.AccountViewSet.testAccount')
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.test` action with an unauthenticated user client."""
+    mock_testAccount = mocker.patch('api.views.AccountViewSet.testAccount')
     previous_is_healthy = accountModel.is_healthy
 
     response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TEST, accountModel))
@@ -361,8 +361,8 @@ def test_test_noauth(accountModel, noauth_apiClient, custom_detail_action_url, m
 
 @pytest.mark.django_db
 def test_test_auth_other(accountModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.test` action with the authenticated other user client."""
-    mock_testAccount = mocker.patch('Emailkasten.Views.AccountViewSet.testAccount')
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.test` action with the authenticated other user client."""
+    mock_testAccount = mocker.patch('api.views.AccountViewSet.testAccount')
     previous_is_healthy = accountModel.is_healthy
 
     response = other_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TEST, accountModel))
@@ -376,8 +376,8 @@ def test_test_auth_other(accountModel, other_apiClient, custom_detail_action_url
 
 @pytest.mark.django_db
 def test_test_auth_owner(accountModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
-    mock_testAccount = mocker.patch('Emailkasten.Views.AccountViewSet.testAccount')
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
+    mock_testAccount = mocker.patch('api.views.AccountViewSet.testAccount')
 
     response = owner_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TEST, accountModel))
 
@@ -388,7 +388,7 @@ def test_test_auth_owner(accountModel, owner_apiClient, custom_detail_action_url
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(accountModel, noauth_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.toggle_favorite` action with an unauthenticated user client."""
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.toggle_favorite` action with an unauthenticated user client."""
     response = noauth_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TOGGLE_FAVORITE, accountModel))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -398,7 +398,7 @@ def test_toggle_favorite_noauth(accountModel, noauth_apiClient, custom_detail_ac
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(accountModel, other_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated other user client."""
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated other user client."""
     response = other_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TOGGLE_FAVORITE, accountModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -408,7 +408,7 @@ def test_toggle_favorite_auth_other(accountModel, other_apiClient, custom_detail
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(accountModel, owner_apiClient, custom_detail_action_url):
-    """Tests the post method :func:`Emailkasten.Views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated owner user client."""
     response = owner_apiClient.post(custom_detail_action_url(AccountViewSet, AccountViewSet.URL_NAME_TOGGLE_FAVORITE, accountModel))
 
     assert response.status_code == status.HTTP_200_OK

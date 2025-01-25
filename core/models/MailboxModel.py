@@ -69,7 +69,7 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
 
     def getAvailableFetchingCriteria(self):
         """Gets the available fetching criteria based on the mail protocol of this mailbox.
-        Used by :func:`Emailkasten.Views.MailboxViewSet.fetching_options` to show the choices for fetching to the user.
+        Used by :func:`api.views.MailboxViewSet.fetching_options` to show the choices for fetching to the user.
 
         Returns:
             list: A list of all available fetching criteria for this mailbox. Empty if the protocol is unknown.

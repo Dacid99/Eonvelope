@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.Views.AccountViewSet`.
+"""Test module for :mod:`api.views.AccountViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -39,7 +39,7 @@ from test_AccountViewSet import fixture_accountModel
 from test_MailboxViewSet import fixture_mailboxModel
 
 from core.models.DaemonModel import DaemonModel
-from Emailkasten.Views.DaemonViewSet import DaemonViewSet
+from api.views.DaemonViewSet import DaemonViewSet
 
 if TYPE_CHECKING:
     from typing import Any
@@ -274,7 +274,7 @@ def test_delete_auth_owner(daemonModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_fetching_options_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with an unauthenticated user client."""
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.fetching_options` action with an unauthenticated user client."""
     mocker.patch('core.models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = ['ALL'])
 
     response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_FETCHING_OPTIONS, daemonModel))
@@ -284,7 +284,7 @@ def test_fetching_options_noauth(daemonModel, noauth_apiClient, custom_detail_ac
 
 @pytest.mark.django_db
 def test_fetching_options_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated other user client."""
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated other user client."""
     mocker.patch('core.models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = ['ALL'])
 
     response = other_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_FETCHING_OPTIONS, daemonModel))
@@ -294,7 +294,7 @@ def test_fetching_options_auth_other(daemonModel, other_apiClient, custom_detail
 
 @pytest.mark.django_db
 def test_fetching_options_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated owner user client."""
     mock_fetchingCriteria = ['ALL']
     mocker.patch('core.models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = mock_fetchingCriteria)
 
@@ -305,7 +305,7 @@ def test_fetching_options_auth_owner(daemonModel, owner_apiClient, custom_detail
 
 @pytest.mark.django_db
 def test_fetching_options_error_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated owner user client."""
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.fetching_options` action with the authenticated owner user client."""
     mock_fetchingCriteria = []
     mocker.patch('core.models.MailboxModel.MailboxModel.getAvailableFetchingCriteria', return_value = mock_fetchingCriteria)
 
@@ -316,8 +316,8 @@ def test_fetching_options_error_auth_owner(daemonModel, owner_apiClient, custom_
 
 @pytest.mark.django_db
 def test_test_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with an unauthenticated user client."""
-    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.test` action with an unauthenticated user client."""
+    mock_testDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=True)
 
     response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
@@ -329,8 +329,8 @@ def test_test_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mo
 
 @pytest.mark.django_db
 def test_test_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated other user client."""
-    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.test` action with the authenticated other user client."""
+    mock_testDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=True)
 
     response = other_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
@@ -342,8 +342,8 @@ def test_test_auth_other(daemonModel, other_apiClient, custom_detail_action_url,
 
 @pytest.mark.django_db
 def test_test_success_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
-    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
+    mock_testDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=True)
 
     response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
@@ -354,8 +354,8 @@ def test_test_success_auth_owner(daemonModel, owner_apiClient, custom_detail_act
 
 @pytest.mark.django_db
 def test_test_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
-    mock_testDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=False)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
+    mock_testDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon', return_value=False)
 
     response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_TEST, daemonModel))
 
@@ -367,8 +367,8 @@ def test_test_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_act
 
 @pytest.mark.django_db
 def test_start_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with an unauthenticated user client."""
-    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.start` action with an unauthenticated user client."""
+    mock_startDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=True)
 
     response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
@@ -380,8 +380,8 @@ def test_start_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, m
 
 @pytest.mark.django_db
 def test_start_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated other user client."""
-    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.start` action with the authenticated other user client."""
+    mock_startDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=True)
 
     response = other_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
@@ -393,8 +393,8 @@ def test_start_auth_other(daemonModel, other_apiClient, custom_detail_action_url
 
 @pytest.mark.django_db
 def test_start_success_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
-    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
+    mock_startDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=True)
 
     response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
@@ -405,8 +405,8 @@ def test_start_success_auth_owner(daemonModel, owner_apiClient, custom_detail_ac
 
 @pytest.mark.django_db
 def test_start_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
-    mock_startDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=False)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
+    mock_startDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon', return_value=False)
 
     response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_START, daemonModel))
 
@@ -417,8 +417,8 @@ def test_start_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_ac
 
 @pytest.mark.django_db
 def test_stop_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with an unauthenticated user client."""
-    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.stop` action with an unauthenticated user client."""
+    mock_stopDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=True)
 
     response = noauth_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
@@ -430,8 +430,8 @@ def test_stop_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mo
 
 @pytest.mark.django_db
 def test_stop_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated other user client."""
-    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated other user client."""
+    mock_stopDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=True)
 
     response = other_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
@@ -443,8 +443,8 @@ def test_stop_auth_other(daemonModel, other_apiClient, custom_detail_action_url,
 
 @pytest.mark.django_db
 def test_stop_success_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
-    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=True)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
+    mock_stopDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=True)
 
     response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
@@ -454,8 +454,8 @@ def test_stop_success_auth_owner(daemonModel, owner_apiClient, custom_detail_act
 
 @pytest.mark.django_db
 def test_stop_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the post method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
-    mock_stopDaemon = mocker.patch('Emailkasten.Views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=False)
+    """Tests the post method :func:`api.views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
+    mock_stopDaemon = mocker.patch('api.views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon', return_value=False)
 
     response = owner_apiClient.post(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_STOP, daemonModel))
 
@@ -466,9 +466,9 @@ def test_stop_failure_auth_owner(daemonModel, owner_apiClient, custom_detail_act
 
 @pytest.mark.django_db
 def test_download_noauth(daemonModel, noauth_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with an unauthenticated user client."""
-    mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
-    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
+    """Tests the get method :func:`api.views.DaemonViewSet.DaemonViewSet.log_download` action with an unauthenticated user client."""
+    mock_open = mocker.patch('api.views.DaemonViewSet.open')
+    mock_os_path_exists = mocker.patch('api.views.DaemonViewSet.os.path.exists', return_value=True)
 
     response = noauth_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 
@@ -479,9 +479,9 @@ def test_download_noauth(daemonModel, noauth_apiClient, custom_detail_action_url
 
 @pytest.mark.django_db
 def test_download_auth_other(daemonModel, other_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated other user client."""
-    mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
-    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
+    """Tests the get method :func:`api.views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated other user client."""
+    mock_open = mocker.patch('api.views.DaemonViewSet.open')
+    mock_os_path_exists = mocker.patch('api.views.DaemonViewSet.os.path.exists', return_value=True)
 
     response = other_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 
@@ -492,9 +492,9 @@ def test_download_auth_other(daemonModel, other_apiClient, custom_detail_action_
 
 @pytest.mark.django_db
 def test_download_no_file_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated owner user client."""
-    mock_open = mocker.patch('Emailkasten.Views.DaemonViewSet.open')
-    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=False)
+    """Tests the get method :func:`api.views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated owner user client."""
+    mock_open = mocker.patch('api.views.DaemonViewSet.open')
+    mock_os_path_exists = mocker.patch('api.views.DaemonViewSet.os.path.exists', return_value=False)
 
     response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 
@@ -505,11 +505,11 @@ def test_download_no_file_auth_owner(daemonModel, owner_apiClient, custom_detail
 
 @pytest.mark.django_db
 def test_download_auth_owner(daemonModel, owner_apiClient, custom_detail_action_url, mocker):
-    """Tests the get method :func:`Emailkasten.Views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated owner user client."""
+    """Tests the get method :func:`api.views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated owner user client."""
     mockedFileContent = b'This is a 24 bytes file.'
     mock_open = mocker.mock_open(read_data=mockedFileContent)
-    mocker.patch('Emailkasten.Views.DaemonViewSet.open', mock_open)
-    mock_os_path_exists = mocker.patch('Emailkasten.Views.DaemonViewSet.os.path.exists', return_value=True)
+    mocker.patch('api.views.DaemonViewSet.open', mock_open)
+    mock_os_path_exists = mocker.patch('api.views.DaemonViewSet.os.path.exists', return_value=True)
 
     response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel))
 

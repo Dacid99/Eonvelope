@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.Views.DatabaseStatsView`."""
+"""Test module for :mod:`api.views.DatabaseStatsView`."""
 
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ from test_AccountViewSet import fixture_accountModel
 from test_EMailViewSet import fixture_emailModel
 from test_AttachmentViewSet import fixture_attachmentModel
 
-from Emailkasten.Views.DatabaseStatsView import DatabaseStatsView
+from api.views.DatabaseStatsView import DatabaseStatsView
 
 if TYPE_CHECKING:
     from typing import Any, Callable

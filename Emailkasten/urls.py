@@ -34,17 +34,17 @@ Including another URLconf
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .Views.AccountViewSet import AccountViewSet
-from .Views.AttachmentViewSet import AttachmentViewSet
-from .Views.ConfigurationViewSet import ConfigurationViewSet
-from .Views.CorrespondentViewSet import CorrespondentViewSet
-from .Views.DaemonViewSet import DaemonViewSet
-from .Views.DatabaseStatsView import DatabaseStatsView
-from .Views.EMailViewSet import EMailViewSet
-from .Views.ImageViewSet import ImageViewSet
-from .Views.MailboxViewSet import MailboxViewSet
-from .Views.MailingListViewSet import MailingListViewSet
-from .Views.UserViewSet import UserViewSet
+from api.views.AccountViewSet import AccountViewSet
+from api.views.AttachmentViewSet import AttachmentViewSet
+from api.views.ConfigurationViewSet import ConfigurationViewSet
+from api.views.CorrespondentViewSet import CorrespondentViewSet
+from api.views.DaemonViewSet import DaemonViewSet
+from api.views.DatabaseStatsView import DatabaseStatsView
+from api.views.EMailViewSet import EMailViewSet
+from api.views.ImageViewSet import ImageViewSet
+from api.views.MailboxViewSet import MailboxViewSet
+from api.views.MailingListViewSet import MailingListViewSet
+from api.views.UserViewSet import UserViewSet
 
 router = DefaultRouter()
 router.register(rf'{AccountViewSet.BASENAME}', AccountViewSet, basename=AccountViewSet.BASENAME)

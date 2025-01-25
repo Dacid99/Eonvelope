@@ -21,7 +21,7 @@ from model_bakery import baker
 from test_AccountViewSet import fixture_accountModel
 
 from Emailkasten.constants import APIConfiguration
-from Emailkasten.Views.EMailViewSet import EMailViewSet
+from api.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
 
 

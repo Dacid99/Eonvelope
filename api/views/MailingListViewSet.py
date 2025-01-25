@@ -29,9 +29,9 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..Filters.MailingListFilter import MailingListFilter
+from Emailkasten.Filters.MailingListFilter import MailingListFilter
 from core.models.MailingListModel import MailingListModel
-from ..Serializers.MailingListSerializers.MailingListSerializer import \
+from Emailkasten.Serializers.MailingListSerializers.MailingListSerializer import \
     MailingListSerializer
 
 if TYPE_CHECKING:

@@ -26,10 +26,10 @@ from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
-from ..constants import APIConfiguration
-from ..Pagination import Pagination
-from ..permissions import IsAdminOrSelf
-from ..Serializers.UserSerializers.UserSerializer import UserSerializer
+from Emailkasten.constants import APIConfiguration
+from Emailkasten.Pagination import Pagination
+from Emailkasten.permissions import IsAdminOrSelf
+from Emailkasten.Serializers.UserSerializers.UserSerializer import UserSerializer
 
 if TYPE_CHECKING:
     from typing import Sequence

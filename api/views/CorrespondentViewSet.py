@@ -29,11 +29,11 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..Filters.CorrespondentFilter import CorrespondentFilter
+from Emailkasten.Filters.CorrespondentFilter import CorrespondentFilter
 from core.models.CorrespondentModel import CorrespondentModel
-from ..Serializers.CorrespondentSerializers.CorrespondentSerializer import \
+from Emailkasten.Serializers.CorrespondentSerializers.CorrespondentSerializer import \
     CorrespondentSerializer
-from ..Serializers.CorrespondentSerializers.BaseCorrespondentSerializer import \
+from Emailkasten.Serializers.CorrespondentSerializers.BaseCorrespondentSerializer import \
     BaseCorrespondentSerializer
 
 if TYPE_CHECKING:

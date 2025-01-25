@@ -18,5 +18,5 @@
 
 """api.views
 
-Package containing the Fetchers in charge of obtaining the maildata to be archived by the application
+Package containing all views for the Emailkasten API
 """

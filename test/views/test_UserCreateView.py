@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`Emailkasten.Views.UserViewSet`.
+"""Test module for :mod:`api.views.UserViewSet`.
 
 Fixtures:
     :func:`fixture_owner_user`: Creates an account owned by `owner_user`.
@@ -36,7 +36,7 @@ from rest_framework.test import APIClient
 from model_bakery import baker
 from rest_framework import status
 
-from Emailkasten.Views.UserViewSet import UserViewSet
+from api.views.UserViewSet import UserViewSet
 
 @pytest.fixture(name='admin_user')
 def fixture_admin_user() -> User:

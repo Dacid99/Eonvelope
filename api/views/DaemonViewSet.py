@@ -31,10 +31,10 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
-from ..Filters.DaemonFilter import DaemonFilter
+from Emailkasten.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from Emailkasten.Filters.DaemonFilter import DaemonFilter
 from core.models.DaemonModel import DaemonModel
-from ..Serializers.DaemonSerializers.BaseDaemonSerializer import \
+from Emailkasten.Serializers.DaemonSerializers.BaseDaemonSerializer import \
     BaseDaemonSerializer
 
 if TYPE_CHECKING:

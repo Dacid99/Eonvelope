@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AttachmentViewSet` viewset."""
+"""Module with the :class:`ImageViewSet` viewset."""
 
 from __future__ import annotations
 
@@ -31,44 +31,43 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..Filters.AttachmentFilter import AttachmentFilter
-from core.models.AttachmentModel import AttachmentModel
-from ..Serializers.AttachmentSerializers.BaseAttachmentSerializer import \
-    BaseAttachmentSerializer
+from Emailkasten.Filters.ImageFilter import ImageFilter
+from core.models.ImageModel import ImageModel
+from Emailkasten.Serializers.ImageSerializers.BaseImageSerializer import BaseImageSerializer
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
     from django.db.models import BaseManager
 
 
-class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
-    """Viewset for the :class:`core.models.AttachmentModel.AttachmentModel`."""
+class ImageViewSet(viewsets.ReadOnlyModelViewSet):
+    """Viewset for the :class:`core.models.ImageModel.ImageModel`."""
 
-    BASENAME = 'attachments'
-    serializer_class = BaseAttachmentSerializer
+    BASENAME = 'images'
+    serializer_class = BaseImageSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_class = AttachmentFilter
+    filterset_class = ImageFilter
     permission_classes = [IsAuthenticated]
     ordering_fields = ['file_name', 'datasize', 'email__datetime', 'is_favorite', 'created', 'updated']
     ordering = ['id']
 
-    def get_queryset(self) -> BaseManager[AttachmentModel]:
+    def get_queryset(self) -> BaseManager[ImageModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
-            The attachment entries matching the request user."""
-        return AttachmentModel.objects.filter(email__account__user = self.request.user)
+            The image entries matching the request user."""
+        return ImageModel.objects.filter(email__account__user = self.request.user)
 
 
     URL_PATH_DOWNLOAD = 'download'
     URL_NAME_DOWNLOAD = 'download'
     @action(detail=True, methods=['get'], url_path=URL_PATH_DOWNLOAD, url_name=URL_NAME_DOWNLOAD)
     def download(self, request: Request, pk: int|None = None) -> FileResponse:
-        """Action method downloading the attachment.
+        """Action method downloading the image.
 
         Args:
             request: The request triggering the action.
-            pk: The private key of the attachment to download. Defaults to None.
+            pk: The private key of the image to download. Defaults to None.
 
         Raises:
             Http404: If the filepath is not in the database or it doesnt exist.
@@ -76,15 +75,15 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
         Returns:
             A fileresponse containing the requested file.
         """
-        attachment = self.get_object()
+        image = self.get_object()
 
-        attachmentFilePath = attachment.file_path
-        if not attachmentFilePath or not os.path.exists(attachmentFilePath):
-            raise Http404("Attachment file not found")
+        imageFilePath = image.file_path
+        if not imageFilePath or not os.path.exists(imageFilePath):
+            raise Http404("Image file not found")
 
-        attachmentFileName = attachment.file_name
-        with open(attachmentFilePath, 'rb') as attachmentFile:
-            response = FileResponse(attachmentFile, as_attachment=True, filename=attachmentFileName)
+        imageFileName = image.file_name
+        with open(imageFilePath, 'rb') as imageFile:
+            response = FileResponse(imageFile, as_attachment=True, filename=imageFileName)
             return response
 
 
@@ -92,16 +91,16 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
     URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
     @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
     def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
-        """Action method toggling the favorite flag of the attachment.
+        """Action method toggling the favorite flag of the image.
 
         Args:
             request: The request triggering the action.
-            pk: The private key of the attachment to toggle favorite. Defaults to None.
+            pk: The private key of the image to toggle favorite. Defaults to None.
 
         Returns:
             A response detailing the request status.
         """
-        attachment = self.get_object()
-        attachment.is_favorite = not attachment.is_favorite
-        attachment.save(update_fields=['is_favorite'])
-        return Response({'detail': 'Attachment marked as favorite'})
+        image = self.get_object()
+        image.is_favorite = not image.is_favorite
+        image.save(update_fields=['is_favorite'])
+        return Response({'detail': 'Image marked as favorite'})

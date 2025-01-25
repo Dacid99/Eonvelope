@@ -31,9 +31,9 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from ..Filters.EMailFilter import EMailFilter
+from Emailkasten.Filters.EMailFilter import EMailFilter
 from core.models.EMailModel import EMailModel
-from ..Serializers.EMailSerializers.FullEMailSerializer import \
+from Emailkasten.Serializers.EMailSerializers.FullEMailSerializer import \
     FullEMailSerializer
 
 if TYPE_CHECKING:

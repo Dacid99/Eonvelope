@@ -20,7 +20,7 @@
 
 import django_filters
 
-from ..constants import FilterSetups
+from Emailkasten.constants import FilterSetups
 from core.models.DaemonModel import DaemonModel
 
 class DaemonFilter(django_filters.FilterSet):

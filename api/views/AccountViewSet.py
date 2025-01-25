@@ -31,7 +31,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from Emailkasten.constants import TestStatusCodes
-from Emailkasten.Filters.AccountFilter import AccountFilter
+from api.filters.AccountFilter import AccountFilter
 from Emailkasten.mailProcessing import scanMailboxes, testAccount
 from core.models.AccountModel import AccountModel
 from api.serializers.account_serializers.AccountSerializer import \

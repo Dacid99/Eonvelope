@@ -29,7 +29,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from Emailkasten.Filters.CorrespondentFilter import CorrespondentFilter
+from api.filters.CorrespondentFilter import CorrespondentFilter
 from core.models.CorrespondentModel import CorrespondentModel
 from api.serializers.correspondent_serializers.CorrespondentSerializer import \
     CorrespondentSerializer

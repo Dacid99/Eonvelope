@@ -31,7 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from Emailkasten.Filters.AttachmentFilter import AttachmentFilter
+from api.filters.AttachmentFilter import AttachmentFilter
 from core.models.AttachmentModel import AttachmentModel
 from api.serializers.attachment_serializers.BaseAttachmentSerializer import \
     BaseAttachmentSerializer

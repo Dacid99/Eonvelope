@@ -20,7 +20,7 @@
 
 import django_filters
 
-from ..constants import FilterSetups
+from Emailkasten.constants import FilterSetups
 from core.models.ImageModel import ImageModel
 
 

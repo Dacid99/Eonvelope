@@ -31,7 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from Emailkasten.Filters.EMailFilter import EMailFilter
+from api.filters.EMailFilter import EMailFilter
 from core.models.EMailModel import EMailModel
 from api.serializers.email_serializers.FullEMailSerializer import \
     FullEMailSerializer

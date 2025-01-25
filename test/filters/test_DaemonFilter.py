@@ -18,7 +18,7 @@
 
 import pytest
 
-from Emailkasten.Filters.DaemonFilter import DaemonFilter
+from api.filters.DaemonFilter import DaemonFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

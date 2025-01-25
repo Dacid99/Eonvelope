@@ -16,32 +16,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailingListFilter` filter provider class."""
+"""Module with the :class:`MailboxFilter` filter provider class."""
 
 import django_filters
 
-from ..constants import FilterSetups
-from core.models.MailingListModel import MailingListModel
+from Emailkasten.constants import FilterSetups
+from core.models.MailboxModel import MailboxModel
 
 
-class MailingListFilter(django_filters.FilterSet):
-    """The filter class for :class:`core.models.MailingListModel`."""
+class MailboxFilter(django_filters.FilterSet):
+    """The filter class for :class:`core.models.MailboxModel`."""
 
     class Meta:
         """Metadata class for the filter."""
 
-        model = MailingListModel
+        model = MailboxModel
         fields = {
-            "list_id": FilterSetups.TEXT,
-            "list_owner": FilterSetups.TEXT,
-            "list_subscribe": FilterSetups.TEXT,
-            "list_unsubscribe": FilterSetups.TEXT,
-            "list_post": FilterSetups.TEXT,
-            "list_help": FilterSetups.TEXT,
-            "list_archive": FilterSetups.TEXT,
+            "name": FilterSetups.TEXT,
+            "save_toEML": FilterSetups.BOOL,
+            "save_attachments": FilterSetups.BOOL,
+            "save_images": FilterSetups.BOOL,
+            "is_healthy": FilterSetups.BOOL,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
-            "correspondent__email_name": FilterSetups.TEXT,
-            "correspondent__email_address": FilterSetups.TEXT,
+            "account__mail_address": FilterSetups.TEXT,
+            "account__mail_host": FilterSetups.TEXT,
+            "account__protocol": FilterSetups.CHOICE,
+            "account__is_healthy": FilterSetups.BOOL
         }

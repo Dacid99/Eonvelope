@@ -16,29 +16,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AccountFilter` filter provider class."""
+"""Module with the :class:`AttachmentFilter` filter provider class."""
 
 import django_filters
 
-from ..constants import FilterSetups
-from core.models.AccountModel import AccountModel
+from Emailkasten.constants import FilterSetups
+from core.models.AttachmentModel import AttachmentModel
 
-
-class AccountFilter(django_filters.FilterSet):
-    """The filter class for :class:`core.models.AccountModel`."""
+class AttachmentFilter(django_filters.FilterSet):
+    """The filter class for :class:`core.models.AttachmentModel`."""
 
     class Meta:
         """Metadata class for the filter."""
 
-        model = AccountModel
+        model = AttachmentModel
         fields = {
-            "mail_address": FilterSetups.TEXT,
-            "mail_host": FilterSetups.TEXT,
-            "mail_host_port": FilterSetups.INT,
-            "protocol": FilterSetups.CHOICE,
-            "timeout": FilterSetups.FLOAT,
-            "is_healthy": FilterSetups.BOOL,
+            "file_name": FilterSetups.TEXT,
+            "datasize": FilterSetups.INT,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
+            "email__datetime": FilterSetups.DATETIME
         }

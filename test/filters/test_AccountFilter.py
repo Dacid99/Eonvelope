@@ -18,7 +18,7 @@
 
 import pytest
 
-from Emailkasten.Filters.AccountFilter import AccountFilter
+from api.filters.AccountFilter import AccountFilter
 
 from .conftest import (BOOL_TEST_PARAMETERS,
                        DATETIME_TEST_PARAMETERS,

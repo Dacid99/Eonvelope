@@ -368,7 +368,7 @@ def fixture_email_queryset(account_queryset, correspondent_queryset, mailinglist
             new_email = baker.make(
                 EMailModel,
                 message_id=TEXT_TEST_ITEMS[number],
-                datetime=datetime.datetime.now(tz=datetime.UTC),
+                datetime=datetime.datetime.now(tz=datetime.datetime.UTC),
                 email_subject=TEXT_TEST_ITEMS[number],
                 bodytext=TEXT_TEST_ITEMS[number],
                 datasize=INT_TEST_ITEMS[number],

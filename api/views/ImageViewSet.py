@@ -31,7 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from Emailkasten.Filters.ImageFilter import ImageFilter
+from api.filters.ImageFilter import ImageFilter
 from core.models.ImageModel import ImageModel
 from api.serializers.image_serializers.BaseImageSerializer import BaseImageSerializer
 

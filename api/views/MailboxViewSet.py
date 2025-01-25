@@ -31,7 +31,7 @@ from rest_framework.response import Response
 
 from Emailkasten import constants
 from Emailkasten.constants import TestStatusCodes
-from Emailkasten.Filters.MailboxFilter import MailboxFilter
+from api.filters.MailboxFilter import MailboxFilter
 from Emailkasten.mailProcessing import fetchAndProcessMails, testMailbox
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel

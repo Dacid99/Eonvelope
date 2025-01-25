@@ -32,7 +32,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from Emailkasten.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
-from Emailkasten.Filters.DaemonFilter import DaemonFilter
+from api.filters.DaemonFilter import DaemonFilter
 from core.models.DaemonModel import DaemonModel
 from api.serializers.daemon_serializers.BaseDaemonSerializer import \
     BaseDaemonSerializer

@@ -18,7 +18,7 @@
 
 import pytest
 
-from Emailkasten.Filters.MailingListFilter import MailingListFilter
+from api.filters.MailingListFilter import MailingListFilter
 
 from .conftest import ( BOOL_TEST_PARAMETERS,
                         DATETIME_TEST_PARAMETERS,

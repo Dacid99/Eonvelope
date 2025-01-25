@@ -16,25 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AttachmentFilter` filter provider class."""
+"""api.filters
 
-import django_filters
-
-from ..constants import FilterSetups
-from core.models.AttachmentModel import AttachmentModel
-
-class AttachmentFilter(django_filters.FilterSet):
-    """The filter class for :class:`core.models.AttachmentModel`."""
-
-    class Meta:
-        """Metadata class for the filter."""
-
-        model = AttachmentModel
-        fields = {
-            "file_name": FilterSetups.TEXT,
-            "datasize": FilterSetups.INT,
-            "is_favorite": FilterSetups.BOOL,
-            "created": FilterSetups.DATETIME,
-            "updated": FilterSetups.DATETIME,
-            "email__datetime": FilterSetups.DATETIME
-        }
+Package containing all filters for the views of the Emailkasten API in :mod:`api.views`
+"""

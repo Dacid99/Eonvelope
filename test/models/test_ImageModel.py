@@ -34,6 +34,12 @@ from core.models.EMailModel import EMailModel
 from core.models.ImageModel import ImageModel
 
 
+@pytest.fixture(name='mock_logger', autouse=True)
+def fixture_mock_logger(mocker):
+    """Mocks :attr:`core.models.ImageModel.logger` of the module."""
+    return mocker.patch('core.models.ImageModel.logger')
+
+
 @pytest.fixture(name='image')
 def fixture_imageModel() -> ImageModel:
     """Creates an :class:`core.models.ImageModel.ImageModel` instance for testing.
@@ -99,3 +105,49 @@ def test_ImageModel_unique():
     baker.make(ImageModel, file_path="test", email = email)
     with pytest.raises(IntegrityError):
         baker.make(ImageModel, file_path="test", email = email)
+
+
+@pytest.mark.django_db
+def test_delete_imagefile_success(mocker, mock_logger, image):
+    """Tests :func:`core.models.ImageModel.ImageModel.delete`
+    if the file removal is successful.
+    """
+    mock_os_remove = mocker.patch('core.models.ImageModel.os.remove')
+    file_path = image.file_path
+
+    image.delete()
+
+    with pytest.raises(ImageModel.DoesNotExist):
+        image.refresh_from_db()
+    mock_os_remove.assert_called_with(file_path)
+    mock_logger.debug.assert_called()
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    'side_effect',
+    [
+        FileNotFoundError,
+        OSError,
+        Exception
+    ]
+)
+def test_delete_imagefile_failure(mocker, image, mock_logger, side_effect):
+    """Tests :func:`core.models.ImageModel.ImageModel.delete`
+    if the file removal throws an exception.
+    """
+    mock_os_remove = mocker.patch('core.models.ImageModel.os.remove', side_effect=side_effect)
+    file_path = image.file_path
+
+    image.delete()
+
+    mock_os_remove.assert_called_with(file_path)
+    with pytest.raises(ImageModel.DoesNotExist):
+        image.refresh_from_db()
+    mock_logger.debug.assert_called()
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_called()
+    mock_logger.critical.assert_not_called()

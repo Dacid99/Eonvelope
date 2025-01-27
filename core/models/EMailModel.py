@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import logging
+import os
 from typing import TYPE_CHECKING
 
 from django.db import models
@@ -159,3 +160,35 @@ class EMailModel(models.Model):
             )
         ]
         """`message_id` and :attr:`account` in combination are unique."""
+
+
+    def delete(self, *args, **kwargs):
+        """Extended :django::func:`django.models.Model.delete` method
+        to delete :attr:`eml_filepath` and :attr:`prerender_filepath` files on deletion.
+        """
+
+        if self.eml_filepath:
+            logger.debug("Removing %s from storage ...", str(self))
+            try:
+                os.remove(self.eml_filepath)
+                logger.debug("Successfully removed the image file from storage.", exc_info=True)
+            except FileNotFoundError:
+                logger.error("%s was not found!", self.eml_filepath, exc_info=True)
+            except OSError:
+                logger.error("An OS error occured removing %s!", self.file_peml_filepathath, exc_info=True)
+            except Exception:
+                logger.error("An unexpected error occured removing %s!", self.eml_filepath, exc_info=True)
+
+        if self.prerender_filepath:
+            logger.debug("Removing %s from storage ...", str(self))
+            try:
+                os.remove(self.prerender_filepath)
+                logger.debug("Successfully removed the image file from storage.", exc_info=True)
+            except FileNotFoundError:
+                logger.error("%s was not found!", self.prerender_filepath, exc_info=True)
+            except OSError:
+                logger.error("An OS error occured removing %s!", self.prerender_filepath, exc_info=True)
+            except Exception:
+                logger.error("An unexpected error occured removing %s!", self.prerender_filepath, exc_info=True)
+
+        super().delete(*args, **kwargs)

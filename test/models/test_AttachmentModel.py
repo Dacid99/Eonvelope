@@ -33,6 +33,12 @@ from core.models.AttachmentModel import AttachmentModel
 from core.models.EMailModel import EMailModel
 
 
+@pytest.fixture(name='mock_logger', autouse=True)
+def fixture_mock_logger(mocker):
+    """Mocks :attr:`core.models.AttachmentModel.logger` of the module."""
+    return mocker.patch('core.models.AttachmentModel.logger')
+
+
 @pytest.fixture(name='attachment')
 def fixture_attachmentModel() -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
@@ -96,3 +102,49 @@ def test_AttachmentModel_unique():
     baker.make(AttachmentModel, file_path="test", email = email)
     with pytest.raises(IntegrityError):
         baker.make(AttachmentModel, file_path="test", email = email)
+
+
+@pytest.mark.django_db
+def test_delete_attachmentfile_success(mocker, mock_logger, attachment):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
+    if the file removal is successful.
+    """
+    mock_os_remove = mocker.patch('core.models.AttachmentModel.os.remove')
+    file_path = attachment.file_path
+
+    attachment.delete()
+
+    with pytest.raises(AttachmentModel.DoesNotExist):
+        attachment.refresh_from_db()
+    mock_os_remove.assert_called_with(file_path)
+    mock_logger.debug.assert_called()
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    'side_effect',
+    [
+        FileNotFoundError,
+        OSError,
+        Exception
+    ]
+)
+def test_delete_attachmentfile_failure(mocker, attachment, mock_logger, side_effect):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
+    if the file removal throws an exception.
+    """
+    mock_os_remove = mocker.patch('core.models.AttachmentModel.os.remove', side_effect=side_effect)
+    file_path = attachment.file_path
+
+    attachment.delete()
+
+    mock_os_remove.assert_called_with(file_path)
+    with pytest.raises(AttachmentModel.DoesNotExist):
+        attachment.refresh_from_db()
+    mock_logger.debug.assert_called()
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_called()
+    mock_logger.critical.assert_not_called()

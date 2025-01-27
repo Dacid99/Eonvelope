@@ -19,12 +19,13 @@
 """Module with the :class:`AttachmentModel` model class."""
 
 import logging
+import os
 
 from django.db import models
 
 from core import constants
-from .EMailModel import EMailModel
 
+from .EMailModel import EMailModel
 
 logger = logging.getLogger(__name__)
 
@@ -77,3 +78,21 @@ class AttachmentModel(models.Model):
             )
         ]
         """:attr:`file_path` and :attr:`email` in combination are unique."""
+
+
+    def delete(self, *args, **kwargs):
+        """Extended :django::func:`django.models.Model.delete` method to delete :attr:`file_path` file on deletion."""
+
+        if self.file_path:
+            logger.debug("Removing %s from storage ...", str(self))
+            try:
+                os.remove(self.file_path)
+                logger.debug("Successfully removed the attachment file from storage.", exc_info=True)
+            except FileNotFoundError:
+                logger.error("%s was not found!", self.file_path, exc_info=True)
+            except OSError:
+                logger.error("An OS error occured removing %s!", self.file_path, exc_info=True)
+            except Exception:
+                logger.error("An unexpected error occured removing %s!", self.file_path, exc_info=True)
+
+        super().delete(*args, **kwargs)

@@ -27,11 +27,19 @@ import datetime
 
 import pytest
 from django.db import IntegrityError
+from faker import Faker
 from model_bakery import baker
 
 from core.models.AccountModel import AccountModel
 from core.models.EMailModel import EMailModel
 from core.models.MailingListModel import MailingListModel
+
+
+@pytest.fixture(name='mock_logger', autouse=True)
+def fixture_mock_logger(mocker):
+    """Mocks :attr:`core.models.EMailModel.logger` of the module."""
+    return mocker.patch('core.models.EMailModel.logger')
+
 
 @pytest.fixture(name='email')
 def fixture_emailModel() -> EMailModel:
@@ -133,3 +141,59 @@ def test_EMailModel_unique():
     baker.make(EMailModel, message_id="abc123", account = account)
     with pytest.raises(IntegrityError):
         baker.make(EMailModel, message_id="abc123", account = account)
+
+
+@pytest.mark.django_db
+def test_post_delete_email_success(mocker, mock_logger, email):
+    """Tests :func:`core.models.EMailModel.EMailModel.delete`
+    if the file removal is successful.
+    """
+    mock_os_remove = mocker.patch('core.models.EMailModel.os.remove')
+    email.eml_filepath = Faker().file_path(extension='eml')
+    email.prerender_filepath = Faker().file_path(extension='png')
+    email.save()
+    eml_file_path = email.eml_filepath
+    prerender_file_path = email.prerender_filepath
+
+    email.delete()
+
+    with pytest.raises(EMailModel.DoesNotExist):
+        email.refresh_from_db()
+    mock_os_remove.assert_any_call(eml_file_path)
+    mock_os_remove.assert_any_call(prerender_file_path)
+    mock_logger.debug.assert_called()
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    'side_effects',
+    [
+        [Exception, None],
+        [None, Exception],
+        [Exception, Exception],
+    ]
+)
+def test_post_delete_email_failure(mocker, email, mock_logger, side_effects):
+    """Tests :func:`core.models.EMailModel.EMailModel.delete`
+    if the file removal throws an exception.
+    """
+    mock_os_remove = mocker.patch('core.models.EMailModel.os.remove', side_effect=side_effects)
+    email.eml_filepath = Faker().file_path(extension='eml')
+    email.prerender_filepath = Faker().file_path(extension='png')
+    email.save()
+    eml_file_path = email.eml_filepath
+    prerender_file_path = email.prerender_filepath
+
+    email.delete()
+
+    with pytest.raises(EMailModel.DoesNotExist):
+        email.refresh_from_db()
+    mock_os_remove.assert_any_call(eml_file_path)
+    mock_os_remove.assert_any_call(prerender_file_path)
+    mock_logger.debug.assert_called()
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_called()
+    mock_logger.critical.assert_not_called()

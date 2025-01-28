@@ -82,6 +82,7 @@ class AttachmentModel(models.Model):
 
     def delete(self, *args, **kwargs):
         """Extended :django::func:`django.models.Model.delete` method to delete :attr:`file_path` file on deletion."""
+        super().delete(*args, **kwargs)
 
         if self.file_path:
             logger.debug("Removing %s from storage ...", str(self))
@@ -94,5 +95,3 @@ class AttachmentModel(models.Model):
                 logger.error("An OS error occured removing %s!", self.file_path, exc_info=True)
             except Exception:
                 logger.error("An unexpected error occured removing %s!", self.file_path, exc_info=True)
-
-        super().delete(*args, **kwargs)

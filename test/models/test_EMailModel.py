@@ -169,7 +169,7 @@ def test_EMailModel_unique():
 
 
 @pytest.mark.django_db
-def test_post_delete_email_success(mocker, mock_logger, email):
+def test_delete_email_success(mocker, mock_logger, email):
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if the file removal is successful.
     """
@@ -201,7 +201,7 @@ def test_post_delete_email_success(mocker, mock_logger, email):
         [Exception, Exception],
     ]
 )
-def test_post_delete_email_failure(mocker, email, mock_logger, side_effects):
+def test_delete_email_remove_error(mocker, email, mock_logger, side_effects):
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if the file removal throws an exception.
     """
@@ -222,6 +222,25 @@ def test_post_delete_email_failure(mocker, email, mock_logger, side_effects):
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_called()
     mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_delete_email_delete_error(mocker, email, mock_logger):
+    """Tests :func:`core.models.EMailModel.EMailModel.delete`
+    if delete throws an exception.
+    """
+    mock_delete = mocker.patch('core.models.EMailModel.models.Model.delete', side_effect=ValueError)
+    mock_os_remove = mocker.patch('core.models.EMailModel.os.remove')
+    email.eml_filepath = Faker().file_path(extension='eml')
+    email.prerender_filepath = Faker().file_path(extension='png')
+    email.save()
+
+    with pytest.raises(ValueError):
+        email.delete()
+
+    mock_delete.assert_called_once()
+    mock_os_remove.assert_not_called()
+    mock_logger.debug.assert_not_called()
 
 
 @pytest.mark.django_db

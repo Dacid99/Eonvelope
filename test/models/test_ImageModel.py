@@ -151,3 +151,19 @@ def test_delete_imagefile_failure(mocker, image, mock_logger, side_effect):
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_called()
     mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_delete_imagefile_delete_error(mocker, image, mock_logger):
+    """Tests :func:`core.models.ImageModel.ImageModel.delete`
+    if delete throws an exception.
+    """
+    mock_delete = mocker.patch('core.models.ImageModel.models.Model.delete', side_effect=ValueError)
+    mock_os_remove = mocker.patch('core.models.ImageModel.os.remove')
+
+    with pytest.raises(ValueError):
+        image.delete()
+
+    mock_delete.assert_called_once()
+    mock_os_remove.assert_not_called()
+    mock_logger.debug.assert_not_called()

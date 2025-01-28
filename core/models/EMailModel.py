@@ -166,6 +166,7 @@ class EMailModel(models.Model):
         """Extended :django::func:`django.models.Model.delete` method
         to delete :attr:`eml_filepath` and :attr:`prerender_filepath` files on deletion.
         """
+        super().delete(*args, **kwargs)
 
         if self.eml_filepath:
             logger.debug("Removing %s from storage ...", str(self))
@@ -190,8 +191,6 @@ class EMailModel(models.Model):
                 logger.error("An OS error occured removing %s!", self.prerender_filepath, exc_info=True)
             except Exception:
                 logger.error("An unexpected error occured removing %s!", self.prerender_filepath, exc_info=True)
-
-        super().delete(*args, **kwargs)
 
 
     def subConversation(self) -> list:

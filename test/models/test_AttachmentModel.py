@@ -132,7 +132,7 @@ def test_delete_attachmentfile_success(mocker, mock_logger, attachment):
         Exception
     ]
 )
-def test_delete_attachmentfile_failure(mocker, attachment, mock_logger, side_effect):
+def test_delete_attachmentfile_remove_error(mocker, attachment, mock_logger, side_effect):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal throws an exception.
     """
@@ -148,3 +148,19 @@ def test_delete_attachmentfile_failure(mocker, attachment, mock_logger, side_eff
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_called()
     mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_delete_attachmentfile_delete_error(mocker, attachment, mock_logger):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
+    if delete throws an exception.
+    """
+    mock_delete = mocker.patch('core.models.AttachmentModel.models.Model.delete', side_effect=ValueError)
+    mock_os_remove = mocker.patch('core.models.AttachmentModel.os.remove')
+
+    with pytest.raises(ValueError):
+        attachment.delete()
+
+    mock_delete.assert_called_once()
+    mock_os_remove.assert_not_called()
+    mock_logger.debug.assert_not_called()

@@ -292,6 +292,8 @@ CONSTANCE_CONFIG = {
     'API_MAX_PAGE_SIZE': (200, _('The maximum page size for paginated API response data'), int),
     'DAEMON_CYCLE_PERIOD_DEFAULT': (60, _('The default cycle period setting of a daemon in seconds'), int),
     'DAEMON_RESTART_TIME_DEFAULT': (10, _('The default restart time setting of a daemon in seconds'), int),
+    'DAEMON_LOG_BACKUP_COUNT_DEFAULT': (5, _('The default restart time setting of a daemon in seconds'), int),
+    'DAEMON_LOGFILE_SIZE_DEFAULT': (1 * 1024 * 1024, _('The default restart time setting of a daemon in seconds'), int),
     'STORAGE_MAX_SUBDIRS_PER_DIR': (1000, _('The maximum numbers of subdirectories in one storage unit. Must not exceed 64000 for ext4 filesystem!'), int),
     'STORAGE_PATH': ('/mnt/archive', _('The path to the storage for the saved data. Must match the path in the docker-compose.yml to ensure data persistence!'), str),
     'PRERENDER_IMAGETYPE': ('jpg', _('The image format for the prerendered eml files'), str),

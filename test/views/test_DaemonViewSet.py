@@ -519,3 +519,30 @@ def test_download_auth_owner(daemonModel, owner_apiClient, custom_detail_action_
     assert 'Content-Disposition' in response.headers
     assert f'filename="{os.path.basename(daemonModel.log_filepath)}"' in response['Content-Disposition']
     assert b''.join(response.streaming_content) == mockedFileContent
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    'number_query_param, expected_suffix',
+    [
+        ('1', '.1'),
+        ('0', ''),
+        ('abc', '')
+    ]
+)
+def test_download_auth_owner_numberquery(daemonModel, owner_apiClient, custom_detail_action_url, mocker, number_query_param, expected_suffix):
+    """Tests the get method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.log_download` action with the authenticated owner user client."""
+    mockedFileContent = b'This is a 24 bytes file.'
+    mock_open = mocker.mock_open(read_data=mockedFileContent)
+    mocker.patch('api.v1.views.DaemonViewSet.open', mock_open)
+    mock_os_path_exists = mocker.patch('api.v1.views.DaemonViewSet.os.path.exists', return_value=True)
+    expected_log_filepath = daemonModel.log_filepath + expected_suffix
+
+    response = owner_apiClient.get(custom_detail_action_url(DaemonViewSet, DaemonViewSet.URL_NAME_LOG_DOWNLOAD, daemonModel), {'number': number_query_param})
+
+    assert response.status_code == status.HTTP_200_OK
+    mock_os_path_exists.assert_called_once_with(expected_log_filepath)
+    mock_open.assert_called_once_with(expected_log_filepath, 'rb')
+    assert 'Content-Disposition' in response.headers
+    assert f'filename="{os.path.basename(expected_log_filepath)}"' in response['Content-Disposition']
+    assert b''.join(response.streaming_content) == mockedFileContent

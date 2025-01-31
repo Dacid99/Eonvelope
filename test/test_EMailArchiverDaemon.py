@@ -54,12 +54,12 @@ def test___init__(mock_setupLogger, daemon):
 @pytest.mark.django_db
 def test_setupLogger(mocker, daemon):
     mock_getLogger = mocker.patch('logging.getLogger', return_value=mocker.Mock())
-    mock_FileHandler = mocker.patch('logging.FileHandler', return_value=mocker.Mock())
+    mock_FileHandler = mocker.patch('logging.handlers.RotatingFileHandler', return_value=mocker.Mock())
 
     emailArchiverDaemon = EMailArchiverDaemon(daemonModel=daemon)
 
     mock_getLogger.assert_called_once()
-    mock_FileHandler.assert_called_once_with(daemon.log_filepath)
+    mock_FileHandler.assert_called_once_with(filename=daemon.log_filepath, backupCount=daemon.log_backup_count, maxBytes=daemon.logfile_size)
     mock_getLogger.return_value.addHandler.assert_called_once_with(mock_FileHandler.return_value)
 
 

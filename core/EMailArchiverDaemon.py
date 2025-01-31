@@ -19,6 +19,7 @@
 """Module with the :class:`EMailArchiverDaemon` class."""
 
 import logging
+import logging.handlers
 import threading
 import time
 
@@ -53,7 +54,11 @@ class EMailArchiverDaemon(threading.Thread):
     def _setupLogger(self) -> None:
         """Sets up the logger for the daemon with an additional filehandler for its own logfile."""
         self.logger = logging.getLogger(__name__ + f".daemon_{self._daemonModel.id}")
-        fileHandler = logging.FileHandler(self._daemonModel.log_filepath)
+        fileHandler = logging.handlers.RotatingFileHandler(
+            filename=self._daemonModel.log_filepath,
+            backupCount=self._daemonModel.log_backup_count,
+            maxBytes=self._daemonModel.logfile_size
+        )
         self.logger.addHandler(fileHandler)
 
 

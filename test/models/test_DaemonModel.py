@@ -65,6 +65,8 @@ def test_DaemonModel_creation(daemon):
     assert daemon.is_running is False
     assert daemon.is_healthy is True
     assert daemon.log_filepath is not None
+    assert daemon.log_backup_count == get_config('DAEMON_LOG_BACKUP_COUNT_DEFAULT')
+    assert daemon.logfile_size == get_config('DAEMON_LOGFILE_SIZE_DEFAULT')
 
     assert daemon.updated is not None
     assert isinstance(daemon.updated, datetime.datetime)

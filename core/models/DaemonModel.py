@@ -51,10 +51,10 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     """The fetching criterion for this mailbox. One of :attr:`FETCHING_CHOICES`. :attr:`Emailkasten.constants.MailFetchingCriteria.ALL` by default."""
 
     cycle_interval = models.IntegerField(default=get_config('DAEMON_CYCLE_PERIOD_DEFAULT'))
-    """The period with which the daemon is running. :attr:`constance.get_config('DAEMON_CYCLE_PERIOD_DEFAULT')` by default."""
+    """The period with which the daemon is running. :attr:`constance.config('DAEMON_CYCLE_PERIOD_DEFAULT')` by default."""
 
     restart_time = models.IntegerField(default=get_config('DAEMON_RESTART_TIME_DEFAULT'))
-    """The time after which a crashed daemon restarts. :attr:`constance.get_config('DAEMON_RESTART_TIME_DEFAULT')` by default."""
+    """The time after which a crashed daemon restarts. :attr:`constance.config('DAEMON_RESTART_TIME_DEFAULT')` by default."""
 
     is_running = models.BooleanField(default=False)
     """Flags whether the daemon is active. `False` by default.
@@ -71,6 +71,12 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
         recursive=True,
         unique=True)
     """The logfile the daemon logs to. Is automatically set by :func:`save`. Unique."""
+
+    log_backup_count = models.IntegerField(default=get_config('DAEMON_LOG_BACKUP_COUNT_DEFAULT'))
+    """The number of backup logfiles for the daemon. :attr:`constance.config('DAEMON_LOG_BACKUP_COUNT_DEFAULT')` by default."""
+
+    logfile_size = models.IntegerField(default=get_config('DAEMON_LOGFILE_SIZE_DEFAULT'))
+    """The maximum size of a logfile for the daemon in bytes. :attr:`constance.config('DAEMON_LOGFILE_SIZE_DEFAULT')` by default."""
 
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""

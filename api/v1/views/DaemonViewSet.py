@@ -33,6 +33,7 @@ from rest_framework.response import Response
 
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from core.models.DaemonModel import DaemonModel
+from Emailkasten.utils import get_config
 
 from ..filters.DaemonFilter import DaemonFilter
 from ..serializers.daemon_serializers.BaseDaemonSerializer import \
@@ -204,7 +205,9 @@ class DaemonViewSet(viewsets.ModelViewSet):
         """
         daemon = self.get_object()
 
-        daemonLogFilepath = daemon.log_filepath
+        number = request.query_params.get('number', 0)
+        number_suffix = f'.{number}' if number > 0 else ''
+        daemonLogFilepath = daemon.log_filepath + number_suffix
         if not daemonLogFilepath or not os.path.exists(daemonLogFilepath):
             raise Http404("Log file not found")
 

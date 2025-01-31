@@ -35,6 +35,7 @@ import logging
 from typing import TYPE_CHECKING
 
 import email_validator
+from Emailkasten.utils import get_config
 from imap_tools.imap_utf7 import utf7_decode
 
 from core.constants import ParsedMailKeys, ParsingConfiguration
@@ -49,7 +50,7 @@ logger = logging.getLogger(__name__)
 def _decodeText(text: email.message.Message) -> str:
     """Decodes a text encoded as bytes.
     Checks for a specific charset to use.
-    If none is found uses :attr:`Emailkasten.constants.ParsingConfiguration.CHARSET_DEFAULT`.
+    If none is found uses :attr:`constance.get_config('CHARSET_DEFAULT')`.
 
     Args:
         text: The text in bytes format to decode properly.
@@ -57,7 +58,7 @@ def _decodeText(text: email.message.Message) -> str:
     Returns:
         The decoded text. Blank if none is present.
     """
-    charset = text.get_content_charset() or ParsingConfiguration.CHARSET_DEFAULT
+    charset = text.get_content_charset() or get_config('CHARSET_DEFAULT')
     if isinstance(textPayload := text.get_payload(decode=True), bytes):
         return textPayload.decode(charset, errors='replace')
     else:
@@ -67,7 +68,7 @@ def _decodeText(text: email.message.Message) -> str:
 def _decodeHeader(header: str) -> str:
     """Decodes an email header field encoded as bytes.
     Checks for a specific charset to use.
-    If none is found uses the default :attr:`Emailkasten.constants.MailParsingConfiguration.CHARSET_DEFAULT`.
+    If none is found uses the default :attr:`Emailkasten.constants.Mailget_config('CHARSET_DEFAULT')`.
 
     Note:
         Uses :func:`email.header.decode_header`.
@@ -83,7 +84,7 @@ def _decodeHeader(header: str) -> str:
     for fragment, charset in decodedFragments:
         if not charset:
             decodedString += (
-                fragment.decode(ParsingConfiguration.CHARSET_DEFAULT, errors="replace")
+                fragment.decode(get_config('CHARSET_DEFAULT'), errors="replace")
                 if isinstance(fragment, bytes)
                 else fragment
             )
@@ -149,7 +150,7 @@ def _parseMessageID(mailMessage: email.message.Message, parsedMail: dict):
 
 def _parseDate(mailMessage: email.message.Message, parsedMail: dict):
     """Parses the date header of the given mailmessage.
-    If none is found uses :attr:`Emailkasten.constants.ParsingConfiguration.DATE_DEFAULT` as fallback.
+    If none is found uses :attr:`constance.get_config('DEFAULT_MAILDATE')` as fallback.
     The result is included in the parsedMail dict.
 
     Note:
@@ -166,7 +167,7 @@ def _parseDate(mailMessage: email.message.Message, parsedMail: dict):
     date = mailMessage.get(ParsedMailKeys.Header.DATE)
     if not date:
         logger.warning("No DATE found in mail, resorting to default!")
-        parsedDate = datetime.datetime.strptime(ParsingConfiguration.DATE_DEFAULT, ParsingConfiguration.DATE_FORMAT)
+        parsedDate = datetime.datetime.strptime(get_config('DEFAULT_MAILDATE'), ParsingConfiguration.DATE_FORMAT)
     else:
         parsedDate = email.utils.parsedate_to_datetime(_decodeHeader(date))
     parsedMail[ParsedMailKeys.Header.DATE] = parsedDate
@@ -176,7 +177,7 @@ def _parseDate(mailMessage: email.message.Message, parsedMail: dict):
 def _parseSubject(mailMessage: email.message.Message, parsedMail: dict):
     """Parses the subject header of the given mailmessage.
     If there is no such header, falls back to a blank string.
-    If :attr:`constants.ParsingConfiguration.STRIP_TEXTS` is True, whitespace is stripped.
+    If :attr:`get_config('STRIP_TEXTS')` is True, whitespace is stripped.
     The result is included in the parsedMail dict.
 
     Args:
@@ -189,7 +190,7 @@ def _parseSubject(mailMessage: email.message.Message, parsedMail: dict):
     logger.debug("Parsing subject ...")
     if subject := mailMessage.get(ParsedMailKeys.Header.SUBJECT):
         decodedSubject = _decodeHeader(subject)
-        if ParsingConfiguration.STRIP_TEXTS:
+        if get_config('STRIP_TEXTS'):
             parsedSubject = decodedSubject.strip()
         else:
             parsedSubject = decodedSubject
@@ -204,7 +205,7 @@ def _parseSubject(mailMessage: email.message.Message, parsedMail: dict):
 def _parseBodyText(mailMessage: email.message.Message, parsedMail: dict):
     """Parses the bodytext of the given mailmessage.
     Combines all elements of content type text if the message is multipart. Otherwise uses the full message.
-    If :attr:`constants.ParsingConfiguration.STRIP_TEXTS` is True, whitespace is stripped.
+    If :attr:`get_config('STRIP_TEXTS')` is True, whitespace is stripped.
     The result is included in the parsedMail dict.
 
     Args:
@@ -229,7 +230,7 @@ def _parseBodyText(mailMessage: email.message.Message, parsedMail: dict):
     else:
         logger.debug("Successfully parsed bodytext")
 
-    if ParsingConfiguration.STRIP_TEXTS:
+    if get_config('STRIP_TEXTS'):
         parsedBodyText = mailBodyText.strip()
         logger.debug("Stripped bodytext")
     else:

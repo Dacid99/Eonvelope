@@ -21,10 +21,10 @@
 import logging
 import os
 
+from Emailkasten.utils import get_config
 from django.db import models
-from core import constants
-from .EMailModel import EMailModel
 
+from .EMailModel import EMailModel
 
 logger = logging.getLogger(__name__)
 
@@ -35,13 +35,13 @@ class ImageModel(models.Model):
     """The filename of the image."""
 
     file_path = models.FilePathField(
-        path=constants.StorageConfiguration.STORAGE_PATH,
+        path=get_config('STORAGE_PATH'),
         max_length=511,
         recursive=True,
         null=True)
     """The path where the image is stored. Unique together with :attr:`email`.
     Can be null if the image has not been saved (null does not collide with the unique constraint.).
-    Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`.
+    Must contain :attr:`constance.get_config('STORAGE_PATH')`.
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_ImageModel.post_delete_image`."""
 
     datasize = models.IntegerField()

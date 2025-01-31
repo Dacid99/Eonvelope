@@ -36,7 +36,6 @@ from rest_framework.routers import DefaultRouter
 
 from api.v1.views.AccountViewSet import AccountViewSet
 from api.v1.views.AttachmentViewSet import AttachmentViewSet
-from api.v1.views.ConfigurationViewSet import ConfigurationViewSet
 from api.v1.views.CorrespondentViewSet import CorrespondentViewSet
 from api.v1.views.DaemonViewSet import DaemonViewSet
 from api.v1.views.DatabaseStatsView import DatabaseStatsView
@@ -54,7 +53,6 @@ router.register(rf'{EMailViewSet.BASENAME}', EMailViewSet, basename=EMailViewSet
 router.register(rf'{CorrespondentViewSet.BASENAME}', CorrespondentViewSet, basename=CorrespondentViewSet.BASENAME)
 router.register(rf'{AttachmentViewSet.BASENAME}', AttachmentViewSet, basename=AttachmentViewSet.BASENAME)
 router.register(rf'{ImageViewSet.BASENAME}', ImageViewSet, basename=ImageViewSet.BASENAME)
-router.register(rf'{ConfigurationViewSet.BASENAME}', ConfigurationViewSet, basename=ConfigurationViewSet.BASENAME)
 router.register(rf'{UserViewSet.BASENAME}', UserViewSet, basename=UserViewSet.BASENAME)
 router.register(rf'{MailingListViewSet.BASENAME}', MailingListViewSet, basename=MailingListViewSet.BASENAME)
 

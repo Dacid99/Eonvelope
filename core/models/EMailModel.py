@@ -24,9 +24,9 @@ import logging
 import os
 from typing import TYPE_CHECKING
 
+from Emailkasten.utils import get_config
 from django.db import models
 
-from core import constants
 from .AccountModel import AccountModel
 from .MailingListModel import MailingListModel
 
@@ -59,7 +59,7 @@ class EMailModel(models.Model):
     """The bytes size of the mail."""
 
     eml_filepath = models.FilePathField(
-        path=constants.StorageConfiguration.STORAGE_PATH,
+        path=get_config('STORAGE_PATH'),
         max_length=255,
         recursive=True,
         match=r".*\.eml$",
@@ -67,20 +67,20 @@ class EMailModel(models.Model):
     )
     """The path where the mail is stored in .eml format.
     Can be null if the mail has not been saved.
-    Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH` and end on .eml .
+    Must contain :attr:`constance.get_config('STORAGE_PATH')` and end on .eml .
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_EMailModel.post_delete_email_files`.
     """
 
     prerender_filepath = models.FilePathField(
-        path=constants.StorageConfiguration.STORAGE_PATH,
+        path=get_config('STORAGE_PATH'),
         max_length=255,
         recursive=True,
-        match=rf".*\.{constants.StorageConfiguration.PRERENDER_IMAGETYPE}$",
+        match=rf".*\.{get_config('PRERENDER_IMAGETYPE')}$",
         null=True
     )
     """The path where the prerender image of the mail is stored.
     Can be null if the prerendering process was no successful.
-    Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH` and end on :attr:`Emailkasten.constants.StorageConfiguration.PRERENDER_IMAGETYPE`.
+    Must contain :attr:`constance.get_config('STORAGE_PATH')` and end on :attr:`constance.get_config('PRERENDER_IMAGETYPE')`.
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_EMailModel.post_delete_email_files`."""
 
     is_favorite = models.BooleanField(default=False)

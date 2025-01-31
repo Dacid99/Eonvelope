@@ -77,14 +77,11 @@ def fixture_mock_filesystem() -> Generator[FakeFilesystem, None, None]:
         ('conflicting-storage', True),
     ]
 )
-def test_StorageModel_initial_single_creation(STORAGE_PATH, expectedCritical, mock_logger, mock_filesystem, mocker):
+def test_StorageModel_initial_single_creation(STORAGE_PATH, expectedCritical, mock_logger, mock_filesystem, override_config):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
-    mock_StorageConfiguration = mocker.patch('core.models.StorageModel.StorageConfiguration')
-    mock_StorageConfiguration.STORAGE_PATH = STORAGE_PATH
-    mock_StorageConfiguration.MAX_SUBDIRS_PER_DIR = 3
-
-    subdirectory = StorageModel.getSubdirectory('test')
+    with override_config(STORAGE_PATH=STORAGE_PATH, STORAGE_MAX_SUBDIRS_PER_DIR=3):
+        subdirectory = StorageModel.getSubdirectory('test')
 
     assert os.path.isdir(subdirectory)
     assert subdirectory == os.path.join(STORAGE_PATH, '0', 'test')
@@ -99,12 +96,9 @@ def test_StorageModel_initial_single_creation(STORAGE_PATH, expectedCritical, mo
 
 
 @pytest.mark.django_db
-def test_StorageModel_initial_many_creation(mock_logger, mock_filesystem, mocker):
+@pytest.mark.override_config(STORAGE_PATH='empty-storage', STORAGE_MAX_SUBDIRS_PER_DIR=3)
+def test_StorageModel_initial_many_creation(mock_logger, mock_filesystem):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
-
-    mock_StorageConfiguration = mocker.patch('core.models.StorageModel.StorageConfiguration')
-    mock_StorageConfiguration.STORAGE_PATH = 'empty-storage'
-    mock_StorageConfiguration.MAX_SUBDIRS_PER_DIR = 3
 
     for number in range(0,2*3+1):
         StorageModel.getSubdirectory(f"test_{number}")
@@ -123,12 +117,9 @@ def test_StorageModel_initial_many_creation(mock_logger, mock_filesystem, mocker
 
 
 @pytest.mark.django_db
+@pytest.mark.override_config(STORAGE_PATH='empty-storage', STORAGE_MAX_SUBDIRS_PER_DIR=3)
 def test_health_check_success(mock_logger, mock_filesystem, mocker):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
-
-    mock_StorageConfiguration = mocker.patch('core.models.StorageModel.StorageConfiguration')
-    mock_StorageConfiguration.STORAGE_PATH = '/empty-storage'
-    mock_StorageConfiguration.MAX_SUBDIRS_PER_DIR = 3
 
     for number in range(0,2*3+1):
         StorageModel.getSubdirectory(f"test_{number}")
@@ -140,12 +131,9 @@ def test_health_check_success(mock_logger, mock_filesystem, mocker):
 
 
 @pytest.mark.django_db
-def test_health_check_failed_duplicate_current(mock_logger, mock_filesystem, mocker):
+@pytest.mark.override_config(STORAGE_PATH='empty-storage', STORAGE_MAX_SUBDIRS_PER_DIR=3)
+def test_health_check_failed_duplicate_current(mock_logger, mock_filesystem):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
-
-    mock_StorageConfiguration = mocker.patch('core.models.StorageModel.StorageConfiguration')
-    mock_StorageConfiguration.STORAGE_PATH = '/empty-storage'
-    mock_StorageConfiguration.MAX_SUBDIRS_PER_DIR = 3
 
     for number in range(0,2*3+1):
         StorageModel.getSubdirectory(f"test_{number}")
@@ -158,12 +146,9 @@ def test_health_check_failed_duplicate_current(mock_logger, mock_filesystem, moc
 
 
 @pytest.mark.django_db
-def test_health_check_failed_dirty_storage(mock_logger, mock_filesystem, mocker):
+@pytest.mark.override_config(STORAGE_PATH='conflicting-storage', STORAGE_MAX_SUBDIRS_PER_DIR=3)
+def test_health_check_failed_dirty_storage(mock_logger, mock_filesystem):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
-
-    mock_StorageConfiguration = mocker.patch('core.models.StorageModel.StorageConfiguration')
-    mock_StorageConfiguration.STORAGE_PATH = '/conflicting-storage'
-    mock_StorageConfiguration.MAX_SUBDIRS_PER_DIR = 3
 
     for number in range(0,2*3+1):
         StorageModel.getSubdirectory(f"test_{number}")

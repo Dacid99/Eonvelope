@@ -38,9 +38,9 @@ import quopri
 from typing import TYPE_CHECKING
 
 import imgkit
+from Emailkasten.utils import get_config
 from PIL import Image
 
-from ..constants import ParsingConfiguration, ProcessingConfiguration
 from .fileManagment import getPrerenderImageStoragePath
 from .mailParsing import ParsedMailKeys
 
@@ -86,7 +86,7 @@ def prerender(parsedMail: dict) -> None:
     """
     logger.debug("Generating prerender image for mail ...")
 
-    dumpDir = ProcessingConfiguration.DUMP_DIRECTORY
+    dumpDir = get_config('TEMPORARY_STORAGE_DIRECTORY')
     # Create the dump directory if not existing yet
     if not os.path.isdir(dumpDir):
         os.makedirs(dumpDir)
@@ -111,7 +111,7 @@ def prerender(parsedMail: dict) -> None:
 
         if not part.get_content_disposition():
             mimeType = part.get_content_type()
-            charset = part.get_content_charset() or ParsingConfiguration.CHARSET_DEFAULT
+            charset = part.get_content_charset() or get_config('CHARSET_DEFAULT')
 
             logger.debug("Found MIME part: %s", mimeType)
             if mimeType.startswith('text/'):
@@ -128,7 +128,7 @@ def prerender(parsedMail: dict) -> None:
 
                 # Insert other text into html format
                 else:
-                    payload = ProcessingConfiguration.HTML_FORMAT % payload
+                    payload = get_config('HTML_WRAPPER') % payload
 
 
                 # Generate MD5 hash of the payload

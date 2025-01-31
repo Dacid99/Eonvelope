@@ -30,8 +30,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import os
 from pathlib import Path
 
-import Emailkasten.constants
+from django.utils.translation import gettext_lazy as _
+
 import api.constants
+import Emailkasten.constants
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,6 +71,8 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "dj_rest_auth",
+    "constance",
+    "constance.backends.database",
     "health_check",
     "health_check.db",
     "health_check.storage",
@@ -144,6 +149,7 @@ DATABASES = {
         },
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -273,3 +279,85 @@ STATICFILES_URL = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# Constance settings
+
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+
+CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+
+CONSTANCE_CONFIG = {
+    'API_DEFAULT_PAGE_SIZE': (20, _('The default page size for paginated API response data'), int),
+    'API_MAX_PAGE_SIZE': (200, _('The maximum page size for paginated API response data'), int),
+    'DAEMON_CYCLE_PERIOD_DEFAULT': (60, _('The default cycle period setting of a daemon in seconds'), int),
+    'DAEMON_RESTART_TIME_DEFAULT': (10, _('The default restart time setting of a daemon in seconds'), int),
+    'STORAGE_MAX_SUBDIRS_PER_DIR': (1000, _('The maximum numbers of subdirectories in one storage unit. Must not exceed 64000 for ext4 filesystem!'), int),
+    'STORAGE_PATH': ('/mnt/archive', _('The path to the storage for the saved data. Must match the path in the docker-compose.yml to ensure data persistence!'), str),
+    'PRERENDER_IMAGETYPE': ('jpg', _('The image format for the prerendered eml files'), str),
+    'DEFAULT_CHARSET': ('utf-8', _('The default charset used for decoding of text'), str),
+    'STRIP_TEXTS': (True, _('Whether or not to strip whitespace from textfields like bodytext and subject'), bool),
+    'THROW_OUT_SPAM': (True, _('Whether or not to ignore emails that have a spam flag'), bool),
+    'DEFAULT_MAILDATE': ('1971-01-01 00:00:00', _('The fallback date to use if none is found in a mail'), str),
+    'TEMPORARY_STORAGE_DIRECTORY': ('/tmp/images', _('The path where intermediate images of the prerendering process will be placed'), str),
+    'HTML_WRAPPER': (
+        """<html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    font-size: 14px;
+                    white-space: pre-wrap;
+                }}
+            </style>
+        </head>
+        <body>
+            <pre>%s</pre>
+        </body>
+        </html>""",
+        'The html template to wrap around plain text before prerendering',
+        str
+    ),
+    'DEFAULT_SAVE_TO_EML': (True, _('The default mailbox setting whether to store mails as eml'), bool),
+    'DEFAULT_SAVE_ATTACHMENTS': (True, _('The default mailbox setting whether to store attachments'), bool),
+    'DEFAULT_SAVE_IMAGES': (True, _('The default mailbox setting whether to store images'), bool),
+}
+
+CONSTANCE_FIELDSETS = (
+    (
+        _('Default Values'),
+        (
+            'DEFAULT_SAVE_TO_EML',
+            'DEFAULT_SAVE_ATTACHMENTS',
+            'DEFAULT_SAVE_IMAGES',
+            'DEFAULT_MAILDATE',
+            'DAEMON_CYCLE_PERIOD_DEFAULT',
+            'DAEMON_RESTART_TIME_DEFAULT',
+        )
+    ),
+    (
+        _('Processing Settings'),
+        (
+            'THROW_OUT_SPAM',
+            'STRIP_TEXTS',
+            'HTML_WRAPPER',
+            'PRERENDER_IMAGETYPE',
+            'DEFAULT_CHARSET'
+        )
+    ),
+    (
+        _('Storage Settings'),
+        (
+            'STORAGE_PATH',
+            'STORAGE_MAX_SUBDIRS_PER_DIR',
+            'TEMPORARY_STORAGE_DIRECTORY'
+        )
+    ),
+    (
+        _('API Settings'),
+        (
+            'API_DEFAULT_PAGE_SIZE',
+            'API_MAX_PAGE_SIZE'
+        )
+    )
+)

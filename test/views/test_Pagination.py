@@ -17,10 +17,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+from Emailkasten.utils import get_config
 from model_bakery import baker
 from test_AccountViewSet import fixture_accountModel
 
-from api.constants import APIv1Configuration
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
 
@@ -76,6 +76,6 @@ def test_Pagination_default(emails, list_url, owner_apiClient):
     response = owner_apiClient.get(list_url(EMailViewSet))
 
     assert response.data['count'] == len(emails)
-    assert len(response.data['results']) == APIv1Configuration.DEFAULT_PAGE_SIZE
+    assert len(response.data['results']) == get_config('API_DEFAULT_PAGE_SIZE')
     assert min(item['id'] for item in response.data['results']) == 1
-    assert max(item['id'] for item in response.data['results']) == APIv1Configuration.DEFAULT_PAGE_SIZE
+    assert max(item['id'] for item in response.data['results']) == get_config('API_DEFAULT_PAGE_SIZE')

@@ -32,7 +32,8 @@ import os.path
 from builtins import open  # required for testing
 from typing import TYPE_CHECKING
 
-from ..constants import StorageConfiguration
+from Emailkasten.utils import get_config
+
 from ..models.StorageModel import StorageModel
 from .mailParsing import ParsedMailKeys
 
@@ -215,7 +216,7 @@ def getPrerenderImageStoragePath(parsedMail: dict[str,Any]) -> str:
 
     filePath = os.path.join(
         dirPath,
-        f"{parsedMail[ParsedMailKeys.Header.MESSAGE_ID]}.{StorageConfiguration.PRERENDER_IMAGETYPE}",
+        f"{parsedMail[ParsedMailKeys.Header.MESSAGE_ID]}.{get_config('PRERENDER_IMAGETYPE')}",
     )
     parsedMail[ParsedMailKeys.PRERENDER_FILE_PATH] = filePath
     logger.debug("Successfully got storage path for prerender image.")

@@ -26,6 +26,7 @@ import datetime
 from uuid import UUID
 
 import pytest
+from Emailkasten.utils import get_config
 from django.db import IntegrityError
 from faker import Faker
 from model_bakery import baker
@@ -33,6 +34,7 @@ from model_bakery import baker
 from core import constants
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
+
 
 @pytest.fixture(name='mock_open')
 def fixture_mock_open(mocker):
@@ -58,8 +60,8 @@ def test_DaemonModel_creation(daemon):
     assert daemon.mailbox is not None
     assert isinstance(daemon.mailbox, MailboxModel)
     assert daemon.fetching_criterion == constants.MailFetchingCriteria.ALL
-    assert daemon.cycle_interval == constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT
-    assert daemon.restart_time == constants.EMailArchiverDaemonConfiguration.RESTART_TIME_DEFAULT
+    assert daemon.cycle_interval == get_config('DAEMON_CYCLE_PERIOD_DEFAULT')
+    assert daemon.restart_time == get_config('DAEMON_RESTART_TIME_DEFAULT')
     assert daemon.is_running is False
     assert daemon.is_healthy is True
     assert daemon.log_filepath is not None

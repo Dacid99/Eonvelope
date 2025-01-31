@@ -24,8 +24,9 @@ import logging
 import os
 from typing import TYPE_CHECKING
 
-from Emailkasten.utils import get_config
 from django.db import models
+
+from Emailkasten.utils import get_config
 
 from .AccountModel import AccountModel
 from .MailingListModel import MailingListModel

@@ -50,6 +50,6 @@ def get_config(setting: str) -> Any:
         logger.info("Failed to retrieve a constance config value, using workaround ...")
         try:
             return CONSTANCE_CONFIG[setting][0]
-        except KeyError:
-            logger.critical("A config value was not found, reraising original exception!", exc_info=True)
-            raise exc
+        except KeyError as keyexc:
+            logger.critical("A config value was not found, reraising from original exception!", exc_info=True)
+            raise keyexc from exc

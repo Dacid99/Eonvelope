@@ -20,12 +20,12 @@
 
 import logging
 
-from Emailkasten.utils import get_config
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
 
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
+from Emailkasten.utils import get_config
 
 from .AccountModel import AccountModel
 

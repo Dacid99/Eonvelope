@@ -18,8 +18,9 @@
 
 """Module with the extended custom :class:`Pagination` class."""
 
-from Emailkasten.utils import get_config
 from rest_framework.pagination import PageNumberPagination
+
+from Emailkasten.utils import get_config
 
 
 class Pagination(PageNumberPagination):

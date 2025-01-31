@@ -26,7 +26,6 @@ import datetime
 from uuid import UUID
 
 import pytest
-from Emailkasten.utils import get_config
 from django.db import IntegrityError
 from faker import Faker
 from model_bakery import baker
@@ -34,6 +33,7 @@ from model_bakery import baker
 from core import constants
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
+from Emailkasten.utils import get_config
 
 
 @pytest.fixture(name='mock_open')

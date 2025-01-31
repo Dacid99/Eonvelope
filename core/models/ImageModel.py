@@ -21,8 +21,9 @@
 import logging
 import os
 
-from Emailkasten.utils import get_config
 from django.db import models
+
+from Emailkasten.utils import get_config
 
 from .EMailModel import EMailModel
 

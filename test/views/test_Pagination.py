@@ -17,12 +17,12 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
-from Emailkasten.utils import get_config
 from model_bakery import baker
 from test_AccountViewSet import fixture_accountModel
 
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
+from Emailkasten.utils import get_config
 
 
 @pytest.fixture(name='emails')

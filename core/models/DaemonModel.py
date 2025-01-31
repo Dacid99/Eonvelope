@@ -22,11 +22,11 @@ import logging
 import os
 import uuid
 
-from Emailkasten.utils import get_config
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
 
 import Emailkasten.constants
+from Emailkasten.utils import get_config
 
 from .. import constants
 from .MailboxModel import MailboxModel

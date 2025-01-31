@@ -26,7 +26,6 @@ Fixtures:
 import datetime
 
 import pytest
-from Emailkasten.utils import get_config
 from django.db import IntegrityError
 from model_bakery import baker
 
@@ -36,6 +35,7 @@ from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
+from Emailkasten.utils import get_config
 
 
 @pytest.fixture(name='mailbox')

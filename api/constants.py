@@ -25,15 +25,8 @@ from typing import Final
 class APIv1Configuration:
     """Namespace class for all configuration constants of the API."""
 
-    DEFAULT_PAGE_SIZE: Final[int] = 20
-    """The default number of entries per paginated response."""
-
-    MAX_PAGE_SIZE: Final[int] = 200
-    """The maximal number of entries per paginated response."""
-
     REGISTRATION_ENABLED: Final[bool] = os.environ.get("REGISTRATION_ENABLED", False)
     """Whether reegistration of new users is enabled."""
-
 
 
 class FilterSetups:

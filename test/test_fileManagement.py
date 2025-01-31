@@ -544,7 +544,7 @@ def test_storeAttachments_badDict(
         ('tiff')
     ]
 )
-def test_getPrerenderImageStoragePath_goodDict(mock_logger: MagicMock, mock_getSubdirectory: MagicMock, PRERENDER_IMAGETYPE: str, mocker: MockerFixture, mock_good_parsedMailDict: dict):
+def test_getPrerenderImageStoragePath_goodDict(mock_logger: MagicMock, mock_getSubdirectory: MagicMock, PRERENDER_IMAGETYPE: str, mocker: MockerFixture, override_config, mock_good_parsedMailDict: dict):
     """Tests :func:`core.utils.fileManagment.getPrerenderImageStoragePath`.
 
     Args:
@@ -556,9 +556,9 @@ def test_getPrerenderImageStoragePath_goodDict(mock_logger: MagicMock, mock_getS
         mock_good_parsedMailDict: The bad parsedMail dictionary fixture.
     """
     spy_ospathjoin = mocker.spy(os.path, "join")
-    mock_StorageConfiguration = mocker.patch("core.utils.fileManagment.StorageConfiguration")
-    mock_StorageConfiguration.PRERENDER_IMAGETYPE = PRERENDER_IMAGETYPE
-    prerenderFilePath = core.utils.fileManagment.getPrerenderImageStoragePath(mock_good_parsedMailDict)
+
+    with override_config(PRERENDER_IMAGETYPE=PRERENDER_IMAGETYPE):
+        prerenderFilePath = core.utils.fileManagment.getPrerenderImageStoragePath(mock_good_parsedMailDict)
 
     assert prerenderFilePath == f"{patch_getSubDirectory_returnValue}/{mock_messageIDValue}.{PRERENDER_IMAGETYPE}"
     mock_getSubdirectory.assert_called_once()
@@ -578,8 +578,6 @@ def test_getPrerenderImageStoragePath_badDict(mock_logger: MagicMock, mock_getSu
         mock_bad_parsedMailDict: The bad parsedMail dictionary fixture.
     """
     spy_ospathjoin = mocker.spy(os.path, "join")
-    mock_StorageConfiguration = mocker.patch("core.utils.fileManagment.StorageConfiguration")
-    mock_StorageConfiguration.PRERENDER_IMAGETYPE = 'jpg'
 
     with pytest.raises(KeyError):
         prerenderFilePath = core.utils.fileManagment.getPrerenderImageStoragePath(mock_bad_parsedMailDict)

@@ -5,7 +5,6 @@
 - maybe fetcher template superclass
 - maybe get rid of filesizes
 - custom fetching filters with NOT, OR and custom criteria
-- distinguish configs by env, db and user-immutables, migrate db settings to initial settings, use settings plugin
 - autostart daemons on restart
 - custom additional healthchecks
 - parsing walks multiple times, could be more efficient
@@ -22,7 +21,7 @@
 - disable all signals in tests
 - threadsafe db operations in daemons
 - filtertest for choices
-- move signals to models where appropriate
+- move all signals into models
 
 ### Work in progress
 - tests
@@ -42,6 +41,3 @@
 - logpath is misconfigured for makemigrations
 - csrf is disabled for debug
 - mailboxviewset.test and accountviewset.test are not fully tested
-
-## At next db reset
-- start to use configurationmodel

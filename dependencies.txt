@@ -5,6 +5,7 @@ django-health-check
 django-filter
 django-dirtyfields
 django-allauth
+django-constance
 dj-rest-auth
 drf-spectacular
 mysqlclient

@@ -20,19 +20,19 @@
 
 from rest_framework.pagination import PageNumberPagination
 
-from api.constants import APIv1Configuration
+from Emailkasten.utils import get_config
 
 
 class Pagination(PageNumberPagination):
     """Extended pagination for the API."""
 
-    page_size = APIv1Configuration.DEFAULT_PAGE_SIZE
+    page_size = get_config('API_DEFAULT_PAGE_SIZE')
     """The number of results per page.
-        Set from :attr:`Emailkasten.constants.APIv1Configuration.DEFAULT_PAGE_SIZE`."""
+        Set from :attr:`constance.get_config('API_DEFAULT_PAGE_SIZE')`."""
 
     page_size_query_param = 'page_size'
     """The query parameter for the page size."""
 
-    max_page_size = APIv1Configuration.MAX_PAGE_SIZE
+    max_page_size = get_config('API_MAX_PAGE_SIZE')
     """The maximal number of results per page.
-        Set from :attr:`Emailkasten.constants.APIv1Configuration.MAX_PAGE_SIZE`."""
+        Set from :attr:`constance.get_config('API_MAX_PAGE_SIZE')`."""

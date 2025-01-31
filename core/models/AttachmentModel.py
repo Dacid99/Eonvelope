@@ -23,7 +23,7 @@ import os
 
 from django.db import models
 
-from core import constants
+from Emailkasten.utils import get_config
 
 from .EMailModel import EMailModel
 
@@ -36,13 +36,13 @@ class AttachmentModel(models.Model):
     """The filename of the attachment."""
 
     file_path = models.FilePathField(
-        path=constants.StorageConfiguration.STORAGE_PATH,
+        path=get_config('STORAGE_PATH'),
         max_length=511,
         recursive=True,
         null=True)
     """The path where the attachment is stored. Unique together with :attr:`email`.
     Can be null if the attachment has not been saved (null does not collide with the unique constraint.).
-    Must contain :attr:`Emailkasten.constants.StorageConfiguration.STORAGE_PATH`.
+    Must contain :attr:`constance.get_config('STORAGE_PATH')`.
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_AttachmentModel.post_delete_attachment`."""
 
     datasize = models.IntegerField()

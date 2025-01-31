@@ -26,6 +26,7 @@ from dirtyfields import DirtyFieldsMixin
 from django.db import models
 
 import Emailkasten.constants
+from Emailkasten.utils import get_config
 
 from .. import constants
 from .MailboxModel import MailboxModel
@@ -49,11 +50,11 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     fetching_criterion = models.CharField(choices=FETCHINGCHOICES, default=constants.MailFetchingCriteria.ALL, max_length=10)
     """The fetching criterion for this mailbox. One of :attr:`FETCHING_CHOICES`. :attr:`Emailkasten.constants.MailFetchingCriteria.ALL` by default."""
 
-    cycle_interval = models.IntegerField(default=constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT)
-    """The period with which the daemon is running. :attr:`Emailkasten.constants.EMailArchiverDaemonConfiguration.CYCLE_PERIOD_DEFAULT` by default."""
+    cycle_interval = models.IntegerField(default=get_config('DAEMON_CYCLE_PERIOD_DEFAULT'))
+    """The period with which the daemon is running. :attr:`constance.get_config('DAEMON_CYCLE_PERIOD_DEFAULT')` by default."""
 
-    restart_time = models.IntegerField(default=constants.EMailArchiverDaemonConfiguration.RESTART_TIME_DEFAULT)
-    """The time after which a crashed daemon restarts. :attr:`Emailkasten.constants.EMailArchiverDaemonConfiguration.RESTART_TIME_DEFAULT` by default."""
+    restart_time = models.IntegerField(default=get_config('DAEMON_RESTART_TIME_DEFAULT'))
+    """The time after which a crashed daemon restarts. :attr:`constance.get_config('DAEMON_RESTART_TIME_DEFAULT')` by default."""
 
     is_running = models.BooleanField(default=False)
     """Flags whether the daemon is active. `False` by default.

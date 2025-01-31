@@ -38,9 +38,13 @@ def fixture_mock_logger(mocker):
     """Mocks :attr:`core.models.AttachmentModel.logger` of the module."""
     return mocker.patch('core.models.AttachmentModel.logger')
 
+@pytest.fixture(name='mock_os_remove')
+def fixture_mock_os_remove(mocker):
+    return mocker.patch('core.models.AttachmentModel.os.remove')
+
 
 @pytest.fixture(name='attachment')
-def fixture_attachmentModel() -> AttachmentModel:
+def fixture_attachmentModel(mock_os_remove) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Returns:
@@ -105,11 +109,10 @@ def test_AttachmentModel_unique():
 
 
 @pytest.mark.django_db
-def test_delete_attachmentfile_success(mocker, mock_logger, attachment):
+def test_delete_attachmentfile_success(mock_logger, attachment, mock_os_remove):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal is successful.
     """
-    mock_os_remove = mocker.patch('core.models.AttachmentModel.os.remove')
     file_path = attachment.file_path
 
     attachment.delete()
@@ -132,11 +135,11 @@ def test_delete_attachmentfile_success(mocker, mock_logger, attachment):
         Exception
     ]
 )
-def test_delete_attachmentfile_remove_error(mocker, attachment, mock_logger, side_effect):
+def test_delete_attachmentfile_failure(attachment, mock_logger, mock_os_remove, side_effect):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal throws an exception.
     """
-    mock_os_remove = mocker.patch('core.models.AttachmentModel.os.remove', side_effect=side_effect)
+    mock_os_remove.side_effect=side_effect
     file_path = attachment.file_path
 
     attachment.delete()

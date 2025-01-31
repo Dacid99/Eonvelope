@@ -23,9 +23,10 @@ import logging
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
 
-from core.constants import FetchingConfiguration
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
+from Emailkasten.utils import get_config
+
 from .AccountModel import AccountModel
 
 logger = logging.getLogger(__name__)
@@ -40,14 +41,14 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
     account = models.ForeignKey(AccountModel, related_name="mailboxes", on_delete=models.CASCADE)
     """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
 
-    save_attachments = models.BooleanField(default=FetchingConfiguration.SAVE_ATTACHMENTS_DEFAULT)
-    """Whether to save attachments of the mails found in this mailbox. :attr:`Emailkasten.constants.FetchingConfiguration.SAVE_ATTACHMENTS_DEFAULT` by default."""
+    save_attachments = models.BooleanField(default=get_config('DEFAULT_SAVE_ATTACHMENTS'))
+    """Whether to save attachments of the mails found in this mailbox. :attr:`constance.get_config('DEFAULT_SAVE_ATTACHMENTS')` by default."""
 
-    save_images = models.BooleanField(default=FetchingConfiguration.SAVE_IMAGES_DEFAULT)
-    """Whether to save images of the mails found in this mailbox. :attr:`Emailkasten.constants.FetchingConfiguration.SAVE_IMAGES_DEFAULT` by default."""
+    save_images = models.BooleanField(default=get_config('DEFAULT_SAVE_IMAGES'))
+    """Whether to save images of the mails found in this mailbox. :attr:`constance.get_config('DEFAULT_SAVE_IMAGES')` by default."""
 
-    save_toEML = models.BooleanField(default=FetchingConfiguration.SAVE_TO_EML_DEFAULT)
-    """Whether to save the mails found in this mailbox as .eml files. :attr:`Emailkasten.constants.FetchingConfiguration.SAVE_TO_EML_DEFAULT` by default."""
+    save_toEML = models.BooleanField(default=get_config('DEFAULT_SAVE_TO_EML'))
+    """Whether to save the mails found in this mailbox as .eml files. :attr:`constance.get_config('DEFAULT_SAVE_TO_EML')` by default."""
 
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mailboxes. False by default."""

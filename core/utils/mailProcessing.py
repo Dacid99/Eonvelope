@@ -41,7 +41,9 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING
 
-from ..constants import ParsedMailKeys, ParsingConfiguration, TestStatusCodes
+from Emailkasten.utils import get_config
+
+from ..constants import ParsedMailKeys, TestStatusCodes
 from ..models.EMailModel import EMailModel
 from ..utils.fetchers.ExchangeFetcher import ExchangeFetcher
 from ..utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
@@ -315,7 +317,7 @@ def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel) -> None:
         try:
             parsedMail = parseMail(mailData)
 
-            if ParsingConfiguration.THROW_OUT_SPAM:
+            if get_config('THROW_OUT_SPAM'):
                 if _isSpam(parsedMail):
                     logger.debug("Not saving email, it is flagged as spam.")
                     continue

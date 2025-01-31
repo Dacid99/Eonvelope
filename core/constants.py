@@ -140,40 +140,8 @@ class TestStatusCodes:
 
 # Configurations
 
-class EMailArchiverDaemonConfiguration:
-    """Namespace class for all configurations constants for the :class:`core.EMailArchiverDaemon` instances."""
-
-    CYCLE_PERIOD_DEFAULT: Final[int] = 60
-    """The default cycle period of the daemons in seconds."""
-
-    RESTART_TIME_DEFAULT: Final[int] = 10
-    """The default restart time for the daemons in case of a crash in seconds."""
-
-
-class StorageConfiguration:
-    """Namespace class for all configurations constants for the :class:`core.models.StorageModel`."""
-
-    MAX_SUBDIRS_PER_DIR: Final[int] = 1000
-    """The maximum numbers of subdirectories in one storage unit. Must not exceed 64000 for ext4 filesystem! """
-
-    STORAGE_PATH: Final[str] = "/mnt/archive"
-    """The path to the storage for the saved data. Must match the path in the docker-compose.yml to ensure data safety."""
-
-    PRERENDER_IMAGETYPE: Final[str] = "jpg"
-    """The image format for the prerendered eml files."""
-
-
 class ParsingConfiguration:
     """Namespace class for all configurations constants for the parsing of mails."""
-
-    CHARSET_DEFAULT: Final[str] = "utf-8"
-    """The default charset used for parsing of text."""
-
-    STRIP_TEXTS: Final[bool] = True
-    """Whether or not to strip whitespace from textfields like bodytext and subject."""
-
-    THROW_OUT_SPAM: Final[bool] = True
-    """Whether or not to ignore emails that have a spam flag."""
 
     APPLICATION_TYPES: Final[list[str]] = [
         "application/pdf",
@@ -181,51 +149,8 @@ class ParsingConfiguration:
     ]
     """A list of application types to parse as attachments."""
 
-    DATE_DEFAULT: Final[str] = "1971-01-01 00:00:00"
-    """The fallback date to use if none is found in a mail."""
-
     DATE_FORMAT: Final[str] = "%Y-%m-%d %H:%M:%S"
-    """The mail datetime format as specified in RFC5322. Must match the pattern of :attr:`DATE_DEFAULT`."""
-
-
-class ProcessingConfiguration:
-    """Namespace class for all configurations constants for the processing, especially the prerendering, of mails."""
-
-    DUMP_DIRECTORY: Final[str] = "/tmp/images"
-    """The directory path where temporary images of the prerendering process will be placed."""
-
-    HTML_FORMAT: Final[
-        str
-    ] = """
-        <html>
-        <head>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    font-size: 14px;
-                    white-space: pre-wrap;
-                }}
-            </style>
-        </head>
-        <body>
-            <pre>%s</pre>
-        </body>
-        </html>
-        """
-    """The html template to wrap around plain text before prerendering."""
-
-
-class FetchingConfiguration:
-    """Namespace class for all configurations constants for the fetching of mails."""
-
-    SAVE_TO_EML_DEFAULT: Final[bool] = True
-    """The default setting whether to store mails as eml. Initially set to True."""
-
-    SAVE_ATTACHMENTS_DEFAULT: Final[bool] = True
-    """The default setting whether to store attachments. Initially set to True."""
-
-    SAVE_IMAGES_DEFAULT: Final[bool] = True
-    """The default setting whether to store images. Initially set to True."""
+    """The mail datetime format as specified in RFC5322. Must match the pattern of :attr:`DEFAULT_MAILDATE`."""
 
 
 class ParsedMailKeys:

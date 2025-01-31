@@ -29,13 +29,13 @@ import pytest
 from django.db import IntegrityError
 from model_bakery import baker
 
-from core import constants
+from core.models.AccountModel import AccountModel
+from core.models.MailboxModel import MailboxModel
 from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
-from core.models.AccountModel import AccountModel
-from core.models.MailboxModel import MailboxModel
+from Emailkasten.utils import get_config
 
 
 @pytest.fixture(name='mailbox')
@@ -55,9 +55,9 @@ def test_MailboxModel_creation(mailbox):
     assert mailbox.name is not None
     assert mailbox.account is not None
     assert isinstance(mailbox.account, AccountModel)
-    assert mailbox.save_attachments is constants.FetchingConfiguration.SAVE_ATTACHMENTS_DEFAULT
-    assert mailbox.save_images is constants.FetchingConfiguration.SAVE_IMAGES_DEFAULT
-    assert mailbox.save_toEML is constants.FetchingConfiguration.SAVE_TO_EML_DEFAULT
+    assert mailbox.save_attachments is get_config('DEFAULT_SAVE_ATTACHMENTS')
+    assert mailbox.save_images is get_config('DEFAULT_SAVE_IMAGES')
+    assert mailbox.save_toEML is get_config('DEFAULT_SAVE_TO_EML')
     assert mailbox.is_favorite is False
     assert mailbox.is_healthy is True
     assert isinstance(mailbox.updated, datetime.datetime)

@@ -22,6 +22,7 @@
 - threadsafe db operations in daemons
 - filtertest for choices
 - move all signals into models
+- user validation for serializers to avoid leakage
 
 ### Work in progress
 - tests

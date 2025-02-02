@@ -14,3 +14,5 @@ factory_boy
 model-bakery
 pylintfileheader
 freezegun
+black
+isort

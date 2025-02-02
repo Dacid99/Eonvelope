@@ -30,7 +30,12 @@ Depending on your OS, the mysqlclient package may cause problems, this can usual
 ## Validation and Linting
 
 You can use the tools in validation/ to lint and check your changes.
-There are preconfigured githooks in validation/githooks that run check and lint jobs before every commit
+
+The code is formatted using black formatter.
+
+The imports are sorted with isort.
+
+There are preconfigured githooks in validation/githooks that run check and lint jobs and format the code before every commit.
 Set them for your local repository via
 
 ```bash
@@ -48,8 +53,10 @@ git config core.hooksPath validation/githooks/
 ### Extensions
 
 - everything for python and django
+- python test (with setting "python.testing.cwd": "/path/to/repo/test/")
 - pylint (with setting "pylint.args": ["--rcfile=validation/pylintrc(_strict)_extension"] )
 - mypy (with setting "mypy-type-checker.args": ["--config-file=validation/mypy_extension.ini"] )
+- black (with setting "mypy-type-checker.args": ["--config=validation/black_config"] )
 - isort
 - ANSI colors (iliazeus.vscode-ansi) (for validation reports)
 - reStructuredText (lextudio.restructuredtext) for docs

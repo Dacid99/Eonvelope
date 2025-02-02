@@ -11,6 +11,7 @@ if [ -z "$CHANGED_FILES" ]; then
   exit 0
 fi
 
+# format
 isort $CHANGED_FILES
 
 black --config=validation/black_config $CHANGED_FILES > validation/reports/black_precommit.ansi
@@ -19,6 +20,9 @@ if $? -ne 0; then
   exit 1
 fi
 
+git add $CHANGED_FILES
+
+# lint
 pylint --rcfile=validation/pylintrc_code $CHANGED_FILES > validation/reports/pylint_code_precommit.ansi
 if $? -ne 0; then
   echo "Pylinting code failed, please check validation/reports/pylint_code_precommit.ansi ."

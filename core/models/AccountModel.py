@@ -32,7 +32,6 @@ from ..utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from ..utils.fetchers.IMAPFetcher import IMAPFetcher
 from ..utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from ..utils.fetchers.POP3Fetcher import POP3Fetcher
-from ..utils.mailParsing import parseMailbox
 from .MailboxModel import MailboxModel
 
 # from utils.fetchers.ExchangeFetcher import ExchangeFetcher
@@ -152,26 +151,15 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         with self.get_fetcher() as fetcher:
             mailboxList = fetcher.fetchMailboxes()
 
-        for mailbox in mailboxList:
-            parsedMailbox = parseMailbox(mailbox)
-            logger.debug("Saving mailbox %s from %s to db ...", parsedMailbox, self)
+        for mailboxData in mailboxList:
+            mailbox = MailboxModel.fromData(mailboxData)
+            mailbox.account = self
+
+            logger.debug("Saving mailbox %s from %s to db ...", mailbox, self)
             try:
-                with django.db.transaction.atomic():
-
-                    mailboxEntry, created = MailboxModel.objects.get_or_create(
-                        name=parsedMailbox, account=self
-                    )
-                    if created:
-                        logger.debug("Entry for %s created", str(mailboxEntry))
-                    else:
-                        logger.debug("Entry for %s already exists", str(mailboxEntry))
-
+                mailbox.save()
+                logger.debug("Successfully saved mailbox to db!")
             except django.db.IntegrityError:
-                logger.error(
-                    "Error while writing to database, rollback to last state",
-                    exc_info=True,
-                )
-
-            logger.debug("Successfully saved mailbox to db ...")
+                logger.debug("%s already exists in db, it is skipped!", mailbox)
 
         logger.info("Successfully updated mailboxes.")

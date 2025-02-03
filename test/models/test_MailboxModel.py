@@ -35,6 +35,7 @@ from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
+from core.utils.mailParsing import parseMailboxName
 from Emailkasten.utils import get_config
 
 
@@ -162,3 +163,14 @@ def test_test_connection_failure(mocker, mailbox):
     assert mailbox.is_healthy is False
     mock_get_fetcher.assert_called_once_with()
     mock_get_fetcher.return_value.__enter__.return_value.test.assert_not_called()
+
+
+def test_fromData(mocker):
+    mock_parseMailboxName = mocker.patch(
+        "core.models.MailboxModel.parseMailboxName", return_value="testname"
+    )
+
+    new_mailbox = MailboxModel.fromData("mailboxData")
+
+    mock_parseMailboxName.assert_called_once_with("mailboxData")
+    assert new_mailbox.name == "testname"

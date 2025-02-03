@@ -23,11 +23,12 @@ import logging
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
 
-from core.utils.fetchers.IMAPFetcher import IMAPFetcher
-from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 from Emailkasten.utils import get_config
 
 from ..constants import TestStatusCodes
+from ..utils.fetchers.IMAPFetcher import IMAPFetcher
+from ..utils.fetchers.POP3Fetcher import POP3Fetcher
+from ..utils.mailParsing import parseMailboxName
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -130,3 +131,9 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             fetchedMails = fetcher.fetchEmails(self, criterion)
         logger.info("Successfully fetched emails.")
         return fetchedMails
+
+    @staticmethod
+    def fromData(mailboxData):
+        new_mailbox = MailboxModel()
+        new_mailbox.name = parseMailboxName(mailboxData)
+        return new_mailbox

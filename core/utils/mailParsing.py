@@ -473,7 +473,7 @@ def parseMail(mailToParse: bytes) -> dict[str, Any]:
     return parsedEMail
 
 
-def parseMailbox(mailboxBytes: bytes) -> str:
+def parseMailboxName(mailboxBytes: bytes) -> str:
     """Parses the mailbox name as received by the `fetchMailboxes` method in :mod:`core.utils.fetchers`.
 
     Note:

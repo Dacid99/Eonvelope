@@ -26,7 +26,6 @@ Functions:
     :func:`_insertAttachment`: Writes the given data for an attachment to the database.
     :func:`_insertImage`: Writes the given data for an image to the database.
     :func:`_insertMailinglist`: Writes the given data for an mailingslist served by a existing correspondent to database.
-    :func:`insertMailbox`: Writes the given data for a mailbox of an account to database.
     :func:`insertEMail`: Writes the given data for an email to database.
 
 Global variables:
@@ -58,7 +57,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-def _insertCorrespondent(correspondentData: tuple[str,str]) -> CorrespondentModel:
+def _insertCorrespondent(correspondentData: tuple[str, str]) -> CorrespondentModel:
     """Writes the given data of a correspondent to the database.
     If a correspondent with that address already exists, updates the name field if it is blank.
 
@@ -70,25 +69,31 @@ def _insertCorrespondent(correspondentData: tuple[str,str]) -> CorrespondentMode
     """
     logger.debug("Creating entry for correspondent in DB...")
 
-    correspondentEntry, created  = CorrespondentModel.objects.get_or_create(
-        email_address = correspondentData[1],
-        defaults = {'email_name': correspondentData[0]}
+    correspondentEntry, created = CorrespondentModel.objects.get_or_create(
+        email_address=correspondentData[1],
+        defaults={"email_name": correspondentData[0]},
     )
     if created:
         logger.debug("Entry for %s created", str(correspondentEntry))
     else:
         logger.debug("Entry for %s already exists", str(correspondentEntry))
         if not correspondentEntry.email_name and correspondentData[0]:
-            logger.debug("EMailName field of %s is blank, update it ... ", str(correspondentEntry))
+            logger.debug(
+                "EMailName field of %s is blank, update it ... ",
+                str(correspondentEntry),
+            )
             correspondentEntry.email_name = correspondentData[0]
             correspondentEntry.save()
-            logger.debug("Successfully updated emailName of %s.", str(correspondentEntry))
+            logger.debug(
+                "Successfully updated emailName of %s.", str(correspondentEntry)
+            )
 
     return correspondentEntry
 
 
-
-def _insertEMailCorrespondent(emailEntry: EMailModel, correspondentEntry: CorrespondentModel, mention: str) -> None:
+def _insertEMailCorrespondent(
+    emailEntry: EMailModel, correspondentEntry: CorrespondentModel, mention: str
+) -> None:
     """Writes the connection betweeen an email and a correspondent to the database.
     If that entry already exists does nothing.
 
@@ -100,18 +105,17 @@ def _insertEMailCorrespondent(emailEntry: EMailModel, correspondentEntry: Corres
     logger.debug("Creating entry for %s correspondent in DB...", mention)
 
     emailCorrespondentsEntry, created = EMailCorrespondentsModel.objects.get_or_create(
-        email = emailEntry,
-        correspondent = correspondentEntry,
-        mention = mention
+        email=emailEntry, correspondent=correspondentEntry, mention=mention
     )
     if created:
-        logger.debug("Successfully created entry for %s.", str(emailCorrespondentsEntry))
+        logger.debug(
+            "Successfully created entry for %s.", str(emailCorrespondentsEntry)
+        )
     else:
         logger.debug("Entry for %s already exists", str(emailCorrespondentsEntry))
 
 
-
-def _insertAttachment(attachmentData: dict[str,Any], emailEntry: EMailModel) -> None:
+def _insertAttachment(attachmentData: dict[str, Any], emailEntry: EMailModel) -> None:
     """Writes the given data for an attachment to the database.
     If that entry already exists does nothing.
 
@@ -119,13 +123,13 @@ def _insertAttachment(attachmentData: dict[str,Any], emailEntry: EMailModel) -> 
         attachmentData: The data of the attachment to be inserted, as created by :func:`core.utils.mailParsing.parseAttachment`.
         emailEntry: The database entry of the mail that the attachment is part of.
     """
-    attachmentEntry, created  = AttachmentModel.objects.get_or_create(
-        file_path = attachmentData.get(ParsedMailKeys.Attachment.FILE_PATH),
-        email = emailEntry,
-        defaults = {
-            'file_name' : attachmentData.get(ParsedMailKeys.Attachment.FILE_NAME),
-            'datasize' : attachmentData.get(ParsedMailKeys.Attachment.SIZE)
-        }
+    attachmentEntry, created = AttachmentModel.objects.get_or_create(
+        file_path=attachmentData.get(ParsedMailKeys.Attachment.FILE_PATH),
+        email=emailEntry,
+        defaults={
+            "file_name": attachmentData.get(ParsedMailKeys.Attachment.FILE_NAME),
+            "datasize": attachmentData.get(ParsedMailKeys.Attachment.SIZE),
+        },
     )
     if created:
         logger.debug("Successfully created entry for %s.", str(attachmentEntry))
@@ -133,8 +137,7 @@ def _insertAttachment(attachmentData: dict[str,Any], emailEntry: EMailModel) -> 
         logger.debug("Entry for %s already exists", str(attachmentEntry))
 
 
-
-def _insertImage(imageData: dict[str,Any], emailEntry: EMailModel) -> None:
+def _insertImage(imageData: dict[str, Any], emailEntry: EMailModel) -> None:
     """Writes the given data for an image to the database.
     If that entry already exists does nothing.
 
@@ -142,13 +145,13 @@ def _insertImage(imageData: dict[str,Any], emailEntry: EMailModel) -> None:
         imageData: The data of the image to be inserted, as created by :func:`core.utils.mailParsing.parseImage`.
         emailEntry: The database entry of the mail that the image is part of.
     """
-    imageEntry, created  = ImageModel.objects.get_or_create(
-        file_path = imageData.get(ParsedMailKeys.Image.FILE_PATH),
-        email = emailEntry,
-        defaults = {
-            'file_name' : imageData.get(ParsedMailKeys.Image.FILE_NAME),
-            'datasize' : imageData.get(ParsedMailKeys.Image.SIZE)
-        }
+    imageEntry, created = ImageModel.objects.get_or_create(
+        file_path=imageData.get(ParsedMailKeys.Image.FILE_PATH),
+        email=emailEntry,
+        defaults={
+            "file_name": imageData.get(ParsedMailKeys.Image.FILE_NAME),
+            "datasize": imageData.get(ParsedMailKeys.Image.SIZE),
+        },
     )
     if created:
         logger.debug("Successfully created entry for %s.", str(imageEntry))
@@ -156,8 +159,9 @@ def _insertImage(imageData: dict[str,Any], emailEntry: EMailModel) -> None:
         logger.debug("Entry for %s already exists", str(imageEntry))
 
 
-
-def _insertMailinglist(mailinglistData: dict[str,Any], fromCorrespondentEntry: CorrespondentModel) -> MailingListModel|None:
+def _insertMailinglist(
+    mailinglistData: dict[str, Any], fromCorrespondentEntry: CorrespondentModel
+) -> MailingListModel | None:
     """Writes the given data for an mailingslist served by a existing correspondent to database.
     If that entry already exists does nothing. If the mailinglist has no ID, it will not be saved.
 
@@ -173,17 +177,21 @@ def _insertMailinglist(mailinglistData: dict[str,Any], fromCorrespondentEntry: C
 
         logger.debug("Creating entry for mailinglist in DB...")
         mailinglistEntry, created = MailingListModel.objects.get_or_create(
-                list_id = mailinglistData.get(ParsedMailKeys.MailingList.ID),
-                correspondent = fromCorrespondentEntry,
-                defaults= {
-                    'list_owner': mailinglistData.get(ParsedMailKeys.MailingList.OWNER),
-                    'list_subscribe': mailinglistData.get(ParsedMailKeys.MailingList.SUBSCRIBE),
-                    'list_unsubscribe': mailinglistData.get(ParsedMailKeys.MailingList.UNSUBSCRIBE),
-                    'list_post': mailinglistData.get(ParsedMailKeys.MailingList.POST),
-                    'list_help': mailinglistData.get(ParsedMailKeys.MailingList.HELP),
-                    'list_archive': mailinglistData.get(ParsedMailKeys.MailingList.ARCHIVE),
-                }
-            )
+            list_id=mailinglistData.get(ParsedMailKeys.MailingList.ID),
+            correspondent=fromCorrespondentEntry,
+            defaults={
+                "list_owner": mailinglistData.get(ParsedMailKeys.MailingList.OWNER),
+                "list_subscribe": mailinglistData.get(
+                    ParsedMailKeys.MailingList.SUBSCRIBE
+                ),
+                "list_unsubscribe": mailinglistData.get(
+                    ParsedMailKeys.MailingList.UNSUBSCRIBE
+                ),
+                "list_post": mailinglistData.get(ParsedMailKeys.MailingList.POST),
+                "list_help": mailinglistData.get(ParsedMailKeys.MailingList.HELP),
+                "list_archive": mailinglistData.get(ParsedMailKeys.MailingList.ARCHIVE),
+            },
+        )
         if created:
             logger.debug("Successfully created entry for %s.", str(mailinglistEntry))
         else:
@@ -194,37 +202,7 @@ def _insertMailinglist(mailinglistData: dict[str,Any], fromCorrespondentEntry: C
     return mailinglistEntry
 
 
-
-def insertMailbox(mailboxData: str, account: AccountModel) -> None:
-    """Writes the given data for a mailbox of an account to database.
-    If a new entry is created, adds a new daemon entry for that mailbox as well. If any of the database operations fails, discards all changes to ensure data integrity.
-    If the entry for the mailbox already exists does nothing.
-
-    Args:
-        mailboxData: The name of the mailbox to be inserted, as created by :func:`core.utils.mailParsing.parseMailbox`.
-        account: The database entry of the account that the mailbox belongs to.
-    """
-    logger.debug("Saving mailbox %s from %s to db ...", mailboxData, str(account))
-    try:
-        with django.db.transaction.atomic():
-
-            mailboxEntry, created = MailboxModel.objects.get_or_create(
-                name = mailboxData,
-                account = account
-            )
-            if created:
-                logger.debug("Entry for %s created", str(mailboxEntry))
-            else:
-                logger.debug("Entry for %s already exists", str(mailboxEntry))
-
-    except django.db.IntegrityError:
-        logger.error("Error while writing to database, rollback to last state", exc_info=True)
-
-    logger.debug("Successfully saved mailbox to db ...")
-
-
-
-def insertEMail(emailData: dict[str,Any], account: AccountModel) -> None:
+def insertEMail(emailData: dict[str, Any], account: AccountModel) -> None:
     """Writes the given data for an email to database.
     If that entry already exists does nothing. If any of the database operations fails, discards all changes to ensure data integrity.
 
@@ -232,7 +210,11 @@ def insertEMail(emailData: dict[str,Any], account: AccountModel) -> None:
         emailData: The data of the mail to be inserted, as created by :func:`core.utils.mailParsing.parseMail`.
         account: The database entry of the account that the mail was found in.
     """
-    logger.debug("Saving mail with subject %s from %s to db ...", emailData[ParsedMailKeys.Header.SUBJECT], emailData[ParsedMailKeys.Header.DATE])
+    logger.debug(
+        "Saving mail with subject %s from %s to db ...",
+        emailData[ParsedMailKeys.Header.SUBJECT],
+        emailData[ParsedMailKeys.Header.DATE],
+    )
     try:
         with django.db.transaction.atomic():
 
@@ -242,70 +224,82 @@ def insertEMail(emailData: dict[str,Any], account: AccountModel) -> None:
             if fromCorrespondent:
                 logger.debug("Adding FROM correspondent to DB...")
 
-                fromCorrespondentEntry = _insertCorrespondent(fromCorrespondent[0]) #there should only be one from correspondent
+                fromCorrespondentEntry = _insertCorrespondent(
+                    fromCorrespondent[0]
+                )  # there should only be one from correspondent
             else:
                 logger.error("No FROM Correspondent found in mail, not writing to DB!")
 
-
-
             mailinglistEntry = None
             if emailData.get(ParsedMailKeys.MAILINGLIST) and fromCorrespondentEntry:
-                mailinglistEntry = _insertMailinglist(emailData.get(ParsedMailKeys.MAILINGLIST, {}), fromCorrespondentEntry)
+                mailinglistEntry = _insertMailinglist(
+                    emailData.get(ParsedMailKeys.MAILINGLIST, {}),
+                    fromCorrespondentEntry,
+                )
             else:
                 logger.debug("No mailinglist info found in mail, not writing to DB")
-
-
 
             inReplyToMailEntry = None
             if emailData.get(ParsedMailKeys.Header.IN_REPLY_TO):
                 logger.debug("Querying inReplyTo mail ...")
                 try:
-                    inReplyToMailEntry = EMailModel.objects.get(message_id = emailData.get(ParsedMailKeys.Header.IN_REPLY_TO))
+                    inReplyToMailEntry = EMailModel.objects.get(
+                        message_id=emailData.get(ParsedMailKeys.Header.IN_REPLY_TO)
+                    )
 
                     logger.debug("Successfully retrieved inReplyTo mail.")
                 except EMailModel.DoesNotExist:
-                    logger.warning("Could not find inReplyTo mail %s!", emailData.get(ParsedMailKeys.Header.IN_REPLY_TO))
+                    logger.warning(
+                        "Could not find inReplyTo mail %s!",
+                        emailData.get(ParsedMailKeys.Header.IN_REPLY_TO),
+                    )
             else:
                 logger.debug("No In-Reply-To found in mail, not writing to DB")
-
-
 
             logger.debug("Creating entry for email in DB...")
 
             emailEntry, created = EMailModel.objects.get_or_create(
-                message_id = emailData[ParsedMailKeys.Header.MESSAGE_ID],
-                defaults = {
-                    'account' : account,
-                    'mailinglist': mailinglistEntry,
-                    'inReplyTo' : inReplyToMailEntry,
-                    'bodytext' : emailData[ParsedMailKeys.BODYTEXT],
-                    'datasize' :  emailData[ParsedMailKeys.SIZE],
-                    'eml_filepath' : emailData.get(ParsedMailKeys.EML_FILE_PATH),
-                    'prerender_filepath': emailData.get(ParsedMailKeys.PRERENDER_FILE_PATH),
-                    'datetime' : emailData[ParsedMailKeys.Header.DATE],
-                    'email_subject' : emailData[ParsedMailKeys.Header.SUBJECT],
-                    'comments': emailData.get(ParsedMailKeys.Header.COMMENTS),
-                    'keywords': emailData.get(ParsedMailKeys.Header.KEYWORDS),
-                    'importance': emailData.get(ParsedMailKeys.Header.IMPORTANCE),
-                    'priority': emailData.get(ParsedMailKeys.Header.PRIORITY),
-                    'precedence': emailData.get(ParsedMailKeys.Header.PRECEDENCE),
-                    'received': emailData.get(ParsedMailKeys.Header.RECEIVED),
-                    'user_agent': emailData.get(ParsedMailKeys.Header.USER_AGENT),
-                    'auto_submitted': emailData.get(ParsedMailKeys.Header.AUTO_SUBMITTED),
-                    'content_type': emailData.get(ParsedMailKeys.Header.CONTENT_TYPE),
-                    'content_language': emailData.get(ParsedMailKeys.Header.CONTENT_LANGUAGE),
-                    'content_location': emailData.get(ParsedMailKeys.Header.CONTENT_LOCATION),
-                    'x_priority': emailData.get(ParsedMailKeys.Header.X_PRIORITY),
-                    'x_originated_client': emailData.get(ParsedMailKeys.Header.X_ORIGINATING_CLIENT),
-                    'x_spam': emailData.get(ParsedMailKeys.Header.X_SPAM_FLAG)
-                }
+                message_id=emailData[ParsedMailKeys.Header.MESSAGE_ID],
+                defaults={
+                    "account": account,
+                    "mailinglist": mailinglistEntry,
+                    "inReplyTo": inReplyToMailEntry,
+                    "bodytext": emailData[ParsedMailKeys.BODYTEXT],
+                    "datasize": emailData[ParsedMailKeys.SIZE],
+                    "eml_filepath": emailData.get(ParsedMailKeys.EML_FILE_PATH),
+                    "prerender_filepath": emailData.get(
+                        ParsedMailKeys.PRERENDER_FILE_PATH
+                    ),
+                    "datetime": emailData[ParsedMailKeys.Header.DATE],
+                    "email_subject": emailData[ParsedMailKeys.Header.SUBJECT],
+                    "comments": emailData.get(ParsedMailKeys.Header.COMMENTS),
+                    "keywords": emailData.get(ParsedMailKeys.Header.KEYWORDS),
+                    "importance": emailData.get(ParsedMailKeys.Header.IMPORTANCE),
+                    "priority": emailData.get(ParsedMailKeys.Header.PRIORITY),
+                    "precedence": emailData.get(ParsedMailKeys.Header.PRECEDENCE),
+                    "received": emailData.get(ParsedMailKeys.Header.RECEIVED),
+                    "user_agent": emailData.get(ParsedMailKeys.Header.USER_AGENT),
+                    "auto_submitted": emailData.get(
+                        ParsedMailKeys.Header.AUTO_SUBMITTED
+                    ),
+                    "content_type": emailData.get(ParsedMailKeys.Header.CONTENT_TYPE),
+                    "content_language": emailData.get(
+                        ParsedMailKeys.Header.CONTENT_LANGUAGE
+                    ),
+                    "content_location": emailData.get(
+                        ParsedMailKeys.Header.CONTENT_LOCATION
+                    ),
+                    "x_priority": emailData.get(ParsedMailKeys.Header.X_PRIORITY),
+                    "x_originated_client": emailData.get(
+                        ParsedMailKeys.Header.X_ORIGINATING_CLIENT
+                    ),
+                    "x_spam": emailData.get(ParsedMailKeys.Header.X_SPAM_FLAG),
+                },
             )
             if created:
                 logger.debug("Successfully created entry for %s.", str(emailEntry))
             else:
                 logger.debug("Entry for %s already exists", str(emailEntry))
-
-
 
             if emailData.get(ParsedMailKeys.ATTACHMENTS):
                 logger.debug("Creating entries for attachments in DB...")
@@ -317,8 +311,6 @@ def insertEMail(emailData: dict[str,Any], account: AccountModel) -> None:
             else:
                 logger.debug("No attachment files found in mail, not writing to DB")
 
-
-
             if emailData.get(ParsedMailKeys.IMAGES):
                 logger.debug("Creating entries for images in DB...")
 
@@ -329,35 +321,57 @@ def insertEMail(emailData: dict[str,Any], account: AccountModel) -> None:
             else:
                 logger.debug("No images found in mail, not writing to DB")
 
-
-
             for mentionType, correspondentHeader in ParsedMailKeys.Correspondent():
-                if correspondentHeader == ParsedMailKeys.Correspondent.FROM:   # from correspondent has been added earlier, just add the connection to bridge table here
+                if (
+                    correspondentHeader == ParsedMailKeys.Correspondent.FROM
+                ):  # from correspondent has been added earlier, just add the connection to bridge table here
                     if fromCorrespondentEntry:
 
-                        _insertEMailCorrespondent(emailEntry, fromCorrespondentEntry, mentionType)
+                        _insertEMailCorrespondent(
+                            emailEntry, fromCorrespondentEntry, mentionType
+                        )
 
-                        logger.debug("Successfully added entries for %s correspondent to DB.", mentionType)
+                        logger.debug(
+                            "Successfully added entries for %s correspondent to DB.",
+                            mentionType,
+                        )
                     else:
-                        logger.error("No %s correspondent found in mail, not writing to DB!", mentionType)
+                        logger.error(
+                            "No %s correspondent found in mail, not writing to DB!",
+                            mentionType,
+                        )
 
                 else:
                     if emailData[correspondentHeader]:
-                        logger.debug("Creating entry for %s correspondents in DB...", mentionType)
+                        logger.debug(
+                            "Creating entry for %s correspondents in DB...", mentionType
+                        )
 
                         for correspondentData in emailData[correspondentHeader]:
                             correspondentEntry = _insertCorrespondent(correspondentData)
-                            _insertEMailCorrespondent(emailEntry, correspondentEntry, mentionType)
+                            _insertEMailCorrespondent(
+                                emailEntry, correspondentEntry, mentionType
+                            )
 
-                        logger.debug("Successfully added entries for %s correspondents to DB.", mentionType)
+                        logger.debug(
+                            "Successfully added entries for %s correspondents to DB.",
+                            mentionType,
+                        )
                     else:
                         if mentionType == ParsedMailKeys.Correspondent.TO:
-                            logger.warning("No %s correspondent found in mail, not writing to DB!", mentionType)
+                            logger.warning(
+                                "No %s correspondent found in mail, not writing to DB!",
+                                mentionType,
+                            )
                         else:
-                            logger.debug("No %s correspondent found in mail, not writing to DB!", mentionType)
-
+                            logger.debug(
+                                "No %s correspondent found in mail, not writing to DB!",
+                                mentionType,
+                            )
 
     except django.db.IntegrityError:
-        logger.error("Error while writing to database, rollback to last state", exc_info=True)
+        logger.error(
+            "Error while writing to database, rollback to last state", exc_info=True
+        )
 
     logger.debug("Successfully saved mail to db.")

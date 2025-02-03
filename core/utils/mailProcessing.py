@@ -39,16 +39,11 @@ from typing import TYPE_CHECKING
 
 from Emailkasten.utils import get_config
 
-from ..constants import ParsedMailKeys, TestStatusCodes
+from ..constants import ParsedMailKeys
 from ..models.EMailModel import EMailModel
-from ..utils.fetchers.ExchangeFetcher import ExchangeFetcher
-from ..utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
-from ..utils.fetchers.IMAPFetcher import IMAPFetcher
-from ..utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
-from ..utils.fetchers.POP3Fetcher import POP3Fetcher
-from .emailDBFeeding import insertEMail, insertMailbox
+from .emailDBFeeding import insertEMail
 from .fileManagment import storeAttachments, storeImages, storeMessageAsEML
-from .mailParsing import parseMail, parseMailbox
+from .mailParsing import parseMail
 from .mailRendering import prerender
 
 if TYPE_CHECKING:

@@ -177,6 +177,14 @@ class EMailModel(models.Model):
         ]
         """`message_id` and :attr:`account` in combination are unique."""
 
+    def save(self, *args, **kwargs):
+        """Extended :django::func:`django.models.Model.save` method
+        to throw out spam if configured.
+        """
+        if get_config("THROW_OUT_SPAM") and self.isSpam():
+            return None
+        return super().save(*args, **kwargs)
+
     def delete(self, *args, **kwargs):
         """Extended :django::func:`django.models.Model.delete` method
         to delete :attr:`eml_filepath` and :attr:`prerender_filepath` files on deletion.
@@ -270,3 +278,11 @@ class EMailModel(models.Model):
         while rootEmail.inReplyTo:
             rootEmail = rootEmail.inReplyTo
         return rootEmail.subConversation()
+
+    def isSpam(self) -> bool:
+        """Checks the spam headers to decide whether the mail is spam.
+
+        Returns:
+            Whether the mail is considered spam.
+        """
+        return bool(self.x_spam) and self.x_spam != "NO"

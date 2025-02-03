@@ -34,13 +34,13 @@ from core.models.EMailModel import EMailModel
 from core.models.ImageModel import ImageModel
 
 
-@pytest.fixture(name='mock_logger', autouse=True)
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`core.models.ImageModel.logger` of the module."""
-    return mocker.patch('core.models.ImageModel.logger')
+    return mocker.patch("core.models.ImageModel.logger")
 
 
-@pytest.fixture(name='image')
+@pytest.fixture(name="image")
 def fixture_imageModel() -> ImageModel:
     """Creates an :class:`core.models.ImageModel.ImageModel` instance for testing.
 
@@ -48,10 +48,7 @@ def fixture_imageModel() -> ImageModel:
     Returns:
         The image instance for testing.
     """
-    return baker.make(
-        ImageModel,
-        file_path=Faker().file_path(extension='pdf')
-    )
+    return baker.make(ImageModel, file_path=Faker().file_path(extension="pdf"))
 
 
 @pytest.mark.django_db
@@ -95,16 +92,16 @@ def test_ImageModel_unique():
     assert image_1.file_path == image_2.file_path
     assert image_1.email != image_2.email
 
-    email = baker.make(EMailModel)
+    email = baker.make(EMailModel, x_spam="NO")
 
-    image_1 = baker.make(ImageModel, file_path="path_1", email = email)
-    image_2 = baker.make(ImageModel, file_path="path_2", email = email)
+    image_1 = baker.make(ImageModel, file_path="path_1", email=email)
+    image_2 = baker.make(ImageModel, file_path="path_2", email=email)
     assert image_1.file_path != image_2.file_path
     assert image_1.email == image_2.email
 
-    baker.make(ImageModel, file_path="test", email = email)
+    baker.make(ImageModel, file_path="test", email=email)
     with pytest.raises(IntegrityError):
-        baker.make(ImageModel, file_path="test", email = email)
+        baker.make(ImageModel, file_path="test", email=email)
 
 
 @pytest.mark.django_db
@@ -112,7 +109,7 @@ def test_delete_imagefile_success(mocker, mock_logger, image):
     """Tests :func:`core.models.ImageModel.ImageModel.delete`
     if the file removal is successful.
     """
-    mock_os_remove = mocker.patch('core.models.ImageModel.os.remove')
+    mock_os_remove = mocker.patch("core.models.ImageModel.os.remove")
     file_path = image.file_path
 
     image.delete()
@@ -127,19 +124,14 @@ def test_delete_imagefile_success(mocker, mock_logger, image):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    'side_effect',
-    [
-        FileNotFoundError,
-        OSError,
-        Exception
-    ]
-)
+@pytest.mark.parametrize("side_effect", [FileNotFoundError, OSError, Exception])
 def test_delete_imagefile_failure(mocker, image, mock_logger, side_effect):
     """Tests :func:`core.models.ImageModel.ImageModel.delete`
     if the file removal throws an exception.
     """
-    mock_os_remove = mocker.patch('core.models.ImageModel.os.remove', side_effect=side_effect)
+    mock_os_remove = mocker.patch(
+        "core.models.ImageModel.os.remove", side_effect=side_effect
+    )
     file_path = image.file_path
 
     image.delete()
@@ -158,8 +150,10 @@ def test_delete_imagefile_delete_error(mocker, image, mock_logger):
     """Tests :func:`core.models.ImageModel.ImageModel.delete`
     if delete throws an exception.
     """
-    mock_delete = mocker.patch('core.models.ImageModel.models.Model.delete', side_effect=ValueError)
-    mock_os_remove = mocker.patch('core.models.ImageModel.os.remove')
+    mock_delete = mocker.patch(
+        "core.models.ImageModel.models.Model.delete", side_effect=ValueError
+    )
+    mock_os_remove = mocker.patch("core.models.ImageModel.os.remove")
 
     with pytest.raises(ValueError):
         image.delete()

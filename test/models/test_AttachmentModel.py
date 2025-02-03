@@ -33,27 +33,26 @@ from core.models.AttachmentModel import AttachmentModel
 from core.models.EMailModel import EMailModel
 
 
-@pytest.fixture(name='mock_logger', autouse=True)
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`core.models.AttachmentModel.logger` of the module."""
-    return mocker.patch('core.models.AttachmentModel.logger')
+    return mocker.patch("core.models.AttachmentModel.logger")
 
-@pytest.fixture(name='mock_os_remove')
+
+@pytest.fixture(name="mock_os_remove")
 def fixture_mock_os_remove(mocker):
-    return mocker.patch('core.models.AttachmentModel.os.remove')
+    return mocker.patch("core.models.AttachmentModel.os.remove")
 
 
-@pytest.fixture(name='attachment')
+@pytest.fixture(name="attachment")
 def fixture_attachmentModel(mock_os_remove) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Returns:
         The attachment instance for testing.
     """
-    return baker.make(
-        AttachmentModel,
-        file_path=Faker().file_path(extension='pdf')
-    )
+    return baker.make(AttachmentModel, file_path=Faker().file_path(extension="pdf"))
+
 
 @pytest.mark.django_db
 def test_AttachmentModel_creation(attachment):
@@ -96,16 +95,16 @@ def test_AttachmentModel_unique():
     assert attachment_1.file_path == attachment_2.file_path
     assert attachment_1.email != attachment_2.email
 
-    email = baker.make(EMailModel)
+    email = baker.make(EMailModel, x_spam="NO")
 
-    attachment_1 = baker.make(AttachmentModel, file_path="path_1", email = email)
-    attachment_2 = baker.make(AttachmentModel, file_path="path_2", email = email)
+    attachment_1 = baker.make(AttachmentModel, file_path="path_1", email=email)
+    attachment_2 = baker.make(AttachmentModel, file_path="path_2", email=email)
     assert attachment_1.file_path != attachment_2.file_path
     assert attachment_1.email == attachment_2.email
 
-    baker.make(AttachmentModel, file_path="test", email = email)
+    baker.make(AttachmentModel, file_path="test", email=email)
     with pytest.raises(IntegrityError):
-        baker.make(AttachmentModel, file_path="test", email = email)
+        baker.make(AttachmentModel, file_path="test", email=email)
 
 
 @pytest.mark.django_db
@@ -127,19 +126,14 @@ def test_delete_attachmentfile_success(mock_logger, attachment, mock_os_remove):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    'side_effect',
-    [
-        FileNotFoundError,
-        OSError,
-        Exception
-    ]
-)
-def test_delete_attachmentfile_failure(attachment, mock_logger, mock_os_remove, side_effect):
+@pytest.mark.parametrize("side_effect", [FileNotFoundError, OSError, Exception])
+def test_delete_attachmentfile_failure(
+    attachment, mock_logger, mock_os_remove, side_effect
+):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal throws an exception.
     """
-    mock_os_remove.side_effect=side_effect
+    mock_os_remove.side_effect = side_effect
     file_path = attachment.file_path
 
     attachment.delete()
@@ -158,8 +152,10 @@ def test_delete_attachmentfile_delete_error(mocker, attachment, mock_logger):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if delete throws an exception.
     """
-    mock_delete = mocker.patch('core.models.AttachmentModel.models.Model.delete', side_effect=ValueError)
-    mock_os_remove = mocker.patch('core.models.AttachmentModel.os.remove')
+    mock_delete = mocker.patch(
+        "core.models.AttachmentModel.models.Model.delete", side_effect=ValueError
+    )
+    mock_os_remove = mocker.patch("core.models.AttachmentModel.os.remove")
 
     with pytest.raises(ValueError):
         attachment.delete()

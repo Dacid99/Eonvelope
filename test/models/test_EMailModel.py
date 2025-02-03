@@ -24,6 +24,7 @@ Fixtures:
 """
 
 import datetime
+from turtle import update
 
 import pytest
 from django.db import IntegrityError
@@ -35,28 +36,28 @@ from core.models.EMailModel import EMailModel
 from core.models.MailingListModel import MailingListModel
 
 
-@pytest.fixture(name='mock_logger', autouse=True)
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`core.models.EMailModel.logger` of the module."""
-    return mocker.patch('core.models.EMailModel.logger')
+    return mocker.patch("core.models.EMailModel.logger")
 
 
-@pytest.fixture(name='email')
+@pytest.fixture(name="email")
 def fixture_emailModel() -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel`.
 
     Returns:
         The email instance for testing.
     """
-    return baker.make(EMailModel)
+    return baker.make(EMailModel, x_spam="NO")
 
 
-@pytest.fixture(name='emailConversation')
+@pytest.fixture(name="emailConversation")
 def fixture_emailConversation(email):
-    replyMails = baker.make(EMailModel, inReplyTo=email, _quantity=3)
-    baker.make(EMailModel, inReplyTo=replyMails[1], _quantity=2)
-    replyReplyMail = baker.make(EMailModel, inReplyTo=replyMails[0])
-    baker.make(EMailModel, inReplyTo=replyReplyMail)
+    replyMails = baker.make(EMailModel, x_spam="NO", inReplyTo=email, _quantity=3)
+    baker.make(EMailModel, x_spam="NO", inReplyTo=replyMails[1], _quantity=2)
+    replyReplyMail = baker.make(EMailModel, x_spam="NO", inReplyTo=replyMails[0])
+    baker.make(EMailModel, x_spam="NO", inReplyTo=replyReplyMail)
 
 
 @pytest.mark.django_db
@@ -121,7 +122,7 @@ def test_EMailModel_foreign_key_account_deletion(email):
 def test_EMailModel_foreign_key_inReplyTo_deletion(email):
     """Tests the on_delete foreign key constraint on account in :class:`core.models.EMailModel.EMailModel`."""
 
-    inReplyToEmail = baker.make(EMailModel)
+    inReplyToEmail = baker.make(EMailModel, x_spam="NO")
     email.inReplyTo = inReplyToEmail
     email.save()
 
@@ -151,21 +152,43 @@ def test_EMailModel_foreign_key_mailingList_deletion(email):
 def test_EMailModel_unique():
     """Tests the unique constraints of :class:`core.models.EMailModel.EMailModel`."""
 
-    email_1 = baker.make(EMailModel, message_id="abc123")
-    email_2 = baker.make(EMailModel, message_id="abc123")
+    email_1 = baker.make(EMailModel, x_spam="NO", message_id="abc123")
+    email_2 = baker.make(EMailModel, x_spam="NO", message_id="abc123")
     assert email_1.message_id == email_2.message_id
     assert email_1.account != email_2.account
 
     account = baker.make(AccountModel)
 
-    email_1 = baker.make(EMailModel, account = account)
-    email_2 = baker.make(EMailModel, account = account)
+    email_1 = baker.make(EMailModel, x_spam="NO", account=account)
+    email_2 = baker.make(EMailModel, x_spam="NO", account=account)
     assert email_1.message_id != email_2.message_id
     assert email_1.account == email_2.account
 
-    baker.make(EMailModel, message_id="abc123", account = account)
+    baker.make(EMailModel, x_spam="NO", message_id="abc123", account=account)
     with pytest.raises(IntegrityError):
-        baker.make(EMailModel, message_id="abc123", account = account)
+        baker.make(EMailModel, x_spam="NO", message_id="abc123", account=account)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "config_throw_out_spam, isSpam, expectedSaveCalled",
+    [
+        (True, True, False),
+        (False, True, True),
+        (True, False, True),
+        (False, False, True),
+    ],
+)
+def test_save_email(
+    mocker, override_config, email, config_throw_out_spam, isSpam, expectedSaveCalled
+):
+    mocker.patch("core.models.EMailModel.EMailModel.isSpam", return_value=isSpam)
+    email.bodytext = "Saved!"
+    with override_config(THROW_OUT_SPAM=config_throw_out_spam):
+        email.save()
+
+    email.refresh_from_db()
+    assert (email.bodytext == "Saved!") is expectedSaveCalled
 
 
 @pytest.mark.django_db
@@ -173,9 +196,9 @@ def test_delete_email_success(mocker, mock_logger, email):
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if the file removal is successful.
     """
-    mock_os_remove = mocker.patch('core.models.EMailModel.os.remove')
-    email.eml_filepath = Faker().file_path(extension='eml')
-    email.prerender_filepath = Faker().file_path(extension='png')
+    mock_os_remove = mocker.patch("core.models.EMailModel.os.remove")
+    email.eml_filepath = Faker().file_path(extension="eml")
+    email.prerender_filepath = Faker().file_path(extension="png")
     email.save()
     eml_file_path = email.eml_filepath
     prerender_file_path = email.prerender_filepath
@@ -194,20 +217,22 @@ def test_delete_email_success(mocker, mock_logger, email):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'side_effects',
+    "side_effects",
     [
         [Exception, None],
         [None, Exception],
         [Exception, Exception],
-    ]
+    ],
 )
 def test_delete_email_remove_error(mocker, email, mock_logger, side_effects):
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if the file removal throws an exception.
     """
-    mock_os_remove = mocker.patch('core.models.EMailModel.os.remove', side_effect=side_effects)
-    email.eml_filepath = Faker().file_path(extension='eml')
-    email.prerender_filepath = Faker().file_path(extension='png')
+    mock_os_remove = mocker.patch(
+        "core.models.EMailModel.os.remove", side_effect=side_effects
+    )
+    email.eml_filepath = Faker().file_path(extension="eml")
+    email.prerender_filepath = Faker().file_path(extension="png")
     email.save()
     eml_file_path = email.eml_filepath
     prerender_file_path = email.prerender_filepath
@@ -229,10 +254,12 @@ def test_delete_email_delete_error(mocker, email, mock_logger):
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if delete throws an exception.
     """
-    mock_delete = mocker.patch('core.models.EMailModel.models.Model.delete', side_effect=ValueError)
-    mock_os_remove = mocker.patch('core.models.EMailModel.os.remove')
-    email.eml_filepath = Faker().file_path(extension='eml')
-    email.prerender_filepath = Faker().file_path(extension='png')
+    mock_delete = mocker.patch(
+        "core.models.EMailModel.models.Model.delete", side_effect=ValueError
+    )
+    mock_os_remove = mocker.patch("core.models.EMailModel.os.remove")
+    email.eml_filepath = Faker().file_path(extension="eml")
+    email.prerender_filepath = Faker().file_path(extension="png")
     email.save()
 
     with pytest.raises(ValueError):
@@ -245,17 +272,8 @@ def test_delete_email_delete_error(mocker, email, mock_logger):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'start_id, expected_len',
-    [
-        (1, 8),
-        (2, 3),
-        (3, 3),
-        (4, 1),
-        (5, 1),
-        (6, 1),
-        (7, 2),
-        (8, 1)
-    ]
+    "start_id, expected_len",
+    [(1, 8), (2, 3), (3, 3), (4, 1), (5, 1), (6, 1), (7, 2), (8, 1)],
 )
 def test_EMailModel_subConversation(emailConversation, start_id, expected_len):
     """Tests the on_delete foreign key constraint on account in :class:`core.models.EMailModel.EMailModel`."""
@@ -267,12 +285,7 @@ def test_EMailModel_subConversation(emailConversation, start_id, expected_len):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    'start_id',
-    [
-        1, 2, 3, 4, 5, 6, 7, 8
-    ]
-)
+@pytest.mark.parametrize("start_id", [1, 2, 3, 4, 5, 6, 7, 8])
 def test_EMailModel_fullConversation(emailConversation, start_id):
     """Tests the on_delete foreign key constraint on account in :class:`core.models.EMailModel.EMailModel`."""
     startEmail = EMailModel.objects.get(id=start_id)
@@ -280,3 +293,15 @@ def test_EMailModel_fullConversation(emailConversation, start_id):
     subConversationEmails = startEmail.fullConversation()
 
     assert len(subConversationEmails) == 8
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "x_spam, expectedResult", [(None, False), ("YES", True), ("NO", False)]
+)
+def test_EMailModel_isSpam(email, x_spam, expectedResult):
+    email.x_spam = x_spam
+
+    result = email.isSpam()
+
+    assert result is expectedResult

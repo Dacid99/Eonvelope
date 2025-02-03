@@ -134,3 +134,31 @@ def test_fetch(mocker, mailbox):
 
     mock_get_fetcher.assert_called_once()
     mock_get_fetcher.return_value.__enter__.return_value.fetchEmails.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_test_connection_success(mocker, mailbox):
+    mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
+
+    mailbox.test_connection()
+
+    mock_get_fetcher.assert_called_once_with()
+    mock_get_fetcher.return_value.__enter__.return_value.test.assert_called_once_with(
+        mailbox
+    )
+
+
+@pytest.mark.django_db
+def test_test_connection_failure(mocker, mailbox):
+    mock_get_fetcher = mocker.patch(
+        "core.models.AccountModel.AccountModel.get_fetcher", side_effect=ValueError
+    )
+    mailbox.is_healthy = True
+    mailbox.save(update_fields=["is_healthy"])
+
+    mailbox.test_connection()
+
+    mailbox.refresh_from_db()
+    assert mailbox.is_healthy is False
+    mock_get_fetcher.assert_called_once_with()
+    mock_get_fetcher.return_value.__enter__.return_value.test.assert_not_called()

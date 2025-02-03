@@ -133,3 +133,29 @@ def test_get_fetcher_failure(account):
 
     with pytest.raises(ValueError):
         fetcher = account.get_fetcher()
+
+
+@pytest.mark.django_db
+def test_test_connection_success(mocker, account):
+    mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
+
+    account.test_connection()
+
+    mock_get_fetcher.assert_called_once_with()
+    mock_get_fetcher.return_value.__enter__.return_value.test.assert_called_once_with()
+
+
+@pytest.mark.django_db
+def test_test_connection_failure(mocker, account):
+    mock_get_fetcher = mocker.patch(
+        "core.models.AccountModel.AccountModel.get_fetcher", side_effect=ValueError
+    )
+    account.is_healthy = True
+    account.save(update_fields=["is_healthy"])
+
+    account.test_connection()
+
+    account.refresh_from_db()
+    assert account.is_healthy is False
+    mock_get_fetcher.assert_called_once_with()
+    mock_get_fetcher.return_value.__enter__.return_value.test.assert_not_called()

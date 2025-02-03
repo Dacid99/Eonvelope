@@ -380,7 +380,9 @@ def test_scan_mailboxes_auth_owner(
 @pytest.mark.django_db
 def test_test_noauth(accountModel, noauth_apiClient, custom_detail_action_url, mocker):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with an unauthenticated user client."""
-    mock_testAccount = mocker.patch("api.v1.views.AccountViewSet.testAccount")
+    mock_test_connection = mocker.patch(
+        "api.v1.views.AccountViewSet.AccountModel.test_connection"
+    )
     previous_is_healthy = accountModel.is_healthy
 
     response = noauth_apiClient.post(
@@ -390,7 +392,7 @@ def test_test_noauth(accountModel, noauth_apiClient, custom_detail_action_url, m
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_testAccount.assert_not_called()
+    mock_test_connection.assert_not_called()
     accountModel.refresh_from_db()
     assert accountModel.is_healthy is previous_is_healthy
     with pytest.raises(KeyError):
@@ -402,7 +404,9 @@ def test_test_auth_other(
     accountModel, other_apiClient, custom_detail_action_url, mocker
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated other user client."""
-    mock_testAccount = mocker.patch("api.v1.views.AccountViewSet.testAccount")
+    mock_test_connection = mocker.patch(
+        "api.v1.views.AccountViewSet.AccountModel.test_connection"
+    )
     previous_is_healthy = accountModel.is_healthy
 
     response = other_apiClient.post(
@@ -412,7 +416,7 @@ def test_test_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_testAccount.assert_not_called()
+    mock_test_connection.assert_not_called()
     accountModel.refresh_from_db()
     assert accountModel.is_healthy is previous_is_healthy
     with pytest.raises(KeyError):
@@ -424,7 +428,9 @@ def test_test_auth_owner(
     accountModel, owner_apiClient, custom_detail_action_url, mocker
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
-    mock_testAccount = mocker.patch("api.v1.views.AccountViewSet.testAccount")
+    mock_test_connection = mocker.patch(
+        "api.v1.views.AccountViewSet.AccountModel.test_connection"
+    )
 
     response = owner_apiClient.post(
         custom_detail_action_url(
@@ -436,7 +442,7 @@ def test_test_auth_owner(
     assert (
         response.data["account"] == AccountViewSet.serializer_class(accountModel).data
     )
-    mock_testAccount.assert_called_once_with(accountModel)
+    mock_test_connection.assert_called_once_with()
 
 
 @pytest.mark.django_db

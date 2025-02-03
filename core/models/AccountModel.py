@@ -27,6 +27,7 @@ from django.db import models
 
 from core import constants
 
+from ..constants import TestStatusCodes
 from ..utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from ..utils.fetchers.IMAPFetcher import IMAPFetcher
 from ..utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
@@ -117,6 +118,30 @@ class AccountModel(DirtyFieldsMixin, models.Model):
             raise ValueError(
                 "The requested protocol is not implemented in a fetcher class!"
             )
+
+    def test_connection(self):
+        """Tests whether the data in the model is correct
+        and allows connecting and logging in to the mailhost and account.
+        The :attr:`core.models.AccountModel.is_healthy` flag is set accordingly.
+        Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
+
+        Returns:
+            The resultcode of the test.
+        """
+
+        logger.info("Testing %s ...", self)
+        try:
+            with self.get_fetcher() as fetcher:
+                result = fetcher.test()
+
+        except ValueError:
+            logger.error("Account %s has unknown protocol!", self)
+            self.is_healthy = False
+            self.save(update_fields=["is_healthy"])
+            result = TestStatusCodes.ERROR
+
+        logger.info("Successfully tested account to be %s.", result)
+        return result
 
     def update_mailboxes(self):
         """Scans the given mailaccount for unknown mailboxes,

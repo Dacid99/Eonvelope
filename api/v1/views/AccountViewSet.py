@@ -33,7 +33,6 @@ from rest_framework.response import Response
 
 from core.constants import TestStatusCodes
 from core.models.AccountModel import AccountModel
-from core.utils.mailProcessing import testAccount
 
 from ..filters.AccountFilter import AccountFilter
 from ..serializers.account_serializers.AccountSerializer import AccountSerializer
@@ -127,7 +126,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             A response containing the updated account data and the test resultcode.
         """
         account = self.get_object()
-        result = testAccount(account)
+        result = account.test_connection()
 
         accountSerializer = self.get_serializer(account)
         return Response(

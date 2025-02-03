@@ -27,6 +27,8 @@ from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 from Emailkasten.utils import get_config
 
+from ..constants import TestStatusCodes
+
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
@@ -97,6 +99,30 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             )
         ]
         """:attr:`name` and :attr:`account` in combination are unique."""
+
+    def test_connection(self):
+        """Tests whether the data in the model is correct
+        and allows connecting and logging in to the mailhost and account.
+        The :attr:`core.models.MailboxModel.is_healthy` flag is set accordingly.
+        Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
+
+        Returns:
+            The resultcode of the test.
+        """
+
+        logger.info("Testing %s ...", self)
+        try:
+            with self.account.get_fetcher() as fetcher:
+                result = fetcher.test(self)
+
+        except ValueError:
+            logger.error("Account %s has unknown protocol!", self)
+            self.is_healthy = False
+            self.save(update_fields=["is_healthy"])
+            result = TestStatusCodes.ERROR
+
+        logger.info("Successfully tested account to be %s.", result)
+        return result
 
     def fetch(self, criterion):
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)

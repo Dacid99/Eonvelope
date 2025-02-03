@@ -33,11 +33,12 @@ from core import constants
 from core.constants import TestStatusCodes
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
-from core.utils.mailProcessing import fetchAndProcessMails, testMailbox
+from core.utils.mailProcessing import fetchAndProcessMails
 
 from ..filters.MailboxFilter import MailboxFilter
-from ..serializers.mailbox_serializers.MailboxWithDaemonSerializer import \
-    MailboxWithDaemonSerializer
+from ..serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
+    MailboxWithDaemonSerializer,
+)
 
 if TYPE_CHECKING:
     from django.db.models import BaseManager
@@ -47,45 +48,50 @@ if TYPE_CHECKING:
 class MailboxViewSet(viewsets.ModelViewSet):
     """Viewset for the :class:`core.models.MailboxModel.MailboxModel`."""
 
-    BASENAME = 'mailboxes'
+    BASENAME = "mailboxes"
     serializer_class = MailboxWithDaemonSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailboxFilter
     permission_classes = [IsAuthenticated]
     ordering_fields = [
-        'name',
-        'account__mail_address',
-        'account__mail_host',
-        'account__protocol',
-        'save_attachments',
-        'save_images',
-        'save_toEML',
-        'is_favorite',
-        'is_healthy',
-        'created',
-        'updated'
+        "name",
+        "account__mail_address",
+        "account__mail_host",
+        "account__protocol",
+        "save_attachments",
+        "save_images",
+        "save_toEML",
+        "is_favorite",
+        "is_healthy",
+        "created",
+        "updated",
     ]
-    ordering = ['id']
-
+    ordering = ["id"]
 
     def get_queryset(self) -> BaseManager[MailboxModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
             The mailbox entries matching the request user."""
-        return MailboxModel.objects.filter(account__user = self.request.user)
+        return MailboxModel.objects.filter(account__user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         """Disables the POST method for this viewset."""
         return Response(
             {"detail": "POST method is not allowed on this endpoint."},
-            status=status.HTTP_405_METHOD_NOT_ALLOWED
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
-    URL_PATH_ADD_DAEMON = 'add-daemon'
-    URL_NAME_ADD_DAEMON = 'add-daemon'
-    @action(detail=True, methods=['POST'], url_path=URL_PATH_ADD_DAEMON, url_name=URL_NAME_ADD_DAEMON)
-    def add_daemon(self, request: Request, pk: int|None = None) -> Response:
+    URL_PATH_ADD_DAEMON = "add-daemon"
+    URL_NAME_ADD_DAEMON = "add-daemon"
+
+    @action(
+        detail=True,
+        methods=["POST"],
+        url_path=URL_PATH_ADD_DAEMON,
+        url_name=URL_NAME_ADD_DAEMON,
+    )
+    def add_daemon(self, request: Request, pk: int | None = None) -> Response:
         """Action method creating a new daemon for the mailbox.
 
         Args:
@@ -99,13 +105,17 @@ class MailboxViewSet(viewsets.ModelViewSet):
         DaemonModel.objects.create(mailbox=mailbox)
 
         mailboxSerializer = self.get_serializer(mailbox)
-        return Response({'detail': 'Added daemon for mailbox', 'mailbox': mailboxSerializer.data})
+        return Response(
+            {"detail": "Added daemon for mailbox", "mailbox": mailboxSerializer.data}
+        )
 
+    URL_PATH_TEST = "test"
+    URL_NAME_TEST = "test"
 
-    URL_PATH_TEST = 'test'
-    URL_NAME_TEST = 'test'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST)
-    def test_mailbox(self, request: Request, pk:int|None = None) -> Response:
+    @action(
+        detail=True, methods=["post"], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST
+    )
+    def test_mailbox(self, request: Request, pk: int | None = None) -> Response:
         """Action method testing the mailbox data.
 
         Args:
@@ -116,16 +126,27 @@ class MailboxViewSet(viewsets.ModelViewSet):
             A response containing the updated mailbox data and the test resultcode.
         """
         mailbox = self.get_object()
-        result = testMailbox(mailbox)
+        result = mailbox.test_connection()
 
         mailboxSerializer = self.get_serializer(mailbox)
-        return Response({'detail': 'Tested mailbox', 'mailbox': mailboxSerializer.data, 'result': TestStatusCodes.INFOS[result]})
+        return Response(
+            {
+                "detail": "Tested mailbox",
+                "mailbox": mailboxSerializer.data,
+                "result": TestStatusCodes.INFOS[result],
+            }
+        )
 
+    URL_PATH_FETCH_ALL = "fetch-all"
+    URL_NAME_FETCH_ALL = "fetch-all"
 
-    URL_PATH_FETCH_ALL = 'fetch-all'
-    URL_NAME_FETCH_ALL = 'fetch-all'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_FETCH_ALL, url_name=URL_NAME_FETCH_ALL)
-    def fetch_all(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_FETCH_ALL,
+        url_name=URL_NAME_FETCH_ALL,
+    )
+    def fetch_all(self, request: Request, pk: int | None = None) -> Response:
         """Action method fetching all mails from the mailbox.
 
         Args:
@@ -140,13 +161,20 @@ class MailboxViewSet(viewsets.ModelViewSet):
         fetchAndProcessMails(mailbox, constants.MailFetchingCriteria.ALL)
 
         mailboxSerializer = self.get_serializer(mailbox)
-        return Response({'detail': 'All mails fetched', "mailbox": mailboxSerializer.data})
+        return Response(
+            {"detail": "All mails fetched", "mailbox": mailboxSerializer.data}
+        )
 
+    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
+    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
 
-    URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
-    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
-    def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_TOGGLE_FAVORITE,
+        url_name=URL_NAME_TOGGLE_FAVORITE,
+    )
+    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the mailbox.
 
         Args:
@@ -158,5 +186,5 @@ class MailboxViewSet(viewsets.ModelViewSet):
         """
         mailbox = self.get_object()
         mailbox.is_favorite = not mailbox.is_favorite
-        mailbox.save(update_fields=['is_favorite'])
-        return Response({'detail': 'Mailbox marked as favorite'})
+        mailbox.save(update_fields=["is_favorite"])
+        return Response({"detail": "Mailbox marked as favorite"})

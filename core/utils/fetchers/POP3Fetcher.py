@@ -247,7 +247,11 @@ class POP3Fetcher:
         """
         return [b"INBOX"]
 
-    def fetchAll(self, mailbox: MailboxModel) -> list[bytes]:
+    def fetchEmails(
+        self,
+        mailbox: MailboxModel,
+        criterion: str = constants.MailFetchingCriteria.ALL,
+    ) -> list[bytes]:
         """Fetches and returns all maildata from the server.
         If an :class:`poplib.error_proto` occurs the mailbox is flagged as unhealthy.
         If a bad response is received when listing messages, it is flagged as unhealthy as well.
@@ -256,10 +260,17 @@ class POP3Fetcher:
         Args:
             mailbox: Database model of the mailbox to fetch data from.
                 If a mailbox that is not in the account is given, returns [].
+            criterion: POP only support ALL lookups.
+                Defaults to :attr:`Emailkasten.constants.MailFetchingCriteria.ALL`.
+                Returns [] if other value is passed.
+                This arg ensures compatibility with the other fetchers.
 
         Returns:
             List of :class:`email.message.EmailMessage` mails in the mailbox. Empty if no messages are found or if an error occured.
         """
+        if criterion != "ALL":
+            return []
+
         if not self._mailhost:
             self.logger.error("No connection to %s!", str(self.account))
             return []

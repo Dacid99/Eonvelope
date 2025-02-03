@@ -38,7 +38,7 @@ from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 from Emailkasten.utils import get_config
 
 
-@pytest.fixture(name='mailbox')
+@pytest.fixture(name="mailbox")
 def fixture_mailboxModel() -> MailboxModel:
     """Creates an :class:`core.models.MailboxModel.MailboxModel`.
 
@@ -55,9 +55,9 @@ def test_MailboxModel_creation(mailbox):
     assert mailbox.name is not None
     assert mailbox.account is not None
     assert isinstance(mailbox.account, AccountModel)
-    assert mailbox.save_attachments is get_config('DEFAULT_SAVE_ATTACHMENTS')
-    assert mailbox.save_images is get_config('DEFAULT_SAVE_IMAGES')
-    assert mailbox.save_toEML is get_config('DEFAULT_SAVE_TO_EML')
+    assert mailbox.save_attachments is get_config("DEFAULT_SAVE_ATTACHMENTS")
+    assert mailbox.save_images is get_config("DEFAULT_SAVE_IMAGES")
+    assert mailbox.save_toEML is get_config("DEFAULT_SAVE_TO_EML")
     assert mailbox.is_favorite is False
     assert mailbox.is_healthy is True
     assert isinstance(mailbox.updated, datetime.datetime)
@@ -90,28 +90,30 @@ def test_MailboxModel_unique():
 
     account = baker.make(AccountModel)
 
-    mailingList_1 = baker.make(MailboxModel, account = account)
-    mailingList_2 = baker.make(MailboxModel, account = account)
+    mailingList_1 = baker.make(MailboxModel, account=account)
+    mailingList_2 = baker.make(MailboxModel, account=account)
     assert mailingList_1.name != mailingList_2.name
     assert mailingList_1.account == mailingList_2.account
 
-    baker.make(MailboxModel, name="abc123", account = account)
+    baker.make(MailboxModel, name="abc123", account=account)
     with pytest.raises(IntegrityError):
-        baker.make(MailboxModel, name="abc123", account = account)
+        baker.make(MailboxModel, name="abc123", account=account)
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-        'protocol, expectedFetchingCriteria',
-        [
-            (IMAPFetcher.PROTOCOL, IMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
-            (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
-            (IMAP_SSL_Fetcher.PROTOCOL, IMAP_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
-            (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
-            ('EXCHANGE', [])
-        ]
+    "protocol, expectedFetchingCriteria",
+    [
+        (IMAPFetcher.PROTOCOL, IMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP_SSL_Fetcher.PROTOCOL, IMAP_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        ("EXCHANGE", []),
+    ],
 )
-def test_MailboxModel_getAvailableFetchingCriteria(mailbox, protocol: str, expectedFetchingCriteria: list[str]):
+def test_MailboxModel_getAvailableFetchingCriteria(
+    mailbox, protocol: str, expectedFetchingCriteria: list[str]
+):
     """Tests :func:`core.models.MailboxModel.MailboxModel.getAvailableFetchingCriteria`.
 
     Args:
@@ -122,3 +124,13 @@ def test_MailboxModel_getAvailableFetchingCriteria(mailbox, protocol: str, expec
     mailbox.account.protocol = protocol
     mailbox.account.save()
     assert mailbox.getAvailableFetchingCriteria() == expectedFetchingCriteria
+
+
+@pytest.mark.django_db
+def test_fetch(mocker, mailbox):
+    mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
+
+    mailbox.fetch("ALL")
+
+    mock_get_fetcher.assert_called_once()
+    mock_get_fetcher.return_value.__enter__.return_value.fetchEmails.assert_called_once()

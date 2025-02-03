@@ -97,3 +97,10 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             )
         ]
         """:attr:`name` and :attr:`account` in combination are unique."""
+
+    def fetch(self, criterion):
+        logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
+        with self.account.get_fetcher() as fetcher:
+            fetchedMails = fetcher.fetchEmails(self, criterion)
+        logger.info("Successfully fetched emails.")
+        return fetchedMails

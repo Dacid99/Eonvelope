@@ -98,7 +98,7 @@ def testAccount(account: AccountModel) -> int:
     else:
         logger.error("Account %s has unknown protocol!", str(account))
         account.is_healthy = False
-        account.save(update_fields=['is_healthy'])
+        account.save(update_fields=["is_healthy"])
         result = TestStatusCodes.ERROR
 
     logger.info("Successfully tested account to be %s.", result)
@@ -139,7 +139,7 @@ def testMailbox(mailbox: MailboxModel) -> int:
     else:
         logger.error("Account %s has unknown protocol!", str(mailbox.account))
         mailbox.is_healthy = False
-        mailbox.save(update_fields=['is_healthy'])
+        mailbox.save(update_fields=["is_healthy"])
         result = TestStatusCodes.ERROR
 
     logger.info("Successfully tested mailbox to be %s.", result)
@@ -171,10 +171,10 @@ def scanMailboxes(account: AccountModel) -> None:
             mailboxes = imapSSLFetcher.fetchMailboxes()
 
     elif account.protocol == POP3Fetcher.PROTOCOL:
-        mailboxes = [b'INBOX']
+        mailboxes = [b"INBOX"]
 
     elif account.protocol == POP3_SSL_Fetcher.PROTOCOL:
-        mailboxes = [b'INBOX']
+        mailboxes = [b"INBOX"]
 
     # elif account.protocol == ExchangeFetcher.PROTOCOL:
     #     with ExchangeFetcher(account) as exchangeMail:
@@ -210,20 +210,20 @@ def _fetchMails(mailbox: MailboxModel, criterion: str) -> list:
     """
 
     logger.info(
-        "Fetching emails with criterion %s from mailbox %s ...",
-        criterion,
-        mailbox
+        "Fetching emails with criterion %s from mailbox %s ...", criterion, mailbox
     )
     mailDataList = []
     if mailbox.account.protocol == IMAPFetcher.PROTOCOL:
         with IMAPFetcher(mailbox.account) as imapFetcher:
 
-            mailDataList = imapFetcher.fetchBySearch(mailbox=mailbox, criterion=criterion)
+            mailDataList = imapFetcher.fetchEmails(mailbox=mailbox, criterion=criterion)
 
     elif mailbox.account.protocol == IMAP_SSL_Fetcher.PROTOCOL:
         with IMAP_SSL_Fetcher(mailbox.account) as imapSSLFetcher:
 
-            mailDataList = imapSSLFetcher.fetchBySearch(mailbox=mailbox, criterion=criterion)
+            mailDataList = imapSSLFetcher.fetchEmails(
+                mailbox=mailbox, criterion=criterion
+            )
 
     elif mailbox.account.protocol == POP3Fetcher.PROTOCOL:
         with POP3Fetcher(mailbox.account) as popFetcher:
@@ -259,7 +259,9 @@ def _saveToEML(parsedMail: dict) -> None:
         parsedMail: The parsed mail to save as .eml.
     """
     try:
-        email = EMailModel.objects.get(message_id = parsedMail[ParsedMailKeys.Header.MESSAGE_ID])
+        email = EMailModel.objects.get(
+            message_id=parsedMail[ParsedMailKeys.Header.MESSAGE_ID]
+        )
         if not email.eml_filepath:
             storeMessageAsEML(parsedMail)
         if not email.prerender_filepath:
@@ -317,7 +319,7 @@ def _parseAndStoreMails(mailDataList: list, mailbox: MailboxModel) -> None:
         try:
             parsedMail = parseMail(mailData)
 
-            if get_config('THROW_OUT_SPAM'):
+            if get_config("THROW_OUT_SPAM"):
                 if _isSpam(parsedMail):
                     logger.debug("Not saving email, it is flagged as spam.")
                     continue
@@ -364,7 +366,7 @@ def fetchAndProcessMails(mailbox: MailboxModel, criterion: str) -> None:
             as returned by :func:`core.utils.fetchers.IMAPFetcher.makeFetchingCriterion`.
     """
 
-    mailDataList = _fetchMails(mailbox, criterion)
+    mailDataList = mailbox.fetch(criterion)
     _parseAndStoreMails(mailDataList, mailbox)
 
 

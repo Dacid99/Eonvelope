@@ -27,7 +27,7 @@
 - allow modification of email_name in correspondent, its arbitrary anyway
 - upload eml action with parsing
 - headers into json field
-- html and plain body
+- get rid of imagemodel again, attachmentmodel suffices
 
 ### Work in progress
 - tests

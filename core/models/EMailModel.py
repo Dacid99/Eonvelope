@@ -20,24 +20,29 @@
 
 from __future__ import annotations
 
-import email
 import email.generator
+import email.parser
 import logging
 import os
+from email import policy
 from hashlib import md5
 from typing import TYPE_CHECKING
 
-from django.db import models
-from django.utils import timezone
+from django.db import models, transaction
 
+from core import constants
 from core.constants import ParsedMailKeys
+from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.utils.fileManagment import saveStore
 from Emailkasten.utils import get_config
 
+from ..utils.mailParsing import getDatetimeHeader, getHeader
+from .AttachmentModel import AttachmentModel
+from .ImageModel import ImageModel
 from .StorageModel import StorageModel
 
 if TYPE_CHECKING:
-    from email.message import Message
+    from email.message import EmailMessage
     from io import BufferedWriter
 
     from .AccountModel import AccountModel
@@ -61,8 +66,11 @@ class EMailModel(models.Model):
     email_subject = models.CharField(max_length=255, null=True)
     """The subject header of the mail."""
 
-    bodytext = models.TextField()
-    """The bodytext of the mail."""
+    plain_bodytext = models.TextField()
+    """The plain bodytext of the mail."""
+
+    html_bodytext = models.TextField()
+    """The html bodytext of the mail."""
 
     inReplyTo: models.ForeignKey[EMailModel] = models.ForeignKey(
         "self", null=True, related_name="replies", on_delete=models.SET_NULL
@@ -291,10 +299,16 @@ class EMailModel(models.Model):
         return bool(self.x_spam) and self.x_spam != "NO"
 
     @staticmethod
-    def fromMessage(emailMessage: Message) -> EMailModel | None:
-        message_id = emailMessage.get(ParsedMailKeys.Header.MESSAGE_ID, None)
-        if not message_id:
-            message_id = md5(emailMessage.as_bytes()).hexdigest()
+    def fromEmailBytes(emailBytes: bytes) -> EMailModel | None:
+        emailMessage: EmailMessage = email.parser.BytesParser(
+            policy=policy.default
+        ).parsebytes(emailBytes)
+
+        message_id = getHeader(
+            emailMessage,
+            ParsedMailKeys.Header.MESSAGE_ID,
+            lambda: md5(emailBytes).hexdigest(),
+        )
 
         try:
             EMailModel.objects.get(message_id=message_id)
@@ -307,12 +321,11 @@ class EMailModel(models.Model):
             logger.debug("Parsing email with Message-ID %s ...", message_id)
 
         new_email = EMailModel(message_id=message_id)
-        new_email.datetime = emailMessage.get(
-            ParsedMailKeys.Header.DATE, timezone.now()
-        )
-        new_email.email_subject = emailMessage.get(ParsedMailKeys.Header.SUBJECT, None)
-        if inReplyTo_message_id := emailMessage.get(
-            ParsedMailKeys.Header.IN_REPLY_TO, None
+        new_email.datetime = getDatetimeHeader(emailMessage)
+        new_email.email_subject = getHeader(emailMessage, ParsedMailKeys.Header.SUBJECT)
+        new_email.datasize = len(emailBytes)
+        if inReplyTo_message_id := getHeader(
+            emailMessage, ParsedMailKeys.Header.IN_REPLY_TO
         ):
             try:
                 new_email.inReplyTo = EMailModel.objects.get(
@@ -320,37 +333,97 @@ class EMailModel(models.Model):
                 )
             except EMailModel.DoesNotExist:
                 new_email.inReplyTo = None
-        new_email.comments = emailMessage.get(ParsedMailKeys.Header.COMMENTS, None)
-        new_email.keywords = emailMessage.get(ParsedMailKeys.Header.KEYWORDS, None)
-        new_email.importance = emailMessage.get(ParsedMailKeys.Header.IMPORTANCE, None)
-        new_email.priority = emailMessage.get(ParsedMailKeys.Header.PRIORITY, None)
-        new_email.precedence = emailMessage.get(ParsedMailKeys.Header.PRECEDENCE, None)
-        new_email.received = (
-            "\n".join(emailMessage.get_all(ParsedMailKeys.Header.RECEIVED, [])) or None
+        new_email.comments = getHeader(emailMessage, ParsedMailKeys.Header.COMMENTS)
+        new_email.keywords = getHeader(emailMessage, ParsedMailKeys.Header.KEYWORDS)
+        new_email.importance = getHeader(emailMessage, ParsedMailKeys.Header.IMPORTANCE)
+        new_email.priority = getHeader(emailMessage, ParsedMailKeys.Header.PRIORITY)
+        new_email.precedence = getHeader(emailMessage, ParsedMailKeys.Header.PRECEDENCE)
+        new_email.received = getHeader(
+            emailMessage, ParsedMailKeys.Header.RECEIVED, joiningString="\n"
         )
-        new_email.user_agent = emailMessage.get(ParsedMailKeys.Header.USER_AGENT, None)
-        new_email.auto_submitted = emailMessage.get(
-            ParsedMailKeys.Header.AUTO_SUBMITTED, None
+        new_email.user_agent = getHeader(emailMessage, ParsedMailKeys.Header.USER_AGENT)
+        new_email.auto_submitted = getHeader(
+            emailMessage, ParsedMailKeys.Header.AUTO_SUBMITTED
         )
-        new_email.content_type = emailMessage.get(
-            ParsedMailKeys.Header.CONTENT_TYPE, None
+        new_email.content_type = getHeader(
+            emailMessage, ParsedMailKeys.Header.CONTENT_TYPE
         )
-        new_email.content_language = emailMessage.get(
-            ParsedMailKeys.Header.CONTENT_LANGUAGE, None
+        new_email.content_language = getHeader(
+            emailMessage, ParsedMailKeys.Header.CONTENT_LANGUAGE
         )
-        new_email.content_location = emailMessage.get(
-            ParsedMailKeys.Header.CONTENT_LOCATION, None
+        new_email.content_location = getHeader(
+            emailMessage, ParsedMailKeys.Header.CONTENT_LOCATION
         )
-        new_email.x_priority = emailMessage.get(ParsedMailKeys.Header.X_PRIORITY, None)
-        new_email.x_originated_client = emailMessage.get(
-            ParsedMailKeys.Header.X_ORIGINATING_CLIENT, None
+        new_email.x_priority = getHeader(emailMessage, ParsedMailKeys.Header.X_PRIORITY)
+        new_email.x_originated_client = getHeader(
+            emailMessage, ParsedMailKeys.Header.X_ORIGINATING_CLIENT
         )
-        new_email.x_spam = emailMessage.get(ParsedMailKeys.Header.X_SPAM_FLAG, None)
+        new_email.x_spam = getHeader(emailMessage, ParsedMailKeys.Header.X_SPAM_FLAG)
 
-        if emailMessage.is_multipart():
-            for part in emailMessage.walk():
-                pass
+        fromCorrespondentHeader = getHeader(
+            emailMessage, ParsedMailKeys.Correspondent.FROM
+        )
+        fromCorrespondent = EMailCorrespondentsModel.fromHeader(
+            fromCorrespondentHeader, mention
+        )
+        emailCorrespondents = []
+        for mention in ParsedMailKeys.Correspondent:
+            correspondentHeader = getHeader(emailMessage, mention)
+            if correspondentHeader:
+                for header in correspondentHeader.split(","):
+                    emailCorrespondents.append(
+                        EMailCorrespondentsModel.fromHeader(header, mention)
+                    )
+        new_email.mailinglist = MailingListModel.fromMessage(
+            emailMessage, correspondent=fromCorrespondent
+        )
 
+        new_email.plain_bodytext = ""
+        new_email.html_bodytext = ""
+        attachments = []
+        images = []
+
+        for part in emailMessage.walk():
+            contentType = part.get_content_type()
+            contentDisposition = part.get_content_disposition()
+            # The order in this switch is crucial
+            # Rare email parts should be in the back
+            if contentType == "text/plain":
+                body_bytes = part.get_payload(decode=True)
+                encoding = part.get_content_charset("utf-8")
+                new_email.plain_bodytext += body_bytes.decode(
+                    encoding, errors="replace"
+                )
+            elif contentType == "text/html":
+                body_bytes = part.get_payload(decode=True)
+                encoding = part.get_content_charset("utf-8")
+                new_email.html_bodytext += body_bytes.decode(encoding, errors="replace")
+            # attachments must be before images to avoid doubling
+            elif contentDisposition == "attachment":
+                attachments.append(AttachmentModel.fromData(part, email=new_email))
+            elif contentType.startswith("image/"):
+                images.append(ImageModel.fromData(part, email=new_email))
+            elif contentType in constants.ParsingConfiguration.APPLICATION_TYPES:
+                attachments.append(AttachmentModel.fromData(part, email=new_email))
+            else:
+                logger.debug(
+                    "Part %s with disposition %s of email %s were not parsed.",
+                    contentType,
+                    contentDisposition,
+                    new_email.message_id,
+                )
         logger.debug("Successfully parsed email.")
-
+        try:
+            with transaction.atomic():
+                for emailCorrespondent in emailCorrespondents:
+                    if emailCorrespondent:
+                        emailCorrespondent.correspondent.save()
+                if new_email.mailinglist:
+                    new_email.mailinglist.save()
+                new_email.save()
+                for emailCorrespondent in emailCorrespondents:
+                    if emailCorrespondent:
+                        emailCorrespondent.save()
+        except Exception:
+            return None
         return new_email

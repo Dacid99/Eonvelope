@@ -143,10 +143,11 @@ class ImageModel(models.Model):
         logger.debug("Successfully stored image.")
 
     @staticmethod
-    def fromData(imageData: Message[str, str]) -> ImageModel:
+    def fromData(imageData: Message[str, str], email=None) -> ImageModel:
         new_image = ImageModel()
 
         new_image.file_name = imageData.get_filename()
         new_image.datasize = len(imageData.as_bytes())
+        new_image.email = email
 
         return new_image

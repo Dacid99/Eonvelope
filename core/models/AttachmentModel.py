@@ -145,10 +145,11 @@ class AttachmentModel(models.Model):
         logger.debug("Successfully stored attachment.")
 
     @staticmethod
-    def fromData(attachmentData: Message[str, str]) -> AttachmentModel:
+    def fromData(attachmentData: Message[str, str], email=None) -> AttachmentModel:
         new_attachment = AttachmentModel()
 
         new_attachment.file_name = attachmentData.get_filename()
         new_attachment.datasize = len(attachmentData.as_bytes())
+        new_attachment.email = email
 
         return new_attachment

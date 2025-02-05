@@ -32,15 +32,20 @@ import email.header
 import email.message
 import email.utils
 import logging
-from typing import TYPE_CHECKING
+from email.utils import parsedate_to_datetime
+from operator import add
+from typing import TYPE_CHECKING, Callable
 
+import charset_normalizer
 import email_validator
+from django.utils import timezone
 from imap_tools.imap_utf7 import utf7_decode
 
 from core.constants import ParsedMailKeys, ParsingConfiguration
 from Emailkasten.utils import get_config
 
 if TYPE_CHECKING:
+    from email.message import EmailMessage
     from typing import Any
 
 
@@ -83,11 +88,16 @@ def _decodeHeader(header: str) -> str:
     decodedString = ""
     for fragment, charset in decodedFragments:
         if not charset:
-            decodedString += (
-                fragment.decode(get_config("DEFAULT_CHARSET"), errors="replace")
-                if isinstance(fragment, bytes)
-                else fragment
-            )
+            if isinstance(fragment, bytes):
+                charsetMatch = charset_normalizer.from_bytes(fragment).best()
+                encoding = (
+                    charsetMatch.encoding
+                    if charsetMatch
+                    else get_config("DEFAULT_CHARSET")
+                )
+                decodedString += fragment.decode(encoding, errors="replace")
+            else:
+                decodedString += fragment
         else:
             decodedString += (
                 fragment.decode(charset, errors="replace")
@@ -96,6 +106,28 @@ def _decodeHeader(header: str) -> str:
             )
 
     return decodedString
+
+
+def getHeader(
+    emailMessage: EmailMessage,
+    headerName: str,
+    joiningString=", ",
+    fallbackCallable: Callable[[], str] = lambda: None,
+) -> str:
+    """Shorthand to safely get a header from a :class:`email.message.EmailMessage`.
+    Args:
+        emailMessage: The message to get the header from.
+        headerName: The name of the header field.
+        fallbackCallable: A callable that provides a fallback if the field is not found.
+            Is only executed if required. Defaults to `lambda: None`.
+    Returns:
+        The decoded header field as a string if found
+        else the return of the :attr:`fallbackCallable`.
+    """
+    encoded_header = emailMessage.get_all(headerName, [])
+    if not encoded_header:
+        return fallbackCallable()
+    return joiningString.join([_decodeHeader(header) for header in encoded_header])
 
 
 def separateRFC2822MailAddressFormat(mailers: list[str]) -> list[tuple[str, str]]:
@@ -124,6 +156,38 @@ def separateRFC2822MailAddressFormat(mailers: list[str]) -> list[tuple[str, str]
 
         separatedMailers.append((mailName, mailAddress))
     return separatedMailers
+
+
+def getDatetimeHeader(mailMessage: email.message.Message) -> datetime.datetime:
+    """Parses the date header of the given mailmessage.
+    If an error occurs uses the current time as fallback.
+    No timezone info in the header is interpreted as UTC.
+
+    Note:
+        Uses :func:`email.utils.parsedate_to_datetime`
+        and :func:`django.utils.timezone.make_aware`.
+
+    Args:
+        mailMessage: The mailmessage to get the datetime header from.
+
+    Returns:
+        The timezone aware datetime header.
+    """
+    logger.debug("Parsing date ...")
+    date = getHeader(mailMessage, ParsedMailKeys.Header.DATE, lambda: None)
+    if not date:
+        logger.warning("No DATE found in mail, resorting to default!")
+        return timezone.now()
+    else:
+        try:
+            parsedDatetime = email.utils.parsedate_to_datetime(date)
+        except ValueError:
+            return timezone.now()
+        try:
+            timezone.make_aware(parsedDatetime, timezone.utc)
+        except ValueError:
+            pass
+        return parsedDatetime
 
 
 def _parseMessageID(mailMessage: email.message.Message, parsedMail: dict):
@@ -164,14 +228,12 @@ def _parseDate(mailMessage: email.message.Message, parsedMail: dict):
         None, the parsed header is appended to the parsedMail dict.
     """
     logger.debug("Parsing date ...")
-    date = mailMessage.get(ParsedMailKeys.Header.DATE)
+    date = getHeader(mailMessage, ParsedMailKeys.Header.DATE, lambda: None)
     if not date:
         logger.warning("No DATE found in mail, resorting to default!")
-        parsedDate = datetime.datetime.strptime(
-            get_config("DEFAULT_MAILDATE"), ParsingConfiguration.DATE_FORMAT
-        )
+        return timezone.now()
     else:
-        parsedDate = email.utils.parsedate_to_datetime(_decodeHeader(date))
+        parsedDate = email.utils.parsedate_to_datetime(date)
     parsedMail[ParsedMailKeys.Header.DATE] = parsedDate
 
 
@@ -251,7 +313,6 @@ def _parseImages(mailMessage: email.message.Message, parsedMail: dict):
     Returns:
         A list of images in the mailmessage.
         Empty if none are found or the message is not multipart.
-
 
     Returns:
         None, the parsed header is appended to the parsedMail dict.

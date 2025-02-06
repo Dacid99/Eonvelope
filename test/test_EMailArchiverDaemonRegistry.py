@@ -17,10 +17,12 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 
-from .models.test_DaemonModel import fixture_mock_open
+.
 from .models.test_DaemonModel import fixture_daemonModel
+
 
 @pytest.fixture(name='mock_logger')
 def fixture_mock_logger(mocker, monkeypatch):

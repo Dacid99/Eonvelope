@@ -120,7 +120,4 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
                 Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
                 f"daemon_{self.uuid}.log",
             )
-            if not os.path.exists(self.log_filepath):
-                with open(self.log_filepath, "w"):
-                    pass
         super().save(*args, **kwargs)

@@ -245,7 +245,7 @@ class EMailModel(models.Model):
         to throw out spam and save the data to eml if configured.
         """
         if self.isSpam() and get_config("THROW_OUT_SPAM"):
-            return None
+            return
         super().save(*args, **kwargs)
         if "emailData" in kwargs and get_config("SAVE_TO_EML"):
             self.save_to_storage(kwargs["emailData"])

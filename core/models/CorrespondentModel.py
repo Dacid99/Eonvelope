@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import logging
 from email.utils import parseaddr
-from statistics import correlation
 
 import email_validator
 from django.db import models

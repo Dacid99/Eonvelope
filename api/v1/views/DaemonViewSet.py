@@ -33,7 +33,6 @@ from rest_framework.response import Response
 
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from core.models.DaemonModel import DaemonModel
-from Emailkasten.utils import get_config
 
 from ..filters.DaemonFilter import DaemonFilter
 from ..serializers.daemon_serializers.BaseDaemonSerializer import BaseDaemonSerializer

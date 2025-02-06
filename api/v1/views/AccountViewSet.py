@@ -79,7 +79,9 @@ class AccountViewSet(viewsets.ModelViewSet):
         """
         try:
             serializer.save(user=self.request.user)
-        except IntegrityError:
+        except (
+            IntegrityError
+        ):  # pylint: disable-next=raise-missing-from ; raising with from is unnecessary here
             raise ValidationError({"detail": "This account already exists!"})
 
     URL_PATH_UPDATE_MAILBOXES = "update-mailboxes"

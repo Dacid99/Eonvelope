@@ -39,6 +39,7 @@ from Emailkasten.utils import get_config
 from ..utils.mailParsing import getDatetimeHeader, getHeader
 from .AttachmentModel import AttachmentModel
 from .ImageModel import ImageModel
+from .MailingListModel import MailingListModel
 from .StorageModel import StorageModel
 
 if TYPE_CHECKING:
@@ -47,7 +48,6 @@ if TYPE_CHECKING:
 
     from .AccountModel import AccountModel
     from .CorrespondentModel import CorrespondentModel
-    from .MailingListModel import MailingListModel
 
 
 logger = logging.getLogger(__name__)
@@ -66,11 +66,11 @@ class EMailModel(models.Model):
     email_subject = models.CharField(max_length=255, null=True)
     """The subject header of the mail."""
 
-    plain_bodytext = models.TextField()
+    bodytext = models.TextField()
     """The plain bodytext of the mail."""
 
-    html_bodytext = models.TextField()
-    """The html bodytext of the mail."""
+    # html_bodytext = models.TextField()
+    # """The html bodytext of the mail."""
 
     inReplyTo: models.ForeignKey[EMailModel] = models.ForeignKey(
         "self", null=True, related_name="replies", on_delete=models.SET_NULL
@@ -299,7 +299,9 @@ class EMailModel(models.Model):
         return bool(self.x_spam) and self.x_spam != "NO"
 
     @staticmethod
-    def fromEmailBytes(emailBytes: bytes) -> EMailModel | None:
+    def fromEmailBytes(
+        emailBytes: bytes, account: AccountModel = None
+    ) -> EMailModel | None:
         emailMessage: EmailMessage = email.parser.BytesParser(
             policy=policy.default
         ).parsebytes(emailBytes)
@@ -320,7 +322,7 @@ class EMailModel(models.Model):
         except EMailModel.DoesNotExist:
             logger.debug("Parsing email with Message-ID %s ...", message_id)
 
-        new_email = EMailModel(message_id=message_id)
+        new_email = EMailModel(message_id=message_id, account=account)
         new_email.datetime = getDatetimeHeader(emailMessage)
         new_email.email_subject = getHeader(emailMessage, ParsedMailKeys.Header.SUBJECT)
         new_email.datasize = len(emailBytes)
@@ -364,7 +366,7 @@ class EMailModel(models.Model):
             emailMessage, ParsedMailKeys.Correspondent.FROM
         )
         fromCorrespondent = EMailCorrespondentsModel.fromHeader(
-            fromCorrespondentHeader, mention
+            fromCorrespondentHeader, ParsedMailKeys.Correspondent.FROM
         )
         emailCorrespondents = []
         for mention in ParsedMailKeys.Correspondent:
@@ -378,8 +380,8 @@ class EMailModel(models.Model):
             emailMessage, correspondent=fromCorrespondent
         )
 
-        new_email.plain_bodytext = ""
-        new_email.html_bodytext = ""
+        new_email.bodytext = ""
+        # new_email.html_bodytext = ""
         attachments = []
         images = []
 
@@ -389,15 +391,13 @@ class EMailModel(models.Model):
             # The order in this switch is crucial
             # Rare email parts should be in the back
             if contentType == "text/plain":
-                body_bytes = part.get_payload(decode=True)
+                payload = part.get_payload(decode=True)
                 encoding = part.get_content_charset("utf-8")
-                new_email.plain_bodytext += body_bytes.decode(
-                    encoding, errors="replace"
-                )
-            elif contentType == "text/html":
-                body_bytes = part.get_payload(decode=True)
-                encoding = part.get_content_charset("utf-8")
-                new_email.html_bodytext += body_bytes.decode(encoding, errors="replace")
+                new_email.bodytext += payload.decode(encoding, errors="replace")
+            # elif contentType == "text/html":
+            #     payload = part.get_payload(decode=True)
+            #     encoding = part.get_content_charset("utf-8")
+            #     new_email.html_bodytext += payload.decode(encoding, errors="replace")
             # attachments must be before images to avoid doubling
             elif contentDisposition == "attachment":
                 attachments.append(AttachmentModel.fromData(part, email=new_email))

@@ -113,6 +113,14 @@ class ImageModel(models.Model):
                     exc_info=True,
                 )
 
+    def save(self, *args, **kwargs):
+        """Extended :django::func:`django.models.Model.save` method
+        to save the data to storage if configured.
+        """
+        super().save(*args, **kwargs)
+        if "imageData" in kwargs and get_config("SAVE_IMAGES"):
+            self.save_to_storage(kwargs["imageData"])
+
     def save_to_storage(self, imageData: Message[str, str]):
         """Saves the image file to the storage.
         If the file already exists, does not overwrite.

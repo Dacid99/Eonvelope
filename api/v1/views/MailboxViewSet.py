@@ -32,8 +32,8 @@ from rest_framework.response import Response
 from core import constants
 from core.constants import TestStatusCodes
 from core.models.DaemonModel import DaemonModel
+from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
-from core.utils.mailProcessing import fetchAndProcessMails
 
 from ..filters.MailboxFilter import MailboxFilter
 from ..serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
@@ -158,7 +158,12 @@ class MailboxViewSet(viewsets.ModelViewSet):
         """
         mailbox = self.get_object()
 
-        fetchAndProcessMails(mailbox, constants.MailFetchingCriteria.ALL)
+        with mailbox.account.get_fetcher() as fetcher:
+            fetchedEmailBytes = fetcher.fetch(
+                mailbox, constants.MailFetchingCriteria.ALL
+            )
+        for emailBytes in fetchedEmailBytes:
+            EMailModel.createFromEmailBytes(emailBytes)
 
         mailboxSerializer = self.get_serializer(mailbox)
         return Response(

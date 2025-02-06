@@ -18,7 +18,10 @@
 
 """Module with the :class:`MailboxModel` model class."""
 
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
@@ -30,6 +33,10 @@ from ..utils.fetchers.IMAPFetcher import IMAPFetcher
 from ..utils.fetchers.POP3Fetcher import POP3Fetcher
 from ..utils.mailParsing import parseMailboxName
 
+if TYPE_CHECKING:
+    from .AccountModel import AccountModel
+
+
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
@@ -40,7 +47,7 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
     name = models.CharField(max_length=255)
     """The mailaccount internal name of the mailbox. Unique together with :attr:`account`."""
 
-    account = models.ForeignKey(
+    account: models.ForeignKey[AccountModel] = models.ForeignKey(
         "AccountModel", related_name="mailboxes", on_delete=models.CASCADE
     )
     """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
@@ -133,7 +140,7 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         return fetchedMails
 
     @staticmethod
-    def fromData(mailboxData):
-        new_mailbox = MailboxModel()
+    def fromData(mailboxData, account=None):
+        new_mailbox = MailboxModel(account=account)
         new_mailbox.name = parseMailboxName(mailboxData)
         return new_mailbox

@@ -152,8 +152,7 @@ class AccountModel(DirtyFieldsMixin, models.Model):
             mailboxList = fetcher.fetchMailboxes()
 
         for mailboxData in mailboxList:
-            mailbox = MailboxModel.fromData(mailboxData)
-            mailbox.account = self
+            mailbox = MailboxModel.fromData(mailboxData, self)
 
             logger.debug("Saving mailbox %s from %s to db ...", mailbox, self)
             try:

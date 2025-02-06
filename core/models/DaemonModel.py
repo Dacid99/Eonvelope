@@ -17,10 +17,12 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`DaemonModel` model class."""
+from __future__ import annotations
 
 import logging
 import os
 import uuid
+from typing import TYPE_CHECKING
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
@@ -29,6 +31,9 @@ import Emailkasten.constants
 from Emailkasten.utils import get_config
 
 from .. import constants
+
+if TYPE_CHECKING:
+    from .MailboxModel import MailboxModel
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -40,7 +45,7 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     """The uuid of this daemon. Used to create a unique logfile."""
 
-    mailbox = models.ForeignKey(
+    mailbox: models.ForeignKey[MailboxModel] = models.ForeignKey(
         "MailboxModel", related_name="daemons", on_delete=models.CASCADE
     )
     """The mailbox this daemon fetches. Unique. Deletion of that :attr:`mailbox` deletes this daemon."""

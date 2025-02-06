@@ -188,14 +188,6 @@ class EMailModel(models.Model):
         ]
         """`message_id` and :attr:`account` in combination are unique."""
 
-    def save(self, *args, **kwargs):
-        """Extended :django::func:`django.models.Model.save` method
-        to throw out spam if configured.
-        """
-        if get_config("THROW_OUT_SPAM") and self.isSpam():
-            return None
-        return super().save(*args, **kwargs)
-
     def delete(self, *args, **kwargs):
         """Extended :django::func:`django.models.Model.delete` method
         to delete :attr:`eml_filepath` and :attr:`prerender_filepath` files on deletion.
@@ -248,6 +240,16 @@ class EMailModel(models.Model):
                     exc_info=True,
                 )
 
+    def save(self, *args, **kwargs):
+        """Extended :django::func:`django.models.Model.save` method
+        to throw out spam and save the data to eml if configured.
+        """
+        if self.isSpam() and get_config("THROW_OUT_SPAM"):
+            return None
+        super().save(*args, **kwargs)
+        if "emailData" in kwargs and get_config("SAVE_TO_EML"):
+            self.save_to_storage(kwargs["emailData"])
+
     def save_to_storage(self, emailData):
         """Saves the email to the storage in eml format.
         If the file already exists, does not overwrite.
@@ -299,7 +301,7 @@ class EMailModel(models.Model):
         return bool(self.x_spam) and self.x_spam != "NO"
 
     @staticmethod
-    def fromEmailBytes(
+    def createFromEmailBytes(
         emailBytes: bytes, account: AccountModel = None
     ) -> EMailModel | None:
         emailMessage: EmailMessage = email.parser.BytesParser(
@@ -362,28 +364,22 @@ class EMailModel(models.Model):
         )
         new_email.x_spam = getHeader(emailMessage, ParsedMailKeys.Header.X_SPAM_FLAG)
 
-        fromCorrespondentHeader = getHeader(
-            emailMessage, ParsedMailKeys.Correspondent.FROM
-        )
-        fromCorrespondent = EMailCorrespondentsModel.fromHeader(
-            fromCorrespondentHeader, ParsedMailKeys.Correspondent.FROM
-        )
+        new_email.mailinglist = MailingListModel.fromMessage(emailMessage)
         emailCorrespondents = []
-        for mention in ParsedMailKeys.Correspondent:
+        for mention in ParsedMailKeys.Correspondent():
             correspondentHeader = getHeader(emailMessage, mention)
             if correspondentHeader:
                 for header in correspondentHeader.split(","):
                     emailCorrespondents.append(
                         EMailCorrespondentsModel.fromHeader(header, mention)
                     )
-        new_email.mailinglist = MailingListModel.fromMessage(
-            emailMessage, correspondent=fromCorrespondent
-        )
+                    if correspondentHeader == ParsedMailKeys.Correspondent.FROM:
+                        new_email.mailinglist.correspondent = emailCorrespondents[-1]
 
         new_email.bodytext = ""
         # new_email.html_bodytext = ""
-        attachments = []
-        images = []
+        attachments = {}
+        images = {}
 
         for part in emailMessage.walk():
             contentType = part.get_content_type()
@@ -400,11 +396,11 @@ class EMailModel(models.Model):
             #     new_email.html_bodytext += payload.decode(encoding, errors="replace")
             # attachments must be before images to avoid doubling
             elif contentDisposition == "attachment":
-                attachments.append(AttachmentModel.fromData(part, email=new_email))
+                attachments[AttachmentModel.fromData(part, email=new_email)] = part
             elif contentType.startswith("image/"):
-                images.append(ImageModel.fromData(part, email=new_email))
+                images[ImageModel.fromData(part, email=new_email)] = part
             elif contentType in constants.ParsingConfiguration.APPLICATION_TYPES:
-                attachments.append(AttachmentModel.fromData(part, email=new_email))
+                attachments[AttachmentModel.fromData(part, email=new_email)] = part
             else:
                 logger.debug(
                     "Part %s with disposition %s of email %s were not parsed.",
@@ -420,10 +416,14 @@ class EMailModel(models.Model):
                         emailCorrespondent.correspondent.save()
                 if new_email.mailinglist:
                     new_email.mailinglist.save()
-                new_email.save()
+                new_email.save(emailData=emailBytes)
                 for emailCorrespondent in emailCorrespondents:
                     if emailCorrespondent:
                         emailCorrespondent.save()
+                for attachment, data in attachments.items():
+                    attachment.save(attachmentData=data)
+                for image, data in images.items():
+                    image.save(imageData=data)
         except Exception:
             return None
         return new_email

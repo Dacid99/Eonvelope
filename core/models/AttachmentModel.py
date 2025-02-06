@@ -115,6 +115,14 @@ class AttachmentModel(models.Model):
                     exc_info=True,
                 )
 
+    def save(self, *args, **kwargs):
+        """Extended :django::func:`django.models.Model.save` method
+        to save the data to storage if configured.
+        """
+        super().save(*args, **kwargs)
+        if "attachmentData" in kwargs and get_config("SAVE_ATTACHMENTS"):
+            self.save_to_storage(kwargs["attachmentData"])
+
     def save_to_storage(self, attachmentData: Message[str, str]):
         """Saves the attachment file to the storage.
         If the file already exists, does not overwrite.

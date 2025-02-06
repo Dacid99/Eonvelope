@@ -28,6 +28,7 @@
 - upload eml action with parsing
 - headers into json field
 - get rid of imagemodel again, attachmentmodel suffices
+- mailinglist.correspondent is redundant
 
 ### Work in progress
 - tests

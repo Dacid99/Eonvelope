@@ -262,7 +262,7 @@ class EMailModel(models.Model):
             emailData: The data of the email to be saved.
         """
         if self.eml_filepath:
-            logger.debug("Email %s is already stored as eml.", self)
+            logger.debug("%s is already stored as eml.", self)
             return
 
         @saveStore
@@ -270,15 +270,16 @@ class EMailModel(models.Model):
             emlGenerator = email.generator.BytesGenerator(emlFile)
             emlGenerator.flatten(emailData)
 
-        logger.debug("Storing images %s ...", self)
+        logger.debug("Storing %s as eml ...", self)
 
         dirPath = StorageModel.getSubdirectory(self.message_id)
         preliminary_file_path = os.path.join(dirPath, self.message_id + ".eml")
-
-        self.eml_filepath = writeMessageToEML(preliminary_file_path, emailData)
-        self.save(update_fields=["eml_filepath"])
-
-        logger.debug("Successfully stored image.")
+        if file_path := writeMessageToEML(preliminary_file_path, emailData):
+            self.eml_filepath = file_path
+            self.save(update_fields=["eml_filepath"])
+            logger.debug("Successfully stored email as eml.")
+        else:
+            logger.error("Failed to store %s as eml!", self)
 
     def subConversation(self) -> list:
         subConversationEmails = [self]
@@ -304,10 +305,7 @@ class EMailModel(models.Model):
     def createFromEmailBytes(
         emailBytes: bytes, account: AccountModel = None
     ) -> EMailModel | None:
-        emailMessage: EmailMessage = email.parser.BytesParser(
-            policy=policy.default
-        ).parsebytes(emailBytes)
-
+        emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)
         message_id = getHeader(
             emailMessage,
             ParsedMailKeys.Header.MESSAGE_ID,

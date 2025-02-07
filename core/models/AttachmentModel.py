@@ -142,15 +142,17 @@ class AttachmentModel(models.Model):
         def writeAttachment(file: BufferedWriter, attachmentData: Message[str, str]):
             file.write(attachmentData.get_payload(decode=True))
 
-        logger.debug("Storing attachment %s ...", self)
+        logger.debug("Storing %s ...", self)
 
         dirPath = StorageModel.getSubdirectory(self.email.message_id)
         preliminary_file_path = os.path.join(dirPath, self.file_name)
 
-        self.file_path = writeAttachment(preliminary_file_path, attachmentData)
-        self.save(update_fields=["file_path"])
-
-        logger.debug("Successfully stored attachment.")
+        if file_path := writeAttachment(preliminary_file_path, attachmentData):
+            self.file_path = file_path
+            self.save(update_fields=["file_path"])
+            logger.debug("Successfully stored attachment.")
+        else:
+            logger.error("Failed to store %s!", self)
 
     @staticmethod
     def fromData(attachmentData: Message[str, str], email=None) -> AttachmentModel:

@@ -140,15 +140,17 @@ class ImageModel(models.Model):
         def writeImage(file: BufferedWriter, imageData: Message[str, str]):
             file.write(imageData.get_payload(decode=True))
 
-        logger.debug("Storing image %s ...", self)
+        logger.debug("Storing %s ...", self)
 
         dirPath = StorageModel.getSubdirectory(self.email.message_id)
         preliminary_file_path = os.path.join(dirPath, self.file_name)
 
-        self.file_path = writeImage(preliminary_file_path, imageData)
-        self.save(update_fields=["file_path"])
-
-        logger.debug("Successfully stored image.")
+        if file_path := writeImage(preliminary_file_path, imageData):
+            self.file_path = file_path
+            self.save(update_fields=["file_path"])
+            logger.debug("Successfully stored image.")
+        else:
+            logger.error("Failed to store %s!", self)
 
     @staticmethod
     def fromData(imageData: Message[str, str], email=None) -> ImageModel:

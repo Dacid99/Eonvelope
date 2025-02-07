@@ -23,13 +23,15 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.models.EMailModel import EMailModel
-from ..attachment_serializers.BaseAttachmentSerializer import \
-    BaseAttachmentSerializer
-from ..emailcorrespondents_serializers.EMailCorrespondentsSerializer import \
-    EMailCorrespondentSerializer
+
+from ..attachment_serializers.BaseAttachmentSerializer import BaseAttachmentSerializer
+from ..emailcorrespondents_serializers.EMailCorrespondentsSerializer import (
+    EMailCorrespondentSerializer,
+)
 from ..image_serializers.BaseImageSerializer import BaseImageSerializer
-from ..mailinglist_serializers.SimpleMailingListSerializer import \
-    SimpleMailingListSerializer
+from ..mailinglist_serializers.SimpleMailingListSerializer import (
+    SimpleMailingListSerializer,
+)
 from .BaseEMailSerializer import BaseEMailSerializer
 
 
@@ -41,6 +43,7 @@ class FullEMailSerializer(BaseEMailSerializer):
     :attr:`core.models.EMailModel.EMailModel.mailinglist` and
     :attr:`core.models.EMailModel.EMailModel.correspondents` foreign key and related fields.
     """
+
     replies = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     """The replies mails are included by id only to prevent recursion."""
 
@@ -68,8 +71,7 @@ class FullEMailSerializer(BaseEMailSerializer):
     class Meta(BaseEMailSerializer.Meta):
         """Metadata class for the serializer."""
 
-
-    def get_correspondents(self, object: EMailModel) -> ReturnDict|None:
+    def get_correspondents(self, object: EMailModel) -> ReturnDict | None:
         """Serializes the correspondents connected to the instance to be serialized.
 
         Args:
@@ -79,10 +81,14 @@ class FullEMailSerializer(BaseEMailSerializer):
             The serialized correspondents connected to the instance to be serialized.
             An empty list if the the user is not authenticated.
         """
-        request = self.context.get('request')
+        request = self.context.get("request")
         user = request.user if request else None
-        if user:
-            emailcorrespondents = EMailCorrespondentsModel.objects.filter(email=object, email__account__user=user).distinct()
-            return EMailCorrespondentSerializer(emailcorrespondents, many=True, read_only=True).data
+        if user is not None:
+            emailcorrespondents = EMailCorrespondentsModel.objects.filter(
+                email=object, email__account__user=user
+            ).distinct()
+            return EMailCorrespondentSerializer(
+                emailcorrespondents, many=True, read_only=True
+            ).data
         else:
             return []

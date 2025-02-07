@@ -194,7 +194,7 @@ class IMAPFetcher:
 
             self.logger.debug("Successfully tested %s.", str(self.account))
 
-            if mailbox:
+            if mailbox is not None:
                 self.logger.debug("Testing %s ...", str(mailbox))
 
                 if mailbox.account != self.account:

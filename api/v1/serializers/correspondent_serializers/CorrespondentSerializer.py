@@ -23,10 +23,13 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 from core.models.CorrespondentModel import CorrespondentModel
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from ..emailcorrespondents_serializers.CorrespondentEMailSerializer import \
-    CorrespondentEMailSerializer
-from ..mailinglist_serializers.SimpleMailingListSerializer import \
-    SimpleMailingListSerializer
+
+from ..emailcorrespondents_serializers.CorrespondentEMailSerializer import (
+    CorrespondentEMailSerializer,
+)
+from ..mailinglist_serializers.SimpleMailingListSerializer import (
+    SimpleMailingListSerializer,
+)
 from .BaseCorrespondentSerializer import BaseCorrespondentSerializer
 
 
@@ -51,8 +54,7 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
     class Meta(BaseCorrespondentSerializer.Meta):
         """Metadata class for the serializer."""
 
-
-    def get_emails(self, object: CorrespondentModel) -> ReturnDict|None:
+    def get_emails(self, object: CorrespondentModel) -> ReturnDict | None:
         """Serializes the emails connected to the instance to be serialized.
 
         Args:
@@ -62,10 +64,14 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
             The serialized emails connected to the instance to be serialized.
             An empty list if the the user is not authenticated.
         """
-        request = self.context.get('request')
+        request = self.context.get("request")
         user = request.user if request else None
-        if user:
-            correspondentemails = EMailCorrespondentsModel.objects.filter(correspondent=object, email__account__user=user).distinct()
-            return CorrespondentEMailSerializer(correspondentemails, many=True, read_only=True).data
+        if user is not None:
+            correspondentemails = EMailCorrespondentsModel.objects.filter(
+                correspondent=object, email__account__user=user
+            ).distinct()
+            return CorrespondentEMailSerializer(
+                correspondentemails, many=True, read_only=True
+            ).data
         else:
             return []

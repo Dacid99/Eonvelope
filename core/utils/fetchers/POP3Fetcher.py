@@ -166,7 +166,7 @@ class POP3Fetcher:
             self.account.save(update_fields=["is_healthy"])
             self.logger.debug("Successfully tested %s.", str(self.account))
 
-            if mailbox:
+            if mailbox is not None:
                 self.logger.debug("Testing %s ...", str(mailbox))
 
                 status, response, _ = self._mailhost.list()

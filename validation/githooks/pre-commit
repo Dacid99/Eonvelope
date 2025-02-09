@@ -15,8 +15,7 @@ fi
 isort $CHANGED_FILES
 
 black --config=validation/black_config $CHANGED_FILES > validation/reports/black_precommit.ansi
-EXIT_CODE = $?
-if $EXIT_CODE -ne 0; then
+if [ $? -ne 0 ]; then
   echo "Formatting code failed, please check validation/reports/black_precommit.ansi ."
   exit 1
 fi
@@ -25,22 +24,19 @@ git add $CHANGED_FILES
 
 # lint
 pylint --rcfile=validation/pylintrc_code $CHANGED_FILES > validation/reports/pylint_code_precommit.ansi
-EXIT_CODE = $?
-if $EXIT_CODE -ne 0; then
+if [ $? -ne 0 ]; then
   echo "Pylinting code failed, please check validation/reports/pylint_code_precommit.ansi ."
   exit 1
 fi
 
 pylint --rcfile=validation/pylintrc_docs $CHANGED_FILES > validation/reports/pylint_docs_precommit.ansi
-EXIT_CODE = $?
-if $EXIT_CODE -ne 0; then
+if [ $? -ne 0 ]; then
   echo "Pylinting docs failed, please check validation/reports/pylint_docs_precommit.ansi ."
   exit 1
 fi
 
 pylint --rcfile=validation/pylintrc_style $CHANGED_FILES > validation/reports/pylint_style_precommit.ansi
-EXIT_CODE = $?
-if $EXIT_CODE -ne 0; then
+if [ $? -ne 0 ]; then
   echo "Pylinting style failed, please check validation/reports/pylint_style_precommit.ansi ."
   exit 1
 fi

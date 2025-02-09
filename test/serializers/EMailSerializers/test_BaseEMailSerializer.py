@@ -55,32 +55,8 @@ def test_output(email):
     assert "prerender_filepath" not in serializerData
     assert "account" in serializerData
     assert serializerData["account"] == email.account.id
-    assert "comments" in serializerData
-    assert serializerData["comments"] == email.comments
-    assert "keywords" in serializerData
-    assert serializerData["keywords"] == email.keywords
-    assert "importance" in serializerData
-    assert serializerData["importance"] == email.importance
-    assert "priority" in serializerData
-    assert serializerData["priority"] == email.priority
-    assert "precedence" in serializerData
-    assert serializerData["precedence"] == email.precedence
-    assert "received" in serializerData
-    assert serializerData["received"] == email.received
-    assert "user_agent" in serializerData
-    assert serializerData["user_agent"] == email.user_agent
-    assert "auto_submitted" in serializerData
-    assert serializerData["auto_submitted"] == email.auto_submitted
-    assert "content_type" in serializerData
-    assert serializerData["content_type"] == email.content_type
-    assert "content_language" in serializerData
-    assert serializerData["content_language"] == email.content_language
-    assert "content_location" in serializerData
-    assert serializerData["content_location"] == email.content_location
-    assert "x_priority" in serializerData
-    assert serializerData["x_priority"] == email.x_priority
-    assert "x_originated_client" in serializerData
-    assert serializerData["x_originated_client"] == email.x_originated_client
+    assert "headers" in serializerData
+    assert serializerData["headers"] == email.headers
     assert "x_spam" in serializerData
     assert serializerData["x_spam"] == email.x_spam
     assert "created" in serializerData
@@ -94,7 +70,7 @@ def test_output(email):
     assert "correspondents" in serializerData
     assert serializerData["correspondents"] == []
 
-    assert len(serializerData) == 28
+    assert len(serializerData) == 17
 
 
 @pytest.mark.django_db
@@ -117,19 +93,7 @@ def test_input(email):
     assert "eml_filepath" not in serializerData
     assert "prerender_filepath" not in serializerData
     assert "account" not in serializerData
-    assert "comments" not in serializerData
-    assert "keywords" not in serializerData
-    assert "importance" not in serializerData
-    assert "priority" not in serializerData
-    assert "precedence" not in serializerData
-    assert "received" not in serializerData
-    assert "user_agent" not in serializerData
-    assert "auto_submitted" not in serializerData
-    assert "content_type" not in serializerData
-    assert "content_language" not in serializerData
-    assert "content_location" not in serializerData
-    assert "x_priority" not in serializerData
-    assert "x_originated_client" not in serializerData
+    assert "headers" not in serializerData
     assert "x_spam" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData

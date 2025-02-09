@@ -39,6 +39,38 @@ class EMailFilter(django_filters.FilterSet):
         field_name="emailcorrespondents__mention", lookup_expr="in"
     )
 
+    headers__contains = django_filters.CharFilter(
+        field_name="headers", lookup_expr="contains"
+    )
+
+    headers__icontains = django_filters.CharFilter(
+        field_name="headers", lookup_expr="icontains"
+    )
+
+    headers__contained_by = django_filters.CharFilter(
+        field_name="headers", lookup_expr="contained_by"
+    )
+
+    headers__regex = django_filters.CharFilter(
+        field_name="headers", lookup_expr="regex"
+    )
+
+    headers__iregex = django_filters.CharFilter(
+        field_name="headers", lookup_expr="iregex"
+    )
+
+    headers__has_key = django_filters.CharFilter(
+        field_name="headers", lookup_expr="has_key"
+    )
+
+    headers__has_keys = django_filters.CharFilter(
+        field_name="headers", lookup_expr="has_keys"
+    )
+
+    headers__has_any_keys = django_filters.CharFilter(
+        field_name="headers", lookup_expr="has_any_keys"
+    )
+
     class Meta:
         """Metadata class for the filter."""
 
@@ -50,19 +82,6 @@ class EMailFilter(django_filters.FilterSet):
             "plain_bodytext": FilterSetups.TEXT,
             "html_bodytext": FilterSetups.TEXT,
             "datasize": FilterSetups.INT,
-            "comments": FilterSetups.TEXT,
-            "keywords": FilterSetups.TEXT,
-            "importance": FilterSetups.TEXT,
-            "priority": FilterSetups.TEXT,
-            "precedence": FilterSetups.TEXT,
-            "received": FilterSetups.TEXT,
-            "user_agent": FilterSetups.TEXT,
-            "auto_submitted": FilterSetups.TEXT,
-            "content_type": FilterSetups.TEXT,
-            "content_language": FilterSetups.TEXT,
-            "content_location": FilterSetups.TEXT,
-            "x_priority": FilterSetups.TEXT,
-            "x_originated_client": FilterSetups.TEXT,
             "x_spam": FilterSetups.TEXT,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,

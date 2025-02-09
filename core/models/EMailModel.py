@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import email.generator
 import email.parser
+import json
 import logging
 import os
 from email import policy
@@ -123,44 +124,8 @@ class EMailModel(models.Model):
     )
     """The account that this mail has been found in. Unique together with :attr:`message_id`. Deletion of that `account` deletes this mail."""
 
-    comments = models.CharField(max_length=255, null=True)
-    """The comments header of this mail. Can be null."""
-
-    keywords = models.CharField(max_length=255, null=True)
-    """The keywords header of this mail. Can be null."""
-
-    importance = models.CharField(max_length=255, null=True)
-    """The importance header of this mail. Can be null."""
-
-    priority = models.CharField(max_length=255, null=True)
-    """The priority header of this mail. Can be null."""
-
-    precedence = models.CharField(max_length=255, null=True)
-    """The precedence header of this mail. Can be null."""
-
-    received = models.TextField(null=True)
-    """The received header of this mail. Can be null."""
-
-    user_agent = models.CharField(max_length=255, null=True)
-    """The user_agent header of this mail. Can be null."""
-
-    auto_submitted = models.CharField(max_length=255, null=True)
-    """The auto_submitted header of this mail. Can be null."""
-
-    content_type = models.CharField(max_length=255, null=True)
-    """The content_type header of this mail. Can be null."""
-
-    content_language = models.CharField(max_length=255, null=True)
-    """The content_language header of this mail. Can be null."""
-
-    content_location = models.CharField(max_length=255, null=True)
-    """The content_location header of this mail. Can be null."""
-
-    x_priority = models.CharField(max_length=255, null=True)
-    """The x_priority header of this mail. Can be null."""
-
-    x_originated_client = models.CharField(max_length=255, null=True)
-    """The x_originated_client header of this mail. Can be null."""
+    headers = models.JSONField(null=True)
+    """All other header fields of the mail. Can be null."""
 
     x_spam = models.CharField(max_length=255, null=True)
     """The x_spam header of this mail. Can be null."""
@@ -338,32 +303,13 @@ class EMailModel(models.Model):
                 )
             except EMailModel.DoesNotExist:
                 new_email.inReplyTo = None
-        new_email.comments = getHeader(emailMessage, ParsedMailKeys.Header.COMMENTS)
-        new_email.keywords = getHeader(emailMessage, ParsedMailKeys.Header.KEYWORDS)
-        new_email.importance = getHeader(emailMessage, ParsedMailKeys.Header.IMPORTANCE)
-        new_email.priority = getHeader(emailMessage, ParsedMailKeys.Header.PRIORITY)
-        new_email.precedence = getHeader(emailMessage, ParsedMailKeys.Header.PRECEDENCE)
-        new_email.received = getHeader(
-            emailMessage, ParsedMailKeys.Header.RECEIVED, joiningString="\n"
-        )
-        new_email.user_agent = getHeader(emailMessage, ParsedMailKeys.Header.USER_AGENT)
-        new_email.auto_submitted = getHeader(
-            emailMessage, ParsedMailKeys.Header.AUTO_SUBMITTED
-        )
-        new_email.content_type = getHeader(
-            emailMessage, ParsedMailKeys.Header.CONTENT_TYPE
-        )
-        new_email.content_language = getHeader(
-            emailMessage, ParsedMailKeys.Header.CONTENT_LANGUAGE
-        )
-        new_email.content_location = getHeader(
-            emailMessage, ParsedMailKeys.Header.CONTENT_LOCATION
-        )
-        new_email.x_priority = getHeader(emailMessage, ParsedMailKeys.Header.X_PRIORITY)
-        new_email.x_originated_client = getHeader(
-            emailMessage, ParsedMailKeys.Header.X_ORIGINATING_CLIENT
-        )
+
         new_email.x_spam = getHeader(emailMessage, ParsedMailKeys.Header.X_SPAM_FLAG)
+
+        headerDict = {}
+        for headerName in emailMessage.keys():
+            headerDict[header] = getHeader(headerName)
+        new_email.headers = headerDict
 
         new_email.mailinglist = MailingListModel.fromEmailMessage(emailMessage)
         emailCorrespondents = []

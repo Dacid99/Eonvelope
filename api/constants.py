@@ -43,7 +43,7 @@ class FilterSetups:
         "iendswith",
         "regex",
         "iregex",
-        "in"
+        "in",
     ]
     """Standard filter options for text fields."""
 
@@ -128,33 +128,16 @@ class FilterSetups:
         "second__range",
     ]
 
-    FLOAT: Final[list[str]] = [
-        "lte",
-        "gte",
-        "range"
-    ]
+    FLOAT: Final[list[str]] = ["lte", "gte", "range"]
     """Standard filter options for float fields."""
 
-
-    INT: Final[list[str]] = [
-        "lte",
-        "gte",
-        "lt",
-        "gt",
-        "exact",
-        "in",
-        "range"
-    ]
+    INT: Final[list[str]] = ["lte", "gte", "lt", "gt", "exact", "in", "range"]
     """Standard filter options for integer fields."""
-
 
     BOOL: Final[list[str]] = ["exact"]
     """Standard filter options for boolean fields."""
 
-
-    CHOICE: Final[list[str]] = [
-        "icontains",
-        "iexact",
-        "in"
-    ]
+    CHOICE: Final[list[str]] = ["icontains", "iexact", "in"]
     """Standard filter options for fields with constant choices."""
+
+    JSON: Final[list[str]] = ["icontains", "contains", "regex", "iregex"]

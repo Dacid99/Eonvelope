@@ -83,19 +83,7 @@ def test_EMailModel_creation(email):
     assert email.mailinglist is None
     assert email.account is not None
     assert isinstance(email.account, AccountModel)
-    assert email.comments is None
-    assert email.keywords is None
-    assert email.importance is None
-    assert email.priority is None
-    assert email.precedence is None
-    assert email.received is None
-    assert email.user_agent is None
-    assert email.auto_submitted is None
-    assert email.content_type is None
-    assert email.content_language is None
-    assert email.content_location is None
-    assert email.x_priority is None
-    assert email.x_originated_client is None
+    assert email.headers is None
     assert email.x_spam == "NO"
 
     assert isinstance(email.updated, datetime.datetime)

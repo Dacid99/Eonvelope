@@ -72,23 +72,8 @@ class EMailSerializer(BaseEMailSerializer):
     class Meta(BaseEMailSerializer.Meta):
         """Metadata class for the serializer."""
 
-        exclude = BaseEMailSerializer.Meta.exclude + [
-            "comments",
-            "keywords",
-            "importance",
-            "priority",
-            "precedence",
-            "received",
-            "user_agent",
-            "auto_submitted",
-            "content_type",
-            "content_language",
-            "content_location",
-            "x_priority",
-            "x_originated_client",
-            "x_spam",
-        ]
-        """Includes only the most relevant fields."""
+        exclude = BaseEMailSerializer.Meta.exclude + ["headers"]
+        """Omit the other header fields."""
 
     def get_correspondents(self, object: EMailModel) -> ReturnDict | None:
         """Serializes the correspondents connected to the instance to be serialized.

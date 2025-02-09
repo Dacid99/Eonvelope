@@ -35,17 +35,19 @@ from model_bakery import baker
 from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
 from test_EMailViewSet import fixture_emailModel
+from test_MailboxViewSet import fixture_mailboxModel
 
-from core.models.CorrespondentModel import CorrespondentModel
-from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import \
-    BaseCorrespondentSerializer
+from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import (
+    BaseCorrespondentSerializer,
+)
 from api.v1.views.CorrespondentViewSet import CorrespondentViewSet
+from core.models.CorrespondentModel import CorrespondentModel
 
 if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name='correspondentModel')
+@pytest.fixture(name="correspondentModel")
 def fixture_correspondentModel(emailModel) -> CorrespondentModel:
     """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` owned by :attr:`owner_user`.
 
@@ -57,7 +59,8 @@ def fixture_correspondentModel(emailModel) -> CorrespondentModel:
     """
     return baker.make(CorrespondentModel, emails=[emailModel])
 
-@pytest.fixture(name='correspondentPayload')
+
+@pytest.fixture(name="correspondentPayload")
 def fixture_correspondentPayload(emailModel) -> dict[str, Any]:
     """Creates clean :class:`core.models.CorrespondentModel.CorrespondentModel` payload for a patch, post or put request.
 
@@ -69,10 +72,9 @@ def fixture_correspondentPayload(emailModel) -> dict[str, Any]:
     """
     correspondentData = baker.prepare(CorrespondentModel, emails=[emailModel])
     payload = model_to_dict(correspondentData)
-    payload.pop('id')
+    payload.pop("id")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
     return cleanPayload
-
 
 
 @pytest.mark.django_db
@@ -82,7 +84,7 @@ def test_list_noauth(correspondentModel, noauth_apiClient, list_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['results']
+        response.data["results"]
 
 
 @pytest.mark.django_db
@@ -91,8 +93,8 @@ def test_list_auth_other(correspondentModel, other_apiClient, list_url):
     response = other_apiClient.get(list_url(CorrespondentViewSet))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['count'] == 0
-    assert response.data['results'] == []
+    assert response.data["count"] == 0
+    assert response.data["results"] == []
 
 
 @pytest.mark.django_db
@@ -101,19 +103,23 @@ def test_list_auth_owner(correspondentModel, owner_apiClient, list_url):
     response = owner_apiClient.get(list_url(CorrespondentViewSet))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['results'] == [BaseCorrespondentSerializer(correspondentModel).data]
-    assert response.data['count'] == 1
-    assert len(response.data['results']) == 1
+    assert response.data["results"] == [
+        BaseCorrespondentSerializer(correspondentModel).data
+    ]
+    assert response.data["count"] == 1
+    assert len(response.data["results"]) == 1
 
 
 @pytest.mark.django_db
 def test_get_noauth(correspondentModel, noauth_apiClient, detail_url):
     """Tests the get method with an unauthenticated user client."""
-    response = noauth_apiClient.get(detail_url(CorrespondentViewSet, correspondentModel))
+    response = noauth_apiClient.get(
+        detail_url(CorrespondentViewSet, correspondentModel)
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
 
 
 @pytest.mark.django_db
@@ -123,7 +129,8 @@ def test_get_auth_other(correspondentModel, other_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
+
 
 @pytest.mark.django_db
 def test_get_auth_owner(correspondentModel, owner_apiClient, detail_url):
@@ -131,121 +138,159 @@ def test_get_auth_owner(correspondentModel, owner_apiClient, detail_url):
     response = owner_apiClient.get(detail_url(CorrespondentViewSet, correspondentModel))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['email_address'] == correspondentModel.email_address
+    assert response.data["email_address"] == correspondentModel.email_address
 
 
 @pytest.mark.django_db
-def test_patch_noauth(correspondentModel, noauth_apiClient, correspondentPayload, detail_url):
+def test_patch_noauth(
+    correspondentModel, noauth_apiClient, correspondentPayload, detail_url
+):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload)
+    response = noauth_apiClient.patch(
+        detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     correspondentModel.refresh_from_db()
-    assert correspondentModel.email_address != correspondentPayload['email_address']
+    assert correspondentModel.email_address != correspondentPayload["email_address"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(correspondentModel, other_apiClient, correspondentPayload, detail_url):
+def test_patch_auth_other(
+    correspondentModel, other_apiClient, correspondentPayload, detail_url
+):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload)
+    response = other_apiClient.patch(
+        detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     correspondentModel.refresh_from_db()
-    assert correspondentModel.email_address != correspondentPayload['email_address']
+    assert correspondentModel.email_address != correspondentPayload["email_address"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(correspondentModel, owner_apiClient, correspondentPayload, detail_url):
+def test_patch_auth_owner(
+    correspondentModel, owner_apiClient, correspondentPayload, detail_url
+):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload)
+    response = owner_apiClient.patch(
+        detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     correspondentModel.refresh_from_db()
-    assert correspondentModel.email_address != correspondentPayload['email_address']
+    assert correspondentModel.email_address != correspondentPayload["email_address"]
 
 
 @pytest.mark.django_db
-def test_put_noauth(correspondentModel, noauth_apiClient, correspondentPayload, detail_url):
+def test_put_noauth(
+    correspondentModel, noauth_apiClient, correspondentPayload, detail_url
+):
     """Tests the put method with an unauthenticated user client."""
-    response = noauth_apiClient.put(detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload)
+    response = noauth_apiClient.put(
+        detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     correspondentModel.refresh_from_db()
-    assert correspondentModel.email_address != correspondentPayload['email_address']
+    assert correspondentModel.email_address != correspondentPayload["email_address"]
 
 
 @pytest.mark.django_db
-def test_put_auth_other(correspondentModel, other_apiClient, correspondentPayload, detail_url):
+def test_put_auth_other(
+    correspondentModel, other_apiClient, correspondentPayload, detail_url
+):
     """Tests the put method with the authenticated other user client."""
-    response = other_apiClient.put(detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload)
+    response = other_apiClient.put(
+        detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     correspondentModel.refresh_from_db()
-    assert correspondentModel.email_address != correspondentPayload['email_address']
+    assert correspondentModel.email_address != correspondentPayload["email_address"]
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(correspondentModel, owner_apiClient, correspondentPayload, detail_url):
+def test_put_auth_owner(
+    correspondentModel, owner_apiClient, correspondentPayload, detail_url
+):
     """Tests the put method with the authenticated owner user client."""
-    response = owner_apiClient.put(detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload)
+    response = owner_apiClient.put(
+        detail_url(CorrespondentViewSet, correspondentModel), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     correspondentModel.refresh_from_db()
-    assert correspondentModel.email_address != correspondentPayload['email_address']
+    assert correspondentModel.email_address != correspondentPayload["email_address"]
 
 
 @pytest.mark.django_db
 def test_post_noauth(noauth_apiClient, correspondentPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url(CorrespondentViewSet), data=correspondentPayload)
+    response = noauth_apiClient.post(
+        list_url(CorrespondentViewSet), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     with pytest.raises(CorrespondentModel.DoesNotExist):
-        CorrespondentModel.objects.get(email_address = correspondentPayload['email_address'])
+        CorrespondentModel.objects.get(
+            email_address=correspondentPayload["email_address"]
+        )
 
 
 @pytest.mark.django_db
 def test_post_auth_other(other_apiClient, correspondentPayload, list_url):
     """Tests the post method with the authenticated other user client."""
-    response = other_apiClient.post(list_url(CorrespondentViewSet), data=correspondentPayload)
+    response = other_apiClient.post(
+        list_url(CorrespondentViewSet), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     with pytest.raises(CorrespondentModel.DoesNotExist):
-        CorrespondentModel.objects.get(email_address = correspondentPayload['email_address'])
+        CorrespondentModel.objects.get(
+            email_address=correspondentPayload["email_address"]
+        )
 
 
 @pytest.mark.django_db
 def test_post_auth_owner(owner_apiClient, correspondentPayload, list_url):
     """Tests the post method with the authenticated owner user client."""
-    response = owner_apiClient.post(list_url(CorrespondentViewSet), data=correspondentPayload)
+    response = owner_apiClient.post(
+        list_url(CorrespondentViewSet), data=correspondentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['email_address']
+        response.data["email_address"]
     with pytest.raises(CorrespondentModel.DoesNotExist):
-        CorrespondentModel.objects.get(email_address = correspondentPayload['email_address'])
+        CorrespondentModel.objects.get(
+            email_address=correspondentPayload["email_address"]
+        )
 
 
 @pytest.mark.django_db
 def test_delete_noauth(correspondentModel, noauth_apiClient, detail_url):
     """Tests the delete method with an unauthenticated user client."""
-    response = noauth_apiClient.delete(detail_url(CorrespondentViewSet, correspondentModel))
+    response = noauth_apiClient.delete(
+        detail_url(CorrespondentViewSet, correspondentModel)
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     correspondentModel.refresh_from_db()
@@ -255,7 +300,9 @@ def test_delete_noauth(correspondentModel, noauth_apiClient, detail_url):
 @pytest.mark.django_db
 def test_delete_auth_other(correspondentModel, other_apiClient, detail_url):
     """Tests the delete method with the authenticated other user client."""
-    response = other_apiClient.delete(detail_url(CorrespondentViewSet, correspondentModel))
+    response = other_apiClient.delete(
+        detail_url(CorrespondentViewSet, correspondentModel)
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     correspondentModel.refresh_from_db()
@@ -265,7 +312,9 @@ def test_delete_auth_other(correspondentModel, other_apiClient, detail_url):
 @pytest.mark.django_db
 def test_delete_auth_owner(correspondentModel, owner_apiClient, detail_url):
     """Tests the delete method with the authenticated owner user client."""
-    response = owner_apiClient.delete(detail_url(CorrespondentViewSet, correspondentModel))
+    response = owner_apiClient.delete(
+        detail_url(CorrespondentViewSet, correspondentModel)
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     correspondentModel.refresh_from_db()
@@ -273,9 +322,17 @@ def test_delete_auth_owner(correspondentModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(correspondentModel, noauth_apiClient, custom_detail_action_url):
+def test_toggle_favorite_noauth(
+    correspondentModel, noauth_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with an unauthenticated user client."""
-    response = noauth_apiClient.post(custom_detail_action_url(CorrespondentViewSet, CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE, correspondentModel))
+    response = noauth_apiClient.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            correspondentModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     correspondentModel.refresh_from_db()
@@ -283,9 +340,17 @@ def test_toggle_favorite_noauth(correspondentModel, noauth_apiClient, custom_det
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(correspondentModel, other_apiClient, custom_detail_action_url):
+def test_toggle_favorite_auth_other(
+    correspondentModel, other_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with the authenticated other user client."""
-    response = other_apiClient.post(custom_detail_action_url(CorrespondentViewSet, CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE, correspondentModel))
+    response = other_apiClient.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            correspondentModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     correspondentModel.refresh_from_db()
@@ -293,9 +358,17 @@ def test_toggle_favorite_auth_other(correspondentModel, other_apiClient, custom_
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_owner(correspondentModel, owner_apiClient, custom_detail_action_url):
+def test_toggle_favorite_auth_owner(
+    correspondentModel, owner_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with the authenticated owner user client."""
-    response = owner_apiClient.post(custom_detail_action_url(CorrespondentViewSet, CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE, correspondentModel))
+    response = owner_apiClient.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            correspondentModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_200_OK
     correspondentModel.refresh_from_db()

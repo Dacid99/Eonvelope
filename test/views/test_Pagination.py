@@ -19,6 +19,7 @@
 import pytest
 from model_bakery import baker
 from test_AccountViewSet import fixture_accountModel
+from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
@@ -26,16 +27,16 @@ from Emailkasten.utils import get_config
 
 
 @pytest.fixture(name="emails")
-def fixture_emails(accountModel):
+def fixture_emails(mailboxModel):
     """Create a bunch of :class:`core.models.EMailModel.EMailModel`s owned by :attr:`owner_user`.
 
     Args:
-        accountModel: Depends on :func:`fixture_accountModel`.
+        mailboxModel: Depends on :func:`fixture_mailboxModel`.
 
     Returns:
         The email instance for testing.
     """
-    return baker.make(EMailModel, x_spam="NO", account=accountModel, _quantity=25)
+    return baker.make(EMailModel, x_spam="NO", mailbox=mailboxModel, _quantity=25)
 
 
 @pytest.mark.django_db

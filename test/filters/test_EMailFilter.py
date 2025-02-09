@@ -203,10 +203,10 @@ def test_updated_filter(email_queryset, lookup_expr, filterquery, expected_indic
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_account__mail_address_filter(
+def test_mailbox__name_filter(
     email_queryset, lookup_expr, filterquery, expected_indices
 ):
-    query = {"account__mail_address" + lookup_expr: filterquery}
+    query = {"mailbox__name" + lookup_expr: filterquery}
 
     filtered_data = EMailFilter(query, queryset=email_queryset).qs
 
@@ -220,10 +220,27 @@ def test_account__mail_address_filter(
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_account__mail_host_filter(
+def test_mailbox__account__mail_address_filter(
     email_queryset, lookup_expr, filterquery, expected_indices
 ):
-    query = {"account__mail_host" + lookup_expr: filterquery}
+    query = {"mailbox__account__mail_address" + lookup_expr: filterquery}
+
+    filtered_data = EMailFilter(query, queryset=email_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_mailbox__account__mail_host_filter(
+    email_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"mailbox__account__mail_host" + lookup_expr: filterquery}
 
     filtered_data = EMailFilter(query, queryset=email_queryset).qs
 

@@ -55,7 +55,7 @@ class BaseEMailSerializer(serializers.ModelSerializer):
             "datasize",
             "correspondents",
             "mailinglist",
-            "account",
+            "mailbox",
             "headers",
             "x_spam",
             "created",

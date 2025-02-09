@@ -21,7 +21,7 @@ from __future__ import annotations
 
 from django.db import models
 
-from core.constants import CORRESPONDENT_HEADERS
+from core.constants import HeaderFields
 
 from .CorrespondentModel import CorrespondentModel
 
@@ -41,8 +41,8 @@ class EMailCorrespondentsModel(models.Model):
     )
     """The correspondent that was mentioned in :attr:`email`. Unique together with :attr:`email` and :attr:`mention`."""
 
-    MENTIONTYPES = list(CORRESPONDENT_HEADERS)
-    """The available types of correspondent memtions. Refers to :attr:`Emailkasten.constants.CORRESPONDENT_HEADERS`."""
+    MENTIONTYPES = list(HeaderFields.Correspondents())
+    """The available types of correspondent memtions. Refers to :attr:`Emailkasten.constants.HeaderFields.Correspondents`."""
 
     mention = models.CharField(choices=MENTIONTYPES, max_length=30)
     """The way that :attr:`correspondent` was mentioned in :attr:`email`. One of :attr:`MENTIONTYPES`.  Unique together with :attr:`email` and :attr:`correspondent`."""

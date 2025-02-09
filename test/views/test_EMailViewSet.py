@@ -36,6 +36,7 @@ from faker import Faker
 from model_bakery import baker
 from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
+from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
@@ -45,11 +46,11 @@ if TYPE_CHECKING:
 
 
 @pytest.fixture(name="emailModel")
-def fixture_emailModel(accountModel) -> EMailModel:
+def fixture_emailModel(mailboxModel) -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel` owned by :attr:`owner_user`.
 
     Args:
-        accountModel: Depends on :func:`fixture_accountModel`.
+        mailboxModel: Depends on :func:`fixture_mailboxModel`.
 
     Returns:
         The email instance for testing.
@@ -57,23 +58,23 @@ def fixture_emailModel(accountModel) -> EMailModel:
     return baker.make(
         EMailModel,
         x_spam="NO",
-        account=accountModel,
+        mailbox=mailboxModel,
         eml_filepath=Faker().file_path(extension="eml"),
         prerender_filepath=Faker().file_path(extension="png"),
     )
 
 
 @pytest.fixture(name="emailPayload")
-def fixture_emailPayload(accountModel) -> dict[str, Any]:
+def fixture_emailPayload(mailboxModel) -> dict[str, Any]:
     """Creates clean :class:`core.models.EMailModel.EMailModel` payload for a patch, post or put request.
 
     Args:
-        accountModel: Depends on :func:`fixture_accountModel`.
+        mailboxModel: Depends on :func:`fixture_mailboxModel`.
 
     Returns:
         The clean payload.
     """
-    emailData = baker.prepare(EMailModel, account=accountModel)
+    emailData = baker.prepare(EMailModel, mailbox=mailboxModel)
     payload = model_to_dict(emailData)
     payload.pop("id")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}

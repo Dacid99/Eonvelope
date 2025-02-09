@@ -48,6 +48,10 @@ def test_output(daemon):
     assert serializerData["cycle_interval"] == daemon.cycle_interval
     assert "restart_time" in serializerData
     assert serializerData["restart_time"] == daemon.restart_time
+    assert "log_backup_count" in serializerData
+    assert serializerData["log_backup_count"] == daemon.log_backup_count
+    assert "logfile_size" in serializerData
+    assert serializerData["logfile_size"] == daemon.logfile_size
     assert "is_running" in serializerData
     assert serializerData["is_running"] == daemon.is_running
     assert "is_healthy" in serializerData
@@ -56,7 +60,7 @@ def test_output(daemon):
     assert datetime.fromisoformat(serializerData["created"]) == daemon.created
     assert "updated" in serializerData
     assert datetime.fromisoformat(serializerData["updated"]) == daemon.updated
-    assert len(serializerData) == 10
+    assert len(serializerData) == 12
 
 
 @pytest.mark.django_db
@@ -76,11 +80,15 @@ def test_input(daemon):
     assert serializerData["cycle_interval"] == daemon.cycle_interval
     assert "restart_time" in serializerData
     assert serializerData["restart_time"] == daemon.restart_time
+    assert "log_backup_count" in serializerData
+    assert serializerData["log_backup_count"] == daemon.log_backup_count
+    assert "logfile_size" in serializerData
+    assert serializerData["logfile_size"] == daemon.logfile_size
     assert "is_running" not in serializerData
     assert "is_healthy" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData
-    assert len(serializerData) == 3
+    assert len(serializerData) == 5
 
 
 @pytest.mark.django_db

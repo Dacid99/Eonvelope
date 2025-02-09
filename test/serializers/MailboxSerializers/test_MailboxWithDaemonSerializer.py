@@ -80,4 +80,4 @@ def test_input(mailbox):
     assert "is_healthy" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData
-    assert len(serializerData) == 4
+    assert len(serializerData) == 3

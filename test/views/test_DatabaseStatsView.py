@@ -29,6 +29,7 @@ from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
 from test_AttachmentViewSet import fixture_attachmentModel
 from test_EMailViewSet import fixture_emailModel
+from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.DatabaseStatsView import DatabaseStatsView
 

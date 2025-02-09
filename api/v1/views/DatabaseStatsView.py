@@ -50,14 +50,18 @@ class DatabaseStatsView(APIView):
         Returns:
             A response with the count of the table entries.
         """
-        email_count = EMailModel.objects.filter(account__user=request.user).count()
+        email_count = EMailModel.objects.filter(
+            mailbox__account__user=request.user
+        ).count()
         correspondent_count = (
-            CorrespondentModel.objects.filter(emails__account__user=request.user)
+            CorrespondentModel.objects.filter(
+                emails__mailbox__account__user=request.user
+            )
             .distinct()
             .count()
         )
         attachment_count = AttachmentModel.objects.filter(
-            email__account__user=request.user
+            email__mailbox__account__user=request.user
         ).count()
         account_count = AccountModel.objects.filter(user=request.user).count()
 

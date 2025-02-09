@@ -30,7 +30,7 @@ from typing import TYPE_CHECKING
 
 from django.db import models, transaction
 
-from core.constants import CORRESPONDENT_HEADERS, HeaderFields
+from core.constants import HeaderFields
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.utils.fileManagment import saveStore
 from Emailkasten.utils import get_config
@@ -43,8 +43,8 @@ from .StorageModel import StorageModel
 if TYPE_CHECKING:
     from io import BufferedWriter
 
-    from .AccountModel import AccountModel
     from .CorrespondentModel import CorrespondentModel
+    from .MailboxModel import MailboxModel
 
 
 logger = logging.getLogger(__name__)
@@ -55,7 +55,7 @@ class EMailModel(models.Model):
     """Database model for an email."""
 
     message_id = models.CharField(max_length=255)
-    """The messageID header of the mail. Unique together with :attr:`account`."""
+    """The messageID header of the mail. Unique together with :attr:`mailbox`."""
 
     datetime = models.DateTimeField()
     """The Date header of the mail."""
@@ -115,10 +115,10 @@ class EMailModel(models.Model):
     )
     """The mailinglist that this mail has been sent from. Can be null. Deletion of that `mailinglist` deletes this mail."""
 
-    account: models.ForeignKey[AccountModel] = models.ForeignKey(
-        "AccountModel", related_name="emails", on_delete=models.CASCADE
+    mailbox: models.ForeignKey[MailboxModel] = models.ForeignKey(
+        "MailboxModel", related_name="emails", on_delete=models.CASCADE
     )
-    """The account that this mail has been found in. Unique together with :attr:`message_id`. Deletion of that `account` deletes this mail."""
+    """The mailbox that this mail has been found in. Unique together with :attr:`message_id`. Deletion of that `mailbox` deletes this mail."""
 
     headers = models.JSONField(null=True)
     """All other header fields of the mail. Can be null."""
@@ -133,7 +133,7 @@ class EMailModel(models.Model):
     """The datetime this entry was last updated. Is set automatically."""
 
     def __str__(self):
-        return f"Email with ID {self.message_id}, received on {self.datetime} from {str(self.account)}"
+        return f"Email with ID {self.message_id}, received on {self.datetime} from {str(self.mailbox)}"
 
     class Meta:
         """Metadata class for the model."""
@@ -143,11 +143,11 @@ class EMailModel(models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                fields=["message_id", "account"],
-                name="email_unique_together_message_id_account",
+                fields=["message_id", "mailbox"],
+                name="email_unique_together_message_id_mailbox",
             )
         ]
-        """`message_id` and :attr:`account` in combination are unique."""
+        """`message_id` and :attr:`mailbox` in combination are unique."""
 
     def delete(self, *args, **kwargs):
         """Extended :django::func:`django.models.Model.delete` method
@@ -267,7 +267,7 @@ class EMailModel(models.Model):
 
     @staticmethod
     def createFromEmailBytes(
-        emailBytes: bytes, account: AccountModel = None
+        emailBytes: bytes, mailbox: MailboxModel = None
     ) -> EMailModel | None:
         emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)
         message_id = getHeader(
@@ -277,16 +277,19 @@ class EMailModel(models.Model):
         )
 
         try:
-            EMailModel.objects.get(message_id=message_id)
+            EMailModel.objects.get(message_id=message_id, mailbox=mailbox)
             logger.debug(
-                "Skipping email with Message-ID %s, it already exists in the db.",
+                "Skipping email with Message-ID %s in %s, it already exists in the db.",
                 message_id,
+                mailbox,
             )
             return None
         except EMailModel.DoesNotExist:
-            logger.debug("Parsing email with Message-ID %s ...", message_id)
+            logger.debug(
+                "Parsing email with Message-ID %s in %s ...", message_id, mailbox
+            )
 
-        new_email = EMailModel(message_id=message_id, account=account)
+        new_email = EMailModel(message_id=message_id, mailbox=mailbox)
         new_email.datetime = parseDatetimeHeader(
             getHeader(emailMessage, HeaderFields.DATE)
         )
@@ -309,7 +312,7 @@ class EMailModel(models.Model):
 
         new_email.mailinglist = MailingListModel.fromEmailMessage(emailMessage)
         emailCorrespondents = []
-        for mention in CORRESPONDENT_HEADERS:
+        for mention in HeaderFields.Correspondents():
             correspondentHeader = getHeader(emailMessage, mention)
             if correspondentHeader:
                 for header in correspondentHeader.split(","):

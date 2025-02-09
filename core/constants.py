@@ -160,24 +160,37 @@ class HeaderFields:
         HELP: Final[str] = "List-Help"
         ARCHIVE: Final[str] = "List-Archive"
 
+    class Correspondents:
+        """Headers that are treated as correspondents."""
 
-CORRESPONDENT_HEADERS: Final[list[str]] = [
-    "From",
-    "To",
-    "Cc",
-    "Bcc",
-    "Sender",
-    "Reply-To",
-    "Resent-From",
-    "Resent-To",
-    "Resent-Cc",
-    "Resent-Bcc",
-    "Resent-Sender",
-    "Resent-Reply-To",
-    "Envelope-To",
-    "Delivered-To",
-    "Return-Path",
-    "Return-Receipt-To",
-    "Disposition-Notification-To",
-]
-"""Header fields that are treated as correspondents."""
+        FROM: Final[str] = "From"
+        TO: Final[str] = "To"
+        CC: Final[str] = "Cc"
+        BCC: Final[str] = "Bcc"
+        SENDER: Final[str] = "Sender"
+        REPLY_TO: Final[str] = "Reply-To"
+        RESENT_FROM: Final[str] = "Resent-From"
+        RESENT_TO: Final[str] = "Resent-To"
+        RESENT_CC: Final[str] = "Resent-Cc"
+        RESENT_BCC: Final[str] = "Resent-Bcc"
+        RESENT_SENDER: Final[str] = "Resent-Sender"
+        RESENT_REPLY_TO: Final[str] = "Resent-Reply-To"
+        ENVELOPE_TO: Final[str] = "Envelope-To"
+        DELIVERED_TO: Final[str] = "Delivered-To"
+        RETURN_PATH: Final[str] = "Return-Path"
+        RETURN_RECEIPT_TO: Final[str] = "Return-Receipt-To"
+        DISPOSITION_NOTIFICATION_TO: Final[str] = "Disposition-Notification-To"
+
+        def __iter__(self):
+            """Method to allow easier referencing of the members by listing.
+            Note:
+                value must come first in the listed tuples to match the format for field choices.
+            """
+            return iter(
+                (value, attr)
+                for attr, value in self.__class__.__dict__.items()
+                if not attr.startswith("__")
+            )
+
+        def __getitem__(self, key):
+            return getattr(self, key)

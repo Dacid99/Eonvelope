@@ -32,10 +32,12 @@ from rest_framework.response import Response
 from core.models.CorrespondentModel import CorrespondentModel
 
 from ..filters.CorrespondentFilter import CorrespondentFilter
-from ..serializers.correspondent_serializers.BaseCorrespondentSerializer import \
-    BaseCorrespondentSerializer
-from ..serializers.correspondent_serializers.CorrespondentSerializer import \
-    CorrespondentSerializer
+from ..serializers.correspondent_serializers.BaseCorrespondentSerializer import (
+    BaseCorrespondentSerializer,
+)
+from ..serializers.correspondent_serializers.CorrespondentSerializer import (
+    CorrespondentSerializer,
+)
 
 if TYPE_CHECKING:
     from django.db.models import BaseManager
@@ -45,32 +47,45 @@ if TYPE_CHECKING:
 class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
-    BASENAME = 'correspondents'
+    BASENAME = "correspondents"
     serializer_class = CorrespondentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = CorrespondentFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['email_name', 'email_address', 'is_favorite','created', 'updated']
-    ordering = ['id']
+    ordering_fields = [
+        "email_name",
+        "email_address",
+        "is_favorite",
+        "created",
+        "updated",
+    ]
+    ordering = ["id"]
 
     def get_queryset(self) -> BaseManager[CorrespondentModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
             The correspondent entries matching the request user."""
-        return CorrespondentModel.objects.filter(emails__account__user = self.request.user).distinct()
+        return CorrespondentModel.objects.filter(
+            emails__mailbox__account__user=self.request.user
+        ).distinct()
 
     def get_serializer_class(self):
         """Sets the serializer for `list` requests to the simplified version."""
-        if self.action == 'list':
+        if self.action == "list":
             return BaseCorrespondentSerializer
         return super().get_serializer_class()
 
+    URL_PATH_TOGGLE_FAVORITE = "toggle_favorite"
+    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
 
-    URL_PATH_TOGGLE_FAVORITE = 'toggle_favorite'
-    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
-    def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_TOGGLE_FAVORITE,
+        url_name=URL_NAME_TOGGLE_FAVORITE,
+    )
+    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the correspondent.
 
         Args:
@@ -82,5 +97,5 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
         """
         correspondent = self.get_object()
         correspondent.is_favorite = not correspondent.is_favorite
-        correspondent.save(update_fields=['is_favorite'])
-        return Response({'detail': 'Correspondent marked as favorite'})
+        correspondent.save(update_fields=["is_favorite"])
+        return Response({"detail": "Correspondent marked as favorite"})

@@ -51,8 +51,8 @@ def test_output(email):
     assert serializerData["datasize"] == email.datasize
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == email.is_favorite
-    assert "account" in serializerData
-    assert serializerData["account"] == email.account.id
+    assert "mailbox" in serializerData
+    assert serializerData["mailbox"] == email.mailbox.id
     assert "created" in serializerData
     assert datetime.fromisoformat(serializerData["created"]) == email.created
     assert "updated" in serializerData
@@ -85,7 +85,7 @@ def test_input(email):
     assert "datasize" not in serializerData
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == email.is_favorite
-    assert "account" not in serializerData
+    assert "mailbox" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData
     assert "replies" not in serializerData

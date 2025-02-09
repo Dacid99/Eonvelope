@@ -89,8 +89,9 @@ class EMailFilter(django_filters.FilterSet):
             "attachments__file_name": FilterSetups.TEXT,
             "correspondents__email_name": FilterSetups.TEXT,
             "correspondents__email_address": FilterSetups.TEXT,
-            "account__mail_address": FilterSetups.TEXT,
-            "account__mail_host": FilterSetups.TEXT,
+            "mailbox__name": FilterSetups.TEXT,
+            "mailbox__account__mail_address": FilterSetups.TEXT,
+            "mailbox__account__mail_host": FilterSetups.TEXT,
             "mailinglist__list_id": FilterSetups.TEXT,
             "mailinglist__list_owner": FilterSetups.TEXT,
         }

@@ -34,17 +34,18 @@ from django.forms.models import model_to_dict
 from model_bakery import baker
 from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
-from test_EMailViewSet import fixture_emailModel
 from test_CorrespondentViewSet import fixture_correspondentModel
+from test_EMailViewSet import fixture_emailModel
+from test_MailboxViewSet import fixture_mailboxModel
 
-from core.models.MailingListModel import MailingListModel
 from api.v1.views.MailingListViewSet import MailingListViewSet
+from core.models.MailingListModel import MailingListModel
 
 if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name='mailingListModel')
+@pytest.fixture(name="mailingListModel")
 def fixture_mailingListModel(correspondentModel, emailModel) -> MailingListModel:
     """Creates an :class:`core.models.MailingListModel.MailingListModel` owned by :attr:`owner_user`.
 
@@ -55,9 +56,12 @@ def fixture_mailingListModel(correspondentModel, emailModel) -> MailingListModel
     Returns:
         The email instance for testing.
     """
-    return baker.make(MailingListModel, correspondent=correspondentModel, emails=[emailModel])
+    return baker.make(
+        MailingListModel, correspondent=correspondentModel, emails=[emailModel]
+    )
 
-@pytest.fixture(name='mailingListPayload')
+
+@pytest.fixture(name="mailingListPayload")
 def fixture_mailingListPayload(correspondentModel, emailModel) -> dict[str, Any]:
     """Creates clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
 
@@ -68,9 +72,11 @@ def fixture_mailingListPayload(correspondentModel, emailModel) -> dict[str, Any]
     Returns:
         The clean payload.
     """
-    correspondentData = baker.prepare(MailingListModel, correspondent=correspondentModel, emails=[emailModel])
+    correspondentData = baker.prepare(
+        MailingListModel, correspondent=correspondentModel, emails=[emailModel]
+    )
     payload = model_to_dict(correspondentData)
-    payload.pop('id')
+    payload.pop("id")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
     return cleanPayload
 
@@ -82,7 +88,7 @@ def test_list_noauth(mailingListModel, noauth_apiClient, list_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['results']
+        response.data["results"]
 
 
 @pytest.mark.django_db
@@ -91,8 +97,8 @@ def test_list_auth_other(mailingListModel, other_apiClient, list_url):
     response = other_apiClient.get(list_url(MailingListViewSet))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['count'] == 0
-    assert response.data['results'] == []
+    assert response.data["count"] == 0
+    assert response.data["results"] == []
 
 
 @pytest.mark.django_db
@@ -101,8 +107,8 @@ def test_list_auth_owner(mailingListModel, owner_apiClient, list_url):
     response = owner_apiClient.get(list_url(MailingListViewSet))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['count'] == 1
-    assert len(response.data['results']) == 1
+    assert response.data["count"] == 1
+    assert len(response.data["results"]) == 1
 
 
 @pytest.mark.django_db
@@ -112,7 +118,7 @@ def test_get_noauth(mailingListModel, noauth_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
 
 
 @pytest.mark.django_db
@@ -122,7 +128,8 @@ def test_get_auth_other(mailingListModel, other_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
+
 
 @pytest.mark.django_db
 def test_get_auth_owner(mailingListModel, owner_apiClient, detail_url):
@@ -130,115 +137,143 @@ def test_get_auth_owner(mailingListModel, owner_apiClient, detail_url):
     response = owner_apiClient.get(detail_url(MailingListViewSet, mailingListModel))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['list_id'] == mailingListModel.list_id
+    assert response.data["list_id"] == mailingListModel.list_id
 
 
 @pytest.mark.django_db
-def test_patch_noauth(mailingListModel, noauth_apiClient, mailingListPayload, detail_url):
+def test_patch_noauth(
+    mailingListModel, noauth_apiClient, mailingListPayload, detail_url
+):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload)
+    response = noauth_apiClient.patch(
+        detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != mailingListPayload['list_id']
+    assert mailingListModel.list_id != mailingListPayload["list_id"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(mailingListModel, other_apiClient, mailingListPayload, detail_url):
+def test_patch_auth_other(
+    mailingListModel, other_apiClient, mailingListPayload, detail_url
+):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload)
+    response = other_apiClient.patch(
+        detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != mailingListPayload['list_id']
+    assert mailingListModel.list_id != mailingListPayload["list_id"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(mailingListModel, owner_apiClient, mailingListPayload, detail_url):
+def test_patch_auth_owner(
+    mailingListModel, owner_apiClient, mailingListPayload, detail_url
+):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload)
+    response = owner_apiClient.patch(
+        detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != mailingListPayload['list_id']
+    assert mailingListModel.list_id != mailingListPayload["list_id"]
 
 
 @pytest.mark.django_db
 def test_put_noauth(mailingListModel, noauth_apiClient, mailingListPayload, detail_url):
     """Tests the put method with an unauthenticated user client."""
-    response = noauth_apiClient.put(detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload)
+    response = noauth_apiClient.put(
+        detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != mailingListPayload['list_id']
+    assert mailingListModel.list_id != mailingListPayload["list_id"]
 
 
 @pytest.mark.django_db
-def test_put_auth_other(mailingListModel, other_apiClient, mailingListPayload, detail_url):
+def test_put_auth_other(
+    mailingListModel, other_apiClient, mailingListPayload, detail_url
+):
     """Tests the put method with the authenticated other user client."""
-    response = other_apiClient.put(detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload)
+    response = other_apiClient.put(
+        detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != mailingListPayload['list_id']
+    assert mailingListModel.list_id != mailingListPayload["list_id"]
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(mailingListModel, owner_apiClient, mailingListPayload, detail_url):
+def test_put_auth_owner(
+    mailingListModel, owner_apiClient, mailingListPayload, detail_url
+):
     """Tests the put method with the authenticated owner user client."""
-    response = owner_apiClient.put(detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload)
+    response = owner_apiClient.put(
+        detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     mailingListModel.refresh_from_db()
-    assert mailingListModel.list_id != mailingListPayload['list_id']
+    assert mailingListModel.list_id != mailingListPayload["list_id"]
 
 
 @pytest.mark.django_db
 def test_post_noauth(noauth_apiClient, mailingListPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url(MailingListViewSet), data=mailingListPayload)
+    response = noauth_apiClient.post(
+        list_url(MailingListViewSet), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     with pytest.raises(MailingListModel.DoesNotExist):
-        MailingListModel.objects.get(list_id = mailingListPayload['list_id'])
+        MailingListModel.objects.get(list_id=mailingListPayload["list_id"])
 
 
 @pytest.mark.django_db
 def test_post_auth_other(other_apiClient, mailingListPayload, list_url):
     """Tests the post method with the authenticated other user client."""
-    response = other_apiClient.post(list_url(MailingListViewSet), data=mailingListPayload)
+    response = other_apiClient.post(
+        list_url(MailingListViewSet), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     with pytest.raises(MailingListModel.DoesNotExist):
-        MailingListModel.objects.get(list_id = mailingListPayload['list_id'])
+        MailingListModel.objects.get(list_id=mailingListPayload["list_id"])
 
 
 @pytest.mark.django_db
 def test_post_auth_owner(owner_apiClient, mailingListPayload, list_url):
     """Tests the post method with the authenticated owner user client."""
-    response = owner_apiClient.post(list_url(MailingListViewSet), data=mailingListPayload)
+    response = owner_apiClient.post(
+        list_url(MailingListViewSet), data=mailingListPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['list_id']
+        response.data["list_id"]
     with pytest.raises(MailingListModel.DoesNotExist):
-        MailingListModel.objects.get(list_id = mailingListPayload['list_id'])
+        MailingListModel.objects.get(list_id=mailingListPayload["list_id"])
 
 
 @pytest.mark.django_db
@@ -285,9 +320,17 @@ def test_delete_nonexistant_auth_owner(mailingListModel, owner_apiClient, detail
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(mailingListModel, noauth_apiClient, custom_detail_action_url):
+def test_toggle_favorite_noauth(
+    mailingListModel, noauth_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with an unauthenticated user client."""
-    response = noauth_apiClient.post(custom_detail_action_url(MailingListViewSet, MailingListViewSet.URL_NAME_TOGGLE_FAVORITE, mailingListModel))
+    response = noauth_apiClient.post(
+        custom_detail_action_url(
+            MailingListViewSet,
+            MailingListViewSet.URL_NAME_TOGGLE_FAVORITE,
+            mailingListModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mailingListModel.refresh_from_db()
@@ -295,9 +338,17 @@ def test_toggle_favorite_noauth(mailingListModel, noauth_apiClient, custom_detai
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(mailingListModel, other_apiClient, custom_detail_action_url):
+def test_toggle_favorite_auth_other(
+    mailingListModel, other_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with the authenticated other user client."""
-    response = other_apiClient.post(custom_detail_action_url(MailingListViewSet, MailingListViewSet.URL_NAME_TOGGLE_FAVORITE, mailingListModel))
+    response = other_apiClient.post(
+        custom_detail_action_url(
+            MailingListViewSet,
+            MailingListViewSet.URL_NAME_TOGGLE_FAVORITE,
+            mailingListModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mailingListModel.refresh_from_db()
@@ -305,9 +356,17 @@ def test_toggle_favorite_auth_other(mailingListModel, other_apiClient, custom_de
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_owner(mailingListModel, owner_apiClient, custom_detail_action_url):
+def test_toggle_favorite_auth_owner(
+    mailingListModel, owner_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.MailingListViewSet.MailingListViewSet.toggle_favorite` action with the authenticated owner user client."""
-    response = owner_apiClient.post(custom_detail_action_url(MailingListViewSet, MailingListViewSet.URL_NAME_TOGGLE_FAVORITE, mailingListModel))
+    response = owner_apiClient.post(
+        custom_detail_action_url(
+            MailingListViewSet,
+            MailingListViewSet.URL_NAME_TOGGLE_FAVORITE,
+            mailingListModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_200_OK
     mailingListModel.refresh_from_db()

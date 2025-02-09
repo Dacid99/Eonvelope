@@ -31,8 +31,8 @@ from django.db import IntegrityError
 from faker import Faker
 from model_bakery import baker
 
-from core.models.AccountModel import AccountModel
 from core.models.EMailModel import EMailModel
+from core.models.MailboxModel import MailboxModel
 from core.models.MailingListModel import MailingListModel
 
 
@@ -81,8 +81,8 @@ def test_EMailModel_creation(email):
     assert email.is_favorite is False
 
     assert email.mailinglist is None
-    assert email.account is not None
-    assert isinstance(email.account, AccountModel)
+    assert email.mailbox is not None
+    assert isinstance(email.mailbox, MailboxModel)
     assert email.headers is None
     assert email.x_spam == "NO"
 
@@ -93,14 +93,14 @@ def test_EMailModel_creation(email):
 
     assert email.message_id in str(email)
     assert str(email.datetime) in str(email)
-    assert str(email.account) in str(email)
+    assert str(email.mailbox) in str(email)
 
 
 @pytest.mark.django_db
-def test_EMailModel_foreign_key_account_deletion(email):
-    """Tests the on_delete foreign key constraint on account in :class:`core.models.EMailModel.EMailModel`."""
+def test_EMailModel_foreign_key_mailbox_deletion(email):
+    """Tests the on_delete foreign key constraint on mailbox in :class:`core.models.EMailModel.EMailModel`."""
 
-    email.account.delete()
+    email.mailbox.delete()
 
     with pytest.raises(EMailModel.DoesNotExist):
         email.refresh_from_db()
@@ -108,7 +108,7 @@ def test_EMailModel_foreign_key_account_deletion(email):
 
 @pytest.mark.django_db
 def test_EMailModel_foreign_key_inReplyTo_deletion(email):
-    """Tests the on_delete foreign key constraint on account in :class:`core.models.EMailModel.EMailModel`."""
+    """Tests the on_delete foreign key constraint on inReplyTo in :class:`core.models.EMailModel.EMailModel`."""
 
     inReplyToEmail = baker.make(EMailModel, x_spam="NO")
     email.inReplyTo = inReplyToEmail
@@ -143,18 +143,18 @@ def test_EMailModel_unique():
     email_1 = baker.make(EMailModel, x_spam="NO", message_id="abc123")
     email_2 = baker.make(EMailModel, x_spam="NO", message_id="abc123")
     assert email_1.message_id == email_2.message_id
-    assert email_1.account != email_2.account
+    assert email_1.mailbox != email_2.mailbox
 
-    account = baker.make(AccountModel)
+    mailbox = baker.make(MailboxModel)
 
-    email_1 = baker.make(EMailModel, x_spam="NO", account=account)
-    email_2 = baker.make(EMailModel, x_spam="NO", account=account)
+    email_1 = baker.make(EMailModel, x_spam="NO", mailbox=mailbox)
+    email_2 = baker.make(EMailModel, x_spam="NO", mailbox=mailbox)
     assert email_1.message_id != email_2.message_id
-    assert email_1.account == email_2.account
+    assert email_1.mailbox == email_2.mailbox
 
-    baker.make(EMailModel, x_spam="NO", message_id="abc123", account=account)
+    baker.make(EMailModel, x_spam="NO", message_id="abc123", mailbox=mailbox)
     with pytest.raises(IntegrityError):
-        baker.make(EMailModel, x_spam="NO", message_id="abc123", account=account)
+        baker.make(EMailModel, x_spam="NO", message_id="abc123", mailbox=mailbox)
 
 
 @pytest.mark.django_db

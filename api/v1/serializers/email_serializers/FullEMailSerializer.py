@@ -78,7 +78,7 @@ class FullEMailSerializer(BaseEMailSerializer):
         user = request.user if request else None
         if user is not None:
             emailcorrespondents = EMailCorrespondentsModel.objects.filter(
-                email=object, email__account__user=user
+                email=object, email__mailbox__account__user=user
             ).distinct()
             return EMailCorrespondentSerializer(
                 emailcorrespondents, many=True, read_only=True

@@ -17,7 +17,6 @@
 - filtertest for choices
 - move all signals into models
 - user validation for serializers to avoid leakage
-- first found in mailbox fk
 - upload eml action with parsing
 - mailinglist.correspondent is redundant
 - enforce choices via constraint

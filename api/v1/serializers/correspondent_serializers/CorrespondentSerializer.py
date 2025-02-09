@@ -68,7 +68,7 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
         user = request.user if request else None
         if user is not None:
             correspondentemails = EMailCorrespondentsModel.objects.filter(
-                correspondent=object, email__account__user=user
+                correspondent=object, email__mailbox__account__user=user
             ).distinct()
             return CorrespondentEMailSerializer(
                 correspondentemails, many=True, read_only=True

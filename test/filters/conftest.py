@@ -394,7 +394,7 @@ def fixture_mailinglist_queryset(correspondent_queryset):
 
 @pytest.fixture(name="email_queryset")
 def fixture_email_queryset(
-    account_queryset, correspondent_queryset, mailinglist_queryset
+    mailbox_queryset, correspondent_queryset, mailinglist_queryset
 ):
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
@@ -407,7 +407,7 @@ def fixture_email_queryset(
                 html_bodytext=text_test_item,
                 datasize=INT_TEST_ITEMS[number],
                 is_favorite=BOOL_TEST_ITEMS[number],
-                account=account_queryset.get(id=number + 1),
+                mailbox=mailbox_queryset.get(id=number + 1),
                 mailinglist=mailinglist_queryset.get(id=number + 1),
                 x_spam=text_test_item,
             )

@@ -23,6 +23,7 @@ import django_filters
 from api.constants import FilterSetups
 from core.models.AttachmentModel import AttachmentModel
 
+
 class AttachmentFilter(django_filters.FilterSet):
     """The filter class for :class:`core.models.AttachmentModel`."""
 
@@ -32,9 +33,11 @@ class AttachmentFilter(django_filters.FilterSet):
         model = AttachmentModel
         fields = {
             "file_name": FilterSetups.TEXT,
+            "content_disposition": FilterSetups.TEXT,
+            "content_type": FilterSetups.TEXT,
             "datasize": FilterSetups.INT,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
-            "email__datetime": FilterSetups.DATETIME
+            "email__datetime": FilterSetups.DATETIME,
         }

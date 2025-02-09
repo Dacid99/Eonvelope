@@ -428,6 +428,8 @@ def fixture_attachment_queryset(email_queryset):
                 AttachmentModel,
                 file_path="/path/" + text_test_item,
                 file_name=text_test_item,
+                content_disposition=text_test_item,
+                content_type=text_test_item,
                 datasize=INT_TEST_ITEMS[number],
                 is_favorite=BOOL_TEST_ITEMS[number],
                 email=email_queryset.get(id=number + 1),

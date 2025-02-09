@@ -40,16 +40,18 @@ class BaseAttachmentSerializer(serializers.ModelSerializer):
         model = AttachmentModel
         """The model to serialize."""
 
-        exclude = ['file_path']
+        exclude = ["file_path"]
         """Exclude the :attr:`core.models.AttachmentModel.AttachmentModel.file_path` field."""
 
         read_only_fields = [
-                'file_name',
-                'datasize',
-                'email',
-                'created',
-                'updated'
-            ]
+            "file_name",
+            "content_disposition",
+            "content_type",
+            "datasize",
+            "email",
+            "created",
+            "updated",
+        ]
         """The :attr:`core.models.AttachmentModel.AttachmentModel.is_healthy`,
         :attr:`core.models.AttachmentModel.AttachmentModel.datasize`,
         :attr:`core.models.AttachmentModel.AttachmentModel.email`,

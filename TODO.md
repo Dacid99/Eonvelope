@@ -22,6 +22,10 @@
 - mailinglist.correspondent is redundant
 - enforce choices via constraint
 - rewrite mailrendering
+- strip texts is not implemented
+- throw out spam is misplaced
+- save_images in mailbox is not connected to save_storage, requires mailbox in emails
+- references header
 
 ### Work in progress
 - tests

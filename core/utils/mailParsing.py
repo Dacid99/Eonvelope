@@ -33,17 +33,16 @@ import email.message
 import email.utils
 import logging
 from email.utils import parseaddr
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING
 
 import email_validator
 import imap_tools.imap_utf7
 from django.utils import timezone
 
-from core.constants import ParsedMailKeys
-
 if TYPE_CHECKING:
     from email.header import Header
     from email.message import EmailMessage
+    from typing import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -90,6 +89,7 @@ def getHeader(
     Args:
         emailMessage: The message to get the header from.
         headerName: The name of the header field.
+        joiningString: The string to join multiple headers with. Default to ', ' which is safe for CharFields.
         fallbackCallable: A callable that provides a fallback if the field is not found.
             Is only executed if required. Defaults to `lambda: None`.
 

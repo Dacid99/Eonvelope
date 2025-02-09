@@ -38,17 +38,18 @@ import quopri
 from typing import TYPE_CHECKING
 
 import imgkit
-from Emailkasten.utils import get_config
 from PIL import Image
 
+from Emailkasten.utils import get_config
+
 from .fileManagment import getPrerenderImageStoragePath
-from .mailParsing import ParsedMailKeys
 
 if TYPE_CHECKING:
     from PIL import ImageFile
 
 
 logger = logging.getLogger(__name__)
+
 
 def _combineImages(imagesFileList: list[ImageFile.ImageFile]) -> Image.Image:
     """Combining multiple images into one with attention to their sizes.
@@ -60,12 +61,12 @@ def _combineImages(imagesFileList: list[ImageFile.ImageFile]) -> Image.Image:
         The combined image.
     """
     logger.debug("Combining image parts ...")
-    backgroundColor=(255,255,255)
+    backgroundColor = (255, 255, 255)
     widths, heights = zip(*(imageFile.size for imageFile in imagesFileList))
 
     newWidth = max(widths)
     newHeight = sum(heights)
-    newImage = Image.new("RGB", (newWidth, newHeight), color = backgroundColor)
+    newImage = Image.new("RGB", (newWidth, newHeight), color=backgroundColor)
     offset = 0
     for images in imagesFileList:
         # xCoordinate = int((new_width - im.size[0])/2)
@@ -77,7 +78,6 @@ def _combineImages(imagesFileList: list[ImageFile.ImageFile]) -> Image.Image:
     return newImage
 
 
-
 def prerender(parsedMail: dict) -> None:
     """Creates a prerender image of an email.
 
@@ -86,17 +86,17 @@ def prerender(parsedMail: dict) -> None:
     """
     logger.debug("Generating prerender image for mail ...")
 
-    dumpDir = get_config('TEMPORARY_STORAGE_DIRECTORY')
+    dumpDir = get_config("TEMPORARY_STORAGE_DIRECTORY")
     # Create the dump directory if not existing yet
     if not os.path.isdir(dumpDir):
         os.makedirs(dumpDir)
         logger.debug("Created dump directory %s", dumpDir)
 
-    message = email.message_from_bytes(parsedMail[ParsedMailKeys.DATA])
+    message = email.message_from_bytes(parsedMail["Data"])
 
-    dirtyChars = [ '\n', '\\n', '\t', '\\t', '\r', '\\r']
+    dirtyChars = ["\n", "\\n", "\t", "\\t", "\r", "\\r"]
 
-    imgkitOptions = { 'load-error-handling': 'skip'}
+    imgkitOptions = {"load-error-handling": "skip"}
     # imgkitOptions.update({ 'quiet': None })
     imagesList = []
     attachments = []
@@ -106,56 +106,69 @@ def prerender(parsedMail: dict) -> None:
     #
     for part in message.walk():
         if part.is_multipart():
-            logger.debug('Multipart found, continue')
+            logger.debug("Multipart found, continue")
             continue
 
         if not part.get_content_disposition():
             mimeType = part.get_content_type()
-            charset = part.get_content_charset() or get_config('DEFAULT_CHARSET')
+            charset = part.get_content_charset() or get_config("DEFAULT_CHARSET")
 
             logger.debug("Found MIME part: %s", mimeType)
-            if mimeType.startswith('text/'):
+            if mimeType.startswith("text/"):
 
                 try:
-                    payload = quopri.decodestring(part.get_payload(decode=True)).decode(charset, errors='replace')
+                    payload = quopri.decodestring(part.get_payload(decode=True)).decode(
+                        charset, errors="replace"
+                    )
                 except Exception:
-                    payload = str(quopri.decodestring(part.get_payload(decode=True)))[2:-1]
+                    payload = str(quopri.decodestring(part.get_payload(decode=True)))[
+                        2:-1
+                    ]
 
                 # Cleanup dirty characters in html
-                if mimeType == 'text/html':
+                if mimeType == "text/html":
                     for char in dirtyChars:
-                        payload = payload.replace(char, '')
+                        payload = payload.replace(char, "")
 
                 # Insert other text into html format
                 else:
-                    payload = get_config('HTML_WRAPPER') % payload
-
+                    payload = get_config("HTML_WRAPPER") % payload
 
                 # Generate MD5 hash of the payload
                 md5 = hashlib.md5()
                 md5.update(payload.encode(charset))
-                imagePath = md5.hexdigest() + '.png'
+                imagePath = md5.hexdigest() + ".png"
                 try:
-                    imgkit.from_string(payload, dumpDir + '/' + imagePath, options = imgkitOptions)
+                    imgkit.from_string(
+                        payload, dumpDir + "/" + imagePath, options=imgkitOptions
+                    )
                     logger.debug("Decoded %s", imagePath)
                     imagesList.append(os.path.join(dumpDir, imagePath))
                 except Exception:
-                    logger.warning("Decoding this MIME part of type %s returned error!", mimeType, exc_info=True)
+                    logger.warning(
+                        "Decoding this MIME part of type %s returned error!",
+                        mimeType,
+                        exc_info=True,
+                    )
 
-            elif mimeType.startswith('image/'):
+            elif mimeType.startswith("image/"):
                 payload = part.get_payload(decode=False)
                 imgdata = base64.b64decode(payload)
                 # Generate MD5 hash of the payload
                 md5 = hashlib.md5()
-                md5.update(payload.encode(charset, errors='replace'))
-                imagePath = md5.hexdigest() + '.' + mimeType.split('/')[1]
+                md5.update(payload.encode(charset, errors="replace"))
+                imagePath = md5.hexdigest() + "." + mimeType.split("/")[1]
                 try:
-                    with open(dumpDir + '/' + imagePath, 'wb') as dumpImageFile:
+                    with open(dumpDir + "/" + imagePath, "wb") as dumpImageFile:
                         dumpImageFile.write(imgdata)
                     logger.debug("Decoded %s", imagePath)
                     imagesList.append(os.path.join(dumpDir, imagePath))
                 except Exception:
-                    logger.warning("Decoding this MIME part of type %s returned error!", mimeType, exc_info=True)
+                    logger.warning(
+                        "Decoding this MIME part of type %s returned error!",
+                        mimeType,
+                        exc_info=True,
+                    )
 
             else:
                 fileName = part.get_filename() or f"{hash(part)}.attachment"
@@ -167,14 +180,14 @@ def prerender(parsedMail: dict) -> None:
             logger.debug("Added attachment %s of MIME type %s", fileName, mimeType)
 
     if attachments:
-        footer = '<p><hr><p><b>Attached Files:</b><p><ul>'
+        footer = "<p><hr><p><b>Attached Files:</b><p><ul>"
         for attachment in attachments:
-            footer = footer + '<li>' + attachment + '</li>'
+            footer = footer + "<li>" + attachment + "</li>"
         md5 = hashlib.md5()
-        md5.update(footer.encode('utf-8'))
-        imagePath = md5.hexdigest() + '.png'
+        md5.update(footer.encode("utf-8"))
+        imagePath = md5.hexdigest() + ".png"
         try:
-            imgkit.from_string(footer, dumpDir + '/' + imagePath, options = imgkitOptions)
+            imgkit.from_string(footer, dumpDir + "/" + imagePath, options=imgkitOptions)
             logger.debug("Created footer %s", imagePath)
             imagesList.append(os.path.join(dumpDir, imagePath))
         except Exception:

@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING
 
 from django.db import models
 
-from ..constants import ParsedMailKeys
+from ..constants import HeaderFields
 from ..utils.mailParsing import getHeader
 
 if TYPE_CHECKING:
@@ -94,7 +94,7 @@ class MailingListModel(models.Model):
     def fromEmailMessage(
         emailMessage: EmailMessage, correspondent=None
     ) -> MailingListModel | None:
-        if not (list_id := getHeader(emailMessage, ParsedMailKeys.MailingList.ID)):
+        if not (list_id := getHeader(emailMessage, HeaderFields.MailingList.ID)):
             logger.debug(
                 "Skipping mailinglist with empty list id %s.",
                 list_id,
@@ -107,22 +107,22 @@ class MailingListModel(models.Model):
 
         new_mailinglist = MailingListModel(list_id=list_id)
         new_mailinglist.list_owner = getHeader(
-            emailMessage, ParsedMailKeys.MailingList.OWNER
+            emailMessage, HeaderFields.MailingList.OWNER
         )
         new_mailinglist.list_subscribe = getHeader(
-            emailMessage, ParsedMailKeys.MailingList.SUBSCRIBE
+            emailMessage, HeaderFields.MailingList.SUBSCRIBE
         )
         new_mailinglist.list_unsubscribe = getHeader(
-            emailMessage, ParsedMailKeys.MailingList.UNSUBSCRIBE
+            emailMessage, HeaderFields.MailingList.UNSUBSCRIBE
         )
         new_mailinglist.list_post = getHeader(
-            emailMessage, ParsedMailKeys.MailingList.POST
+            emailMessage, HeaderFields.MailingList.POST
         )
         new_mailinglist.list_help = getHeader(
-            emailMessage, ParsedMailKeys.MailingList.HELP
+            emailMessage, HeaderFields.MailingList.HELP
         )
         new_mailinglist.list_archive = getHeader(
-            emailMessage, ParsedMailKeys.MailingList.ARCHIVE
+            emailMessage, HeaderFields.MailingList.ARCHIVE
         )
         new_mailinglist.correspondent = correspondent
         return new_mailinglist

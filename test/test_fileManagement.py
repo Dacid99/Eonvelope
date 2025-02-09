@@ -36,7 +36,7 @@ import pytest
 from pyfakefs.fake_filesystem_unittest import Patcher
 
 import core.utils.fileManagment
-from core.constants import ParsedMailKeys
+from core.constants import HeaderFields
 
 if TYPE_CHECKING:
     from typing import Generator
@@ -213,10 +213,7 @@ def test_getPrerenderImageStoragePath_goodDict(
         patch_getSubDirectory_returnValue,
         f"{mock_messageIDValue}.{PRERENDER_IMAGETYPE}",
     )
-    assert (
-        mock_good_parsedMailDict[ParsedMailKeys.PRERENDER_FILE_PATH]
-        == prerenderFilePath
-    )
+    assert mock_good_parsedMailDict[""] == prerenderFilePath
     mock_logger.debug.assert_called()
 
 
@@ -244,4 +241,4 @@ def test_getPrerenderImageStoragePath_badDict(
     mock_getSubdirectory.assert_not_called()
     spy_ospathjoin.assert_not_called()
     mock_logger.debug.assert_called()
-    assert ParsedMailKeys.PRERENDER_FILE_PATH not in mock_bad_parsedMailDict
+    assert "" not in mock_bad_parsedMailDict

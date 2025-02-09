@@ -32,8 +32,8 @@ from typing import TYPE_CHECKING
 
 from Emailkasten.utils import get_config
 
+from ..constants import HeaderFields
 from ..models.StorageModel import StorageModel
-from .mailParsing import ParsedMailKeys
 
 if TYPE_CHECKING:
     from typing import Any, Callable
@@ -112,13 +112,13 @@ def getPrerenderImageStoragePath(parsedMail: dict[str, Any]) -> str:
         The path in the storage where the prerender image should be saved.
     """
     logger.debug("Getting storage path for prerender image ...")
-    dirPath = StorageModel.getSubdirectory(parsedMail[ParsedMailKeys.Header.MESSAGE_ID])
+    dirPath = StorageModel.getSubdirectory(parsedMail[HeaderFields.MESSAGE_ID])
 
     filePath = os.path.join(
         dirPath,
-        f"{parsedMail[ParsedMailKeys.Header.MESSAGE_ID]}.{get_config('PRERENDER_IMAGETYPE')}",
+        f"{parsedMail[HeaderFields.MESSAGE_ID]}.{get_config('PRERENDER_IMAGETYPE')}",
     )
-    parsedMail[ParsedMailKeys.PRERENDER_FILE_PATH] = filePath
+    parsedMail[""] = filePath
     logger.debug("Successfully got storage path for prerender image.")
 
     return filePath

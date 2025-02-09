@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import email.generator
 import email.parser
-import json
 import logging
 import os
 from email import policy
@@ -31,8 +30,7 @@ from typing import TYPE_CHECKING
 
 from django.db import models, transaction
 
-from core import constants
-from core.constants import ParsedMailKeys
+from core.constants import CORRESPONDENT_HEADERS, HeaderFields
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.utils.fileManagment import saveStore
 from Emailkasten.utils import get_config
@@ -273,7 +271,7 @@ class EMailModel(models.Model):
         emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)
         message_id = getHeader(
             emailMessage,
-            ParsedMailKeys.Header.MESSAGE_ID,
+            HeaderFields.MESSAGE_ID,
             lambda: md5(emailBytes).hexdigest(),
         )
 
@@ -289,13 +287,11 @@ class EMailModel(models.Model):
 
         new_email = EMailModel(message_id=message_id, account=account)
         new_email.datetime = parseDatetimeHeader(
-            getHeader(emailMessage, ParsedMailKeys.Header.DATE)
+            getHeader(emailMessage, HeaderFields.DATE)
         )
-        new_email.email_subject = getHeader(emailMessage, ParsedMailKeys.Header.SUBJECT)
+        new_email.email_subject = getHeader(emailMessage, HeaderFields.SUBJECT)
         new_email.datasize = len(emailBytes)
-        if inReplyTo_message_id := getHeader(
-            emailMessage, ParsedMailKeys.Header.IN_REPLY_TO
-        ):
+        if inReplyTo_message_id := getHeader(emailMessage, HeaderFields.IN_REPLY_TO):
             try:
                 new_email.inReplyTo = EMailModel.objects.get(
                     message_id=inReplyTo_message_id
@@ -303,7 +299,7 @@ class EMailModel(models.Model):
             except EMailModel.DoesNotExist:
                 new_email.inReplyTo = None
 
-        new_email.x_spam = getHeader(emailMessage, ParsedMailKeys.Header.X_SPAM_FLAG)
+        new_email.x_spam = getHeader(emailMessage, HeaderFields.X_SPAM_FLAG)
 
         headerDict = {}
         for headerName in emailMessage.keys():
@@ -312,7 +308,7 @@ class EMailModel(models.Model):
 
         new_email.mailinglist = MailingListModel.fromEmailMessage(emailMessage)
         emailCorrespondents = []
-        for mention in ParsedMailKeys.Correspondent():
+        for mention in CORRESPONDENT_HEADERS:
             correspondentHeader = getHeader(emailMessage, mention)
             if correspondentHeader:
                 for header in correspondentHeader.split(","):
@@ -321,7 +317,7 @@ class EMailModel(models.Model):
                             header, mention, email=new_email
                         )
                     )
-                    if correspondentHeader == ParsedMailKeys.Correspondent.FROM:
+                    if correspondentHeader == HeaderFields.Correspondent.FROM:
                         new_email.mailinglist.correspondent = emailCorrespondents[-1]
 
         new_email.plain_bodytext = ""
@@ -345,10 +341,10 @@ class EMailModel(models.Model):
                 attachments[AttachmentModel.fromData(part, email=new_email)] = part
             elif any(
                 contentType.startswith(type_to_save)
-                for type_to_save in constants.ParsingConfiguration.SAVE_CONTENT_TYPE_PREFIXES
+                for type_to_save in get_config("SAVE_CONTENT_TYPE_PREFIXES")
             ) and not any(
                 contentType.endswith(type_to_skip)
-                for type_to_skip in constants.ParsingConfiguration.DONT_SAVE_CONTENT_TYPE_SUFFIXES
+                for type_to_skip in get_config("DONT_SAVE_CONTENT_TYPE_SUFFIXES")
             ):
                 attachments[AttachmentModel.fromData(part, email=new_email)] = part
             else:

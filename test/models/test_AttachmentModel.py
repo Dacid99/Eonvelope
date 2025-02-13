@@ -217,7 +217,7 @@ def test_save_data_failure(mocker, attachment):
 def test_fromData(mocker):
     mock_data = mocker.MagicMock(spec=Message)
 
-    result = AttachmentModel.fromData(mock_data)
+    result = AttachmentModel.fromData(mock_data, None)
 
     mock_data.get_filename.assert_called_once_with()
     mock_data.as_bytes.assert_called_once_with()

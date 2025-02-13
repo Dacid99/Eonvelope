@@ -136,7 +136,7 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         logger.info("Saving fetched emails ...")
         for fetchedMail in fetchedMails:
             try:
-                EMailModel.createFromEmailBytes(fetchedMail)
+                EMailModel.createFromEmailBytes(fetchedMail, self)
                 logger.info("Successfully saved fetched emails.")
             except IntegrityError:
                 logger.error(
@@ -144,7 +144,7 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
                 )
 
     @staticmethod
-    def fromData(mailboxData, account=None):
+    def fromData(mailboxData, account):
         new_mailbox = MailboxModel(account=account)
         new_mailbox.name = parseMailboxName(mailboxData)
         return new_mailbox

@@ -83,7 +83,7 @@ def decodeHeader(header: Header | str) -> str:
 def getHeader(
     emailMessage: EmailMessage,
     headerName: str,
-    joiningString=", ",
+    joiningString: str = ", ",
     fallbackCallable: Callable[[], str | None] = lambda: None,
 ) -> str | None:
     """Shorthand to safely get a header from a :class:`email.message.EmailMessage`.

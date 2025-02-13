@@ -72,7 +72,7 @@ class EMailCorrespondentsModel(models.Model):
 
     @staticmethod
     def fromHeader(
-        header: str, headerName: str, email=None
+        header: str, headerName: str, email
     ) -> EMailCorrespondentsModel | None:
         new_correspondent = CorrespondentModel.fromHeader(header)
         if not new_correspondent:

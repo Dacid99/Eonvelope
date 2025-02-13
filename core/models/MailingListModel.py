@@ -92,7 +92,7 @@ class MailingListModel(models.Model):
 
     @staticmethod
     def fromEmailMessage(
-        emailMessage: EmailMessage, correspondent=None
+        emailMessage: EmailMessage, correspondent
     ) -> MailingListModel | None:
         if not (list_id := getHeader(emailMessage, HeaderFields.MailingList.ID)):
             logger.debug(

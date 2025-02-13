@@ -193,7 +193,7 @@ function-naming-style=camelCase
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=_,pk,OK,CC,TO,ID,id,Id
+good-names=_,__,pk,OK,CC,TO,ID,id,Id
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted

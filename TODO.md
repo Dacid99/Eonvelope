@@ -21,6 +21,8 @@
 - mailinglist.correspondent is redundant
 - enforce choices via constraint
 - references header
+- database statistics
+- replace daemons with celery
 
 ### Work in progress
 - tests

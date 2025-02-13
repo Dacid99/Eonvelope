@@ -249,7 +249,7 @@ def test_fromData(mocker):
         "core.models.MailboxModel.parseMailboxName", return_value="testname"
     )
 
-    new_mailbox = MailboxModel.fromData("mailboxData")
+    new_mailbox = MailboxModel.fromData("mailboxData", None)
 
     mock_parseMailboxName.assert_called_once_with("mailboxData")
     assert new_mailbox.name == "testname"

@@ -301,19 +301,17 @@ class EMailModel(models.Model):
 
     @staticmethod
     def createFromEmailBytes(
-        emailBytes: bytes, mailbox: MailboxModel = None
+        emailBytes: bytes, mailbox: MailboxModel
     ) -> EMailModel | None:
         emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)
 
         message_id = getHeader(
             emailMessage,
             HeaderFields.MESSAGE_ID,
-            lambda: md5(emailBytes).hexdigest(),
+            fallbackCallable=lambda: md5(emailBytes).hexdigest(),
         )
-
-        if x_spam := getHeader(emailMessage, HeaderFields.X_SPAM) and get_config(
-            "THROW_OUT_SPAM"
-        ):
+        x_spam = getHeader(emailMessage, HeaderFields.X_SPAM)
+        if x_spam != "NO" and get_config("THROW_OUT_SPAM"):
             logger.debug(
                 "Skipping email with Message-ID %s in %s, it is flagged as spam.",
                 message_id,
@@ -335,7 +333,9 @@ class EMailModel(models.Model):
         )
         new_email.email_subject = getHeader(emailMessage, HeaderFields.SUBJECT)
         new_email.datasize = len(emailBytes)
-        if inReplyTo_message_id := getHeader(emailMessage, HeaderFields.IN_REPLY_TO):
+
+        inReplyTo_message_id = getHeader(emailMessage, HeaderFields.IN_REPLY_TO)
+        if inReplyTo_message_id:
             try:
                 new_email.inReplyTo = EMailModel.objects.get(
                     message_id=inReplyTo_message_id
@@ -348,23 +348,25 @@ class EMailModel(models.Model):
             headerDict[headerName] = getHeader(emailMessage, headerName)
         new_email.headers = headerDict
 
-        new_email.mailinglist = MailingListModel.fromEmailMessage(emailMessage)
         emailCorrespondents = []
-        for mention in HeaderFields.Correspondents():
+        for mention, __ in HeaderFields.Correspondents():
             correspondentHeader = getHeader(emailMessage, mention)
             if correspondentHeader:
                 for header in correspondentHeader.split(","):
+
                     emailCorrespondents.append(
                         EMailCorrespondentsModel.fromHeader(
                             header, mention, email=new_email
                         )
                     )
-                    if correspondentHeader == HeaderFields.Correspondent.FROM:
-                        new_email.mailinglist.correspondent = emailCorrespondents[-1]
+                    if correspondentHeader == HeaderFields.Correspondents.FROM:
+                        new_email.mailinglist = MailingListModel.fromEmailMessage(
+                            emailMessage, emailCorrespondents[-1]
+                        )
 
         new_email.plain_bodytext = ""
         new_email.html_bodytext = ""
-        attachments = {}
+        attachments = []
 
         for part in emailMessage.walk():
             contentType = part.get_content_type()
@@ -380,7 +382,9 @@ class EMailModel(models.Model):
                 charset = part.get_content_charset("utf-8")
                 new_email.html_bodytext += payload.decode(charset, errors="replace")
             elif contentDisposition is not None:
-                attachments[AttachmentModel.fromData(part, email=new_email)] = part
+                attachments.append(
+                    (AttachmentModel.fromData(part, email=new_email), part)
+                )
             elif any(
                 contentType.startswith(type_to_save)
                 for type_to_save in get_config("SAVE_CONTENT_TYPE_PREFIXES")
@@ -388,7 +392,9 @@ class EMailModel(models.Model):
                 contentType.endswith(type_to_skip)
                 for type_to_skip in get_config("DONT_SAVE_CONTENT_TYPE_SUFFIXES")
             ):
-                attachments[AttachmentModel.fromData(part, email=new_email)] = part
+                attachments.append(
+                    (AttachmentModel.fromData(part, email=new_email), part)
+                )
             else:
                 logger.debug(
                     "Part %s with disposition %s of email %s was not parsed.",
@@ -408,8 +414,9 @@ class EMailModel(models.Model):
                 for emailCorrespondent in emailCorrespondents:
                     if emailCorrespondent is not None:
                         emailCorrespondent.save()
-                for attachment, data in attachments.items():
+                for attachment, data in attachments:
                     attachment.save(attachmentData=data)
-        except Exception:
+        except Exception as e:
+            print(e)
             return None
         return new_email

@@ -119,7 +119,7 @@ def test_MailingListModel_fromEmailMessage(mocker):
         "core.models.MailingListModel.getHeader", return_value="list header"
     )
 
-    result = MailingListModel.fromEmailMessage(emailMessage)
+    result = MailingListModel.fromEmailMessage(emailMessage, None)
 
     mock_getHeader.call_count == 7
     mock_getHeader.assert_has_calls(
@@ -150,7 +150,7 @@ def test_fromHeader_duplicate(mocker, mailingList):
         "core.models.MailingListModel.getHeader", return_value=mailingList.list_id
     )
 
-    result = MailingListModel.fromEmailMessage(emailMessage)
+    result = MailingListModel.fromEmailMessage(emailMessage, None)
 
     assert result == mailingList
     mock_getHeader.assert_called_with(emailMessage, "List-Id")
@@ -163,7 +163,7 @@ def test_MailingListModel_fromEmailMessage_no_list_id(mocker, mock_logger):
         "core.models.MailingListModel.getHeader", return_value=None
     )
 
-    result = MailingListModel.fromEmailMessage(emailMessage)
+    result = MailingListModel.fromEmailMessage(emailMessage, None)
 
     mock_getHeader.call_count == 1
     mock_getHeader.assert_called_with(emailMessage, "List-Id")

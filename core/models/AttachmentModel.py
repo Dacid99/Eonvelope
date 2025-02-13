@@ -162,11 +162,13 @@ class AttachmentModel(models.Model):
             logger.error("Failed to store %s!", self)
 
     @staticmethod
-    def fromData(attachmentData: Message[str, str], email=None) -> AttachmentModel:
+    def fromData(attachmentData: Message[str, str], email) -> AttachmentModel:
         new_attachment = AttachmentModel()
 
         new_attachment.file_name = (
-            attachmentData.get_filename() or md5(attachmentData).hexdigest()
+            attachmentData.get_filename()
+            or md5(attachmentData).hexdigest()
+            + f".{attachmentData.get_content_subtype()}"
         )
         new_attachment.content_disposition = attachmentData.get_content_disposition()
         new_attachment.content_type = attachmentData.get_content_type()

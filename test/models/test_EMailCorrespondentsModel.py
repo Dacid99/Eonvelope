@@ -106,7 +106,7 @@ def test_fromHeader_success(mocker, faker):
     fake_header = faker.words(3)
     fake_headername = faker.word()
 
-    result = EMailCorrespondentsModel.fromHeader(fake_header, fake_headername)
+    result = EMailCorrespondentsModel.fromHeader(fake_header, fake_headername, None)
 
     assert isinstance(result, EMailCorrespondentsModel)
     mock_CorrespondentModel_fromHeader.assert_called_once_with(fake_header)
@@ -122,7 +122,7 @@ def test_fromHeader_no_correspondent(mocker, faker):
     fake_header = faker.words(3)
     fake_headername = faker.word()
 
-    result = EMailCorrespondentsModel.fromHeader(fake_header, fake_headername)
+    result = EMailCorrespondentsModel.fromHeader(fake_header, fake_headername, None)
 
     assert result is None
     mock_CorrespondentModel_fromHeader.assert_called_once_with(fake_header)

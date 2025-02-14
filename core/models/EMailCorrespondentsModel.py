@@ -19,11 +19,16 @@
 """Module with the :class:`EMailCorrespondentsModel` model class."""
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from django.db import models
 
 from core.constants import HeaderFields
 
 from .CorrespondentModel import CorrespondentModel
+
+if TYPE_CHECKING:
+    from .EMailModel import EMailModel
 
 
 class EMailCorrespondentsModel(models.Model):
@@ -72,8 +77,21 @@ class EMailCorrespondentsModel(models.Model):
 
     @staticmethod
     def fromHeader(
-        header: str, headerName: str, email
+        header: str, headerName: str, email: EMailModel
     ) -> EMailCorrespondentsModel | None:
+        """Prepares a :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel`
+        from an email header.
+
+        Args:
+            header: The header to parse the malinglistdata from.
+            headerName: The name of the header, the mention type of the correspondent.
+            email: The email for the new emailcorrespondent.
+
+        Returns:
+            The :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel` instance with data from the header.
+            If the correspondent already exists in the db uses that version.
+            None if the correspondent could not be parsed.
+        """
         new_correspondent = CorrespondentModel.fromHeader(header)
         if not new_correspondent:
             return None

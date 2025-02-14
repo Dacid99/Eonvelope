@@ -59,6 +59,17 @@ class CorrespondentModel(models.Model):
 
     @staticmethod
     def fromHeader(header: str) -> CorrespondentModel | None:
+        """Prepares a :class:`core.models.CorrespondentModel.CorrespondentModel`
+        from email header data.
+
+        Args:
+            header: The header to parse the correspondentdata from.
+
+        Returns:
+            The :class:`core.models.CorrespondentModel.CorrespondentModel` with the data from the header.
+            If the correspondent already exists in the db returns that version.
+            None if there is no address in :attr:`header`.
+        """
         name, address = parseCorrespondentHeader(header)
         if not address:
             logger.debug(

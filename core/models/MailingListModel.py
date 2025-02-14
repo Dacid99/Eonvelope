@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`MailingListModel` model class."""
+
 from __future__ import annotations
 
 import logging
@@ -31,6 +32,7 @@ if TYPE_CHECKING:
     from email.message import EmailMessage
 
     from core.models.CorrespondentModel import CorrespondentModel
+
 
 logger = logging.getLogger(__name__)
 
@@ -92,8 +94,20 @@ class MailingListModel(models.Model):
 
     @staticmethod
     def fromEmailMessage(
-        emailMessage: EmailMessage, correspondent
+        emailMessage: EmailMessage, correspondent: CorrespondentModel
     ) -> MailingListModel | None:
+        """Prepares a :class:`core.models.MailingListModel.MailingListModel`
+        from an email message.
+
+        Args:
+            emailMessage: The email message to parse the malinglistdata from.
+            correspondent: The correspondent for the new mailinglist.
+
+        Returns:
+            The :class:`core.models.MailingListModel.MailingListModel` instance with data from the message.
+            If the correspondent already exists in the db returns that version.
+            None if there is no List-ID header in :attr:`emailMessage`.
+        """
         if not (list_id := getHeader(emailMessage, HeaderFields.MailingList.ID)):
             logger.debug(
                 "Skipping mailinglist with empty list id %s.",

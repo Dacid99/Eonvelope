@@ -30,11 +30,6 @@ import os.path
 from builtins import open  # required for testing
 from typing import TYPE_CHECKING
 
-from Emailkasten.utils import get_config
-
-from ..constants import HeaderFields
-from ..models.StorageModel import StorageModel
-
 if TYPE_CHECKING:
     from typing import Any, Callable
 

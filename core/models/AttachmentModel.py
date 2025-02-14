@@ -162,12 +162,23 @@ class AttachmentModel(models.Model):
             logger.error("Failed to store %s!", self)
 
     @staticmethod
-    def fromData(attachmentData: Message[str, str], email) -> AttachmentModel:
-        new_attachment = AttachmentModel()
+    def fromData(
+        attachmentData: Message[str, str], email: EMailModel
+    ) -> AttachmentModel:
+        """Prepares a :class:`core.models.AttachmentModel.AttachmentModel`
+        from attachment payload in bytes.
 
+        Args:
+            attachmentData: The attachment in bytes.
+            email: The email the attachment was a part of.
+
+        Returns:
+            The :class:`core.models.AttachmentModel.AttachmentModel` instance with the file data.
+        """
+        new_attachment = AttachmentModel()
         new_attachment.file_name = (
             attachmentData.get_filename()
-            or md5(attachmentData).hexdigest()
+            or md5(attachmentData.as_bytes()).hexdigest()
             + f".{attachmentData.get_content_subtype()}"
         )
         new_attachment.content_disposition = attachmentData.get_content_disposition()

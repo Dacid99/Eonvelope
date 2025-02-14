@@ -86,9 +86,7 @@ def eml2html(emailBytes: bytes) -> str:
     Args:
         emailBytes: The data of the mail to be converted.
     """
-    emailMessage: EmailMessage = email.message_from_bytes(
-        emailBytes, policy=policy.default
-    )
+    emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)
     ignorePlainText = False  # ignores too broadly!
 
     htmlWrapper = get_config("HTML_WRAPPER")
@@ -146,6 +144,14 @@ def eml2html(emailBytes: bytes) -> str:
 
 
 def renderHtml(html: str) -> Image.Image:
+    """Renders a html string into an image using imgkit and wkhtmltoimage.
+
+    Args:
+        html: The html string to render.
+
+    Returns:
+        The rendered image.
+    """
     imgkitOptions = get_config("PRERENDER_IMGKIT_OPTIONS")
     try:
         imageBytes = imgkit.from_string(html, None, options=imgkitOptions)
@@ -155,5 +161,13 @@ def renderHtml(html: str) -> Image.Image:
 
 
 def renderEML(emlData: bytes) -> Image.Image:
+    """Renders emldata into an image using imgkit and wkhtmltoimage.
+
+    Args:
+        emlData: The emldata to render.
+
+    Returns:
+        The rendered image.
+    """
     html = eml2html(emlData)
     return renderHtml(html)

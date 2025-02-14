@@ -214,7 +214,7 @@ class EMailModel(models.Model):
                 self.save_to_storage(emailData)
             self.render_to_storage(emailData)
 
-    def save_to_storage(self, emailData):
+    def save_to_storage(self, emailData: bytes):
         """Saves the email to the storage in eml format.
         If the file already exists, does not overwrite.
         If an error occurs, removes the incomplete file.
@@ -245,7 +245,7 @@ class EMailModel(models.Model):
         else:
             logger.error("Failed to store %s as eml!", self)
 
-    def render_to_storage(self, emailData):
+    def render_to_storage(self, emailData: bytes):
         """Renders the email and writes the resulting image
         to the storage.
         If the file already exists, does not overwrite.
@@ -279,15 +279,27 @@ class EMailModel(models.Model):
         else:
             logger.error("Failed to render and store %s!", self)
 
-    def subConversation(self) -> list:
+    def subConversation(self) -> list[EMailModel]:
+        """Gets all emails that are follow this email in the conversation.
+
+        Returns:
+            The list of all mails in the subconversation.
+        """
         subConversationEmails = [self]
         for replyEmail in self.replies.all():
             subConversationEmails.extend(replyEmail.subConversation())
         return subConversationEmails
 
-    def fullConversation(self) -> list:
+    def fullConversation(self) -> list[EMailModel]:
+        """Gets all emails that are connected to this email via inReplyTo.
+        Based on :func:`core.models.EMailModel.EMailModel.subConversation`
+        to recurse through the entire conversation.
+
+        Returns:
+            The list of all mails in the conversation.
+        """
         rootEmail = self
-        while rootEmail.inReplyTo:
+        while rootEmail.inReplyTo is not None:
             rootEmail = rootEmail.inReplyTo
         return rootEmail.subConversation()
 
@@ -303,6 +315,18 @@ class EMailModel(models.Model):
     def createFromEmailBytes(
         emailBytes: bytes, mailbox: MailboxModel
     ) -> EMailModel | None:
+        """Creates an :class:`core.models.EMailModel.EMailModel`
+        from an email in bytes form.
+
+        Args:
+            emailBytes: The email bytes to parse the emaildata from.
+            mailbox: The mailbox the email is in.
+
+        Returns:
+            The :class:`core.models.EMailModel.EMailModel` instance with data from the bytes.
+            If the email already exists in the db returns None.
+            None if there is no List-ID header in :attr:`emailMessage` or the mail is spam and is supposed to be thrown out.
+        """
         emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)
 
         message_id = getHeader(
@@ -416,7 +440,7 @@ class EMailModel(models.Model):
                         emailCorrespondent.save()
                 for attachment, data in attachments:
                     attachment.save(attachmentData=data)
-        except Exception as e:
-            print(e)
+        except Exception as error:
+            print(error)
             return None
         return new_email

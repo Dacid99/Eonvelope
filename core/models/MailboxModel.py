@@ -128,7 +128,13 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         logger.info("Successfully tested account to be %s.", result)
         return result
 
-    def fetch(self, criterion):
+    def fetch(self, criterion: str):
+        """Fetches emails from this mailbox based on :attr:`criterion`
+        and adds them to the db.
+
+        Args:
+            criterion: The criterion used to fetch emails from the mailbox.
+        """
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
         with self.account.get_fetcher() as fetcher:
             fetchedMails = fetcher.fetchEmails(self, criterion)
@@ -144,7 +150,17 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
                 )
 
     @staticmethod
-    def fromData(mailboxData, account):
+    def fromData(mailboxData: bytes, account: AccountModel) -> MailboxModel:
+        """Prepares a :class:`core.models.MailboxModel.MailboxModel`
+        from the mailboxname in bytes.
+
+        Args:
+            mailboxData: The bytes with the mailboxname.
+            account: The account the mailbox is in.
+
+        Returns:
+            The :class:`core.models.MailboxModel.MailboxModel` instance with data from the bytes.
+        """
         new_mailbox = MailboxModel(account=account)
         new_mailbox.name = parseMailboxName(mailboxData)
         return new_mailbox

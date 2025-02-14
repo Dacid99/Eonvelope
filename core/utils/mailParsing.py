@@ -39,8 +39,6 @@ import email_validator
 import imap_tools.imap_utf7
 from django.utils import timezone
 
-from Emailkasten.utils import get_config
-
 if TYPE_CHECKING:
     from email.header import Header
     from email.message import EmailMessage
@@ -132,6 +130,15 @@ def parseDatetimeHeader(dateHeader: str | None) -> datetime.datetime:
 
 
 def parseCorrespondentHeader(correspondentHeader: str) -> tuple[str, str]:
+    """Parses a correspondent header into name and address and validates that address.
+
+    Args:
+        correspondentHeader: The header with the correspondent to parse.
+
+    Returns:
+        The parsed and validated correspondent name and address.
+        If the correspondent address could not be validated uses the entire header.
+    """
     name, address = parseaddr(correspondentHeader)
     if not address:
         logger.warning(

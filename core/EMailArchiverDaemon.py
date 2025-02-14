@@ -18,13 +18,16 @@
 
 """Module with the :class:`EMailArchiverDaemon` class."""
 
+from __future__ import annotations
+
 import logging
 import logging.handlers
 import threading
 import time
+from typing import TYPE_CHECKING
 
-from .models.DaemonModel import DaemonModel
-from .models.EMailModel import EMailModel
+if TYPE_CHECKING:
+    from .models.DaemonModel import DaemonModel
 
 
 class EMailArchiverDaemon(threading.Thread):

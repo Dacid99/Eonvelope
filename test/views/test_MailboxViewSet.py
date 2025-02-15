@@ -472,6 +472,108 @@ def test_fetch_all_auth_owner(
 
 
 @pytest.mark.django_db
+def test_upload_eml_noauth(
+    mailboxModel, noauth_apiClient, custom_detail_action_url, mocker, faker
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with an unauthenticated user client."""
+    mock_EMailModel_createFromEmailBytes = mocker.patch(
+        "api.v1.views.MailboxViewSet.EMailModel.createFromEmailBytes"
+    )
+    fake_file_content = bytes(faker.sentence(5), encoding="utf-8")
+    fake_file = BytesIO(fake_file_content)
+
+    response = noauth_apiClient.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, mailboxModel
+        ),
+        {"eml": fake_file},
+        format="multipart",
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    mock_EMailModel_createFromEmailBytes.assert_not_called()
+    assert EMailModel.objects.all().count() == 0
+    with pytest.raises(KeyError):
+        response.data["name"]
+
+
+@pytest.mark.django_db
+def test_upload_eml_auth_other(
+    mailboxModel, other_apiClient, custom_detail_action_url, mocker, faker
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated other user client."""
+    mock_EMailModel_createFromEmailBytes = mocker.patch(
+        "api.v1.views.MailboxViewSet.EMailModel.createFromEmailBytes"
+    )
+    fake_file_content = bytes(faker.sentence(5), encoding="utf-8")
+    fake_file = BytesIO(fake_file_content)
+
+    response = other_apiClient.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, mailboxModel
+        ),
+        {"eml": fake_file},
+        format="multipart",
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_EMailModel_createFromEmailBytes.assert_not_called()
+    assert EMailModel.objects.all().count() == 0
+    with pytest.raises(KeyError):
+        response.data["name"]
+
+
+@pytest.mark.django_db
+def test_upload_eml_auth_owner(
+    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
+    mock_EMailModel_createFromEmailBytes = mocker.patch(
+        "api.v1.views.MailboxViewSet.EMailModel.createFromEmailBytes"
+    )
+    fake_file_content = bytes(faker.sentence(5), encoding="utf-8")
+    fake_file = BytesIO(fake_file_content)
+
+    response = owner_apiClient.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, mailboxModel
+        ),
+        {"eml": fake_file},
+        format="multipart",
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert (
+        response.data["mailbox"] == MailboxViewSet.serializer_class(mailboxModel).data
+    )
+    mock_EMailModel_createFromEmailBytes.assert_called_once_with(
+        fake_file_content, mailboxModel
+    )
+
+
+@pytest.mark.django_db
+def test_upload_eml_no_file_auth_owner(
+    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
+    mock_EMailModel_createFromEmailBytes = mocker.patch(
+        "api.v1.views.MailboxViewSet.EMailModel.createFromEmailBytes"
+    )
+
+    response = owner_apiClient.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, mailboxModel
+        )
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert EMailModel.objects.all().count() == 0
+    with pytest.raises(KeyError):
+        response.data["name"]
+    mock_EMailModel_createFromEmailBytes.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_upload_mbox_noauth(
     mailboxModel, noauth_apiClient, custom_detail_action_url, mocker, faker
 ):
@@ -484,7 +586,7 @@ def test_upload_mbox_noauth(
 
     response = noauth_apiClient.post(
         custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD, mailboxModel
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MBOX, mailboxModel
         ),
         {"mbox": fake_file},
         format="multipart",
@@ -510,7 +612,7 @@ def test_upload_mbox_auth_other(
 
     response = other_apiClient.post(
         custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD, mailboxModel
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MBOX, mailboxModel
         ),
         {"mbox": fake_file},
         format="multipart",
@@ -536,7 +638,7 @@ def test_upload_mbox_auth_owner(
 
     response = owner_apiClient.post(
         custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD, mailboxModel
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MBOX, mailboxModel
         ),
         {"mbox": fake_file},
         format="multipart",
@@ -560,7 +662,7 @@ def test_upload_mbox_no_file_auth_owner(
 
     response = owner_apiClient.post(
         custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD, mailboxModel
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MBOX, mailboxModel
         )
     )
 

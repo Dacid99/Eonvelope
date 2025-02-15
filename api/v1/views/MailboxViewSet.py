@@ -32,6 +32,7 @@ from rest_framework.response import Response
 from core import constants
 from core.constants import TestStatusCodes
 from core.models.DaemonModel import DaemonModel
+from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
 
 from ..filters.MailboxFilter import MailboxFilter
@@ -161,14 +162,49 @@ class MailboxViewSet(viewsets.ModelViewSet):
             {"detail": "All mails fetched", "mailbox": mailboxSerializer.data}
         )
 
-    URL_PATH_UPLOAD = "upload"
-    URL_NAME_UPLOAD = "upload"
+    URL_PATH_UPLOAD_EML = "upload-eml"
+    URL_NAME_UPLOAD_EML = "upload-eml"
 
     @action(
         detail=True,
         methods=["post"],
-        url_path=URL_PATH_UPLOAD,
-        url_name=URL_NAME_UPLOAD,
+        url_path=URL_PATH_UPLOAD_EML,
+        url_name=URL_NAME_UPLOAD_EML,
+    )
+    def upload_eml(self, request: Request, pk: int | None = None) -> Response:
+        """Action method toggling the favorite flag of the mailbox.
+
+        Args:
+            request: The request triggering the action.
+            pk: int: The private key of the mailbox to upload to. Defaults to None.
+
+        Returns:
+            A response detailing the request status.
+        """
+        uploaded_mbox_file = request.FILES.get("eml", None)
+        if uploaded_mbox_file is None:
+            return Response(
+                {"detail": "EML file missing in request!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        mailbox = self.get_object()
+        EMailModel.createFromEmailBytes(uploaded_mbox_file.read(), mailbox)
+        mailboxSerializer = self.get_serializer(mailbox)
+        return Response(
+            {
+                "detail": "Successfully uploaded mbox file",
+                "mailbox": mailboxSerializer.data,
+            }
+        )
+
+    URL_PATH_UPLOAD_MBOX = "upload-mbox"
+    URL_NAME_UPLOAD_MBOX = "upload-mbox"
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_UPLOAD_MBOX,
+        url_name=URL_NAME_UPLOAD_MBOX,
     )
     def upload_mbox(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the mailbox.

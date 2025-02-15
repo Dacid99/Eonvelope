@@ -21,8 +21,8 @@
 from __future__ import annotations
 
 import logging
+import mailbox
 import os
-from mailbox import mbox
 from typing import TYPE_CHECKING
 
 from dirtyfields import DirtyFieldsMixin
@@ -151,15 +151,27 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
                     "Email already exists in db, preprocessing apparently failed!"
                 )
 
-    def addFromMBOX(self, mbox_data):
-        mbox_filepath = os.path.join(
-            get_config("TEMPORARY_STORAGE_DIRECTORY"), str(hash(mbox_data)) + ".mbox"
+    def addFromMailboxFile(self, file_data, file_format):
+        if file_format == "mbox":
+            formatClass = mailbox.mbox
+        elif file_format == "mh":
+            formatClass = mailbox.MH
+        elif file_format == "babyl":
+            formatClass = mailbox.Babyl
+        elif file_format == "mmdf":
+            formatClass = mailbox.MMDF
+        elif file_format == "maildir":
+            formatClass = mailbox.Maildir
+        else:
+            raise ValueError(f"Mailbox fileformat {file_format} is not implemented!")
+        dump_filepath = os.path.join(
+            get_config("TEMPORARY_STORAGE_DIRECTORY"), str(hash(file_data))
         )
-        with open(mbox_filepath, "bw") as file:
-            file.write(mbox_data)
-        mboxFile = mbox(mbox_filepath)
-        for key in mboxFile.iterkeys():
-            EMailModel.createFromEmailBytes(mboxFile.get_bytes(key), self)
+        with open(dump_filepath, "bw") as file:
+            file.write(file_data)
+        mailboxFile = formatClass(dump_filepath)
+        for key in mailboxFile.iterkeys():
+            EMailModel.createFromEmailBytes(mailboxFile.get_bytes(key), self)
 
     @staticmethod
     def fromData(mailboxData: bytes, account: AccountModel) -> MailboxModel:

@@ -181,32 +181,32 @@ class MailboxViewSet(viewsets.ModelViewSet):
         Returns:
             A response detailing the request status.
         """
-        uploaded_mbox_file = request.FILES.get("eml", None)
-        if uploaded_mbox_file is None:
+        uploaded_mailbox_file = request.FILES.get("eml", None)
+        if uploaded_mailbox_file is None:
             return Response(
                 {"detail": "EML file missing in request!"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
-        EMailModel.createFromEmailBytes(uploaded_mbox_file.read(), mailbox)
+        EMailModel.createFromEmailBytes(uploaded_mailbox_file.read(), mailbox)
         mailboxSerializer = self.get_serializer(mailbox)
         return Response(
             {
-                "detail": "Successfully uploaded mbox file",
+                "detail": "Successfully uploaded EML file",
                 "mailbox": mailboxSerializer.data,
             }
         )
 
-    URL_PATH_UPLOAD_MBOX = "upload-mbox"
-    URL_NAME_UPLOAD_MBOX = "upload-mbox"
+    URL_PATH_UPLOAD_MAILBOX = "upload-mailbox"
+    URL_NAME_UPLOAD_MAILBOX = "upload-mailbox"
 
     @action(
         detail=True,
         methods=["post"],
-        url_path=URL_PATH_UPLOAD_MBOX,
-        url_name=URL_NAME_UPLOAD_MBOX,
+        url_path=URL_PATH_UPLOAD_MAILBOX,
+        url_name=URL_NAME_UPLOAD_MAILBOX,
     )
-    def upload_mbox(self, request: Request, pk: int | None = None) -> Response:
+    def upload_mailbox(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the mailbox.
 
         Args:
@@ -216,18 +216,25 @@ class MailboxViewSet(viewsets.ModelViewSet):
         Returns:
             A response detailing the request status.
         """
-        uploaded_mbox_file = request.FILES.get("mbox", None)
-        if uploaded_mbox_file is None:
+        format = request.data.get("format", "").lower()
+        uploaded_file = request.FILES.get("file", None)
+        if uploaded_file is None:
             return Response(
-                {"detail": "MBOX file missing in request!"},
+                {"detail": "MAILBOX file missing in request!"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
-        mailbox.addFromMBOX(uploaded_mbox_file.read())
+        try:
+            mailbox.addFromMailboxFile(uploaded_file.read(), format)
+        except ValueError:
+            return Response(
+                {"detail": "File format is not supported!"},
+                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            )
         mailboxSerializer = self.get_serializer(mailbox)
         return Response(
             {
-                "detail": "Successfully uploaded mbox file",
+                "detail": f"Successfully uploaded mailbox file.",
                 "mailbox": mailboxSerializer.data,
             }
         )

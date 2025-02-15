@@ -27,12 +27,12 @@ from __future__ import annotations
 import datetime
 import os
 from typing import TYPE_CHECKING
-from unittest.mock import call
 
 import pytest
 from django.db import IntegrityError
 from model_bakery import baker
 
+import core.models.MailboxModel
 from core.constants import TestStatusCodes
 from core.models.AccountModel import AccountModel
 from core.models.MailboxModel import MailboxModel
@@ -40,7 +40,6 @@ from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
-from core.utils.mailParsing import parseMailboxName
 from Emailkasten.utils import get_config
 
 if TYPE_CHECKING:
@@ -247,26 +246,53 @@ def test_fetch_exception(mocker, mock_logger, mailbox):
 
 
 @pytest.mark.django_db
-def test_addFromMBOX(mocker, faker, mailbox, override_config):
+@pytest.mark.parametrize(
+    "file_format, expectedClass",
+    [
+        ("mmdf", "mailbox.MMDF"),
+        ("babyl", "mailbox.Babyl"),
+        ("mbox", "mailbox.mbox"),
+        ("mh", "mailbox.MH"),
+        ("maildir", "mailbox.Maildir"),
+    ],
+)
+def test_addFromMailboxFile_success(
+    mocker, faker, mailbox, override_config, file_format, expectedClass
+):
     mock_open = mocker.mock_open()
     mocker.patch("core.models.MailboxModel.open", mock_open)
-    mock_mbox = mocker.patch("core.models.MailboxModel.mbox")
+    mock_parser_class = mocker.patch(f"core.models.MailboxModel.{expectedClass}")
     mock_EMailModel_createFromEmailBytes = mocker.patch(
         "core.models.EMailModel.EMailModel.createFromEmailBytes"
     )
     fake_mbox = bytes(faker.sentence(7), encoding="utf-8")
 
     with override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"):
-        mailbox.addFromMBOX(fake_mbox)
+        mailbox.addFromMailboxFile(fake_mbox, file_format)
 
-    mock_open.assert_called_once_with(
-        os.path.join("/tmp/", str(hash(fake_mbox)) + ".mbox"), "bw"
-    )
+    mock_open.assert_called_once_with(os.path.join("/tmp/", str(hash(fake_mbox))), "bw")
     mock_open.return_value.write.assert_called_once_with(fake_mbox)
-    mock_mbox.assert_called_once_with(
-        os.path.join("/tmp/", str(hash(fake_mbox)) + ".mbox")
+    mock_parser_class.assert_called_once_with(
+        os.path.join("/tmp/", str(hash(fake_mbox)))
     )
     mock_EMailModel_createFromEmailBytes.call_count == 2
+
+
+@pytest.mark.django_db
+def test_addFromMailboxFile_bad_format(mocker, faker, mailbox, override_config):
+    mock_open = mocker.mock_open()
+    mocker.patch("core.models.MailboxModel.open", mock_open)
+    mock_EMailModel_createFromEmailBytes = mocker.patch(
+        "core.models.EMailModel.EMailModel.createFromEmailBytes"
+    )
+    fake_mbox = bytes(faker.sentence(7), encoding="utf-8")
+
+    with override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"):
+        with pytest.raises(ValueError):
+            mailbox.addFromMailboxFile(fake_mbox, "unimplemented")
+
+    mock_open.assert_not_called()
+    mock_EMailModel_createFromEmailBytes.assert_not_called()
 
 
 def test_fromData(mocker):

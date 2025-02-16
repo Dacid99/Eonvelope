@@ -686,8 +686,7 @@ def test_upload_mailbox_no_format_auth_owner(
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
     mock_MailboxModel_addFromMailboxFile = mocker.patch(
-        "api.v1.views.MailboxViewSet.MailboxModel.addFromMailboxFile",
-        side_effect=ValueError,
+        "api.v1.views.MailboxViewSet.MailboxModel.addFromMailboxFile"
     )
     fake_file_content = bytes(faker.sentence(5), encoding="utf-8")
     fake_file = BytesIO(fake_file_content)
@@ -700,8 +699,8 @@ def test_upload_mailbox_no_format_auth_owner(
         format="multipart",
     )
 
-    assert response.status_code == status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
-    mock_MailboxModel_addFromMailboxFile.assert_called_once_with(fake_file_content, "")
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    mock_MailboxModel_addFromMailboxFile.assert_not_called()
     assert EMailModel.objects.all().count() == 0
     with pytest.raises(KeyError):
         response.data["name"]

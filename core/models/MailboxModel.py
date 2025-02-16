@@ -151,9 +151,21 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
                     "Email already exists in db, preprocessing apparently failed!"
                 )
 
-    def addFromMailboxFile(self, file_data, file_format):
+    def addFromMailboxFile(self, file_data: bytes, file_format: str):
+        """Adds emails from a mailbox file to the db.
+        Supported formats are implemented via the :mod:`mailbox` package.
+
+        Args:
+            file_data: The bytes of the mailbox file.
+            file_format: The format of the mailbox file. Case-insensitive.
+
+        Raises:
+            ValueError: If the file format is not implemented.
+        """
+        file_format = file_format.lower()
+        logger.info("Adding emails from %s mailbox file to %s ...", file_format, self)
         if file_format == "mbox":
-            formatClass = mailbox.mbox
+            formatClass: type[mailbox.Mailbox] = mailbox.mbox
         elif file_format == "mh":
             formatClass = mailbox.MH
         elif file_format == "babyl":
@@ -163,6 +175,11 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         elif file_format == "maildir":
             formatClass = mailbox.Maildir
         else:
+            logger.info(
+                "Failed adding emails from mailbox file to %s, format %s is not implemented.",
+                file_format,
+                self,
+            )
             raise ValueError(f"Mailbox fileformat {file_format} is not implemented!")
         dump_filepath = os.path.join(
             get_config("TEMPORARY_STORAGE_DIRECTORY"), str(hash(file_data))
@@ -172,6 +189,7 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         mailboxFile = formatClass(dump_filepath)
         for key in mailboxFile.iterkeys():
             EMailModel.createFromEmailBytes(mailboxFile.get_bytes(key), self)
+        logger.info("Successfully added emails from mailbox file.")
 
     @staticmethod
     def fromData(mailboxData: bytes, account: AccountModel) -> MailboxModel:

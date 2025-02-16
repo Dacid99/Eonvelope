@@ -257,29 +257,44 @@ def test_fetch_exception(mocker, mock_logger, mailbox):
     ],
 )
 def test_addFromMailboxFile_success(
-    mocker, faker, mailbox, override_config, file_format, expectedClass
+    mocker, faker, override_config, mailbox, mock_logger, file_format, expectedClass
 ):
     mock_open = mocker.mock_open()
     mocker.patch("core.models.MailboxModel.open", mock_open)
-    mock_parser_class = mocker.patch(f"core.models.MailboxModel.{expectedClass}")
-    mock_EMailModel_createFromEmailBytes = mocker.patch(
-        "core.models.EMailModel.EMailModel.createFromEmailBytes"
+    mock_parser = mocker.Mock()
+    mock_parser.iterkeys.return_value = ["key1", "second key"]
+    mock_parser_class = mocker.patch(
+        f"core.models.MailboxModel.{expectedClass}", return_value=mock_parser
     )
-    fake_mbox = bytes(faker.sentence(7), encoding="utf-8")
+    mock_EMailModel_createFromEmailBytes = mocker.patch(
+        "core.models.MailboxModel.EMailModel.createFromEmailBytes"
+    )
+    fake_mailbox_file = bytes(faker.sentence(7), encoding="utf-8")
 
     with override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"):
-        mailbox.addFromMailboxFile(fake_mbox, file_format)
+        mailbox.addFromMailboxFile(fake_mailbox_file, file_format)
 
-    mock_open.assert_called_once_with(os.path.join("/tmp/", str(hash(fake_mbox))), "bw")
-    mock_open.return_value.write.assert_called_once_with(fake_mbox)
-    mock_parser_class.assert_called_once_with(
-        os.path.join("/tmp/", str(hash(fake_mbox)))
+    mock_open.assert_called_once_with(
+        os.path.join("/tmp/", str(hash(fake_mailbox_file))), "bw"
     )
-    mock_EMailModel_createFromEmailBytes.call_count == 2
+    mock_open.return_value.write.assert_called_once_with(fake_mailbox_file)
+    mock_parser_class.assert_called_once_with(
+        os.path.join("/tmp/", str(hash(fake_mailbox_file)))
+    )
+    assert mock_EMailModel_createFromEmailBytes.call_count == 2
+    mock_EMailModel_createFromEmailBytes.assert_has_calls(
+        [
+            mocker.call(mock_parser.get_bytes("key1"), mailbox),
+            mocker.call(mock_parser.get_bytes("second key"), mailbox),
+        ]
+    )
+    mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
-def test_addFromMailboxFile_bad_format(mocker, faker, mailbox, override_config):
+def test_addFromMailboxFile_bad_format(
+    mocker, faker, override_config, mailbox, mock_logger
+):
     mock_open = mocker.mock_open()
     mocker.patch("core.models.MailboxModel.open", mock_open)
     mock_EMailModel_createFromEmailBytes = mocker.patch(
@@ -293,6 +308,7 @@ def test_addFromMailboxFile_bad_format(mocker, faker, mailbox, override_config):
 
     mock_open.assert_not_called()
     mock_EMailModel_createFromEmailBytes.assert_not_called()
+    mock_logger.debug.assert_called()
 
 
 def test_fromData(mocker):

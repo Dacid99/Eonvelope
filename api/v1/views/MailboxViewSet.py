@@ -207,7 +207,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         url_name=URL_NAME_UPLOAD_MAILBOX,
     )
     def upload_mailbox(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the mailbox.
+        """Action method allowing upload of a mailbox file and adding the contained mails to database.
 
         Args:
             request: The request triggering the action.
@@ -216,11 +216,16 @@ class MailboxViewSet(viewsets.ModelViewSet):
         Returns:
             A response detailing the request status.
         """
-        format = request.data.get("format", "").lower()
+        file_format = request.data.get("format", None)
+        if file_format is None:
+            return Response(
+                {"detail": "File format missing in request!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         uploaded_file = request.FILES.get("file", None)
         if uploaded_file is None:
             return Response(
-                {"detail": "MAILBOX file missing in request!"},
+                {"detail": "File missing in request!"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
@@ -234,7 +239,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         mailboxSerializer = self.get_serializer(mailbox)
         return Response(
             {
-                "detail": f"Successfully uploaded mailbox file.",
+                "detail": "Successfully uploaded mailbox file.",
                 "mailbox": mailboxSerializer.data,
             }
         )

@@ -2,6 +2,7 @@ __pycache__/
 .venv/
 .vscode/
 .mypy_cache/
+.ruff_cache/
 .pytest_cache/
 cookie.txt
 debug.txt

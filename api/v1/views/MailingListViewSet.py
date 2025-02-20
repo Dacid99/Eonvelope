@@ -58,8 +58,6 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
         "list_help",
         "list_archive",
         "is_favorite",
-        "correspondent__email_name",
-        "correspondent__email_address",
         "created",
         "updated",
     ]
@@ -71,7 +69,7 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
         Returns:
             The mailingslist entries matching the request user."""
         return MailingListModel.objects.filter(
-            correspondent__emails__mailbox__account__user=self.request.user
+            emails__mailbox__account__user=self.request.user
         ).distinct()
 
     def destroy(self, request: Request, pk: int | None = None) -> Response:

@@ -18,11 +18,17 @@
 
 """Module with the :class:`MailingListSerializer` serializer class."""
 
-from rest_framework import serializers
+import email
 
+from rest_framework import serializers
+from rest_framework.utils.serializer_helpers import ReturnDict
+
+from core.models.CorrespondentModel import CorrespondentModel
 from core.models.MailingListModel import MailingListModel
-from ..correspondent_serializers.BaseCorrespondentSerializer import \
-    BaseCorrespondentSerializer
+
+from ..correspondent_serializers.BaseCorrespondentSerializer import (
+    BaseCorrespondentSerializer,
+)
 from ..email_serializers.BaseEMailSerializer import BaseEMailSerializer
 from .BaseMailingListSerializer import BaseMailingListSerializer
 
@@ -39,7 +45,7 @@ class MailingListSerializer(BaseMailingListSerializer):
     by :class:`api.v1.serializers.EMailSerializers.BaseEMailSerializer.BaseEMailSerializer`.
     """
 
-    correspondent = BaseCorrespondentSerializer(read_only=True)
+    from_correspondents = serializers.SerializerMethodField(read_only=True)
     """The correspondent sending the mailinglist are serialized
     by :class:`api.v1.serializers.CorrespondentSerializers.BaseCorrespondentSerializer.BaseCorrespondentSerializer`.
     """
@@ -47,10 +53,8 @@ class MailingListSerializer(BaseMailingListSerializer):
     email_number = serializers.SerializerMethodField(read_only=True)
     """The number of mails by the mailinglist. Set via :func:`get_email_number`."""
 
-
     class Meta(BaseMailingListSerializer.Meta):
         """Metadata class for the serializer."""
-
 
     def get_email_number(self, object: MailingListModel) -> int:
         """Gets the number of mails sent by the mailinglist.
@@ -63,3 +67,27 @@ class MailingListSerializer(BaseMailingListSerializer):
         """
         number = object.emails.count()
         return number
+
+    def get_from_correspondents(self, object: MailingListModel) -> ReturnDict | None:
+        """Serializes the correspondents connected to the instance to be serialized.
+
+        Args:
+            object: The instance being serialized.
+
+        Returns:
+            The serialized From correspondents connected to the instance to be serialized.
+            An empty list if the the user is not authenticated.
+        """
+        request = self.context.get("request")
+        user = request.user if request else None
+        if user is not None:
+            emailcorrespondents = CorrespondentModel.objects.filter(
+                emails__mailinglist=object,
+                emails__mailbox__account__user=user,
+                correspondentemails__mention="FROM",
+            ).distinct()
+            return BaseCorrespondentSerializer(
+                emailcorrespondents, many=True, read_only=True
+            ).data
+        else:
+            return []

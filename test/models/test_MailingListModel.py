@@ -31,7 +31,6 @@ import pytest
 from django.db import IntegrityError
 from model_bakery import baker
 
-from core.models.CorrespondentModel import CorrespondentModel
 from core.models.MailingListModel import MailingListModel
 
 if TYPE_CHECKING:
@@ -71,8 +70,6 @@ def test_MailingListModel_creation(mailingList):
     assert mailingList.list_help is None
     assert mailingList.list_archive is None
     assert mailingList.is_favorite is False
-    assert mailingList.correspondent is not None
-    assert isinstance(mailingList.correspondent, CorrespondentModel)
     assert mailingList.updated is not None
     assert isinstance(mailingList.updated, datetime.datetime)
     assert mailingList.created is not None
@@ -82,34 +79,10 @@ def test_MailingListModel_creation(mailingList):
 
 
 @pytest.mark.django_db
-def test_MailingListModel_foreign_key_deletion(mailingList):
-    """Tests the on_delete foreign key constraint in :class:`core.models.MailingListModel.MailingListModel`."""
-
-    assert mailingList is not None
-    mailingList.correspondent.delete()
-    with pytest.raises(MailingListModel.DoesNotExist):
-        mailingList.refresh_from_db()
-
-
-@pytest.mark.django_db
-def test_MailingListModel_unique():
+def test_MailingListModel_unique(mailingList):
     """Tests the unique constraints of :class:`core.models.MailingListModel.MailingListModel`."""
-
-    mailingList_1 = baker.make(MailingListModel, list_id="abc123")
-    mailingList_2 = baker.make(MailingListModel, list_id="abc123")
-    assert mailingList_1.list_id == mailingList_2.list_id
-    assert mailingList_1.correspondent != mailingList_2.correspondent
-
-    correspondent = baker.make(CorrespondentModel)
-
-    mailingList_1 = baker.make(MailingListModel, correspondent=correspondent)
-    mailingList_2 = baker.make(MailingListModel, correspondent=correspondent)
-    assert mailingList_1.list_id != mailingList_2.list_id
-    assert mailingList_1.correspondent == mailingList_2.correspondent
-
-    baker.make(MailingListModel, list_id="abc123", correspondent=correspondent)
     with pytest.raises(IntegrityError):
-        baker.make(MailingListModel, list_id="abc123", correspondent=correspondent)
+        baker.make(MailingListModel, list_id=mailingList.list_id)
 
 
 @pytest.mark.django_db
@@ -119,7 +92,7 @@ def test_MailingListModel_fromEmailMessage(mocker):
         "core.models.MailingListModel.getHeader", return_value="list header"
     )
 
-    result = MailingListModel.fromEmailMessage(emailMessage, None)
+    result = MailingListModel.fromEmailMessage(emailMessage)
 
     mock_getHeader.call_count == 7
     mock_getHeader.assert_has_calls(
@@ -150,7 +123,7 @@ def test_fromHeader_duplicate(mocker, mailingList):
         "core.models.MailingListModel.getHeader", return_value=mailingList.list_id
     )
 
-    result = MailingListModel.fromEmailMessage(emailMessage, None)
+    result = MailingListModel.fromEmailMessage(emailMessage)
 
     assert result == mailingList
     mock_getHeader.assert_called_with(emailMessage, "List-Id")
@@ -163,7 +136,7 @@ def test_MailingListModel_fromEmailMessage_no_list_id(mocker, mock_logger):
         "core.models.MailingListModel.getHeader", return_value=None
     )
 
-    result = MailingListModel.fromEmailMessage(emailMessage, None)
+    result = MailingListModel.fromEmailMessage(emailMessage)
 
     mock_getHeader.call_count == 1
     mock_getHeader.assert_called_with(emailMessage, "List-Id")

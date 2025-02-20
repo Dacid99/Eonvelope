@@ -35,6 +35,8 @@ from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
 from core.models.MailingListModel import MailingListModel
 
+from .test_MailboxModel import fixture_mailboxModel
+
 
 @pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
@@ -318,3 +320,29 @@ def test_EMailModel_isSpam(email, x_spam, expectedResult):
     result = email.isSpam()
 
     assert result is expectedResult
+
+
+@pytest.mark.django_db(transaction=True)
+def test_EMailModel_createFromEmailBytes(mocker, attachmentEmailData, mailbox):
+    mock_EMailModel_save_to_storage = mocker.patch(
+        "core.models.EMailModel.EMailModel.save_to_storage"
+    )
+    mock_EMailModel_render_to_storage = mocker.patch(
+        "core.models.EMailModel.EMailModel.render_to_storage"
+    )
+    mock_AttachmentModel_save_to_storage = mocker.patch(
+        "core.models.EMailModel.AttachmentModel.save_to_storage"
+    )
+
+    email = EMailModel.createFromEmailBytes(attachmentEmailData, mailbox=mailbox)
+
+    assert email.message_id == "<e047e14d-2397-435b-baf6-8e8b7423f860@out.de>"
+    assert email.email_subject == "Whats up"
+    assert email.x_spam == "NO"
+    assert email.plain_bodytext == "this a test to see how ur doin\n\n\n\n\n"
+    assert email.html_bodytext == ""
+    assert email.attachments.count() == 1
+    assert email.correspondents.count() == 5
+    mock_AttachmentModel_save_to_storage.assert_called()
+    mock_EMailModel_save_to_storage.assert_called()
+    mock_EMailModel_render_to_storage.assert_called()

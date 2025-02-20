@@ -23,41 +23,41 @@ from datetime import datetime
 import pytest
 from django.forms.models import model_to_dict
 
-from api.v1.serializers.mailinglist_serializers.BaseMailingListSerializer import \
-    BaseMailingListSerializer
+from api.v1.serializers.mailinglist_serializers.BaseMailingListSerializer import (
+    BaseMailingListSerializer,
+)
 
 from ...models.test_MailingListModel import fixture_mailingListModel
+
 
 @pytest.mark.django_db
 def test_output(mailingList):
     """Tests for the expected output of the serializer."""
     serializerData = BaseMailingListSerializer(instance=mailingList).data
 
-    assert 'id' in serializerData
-    assert serializerData['id'] == mailingList.id
-    assert 'list_id' in serializerData
-    assert serializerData['list_id'] == mailingList.list_id
-    assert 'list_owner' in serializerData
-    assert serializerData['list_owner'] == mailingList.list_owner
-    assert 'list_subscribe' in serializerData
-    assert serializerData['list_subscribe'] == mailingList.list_subscribe
-    assert 'list_unsubscribe' in serializerData
-    assert serializerData['list_unsubscribe'] == mailingList.list_unsubscribe
-    assert 'list_post' in serializerData
-    assert serializerData['list_post'] == mailingList.list_post
-    assert 'list_help' in serializerData
-    assert serializerData['list_help'] == mailingList.list_help
-    assert 'list_archive' in serializerData
-    assert serializerData['list_archive'] == mailingList.list_archive
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == mailingList.is_favorite
-    assert 'correspondent' in serializerData
-    assert serializerData['correspondent'] == mailingList.correspondent.id
-    assert 'created' in serializerData
-    assert datetime.fromisoformat(serializerData['created']) == mailingList.created
-    assert 'updated' in serializerData
-    assert datetime.fromisoformat(serializerData['updated']) == mailingList.updated
-    assert len(serializerData) == 12
+    assert "id" in serializerData
+    assert serializerData["id"] == mailingList.id
+    assert "list_id" in serializerData
+    assert serializerData["list_id"] == mailingList.list_id
+    assert "list_owner" in serializerData
+    assert serializerData["list_owner"] == mailingList.list_owner
+    assert "list_subscribe" in serializerData
+    assert serializerData["list_subscribe"] == mailingList.list_subscribe
+    assert "list_unsubscribe" in serializerData
+    assert serializerData["list_unsubscribe"] == mailingList.list_unsubscribe
+    assert "list_post" in serializerData
+    assert serializerData["list_post"] == mailingList.list_post
+    assert "list_help" in serializerData
+    assert serializerData["list_help"] == mailingList.list_help
+    assert "list_archive" in serializerData
+    assert serializerData["list_archive"] == mailingList.list_archive
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == mailingList.is_favorite
+    assert "created" in serializerData
+    assert datetime.fromisoformat(serializerData["created"]) == mailingList.created
+    assert "updated" in serializerData
+    assert datetime.fromisoformat(serializerData["updated"]) == mailingList.updated
+    assert len(serializerData) == 11
 
 
 @pytest.mark.django_db
@@ -67,17 +67,17 @@ def test_input(mailingList):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
-    assert 'id' not in serializerData
-    assert 'list_id' not in serializerData
-    assert 'list_owner' not in serializerData
-    assert 'list_subscribe' not in serializerData
-    assert 'list_unsubscribe' not in serializerData
-    assert 'list_post' not in serializerData
-    assert 'list_help' not in serializerData
-    assert 'list_archive' not in serializerData
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == mailingList.is_favorite
-    assert 'correspondent' not in serializerData
-    assert 'created' not in serializerData
-    assert 'updated' not in serializerData
+    assert "id" not in serializerData
+    assert "list_id" not in serializerData
+    assert "list_owner" not in serializerData
+    assert "list_subscribe" not in serializerData
+    assert "list_unsubscribe" not in serializerData
+    assert "list_post" not in serializerData
+    assert "list_help" not in serializerData
+    assert "list_archive" not in serializerData
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == mailingList.is_favorite
+    assert "from_correspondents" not in serializerData
+    assert "created" not in serializerData
+    assert "updated" not in serializerData
     assert len(serializerData) == 1

@@ -17,7 +17,6 @@
 - filtertest for choices
 - move all signals into models
 - user validation for serializers to avoid leakage
-- mailinglist.correspondent is redundant
 - enforce choices via constraint
 - references header
 - database statistics
@@ -29,6 +28,7 @@
 - type annotations
 
 ## To test
+- mailboxserializer with correspondents
 
 ## To fix
 

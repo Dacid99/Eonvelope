@@ -31,8 +31,6 @@ from ..utils.mailParsing import getHeader
 if TYPE_CHECKING:
     from email.message import EmailMessage
 
-    from core.models.CorrespondentModel import CorrespondentModel
-
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +38,7 @@ logger = logging.getLogger(__name__)
 class MailingListModel(models.Model):
     """Database model for a mailinglist."""
 
-    list_id = models.CharField(max_length=255)
+    list_id = models.CharField(max_length=255, unique=True)
     """The List-ID header of the mailinglist. Unique together with :attr:`correspondent`."""
 
     list_owner = models.CharField(max_length=255, null=True)
@@ -64,11 +62,6 @@ class MailingListModel(models.Model):
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mailingslists. False by default."""
 
-    correspondent: models.ForeignKey[CorrespondentModel] = models.ForeignKey(
-        "CorrespondentModel", related_name="mailinglist", on_delete=models.CASCADE
-    )
-    """The correspondent that sends the mailinglist. Unique together with :attr:`list_id`. Deletion of that `correspondent` deletes this mailinglist."""
-
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
 
@@ -84,18 +77,8 @@ class MailingListModel(models.Model):
         db_table = "mailinglists"
         """The name of the database table for the mailinglists."""
 
-        constraints = [
-            models.UniqueConstraint(
-                fields=["list_id", "correspondent"],
-                name="mailinglist_unique_together_list_id_correspondent",
-            )
-        ]
-        """:attr:`list_id` and :attr:`correspondent` in combination are unique."""
-
     @staticmethod
-    def fromEmailMessage(
-        emailMessage: EmailMessage, correspondent: CorrespondentModel
-    ) -> MailingListModel | None:
+    def fromEmailMessage(emailMessage: EmailMessage) -> MailingListModel | None:
         """Prepares a :class:`core.models.MailingListModel.MailingListModel`
         from an email message.
 
@@ -138,5 +121,4 @@ class MailingListModel(models.Model):
         new_mailinglist.list_archive = getHeader(
             emailMessage, HeaderFields.MailingList.ARCHIVE
         )
-        new_mailinglist.correspondent = correspondent
         return new_mailinglist

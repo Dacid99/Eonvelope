@@ -367,6 +367,8 @@ class EMailModel(models.Model):
             except EMailModel.DoesNotExist:
                 new_email.inReplyTo = None
 
+        new_email.mailinglist = MailingListModel.fromEmailMessage(emailMessage)
+
         headerDict = {}
         for headerName in emailMessage.keys():
             headerDict[headerName] = getHeader(emailMessage, headerName)
@@ -383,10 +385,6 @@ class EMailModel(models.Model):
                             header, mention, email=new_email
                         )
                     )
-                    if correspondentHeader == HeaderFields.Correspondents.FROM:
-                        new_email.mailinglist = MailingListModel.fromEmailMessage(
-                            emailMessage, emailCorrespondents[-1]
-                        )
 
         new_email.plain_bodytext = ""
         new_email.html_bodytext = ""

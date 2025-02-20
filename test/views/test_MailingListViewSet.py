@@ -56,9 +56,7 @@ def fixture_mailingListModel(correspondentModel, emailModel) -> MailingListModel
     Returns:
         The email instance for testing.
     """
-    return baker.make(
-        MailingListModel, correspondent=correspondentModel, emails=[emailModel]
-    )
+    return baker.make(MailingListModel, emails=[emailModel])
 
 
 @pytest.fixture(name="mailingListPayload")
@@ -72,9 +70,7 @@ def fixture_mailingListPayload(correspondentModel, emailModel) -> dict[str, Any]
     Returns:
         The clean payload.
     """
-    correspondentData = baker.prepare(
-        MailingListModel, correspondent=correspondentModel, emails=[emailModel]
-    )
+    correspondentData = baker.prepare(MailingListModel, emails=[emailModel])
     payload = model_to_dict(correspondentData)
     payload.pop("id")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}

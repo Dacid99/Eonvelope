@@ -373,7 +373,7 @@ def fixture_correspondent_queryset():
 
 
 @pytest.fixture(name="mailinglist_queryset")
-def fixture_mailinglist_queryset(correspondent_queryset):
+def fixture_mailinglist_queryset():
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
@@ -386,7 +386,6 @@ def fixture_mailinglist_queryset(correspondent_queryset):
                 list_help=text_test_item,
                 list_archive=text_test_item,
                 is_favorite=BOOL_TEST_ITEMS[number],
-                correspondent=correspondent_queryset.get(id=number + 1),
             )
 
     return MailingListModel.objects.all()

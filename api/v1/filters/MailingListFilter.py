@@ -42,6 +42,4 @@ class MailingListFilter(django_filters.FilterSet):
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
-            "correspondent__email_name": FilterSetups.TEXT,
-            "correspondent__email_address": FilterSetups.TEXT,
         }

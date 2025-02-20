@@ -35,7 +35,6 @@ from django.utils.translation import gettext_lazy as _
 import api.constants
 import Emailkasten.constants
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,12 +55,12 @@ ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
     "rest_framework",
-    'rest_framework.authtoken',
+    "rest_framework.authtoken",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
-    'django.contrib.sites',
+    "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
@@ -79,23 +78,23 @@ INSTALLED_APPS = [
     "health_check.cache",
     "Emailkasten",
     "core",
-    "api"
+    "api",
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'api.v1.pagination.Pagination',
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication'
+    "DEFAULT_PAGINATION_CLASS": "api.v1.pagination.Pagination",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
     ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
     ],
-    'DEFAULT_RENDERER_CLASSES' : [
-        'rest_framework.renderers.JSONRenderer',
-        'rest_framework.renderers.BrowsableAPIRenderer',
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
     ],
 }
 
@@ -143,9 +142,9 @@ DATABASES = {
         "USER": Emailkasten.constants.DatabaseConfiguration.USER,
         "PASSWORD": Emailkasten.constants.DatabaseConfiguration.PASSWORD,
         "HOST": "db",
-        "PORT": '3306',
+        "PORT": "3306",
         "OPTIONS": {
-             'charset': 'utf8mb4',
+            "charset": "utf8mb4",
         },
     }
 }
@@ -170,28 +169,28 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = "username"
+ACCOUNT_EMAIL_VERIFICATION = "none"
 REGISTRATION_ENABLED = api.constants.APIv1Configuration.REGISTRATION_ENABLED
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
 
 REST_USE_JWT = False
-REST_AUTH_TOKEN_MODEL = 'rest_framework.authtoken.models.Token'
+REST_AUTH_TOKEN_MODEL = "rest_framework.authtoken.models.Token"
 
 SESSION_COOKIE_AGE = 1209600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = False
-#SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 CSRF_COOKIE_AGE = 31449600
-#CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 CSRF_COOKIE_HTTPONLY = False
 CSRF_USE_SESSIONS = False
 
@@ -199,57 +198,57 @@ CSRF_USE_SESSIONS = False
 # logging
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
         "default": {
-            'format': Emailkasten.constants.LoggerConfiguration.LOG_FORMAT,
-            'style': '{',
+            "format": Emailkasten.constants.LoggerConfiguration.LOG_FORMAT,
+            "style": "{",
         },
     },
-    'handlers': {
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
+    "handlers": {
+        "console": {
+            "level": "DEBUG",
+            "class": "logging.StreamHandler",
+            "formatter": "default",
         },
-        'django_logfile': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(
+        "django_logfile": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(
                 Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
-                Emailkasten.constants.LoggerConfiguration.DJANGO_LOGFILE_NAME
+                Emailkasten.constants.LoggerConfiguration.DJANGO_LOGFILE_NAME,
             ),
-            'maxBytes': Emailkasten.constants.LoggerConfiguration.LOGFILE_MAXSIZE,
-            'backupCount': Emailkasten.constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
-            'formatter': 'default',
+            "maxBytes": Emailkasten.constants.LoggerConfiguration.LOGFILE_MAXSIZE,
+            "backupCount": Emailkasten.constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
+            "formatter": "default",
         },
-        'app_logfile': {
-            'level': 'DEBUG',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(
+        "app_logfile": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": os.path.join(
                 Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
-                Emailkasten.constants.LoggerConfiguration.APP_LOGFILE_NAME
+                Emailkasten.constants.LoggerConfiguration.APP_LOGFILE_NAME,
             ),
-            'maxBytes': Emailkasten.constants.LoggerConfiguration.LOGFILE_MAXSIZE,
-            'backupCount': Emailkasten.constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
-            'formatter': 'default',
+            "maxBytes": Emailkasten.constants.LoggerConfiguration.LOGFILE_MAXSIZE,
+            "backupCount": Emailkasten.constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
+            "formatter": "default",
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': Emailkasten.constants.LoggerConfiguration.ROOT_LOG_LEVEL,
+    "root": {
+        "handlers": ["console"],
+        "level": Emailkasten.constants.LoggerConfiguration.ROOT_LOG_LEVEL,
     },
-    'loggers': {
-        'django': {
-            'handlers': ['django_logfile'],
-            'level': Emailkasten.constants.LoggerConfiguration.DJANGO_LOG_LEVEL,
-            'propagate': True,
+    "loggers": {
+        "django": {
+            "handlers": ["django_logfile"],
+            "level": Emailkasten.constants.LoggerConfiguration.DJANGO_LOG_LEVEL,
+            "propagate": True,
         },
         "Emailkasten": {
-            'handlers': ['app_logfile'],
-            'level': Emailkasten.constants.LoggerConfiguration.APP_LOG_LEVEL,
-            'propagate': True,
+            "handlers": ["app_logfile"],
+            "level": Emailkasten.constants.LoggerConfiguration.APP_LOG_LEVEL,
+            "propagate": True,
         },
     },
 }
@@ -272,7 +271,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_URL = [
-    os.path.join( BASE_DIR, 'static' ),
+    os.path.join(BASE_DIR, "static"),
 ]
 
 # Default primary key field type
@@ -283,26 +282,92 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Constance settings
 
-CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
 CONSTANCE_CONFIG = {
-    'API_DEFAULT_PAGE_SIZE': (20, _('The default page size for paginated API response data'), int),
-    'API_MAX_PAGE_SIZE': (200, _('The maximum page size for paginated API response data'), int),
-    'DAEMON_CYCLE_PERIOD_DEFAULT': (60, _('The default cycle period setting of a daemon in seconds'), int),
-    'DAEMON_RESTART_TIME_DEFAULT': (10, _('The default restart time setting of a daemon in seconds'), int),
-    'DAEMON_LOG_BACKUP_COUNT_DEFAULT': (5, _('The default restart time setting of a daemon in seconds'), int),
-    'DAEMON_LOGFILE_SIZE_DEFAULT': (1 * 1024 * 1024, _('The default restart time setting of a daemon in seconds'), int),
-    'STORAGE_MAX_SUBDIRS_PER_DIR': (1000, _('The maximum numbers of subdirectories in one storage unit. Must not exceed 64000 for ext4 filesystem!'), int),
-    'STORAGE_PATH': ('/mnt/archive', _('The path to the storage for the saved data. Must match the path in the docker-compose.yml to ensure data persistence!'), str),
-    'PRERENDER_IMAGETYPE': ('jpg', _('The image format for the prerendered eml files'), str),
-    'DEFAULT_CHARSET': ('utf-8', _('The default charset used for decoding of text'), str),
-    'STRIP_TEXTS': (True, _('Whether or not to strip whitespace from textfields like bodytext and subject'), bool),
-    'THROW_OUT_SPAM': (True, _('Whether or not to ignore emails that have a spam flag'), bool),
-    'DEFAULT_MAILDATE': ('1971-01-01 00:00:00', _('The fallback date to use if none is found in a mail'), str),
-    'TEMPORARY_STORAGE_DIRECTORY': ('/tmp/images', _('The path where intermediate images of the prerendering process will be placed'), str),
-    'HTML_WRAPPER': (
+    "API_DEFAULT_PAGE_SIZE": (
+        20,
+        _("The default page size for paginated API response data"),
+        int,
+    ),
+    "API_MAX_PAGE_SIZE": (
+        200,
+        _("The maximum page size for paginated API response data"),
+        int,
+    ),
+    "DAEMON_CYCLE_PERIOD_DEFAULT": (
+        60,
+        _("The default cycle period setting of a daemon in seconds"),
+        int,
+    ),
+    "DAEMON_RESTART_TIME_DEFAULT": (
+        10,
+        _("The default restart time setting of a daemon in seconds"),
+        int,
+    ),
+    "DAEMON_LOG_BACKUP_COUNT_DEFAULT": (
+        5,
+        _("The default restart time setting of a daemon in seconds"),
+        int,
+    ),
+    "DAEMON_LOGFILE_SIZE_DEFAULT": (
+        1 * 1024 * 1024,
+        _("The default restart time setting of a daemon in seconds"),
+        int,
+    ),
+    "STORAGE_MAX_SUBDIRS_PER_DIR": (
+        1000,
+        _(
+            "The maximum numbers of subdirectories in one storage unit. Must not exceed 64000 for ext4 filesystem!"
+        ),
+        int,
+    ),
+    "STORAGE_PATH": (
+        "/mnt/archive",
+        _(
+            "The path to the storage for the saved data. Must match the path in the docker-compose.yml to ensure data persistence!"
+        ),
+        str,
+    ),
+    "THROW_OUT_SPAM": (
+        True,
+        _("Whether or not to ignore emails that have a spam flag"),
+        bool,
+    ),
+    "SAVE_CONTENT_TYPE_PREFIXES": (
+        [
+            "image/",
+            "audio/",
+            "video/",
+            "model/",
+            "font/",
+            "application/",
+        ],
+        _(
+            "A list of content types prefixes to parse as files even if they are not marked as such. For an exhaustive list of all available types see https://www.iana.org/assignments/media-types/media-types.xhtml#text"
+        ),
+        list,
+    ),
+    "DONT_SAVE_CONTENT_TYPE_SUFFIXES": (
+        [
+            "/plain",
+            "/html",
+        ],
+        _(
+            "A list of content types prefixes to not parse as files even if they are not marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
+        ),
+        list,
+    ),
+    "TEMPORARY_STORAGE_DIRECTORY": (
+        "/tmp/images",
+        _(
+            "The path where intermediate images of the prerendering process will be placed"
+        ),
+        str,
+    ),
+    "HTML_WRAPPER": (
         """<html>
         <head>
             <style>
@@ -317,49 +382,63 @@ CONSTANCE_CONFIG = {
             <pre>%s</pre>
         </body>
         </html>""",
-        'The html template to wrap around plain text before prerendering',
-        str
+        "The html template to wrap around plain text before prerendering",
+        str,
     ),
-    'DEFAULT_SAVE_TO_EML': (True, _('The default mailbox setting whether to store mails as eml'), bool),
-    'DEFAULT_SAVE_ATTACHMENTS': (True, _('The default mailbox setting whether to store attachments'), bool),
-    'DEFAULT_SAVE_IMAGES': (True, _('The default mailbox setting whether to store images'), bool),
+    "PRERENDER_IMAGETYPE": (
+        "JPEG",
+        _(
+            "The image format for the prerendered eml files. Must be supported by PILLOW, see https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html."
+        ),
+        str,
+    ),
+    "PRERENDER_IMAGE_BACKGROUND_COLOR": (
+        "#ffffff",
+        _("The background color for the prerender images."),
+        str,
+    ),
+    "PRERENDER_IMGKIT_OPTIONS": (
+        {"load-error-handling": "skip"},
+        _("The imgkit options for prerendering the images."),
+        dict,
+    ),
+    "DEFAULT_SAVE_TO_EML": (
+        True,
+        _("The default mailbox setting whether to store mails as eml"),
+        bool,
+    ),
+    "DEFAULT_SAVE_ATTACHMENTS": (
+        True,
+        _("The default mailbox setting whether to store attachments"),
+        bool,
+    ),
 }
 
 CONSTANCE_FIELDSETS = (
     (
-        _('Default Values'),
+        _("Default Values"),
         (
-            'DEFAULT_SAVE_TO_EML',
-            'DEFAULT_SAVE_ATTACHMENTS',
-            'DEFAULT_SAVE_IMAGES',
-            'DEFAULT_MAILDATE',
-            'DAEMON_CYCLE_PERIOD_DEFAULT',
-            'DAEMON_RESTART_TIME_DEFAULT',
-        )
+            "DEFAULT_SAVE_TO_EML",
+            "DEFAULT_SAVE_ATTACHMENTS",
+            "DAEMON_CYCLE_PERIOD_DEFAULT",
+            "DAEMON_RESTART_TIME_DEFAULT",
+        ),
     ),
     (
-        _('Processing Settings'),
+        _("Processing Settings"),
         (
-            'THROW_OUT_SPAM',
-            'STRIP_TEXTS',
-            'HTML_WRAPPER',
-            'PRERENDER_IMAGETYPE',
-            'DEFAULT_CHARSET'
-        )
+            "THROW_OUT_SPAM",
+            "HTML_WRAPPER",
+            "PRERENDER_IMAGETYPE",
+            "PRERENDER_IMAGE_BACKGROUND_COLOR",
+            "PRERENDER_IMGKIT_OPTIONS",
+            "SAVE_CONTENT_TYPE_PREFIXES",
+            "DONT_SAVE_CONTENT_TYPE_SUFFIXES",
+        ),
     ),
     (
-        _('Storage Settings'),
-        (
-            'STORAGE_PATH',
-            'STORAGE_MAX_SUBDIRS_PER_DIR',
-            'TEMPORARY_STORAGE_DIRECTORY'
-        )
+        _("Storage Settings"),
+        ("STORAGE_PATH", "STORAGE_MAX_SUBDIRS_PER_DIR", "TEMPORARY_STORAGE_DIRECTORY"),
     ),
-    (
-        _('API Settings'),
-        (
-            'API_DEFAULT_PAGE_SIZE',
-            'API_MAX_PAGE_SIZE'
-        )
-    )
+    (_("API Settings"), ("API_DEFAULT_PAGE_SIZE", "API_MAX_PAGE_SIZE")),
 )

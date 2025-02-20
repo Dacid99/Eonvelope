@@ -32,91 +32,91 @@ class CorrespondentFilter(django_filters.FilterSet):
     )
 
     account_mail_address__icontains = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="icontains"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="icontains"
     )
 
     account_mail_address__contains = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="contains"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="contains"
     )
 
     account_mail_address = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="exact"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="exact"
     )
 
     account_mail_address__iexact = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="iexact"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="iexact"
     )
 
     account_mail_address__startswith = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="startswith"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="startswith"
     )
 
     account_mail_address__istartswith = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="istartswith"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="istartswith"
     )
 
     account_mail_address__endswith = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="endswith"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="endswith"
     )
 
     account_mail_address__iendswith = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="iendswith"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="iendswith"
     )
 
     account_mail_address__regex = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="regex"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="regex"
     )
 
     account_mail_address__iregex = django_filters.CharFilter(
-        field_name="emails__account__mail_address", lookup_expr="iregex"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="iregex"
     )
 
     account_mail_address__in = django_filters.BaseInFilter(
-        field_name="emails__account__mail_address", lookup_expr="in"
+        field_name="emails__mailbox__account__mail_address", lookup_expr="in"
     )
 
     account_mail_host__icontains = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="icontains"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="icontains"
     )
 
     account_mail_host__contains = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="contains"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="contains"
     )
 
     account_mail_host = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="exact"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="exact"
     )
 
     account_mail_host__iexact = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="iexact"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="iexact"
     )
 
     account_mail_host__startswith = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="startswith"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="startswith"
     )
 
     account_mail_host__istartswith = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="istartswith"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="istartswith"
     )
 
     account_mail_host__endswith = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="endswith"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="endswith"
     )
 
     account_mail_host__iendswith = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="iendswith"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="iendswith"
     )
 
     account_mail_host__regex = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="regex"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="regex"
     )
 
     account_mail_host__iregex = django_filters.CharFilter(
-        field_name="emails__account__mail_host", lookup_expr="iregex"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="iregex"
     )
 
     account_mail_host__in = django_filters.BaseInFilter(
-        field_name="emails__account__mail_host", lookup_expr="in"
+        field_name="emails__mailbox__account__mail_host", lookup_expr="in"
     )
 
     class Meta:

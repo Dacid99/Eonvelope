@@ -27,8 +27,10 @@ Fixtures:
     :func:`fixture_mock_empty_parsedMailDict`: Mocks an empty parsedMail :class:`dict` that the mail is parsed into.
 """
 
-import datetime
-from email.message import Message
+import zoneinfo
+from datetime import datetime
+from email.message import EmailMessage
+from email.utils import format_datetime
 
 import pytest
 
@@ -39,214 +41,252 @@ import core.utils.mailParsing
 @pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`logger` of the module."""
-    return mocker.patch('core.utils.mailParsing.logger')
+    return mocker.patch("core.utils.mailParsing.logger")
 
-@pytest.fixture(name="mock_good_mailMessage", scope='module')
-def fixture_mock_good_mailMessage():
-    """Mocks a valid :class:`email.message.Message`."""
-    testMessage = Message()
-    testMessage.add_header("Message-ID", 'abcdefgäöüß§')
-    testMessage.add_header("Subject", 'This a test SUBJEcT line äöüß§')
-    testMessage.add_header("Date", 'Fri, 09 Nov 2001 01:08:47 -0000')
-    testMessage.add_header("test", 'test äöüß§')
-    testMessage.add_header("multi", 'test')
-    testMessage.add_header("multi", 'äöüß§\t')
-    testMessage.add_header("multi", '123456')
+
+@pytest.fixture(name="fake_single_header")
+def fixture_fake_single_header(faker):
+    return (faker.word(), faker.sentence(nb_words=5))
+
+
+@pytest.fixture(name="fake_date_headervalue")
+def fixture_fake_date_headervalue(faker):
+    return faker.date_time(tzinfo=zoneinfo.ZoneInfo(faker.timezone()))
+
+
+@pytest.fixture(name="fake_multi_header")
+def fixture_fake_multi_header(faker):
+    return (faker.word(), [faker.sentence(nb_words=5), faker.name(), faker.file_name()])
+
+
+@pytest.fixture(name="emailMessage")
+def fixture_emailMessage(fake_single_header, fake_multi_header):
+    """A valid :class:`email.message.EmailMessage`."""
+    testMessage = EmailMessage()
+    testMessage.add_header(*fake_single_header)
+    for value in fake_multi_header[1]:
+        testMessage.add_header(fake_multi_header[0], value)
     return testMessage
 
-@pytest.fixture(name="mock_special_mailMessage", scope='module')
-def fixture_mock_special_mailMessage():
-    """Mocks a valid :class:`email.message.Message` with special contents."""
-    testMessage = Message()
-    testMessage.add_header("Subject", 'This a test SUBJEcT line äöüß§ \t ')
+
+@pytest.fixture(name="bad_emailMessage")
+def fixture_bad_emailMessage():
+    """A valid :class:`email.message.EmailMessage`."""
+    testMessage = EmailMessage()
+    testMessage.add_header("Date", "not a datetime str")
     return testMessage
 
-@pytest.fixture(name="mock_bad_mailMessage", scope='module')
-def fixture_mock_bad_mailMessage():
-    """Mocks an invalid :class:`email.message.Message`."""
-    testMessage = Message()
+
+@pytest.fixture(name="empty_emailMessage")
+def fixture_empty_emailMessage():
+    """An invalid :class:`email.message.Message`."""
+    testMessage = EmailMessage()
     return testMessage
 
-@pytest.fixture(name="mock_no_mailMessage", scope='module')
-def fixture_mock_no_mailMessage():
-    """Mocks a none message."""
+
+@pytest.fixture(name="no_emailMessage")
+def fixture_no_emailMessage():
+    """A none message."""
     testMessage = None
     return testMessage
 
-@pytest.fixture(name="mock_empty_parsedMailDict")
-def fixture_mock_empty_parsedMailDict():
-    """Mocks an empty parsedMail :class:`dict` that the mail is parsed into."""
-    return {}
 
-# pylint: disable=protected-access ; protected members need to be tested as well
 @pytest.mark.parametrize(
-    'testHeader, expectedResult',
+    "header, expectedResult",
     [
-        ('test äöüß§', "test äöüß§")
-    ]
+        (
+            "Some header text without special chars",
+            "Some header text without special chars",
+        ),
+        (
+            "=?utf-8?q?H=C3=A4ng=C3=B1en_Loch_Junge_also_m=C3=BCssen=C3=A1?= Wetter.",
+            "Hängñen Loch Junge also müssená Wetter.",
+        ),
+        (
+            "Ms. Cassandra =?utf-8?b?R2lsbGVz0JRwafCfmIpl?= <aliciaward@example.com>",
+            "Ms. Cassandra GillesДpi😊e <aliciaward@example.com>",
+        ),
+        (
+            "=?utf-8?q?=C3=89tabl=C3=A9ir_mur_souffler_casser=C3=AD?= comprendre.",
+            "Établéir mur souffler casserí comprendre.",
+        ),
+        (
+            "=?utf-8?b?5Lit5bO24piF0Jkg6Zm95a2Q?= <kenichiito@example.com>",
+            "中島★Й 陽子 <kenichiito@example.com>",
+        ),
+    ],
 )
-def test__decodeHeader(mock_logger, testHeader, expectedResult):
-    decodedHeader = core.utils.mailParsing._decodeHeader(testHeader)
-    assert decodedHeader == expectedResult
+def test_decodeHeader_success(header, expectedResult):
+    result = core.utils.mailParsing.decodeHeader(header)
+
+    assert result == expectedResult
+
+
+def test_getHeader_single_success(emailMessage, fake_single_header):
+    result = core.utils.mailParsing.getHeader(emailMessage, fake_single_header[0])
+
+    assert result == fake_single_header[1]
+
+
+def test_getHeader_multi_success(emailMessage, fake_multi_header):
+    result = core.utils.mailParsing.getHeader(emailMessage, fake_multi_header[0])
+
+    assert result == ", ".join(fake_multi_header[1])
+
+
+def test_getHeader_multi_joinparam_success(emailMessage, fake_multi_header):
+    result = core.utils.mailParsing.getHeader(
+        emailMessage, fake_multi_header[0], joiningString="test"
+    )
+
+    assert result == "test".join(fake_multi_header[1])
+
+
+def test_getHeader_fallback(empty_emailMessage, fake_single_header):
+    result = core.utils.mailParsing.getHeader(empty_emailMessage, fake_single_header[0])
+
+    assert result is None
+
+
+def test_getHeader_fallbackparam_fallback(empty_emailMessage, fake_single_header):
+    result = core.utils.mailParsing.getHeader(
+        empty_emailMessage, fake_single_header[0], fallbackCallable=lambda: "fallback"
+    )
+
+    assert result == "fallback"
+
+
+def test_getHeader_failure(no_emailMessage, fake_single_header):
+    with pytest.raises(AttributeError):
+        core.utils.mailParsing.getHeader(
+            no_emailMessage, fake_single_header[0], fallbackCallable=lambda: "fallback"
+        )
+
+
+def test_parseDatetimeHeader_success(faker, mock_logger):
+    fake_date_headervalue = format_datetime(
+        faker.date_time(tzinfo=zoneinfo.ZoneInfo(faker.timezone()))
+    )
+
+    result = core.utils.mailParsing.parseDatetimeHeader(fake_date_headervalue)
+
+    mock_logger.warning.assert_not_called()
+    assert isinstance(result, datetime)
+    assert format_datetime(result) == fake_date_headervalue
+
+
+def test_parseDatetimeHeader_fallback(mocker, faker, mock_logger):
+    mock_timezone_now = mocker.patch(
+        "django.utils.timezone.now", return_value=faker.date_time()
+    )
+
+    result = core.utils.mailParsing.parseDatetimeHeader("no datetime header")
+
+    mock_logger.warning.assert_called()
+    mock_timezone_now.assert_called()
+    assert isinstance(result, datetime)
+    assert format_datetime(result) == format_datetime(mock_timezone_now.return_value)
+
+
+def test_parseDatetimeHeader_no_header(mocker, faker, mock_logger):
+    mock_timezone_now = mocker.patch(
+        "django.utils.timezone.now", return_value=faker.date_time()
+    )
+
+    result = core.utils.mailParsing.parseDatetimeHeader(None)
+
+    mock_logger.warning.assert_called()
+    mock_timezone_now.assert_called()
+    assert isinstance(result, datetime)
+    assert format_datetime(result) == format_datetime(mock_timezone_now.return_value)
 
 
 @pytest.mark.parametrize(
-        'testMailers, expectedResult, warningCalled',
-        [
-            (["Test äöüß§ <test@testdomain.tld>"], [("Test äöüß§", "test@testdomain.tld")], False),
-            (["Test Persön <testtestdomain.tld>"], [("Test Persön", "testtestdomain.tld")], True),
-            (["test@testdomain.tld"], [("", "test@testdomain.tld")], False)
-        ])
-def test__separateRFC2822MailAddressFormat(mock_logger, testMailers, expectedResult, warningCalled):
-    separatedMailers = core.utils.mailParsing._separateRFC2822MailAddressFormat(testMailers)
-
-    assert separatedMailers == expectedResult
-
-
-def test__parseMessageID_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseMessageID(mock_good_mailMessage, mock_empty_parsedMailDict)
-    assert core.constants.ParsedMailKeys.Header.MESSAGE_ID in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict[core.constants.ParsedMailKeys.Header.MESSAGE_ID] == 'abcdefgäöüß§'
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
-
-
-def test__parseMessageID_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseMessageID(mock_bad_mailMessage, mock_empty_parsedMailDict)
-    assert core.constants.ParsedMailKeys.Header.MESSAGE_ID in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict[core.constants.ParsedMailKeys.Header.MESSAGE_ID] == str(hash(mock_bad_mailMessage))
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_called()
-    mock_logger.error.assert_not_called()
-
-
-def test__parseMessageID_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
-    with pytest.raises(AttributeError):
-        core.utils.mailParsing._parseMessageID(mock_no_mailMessage, mock_empty_parsedMailDict)
-
-
-
-def test__parseDate_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseDate(mock_good_mailMessage, mock_empty_parsedMailDict)
-    assert core.constants.ParsedMailKeys.Header.DATE in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict[core.constants.ParsedMailKeys.Header.DATE] == datetime.datetime(2001, 11, 9, 1, 8, 47)
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
-
-
-def test__parseDate_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseDate(mock_bad_mailMessage, mock_empty_parsedMailDict)
-    assert core.constants.ParsedMailKeys.Header.DATE in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict[core.constants.ParsedMailKeys.Header.DATE] == datetime.datetime(1971, 1, 1, 0, 0, 0)
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_called()
-    mock_logger.error.assert_not_called()
-
-
-def test__parseDate_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
-    with pytest.raises(AttributeError):
-        core.utils.mailParsing._parseDate(mock_no_mailMessage, mock_empty_parsedMailDict)
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "stripTexts, expectedResult",
-    [(True, "This a test SUBJEcT line äöüß§"), (False, "This a test SUBJEcT line äöüß§ \t ")],
+    "header, expectedResult",
+    [
+        ("test <test@test.org>", ("test", "test@test.org")),
+        ("someone@somedomain.us", ("", "someone@somedomain.us")),
+        ("<the@dude.eu>", ("", "the@dude.eu")),
+        ("abc<alpha@beta.de>", ("abc", "alpha@beta.de")),
+        ("a <addr@sub.dom.tld>", ("a", "addr@sub.dom.tld")),
+    ],
 )
-def test__parseSubject_success(mock_logger, stripTexts, expectedResult, override_config, mock_special_mailMessage, mock_empty_parsedMailDict):
-    with override_config(STRIP_TEXTS=stripTexts):
-        core.utils.mailParsing._parseSubject(mock_special_mailMessage, mock_empty_parsedMailDict)
+def test_parseCorrespondentHeader_success(mocker, mock_logger, header, expectedResult):
+    spy_validate_email = mocker.spy(
+        core.utils.mailParsing.email_validator, "validate_email"
+    )
 
-    assert core.constants.ParsedMailKeys.Header.SUBJECT in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict[core.constants.ParsedMailKeys.Header.SUBJECT] == expectedResult
-    mock_logger.debug.assert_called()
+    result = core.utils.mailParsing.parseCorrespondentHeader(header)
+
+    assert result == expectedResult
     mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
+    spy_validate_email.assert_called_once()
 
 
-def test__parseSubject_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseSubject(mock_bad_mailMessage, mock_empty_parsedMailDict)
-    assert core.constants.ParsedMailKeys.Header.SUBJECT in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict[core.constants.ParsedMailKeys.Header.SUBJECT] == ''
-    mock_logger.debug.assert_called()
+def test_parseCorrespondentHeader_no_address(mocker, mock_logger):
+    spy_validate_email = mocker.spy(
+        core.utils.mailParsing.email_validator, "validate_email"
+    )
+
+    result = core.utils.mailParsing.parseCorrespondentHeader("no address <>")
+
+    assert result == ("no address", "no address <>")
     mock_logger.warning.assert_called()
-    mock_logger.error.assert_not_called()
+    spy_validate_email.assert_not_called()
 
 
-def test__parseSubject_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
-    with pytest.raises(AttributeError):
-        core.utils.mailParsing._parseSubject(mock_no_mailMessage, mock_empty_parsedMailDict)
+@pytest.mark.parametrize(
+    "invalidHeader, expectedResult",
+    [
+        ("noone@somedomain", ("", "noone@somedomain")),
+        ("abc", ("", "abc")),
+    ],
+)
+def test_parseCorrespondentHeader_invalid_address(
+    mocker, mock_logger, invalidHeader, expectedResult
+):
+    spy_validate_email = mocker.spy(
+        core.utils.mailParsing.email_validator, "validate_email"
+    )
+
+    result = core.utils.mailParsing.parseCorrespondentHeader(invalidHeader)
+
+    assert result == expectedResult
+    mock_logger.warning.assert_called()
+    spy_validate_email.assert_called_once()
 
 
+def test_parseCorrespondentHeader_no_header(mocker, mock_logger):
+    spy_validate_email = mocker.spy(
+        core.utils.mailParsing.email_validator, "validate_email"
+    )
 
-def test__parseHeader_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseHeader(mock_good_mailMessage, "test", mock_empty_parsedMailDict)
-    assert "test" in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict["test"] == "test äöüß§"
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
+    result = core.utils.mailParsing.parseCorrespondentHeader(None)
 
-
-def test__parseHeader_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseHeader(mock_bad_mailMessage, "test", mock_empty_parsedMailDict)
-    assert "test" in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict["test"] == ''
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
+    assert result == ("", None)
+    mock_logger.warning.assert_called()
+    spy_validate_email.assert_not_called()
 
 
-def test__parseHeader_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
-    with pytest.raises(AttributeError):
-        core.utils.mailParsing._parseHeader(mock_no_mailMessage, "test", mock_empty_parsedMailDict)
+@pytest.mark.parametrize(
+    "nameBytes, expectedName",
+    [
+        (b"INBOX", "INBOX"),
+        (
+            b"Dr&AOc-. Bianka F&APY-rste&BBk-r",
+            "Drç. Bianka FörsteЙr",
+        ),
+        (
+            b"Yves Pr&AN8EGQ-uvost",
+            "Yves PrßЙuvost",
+        ),
+        (
+            b"&ZY4mBQDfheQ- &Zg5,jg-",
+            "斎★ß藤 明美",
+        ),
+    ],
+)
+def test_parseMailboxName_success(nameBytes, expectedName):
+    result = core.utils.mailParsing.parseMailboxName(nameBytes)
 
-
-
-def test__parseMultipleHeader_success(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseMultipleHeader(mock_good_mailMessage, "multi", mock_empty_parsedMailDict)
-    assert "multi" in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict["multi"] == "test\näöüß§\t\n123456"
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
-
-
-def test__parseMultipleHeader_noneMulti(mock_logger, mock_good_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseMultipleHeader(mock_good_mailMessage, "test", mock_empty_parsedMailDict)
-    assert "test" in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict["test"] == "test äöüß§"
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
-
-
-def test__parseMultipleHeader_emptyMessage(mock_logger, mock_bad_mailMessage, mock_empty_parsedMailDict):
-    core.utils.mailParsing._parseMultipleHeader(mock_bad_mailMessage, "multi", mock_empty_parsedMailDict)
-    assert "multi" in mock_empty_parsedMailDict
-    assert mock_empty_parsedMailDict["multi"] == ''
-    mock_logger.debug.assert_called()
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
-
-
-def test__parseMultipleHeader_noMessage(mock_no_mailMessage, mock_empty_parsedMailDict):
-    with pytest.raises(AttributeError):
-        core.utils.mailParsing._parseMultipleHeader(mock_no_mailMessage, "multi", mock_empty_parsedMailDict)
-
-
-def test_parseMail_success(mock_logger, mock_good_mailMessage, mocker):
-    mocker.patch('email.message_from_bytes', return_value = mock_good_mailMessage)
-
-    parsedMail = core.utils.mailParsing.parseMail(mock_good_mailMessage)
-
-    for headerName, _ in core.constants.ParsedMailKeys.Header():
-        assert headerName in parsedMail
-
-    mock_logger.debug.assert_called()
-    #mock_logger.warning.assert_not_called()
-    #mock_logger.error.assert_not_called()
-
-# pylint: enable=protected-access
+    assert result == expectedName

@@ -17,18 +17,23 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import pytest
+
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 
-from .models.test_DaemonModel import fixture_mock_open
 from .models.test_DaemonModel import fixture_daemonModel
 
-@pytest.fixture(name='mock_logger')
+
+@pytest.fixture(name="mock_logger")
 def fixture_mock_logger(mocker, monkeypatch):
     mock_logger = mocker.Mock()
-    mocker.patch('core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.logger', mock_logger)
+    mocker.patch(
+        "core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.logger",
+        mock_logger,
+    )
     return mock_logger
 
-@pytest.fixture(name='mock_runningDaemon')
+
+@pytest.fixture(name="mock_runningDaemon")
 def fixture_mock_runningDaemon(mocker, daemon):
     mock_runningDaemon = mocker.MagicMock()
     EMailArchiverDaemonRegistry._runningDaemons[daemon.id] = mock_runningDaemon
@@ -39,9 +44,12 @@ def fixture_mock_runningDaemon(mocker, daemon):
         pass
 
 
-@pytest.fixture(name='patch_EMailArchiverDaemon')
+@pytest.fixture(name="patch_EMailArchiverDaemon")
 def fixture_patch_EMailArchiverDaemon(mocker):
-    return mocker.patch('core.EMailArchiverDaemonRegistry.EMailArchiverDaemon', return_value=mocker.Mock())
+    return mocker.patch(
+        "core.EMailArchiverDaemonRegistry.EMailArchiverDaemon",
+        return_value=mocker.Mock(),
+    )
 
 
 @pytest.mark.django_db
@@ -64,7 +72,6 @@ def test_updateDaemon(mock_logger, mock_runningDaemon, daemon):
 
     mock_runningDaemon.update.assert_called_once()
     mock_logger.debug.assert_called()
-
 
 
 @pytest.mark.django_db
@@ -94,7 +101,8 @@ def test_testDaemon_failure_exception(mock_logger, patch_EMailArchiverDaemon, da
 def test_testDaemon_failure_unhealthy(mock_logger, patch_EMailArchiverDaemon, daemon):
     def unhealthyDaemon():
         daemon.is_healthy = False
-        daemon.save(update_fields=['is_healthy'])
+        daemon.save(update_fields=["is_healthy"])
+
     patch_EMailArchiverDaemon.return_value.cycle.side_effect = unhealthyDaemon
 
     result = EMailArchiverDaemonRegistry.testDaemon(daemon)
@@ -106,7 +114,9 @@ def test_testDaemon_failure_unhealthy(mock_logger, patch_EMailArchiverDaemon, da
 
 
 @pytest.mark.django_db
-def test_startDaemon_active(mock_logger, patch_EMailArchiverDaemon, mock_runningDaemon, daemon):
+def test_startDaemon_active(
+    mock_logger, patch_EMailArchiverDaemon, mock_runningDaemon, daemon
+):
     result = EMailArchiverDaemonRegistry.startDaemon(daemon)
 
     assert result is False

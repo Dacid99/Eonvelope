@@ -23,40 +23,40 @@ from datetime import datetime
 import pytest
 from django.forms.models import model_to_dict
 
-from api.v1.serializers.mailbox_serializers.MailboxWithDaemonSerializer import \
-    MailboxWithDaemonSerializer
+from api.v1.serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
+    MailboxWithDaemonSerializer,
+)
 
 from ...models.test_MailboxModel import fixture_mailboxModel
+
 
 @pytest.mark.django_db
 def test_output(mailbox):
     """Tests for the expected output of the serializer."""
     serializerData = MailboxWithDaemonSerializer(instance=mailbox).data
 
-    assert 'id' in serializerData
-    assert serializerData['id'] == mailbox.id
-    assert 'daemons' in serializerData
-    assert serializerData['daemons'] == []
-    assert 'name' in serializerData
-    assert serializerData['name'] == mailbox.name
-    assert 'account' in serializerData
-    assert serializerData['account'] == mailbox.account.id
-    assert 'save_attachments' in serializerData
-    assert serializerData['save_attachments'] == mailbox.save_attachments
-    assert 'save_images' in serializerData
-    assert serializerData['save_images'] == mailbox.save_images
-    assert 'save_toEML' in serializerData
-    assert serializerData['save_toEML'] == mailbox.save_toEML
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == mailbox.is_favorite
-    assert 'is_healthy' in serializerData
-    assert serializerData['is_healthy'] == mailbox.is_healthy
-    assert 'created' in serializerData
+    assert "id" in serializerData
+    assert serializerData["id"] == mailbox.id
+    assert "daemons" in serializerData
+    assert serializerData["daemons"] == []
+    assert "name" in serializerData
+    assert serializerData["name"] == mailbox.name
+    assert "account" in serializerData
+    assert serializerData["account"] == mailbox.account.id
+    assert "save_attachments" in serializerData
+    assert serializerData["save_attachments"] == mailbox.save_attachments
+    assert "save_toEML" in serializerData
+    assert serializerData["save_toEML"] == mailbox.save_toEML
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == mailbox.is_favorite
+    assert "is_healthy" in serializerData
+    assert serializerData["is_healthy"] == mailbox.is_healthy
+    assert "created" in serializerData
 
-    assert datetime.fromisoformat(serializerData['created']) == mailbox.created
-    assert 'updated' in serializerData
+    assert datetime.fromisoformat(serializerData["created"]) == mailbox.created
+    assert "updated" in serializerData
 
-    assert datetime.fromisoformat(serializerData['updated']) == mailbox.updated
+    assert datetime.fromisoformat(serializerData["updated"]) == mailbox.updated
     assert len(serializerData) == 11
 
 
@@ -67,19 +67,17 @@ def test_input(mailbox):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
-    assert 'id' not in serializerData
-    assert 'daemons' not in serializerData
-    assert 'name' not in serializerData
-    assert 'account' not in serializerData
-    assert 'save_attachments' in serializerData
-    assert serializerData['save_attachments'] == mailbox.save_attachments
-    assert 'save_images' in serializerData
-    assert serializerData['save_images'] == mailbox.save_images
-    assert 'save_toEML' in serializerData
-    assert serializerData['save_toEML'] == mailbox.save_toEML
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == mailbox.is_favorite
-    assert 'is_healthy' not in serializerData
-    assert 'created' not in serializerData
-    assert 'updated' not in serializerData
-    assert len(serializerData) == 4
+    assert "id" not in serializerData
+    assert "daemons" not in serializerData
+    assert "name" not in serializerData
+    assert "account" not in serializerData
+    assert "save_attachments" in serializerData
+    assert serializerData["save_attachments"] == mailbox.save_attachments
+    assert "save_toEML" in serializerData
+    assert serializerData["save_toEML"] == mailbox.save_toEML
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == mailbox.is_favorite
+    assert "is_healthy" not in serializerData
+    assert "created" not in serializerData
+    assert "updated" not in serializerData
+    assert len(serializerData) == 3

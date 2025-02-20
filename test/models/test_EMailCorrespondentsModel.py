@@ -31,8 +31,10 @@ from core.models.CorrespondentModel import CorrespondentModel
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.models.EMailModel import EMailModel
 
+from .test_EMailModel import fixture_emailModel
 
-@pytest.fixture(name='emailCorrespondent')
+
+@pytest.fixture(name="emailCorrespondent")
 def fixture_emailCorrespondentsModel() -> EMailCorrespondentsModel:
     """Creates an :class:`core.models.EMailModel.EMailModel` instance for testing.
 
@@ -43,7 +45,7 @@ def fixture_emailCorrespondentsModel() -> EMailCorrespondentsModel:
 
 
 @pytest.mark.django_db
-def test_CorrespondentModel_creation(emailCorrespondent):
+def test_EMailCorrespondentsModel_creation(emailCorrespondent):
     """Tests the correct default creation of :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
     assert emailCorrespondent.email is not None
@@ -52,7 +54,8 @@ def test_CorrespondentModel_creation(emailCorrespondent):
     assert isinstance(emailCorrespondent.correspondent, CorrespondentModel)
     assert emailCorrespondent.mention is not None
     assert any(
-        emailCorrespondent.mention == mention for mention, _ in EMailCorrespondentsModel.MENTIONTYPES
+        emailCorrespondent.mention == mention
+        for mention, _ in EMailCorrespondentsModel.MENTIONTYPES
     )
     assert str(emailCorrespondent.email) in str(emailCorrespondent)
     assert str(emailCorrespondent.correspondent) in str(emailCorrespondent)
@@ -60,7 +63,7 @@ def test_CorrespondentModel_creation(emailCorrespondent):
 
 
 @pytest.mark.django_db
-def test_EMailModel_foreign_key_email_deletion(emailCorrespondent):
+def test_EMailCorrespondentsModel_foreign_key_email_deletion(emailCorrespondent):
     """Tests the on_delete foreign key constraint on email in :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel`."""
 
     emailCorrespondent.email.delete()
@@ -70,7 +73,9 @@ def test_EMailModel_foreign_key_email_deletion(emailCorrespondent):
 
 
 @pytest.mark.django_db
-def test_EMailModel_foreign_key_correspondent_deletion(emailCorrespondent):
+def test_EMailCorrespondentsModel_foreign_key_correspondent_deletion(
+    emailCorrespondent,
+):
     """Tests the on_delete foreign key constraint on correspondent in :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel`."""
 
     emailCorrespondent.correspondent.delete()
@@ -80,8 +85,71 @@ def test_EMailModel_foreign_key_correspondent_deletion(emailCorrespondent):
 
 
 @pytest.mark.django_db
-def test_CorrespondentModel_unique(emailCorrespondent):
+def test_EMailCorrespondentsModel_unique(emailCorrespondent):
     """Tests the unique constraint in :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
     with pytest.raises(IntegrityError):
-        baker.make(EMailCorrespondentsModel, email=emailCorrespondent.email, correspondent=emailCorrespondent.correspondent, mention=emailCorrespondent.mention)
+        baker.make(
+            EMailCorrespondentsModel,
+            email=emailCorrespondent.email,
+            correspondent=emailCorrespondent.correspondent,
+            mention=emailCorrespondent.mention,
+        )
+
+
+@pytest.mark.django_db
+def test_createFromHeader_success(mocker, faker, email):
+    fake_CorrespondentModel = CorrespondentModel(email_address=faker.email())
+    mock_CorrespondentModel_fromHeader = mocker.patch(
+        "core.models.EMailCorrespondentsModel.CorrespondentModel.fromHeader",
+        return_value=fake_CorrespondentModel,
+    )
+    fake_header = faker.words(3)
+    fake_headername = faker.word()
+
+    result = EMailCorrespondentsModel.createFromHeader(
+        fake_header, fake_headername, email
+    )
+
+    assert isinstance(result, EMailCorrespondentsModel)
+    assert result.pk is not None
+    assert result.correspondent is fake_CorrespondentModel
+    assert result.email is email
+    assert result.mention is fake_headername
+
+    mock_CorrespondentModel_fromHeader.assert_called_once_with(fake_header)
+    assert result.mention == fake_headername
+
+
+@pytest.mark.django_db
+def test_createFromHeader_no_correspondent(mocker, faker, email):
+    mock_CorrespondentModel_fromHeader = mocker.patch(
+        "core.models.EMailCorrespondentsModel.CorrespondentModel.fromHeader",
+        return_value=None,
+    )
+    fake_header = faker.words(3)
+    fake_headername = faker.word()
+
+    result = EMailCorrespondentsModel.createFromHeader(
+        fake_header, fake_headername, email
+    )
+
+    assert result is None
+    mock_CorrespondentModel_fromHeader.assert_called_once_with(fake_header)
+
+
+@pytest.mark.django_db
+def test_createFromHeader_no_email(mocker, faker):
+    mock_CorrespondentModel_fromHeader = mocker.patch(
+        "core.models.EMailCorrespondentsModel.CorrespondentModel.fromHeader",
+        return_value=None,
+    )
+    fake_header = faker.words(3)
+    fake_headername = faker.word()
+
+    with pytest.raises(ValueError):
+        EMailCorrespondentsModel.createFromHeader(
+            fake_header, fake_headername, EMailModel()
+        )
+
+    mock_CorrespondentModel_fromHeader.assert_not_called()

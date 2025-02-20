@@ -23,6 +23,7 @@ Fixtures:
 """
 
 import datetime
+import os
 from uuid import UUID
 
 import pytest
@@ -30,25 +31,21 @@ from django.db import IntegrityError
 from faker import Faker
 from model_bakery import baker
 
+import Emailkasten.constants
 from core import constants
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 from Emailkasten.utils import get_config
 
 
-@pytest.fixture(name='mock_open')
-def fixture_mock_open(mocker):
-    return mocker.patch('core.models.DaemonModel.open', mocker.mock_open())
-
-
-@pytest.fixture(name='daemon')
-def fixture_daemonModel(mock_open) -> DaemonModel:
+@pytest.fixture(name="daemon")
+def fixture_daemonModel() -> DaemonModel:
     """Creates an :class:`core.models.DaemonModel.DaemonModel`.
 
     Returns:
         The daemon instance for testing.
     """
-    return baker.make(DaemonModel, log_filepath=Faker().file_path(extension='log'))
+    return baker.make(DaemonModel, log_filepath=Faker().file_path(extension="log"))
 
 
 @pytest.mark.django_db
@@ -60,13 +57,13 @@ def test_DaemonModel_creation(daemon):
     assert daemon.mailbox is not None
     assert isinstance(daemon.mailbox, MailboxModel)
     assert daemon.fetching_criterion == constants.MailFetchingCriteria.ALL
-    assert daemon.cycle_interval == get_config('DAEMON_CYCLE_PERIOD_DEFAULT')
-    assert daemon.restart_time == get_config('DAEMON_RESTART_TIME_DEFAULT')
+    assert daemon.cycle_interval == get_config("DAEMON_CYCLE_PERIOD_DEFAULT")
+    assert daemon.restart_time == get_config("DAEMON_RESTART_TIME_DEFAULT")
     assert daemon.is_running is False
     assert daemon.is_healthy is True
     assert daemon.log_filepath is not None
-    assert daemon.log_backup_count == get_config('DAEMON_LOG_BACKUP_COUNT_DEFAULT')
-    assert daemon.logfile_size == get_config('DAEMON_LOGFILE_SIZE_DEFAULT')
+    assert daemon.log_backup_count == get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
+    assert daemon.logfile_size == get_config("DAEMON_LOGFILE_SIZE_DEFAULT")
 
     assert daemon.updated is not None
     assert isinstance(daemon.updated, datetime.datetime)
@@ -96,10 +93,13 @@ def test_DaemonModel_unique(daemon):
 
 
 @pytest.mark.django_db
-def test_DaemonModel_save_logfileCreation(mock_open, daemon):
+def test_DaemonModel_save_logfileCreation(daemon):
     daemon.log_filepath = None
 
     daemon.save()
 
     daemon.refresh_from_db()
-    mock_open.assert_called_with(daemon.log_filepath, 'w')
+    assert daemon.log_filepath == os.path.join(
+        Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
+        f"daemon_{daemon.uuid}.log",
+    )

@@ -40,23 +40,45 @@ from api.v1.views.CorrespondentViewSet import CorrespondentViewSet
 from api.v1.views.DaemonViewSet import DaemonViewSet
 from api.v1.views.DatabaseStatsView import DatabaseStatsView
 from api.v1.views.EMailViewSet import EMailViewSet
-from api.v1.views.ImageViewSet import ImageViewSet
 from api.v1.views.MailboxViewSet import MailboxViewSet
 from api.v1.views.MailingListViewSet import MailingListViewSet
 from api.v1.views.UserViewSet import UserViewSet
 
 router = DefaultRouter()
-router.register(rf'{AccountViewSet.BASENAME}', AccountViewSet, basename=AccountViewSet.BASENAME)
-router.register(rf'{MailboxViewSet.BASENAME}', MailboxViewSet, basename=MailboxViewSet.BASENAME)
-router.register(rf'{DaemonViewSet.BASENAME}', DaemonViewSet, basename=DaemonViewSet.BASENAME)
-router.register(rf'{EMailViewSet.BASENAME}', EMailViewSet, basename=EMailViewSet.BASENAME)
-router.register(rf'{CorrespondentViewSet.BASENAME}', CorrespondentViewSet, basename=CorrespondentViewSet.BASENAME)
-router.register(rf'{AttachmentViewSet.BASENAME}', AttachmentViewSet, basename=AttachmentViewSet.BASENAME)
-router.register(rf'{ImageViewSet.BASENAME}', ImageViewSet, basename=ImageViewSet.BASENAME)
-router.register(rf'{UserViewSet.BASENAME}', UserViewSet, basename=UserViewSet.BASENAME)
-router.register(rf'{MailingListViewSet.BASENAME}', MailingListViewSet, basename=MailingListViewSet.BASENAME)
+router.register(
+    rf"{AccountViewSet.BASENAME}", AccountViewSet, basename=AccountViewSet.BASENAME
+)
+router.register(
+    rf"{MailboxViewSet.BASENAME}", MailboxViewSet, basename=MailboxViewSet.BASENAME
+)
+router.register(
+    rf"{DaemonViewSet.BASENAME}", DaemonViewSet, basename=DaemonViewSet.BASENAME
+)
+router.register(
+    rf"{EMailViewSet.BASENAME}", EMailViewSet, basename=EMailViewSet.BASENAME
+)
+router.register(
+    rf"{CorrespondentViewSet.BASENAME}",
+    CorrespondentViewSet,
+    basename=CorrespondentViewSet.BASENAME,
+)
+router.register(
+    rf"{AttachmentViewSet.BASENAME}",
+    AttachmentViewSet,
+    basename=AttachmentViewSet.BASENAME,
+)
+router.register(rf"{UserViewSet.BASENAME}", UserViewSet, basename=UserViewSet.BASENAME)
+router.register(
+    rf"{MailingListViewSet.BASENAME}",
+    MailingListViewSet,
+    basename=MailingListViewSet.BASENAME,
+)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path(f'{DatabaseStatsView.NAME}/', DatabaseStatsView.as_view(), name = DatabaseStatsView.NAME),
+    path("", include(router.urls)),
+    path(
+        f"{DatabaseStatsView.NAME}/",
+        DatabaseStatsView.as_view(),
+        name=DatabaseStatsView.NAME,
+    ),
 ]

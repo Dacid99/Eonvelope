@@ -18,12 +18,17 @@
 
 """Module with the :class:`POP3_SSL_Fetcher` class."""
 
+from __future__ import annotations
+
 import poplib
+from typing import TYPE_CHECKING
 
 from ... import constants
-from ...models.AccountModel import AccountModel
-from ...models.MailboxModel import MailboxModel
 from .POP3Fetcher import POP3Fetcher
+
+if TYPE_CHECKING:
+    from ...models.AccountModel import AccountModel
+    from ...models.MailboxModel import MailboxModel
 
 
 class POP3_SSL_Fetcher(POP3Fetcher):
@@ -35,47 +40,16 @@ class POP3_SSL_Fetcher(POP3Fetcher):
     PROTOCOL = constants.MailFetchingProtocols.POP3_SSL
     """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.POP3_SSL`."""
 
-
     def connectToHost(self) -> None:
         """Overrides :func:`core.utils.fetchers.POP3Fetcher.connectToHost` to use :class:`poplib.POP3_SSL`."""
         self.logger.debug("Connecting to %s ...", str(self.account))
 
-        kwargs = {"host": self.account.mail_host,
-                  "context": None}
-        if (port := self.account.mail_host_port):
+        kwargs = {"host": self.account.mail_host, "context": None}
+        if port := self.account.mail_host_port:
             kwargs["port"] = port
-        if (timeout := self.account.timeout):
+        if timeout := self.account.timeout:
             kwargs["timeout"] = timeout
 
         self._mailhost = poplib.POP3_SSL(**kwargs)
 
         self.logger.debug("Successfully connected to %s.", str(self.account))
-
-
-    @staticmethod
-    def testAccount(account: AccountModel) -> int:
-        """Overrides :func:`core.utils.fetchers.POP3Fetcher.testAccount` to use :class:`poplib.POP3_SSL`.
-
-        Args:
-            account: Data of the account to be tested.
-
-        Returns:
-            The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
-        """
-        with POP3_SSL_Fetcher(account) as pop3sslFetcher:
-            result = pop3sslFetcher.test()
-        return result
-
-    @staticmethod
-    def testMailbox(mailbox: MailboxModel) -> int:
-        """Overrides :func:`core.utils.fetchers.POP3Fetcher.testMailbox` to use :class:`poplib.POP3_SSL`.
-
-        Args:
-            mailbox: Data of the mailboc to be tested.
-
-        Returns:
-            The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
-        """
-        with POP3_SSL_Fetcher(mailbox.account) as pop3sslFetcher:
-            result = pop3sslFetcher.test(mailbox=mailbox)
-        return result

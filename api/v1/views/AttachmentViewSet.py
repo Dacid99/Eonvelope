@@ -34,8 +34,9 @@ from rest_framework.response import Response
 from core.models.AttachmentModel import AttachmentModel
 
 from ..filters.AttachmentFilter import AttachmentFilter
-from ..serializers.attachment_serializers.BaseAttachmentSerializer import \
-    BaseAttachmentSerializer
+from ..serializers.attachment_serializers.BaseAttachmentSerializer import (
+    BaseAttachmentSerializer,
+)
 
 if TYPE_CHECKING:
     from django.db.models import BaseManager
@@ -45,26 +46,40 @@ if TYPE_CHECKING:
 class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`core.models.AttachmentModel.AttachmentModel`."""
 
-    BASENAME = 'attachments'
+    BASENAME = "attachments"
     serializer_class = BaseAttachmentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AttachmentFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['file_name', 'datasize', 'email__datetime', 'is_favorite', 'created', 'updated']
-    ordering = ['id']
+    ordering_fields = [
+        "file_name",
+        "datasize",
+        "email__datetime",
+        "is_favorite",
+        "created",
+        "updated",
+    ]
+    ordering = ["id"]
 
     def get_queryset(self) -> BaseManager[AttachmentModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
             The attachment entries matching the request user."""
-        return AttachmentModel.objects.filter(email__account__user = self.request.user)
+        return AttachmentModel.objects.filter(
+            email__mailbox__account__user=self.request.user
+        )
 
+    URL_PATH_DOWNLOAD = "download"
+    URL_NAME_DOWNLOAD = "download"
 
-    URL_PATH_DOWNLOAD = 'download'
-    URL_NAME_DOWNLOAD = 'download'
-    @action(detail=True, methods=['get'], url_path=URL_PATH_DOWNLOAD, url_name=URL_NAME_DOWNLOAD)
-    def download(self, request: Request, pk: int|None = None) -> FileResponse:
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_DOWNLOAD,
+        url_name=URL_NAME_DOWNLOAD,
+    )
+    def download(self, request: Request, pk: int | None = None) -> FileResponse:
         """Action method downloading the attachment.
 
         Args:
@@ -84,15 +99,22 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
             raise Http404("Attachment file not found")
 
         attachmentFileName = attachment.file_name
-        with open(attachmentFilePath, 'rb') as attachmentFile:
-            response = FileResponse(attachmentFile, as_attachment=True, filename=attachmentFileName)
+        with open(attachmentFilePath, "rb") as attachmentFile:
+            response = FileResponse(
+                attachmentFile, as_attachment=True, filename=attachmentFileName
+            )
             return response
 
+    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
+    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
 
-    URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
-    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
-    def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_TOGGLE_FAVORITE,
+        url_name=URL_NAME_TOGGLE_FAVORITE,
+    )
+    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the attachment.
 
         Args:
@@ -104,5 +126,5 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
         """
         attachment = self.get_object()
         attachment.is_favorite = not attachment.is_favorite
-        attachment.save(update_fields=['is_favorite'])
-        return Response({'detail': 'Attachment marked as favorite'})
+        attachment.save(update_fields=["is_favorite"])
+        return Response({"detail": "Attachment marked as favorite"})

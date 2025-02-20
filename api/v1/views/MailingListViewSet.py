@@ -32,8 +32,9 @@ from rest_framework.response import Response
 from core.models.MailingListModel import MailingListModel
 
 from ..filters.MailingListFilter import MailingListFilter
-from ..serializers.mailinglist_serializers.MailingListSerializer import \
-    MailingListSerializer
+from ..serializers.mailinglist_serializers.MailingListSerializer import (
+    MailingListSerializer,
+)
 
 if TYPE_CHECKING:
     from django.db.models import BaseManager
@@ -43,35 +44,35 @@ if TYPE_CHECKING:
 class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`core.models.MailingListModel.MailingListModel`."""
 
-    BASENAME = 'mailinglists'
+    BASENAME = "mailinglists"
     serializer_class = MailingListSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailingListFilter
     permission_classes = [IsAuthenticated]
     ordering_fields = [
-        'list_id',
-        'list_owner',
-        'list_subscribe',
-        'list_unsubscribe',
-        'list_post',
-        'list_help',
-        'list_archive',
-        'is_favorite',
-        'correspondent__email_name',
-        'correspondent__email_address',
-        'created',
-        'updated'
+        "list_id",
+        "list_owner",
+        "list_subscribe",
+        "list_unsubscribe",
+        "list_post",
+        "list_help",
+        "list_archive",
+        "is_favorite",
+        "created",
+        "updated",
     ]
-    ordering = ['id']
+    ordering = ["id"]
 
     def get_queryset(self) -> BaseManager[MailingListModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
             The mailingslist entries matching the request user."""
-        return MailingListModel.objects.filter(correspondent__emails__account__user = self.request.user).distinct()
+        return MailingListModel.objects.filter(
+            emails__mailbox__account__user=self.request.user
+        ).distinct()
 
-    def destroy(self, request: Request, pk: int|None = None) -> Response:
+    def destroy(self, request: Request, pk: int | None = None) -> Response:
         """Adds the `delete` action to the viewset."""
         try:
             instance = self.get_object()
@@ -80,11 +81,16 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
         except MailingListModel.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
+    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
 
-    URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
-    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
-    def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_TOGGLE_FAVORITE,
+        url_name=URL_NAME_TOGGLE_FAVORITE,
+    )
+    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the mailinglist.
 
         Args:
@@ -96,5 +102,5 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
         """
         mailinglist = self.get_object()
         mailinglist.is_favorite = not mailinglist.is_favorite
-        mailinglist.save(update_fields=['is_favorite'])
-        return Response({'detail': 'Mailinglist marked as favorite'})
+        mailinglist.save(update_fields=["is_favorite"])
+        return Response({"detail": "Mailinglist marked as favorite"})

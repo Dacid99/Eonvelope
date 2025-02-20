@@ -37,15 +37,16 @@ from model_bakery import baker
 from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
 from test_EMailViewSet import fixture_emailModel
+from test_MailboxViewSet import fixture_mailboxModel
 
-from core.models.AttachmentModel import AttachmentModel
 from api.v1.views.AttachmentViewSet import AttachmentViewSet
+from core.models.AttachmentModel import AttachmentModel
 
 if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name='attachmentModel')
+@pytest.fixture(name="attachmentModel")
 def fixture_attachmentModel(emailModel) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
@@ -56,13 +57,11 @@ def fixture_attachmentModel(emailModel) -> AttachmentModel:
         The attachment instance for testing.
     """
     return baker.make(
-        AttachmentModel,
-        email=emailModel,
-        file_path=Faker().file_path(extension='pdf')
+        AttachmentModel, email=emailModel, file_path=Faker().file_path(extension="pdf")
     )
 
 
-@pytest.fixture(name='attachmentPayload')
+@pytest.fixture(name="attachmentPayload")
 def fixture_attachmentPayload(emailModel) -> dict[str, Any]:
     """Creates clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
 
@@ -74,7 +73,7 @@ def fixture_attachmentPayload(emailModel) -> dict[str, Any]:
     """
     attachmentData = baker.prepare(AttachmentModel, email=emailModel)
     payload = model_to_dict(attachmentData)
-    payload.pop('id')
+    payload.pop("id")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
     return cleanPayload
 
@@ -86,7 +85,7 @@ def test_list_noauth(attachmentModel, noauth_apiClient, list_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['results']
+        response.data["results"]
 
 
 @pytest.mark.django_db
@@ -95,8 +94,8 @@ def test_list_auth_other(attachmentModel, other_apiClient, list_url):
     response = other_apiClient.get(list_url(AttachmentViewSet))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['count'] == 0
-    assert response.data['results'] == []
+    assert response.data["count"] == 0
+    assert response.data["results"] == []
 
 
 @pytest.mark.django_db
@@ -105,8 +104,8 @@ def test_list_auth_owner(attachmentModel, owner_apiClient, list_url):
     response = owner_apiClient.get(list_url(AttachmentViewSet))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['count'] == 1
-    assert len(response.data['results']) == 1
+    assert response.data["count"] == 1
+    assert len(response.data["results"]) == 1
 
 
 @pytest.mark.django_db
@@ -116,7 +115,7 @@ def test_get_noauth(attachmentModel, noauth_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
 
 
 @pytest.mark.django_db
@@ -126,7 +125,8 @@ def test_get_auth_other(attachmentModel, other_apiClient, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
+
 
 @pytest.mark.django_db
 def test_get_auth_owner(attachmentModel, owner_apiClient, detail_url):
@@ -134,91 +134,113 @@ def test_get_auth_owner(attachmentModel, owner_apiClient, detail_url):
     response = owner_apiClient.get(detail_url(AttachmentViewSet, attachmentModel))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data['file_name'] == attachmentModel.file_name
+    assert response.data["file_name"] == attachmentModel.file_name
 
 
 @pytest.mark.django_db
 def test_patch_noauth(attachmentModel, noauth_apiClient, attachmentPayload, detail_url):
     """Tests the patch method with an unauthenticated user client."""
-    response = noauth_apiClient.patch(detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload)
+    response = noauth_apiClient.patch(
+        detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     attachmentModel.refresh_from_db()
-    assert attachmentModel.file_name != attachmentPayload['file_name']
+    assert attachmentModel.file_name != attachmentPayload["file_name"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(attachmentModel, other_apiClient, attachmentPayload, detail_url):
+def test_patch_auth_other(
+    attachmentModel, other_apiClient, attachmentPayload, detail_url
+):
     """Tests the patch method with the authenticated other user client."""
-    response = other_apiClient.patch(detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload)
+    response = other_apiClient.patch(
+        detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     attachmentModel.refresh_from_db()
-    assert attachmentModel.file_name != attachmentPayload['file_name']
+    assert attachmentModel.file_name != attachmentPayload["file_name"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(attachmentModel, owner_apiClient, attachmentPayload, detail_url):
+def test_patch_auth_owner(
+    attachmentModel, owner_apiClient, attachmentPayload, detail_url
+):
     """Tests the patch method with the authenticated owner user client."""
-    response = owner_apiClient.patch(detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload)
+    response = owner_apiClient.patch(
+        detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     attachmentModel.refresh_from_db()
-    assert attachmentModel.file_name != attachmentPayload['file_name']
+    assert attachmentModel.file_name != attachmentPayload["file_name"]
 
 
 @pytest.mark.django_db
 def test_put_noauth(attachmentModel, noauth_apiClient, attachmentPayload, detail_url):
     """Tests the put method with an unauthenticated user client."""
-    response = noauth_apiClient.put(detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload)
+    response = noauth_apiClient.put(
+        detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     attachmentModel.refresh_from_db()
-    assert attachmentModel.file_name != attachmentPayload['file_name']
+    assert attachmentModel.file_name != attachmentPayload["file_name"]
 
 
 @pytest.mark.django_db
-def test_put_auth_other(attachmentModel, other_apiClient, attachmentPayload, detail_url):
+def test_put_auth_other(
+    attachmentModel, other_apiClient, attachmentPayload, detail_url
+):
     """Tests the put method with the authenticated other user client."""
-    response = other_apiClient.put(detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload)
+    response = other_apiClient.put(
+        detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     attachmentModel.refresh_from_db()
-    assert attachmentModel.file_name != attachmentPayload['file_name']
+    assert attachmentModel.file_name != attachmentPayload["file_name"]
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(attachmentModel, owner_apiClient, attachmentPayload, detail_url):
+def test_put_auth_owner(
+    attachmentModel, owner_apiClient, attachmentPayload, detail_url
+):
     """Tests the put method with the authenticated owner user client."""
-    response = owner_apiClient.put(detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload)
+    response = owner_apiClient.put(
+        detail_url(AttachmentViewSet, attachmentModel), data=attachmentPayload
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     attachmentModel.refresh_from_db()
-    assert attachmentModel.file_name != attachmentPayload['file_name']
+    assert attachmentModel.file_name != attachmentPayload["file_name"]
 
 
 @pytest.mark.django_db
 def test_post_noauth(noauth_apiClient, attachmentPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url(AttachmentViewSet), data=attachmentPayload)
+    response = noauth_apiClient.post(
+        list_url(AttachmentViewSet), data=attachmentPayload
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     with pytest.raises(AttachmentModel.DoesNotExist):
-        AttachmentModel.objects.get(file_name = attachmentPayload['file_name'])
+        AttachmentModel.objects.get(file_name=attachmentPayload["file_name"])
 
 
 @pytest.mark.django_db
@@ -228,9 +250,9 @@ def test_post_auth_other(other_apiClient, attachmentPayload, list_url):
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     with pytest.raises(AttachmentModel.DoesNotExist):
-        AttachmentModel.objects.get(file_name = attachmentPayload['file_name'])
+        AttachmentModel.objects.get(file_name=attachmentPayload["file_name"])
 
 
 @pytest.mark.django_db
@@ -240,9 +262,9 @@ def test_post_auth_owner(owner_apiClient, attachmentPayload, list_url):
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     with pytest.raises(KeyError):
-        response.data['file_name']
+        response.data["file_name"]
     with pytest.raises(AttachmentModel.DoesNotExist):
-        AttachmentModel.objects.get(file_name = attachmentPayload['file_name'])
+        AttachmentModel.objects.get(file_name=attachmentPayload["file_name"])
 
 
 @pytest.mark.django_db
@@ -276,14 +298,22 @@ def test_delete_auth_owner(attachmentModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_download_noauth(attachmentModel, noauth_apiClient, custom_detail_action_url, mocker):
+def test_download_noauth(
+    attachmentModel, noauth_apiClient, custom_detail_action_url, mocker
+):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with an unauthenticated user client.
     """
-    mock_open = mocker.patch('api.v1.views.AttachmentViewSet.open')
-    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=True)
+    mock_open = mocker.patch("api.v1.views.AttachmentViewSet.open")
+    mock_os_path_exists = mocker.patch(
+        "api.v1.views.AttachmentViewSet.os.path.exists", return_value=True
+    )
 
-    response = noauth_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
+    response = noauth_apiClient.get(
+        custom_detail_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel
+        )
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_open.assert_not_called()
@@ -291,14 +321,22 @@ def test_download_noauth(attachmentModel, noauth_apiClient, custom_detail_action
 
 
 @pytest.mark.django_db
-def test_download_auth_other(attachmentModel, other_apiClient, custom_detail_action_url, mocker):
+def test_download_auth_other(
+    attachmentModel, other_apiClient, custom_detail_action_url, mocker
+):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated other user client.
     """
-    mock_open = mocker.patch('api.v1.views.AttachmentViewSet.open')
-    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=True)
+    mock_open = mocker.patch("api.v1.views.AttachmentViewSet.open")
+    mock_os_path_exists = mocker.patch(
+        "api.v1.views.AttachmentViewSet.os.path.exists", return_value=True
+    )
 
-    response = other_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
+    response = other_apiClient.get(
+        custom_detail_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel
+        )
+    )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_open.assert_not_called()
@@ -306,14 +344,22 @@ def test_download_auth_other(attachmentModel, other_apiClient, custom_detail_act
 
 
 @pytest.mark.django_db
-def test_download_no_file_auth_owner(attachmentModel, owner_apiClient, custom_detail_action_url, mocker):
+def test_download_no_file_auth_owner(
+    attachmentModel, owner_apiClient, custom_detail_action_url, mocker
+):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated owner user client.
     """
-    mock_open = mocker.patch('api.v1.views.AttachmentViewSet.open')
-    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=False)
+    mock_open = mocker.patch("api.v1.views.AttachmentViewSet.open")
+    mock_os_path_exists = mocker.patch(
+        "api.v1.views.AttachmentViewSet.os.path.exists", return_value=False
+    )
 
-    response = owner_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
+    response = owner_apiClient.get(
+        custom_detail_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel
+        )
+    )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_open.assert_not_called()
@@ -321,31 +367,47 @@ def test_download_no_file_auth_owner(attachmentModel, owner_apiClient, custom_de
 
 
 @pytest.mark.django_db
-def test_download_auth_owner(attachmentModel, owner_apiClient, custom_detail_action_url, mocker):
+def test_download_auth_owner(
+    attachmentModel, owner_apiClient, custom_detail_action_url, mocker
+):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated owner user client.
     """
-    mockedFileContent = b'This is a 24 bytes file.'
+    mockedFileContent = b"This is a 24 bytes file."
     mock_open = mocker.mock_open(read_data=mockedFileContent)
-    mocker.patch('api.v1.views.AttachmentViewSet.open', mock_open)
-    mock_os_path_exists = mocker.patch('api.v1.views.AttachmentViewSet.os.path.exists', return_value=True)
+    mocker.patch("api.v1.views.AttachmentViewSet.open", mock_open)
+    mock_os_path_exists = mocker.patch(
+        "api.v1.views.AttachmentViewSet.os.path.exists", return_value=True
+    )
 
-    response = owner_apiClient.get(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel))
+    response = owner_apiClient.get(
+        custom_detail_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel
+        )
+    )
 
     assert response.status_code == status.HTTP_200_OK
     mock_os_path_exists.assert_called_once_with(attachmentModel.file_path)
-    mock_open.assert_called_once_with(attachmentModel.file_path, 'rb')
-    assert 'Content-Disposition' in response.headers
-    assert f'filename="{attachmentModel.file_name}"' in response['Content-Disposition']
-    assert b''.join(response.streaming_content) == mockedFileContent
+    mock_open.assert_called_once_with(attachmentModel.file_path, "rb")
+    assert "Content-Disposition" in response.headers
+    assert f'filename="{attachmentModel.file_name}"' in response["Content-Disposition"]
+    assert b"".join(response.streaming_content) == mockedFileContent
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(attachmentModel, noauth_apiClient, custom_detail_action_url):
+def test_toggle_favorite_noauth(
+    attachmentModel, noauth_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with an unauthenticated user client.
     """
-    response = noauth_apiClient.post(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE, attachmentModel))
+    response = noauth_apiClient.post(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            attachmentModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     attachmentModel.refresh_from_db()
@@ -353,11 +415,19 @@ def test_toggle_favorite_noauth(attachmentModel, noauth_apiClient, custom_detail
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(attachmentModel, other_apiClient, custom_detail_action_url):
+def test_toggle_favorite_auth_other(
+    attachmentModel, other_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with the authenticated other user client.
     """
-    response = other_apiClient.post(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE, attachmentModel))
+    response = other_apiClient.post(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            attachmentModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     attachmentModel.refresh_from_db()
@@ -365,11 +435,19 @@ def test_toggle_favorite_auth_other(attachmentModel, other_apiClient, custom_det
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_owner(attachmentModel, owner_apiClient, custom_detail_action_url):
+def test_toggle_favorite_auth_owner(
+    attachmentModel, owner_apiClient, custom_detail_action_url
+):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with the authenticated owner user client.
     """
-    response = owner_apiClient.post(custom_detail_action_url(AttachmentViewSet, AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE, attachmentModel))
+    response = owner_apiClient.post(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            attachmentModel,
+        )
+    )
 
     assert response.status_code == status.HTTP_200_OK
     attachmentModel.refresh_from_db()

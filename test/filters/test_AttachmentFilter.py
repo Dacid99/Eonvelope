@@ -20,18 +20,22 @@ import pytest
 
 from api.v1.filters.AttachmentFilter import AttachmentFilter
 
-from .conftest import ( BOOL_TEST_PARAMETERS,
-                        DATETIME_TEST_PARAMETERS,
-                        INT_TEST_PARAMETERS,
-                        TEXT_TEST_PARAMETERS)
+from .conftest import (
+    BOOL_TEST_PARAMETERS,
+    DATETIME_TEST_PARAMETERS,
+    INT_TEST_PARAMETERS,
+    TEXT_TEST_PARAMETERS,
+)
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', TEXT_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_file_name_filter(attachment_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'file_name'+lookup_expr: filterquery}
+def test_file_name_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"file_name" + lookup_expr: filterquery}
 
     filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
 
@@ -43,10 +47,12 @@ def test_file_name_filter(attachment_queryset, lookup_expr, filterquery, expecte
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', INT_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_datasize_filter(attachment_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'datasize'+lookup_expr: filterquery}
+def test_content_disposition_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"content_disposition" + lookup_expr: filterquery}
 
     filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
 
@@ -58,10 +64,12 @@ def test_datasize_filter(attachment_queryset, lookup_expr, filterquery, expected
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', BOOL_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_is_favorite_filter(attachment_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'is_favorite'+lookup_expr: filterquery}
+def test_content_type_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"content_type" + lookup_expr: filterquery}
 
     filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
 
@@ -73,10 +81,12 @@ def test_is_favorite_filter(attachment_queryset, lookup_expr, filterquery, expec
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', DATETIME_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
 )
-def test_created_filter(attachment_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'created' + lookup_expr: filterquery}
+def test_datasize_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"datasize" + lookup_expr: filterquery}
 
     filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
 
@@ -88,10 +98,12 @@ def test_created_filter(attachment_queryset, lookup_expr, filterquery, expected_
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', DATETIME_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
 )
-def test_updated_filter(attachment_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'updated' + lookup_expr: filterquery}
+def test_is_favorite_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"is_favorite" + lookup_expr: filterquery}
 
     filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
 
@@ -103,10 +115,46 @@ def test_updated_filter(attachment_queryset, lookup_expr, filterquery, expected_
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', DATETIME_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
 )
-def test_email__datetime_filter(attachment_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'email__datetime' + lookup_expr: filterquery}
+def test_created_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"created" + lookup_expr: filterquery}
+
+    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+)
+def test_updated_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"updated" + lookup_expr: filterquery}
+
+    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+)
+def test_email__datetime_filter(
+    attachment_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"email__datetime" + lookup_expr: filterquery}
 
     filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
 

@@ -30,7 +30,6 @@ from core.models.AccountModel import AccountModel
 from core.models.AttachmentModel import AttachmentModel
 from core.models.CorrespondentModel import CorrespondentModel
 from core.models.EMailModel import EMailModel
-from core.models.ImageModel import ImageModel
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
@@ -38,7 +37,8 @@ if TYPE_CHECKING:
 
 class DatabaseStatsView(APIView):
     """APIView for the statistics of the database."""
-    NAME = 'stats'
+
+    NAME = "stats"
     permission_classes = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
@@ -50,17 +50,25 @@ class DatabaseStatsView(APIView):
         Returns:
             A response with the count of the table entries.
         """
-        email_count = EMailModel.objects.filter(account__user = request.user).count()
-        correspondent_count = CorrespondentModel.objects.filter(emails__account__user = request.user).distinct().count()
-        attachment_count = AttachmentModel.objects.filter(email__account__user = request.user).count()
-        images_count = ImageModel.objects.filter(email__account__user = request.user).count()
-        account_count = AccountModel.objects.filter(user = request.user).count()
+        email_count = EMailModel.objects.filter(
+            mailbox__account__user=request.user
+        ).count()
+        correspondent_count = (
+            CorrespondentModel.objects.filter(
+                emails__mailbox__account__user=request.user
+            )
+            .distinct()
+            .count()
+        )
+        attachment_count = AttachmentModel.objects.filter(
+            email__mailbox__account__user=request.user
+        ).count()
+        account_count = AccountModel.objects.filter(user=request.user).count()
 
         data = {
-            'email_count': email_count,
-            'correspondent_count': correspondent_count,
-            'attachment_count': attachment_count,
-            'images_count': images_count,
-            'account_count': account_count,
+            "email_count": email_count,
+            "correspondent_count": correspondent_count,
+            "attachment_count": attachment_count,
+            "account_count": account_count,
         }
         return Response(data)

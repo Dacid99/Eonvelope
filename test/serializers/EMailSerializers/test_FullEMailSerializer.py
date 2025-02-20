@@ -23,80 +23,56 @@ from datetime import datetime
 import pytest
 from django.forms.models import model_to_dict
 
-from api.v1.serializers.email_serializers.FullEMailSerializer import \
-    FullEMailSerializer
+from api.v1.serializers.email_serializers.FullEMailSerializer import FullEMailSerializer
 
 from ...models.test_EMailModel import fixture_emailModel
+
 
 @pytest.mark.django_db
 def test_output(email):
     """Tests for the expected output of the serializer."""
     serializerData = FullEMailSerializer(instance=email).data
 
-    assert 'id' in serializerData
-    assert serializerData['id'] == email.id
-    assert 'message_id' in serializerData
-    assert serializerData['message_id'] == email.message_id
-    assert 'datetime' in serializerData
-    assert datetime.fromisoformat(serializerData['datetime']) == email.datetime
-    assert 'email_subject' in serializerData
-    assert serializerData['email_subject'] == email.email_subject
-    assert 'bodytext' in serializerData
-    assert serializerData['bodytext'] == email.bodytext
-    assert 'inReplyTo' in serializerData
-    assert serializerData['inReplyTo'] is None
-    assert 'datasize' in serializerData
-    assert serializerData['datasize'] == email.datasize
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == email.is_favorite
-    assert 'eml_filepath' not in serializerData
-    assert 'prerender_filepath' not in serializerData
-    assert 'account' in serializerData
-    assert serializerData['account'] == email.account.id
-    assert 'comments' in serializerData
-    assert serializerData['comments'] == email.comments
-    assert 'keywords' in serializerData
-    assert serializerData['keywords'] == email.keywords
-    assert 'importance' in serializerData
-    assert serializerData['importance'] == email.importance
-    assert 'priority' in serializerData
-    assert serializerData['priority'] == email.priority
-    assert 'precedence' in serializerData
-    assert serializerData['precedence'] == email.precedence
-    assert 'received' in serializerData
-    assert serializerData['received'] == email.received
-    assert 'user_agent' in serializerData
-    assert serializerData['user_agent'] == email.user_agent
-    assert 'auto_submitted' in serializerData
-    assert serializerData['auto_submitted'] == email.auto_submitted
-    assert 'content_type' in serializerData
-    assert serializerData['content_type'] == email.content_type
-    assert 'content_language' in serializerData
-    assert serializerData['content_language'] == email.content_language
-    assert 'content_location' in serializerData
-    assert serializerData['content_location'] == email.content_location
-    assert 'x_priority' in serializerData
-    assert serializerData['x_priority'] == email.x_priority
-    assert 'x_originated_client' in serializerData
-    assert serializerData['x_originated_client'] == email.x_originated_client
-    assert 'x_spam' in serializerData
-    assert serializerData['x_spam'] == email.x_spam
-    assert 'created' in serializerData
-    assert datetime.fromisoformat(serializerData['created']) == email.created
-    assert 'updated' in serializerData
-    assert datetime.fromisoformat(serializerData['updated']) == email.updated
-    assert 'replies' in serializerData
-    assert serializerData['replies'] == []
-    assert 'attachments' in serializerData
-    assert serializerData['attachments'] == []
-    assert 'images' in serializerData
-    assert serializerData['images'] == []
-    assert 'mailinglist' in serializerData
-    assert serializerData['mailinglist'] is None
-    assert 'correspondents' in serializerData
-    assert serializerData['correspondents'] == []
+    assert "id" in serializerData
+    assert serializerData["id"] == email.id
+    assert "message_id" in serializerData
+    assert serializerData["message_id"] == email.message_id
+    assert "datetime" in serializerData
+    assert datetime.fromisoformat(serializerData["datetime"]) == email.datetime
+    assert "email_subject" in serializerData
+    assert serializerData["email_subject"] == email.email_subject
+    assert "plain_bodytext" in serializerData
+    assert serializerData["plain_bodytext"] == email.plain_bodytext
+    assert "html_bodytext" in serializerData
+    assert serializerData["html_bodytext"] == email.html_bodytext
+    assert "inReplyTo" in serializerData
+    assert serializerData["inReplyTo"] is None
+    assert "datasize" in serializerData
+    assert serializerData["datasize"] == email.datasize
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == email.is_favorite
+    assert "eml_filepath" not in serializerData
+    assert "prerender_filepath" not in serializerData
+    assert "mailbox" in serializerData
+    assert serializerData["mailbox"] == email.mailbox.id
+    assert "headers" in serializerData
+    assert serializerData["headers"] == email.headers
+    assert "x_spam" in serializerData
+    assert serializerData["x_spam"] == email.x_spam
+    assert "created" in serializerData
+    assert datetime.fromisoformat(serializerData["created"]) == email.created
+    assert "updated" in serializerData
+    assert datetime.fromisoformat(serializerData["updated"]) == email.updated
+    assert "replies" in serializerData
+    assert serializerData["replies"] == []
+    assert "attachments" in serializerData
+    assert serializerData["attachments"] == []
+    assert "mailinglist" in serializerData
+    assert serializerData["mailinglist"] is None
+    assert "correspondents" in serializerData
+    assert serializerData["correspondents"] == []
 
-    assert len(serializerData) == 30
+    assert len(serializerData) == 18
 
 
 @pytest.mark.django_db
@@ -106,38 +82,26 @@ def test_input(email):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
-    assert 'id' not in serializerData
-    assert 'message_id' not in serializerData
-    assert 'datetime' not in serializerData
-    assert 'email_subject' not in serializerData
-    assert 'bodytext' not in serializerData
-    assert 'inReplyTo' not in serializerData
-    assert 'datasize' not in serializerData
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == email.is_favorite
-    assert 'eml_filepath' not in serializerData
-    assert 'prerender_filepath' not in serializerData
-    assert 'account' not in serializerData
-    assert 'comments' not in serializerData
-    assert 'keywords' not in serializerData
-    assert 'importance' not in serializerData
-    assert 'priority' not in serializerData
-    assert 'precedence' not in serializerData
-    assert 'received' not in serializerData
-    assert 'user_agent' not in serializerData
-    assert 'auto_submitted' not in serializerData
-    assert 'content_type' not in serializerData
-    assert 'content_language' not in serializerData
-    assert 'content_location' not in serializerData
-    assert 'x_priority' not in serializerData
-    assert 'x_originated_client' not in serializerData
-    assert 'x_spam' not in serializerData
-    assert 'created' not in serializerData
-    assert 'updated' not in serializerData
-    assert 'replies' not in serializerData
-    assert 'attachments' not in serializerData
-    assert 'images' not in serializerData
-    assert 'mailinglist' not in serializerData
-    assert 'correspondents' not in serializerData
+    assert "id" not in serializerData
+    assert "message_id" not in serializerData
+    assert "datetime" not in serializerData
+    assert "email_subject" not in serializerData
+    assert "plain_bodytext" not in serializerData
+    assert "html_bodytext" not in serializerData
+    assert "inReplyTo" not in serializerData
+    assert "datasize" not in serializerData
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == email.is_favorite
+    assert "eml_filepath" not in serializerData
+    assert "prerender_filepath" not in serializerData
+    assert "mailbox" not in serializerData
+    assert "headers" not in serializerData
+    assert "x_spam" not in serializerData
+    assert "created" not in serializerData
+    assert "updated" not in serializerData
+    assert "replies" not in serializerData
+    assert "attachments" not in serializerData
+    assert "mailinglist" not in serializerData
+    assert "correspondents" not in serializerData
 
     assert len(serializerData) == 1

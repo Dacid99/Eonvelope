@@ -40,37 +40,26 @@ class BaseEMailSerializer(serializers.ModelSerializer):
         model = EMailModel
         """The model to serialize."""
 
-        exclude = ['eml_filepath', 'prerender_filepath']
+        exclude = ["eml_filepath", "prerender_filepath"]
         """Exclude the :attr:`core.models.EMailModel.EMailModel.eml_filepath`
         and :attr:`core.models.EMailModel.EMailModel.prerender_filepath` fields.
         """
 
         read_only_fields = [
-            'message_id',
-            'datetime',
-            'email_subject',
-            'bodytext',
-            'inReplyTo',
-            'datasize',
-            'correspondents',
-            'mailinglist',
-            'account',
-            'comments',
-            'keywords',
-            'importance',
-            'priority',
-            'precedence',
-            'received',
-            'user_agent',
-            'auto_submitted',
-            'content_type',
-            'content_language',
-            'content_location',
-            'x_priority',
-            'x_originated_client',
-            'x_spam',
-            'created',
-            'updated'
+            "message_id",
+            "datetime",
+            "email_subject",
+            "plain_bodytext",
+            "html_bodytext",
+            "inReplyTo",
+            "datasize",
+            "correspondents",
+            "mailinglist",
+            "mailbox",
+            "headers",
+            "x_spam",
+            "created",
+            "updated",
         ]
         """All fields except for :attr:`core.models.EMailModel.EMailModel.is_favorite`
         are read-only.

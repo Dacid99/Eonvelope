@@ -138,79 +138,29 @@ class TestStatusCodes:
     ]
 
 
-# Configurations
+class HeaderFields:
+    """Namespace class with all header fields that have their own column in the emails table.
+    For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml.
+    """
 
-class ParsingConfiguration:
-    """Namespace class for all configurations constants for the parsing of mails."""
+    MESSAGE_ID: Final[str] = "Message-ID"
+    IN_REPLY_TO: Final[str] = "In-Reply-To"
+    DATE: Final[str] = "Date"
+    SUBJECT: Final[str] = "Subject"
+    X_SPAM: Final[str] = "X-Spam-Flag"
 
-    APPLICATION_TYPES: Final[list[str]] = [
-        "application/pdf",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ]
-    """A list of application types to parse as attachments."""
+    class MailingList:
+        """Headers that are included in the mailinglists table."""
 
-    DATE_FORMAT: Final[str] = "%Y-%m-%d %H:%M:%S"
-    """The mail datetime format as specified in RFC5322. Must match the pattern of :attr:`DEFAULT_MAILDATE`."""
+        ID: Final[str] = "List-Id"
+        OWNER: Final[str] = "List-Owner"
+        SUBSCRIBE: Final[str] = "List-Subscribe"
+        UNSUBSCRIBE: Final[str] = "List-Unsubscribe"
+        POST: Final[str] = "List-Post"
+        HELP: Final[str] = "List-Help"
+        ARCHIVE: Final[str] = "List-Archive"
 
-
-class ParsedMailKeys:
-    """Namespace class for all keys to the parsedMail dictionary."""
-
-    DATA: Final[str] = "Raw"
-    FULL_MESSAGE: Final[str] = "Full"
-    SIZE: Final[str] = "Size"
-    EML_FILE_PATH: Final[str] = "EmlFilePath"
-    PRERENDER_FILE_PATH: Final[str] = "PrerenderFilePath"
-    ATTACHMENTS: Final[str] = "Attachments"
-    IMAGES: Final[str] = "Images"
-    MAILINGLIST: Final[str] = "Mailinglist"
-    BODYTEXT: Final[str] = "Bodytext"
-
-    class Header:
-        """For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml."""
-
-        MESSAGE_ID: Final[str] = "Message-ID"
-        IN_REPLY_TO: Final[str] = "In-Reply-To"
-
-        DATE: Final[str] = "Date"
-        SUBJECT: Final[str] = "Subject"
-        COMMENTS: Final[str] = "Comments"
-        KEYWORDS: Final[str] = "Keywords"
-
-        RECEIVED: Final[str] = "Received"
-        IMPORTANCE: Final[str] = "Importance"
-        PRIORITY: Final[str] = "Priority"
-        PRECEDENCE: Final[str] = "Precedence"
-
-        LANGUAGE: Final[str] = "Language"
-        CONTENT_LANGUAGE: Final[str] = "Content-Language"
-        CONTENT_LOCATION: Final[str] = "Content-Location"
-        CONTENT_TYPE: Final[str] = "Content-Type"
-
-        USER_AGENT: Final[str] = "User-Agent"
-        AUTO_SUBMITTED: Final[str] = "Auto-Submitted"
-        ARCHIVED_AT: Final[str] = "Archived-At"
-
-        X_PRIORITY: Final[str] = "X-Priority"
-        X_ORIGINATING_CLIENT: Final[str] = "X-Originating-Client"
-        X_SPAM_FLAG: Final[str] = "X-Spam-Flag"
-
-        def __iter__(self):
-            """Method to allow easier referencing of the members by listing.
-            Note:
-                value must come first in the listed tuples to match the format for field choices.
-            """
-            return iter(
-                (value, attr)
-                for attr, value in self.__class__.__dict__.items()
-                if not attr.startswith("__")
-            )
-
-        def __getitem__(self, key):
-            return getattr(self, key)
-
-
-    class Correspondent:
+    class Correspondents:
         """Headers that are treated as correspondents."""
 
         FROM: Final[str] = "From"
@@ -244,33 +194,3 @@ class ParsedMailKeys:
 
         def __getitem__(self, key):
             return getattr(self, key)
-
-
-    class Attachment:
-        """Keys to the attachment sub-dictionary."""
-
-        DATA: Final[str] = "AttachmentData"
-        SIZE: Final[str] = "AttachmentSize"
-        FILE_NAME: Final[str] = "AttachmentFileName"
-        FILE_PATH: Final[str] = "AttachmentFilePath"
-
-
-    class Image:
-        """Keys to the image sub-dictionary."""
-
-        DATA: Final[str] = "ImageData"
-        SIZE: Final[str] = "ImageSize"
-        FILE_NAME: Final[str] = "ImageFileName"
-        FILE_PATH: Final[str] = "ImageFilePath"
-
-
-    class MailingList:
-        """Keys to the mailinglist sub-dictionary."""
-
-        ID: Final[str] = "List-Id"
-        OWNER: Final[str] = "List-Owner"
-        SUBSCRIBE: Final[str] = "List-Subscribe"
-        UNSUBSCRIBE: Final[str] = "List-Unsubscribe"
-        POST: Final[str] = "List-Post"
-        HELP: Final[str] = "List-Help"
-        ARCHIVE: Final[str] = "List-Archive"

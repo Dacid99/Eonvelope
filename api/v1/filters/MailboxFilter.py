@@ -35,7 +35,6 @@ class MailboxFilter(django_filters.FilterSet):
             "name": FilterSetups.TEXT,
             "save_toEML": FilterSetups.BOOL,
             "save_attachments": FilterSetups.BOOL,
-            "save_images": FilterSetups.BOOL,
             "is_healthy": FilterSetups.BOOL,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
@@ -43,5 +42,5 @@ class MailboxFilter(django_filters.FilterSet):
             "account__mail_address": FilterSetups.TEXT,
             "account__mail_host": FilterSetups.TEXT,
             "account__protocol": FilterSetups.CHOICE,
-            "account__is_healthy": FilterSetups.BOOL
+            "account__is_healthy": FilterSetups.BOOL,
         }

@@ -17,10 +17,12 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`DaemonModel` model class."""
+from __future__ import annotations
 
 import logging
 import os
 import uuid
+from typing import TYPE_CHECKING
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
@@ -29,7 +31,9 @@ import Emailkasten.constants
 from Emailkasten.utils import get_config
 
 from .. import constants
-from .MailboxModel import MailboxModel
+
+if TYPE_CHECKING:
+    from .MailboxModel import MailboxModel
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -41,19 +45,29 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     """The uuid of this daemon. Used to create a unique logfile."""
 
-    mailbox = models.ForeignKey(MailboxModel, related_name='daemons', on_delete=models.CASCADE)
+    mailbox: models.ForeignKey[MailboxModel] = models.ForeignKey(
+        "MailboxModel", related_name="daemons", on_delete=models.CASCADE
+    )
     """The mailbox this daemon fetches. Unique. Deletion of that :attr:`mailbox` deletes this daemon."""
 
     FETCHINGCHOICES = list(constants.MailFetchingCriteria())
     """The available mail fetching criteria. Refers to :class:`Emailkasten.constants.MailFetchingCriteria`."""
 
-    fetching_criterion = models.CharField(choices=FETCHINGCHOICES, default=constants.MailFetchingCriteria.ALL, max_length=10)
+    fetching_criterion = models.CharField(
+        choices=FETCHINGCHOICES,
+        default=constants.MailFetchingCriteria.ALL,
+        max_length=10,
+    )
     """The fetching criterion for this mailbox. One of :attr:`FETCHING_CHOICES`. :attr:`Emailkasten.constants.MailFetchingCriteria.ALL` by default."""
 
-    cycle_interval = models.IntegerField(default=get_config('DAEMON_CYCLE_PERIOD_DEFAULT'))
+    cycle_interval = models.IntegerField(
+        default=get_config("DAEMON_CYCLE_PERIOD_DEFAULT")
+    )
     """The period with which the daemon is running. :attr:`constance.config('DAEMON_CYCLE_PERIOD_DEFAULT')` by default."""
 
-    restart_time = models.IntegerField(default=get_config('DAEMON_RESTART_TIME_DEFAULT'))
+    restart_time = models.IntegerField(
+        default=get_config("DAEMON_RESTART_TIME_DEFAULT")
+    )
     """The time after which a crashed daemon restarts. :attr:`constance.config('DAEMON_RESTART_TIME_DEFAULT')` by default."""
 
     is_running = models.BooleanField(default=False)
@@ -69,13 +83,18 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     log_filepath = models.FilePathField(
         path=Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
         recursive=True,
-        unique=True)
+        unique=True,
+    )
     """The logfile the daemon logs to. Is automatically set by :func:`save`. Unique."""
 
-    log_backup_count = models.IntegerField(default=get_config('DAEMON_LOG_BACKUP_COUNT_DEFAULT'))
+    log_backup_count = models.IntegerField(
+        default=get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
+    )
     """The number of backup logfiles for the daemon. :attr:`constance.config('DAEMON_LOG_BACKUP_COUNT_DEFAULT')` by default."""
 
-    logfile_size = models.IntegerField(default=get_config('DAEMON_LOGFILE_SIZE_DEFAULT'))
+    logfile_size = models.IntegerField(
+        default=get_config("DAEMON_LOGFILE_SIZE_DEFAULT")
+    )
     """The maximum size of a logfile for the daemon in bytes. :attr:`constance.config('DAEMON_LOGFILE_SIZE_DEFAULT')` by default."""
 
     created = models.DateTimeField(auto_now_add=True)
@@ -84,24 +103,21 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-
     def __str__(self):
         return f"Mailfetcher daemon configuration {str(self.uuid)} for mailbox {self.mailbox}"
-
 
     class Meta:
         """Metadata class for the model."""
 
-        db_table = 'daemons'
+        db_table = "daemons"
         """The name of the database table for the daemons."""
-
 
     def save(self, *args, **kwargs):
         """Extended :django::func:`django.models.Model.save` method to create and set :attr:`log_filepath` if it is null."""
 
         if not self.log_filepath:
-            self.log_filepath = os.path.join(Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH, f"daemon_{self.uuid}.log")
-            if not os.path.exists(self.log_filepath):
-                with open(self.log_filepath, 'w'):
-                    pass
-        super().save(*args,**kwargs)
+            self.log_filepath = os.path.join(
+                Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
+                f"daemon_{self.uuid}.log",
+            )
+        super().save(*args, **kwargs)

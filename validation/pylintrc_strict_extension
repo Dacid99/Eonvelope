@@ -194,11 +194,11 @@ function-naming-style=camelCase
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=_,pk,OK,CC,TO,ID,id,Id
+good-names=_,__,pk,OK,CC,TO,ID,id,Id
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
-good-names-rgxs=
+good-names-rgxs=v\d
 
 # Include a hint for the correct naming format with invalid-name.
 include-naming-hint=yes
@@ -344,7 +344,7 @@ indent-after-paren=4
 indent-string='    '
 
 # Maximum number of characters on a single line.
-max-line-length=120
+max-line-length=100
 
 # Maximum number of lines in a module.
 max-module-lines=1000

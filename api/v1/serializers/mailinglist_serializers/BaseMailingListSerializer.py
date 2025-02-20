@@ -40,21 +40,20 @@ class BaseMailingListSerializer(serializers.ModelSerializer):
         model = MailingListModel
         """The model to serialize."""
 
-        fields = '__all__'
+        fields = "__all__"
         """Include all fields."""
 
         read_only_fields = [
-            'list_id',
-            'list_owner',
-            'list_subscribe',
-            'list_unsubscribe',
-            'list_post',
-            'list_help',
-            'list_archive',
-            'correspondent',
-            'created',
-            'updated',
-            'email_number'
+            "list_id",
+            "list_owner",
+            "list_subscribe",
+            "list_unsubscribe",
+            "list_post",
+            "list_help",
+            "list_archive",
+            "created",
+            "updated",
+            "email_number",
         ]
         """All fields except for
         :attr:`core.models.MailingListModel.MailingListModel.is_favorite`

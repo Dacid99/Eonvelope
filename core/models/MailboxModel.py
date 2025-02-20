@@ -18,19 +18,31 @@
 
 """Module with the :class:`MailboxModel` model class."""
 
+from __future__ import annotations
+
 import logging
+import mailbox
+import os
+from typing import TYPE_CHECKING
 
 from dirtyfields import DirtyFieldsMixin
-from django.db import models
+from django.db import IntegrityError, models
 
-from core.utils.fetchers.IMAPFetcher import IMAPFetcher
-from core.utils.fetchers.POP3Fetcher import POP3Fetcher
+from core.models.EMailModel import EMailModel
 from Emailkasten.utils import get_config
 
-from .AccountModel import AccountModel
+from ..constants import TestStatusCodes
+from ..utils.fetchers.IMAPFetcher import IMAPFetcher
+from ..utils.fetchers.POP3Fetcher import POP3Fetcher
+from ..utils.mailParsing import parseMailboxName
+
+if TYPE_CHECKING:
+    from .AccountModel import AccountModel
+
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
+
 
 class MailboxModel(DirtyFieldsMixin, models.Model):
     """Database model for a mailbox in a mail account."""
@@ -38,16 +50,17 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
     name = models.CharField(max_length=255)
     """The mailaccount internal name of the mailbox. Unique together with :attr:`account`."""
 
-    account = models.ForeignKey(AccountModel, related_name="mailboxes", on_delete=models.CASCADE)
+    account: models.ForeignKey[AccountModel] = models.ForeignKey(
+        "AccountModel", related_name="mailboxes", on_delete=models.CASCADE
+    )
     """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
 
-    save_attachments = models.BooleanField(default=get_config('DEFAULT_SAVE_ATTACHMENTS'))
+    save_attachments = models.BooleanField(
+        default=get_config("DEFAULT_SAVE_ATTACHMENTS")
+    )
     """Whether to save attachments of the mails found in this mailbox. :attr:`constance.get_config('DEFAULT_SAVE_ATTACHMENTS')` by default."""
 
-    save_images = models.BooleanField(default=get_config('DEFAULT_SAVE_IMAGES'))
-    """Whether to save images of the mails found in this mailbox. :attr:`constance.get_config('DEFAULT_SAVE_IMAGES')` by default."""
-
-    save_toEML = models.BooleanField(default=get_config('DEFAULT_SAVE_TO_EML'))
+    save_toEML = models.BooleanField(default=get_config("DEFAULT_SAVE_TO_EML"))
     """Whether to save the mails found in this mailbox as .eml files. :attr:`constance.get_config('DEFAULT_SAVE_TO_EML')` by default."""
 
     is_favorite = models.BooleanField(default=False)
@@ -63,7 +76,6 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
 
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
-
 
     def __str__(self):
         return f"Mailbox {self.name} of {self.account}"
@@ -83,7 +95,6 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             availableFetchingOptions = []
         return availableFetchingOptions
 
-
     class Meta:
         """Metadata class for the model."""
 
@@ -92,8 +103,106 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                fields=['name', 'account'],
-                name='mailbox_unique_together_name_account'
+                fields=["name", "account"], name="mailbox_unique_together_name_account"
             )
         ]
         """:attr:`name` and :attr:`account` in combination are unique."""
+
+    def test_connection(self):
+        """Tests whether the data in the model is correct
+        and allows connecting and logging in to the mailhost and account.
+        The :attr:`core.models.MailboxModel.is_healthy` flag is set accordingly.
+        Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
+
+        Returns:
+            The resultcode of the test.
+        """
+
+        logger.info("Testing %s ...", self)
+        try:
+            with self.account.get_fetcher() as fetcher:
+                result = fetcher.test(self)
+
+        except ValueError:
+            logger.error("Account %s has unknown protocol!", self)
+            result = TestStatusCodes.ERROR
+
+        logger.info("Successfully tested account to be %s.", result)
+        return result
+
+    def fetch(self, criterion: str):
+        """Fetches emails from this mailbox based on :attr:`criterion`
+        and adds them to the db.
+
+        Args:
+            criterion: The criterion used to fetch emails from the mailbox.
+        """
+        logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
+        with self.account.get_fetcher() as fetcher:
+            fetchedMails = fetcher.fetchEmails(self, criterion)
+        logger.info("Successfully fetched emails.")
+        logger.info("Saving fetched emails ...")
+        for fetchedMail in fetchedMails:
+            try:
+                EMailModel.createFromEmailBytes(fetchedMail, self)
+                logger.info("Successfully saved fetched emails.")
+            except IntegrityError:
+                logger.error(
+                    "Email already exists in db, preprocessing apparently failed!"
+                )
+
+    def addFromMailboxFile(self, file_data: bytes, file_format: str):
+        """Adds emails from a mailbox file to the db.
+        Supported formats are implemented via the :mod:`mailbox` package.
+
+        Args:
+            file_data: The bytes of the mailbox file.
+            file_format: The format of the mailbox file. Case-insensitive.
+
+        Raises:
+            ValueError: If the file format is not implemented.
+        """
+        file_format = file_format.lower()
+        logger.info("Adding emails from %s mailbox file to %s ...", file_format, self)
+        if file_format == "mbox":
+            formatClass: type[mailbox.Mailbox] = mailbox.mbox
+        elif file_format == "mh":
+            formatClass = mailbox.MH
+        elif file_format == "babyl":
+            formatClass = mailbox.Babyl
+        elif file_format == "mmdf":
+            formatClass = mailbox.MMDF
+        elif file_format == "maildir":
+            formatClass = mailbox.Maildir
+        else:
+            logger.info(
+                "Failed adding emails from mailbox file to %s, format %s is not implemented.",
+                file_format,
+                self,
+            )
+            raise ValueError(f"Mailbox fileformat {file_format} is not implemented!")
+        dump_filepath = os.path.join(
+            get_config("TEMPORARY_STORAGE_DIRECTORY"), str(hash(file_data))
+        )
+        with open(dump_filepath, "bw") as file:
+            file.write(file_data)
+        mailboxFile = formatClass(dump_filepath)
+        for key in mailboxFile.iterkeys():
+            EMailModel.createFromEmailBytes(mailboxFile.get_bytes(key), self)
+        logger.info("Successfully added emails from mailbox file.")
+
+    @staticmethod
+    def fromData(mailboxData: bytes, account: AccountModel) -> MailboxModel:
+        """Prepares a :class:`core.models.MailboxModel.MailboxModel`
+        from the mailboxname in bytes.
+
+        Args:
+            mailboxData: The bytes with the mailboxname.
+            account: The account the mailbox is in.
+
+        Returns:
+            The :class:`core.models.MailboxModel.MailboxModel` instance with data from the bytes.
+        """
+        new_mailbox = MailboxModel(account=account)
+        new_mailbox.name = parseMailboxName(mailboxData)
+        return new_mailbox

@@ -33,11 +33,9 @@ from rest_framework.response import Response
 
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from core.models.DaemonModel import DaemonModel
-from Emailkasten.utils import get_config
 
 from ..filters.DaemonFilter import DaemonFilter
-from ..serializers.daemon_serializers.BaseDaemonSerializer import \
-    BaseDaemonSerializer
+from ..serializers.daemon_serializers.BaseDaemonSerializer import BaseDaemonSerializer
 
 if TYPE_CHECKING:
     from django.db.models import BaseManager
@@ -47,46 +45,51 @@ if TYPE_CHECKING:
 class DaemonViewSet(viewsets.ModelViewSet):
     """Viewset for the :class:`core.models.DaemonModel.DaemonModel`."""
 
-    BASENAME = 'daemons'
+    BASENAME = "daemons"
     serializer_class = BaseDaemonSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = DaemonFilter
     permission_classes = [IsAuthenticated]
     ordering_fields = [
-        'fetching_criterion',
-        'cycle_interval',
-        'restart_time',
-        'is_running',
-        'is_healthy',
-        'mailbox__fetching_criterion',
-        'mailbox__name',
-        'mailbox__account__mail_address',
-        'mailbox__account__mail_host',
-        'mailbox__account__protocol',
-        'created',
-        'updated'
+        "fetching_criterion",
+        "cycle_interval",
+        "restart_time",
+        "is_running",
+        "is_healthy",
+        "mailbox__fetching_criterion",
+        "mailbox__name",
+        "mailbox__account__mail_address",
+        "mailbox__account__mail_host",
+        "mailbox__account__protocol",
+        "created",
+        "updated",
     ]
-    ordering = ['id']
-
+    ordering = ["id"]
 
     def get_queryset(self) -> BaseManager[DaemonModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
             The daemon entries matching the request user."""
-        return DaemonModel.objects.filter(mailbox__account__user = self.request.user)
+        return DaemonModel.objects.filter(mailbox__account__user=self.request.user)
 
     def create(self, request, *args, **kwargs):
         """Disables the POST method for this viewset."""
         return Response(
             {"detail": "POST method is not allowed on this endpoint."},
-            status=status.HTTP_405_METHOD_NOT_ALLOWED
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
-    URL_PATH_FETCHING_OPTIONS = 'fetching-options'
-    URL_NAME_FETCHING_OPTIONS = 'fetching-options'
-    @action(detail=True, methods=['get'], url_path=URL_PATH_FETCHING_OPTIONS, url_name=URL_NAME_FETCHING_OPTIONS)
-    def fetching_options(self, request: Request, pk: int|None = None) -> Response:
+    URL_PATH_FETCHING_OPTIONS = "fetching-options"
+    URL_NAME_FETCHING_OPTIONS = "fetching-options"
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_FETCHING_OPTIONS,
+        url_name=URL_NAME_FETCHING_OPTIONS,
+    )
+    def fetching_options(self, request: Request, pk: int | None = None) -> Response:
         """Action method returning all fetching options for the daemon.
 
         Args:
@@ -100,15 +103,20 @@ class DaemonViewSet(viewsets.ModelViewSet):
 
         availableFetchingOptions = daemon.mailbox.getAvailableFetchingCriteria()
         if availableFetchingOptions:
-            return Response({'options': availableFetchingOptions})
+            return Response({"options": availableFetchingOptions})
         else:
-            return Response({'error': "No fetching options available for this mailbox!"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(
+                {"error": "No fetching options available for this mailbox!"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
+    URL_PATH_TEST = "test"
+    URL_NAME_TEST = "test"
 
-    URL_PATH_TEST = 'test'
-    URL_NAME_TEST = 'test'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST)
-    def test(self, request: Request, pk:int|None = None) -> Response:
+    @action(
+        detail=True, methods=["post"], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST
+    )
+    def test(self, request: Request, pk: int | None = None) -> Response:
         """Action method testing the daemon data of the mailbox.
 
         Args:
@@ -122,17 +130,25 @@ class DaemonViewSet(viewsets.ModelViewSet):
         daemonData = self.get_serializer(daemon).data
         result = EMailArchiverDaemonRegistry.testDaemon(daemon)
 
-        return Response({
-            'detail': 'Daemon testrun was successful.' if result else 'Daemon testrun failed!',
-            'daemon': daemonData,
-            'result': result
-        })
+        return Response(
+            {
+                "detail": (
+                    "Daemon testrun was successful."
+                    if result
+                    else "Daemon testrun failed!"
+                ),
+                "daemon": daemonData,
+                "result": result,
+            }
+        )
 
+    URL_PATH_START = "start"
+    URL_NAME_START = "start"
 
-    URL_PATH_START = 'start'
-    URL_NAME_START = 'start'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_START, url_name=URL_NAME_START)
-    def start(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True, methods=["post"], url_path=URL_PATH_START, url_name=URL_NAME_START
+    )
+    def start(self, request: Request, pk: int | None = None) -> Response:
         """Action method starting the daemon for the mailbox.
 
         Args:
@@ -146,22 +162,20 @@ class DaemonViewSet(viewsets.ModelViewSet):
         daemonData = self.get_serializer(daemon).data
         result = EMailArchiverDaemonRegistry.startDaemon(daemon)
         if result:
-            return Response({
-                'detail': 'Daemon started',
-                'daemon': daemonData
-            })
+            return Response({"detail": "Daemon started", "daemon": daemonData})
         else:
-            return Response({
-                'detail': 'Daemon already running',
-                'daemon': daemonData
-            },
-            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Daemon already running", "daemon": daemonData},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
+    URL_PATH_STOP = "stop"
+    URL_NAME_STOP = "stop"
 
-    URL_PATH_STOP = 'stop'
-    URL_NAME_STOP = 'stop'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_STOP, url_name=URL_NAME_STOP)
-    def stop(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True, methods=["post"], url_path=URL_PATH_STOP, url_name=URL_NAME_STOP
+    )
+    def stop(self, request: Request, pk: int | None = None) -> Response:
         """Action method stopping the daemon data of the mailbox.
 
         Args:
@@ -175,22 +189,23 @@ class DaemonViewSet(viewsets.ModelViewSet):
         daemonData = self.get_serializer(daemon).data
         result = EMailArchiverDaemonRegistry.stopDaemon(daemon)
         if result:
-            return Response({
-                'status': 'Daemon stopped',
-                'daemon': daemonData
-            })
+            return Response({"status": "Daemon stopped", "daemon": daemonData})
         else:
-            return Response({
-                'status': 'Daemon not running',
-                'daemon': daemonData
-            },
-            status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"status": "Daemon not running", "daemon": daemonData},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
+    URL_PATH_LOG_DOWNLOAD = "log/download"
+    URL_NAME_LOG_DOWNLOAD = "log-download"
 
-    URL_PATH_LOG_DOWNLOAD = 'log/download'
-    URL_NAME_LOG_DOWNLOAD = 'log-download'
-    @action(detail=True, methods=['get'], url_path=URL_PATH_LOG_DOWNLOAD, url_name=URL_NAME_LOG_DOWNLOAD)
-    def log_download(self, request: Request, pk: int|None = None) -> FileResponse:
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_LOG_DOWNLOAD,
+        url_name=URL_NAME_LOG_DOWNLOAD,
+    )
+    def log_download(self, request: Request, pk: int | None = None) -> FileResponse:
         """Action method downloading the log file of the daemon.
 
         Args:
@@ -205,13 +220,19 @@ class DaemonViewSet(viewsets.ModelViewSet):
         """
         daemon = self.get_object()
 
-        number = request.query_params.get('number', 0)
-        number_suffix = f'.{number}' if number > 0 else ''
+        number = request.query_params.get("number", "0")
+        try:
+            number = int(number)
+        except ValueError:
+            number = 0
+        number_suffix = f".{number}" if number > 0 else ""
         daemonLogFilepath = daemon.log_filepath + number_suffix
         if not daemonLogFilepath or not os.path.exists(daemonLogFilepath):
             raise Http404("Log file not found")
 
         daemonLogFilename = os.path.basename(daemonLogFilepath)
-        with open(daemonLogFilepath, 'rb') as daemonLogFile:
-            response = FileResponse(daemonLogFile, as_attachment=True, filename=daemonLogFilename)
+        with open(daemonLogFilepath, "rb") as daemonLogFile:
+            response = FileResponse(
+                daemonLogFile, as_attachment=True, filename=daemonLogFilename
+            )
             return response

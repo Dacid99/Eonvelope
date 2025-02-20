@@ -33,11 +33,9 @@ from rest_framework.response import Response
 
 from core.constants import TestStatusCodes
 from core.models.AccountModel import AccountModel
-from core.utils.mailProcessing import scanMailboxes, testAccount
 
 from ..filters.AccountFilter import AccountFilter
-from ..serializers.account_serializers.AccountSerializer import \
-    AccountSerializer
+from ..serializers.account_serializers.AccountSerializer import AccountSerializer
 
 if TYPE_CHECKING:
     from django.db.models import BaseManager
@@ -48,32 +46,30 @@ if TYPE_CHECKING:
 class AccountViewSet(viewsets.ModelViewSet):
     """Viewset for the :class:`core.models.AccountModel.AccountModel`."""
 
-    BASENAME = 'accounts'
+    BASENAME = "accounts"
     serializer_class = AccountSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AccountFilter
     permission_classes = [IsAuthenticated]
     ordering_fields = [
-        'mail_address',
-        'mail_host',
-        'mail_host_port',
-        'protocol',
-        'timeout',
-        'is_healthy',
-        'is_favorite',
-        'created',
-        'updated'
+        "mail_address",
+        "mail_host",
+        "mail_host_port",
+        "protocol",
+        "timeout",
+        "is_healthy",
+        "is_favorite",
+        "created",
+        "updated",
     ]
-    ordering = ['id']
-
+    ordering = ["id"]
 
     def get_queryset(self) -> BaseManager[AccountModel]:
         """Fetches the queryset by filtering the data for entries connected to the request user.
 
         Returns:
             The account entries matching the request user."""
-        return AccountModel.objects.filter(user = self.request.user)
-
+        return AccountModel.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer: BaseSerializer):
         """Adds the request user to the serializer data of the create request.
@@ -82,16 +78,22 @@ class AccountViewSet(viewsets.ModelViewSet):
             serializer: The serializer data of the create request.
         """
         try:
-            serializer.save(user = self.request.user)
+            serializer.save(user=self.request.user)
         except IntegrityError:
-            raise ValidationError({'detail': 'This account already exists!'})
+            # pylint: disable-next=raise-missing-from ; raising with from is unnecessary here
+            raise ValidationError({"detail": "This account already exists!"})
 
+    URL_PATH_UPDATE_MAILBOXES = "update-mailboxes"
+    URL_NAME_UPDATE_MAILBOXES = "update-mailboxes"
 
-    URL_PATH_SCAN_MAILBOXES = 'scan-mailboxes'
-    URL_NAME_SCAN_MAILBOXES = 'scan-mailboxes'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_SCAN_MAILBOXES, url_name=URL_NAME_SCAN_MAILBOXES)
-    def scan_mailboxes(self, request: Request, pk: int|None=None) -> Response:
-        """Action method scanning for mailboxes in the account.
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_UPDATE_MAILBOXES,
+        url_name=URL_NAME_UPDATE_MAILBOXES,
+    )
+    def update_mailboxes(self, request: Request, pk: int | None = None) -> Response:
+        """Action method updating the mailboxes in the account.
 
         Args:
             request: The request triggering the action.
@@ -101,16 +103,20 @@ class AccountViewSet(viewsets.ModelViewSet):
             A response containing the updated account data.
         """
         account = self.get_object()
-        scanMailboxes(account)
+        account.update_mailboxes()
 
         accountSerializer = self.get_serializer(account)
-        return Response(data = {'status': 'Scanned for mailboxes', 'account': accountSerializer.data})
+        return Response(
+            data={"status": "Updated mailboxes", "account": accountSerializer.data}
+        )
 
+    URL_PATH_TEST = "test"
+    URL_NAME_TEST = "test"
 
-    URL_PATH_TEST = 'test'
-    URL_NAME_TEST = 'test'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST)
-    def test(self, request: Request, pk: int|None =None) -> Response:
+    @action(
+        detail=True, methods=["post"], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST
+    )
+    def test(self, request: Request, pk: int | None = None) -> Response:
         """Action method testing the account data.
 
         Args:
@@ -121,16 +127,27 @@ class AccountViewSet(viewsets.ModelViewSet):
             A response containing the updated account data and the test resultcode.
         """
         account = self.get_object()
-        result = testAccount(account)
+        result = account.test_connection()
 
         accountSerializer = self.get_serializer(account)
-        return Response({'detail': 'Tested mailaccount', 'account': accountSerializer.data, 'result': TestStatusCodes.INFOS[result]})
+        return Response(
+            {
+                "detail": "Tested mailaccount",
+                "account": accountSerializer.data,
+                "result": TestStatusCodes.INFOS[result],
+            }
+        )
 
+    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
+    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
 
-    URL_PATH_TOGGLE_FAVORITE = 'toggle-favorite'
-    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
-    def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_TOGGLE_FAVORITE,
+        url_name=URL_NAME_TOGGLE_FAVORITE,
+    )
+    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the account.
 
         Args:
@@ -142,5 +159,5 @@ class AccountViewSet(viewsets.ModelViewSet):
         """
         account = self.get_object()
         account.is_favorite = not account.is_favorite
-        account.save(update_fields=['is_favorite'])
-        return Response({'detail': 'Account marked as favorite'})
+        account.save(update_fields=["is_favorite"])
+        return Response({"detail": "Account marked as favorite"})

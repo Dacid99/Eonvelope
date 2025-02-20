@@ -35,8 +35,7 @@ from core.models.EMailModel import EMailModel
 
 from ..filters.EMailFilter import EMailFilter
 from ..serializers.email_serializers.EMailSerializer import EMailSerializer
-from ..serializers.email_serializers.FullEMailSerializer import \
-    FullEMailSerializer
+from ..serializers.email_serializers.FullEMailSerializer import FullEMailSerializer
 
 if TYPE_CHECKING:
     from django.db.models import BaseManager
@@ -46,23 +45,37 @@ if TYPE_CHECKING:
 class EMailViewSet(viewsets.ReadOnlyModelViewSet):
     """Viewset for the :class:`core.models.EMailModel.EMailModel`."""
 
-    BASENAME = 'emails'
+    BASENAME = "emails"
     serializer_class = FullEMailSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
     filterset_class = EMailFilter
     permission_classes = [IsAuthenticated]
-    ordering_fields = ['datetime', 'email_subject', 'datasize', 'is_favorite','created', 'updated', 'user_agent', 'language', 'content_language', 'importance', 'priority', 'precedence', 'x_priority', 'x_originated_client']
-    ordering = ['id']
+    ordering_fields = [
+        "datetime",
+        "email_subject",
+        "datasize",
+        "is_favorite",
+        "created",
+        "updated",
+        "user_agent",
+        "language",
+        "content_language",
+        "importance",
+        "priority",
+        "precedence",
+        "x_priority",
+        "x_originated_client",
+    ]
+    ordering = ["id"]
 
     def get_queryset(self) -> BaseManager[EMailModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
             The email entries matching the request user."""
-        return EMailModel.objects.filter(account__user = self.request.user)
+        return EMailModel.objects.filter(mailbox__account__user=self.request.user)
 
-
-    def destroy(self, request: Request, pk: int|None = None) -> Response:
+    def destroy(self, request: Request, pk: int | None = None) -> Response:
         """Adds the `delete` action to the viewset."""
         try:
             instance = self.get_object()
@@ -71,11 +84,16 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         except EMailModel.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
+    URL_PATH_DOWNLOAD = "download"
+    URL_NAME_DOWNLOAD = "download"
 
-    URL_PATH_DOWNLOAD = 'download'
-    URL_NAME_DOWNLOAD = 'download'
-    @action(detail=True, methods=['get'], url_path=URL_PATH_DOWNLOAD, url_name=URL_NAME_DOWNLOAD)
-    def download(self, request: Request, pk: int|None = None) -> FileResponse:
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_DOWNLOAD,
+        url_name=URL_NAME_DOWNLOAD,
+    )
+    def download(self, request: Request, pk: int | None = None) -> FileResponse:
         """Action method downloading the eml file of the email.
 
         Args:
@@ -95,15 +113,20 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
             raise Http404("EMl file not found")
 
         fileName = os.path.basename(filePath)
-        with open(filePath, 'rb') as file:
+        with open(filePath, "rb") as file:
             response = FileResponse(file, as_attachment=True, filename=fileName)
             return response
 
+    URL_PATH_PRERENDER = "prerender"
+    URL_NAME_PRERENDER = "prerender"
 
-    URL_PATH_PRERENDER = 'prerender'
-    URL_NAME_PRERENDER = 'prerender'
-    @action(detail=True, methods=['get'], url_path=URL_PATH_PRERENDER, url_name=URL_NAME_PRERENDER)
-    def prerender(self, request: Request, pk: int|None = None) -> FileResponse:
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_PRERENDER,
+        url_name=URL_NAME_PRERENDER,
+    )
+    def prerender(self, request: Request, pk: int | None = None) -> FileResponse:
         """Action method downloading the prerender image of the mail.
 
         Args:
@@ -123,15 +146,22 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
             raise Http404("Prerender image file not found")
 
         prerenderFileName = os.path.basename(prerenderFilePath)
-        with open(prerenderFilePath, 'rb') as prerenderFile:
-            response = FileResponse(prerenderFile, as_attachment=True, filename=prerenderFileName)
+        with open(prerenderFilePath, "rb") as prerenderFile:
+            response = FileResponse(
+                prerenderFile, as_attachment=True, filename=prerenderFileName
+            )
             return response
 
+    URL_PATH_FULLCONVERSATION = "full-conversation"
+    URL_NAME_FULLCONVERSATION = "full-conversation"
 
-    URL_PATH_FULLCONVERSATION = 'full-conversation'
-    URL_NAME_FULLCONVERSATION = 'full-conversation'
-    @action(detail=True, methods=['get'], url_path=URL_PATH_FULLCONVERSATION, url_name=URL_NAME_FULLCONVERSATION)
-    def fullConversation(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_FULLCONVERSATION,
+        url_name=URL_NAME_FULLCONVERSATION,
+    )
+    def fullConversation(self, request: Request, pk: int | None = None) -> Response:
         """Action method getting the complete conversation a mail is part of.
 
         Args:
@@ -144,13 +174,18 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         email = self.get_object()
         conversation = email.fullConversation()
         conversationSerializer = EMailSerializer(conversation, many=True)
-        return Response({'emails': conversationSerializer.data})
+        return Response({"emails": conversationSerializer.data})
 
+    URL_PATH_SUBCONVERSATION = "sub-conversation"
+    URL_NAME_SUBCONVERSATION = "sub-conversation"
 
-    URL_PATH_SUBCONVERSATION = 'sub-conversation'
-    URL_NAME_SUBCONVERSATION = 'sub-conversation'
-    @action(detail=True, methods=['get'], url_path=URL_PATH_SUBCONVERSATION, url_name=URL_NAME_SUBCONVERSATION)
-    def subConversation(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_SUBCONVERSATION,
+        url_name=URL_NAME_SUBCONVERSATION,
+    )
+    def subConversation(self, request: Request, pk: int | None = None) -> Response:
         """Action method getting the subconversation in reply to this email.
 
         Args:
@@ -163,13 +198,18 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         email = self.get_object()
         conversation = email.subConversation()
         conversationSerializer = EMailSerializer(conversation, many=True)
-        return Response({'emails': conversationSerializer.data})
+        return Response({"emails": conversationSerializer.data})
 
+    URL_PATH_TOGGLE_FAVORITE = "toggle_favorite"
+    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
 
-    URL_PATH_TOGGLE_FAVORITE = 'toggle_favorite'
-    URL_NAME_TOGGLE_FAVORITE = 'toggle-favorite'
-    @action(detail=True, methods=['post'], url_path=URL_PATH_TOGGLE_FAVORITE, url_name=URL_NAME_TOGGLE_FAVORITE)
-    def toggle_favorite(self, request: Request, pk: int|None = None) -> Response:
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_TOGGLE_FAVORITE,
+        url_name=URL_NAME_TOGGLE_FAVORITE,
+    )
+    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
         """Action method toggling the favorite flag of the email.
 
         Args:
@@ -181,5 +221,5 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         """
         email = self.get_object()
         email.is_favorite = not email.is_favorite
-        email.save(update_fields=['is_favorite'])
-        return Response({'detail': 'Email marked as favorite'})
+        email.save(update_fields=["is_favorite"])
+        return Response({"detail": "Email marked as favorite"})

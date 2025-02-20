@@ -17,13 +17,17 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`IMAP_SSL_Fetcher` class."""
+from __future__ import annotations
 
 import imaplib
+from typing import TYPE_CHECKING
 
 from ... import constants
-from ...models.AccountModel import AccountModel
-from ...models.MailboxModel import MailboxModel
 from .IMAPFetcher import IMAPFetcher
+
+if TYPE_CHECKING:
+    from ...models.AccountModel import AccountModel
+    from ...models.MailboxModel import MailboxModel
 
 
 class IMAP_SSL_Fetcher(IMAPFetcher):
@@ -38,42 +42,11 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
     def connectToHost(self):
         """Overrides :func:`core.utils.fetchers.IMAPFetcher.connectToHost` to use :class:`imaplib.IMAP4_SSL`."""
         self.logger.debug("Connecting to %s ...", str(self.account))
-        kwargs = {"host": self.account.mail_host,
-                  "ssl_context": None}
-        if (port := self.account.mail_host_port):
+        kwargs = {"host": self.account.mail_host, "ssl_context": None}
+        if port := self.account.mail_host_port:
             kwargs["port"] = port
-        if (timeout := self.account.timeout):
+        if timeout := self.account.timeout:
             kwargs["timeout"] = timeout
 
         self._mailhost = imaplib.IMAP4_SSL(**kwargs)
         self.logger.debug("Successfully connected to %s.", str(self.account))
-
-
-    @staticmethod
-    def testAccount(account: AccountModel) -> int:
-        """Overrides :func:`core.utils.fetchers.IMAPFetcher.testAccount` to use :class:`imaplib.IMAP4_SSL`.
-
-        Args:
-            account: Data of the account to be tested.
-
-        Returns:
-            The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
-        """
-        with IMAP_SSL_Fetcher(account) as imapsslFetcher:
-            result = imapsslFetcher.test()
-        return result
-
-
-    @staticmethod
-    def testMailbox(mailbox: MailboxModel) -> int:
-        """Overrides :func:`core.utils.fetchers.IMAPFetcher.testMailbox` to use :class:`imaplib.IMAP4_SSL`.
-
-        Args:
-            mailbox: Data of the mailbox to be tested.
-
-        Returns:
-            The test status in form of a code from :class:`Emailkasten.constants.TestStatusCodes`.
-        """
-        with IMAP_SSL_Fetcher(mailbox.account) as imapsslFetcher:
-            result = imapsslFetcher.test(mailbox)
-        return result

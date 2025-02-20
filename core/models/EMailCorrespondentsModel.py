@@ -17,25 +17,37 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`EMailCorrespondentsModel` model class."""
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from django.db import models
 
-from core.constants import ParsedMailKeys
+from core.constants import HeaderFields
+
 from .CorrespondentModel import CorrespondentModel
-from .EMailModel import EMailModel
+
+if TYPE_CHECKING:
+    from .EMailModel import EMailModel
 
 
 class EMailCorrespondentsModel(models.Model):
     """Database model for connecting emails and their correspondents."""
 
-    email = models.ForeignKey(EMailModel, related_name="emailcorrespondents", on_delete=models.CASCADE)
+    email = models.ForeignKey(
+        "EMailModel", related_name="emailcorrespondents", on_delete=models.CASCADE
+    )
     """The email :attr:`correspondent` was mentioned in. Unique together with :attr:`correspondent` and :attr:`mention`."""
 
-    correspondent = models.ForeignKey(CorrespondentModel, related_name="correspondentemails", on_delete=models.CASCADE)
+    correspondent = models.ForeignKey(
+        "CorrespondentModel",
+        related_name="correspondentemails",
+        on_delete=models.CASCADE,
+    )
     """The correspondent that was mentioned in :attr:`email`. Unique together with :attr:`email` and :attr:`mention`."""
 
-    MENTIONTYPES = list(ParsedMailKeys.Correspondent())
-    """The available types of correspondent memtions. Refers to :class:`Emailkasten.constants.ParsedMailKeys.Correspondent`."""
+    MENTIONTYPES = list(HeaderFields.Correspondents())
+    """The available types of correspondent memtions. Refers to :attr:`Emailkasten.constants.HeaderFields.Correspondents`."""
 
     mention = models.CharField(choices=MENTIONTYPES, max_length=30)
     """The way that :attr:`correspondent` was mentioned in :attr:`email`. One of :attr:`MENTIONTYPES`.  Unique together with :attr:`email` and :attr:`correspondent`."""
@@ -46,7 +58,6 @@ class EMailCorrespondentsModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-
     def __str__(self):
         return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"
 
@@ -54,12 +65,41 @@ class EMailCorrespondentsModel(models.Model):
         """Metadata class for the model."""
 
         db_table = "email_correspondents"
-        """The name of the database table for the images."""
+        """The name of the database bridge table for the emails and correspondents."""
 
         constraints = [
             models.UniqueConstraint(
-                fields=['email', 'correspondent', 'mention'],
-                name='emailcorrespondents_unique_together_email_correspondent_mention'
+                fields=["email", "correspondent", "mention"],
+                name="emailcorrespondents_unique_together_email_correspondent_mention",
             )
         ]
         """:attr:`email`, :attr:`correspondent` and :attr:`mention` in combination are unique."""
+
+    @staticmethod
+    def createFromHeader(
+        header: str, headerName: str, email: EMailModel
+    ) -> EMailCorrespondentsModel | None:
+        """Prepares a :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel`
+        from an email header.
+
+        Args:
+            header: The header to parse the malinglistdata from.
+            headerName: The name of the header, the mention type of the correspondent.
+            email: The email for the new emailcorrespondent.
+
+        Returns:
+            The :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel` instance with data from the header.
+            If the correspondent already exists in the db uses that version.
+            None if the correspondent could not be parsed.
+        """
+        if email.pk is None:
+            raise ValueError("Email is not in the db!")
+        new_correspondent = CorrespondentModel.fromHeader(header)
+        if new_correspondent is None:
+            return None
+        new_correspondent.save()
+        new_emailCorrespondent = EMailCorrespondentsModel(
+            correspondent=new_correspondent, email=email, mention=headerName
+        )
+        new_emailCorrespondent.save()
+        return new_emailCorrespondent

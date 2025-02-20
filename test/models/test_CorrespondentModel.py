@@ -22,23 +22,40 @@
 Fixtures:
     :func:`fixture_correspondentModel`: Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
 """
+from __future__ import annotations
 
 import datetime
-from model_bakery import baker
-import pytest
+from typing import TYPE_CHECKING
 
+import pytest
 from django.db import IntegrityError
+from model_bakery import baker
 
 from core.models.CorrespondentModel import CorrespondentModel
 
-@pytest.fixture(name='correspondent')
+if TYPE_CHECKING:
+    from unittest.mock import MagicMock
+
+
+@pytest.fixture(name="mock_logger")
+def fixture_mock_logger(mocker) -> MagicMock:
+    """Mocks the :class:`core.models.MailingListMoCorrespondentModeldel.logger`.
+
+    Returns:
+        The email instance for testing.
+    """
+    return mocker.patch("core.models.CorrespondentModel.logger")
+
+
+@pytest.fixture(name="correspondent")
 def fixture_correspondentModel() -> CorrespondentModel:
-    """Creates an :class:`core.models.EMailModel.EMailModel` instance for testing.
+    """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
 
     Returns:
         The email instance for testing.
     """
     return baker.make(CorrespondentModel)
+
 
 @pytest.mark.django_db
 def test_CorrespondentModel_creation(correspondent):
@@ -62,4 +79,50 @@ def test_CorrespondentModel_unique(correspondent):
     """Tests the unique constraint in :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
     with pytest.raises(IntegrityError):
-        baker.make(CorrespondentModel, email_name=correspondent.email_name, email_address=correspondent.email_address)
+        baker.make(
+            CorrespondentModel,
+            email_name=correspondent.email_name,
+            email_address=correspondent.email_address,
+        )
+
+
+@pytest.mark.django_db
+def test_fromHeader_success(mocker, faker):
+    mock_parseCorrespondentHeader = mocker.patch(
+        "core.models.CorrespondentModel.parseCorrespondentHeader",
+        return_value=(faker.name(), faker.email()),
+    )
+
+    result = CorrespondentModel.fromHeader("correspondent header")
+
+    assert isinstance(result, CorrespondentModel)
+    mock_parseCorrespondentHeader.assert_called_once_with("correspondent header")
+    assert result.email_name == mock_parseCorrespondentHeader.return_value[0]
+    assert result.email_address == mock_parseCorrespondentHeader.return_value[1]
+
+
+@pytest.mark.django_db
+def test_fromHeader_duplicate(mocker, faker, correspondent):
+    mock_parseCorrespondentHeader = mocker.patch(
+        "core.models.CorrespondentModel.parseCorrespondentHeader",
+        return_value=(faker.name(), correspondent.email_address),
+    )
+
+    result = CorrespondentModel.fromHeader("correspondent header")
+
+    assert result == correspondent
+    mock_parseCorrespondentHeader.assert_called_once_with("correspondent header")
+
+
+@pytest.mark.django_db
+def test_fromHeader_no_address(mocker, mock_logger, faker, correspondent):
+    mock_parseCorrespondentHeader = mocker.patch(
+        "core.models.CorrespondentModel.parseCorrespondentHeader",
+        return_value=(faker.name(), ""),
+    )
+
+    result = CorrespondentModel.fromHeader("correspondent header")
+
+    assert result is None
+    mock_parseCorrespondentHeader.assert_called_once_with("correspondent header")
+    mock_logger.debug.assert_called()

@@ -20,19 +20,20 @@
 
 import pytest
 from django.db.models.signals import post_save
-from core.signals.save_DaemonModel import post_save_daemon
+
 from core.EMailArchiverDaemon import EMailArchiverDaemon
 from core.models.DaemonModel import DaemonModel
+from core.signals.save_DaemonModel import post_save_daemon
 
-from .models.test_DaemonModel import fixture_mock_open
 from .models.test_DaemonModel import fixture_daemonModel
 
 
-@pytest.fixture(name='mock_setupLogger')
+@pytest.fixture(name="mock_setupLogger")
 def fixture_setupLogger(mocker):
-    return mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon._setupLogger')
+    return mocker.patch("core.EMailArchiverDaemon.EMailArchiverDaemon._setupLogger")
 
-@pytest.fixture(name='emailArchiverDaemon')
+
+@pytest.fixture(name="emailArchiverDaemon")
 def fixture_emailArchiverDaemon(mocker, daemon, mock_setupLogger):
     emailArchiverDaemon = EMailArchiverDaemon(daemonModel=daemon)
     emailArchiverDaemon.logger = mocker.Mock()
@@ -53,22 +54,29 @@ def test___init__(mock_setupLogger, daemon):
 
 @pytest.mark.django_db
 def test_setupLogger(mocker, daemon):
-    mock_getLogger = mocker.patch('logging.getLogger', return_value=mocker.Mock())
-    mock_FileHandler = mocker.patch('logging.handlers.RotatingFileHandler', return_value=mocker.Mock())
+    mock_getLogger = mocker.patch("logging.getLogger", return_value=mocker.Mock())
+    mock_FileHandler = mocker.patch(
+        "logging.handlers.RotatingFileHandler", return_value=mocker.Mock()
+    )
 
     emailArchiverDaemon = EMailArchiverDaemon(daemonModel=daemon)
 
     mock_getLogger.assert_called_once()
-    mock_FileHandler.assert_called_once_with(filename=daemon.log_filepath, backupCount=daemon.log_backup_count, maxBytes=daemon.logfile_size)
-    mock_getLogger.return_value.addHandler.assert_called_once_with(mock_FileHandler.return_value)
-
+    mock_FileHandler.assert_called_once_with(
+        filename=daemon.log_filepath,
+        backupCount=daemon.log_backup_count,
+        maxBytes=daemon.logfile_size,
+    )
+    mock_getLogger.return_value.addHandler.assert_called_once_with(
+        mock_FileHandler.return_value
+    )
 
 
 @pytest.mark.django_db
 def test_start_dryrun_success(mocker, daemon, emailArchiverDaemon):
-    mock_thread_start = mocker.patch('core.EMailArchiverDaemon.threading.Thread.start')
+    mock_thread_start = mocker.patch("core.EMailArchiverDaemon.threading.Thread.start")
     daemon.is_running = False
-    daemon.save(update_fields=['is_running'])
+    daemon.save(update_fields=["is_running"])
 
     emailArchiverDaemon.start()
 
@@ -80,9 +88,11 @@ def test_start_dryrun_success(mocker, daemon, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_start_dryrun_failure(mocker, daemon, emailArchiverDaemon):
-    mock_thread_start = mocker.patch('core.EMailArchiverDaemon.threading.Thread.start', side_effect=RuntimeError)
+    mock_thread_start = mocker.patch(
+        "core.EMailArchiverDaemon.threading.Thread.start", side_effect=RuntimeError
+    )
     daemon.is_running = True
-    daemon.save(update_fields=['is_running'])
+    daemon.save(update_fields=["is_running"])
 
     emailArchiverDaemon.start()
 
@@ -95,7 +105,7 @@ def test_start_dryrun_failure(mocker, daemon, emailArchiverDaemon):
 @pytest.mark.django_db
 def test_stop_dryrun_success(daemon, emailArchiverDaemon):
     daemon.is_running = True
-    daemon.save(update_fields=['is_running'])
+    daemon.save(update_fields=["is_running"])
 
     emailArchiverDaemon.stop()
 
@@ -108,7 +118,7 @@ def test_stop_dryrun_success(daemon, emailArchiverDaemon):
 def test_stop_dryrun_failure(daemon, emailArchiverDaemon):
     emailArchiverDaemon._stopEvent.set()
     daemon.is_running = False
-    daemon.save(update_fields=['is_running'])
+    daemon.save(update_fields=["is_running"])
 
     emailArchiverDaemon.stop()
 
@@ -119,10 +129,10 @@ def test_stop_dryrun_failure(daemon, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_start_stop(mocker, daemon, emailArchiverDaemon):
-    mock_cycle = mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon.cycle')
-    mock_sleep = mocker.patch('core.EMailArchiverDaemon.time.sleep')
+    mock_cycle = mocker.patch("core.EMailArchiverDaemon.EMailArchiverDaemon.cycle")
+    mock_sleep = mocker.patch("core.EMailArchiverDaemon.time.sleep")
     daemon.is_running = False
-    daemon.save(update_fields=['is_running'])
+    daemon.save(update_fields=["is_running"])
 
     emailArchiverDaemon.start()
     emailArchiverDaemon.stop()
@@ -154,35 +164,41 @@ def test_update(daemon, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_cycle_success(mocker, emailArchiverDaemon):
-    mock_fetchAndProcessMails = mocker.patch('core.EMailArchiverDaemon.fetchAndProcessMails')
+    mock_mailbox_fetch = mocker.patch("core.models.MailboxModel.MailboxModel.fetch")
     emailArchiverDaemon._daemonModel.is_healthy = False
-    emailArchiverDaemon._daemonModel.save(update_fields=['is_healthy'])
+    emailArchiverDaemon._daemonModel.save(update_fields=["is_healthy"])
 
     emailArchiverDaemon.cycle()
 
-    mock_fetchAndProcessMails.assert_called_once_with(emailArchiverDaemon._daemonModel.mailbox, emailArchiverDaemon._daemonModel.fetching_criterion)
+    mock_mailbox_fetch.assert_called_once_with(
+        emailArchiverDaemon._daemonModel.fetching_criterion,
+    )
     assert emailArchiverDaemon._daemonModel.is_healthy is True
     emailArchiverDaemon.logger.debug.assert_called()
 
 
 @pytest.mark.django_db
 def test_cycle_exception(mocker, emailArchiverDaemon):
-    mock_fetchAndProcessMails = mocker.patch('core.EMailArchiverDaemon.fetchAndProcessMails', side_effect=Exception)
+    mock_mailbox_fetch = mocker.patch(
+        "core.models.MailboxModel.MailboxModel.fetch", side_effect=RuntimeError
+    )
     emailArchiverDaemon._daemonModel.is_healthy = False
-    emailArchiverDaemon._daemonModel.save(update_fields=['is_healthy'])
+    emailArchiverDaemon._daemonModel.save(update_fields=["is_healthy"])
 
-    with pytest.raises(Exception):
+    with pytest.raises(RuntimeError):
         emailArchiverDaemon.cycle()
 
-    mock_fetchAndProcessMails.assert_called_once_with(emailArchiverDaemon._daemonModel.mailbox, emailArchiverDaemon._daemonModel.fetching_criterion)
+    mock_mailbox_fetch.assert_called_once_with(
+        emailArchiverDaemon._daemonModel.fetching_criterion,
+    )
     assert emailArchiverDaemon._daemonModel.is_healthy is False
     emailArchiverDaemon.logger.debug.assert_called()
 
 
 @pytest.mark.django_db
 def test_run_success(mocker, emailArchiverDaemon):
-    mock_cycle = mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon.cycle')
-    mock_sleep = mocker.patch('core.EMailArchiverDaemon.time.sleep')
+    mock_cycle = mocker.patch("core.EMailArchiverDaemon.EMailArchiverDaemon.cycle")
+    mock_sleep = mocker.patch("core.EMailArchiverDaemon.time.sleep")
 
     emailArchiverDaemon.start()
 
@@ -198,8 +214,10 @@ def test_run_success(mocker, emailArchiverDaemon):
 
 @pytest.mark.django_db
 def test_run_exception(mocker, emailArchiverDaemon):
-    mock_cycle = mocker.patch('core.EMailArchiverDaemon.EMailArchiverDaemon.cycle', side_effect=Exception)
-    mock_sleep = mocker.patch('core.EMailArchiverDaemon.time.sleep')
+    mock_cycle = mocker.patch(
+        "core.EMailArchiverDaemon.EMailArchiverDaemon.cycle", side_effect=Exception
+    )
+    mock_sleep = mocker.patch("core.EMailArchiverDaemon.time.sleep")
 
     emailArchiverDaemon.start()
 

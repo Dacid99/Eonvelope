@@ -20,14 +20,26 @@
 
 import logging
 
+import django.db
 from dirtyfields import DirtyFieldsMixin
 from django.contrib.auth.models import User
 from django.db import models
 
 from core import constants
 
+from ..constants import TestStatusCodes
+from ..utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+from ..utils.fetchers.IMAPFetcher import IMAPFetcher
+from ..utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
+from ..utils.fetchers.POP3Fetcher import POP3Fetcher
+from .MailboxModel import MailboxModel
+
+# from utils.fetchers.ExchangeFetcher import ExchangeFetcher
+
+
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
+
 
 class AccountModel(DirtyFieldsMixin, models.Model):
     """Database model for the account data of a mail account."""
@@ -62,7 +74,7 @@ class AccountModel(DirtyFieldsMixin, models.Model):
     is_favorite = models.BooleanField(default=False)
     """Flags favorite accounts. False by default."""
 
-    user = models.ForeignKey(User, related_name='accounts', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name="accounts", on_delete=models.CASCADE)
     """The user this account belongs to. Deletion of that `user` deletes this correspondent."""
 
     created = models.DateTimeField(auto_now_add=True)
@@ -70,7 +82,6 @@ class AccountModel(DirtyFieldsMixin, models.Model):
 
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
-
 
     def __str__(self):
         return f"Account {self.mail_address} at host {self.mail_host} with protocol {self.protocol}"
@@ -83,8 +94,72 @@ class AccountModel(DirtyFieldsMixin, models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                fields=['mail_address', 'user'],
-                name='account_unique_together_mail_address_user'
+                fields=["mail_address", "user"],
+                name="account_unique_together_mail_address_user",
             )
         ]
         """`mail_address` and :attr:`user` in combination are unique fields."""
+
+    def get_fetcher(self):
+        """Instantiates the fetcher from :class:`core.utils.fetchers` corresponding to :attr:`protocol`."""
+
+        if self.protocol == IMAPFetcher.PROTOCOL:
+            return IMAPFetcher(self)
+        elif self.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+            return IMAP_SSL_Fetcher(self)
+        elif self.protocol == POP3Fetcher.PROTOCOL:
+            return POP3Fetcher(self)
+        elif self.protocol == POP3_SSL_Fetcher.PROTOCOL:
+            return POP3_SSL_Fetcher(self)
+        # elif self.protocol == ExchangeFetcher.PROTOCOL:
+        #     return ExchangeFetcher(self)
+        else:
+            logger.error(
+                "The protocol %s is not implemented in a fetcher class!", self.protocol
+            )
+            self.is_healthy = False
+            self.save(update_fields=["is_healthy"])
+            raise ValueError(
+                "The requested protocol is not implemented in a fetcher class!"
+            )
+
+    def test_connection(self):
+        """Tests whether the data in the model is correct
+        and allows connecting and logging in to the mailhost and account.
+        The :attr:`core.models.AccountModel.is_healthy` flag is set accordingly.
+        Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
+
+        Returns:
+            The resultcode of the test.
+        """
+        logger.info("Testing %s ...", self)
+        try:
+            with self.get_fetcher() as fetcher:
+                result = fetcher.test()
+        except ValueError:
+            logger.error("Account %s has unknown protocol!", self)
+            result = TestStatusCodes.ERROR
+
+        logger.info("Successfully tested account to be %s.", result)
+        return result
+
+    def update_mailboxes(self):
+        """Scans the given mailaccount for unknown mailboxes,
+        parses and inserts them into the database.
+        """
+        logger.info("Updating mailboxes in %s...", self)
+
+        with self.get_fetcher() as fetcher:
+            mailboxList = fetcher.fetchMailboxes()
+
+        for mailboxData in mailboxList:
+            mailbox = MailboxModel.fromData(mailboxData, self)
+
+            logger.debug("Saving mailbox %s from %s to db ...", mailbox, self)
+            try:
+                mailbox.save()
+                logger.debug("Successfully saved mailbox to db!")
+            except django.db.IntegrityError:
+                logger.debug("%s already exists in db, it is skipped!", mailbox)
+
+        logger.info("Successfully updated mailboxes.")

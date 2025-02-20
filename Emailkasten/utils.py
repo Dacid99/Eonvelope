@@ -41,7 +41,7 @@ def get_config(setting: str) -> Any:
         The requested setting value.
 
     Raises:
-        :class:`Exception`: Reraise of any exception
+        KeyError (:class:`KeyError`): Reraise of any exception
         that is related to a settings value not existing.
     """
     try:
@@ -51,5 +51,8 @@ def get_config(setting: str) -> Any:
         try:
             return CONSTANCE_CONFIG[setting][0]
         except KeyError as keyexc:
-            logger.critical("A config value was not found, reraising from original exception!", exc_info=True)
+            logger.critical(
+                "A config value was not found, reraising from original exception!",
+                exc_info=True,
+            )
             raise keyexc from exc

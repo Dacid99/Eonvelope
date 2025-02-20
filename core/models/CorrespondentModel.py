@@ -18,7 +18,16 @@
 
 """Module with the :class:`CorrespondentModel` model class."""
 
+from __future__ import annotations
+
+import logging
+
 from django.db import models
+
+from core.utils.mailParsing import parseCorrespondentHeader
+
+logger = logging.getLogger(__name__)
+"""The logger instance for the module."""
 
 
 class CorrespondentModel(models.Model):
@@ -47,3 +56,30 @@ class CorrespondentModel(models.Model):
 
         db_table = "correspondents"
         """The name of the database table for the correspondents."""
+
+    @staticmethod
+    def fromHeader(header: str) -> CorrespondentModel | None:
+        """Prepares a :class:`core.models.CorrespondentModel.CorrespondentModel`
+        from email header data.
+
+        Args:
+            header: The header to parse the correspondentdata from.
+
+        Returns:
+            The :class:`core.models.CorrespondentModel.CorrespondentModel` with the data from the header.
+            If the correspondent already exists in the db returns that version.
+            None if there is no address in :attr:`header`.
+        """
+        name, address = parseCorrespondentHeader(header)
+        if not address:
+            logger.debug(
+                "Skipping correspondent with empty mailaddress %s.",
+                address,
+            )
+            return None
+        try:
+            return CorrespondentModel.objects.get(email_address=address)
+        except CorrespondentModel.DoesNotExist:
+            pass
+
+        return CorrespondentModel(email_address=address, email_name=name)

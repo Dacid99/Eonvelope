@@ -18,13 +18,13 @@
 
 """Module with the :class:`MailingListSerializer` serializer class."""
 
-import email
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from rest_framework import serializers
-from rest_framework.utils.serializer_helpers import ReturnDict
 
 from core.models.CorrespondentModel import CorrespondentModel
-from core.models.MailingListModel import MailingListModel
 
 from ..correspondent_serializers.BaseCorrespondentSerializer import (
     BaseCorrespondentSerializer,
@@ -33,8 +33,15 @@ from ..email_serializers.BaseEMailSerializer import BaseEMailSerializer
 from .BaseMailingListSerializer import BaseMailingListSerializer
 
 
+if TYPE_CHECKING:
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
+    from core.models.MailingListModel import MailingListModel
+
+
 class MailingListSerializer(BaseMailingListSerializer):
     """The standard serializer for a :class:`core.models.MailingList`.
+
     Includes nested serializers for the :attr:`core.models.MailingList.MailingList.emails`,
     :attr:`core.models.MailingList.MailingList.correspondent` foreign key fields
     as well as a method field for the count of elements in :attr:`core.models.MailingList.MailingList.emails`.
@@ -53,9 +60,6 @@ class MailingListSerializer(BaseMailingListSerializer):
     email_number = serializers.SerializerMethodField(read_only=True)
     """The number of mails by the mailinglist. Set via :func:`get_email_number`."""
 
-    class Meta(BaseMailingListSerializer.Meta):
-        """Metadata class for the serializer."""
-
     def get_email_number(self, object: MailingListModel) -> int:
         """Gets the number of mails sent by the mailinglist.
 
@@ -65,8 +69,7 @@ class MailingListSerializer(BaseMailingListSerializer):
         Returns:
             The number of mails referencing by the instance.
         """
-        number = object.emails.count()
-        return number
+        return object.emails.count()
 
     def get_from_correspondents(self, object: MailingListModel) -> ReturnDict | None:
         """Serializes the correspondents connected to the instance to be serialized.
@@ -89,5 +92,4 @@ class MailingListSerializer(BaseMailingListSerializer):
             return BaseCorrespondentSerializer(
                 emailcorrespondents, many=True, read_only=True
             ).data
-        else:
-            return []
+        return []

@@ -17,8 +17,9 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
-"""Emailkasten
+"""Emailkasten.utils package containing utility for Emailkasten project."""
 
-Package containing the packages and modules for the Emailkasten application
-"""
-default_app_config = 'Emailkasten.apps.Emailkasten.Config'
+from __future__ import annotations
+
+
+default_app_config = "Emailkasten.apps.Emailkasten.Config"

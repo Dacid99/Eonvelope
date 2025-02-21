@@ -21,14 +21,9 @@
 from __future__ import annotations
 
 import poplib
-from typing import TYPE_CHECKING
 
 from ... import constants
 from .POP3Fetcher import POP3Fetcher
-
-if TYPE_CHECKING:
-    from ...models.AccountModel import AccountModel
-    from ...models.MailboxModel import MailboxModel
 
 
 class POP3_SSL_Fetcher(POP3Fetcher):

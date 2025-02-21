@@ -18,24 +18,27 @@
 
 """Module with the :class:`SimpleMailingListSerializer` serializer class."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from rest_framework import serializers
 
-from core.models.MailingListModel import MailingListModel
 from .BaseMailingListSerializer import BaseMailingListSerializer
+
+
+if TYPE_CHECKING:
+    from core.models.MailingListModel import MailingListModel
 
 
 class SimpleMailingListSerializer(BaseMailingListSerializer):
     """A reduced serializer for a :class:`core.models.MailingListModel`.
+
     Includes a method field for the count of elements in :attr:`core.models.MailingList.MailingList.emails`.
     """
 
     email_number = serializers.SerializerMethodField(read_only=True)
     """The number of mails by the mailinglist. Set via :func:`get_email_number`."""
-
-
-    class Meta(BaseMailingListSerializer.Meta):
-        """Metadata class for the serializer."""
-
 
     def get_email_number(self, object: MailingListModel) -> int:
         """Gets the number of mails sent by the mailinglist.
@@ -46,5 +49,4 @@ class SimpleMailingListSerializer(BaseMailingListSerializer):
         Returns:
            The number of mails referencing by the instance.
         """
-        number = object.emails.count()
-        return number
+        return object.emails.count()

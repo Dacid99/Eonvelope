@@ -33,6 +33,7 @@ from model_bakery import baker
 
 from core.models.MailingListModel import MailingListModel
 
+
 if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
@@ -58,17 +59,23 @@ def fixture_mailingListModel() -> MailingListModel:
 
 
 @pytest.mark.django_db
-def test_MailingListModel_creation(mailingList):
+def test_MailingListModel_creation(mailingList) -> None:
     """Tests the correct default creation of :class:`core.models.MailingListModel.MailingListModel`."""
 
     assert mailingList.list_id is not None
     assert isinstance(mailingList.list_id, str)
-    assert mailingList.list_owner is None
-    assert mailingList.list_subscribe is None
-    assert mailingList.list_unsubscribe is None
-    assert mailingList.list_post is None
-    assert mailingList.list_help is None
-    assert mailingList.list_archive is None
+    assert mailingList.list_owner is not None
+    assert isinstance(mailingList.list_owner, str)
+    assert mailingList.list_subscribe is not None
+    assert isinstance(mailingList.list_subscribe, str)
+    assert mailingList.list_unsubscribe is not None
+    assert isinstance(mailingList.list_unsubscribe, str)
+    assert mailingList.list_post is not None
+    assert isinstance(mailingList.list_post, str)
+    assert mailingList.list_help is not None
+    assert isinstance(mailingList.list_help, str)
+    assert mailingList.list_archive is not None
+    assert isinstance(mailingList.list_archive, str)
     assert mailingList.is_favorite is False
     assert mailingList.updated is not None
     assert isinstance(mailingList.updated, datetime.datetime)
@@ -79,14 +86,14 @@ def test_MailingListModel_creation(mailingList):
 
 
 @pytest.mark.django_db
-def test_MailingListModel_unique(mailingList):
+def test_MailingListModel_unique(mailingList) -> None:
     """Tests the unique constraints of :class:`core.models.MailingListModel.MailingListModel`."""
     with pytest.raises(IntegrityError):
         baker.make(MailingListModel, list_id=mailingList.list_id)
 
 
 @pytest.mark.django_db
-def test_MailingListModel_fromEmailMessage(mocker):
+def test_MailingListModel_fromEmailMessage(mocker) -> None:
     emailMessage = EmailMessage()
     mock_getHeader = mocker.patch(
         "core.models.MailingListModel.getHeader", return_value="list header"
@@ -117,7 +124,7 @@ def test_MailingListModel_fromEmailMessage(mocker):
 
 
 @pytest.mark.django_db
-def test_fromHeader_duplicate(mocker, mailingList):
+def test_fromHeader_duplicate(mocker, mailingList) -> None:
     emailMessage = EmailMessage()
     mock_getHeader = mocker.patch(
         "core.models.MailingListModel.getHeader", return_value=mailingList.list_id
@@ -130,7 +137,7 @@ def test_fromHeader_duplicate(mocker, mailingList):
 
 
 @pytest.mark.django_db
-def test_MailingListModel_fromEmailMessage_no_list_id(mocker, mock_logger):
+def test_MailingListModel_fromEmailMessage_no_list_id(mocker, mock_logger) -> None:
     emailMessage = EmailMessage()
     mock_getHeader = mocker.patch(
         "core.models.MailingListModel.getHeader", return_value=None

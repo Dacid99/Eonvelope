@@ -17,15 +17,17 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`EMailCorrespondentsModel` model class."""
+
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from django.db import models
 
 from core.constants import HeaderFields
 
 from .CorrespondentModel import CorrespondentModel
+
 
 if TYPE_CHECKING:
     from .EMailModel import EMailModel
@@ -46,7 +48,7 @@ class EMailCorrespondentsModel(models.Model):
     )
     """The correspondent that was mentioned in :attr:`email`. Unique together with :attr:`email` and :attr:`mention`."""
 
-    MENTIONTYPES = list(HeaderFields.Correspondents())
+    MENTIONTYPES: Final[list[tuple[str, str]]] = list(HeaderFields.Correspondents())
     """The available types of correspondent memtions. Refers to :attr:`Emailkasten.constants.HeaderFields.Correspondents`."""
 
     mention = models.CharField(choices=MENTIONTYPES, max_length=30)
@@ -58,16 +60,13 @@ class EMailCorrespondentsModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "email_correspondents"
         """The name of the database bridge table for the emails and correspondents."""
 
-        constraints = [
+        constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
                 fields=["email", "correspondent", "mention"],
                 name="emailcorrespondents_unique_together_email_correspondent_mention",
@@ -75,12 +74,19 @@ class EMailCorrespondentsModel(models.Model):
         ]
         """:attr:`email`, :attr:`correspondent` and :attr:`mention` in combination are unique."""
 
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the emailcorrespondent, using :attr:`email`, :attr:`correspondent` and :attr:`mention`.
+        """
+        return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"
+
     @staticmethod
     def createFromHeader(
         header: str, headerName: str, email: EMailModel
     ) -> EMailCorrespondentsModel | None:
-        """Prepares a :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel`
-        from an email header.
+        """Prepares a :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel` from an email header.
 
         Args:
             header: The header to parse the malinglistdata from.

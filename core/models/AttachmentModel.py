@@ -23,14 +23,16 @@ from __future__ import annotations
 import logging
 import os
 from hashlib import md5
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Final
 
 from django.db import models
+from typing_extensions import override
 
 from Emailkasten.utils import get_config
 
 from ..utils.fileManagment import saveStore
 from .StorageModel import StorageModel
+
 
 if TYPE_CHECKING:
     from email.message import Message
@@ -56,10 +58,10 @@ class AttachmentModel(models.Model):
     Must contain :attr:`constance.get_config('STORAGE_PATH')`.
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_AttachmentModel.post_delete_attachment`."""
 
-    content_disposition = models.CharField(null=True, max_length=255)
-    """The disposition of the file. Typically 'attachment', 'inline' or NULL."""
+    content_disposition = models.CharField(blank=True, default="", max_length=255)
+    """The disposition of the file. Typically 'attachment', 'inline' or ''."""
 
-    content_type = models.CharField(max_length=255)
+    content_type = models.CharField(max_length=255, default="")
     """The type of the file."""
 
     datasize = models.IntegerField()
@@ -79,16 +81,13 @@ class AttachmentModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        return f"Attachment {self.file_name} from {str(self.email)}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "attachments"
         """The name of the database table for the attachments."""
 
-        constraints = [
+        constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
                 fields=["file_path", "email"],
                 name="attachment_unique_together_file_path_email",
@@ -96,8 +95,31 @@ class AttachmentModel(models.Model):
         ]
         """:attr:`file_path` and :attr:`email` in combination are unique."""
 
-    def delete(self, *args, **kwargs):
-        """Extended :django::func:`django.models.Model.delete` method to delete :attr:`file_path` file on deletion."""
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the attachment, using :attr:`file_name` and :attr:`email`.
+        """
+        return f"Attachment {self.file_name} from {self.email}"
+
+    @override
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Extended :django::func:`django.models.Model.save` method.
+
+        Saves the data to storage if configured.
+        """
+        attachmentData = kwargs.pop("attachmentData", None)
+        super().save(*args, **kwargs)
+        if attachmentData is not None and self.email.mailbox.save_attachments:
+            self.save_to_storage(attachmentData)
+
+    @override
+    def delete(self, *args: Any, **kwargs: Any) -> None:
+        """Extended :django::func:`django.models.Model.delete` method.
+
+        Deletes :attr:`file_path` file on deletion.
+        """
         super().delete(*args, **kwargs)
 
         if self.file_path:
@@ -109,29 +131,17 @@ class AttachmentModel(models.Model):
                     exc_info=True,
                 )
             except FileNotFoundError:
-                logger.error("%s was not found!", self.file_path, exc_info=True)
+                logger.exception("%s was not found!", self.file_path)
             except OSError:
-                logger.error(
-                    "An OS error occured removing %s!", self.file_path, exc_info=True
-                )
+                logger.exception("An OS error occured removing %s!", self.file_path)
             except Exception:
-                logger.error(
-                    "An unexpected error occured removing %s!",
-                    self.file_path,
-                    exc_info=True,
+                logger.exception(
+                    "An unexpected error occured removing %s!", self.file_path
                 )
 
-    def save(self, *args, **kwargs):
-        """Extended :django::func:`django.models.Model.save` method
-        to save the data to storage if configured.
-        """
-        attachmentData = kwargs.pop("attachmentData", None)
-        super().save(*args, **kwargs)
-        if attachmentData is not None and self.email.mailbox.save_attachments:
-            self.save_to_storage(attachmentData)
-
-    def save_to_storage(self, attachmentData: Message[str, str]):
+    def save_to_storage(self, attachmentData: Message[str, str]) -> None:
         """Saves the attachment file to the storage.
+
         If the file already exists, does not overwrite.
         If an error occurs, removes the incomplete file.
 
@@ -146,7 +156,9 @@ class AttachmentModel(models.Model):
             return
 
         @saveStore
-        def writeAttachment(file: BufferedWriter, attachmentData: Message[str, str]):
+        def writeAttachment(
+            file: BufferedWriter, attachmentData: Message[str, str]
+        ) -> None:
             file.write(attachmentData.get_payload(decode=True))
 
         logger.debug("Storing %s ...", self)
@@ -165,8 +177,7 @@ class AttachmentModel(models.Model):
     def fromData(
         attachmentData: Message[str, str], email: EMailModel
     ) -> AttachmentModel:
-        """Prepares a :class:`core.models.AttachmentModel.AttachmentModel`
-        from attachment payload in bytes.
+        """Prepares a :class:`core.models.AttachmentModel.AttachmentModel` from attachment payload in bytes.
 
         Args:
             attachmentData: The attachment in bytes.
@@ -181,7 +192,9 @@ class AttachmentModel(models.Model):
             or md5(attachmentData.as_bytes()).hexdigest()
             + f".{attachmentData.get_content_subtype()}"
         )
-        new_attachment.content_disposition = attachmentData.get_content_disposition()
+        new_attachment.content_disposition = (
+            attachmentData.get_content_disposition() or ""
+        )
         new_attachment.content_type = attachmentData.get_content_type()
         new_attachment.datasize = len(attachmentData.as_bytes())
         new_attachment.email = email

@@ -20,17 +20,21 @@ import pytest
 
 from api.v1.filters.CorrespondentFilter import CorrespondentFilter
 
-from .conftest import ( BOOL_TEST_PARAMETERS,
-                        DATETIME_TEST_PARAMETERS,
-                        TEXT_TEST_PARAMETERS)
+from .conftest import (
+    BOOL_TEST_PARAMETERS,
+    DATETIME_TEST_PARAMETERS,
+    TEXT_TEST_PARAMETERS,
+)
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', TEXT_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_email_name_filter(correspondent_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'email_name'+lookup_expr: filterquery}
+def test_email_name_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"email_name" + lookup_expr: filterquery}
 
     filtered_data = CorrespondentFilter(query, queryset=correspondent_queryset).qs
 
@@ -42,10 +46,12 @@ def test_email_name_filter(correspondent_queryset, lookup_expr, filterquery, exp
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', TEXT_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_email_address_filter(correspondent_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'email_address'+lookup_expr: filterquery}
+def test_email_address_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"email_address" + lookup_expr: filterquery}
 
     filtered_data = CorrespondentFilter(query, queryset=correspondent_queryset).qs
 
@@ -57,10 +63,12 @@ def test_email_address_filter(correspondent_queryset, lookup_expr, filterquery, 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', BOOL_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
 )
-def test_is_favorite_filter(correspondent_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'is_favorite'+lookup_expr: filterquery}
+def test_is_favorite_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"is_favorite" + lookup_expr: filterquery}
 
     filtered_data = CorrespondentFilter(query, queryset=correspondent_queryset).qs
 
@@ -72,10 +80,12 @@ def test_is_favorite_filter(correspondent_queryset, lookup_expr, filterquery, ex
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', DATETIME_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
 )
-def test_created_filter(correspondent_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'created' + lookup_expr: filterquery}
+def test_created_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"created" + lookup_expr: filterquery}
 
     filtered_data = CorrespondentFilter(query, queryset=correspondent_queryset).qs
 
@@ -87,10 +97,12 @@ def test_created_filter(correspondent_queryset, lookup_expr, filterquery, expect
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    'lookup_expr, filterquery, expected_indices', DATETIME_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
 )
-def test_updated_filter(correspondent_queryset, lookup_expr, filterquery, expected_indices):
-    query = {'updated' + lookup_expr: filterquery}
+def test_updated_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    query = {"updated" + lookup_expr: filterquery}
 
     filtered_data = CorrespondentFilter(query, queryset=correspondent_queryset).qs
 

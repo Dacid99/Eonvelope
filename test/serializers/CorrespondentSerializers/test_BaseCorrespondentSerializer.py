@@ -23,30 +23,32 @@ from datetime import datetime
 import pytest
 from django.forms.models import model_to_dict
 
-from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import \
-    BaseCorrespondentSerializer
+from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import (
+    BaseCorrespondentSerializer,
+)
 
 from ...models.test_CorrespondentModel import fixture_correspondentModel
+
 
 @pytest.mark.django_db
 def test_output(correspondent):
     """Tests for the expected output of the serializer."""
     serializerData = BaseCorrespondentSerializer(instance=correspondent).data
 
-    assert 'id' in serializerData
-    assert serializerData['id'] == correspondent.id
-    assert 'emails' not in serializerData
-    assert 'mailinglist' not in serializerData
-    assert 'email_name' in serializerData
-    assert serializerData['email_name'] == correspondent.email_name
-    assert 'email_address' in serializerData
-    assert serializerData['email_address'] == correspondent.email_address
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == correspondent.is_favorite
-    assert 'created' in serializerData
-    assert datetime.fromisoformat(serializerData['created']) == correspondent.created
-    assert 'updated' in serializerData
-    assert datetime.fromisoformat(serializerData['updated']) == correspondent.updated
+    assert "id" in serializerData
+    assert serializerData["id"] == correspondent.id
+    assert "emails" not in serializerData
+    assert "mailinglist" not in serializerData
+    assert "email_name" in serializerData
+    assert serializerData["email_name"] == correspondent.email_name
+    assert "email_address" in serializerData
+    assert serializerData["email_address"] == correspondent.email_address
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == correspondent.is_favorite
+    assert "created" in serializerData
+    assert datetime.fromisoformat(serializerData["created"]) == correspondent.created
+    assert "updated" in serializerData
+    assert datetime.fromisoformat(serializerData["updated"]) == correspondent.updated
     assert len(serializerData) == 6
 
 
@@ -57,14 +59,14 @@ def test_input(correspondent):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
-    assert 'id' not in serializerData
-    assert 'emails' not in serializerData
-    assert 'mailinglist' not in serializerData
-    assert 'email_name' in serializerData
-    assert serializerData['email_name'] == correspondent.email_name
-    assert 'email_address' not in serializerData
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == correspondent.is_favorite
-    assert 'created' not in serializerData
-    assert 'updated' not in serializerData
+    assert "id" not in serializerData
+    assert "emails" not in serializerData
+    assert "mailinglist" not in serializerData
+    assert "email_name" in serializerData
+    assert serializerData["email_name"] == correspondent.email_name
+    assert "email_address" not in serializerData
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == correspondent.is_favorite
+    assert "created" not in serializerData
+    assert "updated" not in serializerData
     assert len(serializerData) == 2

@@ -223,7 +223,7 @@ def test_run_exception(mocker, emailArchiverDaemon):
 
     assert emailArchiverDaemon.is_alive()
     mock_cycle.assert_called()
-    emailArchiverDaemon.logger.error.assert_called()
+    emailArchiverDaemon.logger.exception.assert_called()
     mock_sleep.assert_called_with(emailArchiverDaemon._daemonModel.restart_time)
     assert emailArchiverDaemon._daemonModel.is_healthy is False
 

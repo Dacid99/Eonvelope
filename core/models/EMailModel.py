@@ -26,9 +26,10 @@ import logging
 import os
 from email import policy
 from hashlib import md5
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Final
 
 from django.db import models, transaction
+from typing_extensions import override
 
 from core.constants import HeaderFields
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
@@ -38,13 +39,14 @@ from Emailkasten.utils import get_config
 from ..utils.mailParsing import getHeader, parseDatetimeHeader
 from ..utils.mailRendering import renderEML
 from .AttachmentModel import AttachmentModel
-from .CorrespondentModel import CorrespondentModel
 from .MailingListModel import MailingListModel
 from .StorageModel import StorageModel
+
 
 if TYPE_CHECKING:
     from io import BufferedWriter
 
+    from .CorrespondentModel import CorrespondentModel
     from .MailboxModel import MailboxModel
 
 
@@ -61,14 +63,14 @@ class EMailModel(models.Model):
     datetime = models.DateTimeField()
     """The Date header of the mail."""
 
-    email_subject = models.CharField(max_length=255, null=True)
+    email_subject = models.CharField(max_length=255, blank=True, default="")
     """The subject header of the mail."""
 
-    plain_bodytext = models.TextField()
-    """The plain bodytext of the mail."""
+    plain_bodytext = models.TextField(blank=True, default="")
+    """The plain bodytext of the mail. Can be blank."""
 
-    html_bodytext = models.TextField()
-    """The html bodytext of the mail."""
+    html_bodytext = models.TextField(blank=True, default="")
+    """The html bodytext of the mail. Can be blank."""
 
     inReplyTo: models.ForeignKey[EMailModel] = models.ForeignKey(
         "self", null=True, related_name="replies", on_delete=models.SET_NULL
@@ -124,8 +126,8 @@ class EMailModel(models.Model):
     headers = models.JSONField(null=True)
     """All other header fields of the mail. Can be null."""
 
-    x_spam = models.CharField(max_length=255, null=True)
-    """The x_spam header of this mail. Can be null."""
+    x_spam = models.CharField(max_length=255, blank=True, default="")
+    """The x_spam header of this mail. Can be blank."""
 
     created = models.DateTimeField(auto_now_add=True)
     """The datetime this entry was created. Is set automatically."""
@@ -133,16 +135,13 @@ class EMailModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        return f"Email with ID {self.message_id}, received on {self.datetime} from {str(self.mailbox)}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "emails"
         """The name of the database table for the emails."""
 
-        constraints = [
+        constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
                 fields=["message_id", "mailbox"],
                 name="email_unique_together_message_id_mailbox",
@@ -150,9 +149,32 @@ class EMailModel(models.Model):
         ]
         """`message_id` and :attr:`mailbox` in combination are unique."""
 
-    def delete(self, *args, **kwargs):
-        """Extended :django::func:`django.models.Model.delete` method
-        to delete :attr:`eml_filepath` and :attr:`prerender_filepath` files on deletion.
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the email, using :attr:`message_id`, :attr:`datetime` and :attr:`mailbox`.
+        """
+        return f"Email with ID {self.message_id}, received on {self.datetime} from {self.mailbox}"
+
+    @override
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Extended :django::func:`django.models.Model.save` method.
+
+        Renders and save the data to eml if configured.
+        """
+        emailData = kwargs.pop("emailData", None)
+        super().save(*args, **kwargs)
+        if emailData is not None:
+            if self.mailbox.save_toEML:
+                self.save_to_storage(emailData)
+            self.render_to_storage(emailData)
+
+    @override
+    def delete(self, *args: Any, **kwargs: Any) -> None:
+        """Extended :django::func:`django.models.Model.delete` method.
+
+        Deletes :attr:`eml_filepath` and :attr:`prerender_filepath` files on deletion.
         """
         super().delete(*args, **kwargs)
 
@@ -164,18 +186,12 @@ class EMailModel(models.Model):
                     "Successfully removed the eml file from storage.", exc_info=True
                 )
             except FileNotFoundError:
-                logger.error("%s was not found!", self.eml_filepath, exc_info=True)
+                logger.exception("%s was not found!", self.eml_filepath)
             except OSError:
-                logger.error(
-                    "An OS error occured removing %s!",
-                    self.eml_filepath,
-                    exc_info=True,
-                )
+                logger.exception("An OS error occured removing %s!", self.eml_filepath)
             except Exception:
-                logger.error(
-                    "An unexpected error occured removing %s!",
-                    self.eml_filepath,
-                    exc_info=True,
+                logger.exception(
+                    "An unexpected error occured removing %s!", self.eml_filepath
                 )
 
         if self.prerender_filepath:
@@ -187,35 +203,19 @@ class EMailModel(models.Model):
                     exc_info=True,
                 )
             except FileNotFoundError:
-                logger.error(
-                    "%s was not found!", self.prerender_filepath, exc_info=True
-                )
+                logger.exception("%s was not found!", self.prerender_filepath)
             except OSError:
-                logger.error(
-                    "An OS error occured removing %s!",
-                    self.prerender_filepath,
-                    exc_info=True,
+                logger.exception(
+                    "An OS error occured removing %s!", self.prerender_filepath
                 )
             except Exception:
-                logger.error(
-                    "An unexpected error occured removing %s!",
-                    self.prerender_filepath,
-                    exc_info=True,
+                logger.exception(
+                    "An unexpected error occured removing %s!", self.prerender_filepath
                 )
 
-    def save(self, *args, **kwargs):
-        """Extended :django::func:`django.models.Model.save` method
-        to render and save the data to eml if configured.
-        """
-        emailData = kwargs.pop("emailData", None)
-        super().save(*args, **kwargs)
-        if emailData is not None:
-            if self.mailbox.save_toEML:
-                self.save_to_storage(emailData)
-            self.render_to_storage(emailData)
-
-    def save_to_storage(self, emailData: bytes):
+    def save_to_storage(self, emailData: bytes) -> None:
         """Saves the email to the storage in eml format.
+
         If the file already exists, does not overwrite.
         If an error occurs, removes the incomplete file.
 
@@ -230,7 +230,7 @@ class EMailModel(models.Model):
             return
 
         @saveStore
-        def writeMessageToEML(emlFile: BufferedWriter, emailData) -> None:
+        def writeMessageToEML(emlFile: BufferedWriter, emailData: bytes) -> None:
             emlGenerator = email.generator.BytesGenerator(emlFile)
             emlGenerator.flatten(emailData)
 
@@ -245,9 +245,9 @@ class EMailModel(models.Model):
         else:
             logger.error("Failed to store %s as eml!", self)
 
-    def render_to_storage(self, emailData: bytes):
-        """Renders the email and writes the resulting image
-        to the storage.
+    def render_to_storage(self, emailData: bytes) -> None:
+        """Renders the email and writes the resulting image to the storage.
+
         If the file already exists, does not overwrite.
         If an error occurs, removes the incomplete file.
 
@@ -264,7 +264,9 @@ class EMailModel(models.Model):
         imageType = get_config("PRERENDER_IMAGETYPE")
 
         @saveStore
-        def renderAndStoreMessage(prerenderFile: BufferedWriter, emailData) -> None:
+        def renderAndStoreMessage(
+            prerenderFile: BufferedWriter, emailData: bytes
+        ) -> None:
             renderedMessage = renderEML(emailData)
             renderedMessage.save(prerenderFile, format=imageType)
 
@@ -292,6 +294,7 @@ class EMailModel(models.Model):
 
     def fullConversation(self) -> list[EMailModel]:
         """Gets all emails that are connected to this email via inReplyTo.
+
         Based on :func:`core.models.EMailModel.EMailModel.subConversation`
         to recurse through the entire conversation.
 
@@ -315,8 +318,7 @@ class EMailModel(models.Model):
     def createFromEmailBytes(
         emailBytes: bytes, mailbox: MailboxModel
     ) -> EMailModel | None:
-        """Creates an :class:`core.models.EMailModel.EMailModel`
-        from an email in bytes form.
+        """Creates an :class:`core.models.EMailModel.EMailModel` from an email in bytes form.
 
         Args:
             emailBytes: The email bytes to parse the emaildata from.
@@ -334,8 +336,10 @@ class EMailModel(models.Model):
             HeaderFields.MESSAGE_ID,
             fallbackCallable=lambda: md5(emailBytes).hexdigest(),
         )
-        x_spam = getHeader(emailMessage, HeaderFields.X_SPAM)
-        if x_spam is not None and x_spam != "NO" and get_config("THROW_OUT_SPAM"):
+        x_spam = getHeader(
+            emailMessage, HeaderFields.X_SPAM, fallbackCallable=lambda: ""
+        )
+        if x_spam != "NO" and get_config("THROW_OUT_SPAM"):
             logger.debug(
                 "Skipping email with Message-ID %s in %s, it is flagged as spam.",
                 message_id,
@@ -355,7 +359,9 @@ class EMailModel(models.Model):
         new_email.datetime = parseDatetimeHeader(
             getHeader(emailMessage, HeaderFields.DATE)
         )
-        new_email.email_subject = getHeader(emailMessage, HeaderFields.SUBJECT)
+        new_email.email_subject = getHeader(
+            emailMessage, HeaderFields.SUBJECT, fallbackCallable=lambda: ""
+        )
         new_email.datasize = len(emailBytes)
 
         inReplyTo_message_id = getHeader(emailMessage, HeaderFields.IN_REPLY_TO)
@@ -370,7 +376,7 @@ class EMailModel(models.Model):
         new_email.mailinglist = MailingListModel.fromEmailMessage(emailMessage)
 
         headerDict = {}
-        for headerName in emailMessage.keys():
+        for headerName in emailMessage:
             headerDict[headerName] = getHeader(emailMessage, headerName)
         new_email.headers = headerDict
 
@@ -390,16 +396,15 @@ class EMailModel(models.Model):
                 payload = part.get_payload(decode=True)
                 charset = part.get_content_charset("utf-8")
                 new_email.html_bodytext += payload.decode(charset, errors="replace")
-            elif contentDisposition is not None:
-                attachments.append(
-                    (AttachmentModel.fromData(part, email=new_email), part)
+            elif contentDisposition is not None or (
+                any(
+                    contentType.startswith(type_to_save)
+                    for type_to_save in get_config("SAVE_CONTENT_TYPE_PREFIXES")
                 )
-            elif any(
-                contentType.startswith(type_to_save)
-                for type_to_save in get_config("SAVE_CONTENT_TYPE_PREFIXES")
-            ) and not any(
-                contentType.endswith(type_to_skip)
-                for type_to_skip in get_config("DONT_SAVE_CONTENT_TYPE_SUFFIXES")
+                and not any(
+                    contentType.endswith(type_to_skip)
+                    for type_to_skip in get_config("DONT_SAVE_CONTENT_TYPE_SUFFIXES")
+                )
             ):
                 attachments.append(
                     (AttachmentModel.fromData(part, email=new_email), part)

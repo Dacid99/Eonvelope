@@ -33,8 +33,10 @@ from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.DatabaseStatsView import DatabaseStatsView
 
+
 if TYPE_CHECKING:
-    from typing import Any, Callable
+    from collections.abc import Callable
+    from typing import Any
 
     from rest_framework.viewsets import ModelViewSet
 

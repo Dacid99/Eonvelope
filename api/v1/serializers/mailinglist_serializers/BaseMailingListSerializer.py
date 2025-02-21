@@ -18,13 +18,22 @@
 
 """Module with the :class:`BaseMailingListSerializer` serializer class."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Final
+
 from rest_framework import serializers
 
 from core.models.MailingListModel import MailingListModel
 
 
+if TYPE_CHECKING:
+    from django.db.models import Model
+
+
 class BaseMailingListSerializer(serializers.ModelSerializer):
     """The base serializer for :class:`core.models.MailingListModel.MailingListModel`.
+
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
     Other serializers for :class:`core.models.MailingListModel.MailingListModel` should inherit from this.
@@ -32,18 +41,19 @@ class BaseMailingListSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Metadata class for the base serializer.
+
         Contains constraints that must be implemented by all serializers.
         Other serializer metaclasses should inherit from this.
-        The read_only_fields must not be shortened in subclasses.
+        :attr:`read_only_fields` must not be shortened in subclasses.
         """
 
-        model = MailingListModel
+        model: Final[type[Model]] = MailingListModel
         """The model to serialize."""
 
         fields = "__all__"
         """Include all fields."""
 
-        read_only_fields = [
+        read_only_fields: Final[list[str]] = [
             "list_id",
             "list_owner",
             "list_subscribe",

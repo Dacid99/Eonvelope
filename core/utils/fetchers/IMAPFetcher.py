@@ -30,6 +30,7 @@ from django.utils import timezone
 from ... import constants
 from ...constants import TestStatusCodes
 
+
 if TYPE_CHECKING:
     from types import TracebackType
 
@@ -300,25 +301,23 @@ class IMAPFetcher:
             if criterionName == constants.MailFetchingCriteria.DAILY:
                 startTime = timezone.now() - datetime.timedelta(days=1)
                 return "SENTSINCE " + imaplib.Time2Internaldate(startTime).split(" ")[0]
-            elif criterionName == constants.MailFetchingCriteria.WEEKLY:
+            if criterionName == constants.MailFetchingCriteria.WEEKLY:
                 startTime = timezone.now() - datetime.timedelta(weeks=1)
                 return "SENTSINCE " + imaplib.Time2Internaldate(startTime).split(" ")[0]
-            elif criterionName == constants.MailFetchingCriteria.MONTHLY:
+            if criterionName == constants.MailFetchingCriteria.MONTHLY:
                 startTime = timezone.now() - datetime.timedelta(weeks=4)
                 return "SENTSINCE " + imaplib.Time2Internaldate(startTime).split(" ")[0]
-            elif criterionName == constants.MailFetchingCriteria.ANNUALLY:
+            if criterionName == constants.MailFetchingCriteria.ANNUALLY:
                 startTime = timezone.now() - datetime.timedelta(weeks=52)
                 return "SENTSINCE " + imaplib.Time2Internaldate(startTime).split(" ")[0]
-            else:
-                return criterionName
+            return criterionName
 
-        else:
-            self.logger.error(
-                "Fetching by %s is not available via protocol %s!",
-                criterionName,
-                self.PROTOCOL,
-            )
-            return None
+        self.logger.error(
+            "Fetching by %s is not available via protocol %s!",
+            criterionName,
+            self.PROTOCOL,
+        )
+        return None
 
     def fetchEmails(
         self,

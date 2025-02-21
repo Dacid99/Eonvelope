@@ -27,7 +27,6 @@ from email.message import Message
 
 import pytest
 from django.db import IntegrityError
-from faker import Faker
 from model_bakery import baker
 
 from core.models.AttachmentModel import AttachmentModel
@@ -46,13 +45,13 @@ def fixture_mock_os_remove(mocker):
 
 
 @pytest.fixture(name="attachment")
-def fixture_attachmentModel(mock_os_remove) -> AttachmentModel:
+def fixture_attachmentModel(faker, mock_os_remove) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Returns:
         The attachment instance for testing.
     """
-    return baker.make(AttachmentModel, file_path=Faker().file_path(extension="pdf"))
+    return baker.make(AttachmentModel, file_path=faker.file_path(extension="pdf"))
 
 
 @pytest.mark.django_db
@@ -144,7 +143,7 @@ def test_delete_attachmentfile_failure(
         attachment.refresh_from_db()
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_called()
+    mock_logger.exception.assert_called()
     mock_logger.critical.assert_not_called()
 
 

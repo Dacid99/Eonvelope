@@ -16,12 +16,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AccountFilter` filter provider class."""
+"""Module with the :class:`AccountFilter` filter set class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import django_filters
 
 from api.constants import FilterSetups
 from core.models.AccountModel import AccountModel
+
+
+if TYPE_CHECKING:
+    from django.db.models import Model
 
 
 class AccountFilter(django_filters.FilterSet):
@@ -30,8 +38,9 @@ class AccountFilter(django_filters.FilterSet):
     class Meta:
         """Metadata class for the filter."""
 
-        model = AccountModel
-        fields = {
+        model: Final[type[Model]] = AccountModel
+
+        fields: ClassVar[dict[str, list[str]]] = {
             "mail_address": FilterSetups.TEXT,
             "mail_host": FilterSetups.TEXT,
             "mail_host_port": FilterSetups.INT,

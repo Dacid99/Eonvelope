@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Literal
 from ... import constants
 from ...constants import TestStatusCodes
 
+
 if TYPE_CHECKING:
     from types import TracebackType
 

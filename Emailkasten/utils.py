@@ -18,6 +18,7 @@
 
 """Module with utility for the :mod:`Emailkasten` project ."""
 
+from __future__ import annotations
 
 import logging
 from typing import Any
@@ -26,12 +27,14 @@ from constance import config
 
 from Emailkasten.settings import CONSTANCE_CONFIG
 
+
 logger = logging.getLogger(__name__)
 
 
 def get_config(setting: str) -> Any:
-    """A dirty workaround to enable Constance do the inital migration and not
-    fail because the table that is about to be created doesn't exist yet.
+    """A dirty workaround to enable constance to do the inital migration.
+
+    Initial migrations fail otherwise because the models depend on constance that is not initialized yet.
     See https://github.com/jazzband/django-constance/issues/229
 
     Args:

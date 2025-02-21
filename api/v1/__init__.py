@@ -16,4 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""API Version 1 for Emailkasten"""
+"""api.v1 for Emailkasten project."""

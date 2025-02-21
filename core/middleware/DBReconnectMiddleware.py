@@ -27,15 +27,20 @@ from django.db import OperationalError, connection
 
 from Emailkasten.constants import DatabaseConfiguration
 
+
 if TYPE_CHECKING:
-    from rest_framework.response import Response
+    from collections.abc import Callable
+
     from rest_framework.request import Request
+    from rest_framework.response import Response
 
 
 class DBReconnectMiddleware:
     """Middleware to reconnect to the database.
-    Especially relevant for initial setup.
+
+    Elementary for initial setup.
     """
+
     max_retries = DatabaseConfiguration.RECONNECT_RETRIES
     """The number of times to retry connecting.
     Set from :attr:`Emailkasten.constants.DatabaseConfiguration.RECONNECT_RETRIES`."""
@@ -44,10 +49,9 @@ class DBReconnectMiddleware:
     """The time delay between reconnect attempt.
     Set from :attr:`Emailkasten.constants.DatabaseConfiguration.RECONNECT_DELAY`."""
 
-
-    def __init__(self, get_response):
+    def __init__(self, get_response: Callable):
+        """Sets up the middleware."""
         self.get_response = get_response
-
 
     def __call__(self, request: Request) -> Response:
         """Attempts to connect to the database :attr:`max_retries` times.
@@ -70,5 +74,4 @@ class DBReconnectMiddleware:
                     raise
                 time.sleep(self.delay)
 
-        response = self.get_response(request)
-        return response
+        return self.get_response(request)

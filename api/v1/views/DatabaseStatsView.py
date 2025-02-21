@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -31,7 +31,9 @@ from core.models.AttachmentModel import AttachmentModel
 from core.models.CorrespondentModel import CorrespondentModel
 from core.models.EMailModel import EMailModel
 
+
 if TYPE_CHECKING:
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
 
 
@@ -39,7 +41,7 @@ class DatabaseStatsView(APIView):
     """APIView for the statistics of the database."""
 
     NAME = "stats"
-    permission_classes = [IsAuthenticated]
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
 
     def get(self, request: Request) -> Response:
         """Gets all the number of entries in the tables of the database.

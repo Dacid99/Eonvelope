@@ -20,14 +20,15 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, viewsets
+from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from typing_extensions import override
 
 from core.models.MailingListModel import MailingListModel
 
@@ -36,20 +37,25 @@ from ..serializers.mailinglist_serializers.MailingListSerializer import (
     MailingListSerializer,
 )
 
+
 if TYPE_CHECKING:
-    from django.db.models import BaseManager
+    from django.db.models import QuerySet
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
 
 
-class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
-    """Viewset for the :class:`core.models.MailingListModel.MailingListModel`."""
+class MailingListViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin):
+    """Viewset for the :class:`core.models.MailingListModel.MailingListModel`.
+
+    Provides every read-only and a destroy action.
+    """
 
     BASENAME = "mailinglists"
     serializer_class = MailingListSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailingListFilter
-    permission_classes = [IsAuthenticated]
-    ordering_fields = [
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
+    ordering_fields: Final[list[str]] = [
         "list_id",
         "list_owner",
         "list_subscribe",
@@ -61,25 +67,18 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet):
         "created",
         "updated",
     ]
-    ordering = ["id"]
+    ordering: Final[list[str]] = ["id"]
 
-    def get_queryset(self) -> BaseManager[MailingListModel]:
+    @override
+    def get_queryset(self) -> QuerySet[MailingListModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
-            The mailingslist entries matching the request user."""
+            The mailingslist entries matching the request user.
+        """
         return MailingListModel.objects.filter(
             emails__mailbox__account__user=self.request.user
         ).distinct()
-
-    def destroy(self, request: Request, pk: int | None = None) -> Response:
-        """Adds the `delete` action to the viewset."""
-        try:
-            instance = self.get_object()
-            instance.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except MailingListModel.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
 
     URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
     URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"

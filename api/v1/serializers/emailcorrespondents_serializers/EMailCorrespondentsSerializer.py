@@ -18,13 +18,19 @@
 
 """Module with the :class:`EMailCorrespondentsSerializer` serializer class."""
 
-from ..correspondent_serializers.BaseCorrespondentSerializer import \
-    BaseCorrespondentSerializer
+from __future__ import annotations
+
+from typing import ClassVar
+
+from ..correspondent_serializers.BaseCorrespondentSerializer import (
+    BaseCorrespondentSerializer,
+)
 from .BaseEMailCorrespondentSerializer import BaseEMailCorrespondentSerializer
 
 
 class EMailCorrespondentSerializer(BaseEMailCorrespondentSerializer):
     """The serializer for correspondents from :class:`core.models.EMailCorrespondentsModel`.
+
     Used to serialize the correspondent belonging to an email. Does not include that email.
     """
 
@@ -36,7 +42,7 @@ class EMailCorrespondentSerializer(BaseEMailCorrespondentSerializer):
     class Meta(BaseEMailCorrespondentSerializer.Meta):
         """Metadata class for the serializer."""
 
-        fields = ['correspondent', 'mention']
+        fields: ClassVar[list[str]] = ["correspondent", "mention"]
         """Includes only
         :attr:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel.correspondent`
         and :attr:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel.mention`.

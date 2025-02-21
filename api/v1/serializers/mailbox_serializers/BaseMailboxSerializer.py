@@ -16,15 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailboxSerializer` serializer class."""
+"""Module with the :class:`BaseMailboxSerializer` serializer class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Final
 
 from rest_framework import serializers
 
 from core.models.MailboxModel import MailboxModel
 
 
+if TYPE_CHECKING:
+    from django.db.models import Model
+
+
 class BaseMailboxSerializer(serializers.ModelSerializer):
     """The base serializer for :class:`core.models.MailboxModel.MailboxModel`.
+
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
     Other serializers for :class:`core.models.MailboxModel.MailboxModel` should inherit from this.
@@ -32,18 +41,25 @@ class BaseMailboxSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Metadata class for the base serializer.
+
         Contains constraints that must be implemented by all serializers.
         Other serializer metaclasses should inherit from this.
-        The read_only_fields must not be shortened in subclasses.
+        :attr:`read_only_fields` must not be shortened in subclasses.
         """
 
-        model = MailboxModel
+        model: Final[type[Model]] = MailboxModel
         """The model to serialize."""
 
-        fields = '__all__'
+        fields = "__all__"
         """Includes all fields."""
 
-        read_only_fields = ['name', 'account', 'is_healthy', 'created', 'updated']
+        read_only_fields: Final[list[str]] = [
+            "name",
+            "account",
+            "is_healthy",
+            "created",
+            "updated",
+        ]
         """The :attr:`core.models.MailboxModel.MailboxModel.name`,
         :attr:`core.models.MailboxModel.MailboxModel.account`,
         :attr:`core.models.MailboxModel.MailboxModel.is_healthy`,

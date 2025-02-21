@@ -25,21 +25,21 @@ from core.models.AccountModel import AccountModel
 from core.models.MailboxModel import MailboxModel
 
 
-@pytest.fixture(name='mock_logger', autouse=True)
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`core.signals.save_AccountModel.logger` of the module."""
-    return mocker.patch('core.signals.save_AccountModel.logger')
+    return mocker.patch("core.signals.save_AccountModel.logger")
 
 
 @pytest.mark.django_db
-def test_AccountModel_post_save_is_healthy_from_healthy(mock_logger):
+def test_AccountModel_post_save_from_healthy(mock_logger):
     """Tests the post_save function of :class:`core.models.AccountModel.AccountModel`."""
 
     account = baker.make(AccountModel, is_healthy=True)
     baker.make(MailboxModel, account=account, is_healthy=True, _quantity=2)
 
     account.is_healthy = False
-    account.save(update_fields = ['is_healthy'])
+    account.save(update_fields=["is_healthy"])
 
     for mailbox in account.mailboxes.all():
         assert mailbox.is_healthy is False
@@ -47,14 +47,14 @@ def test_AccountModel_post_save_is_healthy_from_healthy(mock_logger):
 
 
 @pytest.mark.django_db
-def test_AccountModel_post_save_is_healthy_from_unhealthy(mock_logger):
+def test_AccountModel_post_save_from_unhealthy(mock_logger):
     """Tests the post_save function of :class:`core.models.AccountModel.AccountModel`."""
 
     account = baker.make(AccountModel, is_healthy=False)
     baker.make(MailboxModel, account=account, is_healthy=False, _quantity=2)
 
     account.is_healthy = True
-    account.save(update_fields = ['is_healthy'])
+    account.save(update_fields=["is_healthy"])
 
     for mailbox in account.mailboxes.all():
         assert mailbox.is_healthy is False

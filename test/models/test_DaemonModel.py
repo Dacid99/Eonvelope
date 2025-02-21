@@ -28,7 +28,6 @@ from uuid import UUID
 
 import pytest
 from django.db import IntegrityError
-from faker import Faker
 from model_bakery import baker
 
 import Emailkasten.constants
@@ -39,13 +38,13 @@ from Emailkasten.utils import get_config
 
 
 @pytest.fixture(name="daemon")
-def fixture_daemonModel() -> DaemonModel:
+def fixture_daemonModel(faker) -> DaemonModel:
     """Creates an :class:`core.models.DaemonModel.DaemonModel`.
 
     Returns:
         The daemon instance for testing.
     """
-    return baker.make(DaemonModel, log_filepath=Faker().file_path(extension="log"))
+    return baker.make(DaemonModel, log_filepath=faker.file_path(extension="log"))
 
 
 @pytest.mark.django_db

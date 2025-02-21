@@ -23,25 +23,26 @@ from datetime import datetime
 import pytest
 from django.forms.models import model_to_dict
 
-from api.v1.serializers.emailcorrespondents_serializers.CorrespondentEMailSerializer import \
-    CorrespondentEMailSerializer
+from api.v1.serializers.emailcorrespondents_serializers.CorrespondentEMailSerializer import (
+    CorrespondentEMailSerializer,
+)
 
-from ...models.test_EMailCorrespondentsModel import \
-    fixture_emailCorrespondentsModel
+from ...models.test_EMailCorrespondentsModel import fixture_emailCorrespondentsModel
+
 
 @pytest.mark.django_db
 def test_output(emailCorrespondent):
     """Tests for the expected output of the serializer."""
     serializerData = CorrespondentEMailSerializer(instance=emailCorrespondent).data
 
-    assert 'id' not in serializerData
-    assert 'email' in serializerData
-    assert isinstance(serializerData['email'], dict)
-    assert 'correspondent' not in serializerData
-    assert 'mention' in serializerData
-    assert serializerData['mention'] == emailCorrespondent.mention
-    assert 'created' not in serializerData
-    assert 'updated' not in serializerData
+    assert "id" not in serializerData
+    assert "email" in serializerData
+    assert isinstance(serializerData["email"], dict)
+    assert "correspondent" not in serializerData
+    assert "mention" in serializerData
+    assert serializerData["mention"] == emailCorrespondent.mention
+    assert "created" not in serializerData
+    assert "updated" not in serializerData
     assert len(serializerData) == 2
 
 
@@ -52,10 +53,10 @@ def test_input(emailCorrespondent):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
-    assert 'id' not in serializerData
-    assert 'email' not in serializerData
-    assert 'correspondent' not in serializerData
-    assert 'mention' not in serializerData
-    assert 'created' not in serializerData
-    assert 'updated' not in serializerData
+    assert "id" not in serializerData
+    assert "email" not in serializerData
+    assert "correspondent" not in serializerData
+    assert "mention" not in serializerData
+    assert "created" not in serializerData
+    assert "updated" not in serializerData
     assert len(serializerData) == 0

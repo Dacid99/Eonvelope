@@ -18,11 +18,13 @@
 
 """The apps module for :mod:`api`."""
 
+from __future__ import annotations
+
 from django.apps import AppConfig
 
 
 class APIConfig(AppConfig):
     """App config for :mod:`core`."""
 
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'api'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "api"

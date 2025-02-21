@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Final
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
@@ -28,6 +28,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from typing_extensions import override
 
 from core import constants
 from core.constants import TestStatusCodes
@@ -40,8 +41,10 @@ from ..serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
     MailboxWithDaemonSerializer,
 )
 
+
 if TYPE_CHECKING:
-    from django.db.models import BaseManager
+    from django.db.models import QuerySet
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
 
 
@@ -50,10 +53,10 @@ class MailboxViewSet(viewsets.ModelViewSet):
 
     BASENAME = "mailboxes"
     serializer_class = MailboxWithDaemonSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailboxFilter
-    permission_classes = [IsAuthenticated]
-    ordering_fields = [
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
+    ordering_fields: Final[list[str]] = [
         "name",
         "account__mail_address",
         "account__mail_host",
@@ -65,16 +68,19 @@ class MailboxViewSet(viewsets.ModelViewSet):
         "created",
         "updated",
     ]
-    ordering = ["id"]
+    ordering: Final[list[str]] = ["id"]
 
-    def get_queryset(self) -> BaseManager[MailboxModel]:
+    @override
+    def get_queryset(self) -> QuerySet[MailboxModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
-            The mailbox entries matching the request user."""
+            The mailbox entries matching the request user.
+        """
         return MailboxModel.objects.filter(account__user=self.request.user)
 
-    def create(self, request, *args, **kwargs):
+    @override
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Disables the POST method for this viewset."""
         return Response(
             {"detail": "POST method is not allowed on this endpoint."},
@@ -230,7 +236,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
             )
         mailbox = self.get_object()
         try:
-            mailbox.addFromMailboxFile(uploaded_file.read(), format)
+            mailbox.addFromMailboxFile(uploaded_file.read(), file_format)
         except ValueError:
             return Response(
                 {"detail": "File format is not supported!"},

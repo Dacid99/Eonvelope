@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Any
 
 from rest_framework.permissions import IsAuthenticated
 
+
 if TYPE_CHECKING:
     from rest_framework.request import Request
     from rest_framework.views import APIView

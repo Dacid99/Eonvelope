@@ -26,6 +26,7 @@ import threading
 import time
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     from .models.DaemonModel import DaemonModel
 
@@ -77,9 +78,8 @@ class EMailArchiverDaemon(threading.Thread):
         self._daemonModel.save(update_fields=["is_running"])
 
     def stop(self) -> None:
-        """Stops this daemon instance if it is active.
-        The thread finishes by itself later.
-        """
+        """Stops this daemon instance if it is active. The thread finishes by itself later."""
+
         if self._stopEvent.is_set():
             self.logger.debug(
                 "Attempt to stop this inactive daemon recorded.", stack_info=True
@@ -98,6 +98,7 @@ class EMailArchiverDaemon(threading.Thread):
 
     def run(self) -> None:
         """The looping task execute on the daemon thread.
+
         If crashed tries to restart after time set in :attr:`_daemonModel.restart_time`
         and sets health flag of daemon to `False`.
         """
@@ -107,10 +108,9 @@ class EMailArchiverDaemon(threading.Thread):
                 time.sleep(self._daemonModel.cycle_interval)
             self.logger.info("%s finished successfully", str(self._daemonModel))
         except Exception:
-            self.logger.error(
+            self.logger.exception(
                 "%s crashed! Attempting to restart ...",
                 str(self._daemonModel),
-                exc_info=True,
             )
             time.sleep(self._daemonModel.restart_time)
             self._daemonModel.is_healthy = False
@@ -119,6 +119,7 @@ class EMailArchiverDaemon(threading.Thread):
 
     def cycle(self) -> None:
         """The routine of this daemon.
+
         Fetches and saves mails. Logs the execution time.
         A successul run sets the daemon to healthy.
 

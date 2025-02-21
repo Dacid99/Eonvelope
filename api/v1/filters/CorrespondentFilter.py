@@ -16,12 +16,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`CorrespondentFilter` filter provider class."""
+"""Module with the :class:`CorrespondentFilter` filter set class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import django_filters
 
 from api.constants import FilterSetups
 from core.models.CorrespondentModel import CorrespondentModel
+
+
+if TYPE_CHECKING:
+    from django.db.models import Model
 
 
 class CorrespondentFilter(django_filters.FilterSet):
@@ -122,8 +130,9 @@ class CorrespondentFilter(django_filters.FilterSet):
     class Meta:
         """Metadata class for the filter."""
 
-        model = CorrespondentModel
-        fields = {
+        model: Final[type[Model]] = CorrespondentModel
+
+        fields: ClassVar[dict[str, list[str]]] = {
             "email_name": FilterSetups.TEXT,
             "email_address": FilterSetups.TEXT,
             "is_favorite": FilterSetups.BOOL,

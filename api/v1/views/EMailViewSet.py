@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -37,8 +37,10 @@ from ..filters.EMailFilter import EMailFilter
 from ..serializers.email_serializers.EMailSerializer import EMailSerializer
 from ..serializers.email_serializers.FullEMailSerializer import FullEMailSerializer
 
+
 if TYPE_CHECKING:
-    from django.db.models import BaseManager
+    from django.db.models import QuerySet
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
 
 
@@ -47,10 +49,10 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
 
     BASENAME = "emails"
     serializer_class = FullEMailSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = EMailFilter
-    permission_classes = [IsAuthenticated]
-    ordering_fields = [
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
+    ordering_fields: Final[list[str]] = [
         "datetime",
         "email_subject",
         "datasize",
@@ -66,13 +68,14 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         "x_priority",
         "x_originated_client",
     ]
-    ordering = ["id"]
+    ordering: Final[list[str]] = ["id"]
 
-    def get_queryset(self) -> BaseManager[EMailModel]:
+    def get_queryset(self) -> QuerySet[EMailModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
-            The email entries matching the request user."""
+            The email entries matching the request user.
+        """
         return EMailModel.objects.filter(mailbox__account__user=self.request.user)
 
     def destroy(self, request: Request, pk: int | None = None) -> Response:
@@ -114,8 +117,7 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
 
         fileName = os.path.basename(filePath)
         with open(filePath, "rb") as file:
-            response = FileResponse(file, as_attachment=True, filename=fileName)
-            return response
+            return FileResponse(file, as_attachment=True, filename=fileName)
 
     URL_PATH_PRERENDER = "prerender"
     URL_NAME_PRERENDER = "prerender"
@@ -147,10 +149,9 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
 
         prerenderFileName = os.path.basename(prerenderFilePath)
         with open(prerenderFilePath, "rb") as prerenderFile:
-            response = FileResponse(
+            return FileResponse(
                 prerenderFile, as_attachment=True, filename=prerenderFileName
             )
-            return response
 
     URL_PATH_FULLCONVERSATION = "full-conversation"
     URL_NAME_FULLCONVERSATION = "full-conversation"

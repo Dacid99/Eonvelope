@@ -1,7 +1,26 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Emailkasten - a open-source self-hostable email archiving server
+# Copyright (C) 2024  David & Philipp Aderbauer
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+from __future__ import annotations
+
 import datetime
 
 import pytest
-from faker import Faker
 from freezegun import freeze_time
 from model_bakery import baker
 
@@ -343,7 +362,7 @@ def fixture_mailbox_queryset(account_queryset):
 
 
 @pytest.fixture(name="daemon_queryset")
-def fixture_daemon_queryset(mailbox_queryset):
+def fixture_daemon_queryset(faker, mailbox_queryset):
     for number, int_test_item in enumerate(INT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
@@ -352,7 +371,7 @@ def fixture_daemon_queryset(mailbox_queryset):
                 is_running=BOOL_TEST_ITEMS[number],
                 is_healthy=BOOL_TEST_ITEMS[number],
                 mailbox=mailbox_queryset.get(id=number + 1),
-                log_filepath=Faker().file_path(),
+                log_filepath=faker.file_path(),
             )
 
     return DaemonModel.objects.all()

@@ -16,9 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Provides functions to render images from .eml files.
-Functions starting with _ are helpers and are used only within the scope of this module.
-"""
+"""Provides functions to render images from .eml files."""
 
 from __future__ import annotations
 
@@ -28,56 +26,14 @@ import logging
 from base64 import b64encode
 from email import policy
 from io import BytesIO
-from typing import TYPE_CHECKING
 
 import imgkit
 from PIL import Image
 
 from Emailkasten.utils import get_config
 
-if TYPE_CHECKING:
-    from email.message import EmailMessage, Message
-
 
 logger = logging.getLogger(__name__)
-
-
-def _addHtmlContent(
-    part: Message,
-    html: str,
-    cidContent: list,
-    attachmentsFooter: str,
-    ignorePlainText: bool,
-):
-    content_maintype = part.get_content_maintype()
-    content_subtype = part.get_content_subtype()
-    content_disposition = part.get_content_disposition()
-    # The order of the conditions is crucial
-    if content_maintype == "text":
-        if content_subtype == "html":
-            charset = part.get_content_charset("utf-8")
-            html += part.get_payload(decode=True).decode(charset, errors="replace")
-        elif not ignorePlainText:
-            charset = part.get_content_charset("utf-8")
-            text = part.get_payload(decode=True).decode(charset, errors="replace")
-            html += get_config("HTML_WRAPPER") % text
-
-    elif content_maintype == "image":
-        if cid := part.get("Content-ID", None):
-            cidContent[cid.strip("<>")] = part
-
-    elif content_disposition == "inline":
-        if cid := part.get("Content-ID", None):
-            cidContent[cid.strip("<>")] = part
-        else:
-            fileName = (
-                part.get_filename() or f"{hash(part)}.{part.get_content_subtype()}"
-            )
-            attachmentsFooter += "<li>" + fileName + "</li>"
-
-    elif content_disposition == "attachment":
-        fileName = part.get_filename() or f"{hash(part)}.{part.get_content_subtype()}"
-        attachmentsFooter += "<li>" + fileName + "</li>"
 
 
 def eml2html(emailBytes: bytes) -> str:

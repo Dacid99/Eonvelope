@@ -18,11 +18,13 @@
 
 """Module with the :class:`EMailSerializer` serializer class."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar
+
 from rest_framework import serializers
-from rest_framework.utils.serializer_helpers import ReturnDict
 
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from core.models.EMailModel import EMailModel
 
 from ..attachment_serializers.BaseAttachmentSerializer import BaseAttachmentSerializer
 from ..emailcorrespondents_serializers.EMailCorrespondentsSerializer import (
@@ -34,8 +36,15 @@ from ..mailinglist_serializers.SimpleMailingListSerializer import (
 from .BaseEMailSerializer import BaseEMailSerializer
 
 
+if TYPE_CHECKING:
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
+    from core.models.EMailModel import EMailModel
+
+
 class EMailSerializer(BaseEMailSerializer):
     """The standard serializer for a :class:`core.models.EMailModel`.
+
     Includes only the most relevant model fields.
     Includes nested serializers for the :attr:`core.models.EMailModel.EMailModel.replies`,
     :attr:`core.models.EMailModel.EMailModel.attachments`,
@@ -65,7 +74,7 @@ class EMailSerializer(BaseEMailSerializer):
     class Meta(BaseEMailSerializer.Meta):
         """Metadata class for the serializer."""
 
-        exclude = BaseEMailSerializer.Meta.exclude + ["headers"]
+        exclude: ClassVar[list[str]] = [*BaseEMailSerializer.Meta.exclude, "headers"]
         """Omit the other header fields."""
 
     def get_correspondents(self, object: EMailModel) -> ReturnDict | None:
@@ -87,5 +96,4 @@ class EMailSerializer(BaseEMailSerializer):
             return EMailCorrespondentSerializer(
                 emailcorrespondents, many=True, read_only=True
             ).data
-        else:
-            return []
+        return []

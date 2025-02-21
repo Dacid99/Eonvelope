@@ -20,14 +20,9 @@
 from __future__ import annotations
 
 import imaplib
-from typing import TYPE_CHECKING
 
 from ... import constants
 from .IMAPFetcher import IMAPFetcher
-
-if TYPE_CHECKING:
-    from ...models.AccountModel import AccountModel
-    from ...models.MailboxModel import MailboxModel
 
 
 class IMAP_SSL_Fetcher(IMAPFetcher):
@@ -39,7 +34,7 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
     PROTOCOL = constants.MailFetchingProtocols.IMAP_SSL
     """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.IMAP_SSL`."""
 
-    def connectToHost(self):
+    def connectToHost(self) -> None:
         """Overrides :func:`core.utils.fetchers.IMAPFetcher.connectToHost` to use :class:`imaplib.IMAP4_SSL`."""
         self.logger.debug("Connecting to %s ...", str(self.account))
         kwargs = {"host": self.account.mail_host, "ssl_context": None}

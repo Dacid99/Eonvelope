@@ -26,7 +26,9 @@ from typing import TYPE_CHECKING, Literal
 import exchangelib
 
 from core import constants
+
 from ..exchangeMailParsing import ExchangeMailParser
+
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -47,14 +49,27 @@ class ExchangeFetcher:
         constants.MailFetchingCriteria.DAILY,
         constants.MailFetchingCriteria.WEEKLY,
         constants.MailFetchingCriteria.MONTHLY,
-        constants.MailFetchingCriteria.ANNUALLY
+        constants.MailFetchingCriteria.ANNUALLY,
     ]
 
-    def __init__(self, username, password, primary_smtp_address=None, server='outlook.office365.com', fullname=None, access_type=exchangelib.DELEGATE, autodiscover=True, locale=None, default_timezone=None):
+    def __init__(
+        self,
+        username,
+        password,
+        primary_smtp_address=None,
+        server="outlook.office365.com",
+        fullname=None,
+        access_type=exchangelib.DELEGATE,
+        autodiscover=True,
+        locale=None,
+        default_timezone=None,
+    ) -> None:
         self.logger = logging.getLogger(__name__)
 
         self.__credentials = exchangelib.Credentials(username, password)
-        self.__config = exchangelib.Configuration(server=server, credentials=self.__credentials)
+        self.__config = exchangelib.Configuration(
+            server=server, credentials=self.__credentials
+        )
 
         self.__mailhost = exchangelib.Account(
             primary_smtp_address=primary_smtp_address,
@@ -62,16 +77,15 @@ class ExchangeFetcher:
             access_type=access_type,
             autodiscover=autodiscover,
             locale=locale,
-            default_timezone=default_timezone
-            )
+            default_timezone=default_timezone,
+        )
 
-    def fetchAllAndPrint(self):
-        for message in self.__mailhost.inbox.all().order_by('-datetime_received')[:10]:
+    def fetchAllAndPrint(self) -> None:
+        for message in self.__mailhost.inbox.all().order_by("-datetime_received")[:10]:
             mailParser = ExchangeMailParser(message)
             print(mailParser.parseFrom())
 
-
-    def close(self):
+    def close(self) -> None:
         pass
 
     def __enter__(self) -> ExchangeFetcher:
@@ -79,8 +93,12 @@ class ExchangeFetcher:
         self.logger.debug(str(self.__class__.__name__) + "._enter_")
         return self
 
-
-    def __exit__(self, exc_type: BaseException|None, exc_value: BaseException|None, traceback: TracebackType|None) -> Literal[True]:
+    def __exit__(
+        self,
+        exc_type: BaseException | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> Literal[True]:
         """Framework method for use of class in 'with' statement, closes an instance.
 
         Args:
@@ -94,5 +112,7 @@ class ExchangeFetcher:
         self.logger.debug("Exiting")
         self.close()
         if exc_value or exc_type:
-            self.logger.error("Unexpected error %s occured!", exc_type, exc_info=exc_value)
+            self.logger.error(
+                "Unexpected error %s occured!", exc_type, exc_info=exc_value
+            )
         return True

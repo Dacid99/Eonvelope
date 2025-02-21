@@ -16,7 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Emailkasten.Models
-
-Package containing all models for the Emailkasten database
-"""
+"""Emailkasten.models package containing all models for the Emailkasten database."""

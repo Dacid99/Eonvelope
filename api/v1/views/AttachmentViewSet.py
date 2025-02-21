@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -30,6 +30,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from typing_extensions import override
 
 from core.models.AttachmentModel import AttachmentModel
 
@@ -38,8 +39,10 @@ from ..serializers.attachment_serializers.BaseAttachmentSerializer import (
     BaseAttachmentSerializer,
 )
 
+
 if TYPE_CHECKING:
-    from django.db.models import BaseManager
+    from django.db.models.query import QuerySet
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
 
 
@@ -48,10 +51,10 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
 
     BASENAME = "attachments"
     serializer_class = BaseAttachmentSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AttachmentFilter
-    permission_classes = [IsAuthenticated]
-    ordering_fields = [
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
+    ordering_fields: Final[list[str]] = [
         "file_name",
         "datasize",
         "email__datetime",
@@ -59,13 +62,15 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
         "created",
         "updated",
     ]
-    ordering = ["id"]
+    ordering: Final[list[str]] = ["id"]
 
-    def get_queryset(self) -> BaseManager[AttachmentModel]:
+    @override
+    def get_queryset(self) -> QuerySet[AttachmentModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
-            The attachment entries matching the request user."""
+            The attachment entries matching the request user.
+        """
         return AttachmentModel.objects.filter(
             email__mailbox__account__user=self.request.user
         )
@@ -100,10 +105,9 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
 
         attachmentFileName = attachment.file_name
         with open(attachmentFilePath, "rb") as attachmentFile:
-            response = FileResponse(
+            return FileResponse(
                 attachmentFile, as_attachment=True, filename=attachmentFileName
             )
-            return response
 
     URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
     URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"

@@ -17,18 +17,24 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Save signal receivers for the :class:`core.models.AccoutModel.AccountModel` model."""
+from __future__ import annotations
 
 import logging
+from typing import Any
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from core.models.AccountModel import AccountModel
 
+
 logger = logging.getLogger(__name__)
 
+
 @receiver(post_save, sender=AccountModel)
-def post_save_is_healthy(sender: AccountModel, instance: AccountModel, created: bool, **kwargs) -> None:
+def post_save_is_healthy(
+    sender: AccountModel, instance: AccountModel, created: bool, **kwargs: Any
+) -> None:
     """Receiver function flagging all mailboxes of an account as unhealthy once that account becomes unhealthy.
 
     Args:
@@ -40,10 +46,13 @@ def post_save_is_healthy(sender: AccountModel, instance: AccountModel, created: 
     if created:
         return
 
-    if not instance.is_healthy and 'is_healthy' in instance.get_dirty_fields():
-        logger.debug("%s has become unhealthy, flagging all its mailboxes as unhealthy ...", str(instance))
+    if not instance.is_healthy and "is_healthy" in instance.get_dirty_fields():
+        logger.debug(
+            "%s has become unhealthy, flagging all its mailboxes as unhealthy ...",
+            str(instance),
+        )
         mailboxEntries = instance.mailboxes.all()
         for mailboxEntry in mailboxEntries:
             mailboxEntry.is_healthy = False
-            mailboxEntry.save(update_fields=['is_healthy'])
+            mailboxEntry.save(update_fields=["is_healthy"])
         logger.debug("Successfully flagged mailboxes as unhealthy.")

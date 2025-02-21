@@ -18,9 +18,17 @@
 
 """Module with the :class:`UserSerializer` serializer class."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
+
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+
+
+if TYPE_CHECKING:
+    from django.db.models import Model
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -29,18 +37,17 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     """The password field is set to write-only for security reasons."""
 
-
     class Meta:
         """Metadata class for the serializer."""
 
-        model = User
+        model: Final[type[Model]] = User
 
-        fields = ['username', 'password', 'is_staff']
+        fields: ClassVar[list[str]] = ["username", "password", "is_staff"]
         """Includes only :django::attr:`contrib.auth.models.User.username`, :attr:`password` and :django::attr:`contrib.auth.models.User.is_staff`."""
-
 
     def create(self, validated_data: dict) -> User:
         """Creates a new :django::class:`contrib.auth.models.User` instance with given data.
+
         Uses :django::func:`contrib.auth.models.UserManager.create_user` to ensure encryption of the password.
 
         Args:
@@ -49,13 +56,11 @@ class UserSerializer(serializers.ModelSerializer):
         Returns:
             The newly created model instance.
         """
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            password=validated_data['password'],
-            is_staff=validated_data.get('is_staff', False)
+        return User.objects.create_user(
+            username=validated_data["username"],
+            password=validated_data["password"],
+            is_staff=validated_data.get("is_staff", False),
         )
-        return user
-
 
     def update(self, instance: User, validated_data: dict) -> User:
         """Overrides :django::func:`serializers.ModelSerializer.update` to ensure correct encryption of password and proper permission changes.
@@ -70,17 +75,19 @@ class UserSerializer(serializers.ModelSerializer):
         Returns:
             The updated model instance.
         """
-        instance.username = validated_data.get('username', instance.username)
+        instance.username = validated_data.get("username", instance.username)
 
-        if 'password' in validated_data and validated_data['password']:
-            instance.set_password(validated_data['password'])
+        if validated_data.get("password"):
+            instance.set_password(validated_data["password"])
 
-        if 'is_staff' in validated_data and validated_data['is_staff']:
-            request = self.context.get('request')
+        if validated_data.get("is_staff"):
+            request = self.context.get("request")
             if request.user.is_staff:
-                instance.is_staff = validated_data['is_staff']
+                instance.is_staff = validated_data["is_staff"]
             else:
-                raise ValidationError({"detail": "You do not have permissions to perform this action."})  # default permissions message to avoid giving clues to attackers
+                raise ValidationError(
+                    {"detail": "You do not have permissions to perform this action."}
+                )  # default permissions message to avoid giving clues to attackers
 
         instance.save()
         return instance

@@ -16,9 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-
 """Provides functions for parsing features from the maildata.
-Functions starting with _ are helpers and are used only within the scope of this module.
 
 Global variables:
     logger (:class:`logging.Logger`): The logger for this module.
@@ -26,7 +24,6 @@ Global variables:
 
 from __future__ import annotations
 
-import datetime
 import email
 import email.header
 import email.message
@@ -39,10 +36,12 @@ import email_validator
 import imap_tools.imap_utf7
 from django.utils import timezone
 
+
 if TYPE_CHECKING:
+    import datetime
+    from collections.abc import Callable
     from email.header import Header
     from email.message import EmailMessage
-    from typing import Callable
 
 logger = logging.getLogger(__name__)
 
@@ -105,6 +104,7 @@ def getHeader(
 
 def parseDatetimeHeader(dateHeader: str | None) -> datetime.datetime:
     """Parses the date header into a datetime object.
+
     If an error occurs uses the current time as fallback.
 
     Note:

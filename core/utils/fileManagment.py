@@ -18,11 +18,11 @@
 
 
 """Provides functions for saving various files to the storage.
-Functions starting with _ are helpers and are used only within the scope of this module.
 
 Global variables:
     logger (:class:`logging.Logger`): The logger for this module.
 """
+
 from __future__ import annotations
 
 import logging
@@ -30,8 +30,10 @@ import os.path
 from builtins import open  # required for testing
 from typing import TYPE_CHECKING
 
+
 if TYPE_CHECKING:
-    from typing import Any, Callable
+    from collections.abc import Callable
+    from typing import Any
 
 
 logger = logging.getLogger(__name__)
@@ -39,6 +41,9 @@ logger = logging.getLogger(__name__)
 
 def saveStore(storingFunc: Callable) -> Callable:
     """Decorator to ensure no files are overwriten and errors are handled when storing files.
+
+    Todo:
+        Needs a test that doesnt require workarounds, eg using tempfile
 
     Args:
         storingFunc: The function writing a file into the storage to wrap.
@@ -67,19 +72,14 @@ def saveStore(storingFunc: Callable) -> Callable:
         try:
             with open(filePath, "wb") as file:
                 storingFunc(file, *args, **kwargs)
-
-            logger.debug("Successfully wrote to file.")
-            return filePath
-
         except PermissionError:
-            logger.error(
+            logger.exception(
                 "Failed to write to file %s, it is not writeable!",
                 filePath,
-                exc_info=True,
             )
             return None
         except Exception:
-            logger.error("Failed to write to file %s!", filePath, exc_info=True)
+            logger.exception("Failed to write to file %s!", filePath)
             if os.path.exists(filePath):
                 logger.debug("Clearing incomplete file ...")
                 try:
@@ -89,9 +89,12 @@ def saveStore(storingFunc: Callable) -> Callable:
                     logger.debug("Successfully cleared incomplete file.")
 
                 except OSError:
-                    logger.error("Failed to clear the incomplete file!")
+                    logger.exception("Failed to clear the incomplete file!")
             else:
                 logger.debug("File was not created")
             return None
+        else:
+            logger.debug("Successfully wrote to file.")
+            return filePath
 
     return saveStoringFunc

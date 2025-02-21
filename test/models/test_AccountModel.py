@@ -40,6 +40,7 @@ from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 
+
 if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
@@ -183,7 +184,7 @@ def test_test_connection_failure(mocker, mock_logger, account):
     mock_get_fetcher.assert_called_once_with()
     mock_get_fetcher.return_value.__enter__.return_value.test.assert_not_called()
     mock_logger.info.assert_called()
-    mock_logger.error.assert_called()
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db
@@ -229,7 +230,7 @@ def test_update_mailboxes_duplicate(mocker, mock_logger, account):
     mock_logger.info.assert_called()
 
 
-@pytest.mark.django_db()
+@pytest.mark.django_db
 def test_update_mailboxes_exception(mocker, mock_logger, account):
     mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
     mock_fetchMailboxes = (

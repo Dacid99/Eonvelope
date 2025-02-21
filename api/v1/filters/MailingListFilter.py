@@ -16,12 +16,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailingListFilter` filter provider class."""
+"""Module with the :class:`MailingListFilter` filter set class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import django_filters
 
 from api.constants import FilterSetups
 from core.models.MailingListModel import MailingListModel
+
+
+if TYPE_CHECKING:
+    from django.db.models import Model
 
 
 class MailingListFilter(django_filters.FilterSet):
@@ -30,8 +38,9 @@ class MailingListFilter(django_filters.FilterSet):
     class Meta:
         """Metadata class for the filter."""
 
-        model = MailingListModel
-        fields = {
+        model: Final[type[Model]] = MailingListModel
+
+        fields: ClassVar[dict[str, list[str]]] = {
             "list_id": FilterSetups.TEXT,
             "list_owner": FilterSetups.TEXT,
             "list_subscribe": FilterSetups.TEXT,

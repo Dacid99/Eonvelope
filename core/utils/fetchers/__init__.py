@@ -16,7 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""api.v1.views
-
-Package containing the Fetchers in charge of obtaining the maildata to be archived by the application
-"""
+"""core.utils.fetchers package containing the email fetcher classes for Emailkasten project."""

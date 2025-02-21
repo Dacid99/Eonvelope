@@ -18,11 +18,13 @@
 
 """Module with the :class:`FullEMailSerializer` serializer class."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from rest_framework import serializers
-from rest_framework.utils.serializer_helpers import ReturnDict
 
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from core.models.EMailModel import EMailModel
 
 from ..attachment_serializers.BaseAttachmentSerializer import BaseAttachmentSerializer
 from ..emailcorrespondents_serializers.EMailCorrespondentsSerializer import (
@@ -34,8 +36,15 @@ from ..mailinglist_serializers.SimpleMailingListSerializer import (
 from .BaseEMailSerializer import BaseEMailSerializer
 
 
+if TYPE_CHECKING:
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
+    from core.models.EMailModel import EMailModel
+
+
 class FullEMailSerializer(BaseEMailSerializer):
     """A complete serializer for a :class:`core.models.EMailModel`.
+
     Includes nested serializers for the :attr:`core.models.EMailModel.EMailModel.replies`,
     :attr:`core.models.EMailModel.EMailModel.attachments`,
     :attr:`core.models.EMailModel.EMailModel.mailinglist` and
@@ -61,9 +70,6 @@ class FullEMailSerializer(BaseEMailSerializer):
     via :func:`get_emails`.
     """
 
-    class Meta(BaseEMailSerializer.Meta):
-        """Metadata class for the serializer."""
-
     def get_correspondents(self, object: EMailModel) -> ReturnDict | None:
         """Serializes the correspondents connected to the instance to be serialized.
 
@@ -83,5 +89,4 @@ class FullEMailSerializer(BaseEMailSerializer):
             return EMailCorrespondentSerializer(
                 emailcorrespondents, many=True, read_only=True
             ).data
-        else:
-            return []
+        return []

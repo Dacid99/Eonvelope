@@ -17,7 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
-"""Emailkasten
+"""Emailkasten package for Emailkasten project.
 
-Package containing the packages and modules for the Emailkasten application
+Contains the packages and modules for the Emailkasten application.
 """

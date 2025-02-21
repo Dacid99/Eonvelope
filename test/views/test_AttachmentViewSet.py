@@ -32,7 +32,6 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.forms.models import model_to_dict
-from faker import Faker
 from model_bakery import baker
 from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
@@ -42,12 +41,13 @@ from test_MailboxViewSet import fixture_mailboxModel
 from api.v1.views.AttachmentViewSet import AttachmentViewSet
 from core.models.AttachmentModel import AttachmentModel
 
+
 if TYPE_CHECKING:
     from typing import Any
 
 
 @pytest.fixture(name="attachmentModel")
-def fixture_attachmentModel(emailModel) -> AttachmentModel:
+def fixture_attachmentModel(faker, emailModel) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Args:
@@ -57,7 +57,7 @@ def fixture_attachmentModel(emailModel) -> AttachmentModel:
         The attachment instance for testing.
     """
     return baker.make(
-        AttachmentModel, email=emailModel, file_path=Faker().file_path(extension="pdf")
+        AttachmentModel, email=emailModel, file_path=faker.file_path(extension="pdf")
     )
 
 

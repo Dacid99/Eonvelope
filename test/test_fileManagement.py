@@ -37,31 +37,19 @@ from pyfakefs.fake_filesystem_unittest import Patcher
 import core.utils.fileManagment
 from core.constants import HeaderFields
 
+
 if TYPE_CHECKING:
-    from typing import Generator
+    from collections.abc import Generator
     from unittest.mock import MagicMock
 
     from pyfakefs.fake_filesystem import FakeFilesystem
     from pytest_mock.plugin import MockerFixture
 
 
-patch_getSubDirectory_returnValue = "subDirInStorage"
-mock_messageIDValue = "abc123"
-
-
 @pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker: MockerFixture) -> MagicMock:
     """Mocks :attr:`core.utils.fileManagment.logger` of the module."""
     return mocker.patch("core.utils.fileManagment.logger")
-
-
-@pytest.fixture(name="mock_getSubdirectory", autouse=True)
-def fixture_mock_getSubdirectory(mocker: MockerFixture) -> MagicMock:
-    """Mocks the :func:`core.models.StorageModel.StorageModel.getSubdirectory` function."""
-    return mocker.patch(
-        "core.utils.fileManagment.StorageModel.getSubdirectory",
-        return_value=patch_getSubDirectory_returnValue,
-    )
 
 
 @pytest.fixture(name="mock_filesystem", autouse=True)
@@ -171,6 +159,6 @@ def test_saveStore(
 
     assert spy_open.call_count == expectedCallsToOpen
     spy_open.assert_has_calls([mocker.call(fakeFile, "wb")] * expectedCallsToOpen)
-    assert mock_logger.error.call_count == expectedErrors
+    assert mock_logger.exception.call_count == expectedErrors
 
     mock_logger.debug.assert_called()

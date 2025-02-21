@@ -17,8 +17,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Settings for testing of the django project."""
+from __future__ import annotations
 
 from Emailkasten.settings import *  # pylint: disable=wildcard-import, unused-wildcard-import ; all settings need to be imported
+
 
 DATABASES = {
     "default": {
@@ -29,37 +31,35 @@ DATABASES = {
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'formatters': {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
         "default": {
-            'format': Emailkasten.constants.LoggerConfiguration.LOG_FORMAT,
-            'style': '{',
+            "format": Emailkasten.constants.LoggerConfiguration.LOG_FORMAT,
+            "style": "{",
         },
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'default',
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "default",
         },
-        'null': {
-            'class': 'logging.NullHandler'
-        }
+        "null": {"class": "logging.NullHandler"},
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'ERROR',
+    "root": {
+        "handlers": ["console"],
+        "level": "ERROR",
     },
-    'loggers': {
-        'django': {
-            'handlers': ['null'],
-            'level': 'ERROR',
-            'propagate': True,
+    "loggers": {
+        "django": {
+            "handlers": ["null"],
+            "level": "ERROR",
+            "propagate": True,
         },
         "Emailkasten": {
-            'handlers': ['null'],
-            'level': 'DEBUG',
-            'propagate': True,
+            "handlers": ["null"],
+            "level": "DEBUG",
+            "propagate": True,
         },
     },
 }

@@ -17,19 +17,25 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Delete signal receivers for the :class:`core.models.DaemonModel.DaemonModel` model."""
+from __future__ import annotations
 
 import logging
+from typing import Any
 
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
-from core.models.DaemonModel import DaemonModel
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.models.DaemonModel import DaemonModel
+
 
 logger = logging.getLogger(__name__)
 
+
 @receiver(pre_delete, sender=DaemonModel)
-def pre_delete_stop_daemon(sender: DaemonModel, instance: DaemonModel, **kwargs):
+def pre_delete_stop_daemon(
+    sender: DaemonModel, instance: DaemonModel, **kwargs: Any
+) -> None:
     """Receiver function stopping the daemon once its daemon database entry is deleted.
 
     Args:

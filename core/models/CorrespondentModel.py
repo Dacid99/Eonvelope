@@ -26,6 +26,7 @@ from django.db import models
 
 from core.utils.mailParsing import parseCorrespondentHeader
 
+
 logger = logging.getLogger(__name__)
 """The logger instance for the module."""
 
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 class CorrespondentModel(models.Model):
     """Database model for the correspondent data found in a mail."""
 
-    email_name = models.CharField(max_length=255, blank=True)
+    email_name = models.CharField(max_length=255, blank=True, default="")
     """The mailer name. Can be blank if none has been found."""
 
     email_address = models.CharField(max_length=255, unique=True)
@@ -48,19 +49,23 @@ class CorrespondentModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        return f"Correspondent with address {self.email_address}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "correspondents"
         """The name of the database table for the correspondents."""
 
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the correspondent, using :attr:`email_address`.
+        """
+        return f"Correspondent with address {self.email_address}"
+
     @staticmethod
     def fromHeader(header: str) -> CorrespondentModel | None:
-        """Prepares a :class:`core.models.CorrespondentModel.CorrespondentModel`
-        from email header data.
+        """Prepares a :class:`core.models.CorrespondentModel.CorrespondentModel` from email header data.
 
         Args:
             header: The header to parse the correspondentdata from.

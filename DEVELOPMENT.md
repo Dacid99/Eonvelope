@@ -33,9 +33,9 @@ You can use the tools in validation/ to lint and check your changes.
 
 The code is formatted using black formatter.
 
-The imports are sorted with isort.
+The imports are sorted with ruffs isort.
 
-There are preconfigured githooks in validation/githooks that run check and lint jobs and format the code before every commit.
+There are preconfigured githooks in validation/githooks that format, check and lint the code before every commit.
 Set them for your local repository via
 
 ```bash

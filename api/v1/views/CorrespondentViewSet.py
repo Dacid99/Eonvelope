@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
@@ -39,9 +39,12 @@ from ..serializers.correspondent_serializers.CorrespondentSerializer import (
     CorrespondentSerializer,
 )
 
+
 if TYPE_CHECKING:
-    from django.db.models import BaseManager
+    from django.db.models import QuerySet
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
+    from rest_framework.serializers import BaseSerializer
 
 
 class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
@@ -49,28 +52,29 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
 
     BASENAME = "correspondents"
     serializer_class = CorrespondentSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = CorrespondentFilter
-    permission_classes = [IsAuthenticated]
-    ordering_fields = [
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
+    ordering_fields: Final[list[str]] = [
         "email_name",
         "email_address",
         "is_favorite",
         "created",
         "updated",
     ]
-    ordering = ["id"]
+    ordering: Final[list[str]] = ["id"]
 
-    def get_queryset(self) -> BaseManager[CorrespondentModel]:
+    def get_queryset(self) -> QuerySet[CorrespondentModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
-            The correspondent entries matching the request user."""
+            The correspondent entries matching the request user.
+        """
         return CorrespondentModel.objects.filter(
             emails__mailbox__account__user=self.request.user
         ).distinct()
 
-    def get_serializer_class(self):
+    def get_serializer_class(self) -> type[BaseSerializer]:
         """Sets the serializer for `list` requests to the simplified version."""
         if self.action == "list":
             return BaseCorrespondentSerializer

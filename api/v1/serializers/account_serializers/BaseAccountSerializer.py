@@ -16,15 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AccountSerializer` serializer class."""
+"""Module with the :class:`BaseAccountSerializer` serializer class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
 
 from rest_framework import serializers
 
 from core.models.AccountModel import AccountModel
 
 
+if TYPE_CHECKING:
+    from django.db.models import Model
+
+
 class BaseAccountSerializer(serializers.ModelSerializer):
     """The base serializer for :class:`core.models.AccountModel.AccountModel`.
+
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
     Other serializers for :class:`core.models.AccountModel.AccountModel` should inherit from this.
@@ -42,18 +51,19 @@ class BaseAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Metadata class for the base serializer.
+
         Contains constraints that must be implemented by all serializers.
         Other serializer metaclasses should inherit from this.
-        The read_only_fields must not be shortened in subclasses.
+        :attr:`read_only_fields` and :attr:`exclude` must not be shortened in subclasses.
         """
 
-        model = AccountModel
+        model: Final[type[Model]] = AccountModel
         """The model to serialize."""
 
-        exclude = ['user']
+        exclude: ClassVar[list[str]] = ["user"]
         """Exclude the :attr:`core.models.AccountModel.AccountModel.user` field."""
 
-        read_only_fields = ['is_healthy', 'created', 'updated']
+        read_only_fields: Final[list[str]] = ["is_healthy", "created", "updated"]
         """The :attr:`core.models.AccountModel.AccountModel.is_healthy`,
         :attr:`core.models.AccountModel.AccountModel.created` and
         :attr:`core.models.AccountModel.AccountModel.updated` fields are read-only.

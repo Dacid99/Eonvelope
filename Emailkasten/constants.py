@@ -18,6 +18,8 @@
 
 """Module with the constant values for the :mod:`Emailkasten` application."""
 
+from __future__ import annotations
+
 import os
 from typing import Final
 
@@ -70,7 +72,6 @@ class LoggerConfiguration:
 
     LOG_FORMAT: Final[str] = "{asctime} {levelname} - {name}.{funcName}: {message}"
     """The format of the log messages for all loggers."""
-
 
 
 class DatabaseConfiguration:

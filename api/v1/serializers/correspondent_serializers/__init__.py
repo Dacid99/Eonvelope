@@ -16,7 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""api.serializers.CorrespondentSerializers
-
-Package containing different serializers for the :mod:`core.models.CorrespondentModel` data
-"""
+"""api.v1.serializers.Correspondent_serializers package containing serializers for the :mod:`core.models.CorrespondentModel` data."""

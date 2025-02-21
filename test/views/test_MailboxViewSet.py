@@ -42,6 +42,7 @@ from core.models.DaemonModel import DaemonModel
 from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
 
+
 if TYPE_CHECKING:
     from typing import Any
 

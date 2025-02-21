@@ -17,13 +17,17 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`StorageModel` model class."""
+from __future__ import annotations
 
 import logging
 import os
+from typing import Any
 
 from django.db import models
+from typing_extensions import override
 
 from Emailkasten.utils import get_config
+
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -33,7 +37,8 @@ class StorageModel(models.Model):
     """A database model to keep track of and manage the sharded storage's status and structure.
 
     Important:
-        Use the custom methods to create new instances, never use :func:`create`!"""
+        Use the custom methods to create new instances, never use :func:`create`!
+    """
 
     directory_number = models.PositiveIntegerField(unique=True)
     """The number of the directory tracked by this entry. Unique."""
@@ -56,17 +61,23 @@ class StorageModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        state = "Current" if self.current else "Archived"
-        return f"{state} storage directory {self.path}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "storage"
         """The name of the database table for the storage status."""
 
-    def save(self, *args, **kwargs) -> None:
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the storage directory, using :attr:`path` and the state of the directory.
+        """
+        state = "Current" if self.current else "Archived"
+        return f"{state} storage directory {self.path}"
+
+    @override
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """Extended :django::func:`django.models.Model.save` method with additional check for unique current directory and storage directory creation for new entries."""
 
         if StorageModel.objects.filter(current=True).count() > 1:
@@ -84,6 +95,7 @@ class StorageModel(models.Model):
 
     def incrementSubdirectoryCount(self) -> None:
         """Increments the :attr:`subdirectory_count` within the limits of :attr:`constance.get_config('STORAGE_MAX_SUBDIRS_PER_DIR')`.
+
         If the result exceeds this limit, creates a new storage directory via :func:`_addNewDirectory`.
         """
         logger.debug("Incrementing subdirectory count of %s ..", str(self))
@@ -101,8 +113,10 @@ class StorageModel(models.Model):
         logger.debug("Successfully incrementing subdirectory count.")
 
     def _addNewDirectory(self) -> None:
-        """Adds a new storage directory by setting this entries :attr:`current` to `False`
-        and creating a new database entry with incremented :attr:`directory_number` and :attr:`current` set to `True`.
+        """Adds a new storage directory.
+
+        Setting this entries :attr:`current` to `False`
+        and creates a new database entry with incremented :attr:`directory_number` and :attr:`current` set to `True`.
         """
         self.current = False
         self.save(update_fields=["current"])
@@ -115,7 +129,9 @@ class StorageModel(models.Model):
     @staticmethod
     def getSubdirectory(subdirectoryName: str) -> str:
         """Static utility to acquire a path for a subdirectory in the storage.
-        If that subdirectory does not exist yet, creates it and increments the :attr:`subdirectory_count` of the current storage directory.
+
+        If that subdirectory does not exist yet,
+        creates it and increments the :attr:`subdirectory_count` of the current storage directory.
 
         Args:
             subdirectoryName: The name of the subdirectory to be stored.

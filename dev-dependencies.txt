@@ -16,6 +16,5 @@ model-bakery
 pylintfileheader
 freezegun
 black
-isort
 ruff
 autotyping

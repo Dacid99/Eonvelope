@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the constant values for the :mod:`core` app."""
+from __future__ import annotations
 
 from typing import Final
 
@@ -25,7 +26,8 @@ class MailFetchingCriteria:
     """Namespace class for all implemented mail fetching criteria constants.
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
     Note that IMAP does not support time just dates. So we are always refering to full days.
-    POP does not support queries at all, so everything will be fetched."""
+    POP does not support queries at all, so everything will be fetched.
+    """
 
     RECENT: Final[str] = "RECENT"
     """Filter: str by "RECENT" flag."""
@@ -65,6 +67,7 @@ class MailFetchingCriteria:
 
     def __iter__(self):
         """Method to allow easier referencing of the members by listing.
+
         Note:
             value must come first in the listed tuples to match the format for field choices.
         """
@@ -98,6 +101,7 @@ class MailFetchingProtocols:
 
     def __iter__(self):
         """Method to allow easier referencing of the members by listing.
+
         Note:
             value must come first in the listed tuples to match the format for field choices.
         """
@@ -183,6 +187,7 @@ class HeaderFields:
 
         def __iter__(self):
             """Method to allow easier referencing of the members by listing.
+
             Note:
                 value must come first in the listed tuples to match the format for field choices.
             """

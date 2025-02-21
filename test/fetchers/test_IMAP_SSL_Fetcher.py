@@ -23,11 +23,11 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.models.AccountModel import AccountModel
+from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 
 
-@pytest.fixture(name='mock_account')
+@pytest.fixture(name="mock_account")
 def fixture_mock_account():
     """Fixture for a mocked AccountModel.
 
@@ -44,9 +44,9 @@ def fixture_mock_account():
 
 
 # Test for IMAP connection success
-@patch('IMAPFetcher.connectToHost')
-@patch('IMAPFetcher.login')
-@patch('logging.getLogger')
+@patch("IMAPFetcher.connectToHost")
+@patch("IMAPFetcher.login")
+@patch("logging.getLogger")
 def test_imapfetcher_success(mock_logger, mock_login, mock_connect, mock_account):
     """Test successful connection and login to IMAP server."""
 
@@ -66,8 +66,8 @@ def test_imapfetcher_success(mock_logger, mock_login, mock_connect, mock_account
 
 
 # Test for IMAP connection failure
-@patch('IMAPFetcher.connectToHost', side_effect=imaplib.IMAP4.error)
-@patch('logging.getLogger')
+@patch("IMAPFetcher.connectToHost", side_effect=imaplib.IMAP4.error)
+@patch("logging.getLogger")
 def test_imapfetcher_imap_error(mock_logger, mock_connect, mock_account):
     """Test handling of IMAP connection error."""
 
@@ -83,11 +83,13 @@ def test_imapfetcher_imap_error(mock_logger, mock_connect, mock_account):
 
 
 # Test for IMAP connection failure
-@patch('imaplib.IMAP4.list', return_value=['NO','errorcode'])
-@patch('IMAPFetcher.login')
-@patch('IMAPFetcher.connectToHost')
-@patch('logging.getLogger')
-def test_imapfetcher_badresponse_fetchMailboxes(mock_logger, mock_connect, mock_login, mock_list, mock_account):
+@patch("imaplib.IMAP4.list", return_value=["NO", "errorcode"])
+@patch("IMAPFetcher.login")
+@patch("IMAPFetcher.connectToHost")
+@patch("logging.getLogger")
+def test_imapfetcher_badresponse_fetchMailboxes(
+    mock_logger, mock_connect, mock_login, mock_list, mock_account
+):
     """Test handling of IMAP connection error."""
 
     # Call the constructor, which should raise an error in connectToHost
@@ -103,8 +105,11 @@ def test_imapfetcher_badresponse_fetchMailboxes(mock_logger, mock_connect, mock_
 
 
 # Test for unexpected error
-@patch('myapp.emailfetcher.IMAPFetcher.connectToHost', side_effect=Exception("Unexpected error"))
-@patch('myapp.emailfetcher.logging.getLogger')
+@patch(
+    "myapp.emailfetcher.IMAPFetcher.connectToHost",
+    side_effect=Exception("Unexpected error"),
+)
+@patch("myapp.emailfetcher.logging.getLogger")
 def test_imapfetcher_unexpected_error(mock_logger, mock_connect, mock_account):
     """Test handling of unexpected errors during connection."""
 

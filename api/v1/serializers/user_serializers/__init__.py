@@ -16,7 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""api.serializers.UserSerializers
-
-Package containing different serializers for the :django::class:`contrib.auth.models.User` data
-"""
+"""api.v1.serializers.user_serializers package containing serializers for the :django::class:`contrib.auth.models.User` data."""

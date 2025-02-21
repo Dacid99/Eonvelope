@@ -24,5 +24,4 @@ import pytest
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
-from api.v1.serializers.user_serializers.UserSerializer import \
-    UserSerializer
+from api.v1.serializers.user_serializers.UserSerializer import UserSerializer

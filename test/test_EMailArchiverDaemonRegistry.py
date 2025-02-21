@@ -94,7 +94,7 @@ def test_testDaemon_failure_exception(mock_logger, patch_EMailArchiverDaemon, da
     patch_EMailArchiverDaemon.assert_called_once_with(daemon)
     patch_EMailArchiverDaemon.return_value.cycle.assert_called_once_with()
     mock_logger.debug.assert_called()
-    mock_logger.error.assert_called()
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db

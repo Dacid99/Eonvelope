@@ -16,7 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""api.filters
-
-Package containing all filters for the views of the Emailkasten API Version 1 in :mod:`api.v1.views`
-"""
+"""api.v1.filters package containing filters for Emailkasten API Version 1."""

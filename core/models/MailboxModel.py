@@ -23,7 +23,7 @@ from __future__ import annotations
 import logging
 import mailbox
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import IntegrityError, models
@@ -35,6 +35,7 @@ from ..constants import TestStatusCodes
 from ..utils.fetchers.IMAPFetcher import IMAPFetcher
 from ..utils.fetchers.POP3Fetcher import POP3Fetcher
 from ..utils.mailParsing import parseMailboxName
+
 
 if TYPE_CHECKING:
     from .AccountModel import AccountModel
@@ -77,11 +78,30 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
+    class Meta:
+        """Metadata class for the model."""
+
+        db_table = "mailboxes"
+        """The name of the database table for the mailboxes."""
+
+        constraints: Final[list[models.BaseConstraint]] = [
+            models.UniqueConstraint(
+                fields=["name", "account"], name="mailbox_unique_together_name_account"
+            )
+        ]
+        """:attr:`name` and :attr:`account` in combination are unique."""
+
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the mailbox, using :attr:`name` and :attr:`account`.
+        """
         return f"Mailbox {self.name} of {self.account}"
 
-    def getAvailableFetchingCriteria(self):
+    def getAvailableFetchingCriteria(self) -> list[str]:
         """Gets the available fetching criteria based on the mail protocol of this mailbox.
+
         Used by :func:`api.v1.views.MailboxViewSet.fetching_options` to show the choices for fetching to the user.
 
         Returns:
@@ -95,22 +115,10 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             availableFetchingOptions = []
         return availableFetchingOptions
 
-    class Meta:
-        """Metadata class for the model."""
+    def test_connection(self) -> int:
+        """Tests whether the data in the model is correct.
 
-        db_table = "mailboxes"
-        """The name of the database table for the mailboxes."""
-
-        constraints = [
-            models.UniqueConstraint(
-                fields=["name", "account"], name="mailbox_unique_together_name_account"
-            )
-        ]
-        """:attr:`name` and :attr:`account` in combination are unique."""
-
-    def test_connection(self):
-        """Tests whether the data in the model is correct
-        and allows connecting and logging in to the mailhost and account.
+        Tests connecting and logging in to the mailhost and account.
         The :attr:`core.models.MailboxModel.is_healthy` flag is set accordingly.
         Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
 
@@ -122,7 +130,6 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         try:
             with self.account.get_fetcher() as fetcher:
                 result = fetcher.test(self)
-
         except ValueError:
             logger.error("Account %s has unknown protocol!", self)
             result = TestStatusCodes.ERROR
@@ -130,9 +137,8 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         logger.info("Successfully tested account to be %s.", result)
         return result
 
-    def fetch(self, criterion: str):
-        """Fetches emails from this mailbox based on :attr:`criterion`
-        and adds them to the db.
+    def fetch(self, criterion: str) -> None:
+        """Fetches emails from this mailbox based on :attr:`criterion` and adds them to the db.
 
         Args:
             criterion: The criterion used to fetch emails from the mailbox.
@@ -147,12 +153,13 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
                 EMailModel.createFromEmailBytes(fetchedMail, self)
                 logger.info("Successfully saved fetched emails.")
             except IntegrityError:
-                logger.error(
+                logger.exception(
                     "Email already exists in db, preprocessing apparently failed!"
                 )
 
-    def addFromMailboxFile(self, file_data: bytes, file_format: str):
+    def addFromMailboxFile(self, file_data: bytes, file_format: str) -> None:
         """Adds emails from a mailbox file to the db.
+
         Supported formats are implemented via the :mod:`mailbox` package.
 
         Args:
@@ -193,8 +200,7 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
 
     @staticmethod
     def fromData(mailboxData: bytes, account: AccountModel) -> MailboxModel:
-        """Prepares a :class:`core.models.MailboxModel.MailboxModel`
-        from the mailboxname in bytes.
+        """Prepares a :class:`core.models.MailboxModel.MailboxModel` from the mailboxname in bytes.
 
         Args:
             mailboxData: The bytes with the mailboxname.

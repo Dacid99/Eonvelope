@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Final
 
 from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
@@ -30,6 +30,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from typing_extensions import override
 
 from core.constants import TestStatusCodes
 from core.models.AccountModel import AccountModel
@@ -37,8 +38,10 @@ from core.models.AccountModel import AccountModel
 from ..filters.AccountFilter import AccountFilter
 from ..serializers.account_serializers.AccountSerializer import AccountSerializer
 
+
 if TYPE_CHECKING:
-    from django.db.models import BaseManager
+    from django.db.models.query import QuerySet
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
     from rest_framework.serializers import BaseSerializer
 
@@ -48,10 +51,10 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     BASENAME = "accounts"
     serializer_class = AccountSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AccountFilter
-    permission_classes = [IsAuthenticated]
-    ordering_fields = [
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
+    ordering_fields: Final[list[str]] = [
         "mail_address",
         "mail_host",
         "mail_host_port",
@@ -62,16 +65,19 @@ class AccountViewSet(viewsets.ModelViewSet):
         "created",
         "updated",
     ]
-    ordering = ["id"]
+    ordering: Final[list[str]] = ["id"]
 
-    def get_queryset(self) -> BaseManager[AccountModel]:
+    @override
+    def get_queryset(self) -> QuerySet[AccountModel, AccountModel]:
         """Fetches the queryset by filtering the data for entries connected to the request user.
 
         Returns:
-            The account entries matching the request user."""
+            The account entries matching the request user.
+        """
         return AccountModel.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer: BaseSerializer):
+    @override
+    def perform_create(self, serializer: BaseSerializer) -> None:
         """Adds the request user to the serializer data of the create request.
 
         Args:
@@ -81,7 +87,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             serializer.save(user=self.request.user)
         except IntegrityError:
             # pylint: disable-next=raise-missing-from ; raising with from is unnecessary here
-            raise ValidationError({"detail": "This account already exists!"})
+            raise ValidationError({"detail": "This account already exists!"}) from None
 
     URL_PATH_UPDATE_MAILBOXES = "update-mailboxes"
     URL_NAME_UPDATE_MAILBOXES = "update-mailboxes"

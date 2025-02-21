@@ -16,12 +16,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`EMailFilter` filter provider class."""
+"""Module with the :class:`EMailFilter` filter set class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import django_filters
 
 from api.constants import FilterSetups
 from core.models.EMailModel import EMailModel
+
+
+if TYPE_CHECKING:
+    from django.db.models import Model
 
 
 class EMailFilter(django_filters.FilterSet):
@@ -74,8 +82,9 @@ class EMailFilter(django_filters.FilterSet):
     class Meta:
         """Metadata class for the filter."""
 
-        model = EMailModel
-        fields = {
+        model: Final[type[Model]] = EMailModel
+
+        fields: ClassVar[dict[str, list[str]]] = {
             "message_id": FilterSetups.TEXT,
             "datetime": FilterSetups.DATETIME,
             "email_subject": FilterSetups.TEXT,

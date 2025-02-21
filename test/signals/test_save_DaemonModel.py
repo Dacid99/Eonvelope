@@ -19,36 +19,46 @@
 """Test file for :mod:`core.signals.save_DaemonModel`."""
 
 import pytest
-from faker import Faker
 from model_bakery import baker
 
+from core.models.AccountModel import (
+    AccountModel,
+)  # must be imported to resolve ForeignKey in MailboxModel
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 
 
-@pytest.fixture(name='mock_updateDaemon')
+@pytest.fixture(name="mock_updateDaemon")
 def fixture_mock_updateDaemon(mocker):
     """Patches the :func:`core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon`
     function called in the signal.
     """
-    return mocker.patch('core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon')
+    return mocker.patch(
+        "core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon"
+    )
 
-@pytest.fixture(name='mock_logger', autouse=True)
+
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`core.signals.save_DaemonModel.logger` of the module."""
-    return mocker.patch('core.signals.save_DaemonModel.logger')
+    return mocker.patch("core.signals.save_DaemonModel.logger")
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_daemon_from_healthy(mock_logger, mock_updateDaemon):
-    """Tests :func:`core.signals.saveMailboxModel.post_save_is_healthy`
+def test_DaemonModel_post_save_from_healthy(faker, mock_logger, mock_updateDaemon):
+    """Tests :func:`core.signals.saveDaemonModel.post_save_is_healthy`
     for an initially healthy daemon.
     """
     mailbox = baker.make(MailboxModel, is_healthy=True)
-    daemon = baker.make(DaemonModel, mailbox=mailbox, is_healthy=True, log_filepath=Faker().file_path(extension='log'))
+    daemon = baker.make(
+        DaemonModel,
+        mailbox=mailbox,
+        is_healthy=True,
+        log_filepath=faker.file_path(extension="log"),
+    )
 
     daemon.is_healthy = False
-    daemon.save(update_fields = ['is_healthy'])
+    daemon.save(update_fields=["is_healthy"])
 
     mailbox.refresh_from_db()
     mock_updateDaemon.assert_called_once_with(daemon)
@@ -57,15 +67,20 @@ def test_MailboxModel_post_save_daemon_from_healthy(mock_logger, mock_updateDaem
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_daemon_from_unhealthy(mock_logger, mock_updateDaemon):
-    """Tests :func:`core.signals.saveMailboxModel.post_save_is_healthy`
+def test_DaemonModel_post_save_from_unhealthy(faker, mock_logger, mock_updateDaemon):
+    """Tests :func:`core.signals.saveDaemonModel.post_save_is_healthy`
     for an initially unhealthy daemon.
     """
     mailbox = baker.make(MailboxModel, is_healthy=False)
-    daemon = baker.make(DaemonModel, mailbox=mailbox, is_healthy=False, log_filepath=Faker().file_path(extension='log'))
+    daemon = baker.make(
+        DaemonModel,
+        mailbox=mailbox,
+        is_healthy=False,
+        log_filepath=faker.file_path(extension="log"),
+    )
 
     daemon.is_healthy = True
-    daemon.save(update_fields = ['is_healthy'])
+    daemon.save(update_fields=["is_healthy"])
 
     mailbox.refresh_from_db()
     mock_updateDaemon.assert_called_once_with(daemon)

@@ -20,29 +20,38 @@
 
 import pytest
 from model_bakery import baker
-from faker import Faker
 
+from core.models.AccountModel import AccountModel
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
-from core.models.AccountModel import AccountModel
 
 
-@pytest.fixture(name='mock_logger', autouse=True)
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):
     """Mocks :attr:`core.signals.save_MailboxModel.logger` of the module."""
-    return mocker.patch('core.signals.save_MailboxModel.logger')
+    return mocker.patch("core.signals.save_MailboxModel.logger")
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_from_healthy(mock_logger):
+def test_MailboxModel_post_save_from_healthy(faker, mock_logger):
     """Tests behaviour of :func:`core.signals.saveMailboxModel.post_save_is_healthy`."""
     account = baker.make(AccountModel, is_healthy=True)
     mailbox = baker.make(MailboxModel, account=account, is_healthy=True)
-    baker.make(DaemonModel, mailbox=mailbox, is_healthy=True, log_filepath=Faker().file_path(extension='log'))
-    baker.make(DaemonModel, mailbox=mailbox, is_healthy=True, log_filepath=Faker().file_path(extension='log'))
+    baker.make(
+        DaemonModel,
+        mailbox=mailbox,
+        is_healthy=True,
+        log_filepath=faker.file_path(extension="log"),
+    )
+    baker.make(
+        DaemonModel,
+        mailbox=mailbox,
+        is_healthy=True,
+        log_filepath=faker.file_path(extension="log"),
+    )
 
     mailbox.is_healthy = False
-    mailbox.save(update_fields = ['is_healthy'])
+    mailbox.save(update_fields=["is_healthy"])
     for daemon in mailbox.daemons.all():
         assert daemon.is_healthy is False
     account.refresh_from_db()
@@ -51,15 +60,25 @@ def test_MailboxModel_post_save_from_healthy(mock_logger):
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_from_unhealthy(mock_logger):
+def test_MailboxModel_post_save_from_unhealthy(faker, mock_logger):
     """Tests behaviour of :func:`core.signals.saveMailboxModel.post_save_is_healthy`."""
     account = baker.make(AccountModel, is_healthy=False)
     mailbox = baker.make(MailboxModel, account=account, is_healthy=False)
-    baker.make(DaemonModel, mailbox=mailbox, is_healthy=False, log_filepath=Faker().file_path(extension='log'))
-    baker.make(DaemonModel, mailbox=mailbox, is_healthy=False, log_filepath=Faker().file_path(extension='log'))
+    baker.make(
+        DaemonModel,
+        mailbox=mailbox,
+        is_healthy=False,
+        log_filepath=faker.file_path(extension="log"),
+    )
+    baker.make(
+        DaemonModel,
+        mailbox=mailbox,
+        is_healthy=False,
+        log_filepath=faker.file_path(extension="log"),
+    )
 
     mailbox.is_healthy = True
-    mailbox.save(update_fields = ['is_healthy'])
+    mailbox.save(update_fields=["is_healthy"])
     for daemon in mailbox.daemons.all():
         assert daemon.is_healthy is False
     account.refresh_from_db()

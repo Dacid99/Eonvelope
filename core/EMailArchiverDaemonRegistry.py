@@ -16,18 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`EMailArchiverDaemonRegistry class."""
+"""Module with the :class:`EMailArchiverDaemonRegistry` class."""
+
+from __future__ import annotations
 
 import logging
+from typing import TYPE_CHECKING, ClassVar
 
 from .EMailArchiverDaemon import EMailArchiverDaemon
-from .models.DaemonModel import DaemonModel
+
+
+if TYPE_CHECKING:
+    from .models.DaemonModel import DaemonModel
 
 
 class EMailArchiverDaemonRegistry:
     """Daemon registry for managment of the running :class:`core.EMailArchiverDaemon.EMailArchiverDaemon` instances."""
 
-    _runningDaemons: dict = {}
+    _runningDaemons: ClassVar[dict[int, EMailArchiverDaemon]] = {}
     """A static dictionary of all active daemon instances with their database IDs as keys."""
 
     logger: logging.Logger = logging.getLogger(__name__)
@@ -46,7 +52,7 @@ class EMailArchiverDaemonRegistry:
         return daemonModel.id in cls._runningDaemons
 
     @classmethod
-    def updateDaemon(cls, daemonModel: DaemonModel):
+    def updateDaemon(cls, daemonModel: DaemonModel) -> None:
         """Class method to update a daemon instance.
 
         Args:
@@ -55,7 +61,7 @@ class EMailArchiverDaemonRegistry:
         if cls.isRunning(daemonModel):
             daemonInstance = cls._runningDaemons[daemonModel.id]
             daemonInstance.update()
-            cls.logger.debug('Updated daemon %s', str(daemonModel))
+            cls.logger.debug("Updated daemon %s", str(daemonModel))
 
     @classmethod
     def testDaemon(cls, daemonModel: DaemonModel) -> bool:
@@ -73,11 +79,11 @@ class EMailArchiverDaemonRegistry:
             newDaemon.cycle()
             cls.logger.debug("Successfully tested daemon %s.", str(daemonModel))
             daemonModel.refresh_from_db()
-            return daemonModel.is_healthy
         except Exception:
-            cls.logger.error("Failed to test daemon %s !", str(daemonModel), exc_info=True)
+            cls.logger.exception("Failed to test daemon %s !", str(daemonModel))
             return False
-
+        else:
+            return daemonModel.is_healthy
 
     @classmethod
     def startDaemon(cls, daemonModel: DaemonModel) -> bool:
@@ -96,10 +102,10 @@ class EMailArchiverDaemonRegistry:
             cls._runningDaemons[daemonModel.id] = newDaemon
             cls.logger.debug("Successfully started daemon %s .", str(daemonModel))
             return True
-        else:
-            cls.logger.debug("Did not start daemon %s, it was already running.", str(daemonModel))
-            return False
-
+        cls.logger.debug(
+            "Did not start daemon %s, it was already running.", str(daemonModel)
+        )
+        return False
 
     @classmethod
     def stopDaemon(cls, daemonModel: DaemonModel) -> bool:
@@ -117,6 +123,7 @@ class EMailArchiverDaemonRegistry:
             daemon.stop()
             cls.logger.debug("Successfully stopped daemon %s .", str(daemonModel))
             return True
-        else:
-            cls.logger.debug("Did not stop daemon %s, it was not running.", str(daemonModel))
-            return False
+        cls.logger.debug(
+            "Did not stop daemon %s, it was not running.", str(daemonModel)
+        )
+        return False

@@ -32,7 +32,6 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.forms.models import model_to_dict
-from faker import Faker
 from model_bakery import baker
 from rest_framework import status
 from test_AccountViewSet import fixture_accountModel
@@ -41,12 +40,13 @@ from test_MailboxViewSet import fixture_mailboxModel
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
 
+
 if TYPE_CHECKING:
     from typing import Any
 
 
 @pytest.fixture(name="emailModel")
-def fixture_emailModel(mailboxModel) -> EMailModel:
+def fixture_emailModel(faker, mailboxModel) -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel` owned by :attr:`owner_user`.
 
     Args:
@@ -59,8 +59,8 @@ def fixture_emailModel(mailboxModel) -> EMailModel:
         EMailModel,
         x_spam="NO",
         mailbox=mailboxModel,
-        eml_filepath=Faker().file_path(extension="eml"),
-        prerender_filepath=Faker().file_path(extension="png"),
+        eml_filepath=faker.file_path(extension="eml"),
+        prerender_filepath=faker.file_path(extension="png"),
     )
 
 

@@ -24,15 +24,16 @@ from typing import TYPE_CHECKING
 
 from django.contrib.auth.models import User
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from api.constants import APIv1Configuration
 from api.v1.pagination import Pagination
 from api.v1.permissions import IsAdminOrSelf
 from api.v1.serializers.user_serializers.UserSerializer import UserSerializer
 
+
 if TYPE_CHECKING:
-    from typing import Sequence
+    from collections.abc import Sequence
 
     from rest_framework.permissions import _SupportsHasPermission
 
@@ -40,26 +41,26 @@ if TYPE_CHECKING:
 class UserViewSet(viewsets.ModelViewSet):
     """Viewset to manage users."""
 
-    BASENAME = 'users'
+    BASENAME = "users"
     queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = Pagination
 
     def get_permissions(self) -> Sequence[_SupportsHasPermission]:
         """Gets the permission for different request methods.
+
         Allows POST (registration) for all
         and all other methods only for authenticated and admin users.
 
         Returns:
             The permission class(es) for the request.
         """
-        if self.request.method in ['POST']:
+        if self.request.method in ["POST"]:
             if APIv1Configuration.REGISTRATION_ENABLED:
                 return [AllowAny()]
-            else:
-                return [IsAdminUser(), IsAuthenticated()]
+            return [IsAdminUser(), IsAuthenticated()]
 
-        elif self.request.method in ['PATCH','PUT','DELETE','GET']:
+        if self.request.method in ["PATCH", "PUT", "DELETE", "GET"]:
             return [IsAdminOrSelf(), IsAuthenticated()]
 
         return super().get_permissions()

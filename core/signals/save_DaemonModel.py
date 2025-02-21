@@ -17,19 +17,25 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Save signal receivers for the :class:`core.models.DaemonModel.DaemonModel` model."""
+from __future__ import annotations
 
 import logging
+from typing import Any
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from core.models.DaemonModel import DaemonModel
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.models.DaemonModel import DaemonModel
+
 
 logger = logging.getLogger(__name__)
 
+
 @receiver(post_save, sender=DaemonModel)
-def post_save_daemon(sender: DaemonModel, instance: DaemonModel, created: bool, **kwargs) -> None:
+def post_save_daemon(
+    sender: DaemonModel, instance: DaemonModel, created: bool, **kwargs: Any
+) -> None:
     """Receiver function flagging the mailbox of a daemon as healthy once that daemon becomes healthy again.
 
     Args:
@@ -43,9 +49,10 @@ def post_save_daemon(sender: DaemonModel, instance: DaemonModel, created: bool, 
 
     EMailArchiverDaemonRegistry.updateDaemon(instance)
 
-    if instance.is_healthy:
-        if 'is_healthy' in instance.get_dirty_fields():
-            logger.debug("%s has become healthy, flagging its mailbox as healthy ...", str(instance))
-            instance.mailbox.is_healthy=True
-            instance.mailbox.save(update_fields=['is_healthy'])
-            logger.debug("Successfully flagged mailbox as healthy.")
+    if instance.is_healthy and "is_healthy" in instance.get_dirty_fields():
+        logger.debug(
+            "%s has become healthy, flagging its mailbox as healthy ...", str(instance)
+        )
+        instance.mailbox.is_healthy = True
+        instance.mailbox.save(update_fields=["is_healthy"])
+        logger.debug("Successfully flagged mailbox as healthy.")

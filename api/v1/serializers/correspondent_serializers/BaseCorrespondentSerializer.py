@@ -16,15 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`SimpleCorrespondentSerializer` serializer class."""
+"""Module with the :class:`BaseCorrespondentSerializer` serializer class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Final
 
 from rest_framework import serializers
 
 from core.models.CorrespondentModel import CorrespondentModel
 
 
+if TYPE_CHECKING:
+    from django.db.models import Model
+
+
 class BaseCorrespondentSerializer(serializers.ModelSerializer):
     """The base serializer for :class:`core.models.CorrespondentModel.CorrespondentModel`.
+
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
     Other serializers for :class:`core.models.CorrespondentModel.CorrespondentModel` should inherit from this.
@@ -32,22 +41,19 @@ class BaseCorrespondentSerializer(serializers.ModelSerializer):
 
     class Meta:
         """Metadata class for the base serializer.
+
         Contains constraints that must be implemented by all serializers.
         Other serializer metaclasses should inherit from this.
-        The read_only_fields must not be shortened in subclasses.
+        :attr:`read_only_fields` must not be shortened in subclasses.
         """
 
-        model = CorrespondentModel
+        model: Final[type[Model]] = CorrespondentModel
         """The model to serialize."""
 
-        fields = '__all__'
+        fields = "__all__"
         """Include all fields."""
 
-        read_only_fields = [
-                'email_address',
-                'created',
-                'updated'
-            ]
+        read_only_fields: Final[list[str]] = ["email_address", "created", "updated"]
         """The :attr:`core.models.CorrespondentModel.CorrespondentModel.email_address`,
         :attr:`core.models.CorrespondentModel.CorrespondentModel.created` and
         :attr:`core.models.CorrespondentModel.CorrespondentModel.updated` fields are read-only.

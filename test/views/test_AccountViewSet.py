@@ -36,6 +36,7 @@ from rest_framework import status
 from api.v1.views.AccountViewSet import AccountViewSet
 from core.models.AccountModel import AccountModel
 
+
 if TYPE_CHECKING:
     from typing import Any
 

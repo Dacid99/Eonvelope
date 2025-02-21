@@ -18,7 +18,10 @@
 
 """Module with the :class:`AccountModel` model class."""
 
+from __future__ import annotations
+
 import logging
+from typing import TYPE_CHECKING, Final
 
 import django.db
 from dirtyfields import DirtyFieldsMixin
@@ -34,7 +37,11 @@ from ..utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from ..utils.fetchers.POP3Fetcher import POP3Fetcher
 from .MailboxModel import MailboxModel
 
+
 # from utils.fetchers.ExchangeFetcher import ExchangeFetcher
+if TYPE_CHECKING:
+    from imaplib import IMAP4
+    from poplib import POP3
 
 
 logger = logging.getLogger(__name__)
@@ -56,7 +63,9 @@ class AccountModel(DirtyFieldsMixin, models.Model):
     mail_host_port = models.IntegerField(null=True)
     """The port of the mail server. Can be null if the default port of the protocol is used."""
 
-    PROTOCOL_CHOICES = list(constants.MailFetchingProtocols())
+    PROTOCOL_CHOICES: Final[list[tuple[str, str]]] = list(
+        constants.MailFetchingProtocols()
+    )
     """The available mail protocols."""
 
     protocol = models.CharField(choices=PROTOCOL_CHOICES, max_length=10)
@@ -83,16 +92,13 @@ class AccountModel(DirtyFieldsMixin, models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        return f"Account {self.mail_address} at host {self.mail_host} with protocol {self.protocol}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "accounts"
         """The name of the database table for the mail accounts."""
 
-        constraints = [
+        constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
                 fields=["mail_address", "user"],
                 name="account_unique_together_mail_address_user",
@@ -100,32 +106,49 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         ]
         """`mail_address` and :attr:`user` in combination are unique fields."""
 
-    def get_fetcher(self):
-        """Instantiates the fetcher from :class:`core.utils.fetchers` corresponding to :attr:`protocol`."""
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the account, using :attr:`mail_address`, :attr:`mail_host` and :attr:`protocol`.
+        """
+        return f"Account {self.mail_address} at host {self.mail_host} with protocol {self.protocol}"
+
+    def get_fetcher(self) -> IMAP4 | POP3:
+        """Instantiates the fetcher from :class:`core.utils.fetchers` corresponding to :attr:`protocol`.
+
+        Returns:
+            A fetcher instance for the account.
+
+        Raises:
+            ValueError: If the protocol doesnt match any fetcher class.
+                Marks the account as unhealthy in this case.
+        """
 
         if self.protocol == IMAPFetcher.PROTOCOL:
             return IMAPFetcher(self)
-        elif self.protocol == IMAP_SSL_Fetcher.PROTOCOL:
+        if self.protocol == IMAP_SSL_Fetcher.PROTOCOL:
             return IMAP_SSL_Fetcher(self)
-        elif self.protocol == POP3Fetcher.PROTOCOL:
+        if self.protocol == POP3Fetcher.PROTOCOL:
             return POP3Fetcher(self)
-        elif self.protocol == POP3_SSL_Fetcher.PROTOCOL:
+        if self.protocol == POP3_SSL_Fetcher.PROTOCOL:
             return POP3_SSL_Fetcher(self)
-        # elif self.protocol == ExchangeFetcher.PROTOCOL:
+        # if self.protocol == ExchangeFetcher.PROTOCOL:
         #     return ExchangeFetcher(self)
-        else:
-            logger.error(
-                "The protocol %s is not implemented in a fetcher class!", self.protocol
-            )
-            self.is_healthy = False
-            self.save(update_fields=["is_healthy"])
-            raise ValueError(
-                "The requested protocol is not implemented in a fetcher class!"
-            )
 
-    def test_connection(self):
-        """Tests whether the data in the model is correct
-        and allows connecting and logging in to the mailhost and account.
+        logger.error(
+            "The protocol %s is not implemented in a fetcher class!", self.protocol
+        )
+        self.is_healthy = False
+        self.save(update_fields=["is_healthy"])
+        raise ValueError(
+            "The requested protocol is not implemented in a fetcher class!"
+        )
+
+    def test_connection(self) -> int:
+        """Tests whether the data in the model is correct.
+
+        Tests connecting and logging in to the mailhost and account.
         The :attr:`core.models.AccountModel.is_healthy` flag is set accordingly.
         Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
 
@@ -137,16 +160,15 @@ class AccountModel(DirtyFieldsMixin, models.Model):
             with self.get_fetcher() as fetcher:
                 result = fetcher.test()
         except ValueError:
-            logger.error("Account %s has unknown protocol!", self)
+            logger.exception("Account %s has unknown protocol!", self)
             result = TestStatusCodes.ERROR
 
         logger.info("Successfully tested account to be %s.", result)
         return result
 
-    def update_mailboxes(self):
-        """Scans the given mailaccount for unknown mailboxes,
-        parses and inserts them into the database.
-        """
+    def update_mailboxes(self) -> None:
+        """Scans the given mailaccount for unknown mailboxes, parses and inserts them into the database."""
+
         logger.info("Updating mailboxes in %s...", self)
 
         with self.get_fetcher() as fetcher:

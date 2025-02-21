@@ -42,11 +42,12 @@ from model_bakery import baker
 from rest_framework.test import APIClient
 from rest_framework.viewsets import ModelViewSet
 
+
 if TYPE_CHECKING:
-    from typing import Callable
+    from collections.abc import Callable
 
 
-@pytest.fixture(name='owner_user')
+@pytest.fixture(name="owner_user")
 def fixture_owner_user() -> User:
     """Creates a :class:`django.contrib.auth.models.User`
     that represents the owner of the data.
@@ -57,7 +58,8 @@ def fixture_owner_user() -> User:
     """
     return baker.make(User)
 
-@pytest.fixture(name='other_user')
+
+@pytest.fixture(name="other_user")
 def fixture_other_user() -> User:
     """Creates a :class:`django.contrib.auth.models.User`
     that represents another user that is not the owner of the data.
@@ -69,7 +71,7 @@ def fixture_other_user() -> User:
     return baker.make(User)
 
 
-@pytest.fixture(name='noauth_apiClient')
+@pytest.fixture(name="noauth_apiClient")
 def fixture_noauth_apiClient() -> APIClient:
     """Creates an unauthenticated :class:`rest_framework.test.APIClient` instance.
 
@@ -79,7 +81,7 @@ def fixture_noauth_apiClient() -> APIClient:
     return APIClient()
 
 
-@pytest.fixture(name='other_apiClient')
+@pytest.fixture(name="other_apiClient")
 def fixture_other_apiClient(noauth_apiClient, other_user) -> APIClient:
     """Creates a :class:`rest_framework.test.APIClient` instance
     that is authenticated as :attr:`other_user`.
@@ -94,7 +96,8 @@ def fixture_other_apiClient(noauth_apiClient, other_user) -> APIClient:
     noauth_apiClient.force_authenticate(user=other_user)
     return noauth_apiClient
 
-@pytest.fixture(name='owner_apiClient')
+
+@pytest.fixture(name="owner_apiClient")
 def fixture_owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
     """Creates a :class:`rest_framework.test.APIClient` instance
     that is authenticated as :attr:`owner_user`.
@@ -110,41 +113,52 @@ def fixture_owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
     return noauth_apiClient
 
 
-@pytest.fixture(name='list_url')
-def fixture_list_url() -> Callable[[type[ModelViewSet]],str]:
+@pytest.fixture(name="list_url")
+def fixture_list_url() -> Callable[[type[ModelViewSet]], str]:
     """Gets the viewsets url for list actions.
 
     Returns:
         The list url.
     """
-    return lambda viewsetClass: reverse(f'{viewsetClass.BASENAME}-list')
+    return lambda viewsetClass: reverse(f"{viewsetClass.BASENAME}-list")
 
-@pytest.fixture(name='detail_url')
-def fixture_detail_url() -> Callable[[type[ModelViewSet], Model],str]:
+
+@pytest.fixture(name="detail_url")
+def fixture_detail_url() -> Callable[[type[ModelViewSet], Model], str]:
     """Gets the viewsets url for detail actions.
 
     Returns:
-        The detail url."""
-    return lambda viewsetClass, instance: reverse(f'{viewsetClass.BASENAME}-detail', args=[instance.id])
+        The detail url.
+    """
+    return lambda viewsetClass, instance: reverse(
+        f"{viewsetClass.BASENAME}-detail", args=[instance.id]
+    )
 
-@pytest.fixture(name='custom_list_action_url')
-def fixture_custom_list_action_url() -> Callable[[type[ModelViewSet], str],str]:
+
+@pytest.fixture(name="custom_list_action_url")
+def fixture_custom_list_action_url() -> Callable[[type[ModelViewSet], str], str]:
     """Gets the viewsets url for custom list actions.
 
     Returns:
         A callable that gets the list url of the viewset from the custom action name.
     """
     return lambda viewsetClass, custom_list_action_url_name: (
-        reverse(f'{viewsetClass.BASENAME}-{custom_list_action_url_name}')
+        reverse(f"{viewsetClass.BASENAME}-{custom_list_action_url_name}")
     )
 
-@pytest.fixture(name='custom_detail_action_url')
-def fixture_custom_detail_action_url() -> Callable[[type[ModelViewSet], str, Model],str]:
+
+@pytest.fixture(name="custom_detail_action_url")
+def fixture_custom_detail_action_url() -> (
+    Callable[[type[ModelViewSet], str, Model], str]
+):
     """Gets the viewsets url for custom detail actions.
 
     Returns:
         A callable that gets the detail url of the viewset from the custom action name.
     """
     return lambda viewsetClass, custom_detail_action_url_name, instance: (
-        reverse(f'{viewsetClass.BASENAME}-{custom_detail_action_url_name}', args=[instance.id])
+        reverse(
+            f"{viewsetClass.BASENAME}-{custom_detail_action_url_name}",
+            args=[instance.id],
+        )
     )

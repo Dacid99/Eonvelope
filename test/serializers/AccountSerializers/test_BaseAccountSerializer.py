@@ -23,8 +23,9 @@ from datetime import datetime
 import pytest
 from django.forms.models import model_to_dict
 
-from api.v1.serializers.account_serializers.BaseAccountSerializer import \
-    BaseAccountSerializer
+from api.v1.serializers.account_serializers.BaseAccountSerializer import (
+    BaseAccountSerializer,
+)
 
 from ...models.test_AccountModel import fixture_accountModel
 
@@ -34,28 +35,28 @@ def test_output(account):
     """Tests for the expected output of the serializer."""
     serializerData = BaseAccountSerializer(instance=account).data
 
-    assert 'id' in serializerData
-    assert serializerData['id'] == account.id
-    assert 'password' not in serializerData
-    assert 'mail_address' in serializerData
-    assert serializerData['mail_address'] == account.mail_address
-    assert 'mail_host' in serializerData
-    assert serializerData['mail_host'] == account.mail_host
-    assert 'mail_host_port' in serializerData
-    assert serializerData['mail_host_port'] == account.mail_host_port
-    assert 'protocol' in serializerData
-    assert serializerData['protocol'] == account.protocol
-    assert 'timeout' in serializerData
-    assert serializerData['timeout'] == account.timeout
-    assert 'is_healthy' in serializerData
-    assert serializerData['is_healthy'] == account.is_healthy
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == account.is_favorite
-    assert 'created' in serializerData
+    assert "id" in serializerData
+    assert serializerData["id"] == account.id
+    assert "password" not in serializerData
+    assert "mail_address" in serializerData
+    assert serializerData["mail_address"] == account.mail_address
+    assert "mail_host" in serializerData
+    assert serializerData["mail_host"] == account.mail_host
+    assert "mail_host_port" in serializerData
+    assert serializerData["mail_host_port"] == account.mail_host_port
+    assert "protocol" in serializerData
+    assert serializerData["protocol"] == account.protocol
+    assert "timeout" in serializerData
+    assert serializerData["timeout"] == account.timeout
+    assert "is_healthy" in serializerData
+    assert serializerData["is_healthy"] == account.is_healthy
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == account.is_favorite
+    assert "created" in serializerData
 
-    assert 'updated' in serializerData
+    assert "updated" in serializerData
 
-    assert 'user' not in serializerData
+    assert "user" not in serializerData
     assert len(serializerData) == 10
 
 
@@ -66,23 +67,23 @@ def test_input(account):
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
-    assert 'id' not in serializerData
-    assert 'password' in serializerData
-    assert serializerData['password'] == account.password
-    assert 'mail_address' in serializerData
-    assert serializerData['mail_address'] == account.mail_address
-    assert 'mail_host' in serializerData
-    assert serializerData['mail_host'] == account.mail_host
-    assert 'mail_host_port' in serializerData
-    assert serializerData['mail_host_port'] == account.mail_host_port
-    assert 'protocol' in serializerData
-    assert serializerData['protocol'] == account.protocol
-    assert 'timeout' in serializerData
-    assert serializerData['timeout'] == account.timeout
-    assert 'is_healthy' not in serializerData
-    assert 'is_favorite' in serializerData
-    assert serializerData['is_favorite'] == account.is_favorite
-    assert 'created' not in serializerData
-    assert 'updated' not in serializerData
-    assert 'user' not in serializerData
+    assert "id" not in serializerData
+    assert "password" in serializerData
+    assert serializerData["password"] == account.password
+    assert "mail_address" in serializerData
+    assert serializerData["mail_address"] == account.mail_address
+    assert "mail_host" in serializerData
+    assert serializerData["mail_host"] == account.mail_host
+    assert "mail_host_port" in serializerData
+    assert serializerData["mail_host_port"] == account.mail_host_port
+    assert "protocol" in serializerData
+    assert serializerData["protocol"] == account.protocol
+    assert "timeout" in serializerData
+    assert serializerData["timeout"] == account.timeout
+    assert "is_healthy" not in serializerData
+    assert "is_favorite" in serializerData
+    assert serializerData["is_favorite"] == account.is_favorite
+    assert "created" not in serializerData
+    assert "updated" not in serializerData
+    assert "user" not in serializerData
     assert len(serializerData) == 7

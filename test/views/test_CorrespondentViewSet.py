@@ -43,6 +43,7 @@ from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer im
 from api.v1.views.CorrespondentViewSet import CorrespondentViewSet
 from core.models.CorrespondentModel import CorrespondentModel
 
+
 if TYPE_CHECKING:
     from typing import Any
 

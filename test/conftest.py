@@ -18,12 +18,12 @@
 
 """File with fixtures and configurations required for all tests. Automatically imported to test_ files."""
 
+from __future__ import annotations
+
 import os
 
-import pytest
 
-
-def pytest_configure(config):
+def pytest_configure(config) -> None:
     """Configures the path for pytest
     to be the directory of this file for consistent relative paths.
     """

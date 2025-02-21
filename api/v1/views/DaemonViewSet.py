@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Final
 
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -30,6 +30,7 @@ from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from typing_extensions import override
 
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from core.models.DaemonModel import DaemonModel
@@ -37,8 +38,10 @@ from core.models.DaemonModel import DaemonModel
 from ..filters.DaemonFilter import DaemonFilter
 from ..serializers.daemon_serializers.BaseDaemonSerializer import BaseDaemonSerializer
 
+
 if TYPE_CHECKING:
-    from django.db.models import BaseManager
+    from django.db.models import QuerySet
+    from rest_framework.permissions import BasePermission
     from rest_framework.request import Request
 
 
@@ -47,10 +50,10 @@ class DaemonViewSet(viewsets.ModelViewSet):
 
     BASENAME = "daemons"
     serializer_class = BaseDaemonSerializer
-    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = DaemonFilter
-    permission_classes = [IsAuthenticated]
-    ordering_fields = [
+    permission_classes: Final[list[type[BasePermission]]] = [IsAuthenticated]
+    ordering_fields: Final[list[str]] = [
         "fetching_criterion",
         "cycle_interval",
         "restart_time",
@@ -64,16 +67,19 @@ class DaemonViewSet(viewsets.ModelViewSet):
         "created",
         "updated",
     ]
-    ordering = ["id"]
+    ordering: Final[list[str]] = ["id"]
 
-    def get_queryset(self) -> BaseManager[DaemonModel]:
+    @override
+    def get_queryset(self) -> QuerySet[DaemonModel]:
         """Filters the data for entries connected to the request user.
 
         Returns:
-            The daemon entries matching the request user."""
+            The daemon entries matching the request user.
+        """
         return DaemonModel.objects.filter(mailbox__account__user=self.request.user)
 
-    def create(self, request, *args, **kwargs):
+    @override
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         """Disables the POST method for this viewset."""
         return Response(
             {"detail": "POST method is not allowed on this endpoint."},
@@ -104,11 +110,10 @@ class DaemonViewSet(viewsets.ModelViewSet):
         availableFetchingOptions = daemon.mailbox.getAvailableFetchingCriteria()
         if availableFetchingOptions:
             return Response({"options": availableFetchingOptions})
-        else:
-            return Response(
-                {"error": "No fetching options available for this mailbox!"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
+        return Response(
+            {"error": "No fetching options available for this mailbox!"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
 
     URL_PATH_TEST = "test"
     URL_NAME_TEST = "test"
@@ -163,11 +168,10 @@ class DaemonViewSet(viewsets.ModelViewSet):
         result = EMailArchiverDaemonRegistry.startDaemon(daemon)
         if result:
             return Response({"detail": "Daemon started", "daemon": daemonData})
-        else:
-            return Response(
-                {"detail": "Daemon already running", "daemon": daemonData},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        return Response(
+            {"detail": "Daemon already running", "daemon": daemonData},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     URL_PATH_STOP = "stop"
     URL_NAME_STOP = "stop"
@@ -190,11 +194,10 @@ class DaemonViewSet(viewsets.ModelViewSet):
         result = EMailArchiverDaemonRegistry.stopDaemon(daemon)
         if result:
             return Response({"status": "Daemon stopped", "daemon": daemonData})
-        else:
-            return Response(
-                {"status": "Daemon not running", "daemon": daemonData},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        return Response(
+            {"status": "Daemon not running", "daemon": daemonData},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     URL_PATH_LOG_DOWNLOAD = "log/download"
     URL_NAME_LOG_DOWNLOAD = "log-download"
@@ -232,7 +235,6 @@ class DaemonViewSet(viewsets.ModelViewSet):
 
         daemonLogFilename = os.path.basename(daemonLogFilepath)
         with open(daemonLogFilepath, "rb") as daemonLogFile:
-            response = FileResponse(
+            return FileResponse(
                 daemonLogFile, as_attachment=True, filename=daemonLogFilename
             )
-            return response

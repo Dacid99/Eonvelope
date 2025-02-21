@@ -16,7 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""api.serializers
-
-Package containing different serializers for the Emailkasten API
-"""
+"""api.v1.serializers package containing serializers for the Emailkasten API version 1."""

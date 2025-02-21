@@ -18,6 +18,8 @@
 
 """Module with the constant values for the :mod:`api` app."""
 
+from __future__ import annotations
+
 import os
 from typing import Final
 

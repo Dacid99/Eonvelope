@@ -18,6 +18,8 @@
 
 """Module with the extended custom :class:`Pagination` class."""
 
+from __future__ import annotations
+
 from rest_framework.pagination import PageNumberPagination
 
 from Emailkasten.utils import get_config
@@ -26,13 +28,13 @@ from Emailkasten.utils import get_config
 class Pagination(PageNumberPagination):
     """Extended pagination for the API."""
 
-    page_size = get_config('API_DEFAULT_PAGE_SIZE')
+    page_size = get_config("API_DEFAULT_PAGE_SIZE")
     """The number of results per page.
         Set from :attr:`constance.get_config('API_DEFAULT_PAGE_SIZE')`."""
 
-    page_size_query_param = 'page_size'
+    page_size_query_param = "page_size"
     """The query parameter for the page size."""
 
-    max_page_size = get_config('API_MAX_PAGE_SIZE')
+    max_page_size = get_config("API_MAX_PAGE_SIZE")
     """The maximal number of results per page.
         Set from :attr:`constance.get_config('API_MAX_PAGE_SIZE')`."""

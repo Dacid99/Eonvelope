@@ -18,12 +18,15 @@
 
 """Module with the :class:`MailboxWithDaemonsSerializer` serializer class."""
 
+from __future__ import annotations
+
 from ..daemon_serializers.BaseDaemonSerializer import BaseDaemonSerializer
 from .BaseMailboxSerializer import BaseMailboxSerializer
 
 
 class MailboxWithDaemonSerializer(BaseMailboxSerializer):
     """The standard serializer for a :class:`core.models.DaemonModel`.
+
     Includes a nested serializer for the :attr:`core.models.DaemonModel.DaemonModel.daemons` related field.
     """
 
@@ -31,7 +34,3 @@ class MailboxWithDaemonSerializer(BaseMailboxSerializer):
     """The emails are serialized by
     :class:`api.v1.serializers.DaemonSerializers.BaseDaemonSerializer.BaseDaemonSerializer`.
     """
-
-
-    class Meta(BaseMailboxSerializer.Meta):
-        """Metadata class for the serializer."""

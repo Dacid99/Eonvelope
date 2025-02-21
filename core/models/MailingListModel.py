@@ -28,6 +28,7 @@ from django.db import models
 from ..constants import HeaderFields
 from ..utils.mailParsing import getHeader
 
+
 if TYPE_CHECKING:
     from email.message import EmailMessage
 
@@ -41,23 +42,23 @@ class MailingListModel(models.Model):
     list_id = models.CharField(max_length=255, unique=True)
     """The List-ID header of the mailinglist. Unique together with :attr:`correspondent`."""
 
-    list_owner = models.CharField(max_length=255, null=True)
-    """The List-Owner header of the mailinglist. Can be null."""
+    list_owner = models.CharField(max_length=255, blank=True, default="")
+    """The List-Owner header of the mailinglist. Can be blank."""
 
-    list_subscribe = models.EmailField(max_length=255, null=True)
-    """The List-Subscribe header of the mailinglist. Can be null."""
+    list_subscribe = models.EmailField(max_length=255, blank=True, default="")
+    """The List-Subscribe header of the mailinglist. Can be blank."""
 
-    list_unsubscribe = models.EmailField(max_length=255, null=True)
-    """The List-Unsubscribe header of the mailinglist. Can be null."""
+    list_unsubscribe = models.EmailField(max_length=255, blank=True, default="")
+    """The List-Unsubscribe header of the mailinglist. Can be blank."""
 
-    list_post = models.CharField(max_length=255, null=True)
-    """The List-Post header of the mailinglist. Can be null."""
+    list_post = models.CharField(max_length=255, blank=True, default="")
+    """The List-Post header of the mailinglist. Can be blank."""
 
-    list_help = models.CharField(max_length=255, null=True)
-    """The List-Help header of the mailinglist. Can be null."""
+    list_help = models.CharField(max_length=255, blank=True, default="")
+    """The List-Help header of the mailinglist. Can be blank."""
 
-    list_archive = models.CharField(max_length=255, null=True)
-    """The List-Archive header of the mailinglist. Can be null."""
+    list_archive = models.CharField(max_length=255, blank=True, default="")
+    """The List-Archive header of the mailinglist. Can be blank."""
 
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mailingslists. False by default."""
@@ -68,19 +69,23 @@ class MailingListModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        return f"Mailinglist {self.list_id}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "mailinglists"
         """The name of the database table for the mailinglists."""
 
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the mailinglist, using :attr:`list_id`.
+        """
+        return f"Mailinglist {self.list_id}"
+
     @staticmethod
     def fromEmailMessage(emailMessage: EmailMessage) -> MailingListModel | None:
-        """Prepares a :class:`core.models.MailingListModel.MailingListModel`
-        from an email message.
+        """Prepares a :class:`core.models.MailingListModel.MailingListModel` from an email message.
 
         Args:
             emailMessage: The email message to parse the malinglistdata from.
@@ -91,7 +96,8 @@ class MailingListModel(models.Model):
             If the correspondent already exists in the db returns that version.
             None if there is no List-ID header in :attr:`emailMessage`.
         """
-        if not (list_id := getHeader(emailMessage, HeaderFields.MailingList.ID)):
+        list_id = getHeader(emailMessage, HeaderFields.MailingList.ID)
+        if not list_id:
             logger.debug(
                 "Skipping mailinglist with empty list id %s.",
                 list_id,
@@ -104,21 +110,25 @@ class MailingListModel(models.Model):
 
         new_mailinglist = MailingListModel(list_id=list_id)
         new_mailinglist.list_owner = getHeader(
-            emailMessage, HeaderFields.MailingList.OWNER
+            emailMessage, HeaderFields.MailingList.OWNER, fallbackCallable=lambda: ""
         )
         new_mailinglist.list_subscribe = getHeader(
-            emailMessage, HeaderFields.MailingList.SUBSCRIBE
+            emailMessage,
+            HeaderFields.MailingList.SUBSCRIBE,
+            fallbackCallable=lambda: "",
         )
         new_mailinglist.list_unsubscribe = getHeader(
-            emailMessage, HeaderFields.MailingList.UNSUBSCRIBE
+            emailMessage,
+            HeaderFields.MailingList.UNSUBSCRIBE,
+            fallbackCallable=lambda: "",
         )
         new_mailinglist.list_post = getHeader(
-            emailMessage, HeaderFields.MailingList.POST
+            emailMessage, HeaderFields.MailingList.POST, fallbackCallable=lambda: ""
         )
         new_mailinglist.list_help = getHeader(
-            emailMessage, HeaderFields.MailingList.HELP
+            emailMessage, HeaderFields.MailingList.HELP, fallbackCallable=lambda: ""
         )
         new_mailinglist.list_archive = getHeader(
-            emailMessage, HeaderFields.MailingList.ARCHIVE
+            emailMessage, HeaderFields.MailingList.ARCHIVE, fallbackCallable=lambda: ""
         )
         return new_mailinglist

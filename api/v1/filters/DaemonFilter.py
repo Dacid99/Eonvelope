@@ -16,12 +16,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`DaemonFilter` filter provider class."""
+"""Module with the :class:`DaemonFilter` filter set class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import django_filters
 
 from api.constants import FilterSetups
 from core.models.DaemonModel import DaemonModel
+
+
+if TYPE_CHECKING:
+    from django.db.models import Model
+
 
 class DaemonFilter(django_filters.FilterSet):
     """The filter class for :class:`core.models.MailboxModel`."""
@@ -111,8 +120,9 @@ class DaemonFilter(django_filters.FilterSet):
     class Meta:
         """Metadata class for the filter."""
 
-        model = DaemonModel
-        fields = {
+        model: Final[type[Model]] = DaemonModel
+
+        fields: ClassVar[dict[str, list[str]]] = {
             "uuid": ["exact", "contains"],
             "fetching_criterion": FilterSetups.CHOICE,
             "cycle_interval": FilterSetups.INT,
@@ -122,5 +132,5 @@ class DaemonFilter(django_filters.FilterSet):
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
             "mailbox__name": FilterSetups.TEXT,
-            "mailbox__is_healthy": FilterSetups.BOOL
+            "mailbox__is_healthy": FilterSetups.BOOL,
         }

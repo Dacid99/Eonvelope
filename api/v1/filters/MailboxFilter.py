@@ -16,12 +16,20 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailboxFilter` filter provider class."""
+"""Module with the :class:`MailboxFilter` filter set class."""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, ClassVar, Final
 
 import django_filters
 
 from api.constants import FilterSetups
 from core.models.MailboxModel import MailboxModel
+
+
+if TYPE_CHECKING:
+    from django.db.models import Model
 
 
 class MailboxFilter(django_filters.FilterSet):
@@ -30,8 +38,9 @@ class MailboxFilter(django_filters.FilterSet):
     class Meta:
         """Metadata class for the filter."""
 
-        model = MailboxModel
-        fields = {
+        model: Final[type[Model]] = MailboxModel
+
+        fields: ClassVar[dict[str, list[str]]] = {
             "name": FilterSetups.TEXT,
             "save_toEML": FilterSetups.BOOL,
             "save_attachments": FilterSetups.BOOL,

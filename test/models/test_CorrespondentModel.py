@@ -33,6 +33,7 @@ from model_bakery import baker
 
 from core.models.CorrespondentModel import CorrespondentModel
 
+
 if TYPE_CHECKING:
     from unittest.mock import MagicMock
 

@@ -18,12 +18,15 @@
 
 """Module with the :class:`AccountSerializer` serializer class."""
 
-from .BaseAccountSerializer import BaseAccountSerializer
+from __future__ import annotations
+
 from ..mailbox_serializers.BaseMailboxSerializer import BaseMailboxSerializer
+from .BaseAccountSerializer import BaseAccountSerializer
 
 
 class AccountSerializer(BaseAccountSerializer):
     """The standard serializer for a :class:`core.models.AccountModel`.
+
     Includes a nested serializer for the related field `mailboxes`.
     """
 
@@ -31,7 +34,3 @@ class AccountSerializer(BaseAccountSerializer):
     """The mailboxes of the account are serialized
     by :class:`core.models.MailboxSerializers.BaseMailboxSerializer.BaseMailboxSerializer`.
     """
-
-
-    class Meta(BaseAccountSerializer.Meta):
-        """Metadata class for the serializer."""

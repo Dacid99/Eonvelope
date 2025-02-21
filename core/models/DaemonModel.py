@@ -17,20 +17,23 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`DaemonModel` model class."""
+
 from __future__ import annotations
 
 import logging
 import os
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Final
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
+from typing_extensions import override
 
 import Emailkasten.constants
 from Emailkasten.utils import get_config
 
 from .. import constants
+
 
 if TYPE_CHECKING:
     from .MailboxModel import MailboxModel
@@ -50,7 +53,9 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     )
     """The mailbox this daemon fetches. Unique. Deletion of that :attr:`mailbox` deletes this daemon."""
 
-    FETCHINGCHOICES = list(constants.MailFetchingCriteria())
+    FETCHINGCHOICES: Final[list[tuple[str, str]]] = list(
+        constants.MailFetchingCriteria()
+    )
     """The available mail fetching criteria. Refers to :class:`Emailkasten.constants.MailFetchingCriteria`."""
 
     fetching_criterion = models.CharField(
@@ -103,17 +108,28 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
-    def __str__(self):
-        return f"Mailfetcher daemon configuration {str(self.uuid)} for mailbox {self.mailbox}"
-
     class Meta:
         """Metadata class for the model."""
 
         db_table = "daemons"
         """The name of the database table for the daemons."""
 
-    def save(self, *args, **kwargs):
-        """Extended :django::func:`django.models.Model.save` method to create and set :attr:`log_filepath` if it is null."""
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the daemon, using :attr:`uuid` and :attr:`mailbox`.
+        """
+        return (
+            f"Mailfetcher daemon configuration {self.uuid} for mailbox {self.mailbox}"
+        )
+
+    @override
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Extended :django::func:`django.models.Model.save` method.
+
+        Create and sets :attr:`log_filepath` if it is null.
+        """
 
         if not self.log_filepath:
             self.log_filepath = os.path.join(

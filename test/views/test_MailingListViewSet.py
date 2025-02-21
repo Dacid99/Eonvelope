@@ -41,6 +41,7 @@ from test_MailboxViewSet import fixture_mailboxModel
 from api.v1.views.MailingListViewSet import MailingListViewSet
 from core.models.MailingListModel import MailingListModel
 
+
 if TYPE_CHECKING:
     from typing import Any
 

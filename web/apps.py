@@ -18,10 +18,13 @@
 
 """The apps module for :mod:`core`."""
 
+from __future__ import annotations
+
 from django.apps import AppConfig
+
 
 class WebConfig(AppConfig):
     """App config for :mod:`web`."""
 
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'web'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "web"

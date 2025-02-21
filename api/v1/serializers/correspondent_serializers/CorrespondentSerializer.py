@@ -18,10 +18,12 @@
 
 """Module with the :class:`CorrespondentSerializer` serializer class."""
 
-from rest_framework import serializers
-from rest_framework.utils.serializer_helpers import ReturnDict
+from __future__ import annotations
 
-from core.models.CorrespondentModel import CorrespondentModel
+from typing import TYPE_CHECKING
+
+from rest_framework import serializers
+
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 
 from ..emailcorrespondents_serializers.CorrespondentEMailSerializer import (
@@ -33,8 +35,15 @@ from ..mailinglist_serializers.SimpleMailingListSerializer import (
 from .BaseCorrespondentSerializer import BaseCorrespondentSerializer
 
 
+if TYPE_CHECKING:
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
+    from core.models.CorrespondentModel import CorrespondentModel
+
+
 class CorrespondentSerializer(BaseCorrespondentSerializer):
     """The standard serializer for a :class:`core.models.CorrespondentModel`.
+
     Includes a nested serializer for
     the :attr:`core.models.CorrespondentModel.CorrespondentModel.emails`
     and :attr:`core.models.CorrespondentModel.CorrespondentModel.mailinglist` fields.
@@ -50,9 +59,6 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
     """The mailinglists are serialized
     by :class:`Emailkasten.MailingListSerializers.SimpleMailingListSerializer.SimpleMailingListSerializer`.
     """
-
-    class Meta(BaseCorrespondentSerializer.Meta):
-        """Metadata class for the serializer."""
 
     def get_emails(self, object: CorrespondentModel) -> ReturnDict | None:
         """Serializes the emails connected to the instance to be serialized.
@@ -73,5 +79,4 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
             return CorrespondentEMailSerializer(
                 correspondentemails, many=True, read_only=True
             ).data
-        else:
-            return []
+        return []

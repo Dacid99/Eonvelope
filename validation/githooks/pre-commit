@@ -11,8 +11,7 @@ if [ -z "$CHANGED_FILES" ]; then
   exit 0
 fi
 
-# format
-isort $CHANGED_FILES
+#format
 
 black --config=validation/black_config $CHANGED_FILES > validation/reports/black_precommit.ansi
 if [ $? -ne 0 ]; then

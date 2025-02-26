@@ -25,16 +25,17 @@ from typing import TYPE_CHECKING
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from typing_extensions import override
 
-from api.constants import APIv1Configuration
 from api.v1.pagination import Pagination
-from api.v1.permissions import IsAdminOrSelf
 from api.v1.serializers.user_serializers.UserSerializer import UserSerializer
+from Emailkasten.utils import get_config
 
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
+    from django.db.models.query import QuerySet
     from rest_framework.permissions import _SupportsHasPermission
 
 
@@ -46,6 +47,25 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     pagination_class = Pagination
 
+    @override
+    def get_queryset(self) -> QuerySet[User]:
+        """Filters the data for entries accessible the request user.
+
+        Staff and superuser get to access all, others only themselves.
+
+        Returns:
+            The user entries matching the request users status.
+        """
+
+        if self.request and self.request.user:
+            if self.request.user.is_staff or self.request.user.is_superuser:
+                return User.objects.all()
+            return User.objects.filter(
+                username=self.request.user.username
+            )
+        return User.objects.none()
+
+
     def get_permissions(self) -> Sequence[_SupportsHasPermission]:
         """Gets the permission for different request methods.
 
@@ -56,11 +76,11 @@ class UserViewSet(viewsets.ModelViewSet):
             The permission class(es) for the request.
         """
         if self.request.method in ["POST"]:
-            if APIv1Configuration.REGISTRATION_ENABLED:
+            if get_config("API_REGISTRATION_ENABLED"):
                 return [AllowAny()]
             return [IsAdminUser(), IsAuthenticated()]
 
         if self.request.method in ["PATCH", "PUT", "DELETE", "GET"]:
-            return [IsAdminOrSelf(), IsAuthenticated()]
+            return [IsAuthenticated()]
 
         return super().get_permissions()

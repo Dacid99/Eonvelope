@@ -72,6 +72,7 @@ def fixture_userPayload():
     userData = baker.prepare(User, is_staff=False)
     payload = model_to_dict(userData)
     payload.pop("id")
+    payload.pop("date_joined")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
     return cleanPayload
 
@@ -110,6 +111,18 @@ def test_list_auth_owner(other_user, owner_apiClient, list_url):
 
 
 @pytest.mark.django_db
+def test_list_auth_admin(other_user, admin_apiClient, list_url):
+    """Tests the list method with the authenticated owner user client."""
+    response = admin_apiClient.get(list_url(UserViewSet))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 2
+    assert len(response.data["results"]) == 2
+    with pytest.raises(KeyError):
+        response.data["results"][0]["password"]
+
+
+@pytest.mark.django_db
 def test_get_noauth(owner_user, noauth_apiClient, detail_url):
     """Tests the get method with an unauthenticated user client."""
     response = noauth_apiClient.get(detail_url(UserViewSet, owner_user))
@@ -124,7 +137,7 @@ def test_get_auth_other(owner_user, other_apiClient, detail_url):
     """Tests the get method with the authenticated other user client."""
     response = other_apiClient.get(detail_url(UserViewSet, owner_user))
 
-    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data["password"]
 
@@ -174,7 +187,7 @@ def test_patch_auth_other(owner_user, other_apiClient, userPayload, detail_url):
         detail_url(UserViewSet, owner_user), data=userPayload
     )
 
-    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data["username"]
     with pytest.raises(KeyError):
@@ -221,7 +234,7 @@ def test_put_auth_other(owner_user, other_apiClient, userPayload, detail_url):
         detail_url(UserViewSet, owner_user), data=userPayload
     )
 
-    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data["username"]
     with pytest.raises(KeyError):
@@ -261,9 +274,10 @@ def test_put_auth_admin(owner_user, admin_apiClient, userPayload, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_noauth(noauth_apiClient, userPayload, list_url):
+def test_post_noauth_noregistration(override_config, noauth_apiClient, userPayload, list_url):
     """Tests the post method with an unauthenticated user client."""
-    response = noauth_apiClient.post(list_url(UserViewSet), data=userPayload)
+    with override_config(API_REGISTRATION_ENABLED=False):
+        response = noauth_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -275,23 +289,10 @@ def test_post_noauth(noauth_apiClient, userPayload, list_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_user, other_apiClient, userPayload, list_url):
-    """Tests the post method with the authenticated other user client."""
-    response = other_apiClient.post(list_url(UserViewSet), data=userPayload)
-
-    assert response.status_code == status.HTTP_201_CREATED
-    assert response.data["username"] == userPayload["username"]
-    with pytest.raises(KeyError):
-        response.data["password"]
-    postedUser = User.objects.get(username=userPayload["username"])
-    assert postedUser is not None
-    assert postedUser.user == other_user
-
-
-@pytest.mark.django_db
-def test_post_auth_owner(owner_user, owner_apiClient, userPayload, list_url):
+def test_post_noauth_registration(override_config, noauth_apiClient, userPayload, list_url):
     """Tests the post method with the authenticated owner user client."""
-    response = owner_apiClient.post(list_url(UserViewSet), data=userPayload)
+    with override_config(API_REGISTRATION_ENABLED=True):
+        response = noauth_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["username"] == userPayload["username"]
@@ -299,21 +300,79 @@ def test_post_auth_owner(owner_user, owner_apiClient, userPayload, list_url):
         response.data["password"]
     postedUser = User.objects.get(username=userPayload["username"])
     assert postedUser is not None
-    assert postedUser.user == owner_user
 
 
 @pytest.mark.django_db
-def test_post_duplicate_auth_owner(owner_user, owner_apiClient, list_url):
+def test_post_auth_other_noregistration(override_config, other_apiClient, userPayload, list_url):
+    """Tests the post method with the authenticated other user client."""
+    with override_config(API_REGISTRATION_ENABLED=False):
+        response = other_apiClient.post(list_url(UserViewSet), data=userPayload)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    with pytest.raises(KeyError):
+        response.data["username"]
+    with pytest.raises(KeyError):
+        response.data["password"]
+    with pytest.raises(User.DoesNotExist):
+        User.objects.get(username=userPayload["username"])
+
+
+@pytest.mark.django_db
+def test_post_auth_other_registration(override_config, other_user, other_apiClient, userPayload, list_url):
+    """Tests the post method with the authenticated owner user client."""
+    with override_config(API_REGISTRATION_ENABLED=True):
+        response = other_apiClient.post(list_url(UserViewSet), data=userPayload)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["username"] == userPayload["username"]
+    with pytest.raises(KeyError):
+        response.data["password"]
+    postedUser = User.objects.get(username=userPayload["username"])
+    assert postedUser is not None
+
+
+@pytest.mark.django_db
+def test_post_auth_owner_noregistration(override_config, owner_apiClient, userPayload, list_url):
+    """Tests the post method with the authenticated other user client."""
+    with override_config(API_REGISTRATION_ENABLED=False):
+        response = owner_apiClient.post(list_url(UserViewSet), data=userPayload)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    with pytest.raises(KeyError):
+        response.data["username"]
+    with pytest.raises(KeyError):
+        response.data["password"]
+    with pytest.raises(User.DoesNotExist):
+        User.objects.get(username=userPayload["username"])
+
+
+@pytest.mark.django_db
+def test_post_auth_owner_registration(override_config, owner_user, owner_apiClient, userPayload, list_url):
+    """Tests the post method with the authenticated owner user client."""
+    with override_config(API_REGISTRATION_ENABLED=True):
+        response = owner_apiClient.post(list_url(UserViewSet), data=userPayload)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["username"] == userPayload["username"]
+    with pytest.raises(KeyError):
+        response.data["password"]
+    postedUser = User.objects.get(username=userPayload["username"])
+    assert postedUser is not None
+
+
+@pytest.mark.django_db
+def test_post_auth_owner_duplicate(override_config, owner_user, owner_apiClient, list_url):
     """Tests the post method with the authenticated owner user client and duplicate data."""
     payload = model_to_dict(owner_user)
     payload.pop("id")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
 
-    response = owner_apiClient.post(list_url(UserViewSet), data=cleanPayload)
+    with override_config(API_REGISTRATION_ENABLED=True):
+        response = owner_apiClient.post(list_url(UserViewSet), data=cleanPayload)
 
     assert cleanPayload["username"] == owner_user.username
     User.objects.get(username=cleanPayload["username"])
-    assert response.status_code == status.HTTP_409_CONFLICT
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     with pytest.raises(KeyError):
         response.data["password"]
 
@@ -333,7 +392,7 @@ def test_delete_auth_other(owner_user, other_apiClient, detail_url):
     """Tests the delete method with the authenticated other user client."""
     response = other_apiClient.delete(detail_url(UserViewSet, owner_user))
 
-    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     owner_user.refresh_from_db()
     assert owner_user.username is not None
 

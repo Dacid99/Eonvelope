@@ -20,15 +20,7 @@
 
 from __future__ import annotations
 
-import os
 from typing import Final
-
-
-class APIv1Configuration:
-    """Namespace class for all configuration constants of the API."""
-
-    REGISTRATION_ENABLED: Final[bool] = os.environ.get("REGISTRATION_ENABLED", False)
-    """Whether reegistration of new users is enabled."""
 
 
 class FilterSetups:

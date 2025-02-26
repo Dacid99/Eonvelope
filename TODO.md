@@ -29,6 +29,7 @@
 
 ## To test
 - mailboxserializer with correspondents
+- registration in dj-api-auth vs custom implementation
 
 ## To fix
 

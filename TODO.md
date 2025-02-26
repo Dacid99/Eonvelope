@@ -11,7 +11,6 @@
 - combined filter for correspondent with mention
 - refine storage management error correction
 - streamable logs for daemons
-- registration toggling
 - disable all signals in tests
 - threadsafe db operations in daemons
 - filtertest for choices
@@ -30,6 +29,7 @@
 ## To test
 - mailboxserializer with correspondents
 - registration in dj-api-auth vs custom implementation
+- registration toggling
 
 ## To fix
 

@@ -194,10 +194,19 @@ ACCOUNT_EMAIL_REQUIRED = False
 ACCOUNT_LOGIN_METHODS = {"username"}
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_SESSION_REMEMBER = None
+ACCOUNT_ADAPTER = "Emailkasten.utils.ToggleSignupAccountAdapter"
 
-# dj-api-auth
+# dj-rest-auth
 REST_AUTH = {
     "USE_JWT": False,
+    "REGISTER_PERMISSION_CLASSES": (
+        ("rest_framework.permissions.AllowAny",)
+        if os.getenv("REGISTRATION_ENABLED")
+        else (
+            "rest_framework.permissions.IsAdminUser",
+            "rest_framework.permissions.IsAuthenticated",
+        )
+    ),
 }
 
 
@@ -301,11 +310,6 @@ CONSTANCE_CONFIG = {
         200,
         _("The maximum page size for paginated API response data"),
         int,
-    ),
-    "API_REGISTRATION_ENABLED": (
-        False,
-        _("Whether registration via the API is enabled"),
-        bool,
     ),
     "DAEMON_CYCLE_PERIOD_DEFAULT": (
         60,
@@ -450,5 +454,8 @@ CONSTANCE_FIELDSETS = (
         _("Storage Settings"),
         ("STORAGE_PATH", "STORAGE_MAX_SUBDIRS_PER_DIR", "TEMPORARY_STORAGE_DIRECTORY"),
     ),
-    (_("API Settings"), ("API_REGISTRATION_ENABLED", "API_DEFAULT_PAGE_SIZE", "API_MAX_PAGE_SIZE")),
+    (
+        _("API Settings"),
+        ("API_DEFAULT_PAGE_SIZE", "API_MAX_PAGE_SIZE"),
+    ),
 )

@@ -21,14 +21,39 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+import os
+from typing import TYPE_CHECKING, Any
 
+from allauth.account.adapter import DefaultAccountAdapter
 from constance import config
+from django.conf import settings
+from typing_extensions import override
 
 from Emailkasten.settings import CONSTANCE_CONFIG
 
 
+if TYPE_CHECKING:
+    from rest_framework.request import Request
+
+
 logger = logging.getLogger(__name__)
+
+
+class ToggleSignupAccountAdapter(DefaultAccountAdapter):
+    """AccountAdapter class to allow toggling of signups for django-allauth."""
+
+    @override
+    def is_open_for_signup(self, request: Request) -> bool:
+        """Checks whether signups are allowed.
+
+        Args;
+            request: The signup request.
+
+        Returns:
+            Whether signups are allowed.
+        """
+        allow_signups = super().is_open_for_signup(request)
+        return os.getenv("REGISTRATION_ENABLED", allow_signups)
 
 
 def get_config(setting: str) -> Any:

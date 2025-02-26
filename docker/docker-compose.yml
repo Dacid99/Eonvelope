@@ -45,6 +45,7 @@ services:
       - ROOT_LOG_LEVEL=DEBUG
       - LOGFILE_MAXSIZE=10485760
       - LOGFILE_BACKUP_NUMBER=5
+      - REGISTRATION_ENABLED=False
     restart: unless-stopped
     depends_on:
       db:

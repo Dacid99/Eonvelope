@@ -29,6 +29,8 @@ Fixtures:
 
 from __future__ import annotations
 
+from unittest.mock import MagicMock
+
 import pytest
 from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
@@ -65,6 +67,19 @@ def fixture_admin_apiClient(noauth_apiClient, admin_user) -> APIClient:
     """
     noauth_apiClient.force_authenticate(user=admin_user)
     return noauth_apiClient
+
+
+@pytest.fixture(name="mock_os_getenv")
+def fixture_mock_os_getenv(mocker) -> MagicMock:
+    """Mocks calls to os.getenv for testing of registration toggling.
+
+    Args:
+        mocker: Depends on :func:`mocker`.
+
+    Returns:
+        The mocked function.
+    """
+    return mocker.patch("api.v1.views.UserViewSet.os.getenv")
 
 
 @pytest.fixture(name="userPayload")
@@ -274,10 +289,13 @@ def test_put_auth_admin(owner_user, admin_apiClient, userPayload, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_noauth_noregistration(override_config, noauth_apiClient, userPayload, list_url):
+def test_post_noauth_noregistration(
+    mock_os_getenv, noauth_apiClient, userPayload, list_url
+):
     """Tests the post method with an unauthenticated user client."""
-    with override_config(API_REGISTRATION_ENABLED=False):
-        response = noauth_apiClient.post(list_url(UserViewSet), data=userPayload)
+    mock_os_getenv.return_value = False
+
+    response = noauth_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -289,10 +307,13 @@ def test_post_noauth_noregistration(override_config, noauth_apiClient, userPaylo
 
 
 @pytest.mark.django_db
-def test_post_noauth_registration(override_config, noauth_apiClient, userPayload, list_url):
+def test_post_noauth_registration(
+    mock_os_getenv, noauth_apiClient, userPayload, list_url
+):
     """Tests the post method with the authenticated owner user client."""
-    with override_config(API_REGISTRATION_ENABLED=True):
-        response = noauth_apiClient.post(list_url(UserViewSet), data=userPayload)
+    mock_os_getenv.return_value = True
+
+    response = noauth_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["username"] == userPayload["username"]
@@ -303,10 +324,13 @@ def test_post_noauth_registration(override_config, noauth_apiClient, userPayload
 
 
 @pytest.mark.django_db
-def test_post_auth_other_noregistration(override_config, other_apiClient, userPayload, list_url):
+def test_post_auth_other_noregistration(
+    mock_os_getenv, other_apiClient, userPayload, list_url
+):
     """Tests the post method with the authenticated other user client."""
-    with override_config(API_REGISTRATION_ENABLED=False):
-        response = other_apiClient.post(list_url(UserViewSet), data=userPayload)
+    mock_os_getenv.return_value = False
+
+    response = other_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -318,10 +342,13 @@ def test_post_auth_other_noregistration(override_config, other_apiClient, userPa
 
 
 @pytest.mark.django_db
-def test_post_auth_other_registration(override_config, other_user, other_apiClient, userPayload, list_url):
+def test_post_auth_other_registration(
+    mock_os_getenv, other_user, other_apiClient, userPayload, list_url
+):
     """Tests the post method with the authenticated owner user client."""
-    with override_config(API_REGISTRATION_ENABLED=True):
-        response = other_apiClient.post(list_url(UserViewSet), data=userPayload)
+    mock_os_getenv.return_value = True
+
+    response = other_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["username"] == userPayload["username"]
@@ -332,10 +359,13 @@ def test_post_auth_other_registration(override_config, other_user, other_apiClie
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_noregistration(override_config, owner_apiClient, userPayload, list_url):
+def test_post_auth_owner_noregistration(
+    mock_os_getenv, owner_apiClient, userPayload, list_url
+):
     """Tests the post method with the authenticated other user client."""
-    with override_config(API_REGISTRATION_ENABLED=False):
-        response = owner_apiClient.post(list_url(UserViewSet), data=userPayload)
+    mock_os_getenv.return_value = False
+
+    response = owner_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
@@ -347,10 +377,13 @@ def test_post_auth_owner_noregistration(override_config, owner_apiClient, userPa
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_registration(override_config, owner_user, owner_apiClient, userPayload, list_url):
+def test_post_auth_owner_registration(
+    mock_os_getenv, owner_user, owner_apiClient, userPayload, list_url
+):
     """Tests the post method with the authenticated owner user client."""
-    with override_config(API_REGISTRATION_ENABLED=True):
-        response = owner_apiClient.post(list_url(UserViewSet), data=userPayload)
+    mock_os_getenv.return_value = True
+
+    response = owner_apiClient.post(list_url(UserViewSet), data=userPayload)
 
     assert response.status_code == status.HTTP_201_CREATED
     assert response.data["username"] == userPayload["username"]
@@ -361,14 +394,17 @@ def test_post_auth_owner_registration(override_config, owner_user, owner_apiClie
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_duplicate(override_config, owner_user, owner_apiClient, list_url):
+def test_post_auth_owner_duplicate(
+    mock_os_getenv, owner_user, owner_apiClient, list_url
+):
     """Tests the post method with the authenticated owner user client and duplicate data."""
     payload = model_to_dict(owner_user)
     payload.pop("id")
     cleanPayload = {key: value for key, value in payload.items() if value is not None}
 
-    with override_config(API_REGISTRATION_ENABLED=True):
-        response = owner_apiClient.post(list_url(UserViewSet), data=cleanPayload)
+    mock_os_getenv.return_value = True
+
+    response = owner_apiClient.post(list_url(UserViewSet), data=cleanPayload)
 
     assert cleanPayload["username"] == owner_user.username
     User.objects.get(username=cleanPayload["username"])

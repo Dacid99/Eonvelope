@@ -18,10 +18,10 @@
 
 """Module with the :class:`BaseFetcher` class template."""
 
-
 from __future__ import annotations
 
 import logging
+from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Literal
 
 from core.utils.fetchers.exceptions import FetcherError
@@ -36,47 +36,22 @@ if TYPE_CHECKING:
     from core.models.MailboxModel import MailboxModel
 
 
-class BaseFetcher:
+class BaseFetcher(ABC):
     """Template class for the mailfetcher classes."""
 
-    def _checkResponse(
-        self,
-        response: tuple[str | bytes],
-        exception: type[FetcherError] = FetcherError,
-        commandName: str = "",
-        expectedStatus: str | tuple[str] = ("OK", "+OK"),
-    ) -> None:
-        status = (
-            response[0].decode("utf-8", errors="replace")
-            if isinstance(response[0], bytes)
-            else response[0]
-        )
-        if not status.startswith(expectedStatus):
-            serverMessage = (
-                response[1].decode("utf-8", errors="replace")
-                if response[1] and isinstance(response[1], bytes)
-                else "Unknown Error"
-            )
-            self.logger.error(
-                "Bad server response for %s:\n%s %s",
-                commandName,
-                status,
-                serverMessage,
-            )
-            raise exception(f"Bad server response for {commandName}:\n{serverMessage}")
-        self.logger.debug("Server responded %s as expected.", status)
-
+    @abstractmethod
     def __init__(self, account: AccountModel):
         self.logger = logging.getLogger(__name__)
-        self._mailHost = None
-        raise NotImplementedError
 
+    @abstractmethod
     def connectToHost(self) -> None:
         pass
 
+    @abstractmethod
     def test(self, mailboxModel: MailboxModel) -> None:
         pass
 
+    @abstractmethod
     def fetchEmails(
         self,
         mailbox: MailboxModel,
@@ -84,9 +59,11 @@ class BaseFetcher:
     ) -> list[bytes]:
         pass
 
+    @abstractmethod
     def fetchMailboxes(self) -> list[bytes]:
         pass
 
+    @abstractmethod
     def close(self) -> None:
         self.logger.debug("Closing connection to %s ...", str(self.account))
         if self._mailhost is None:

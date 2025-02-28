@@ -128,7 +128,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
             pk: The private key of the mailbox to test. Defaults to None.
 
         Returns:
-            A response containing the updated mailbox data and the test resultcode.
+            A response containing the updated mailbox data and the test result.
         """
         mailbox = self.get_object()
         mailboxSerializer = self.get_serializer(mailbox)

@@ -139,7 +139,7 @@ class AccountViewSet(viewsets.ModelViewSet):
             pk: The private key of the account to test. Defaults to None.
 
         Returns:
-            A response containing the updated account data and the test resultcode.
+            A response containing the updated account data and the test result.
         """
         account = self.get_object()
         accountSerializer = self.get_serializer(account)

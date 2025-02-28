@@ -20,7 +20,6 @@
 
 from __future__ import annotations
 
-import logging
 import poplib
 from typing import TYPE_CHECKING, Final
 

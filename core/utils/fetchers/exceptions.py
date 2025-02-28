@@ -16,16 +16,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Exceptions for the fetcher classes."""
+"""Exceptions for errors during operations on mailservers."""
 
 
 class FetcherError(Exception):
-    pass
+    """Base exception class for errors during operations on mailservers."""
 
 
 class MailAccountError(FetcherError):
-    pass
+    """Exception for errors concerning the mail account."""
 
 
 class MailboxError(FetcherError):
-    pass
+    """Exception for errors concerning the mailbox."""

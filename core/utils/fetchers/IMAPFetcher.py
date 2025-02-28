@@ -22,7 +22,6 @@ from __future__ import annotations
 
 import datetime
 import imaplib
-import logging
 from typing import TYPE_CHECKING, Final
 
 from django.utils import timezone

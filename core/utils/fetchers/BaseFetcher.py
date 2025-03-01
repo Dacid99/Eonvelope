@@ -39,16 +39,25 @@ class BaseFetcher(ABC):
 
     @abstractmethod
     def __init__(self, account: AccountModel):
+        """Constructor basis, sets up the instance logger.
+
+        Args:
+            account: The model of the account to fetch from.
+        """
         self.logger = logging.getLogger(self)
         self.account = account
 
     @abstractmethod
     def connectToHost(self) -> None:
-        pass
+        """Opens the connection to the mailserver."""
 
     @abstractmethod
     def test(self, mailboxModel: MailboxModel) -> None:
-        pass
+        """Tests the connection to the mailaccount and, if given, the mailbox.
+
+        Args:
+            mailbox: The mailbox to be tested. Default is `None`.
+        """
 
     @abstractmethod
     def fetchEmails(
@@ -56,20 +65,40 @@ class BaseFetcher(ABC):
         mailbox: MailboxModel,
         fetchingCriterion: str = MailFetchingCriteria.ALL,
     ) -> list[bytes]:
-        pass
+        """Fetches emails based on a criterion from the server.
+
+        Args:
+            mailbox: The model of the mailbox to fetch data from.
+            criterion: Formatted criterion to filter mails by.
+                Defaults to :attr:`Emailkasten.MailFetchingCriteria.ALL`.
+
+        Returns:
+            List of mails in the mailbox matching the criterion as :class:`bytes`.
+            Empty if no such messages are found.
+        """
 
     @abstractmethod
     def fetchMailboxes(self) -> list[bytes]:
-        pass
+        """Fetches all mailbox names from the server.
+
+        Returns:
+            List of data of all mailboxes in the account. Empty if none are found.
+        """
 
     @abstractmethod
     def close(self) -> None:
+        """Closes the connection to the mail server."""
         self.logger.debug("Closing connection to %s ...", str(self.account))
-        if self._mailhost is None:
+        if self._mailClient is None:
             self.logger.debug("Connection to %s is already closed.", str(self.account))
             return
 
     def __str__(self) -> str:
+        """Returns a string representation of the :class:`BaseFetcher` instances.
+
+        Returns:
+            The string representation of the fetcher instance.
+        """
         return f"Fetcher for {self.account}"
 
     def __enter__(self) -> BaseFetcher:
@@ -92,9 +121,6 @@ class BaseFetcher(ABC):
             exc_type: The exception type that raised close.
             exc_value: The exception value that raised close.
             traceback: The exception traceback that raised close.
-
-        Returns:
-            False, exceptions leave the with block.
         """
         if exc_value or exc_type:
             self.logger.error(

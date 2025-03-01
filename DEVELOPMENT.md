@@ -1,6 +1,6 @@
 # Setup
 
-Your global python version should be at least 3.11.
+Your global python version should be at least *3.11*.
 
 First install the packages required for the build environment, on debian based distros:
 
@@ -25,9 +25,9 @@ pip install -Ur docs/dependencies.txt
 
 Depending on your OS, the mysqlclient package may cause problems, this can usually be solved by installing a missing system package.
 
-# Workspace Recommendations
+## Workspace Recommendations
 
-## Validation and Linting
+### Validation and Linting
 
 You can use the tools in validation/ to lint and check your changes.
 
@@ -42,15 +42,15 @@ Set them for your local repository via
 git config core.hooksPath validation/githooks/
 ```
 
-## VSCode
+### VSCode
 
-### Settings
+#### Settings
 
 - Trim final newlines
 - Trim trailing whitespace
 - Insert final newline
 
-### Extensions
+#### Extensions
 
 - everything for python and django
 - python test (with setting "python.testing.cwd": "/path/to/repo/test/")

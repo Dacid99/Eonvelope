@@ -1,8 +1,8 @@
+# Guidelines
+
 If you have an idea for the project you are very welcome to implement it yourself!
 
-To make it easier for me to read and understand your pull requests please follow these guidelines as closely as possible.
-
-# Guidelines
+To make it easier to read and understand your pull requests please follow these guidelines as closely as possible.
 
 - Adapt to the code style of the repository:
   PascalCase for classes and camelCase for variables and functions. Constants are capitalized.
@@ -27,7 +27,5 @@ To make it easier for me to read and understand your pull requests please follow
 - Your pull request should already have been properly tested by yourself.
 
 - Every pull request will be linted and checked using the tools in the validation folder. Please make sure to do this yourself as well.
-
-
 
 Thank you for helping with the project!

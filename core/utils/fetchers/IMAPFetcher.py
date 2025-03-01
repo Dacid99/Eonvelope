@@ -164,6 +164,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
         if mailbox is not None:
             self.logger.debug("Testing %s ...", str(mailbox))
             self.safe_select(mailbox.name, readonly=True)
+            self.safe_check()
             self._mailClient.unselect()
             self.logger.debug("Successfully tested %s.", str(mailbox))
 
@@ -185,7 +186,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
                 If an invalid criterion is given, returns [].
 
         Returns:
-            List of :class:`email.message.EmailMessage` mails in the mailbox matching the criterion.
+            List of mails in the mailbox matching the criterion as :class:`bytes`.
             Empty if no such messages are found.
 
         Raises:

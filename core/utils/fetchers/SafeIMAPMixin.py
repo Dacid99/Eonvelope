@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the SafeIMAPMixin mixin."""
 
 import imaplib
 from collections.abc import Callable
@@ -52,11 +53,7 @@ class SafeIMAPMixin:
         Raises:
             exception: If the response status doesnt match the expectation.
         """
-        status = (
-            response[0].decode("utf-8", errors="replace")
-            if isinstance(response[0], bytes)
-            else response[0]
-        )
+        status = response[0]
         if status != expectedStatus:
             serverMessage = (
                 response[1].decode("utf-8", errors="replace")
@@ -72,9 +69,8 @@ class SafeIMAPMixin:
             raise exception(f"Bad server response for {commandName}:\n{serverMessage}")
         self.logger.debug("Server responded %s as expected.", status)
 
+    @staticmethod
     def safe(
-        self,
-        imapAction: Callable,
         expectedStatus: str = "OK",
         exception: type[FetcherError] = FetcherError,
     ) -> Callable:
@@ -94,7 +90,8 @@ class SafeIMAPMixin:
         Raises:
             exception: If an error occurs or the status doesnt match the expectation.
         """
-        def safeWrapper(imapAction: Callable):
+
+        def safeWrapper(imapAction: Callable) -> Callable:
             def safeAction(self, *args: Any, **kwargs: Any) -> Any:
                 try:
                     response = imapAction(self, *args, **kwargs)
@@ -106,9 +103,13 @@ class SafeIMAPMixin:
                     raise exception(
                         f"An IMAP error occured during {imapAction.__name__}!",
                     ) from error
-                self.checkResponse(response, imapAction.__name__, expectedStatus, exception)
+                self.checkResponse(
+                    response, imapAction.__name__, expectedStatus, exception
+                )
                 return response
+
             return safeAction
+
         return safeWrapper
 
     @safe(exception=MailAccountError)
@@ -131,6 +132,10 @@ class SafeIMAPMixin:
     def safe_noop(self, *args, **kwargs):
         return self._mailClient.noop(*args, **kwargs)
 
-    @safe(expectedStatus="BYE", exception=MailAccountError)
+    @safe(exception=MailAccountError)
+    def safe_check(self, *args, **kwargs):
+        return self._mailClient.check(*args, **kwargs)
+
+    @safe("BYE", exception=MailAccountError)
     def safe_logout(self, *args, **kwargs):
         return self._mailClient.logout(*args, **kwargs)

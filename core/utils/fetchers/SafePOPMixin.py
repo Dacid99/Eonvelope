@@ -16,6 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the SafePOPMixin mixin."""
 
 import poplib
 from collections.abc import Callable
@@ -72,9 +73,8 @@ class SafePOPMixin:
             raise exception(f"Bad server response for {commandName}:\n{serverMessage}")
         self.logger.debug("Server responded %s as expected.", status)
 
+    @staticmethod
     def safe(
-        self,
-        popAction: Callable,
         expectedStatus: str = "OK",
         exception: type[FetcherError] = FetcherError,
     ) -> Callable:
@@ -94,11 +94,12 @@ class SafePOPMixin:
         Raises:
             exception: If an error occurs or the status doesnt match the expectation.
         """
-        def safeWrapper(popAction: Callable):
+
+        def safeWrapper(popAction: Callable) -> Callable:
             def safeAction(self, *args: Any, **kwargs: Any) -> Any:
                 try:
                     response = popAction(self, *args, **kwargs)
-                except poplib.POP3.error as error:
+                except poplib.error_proto as error:
                     self.logger.exception(
                         "A POP error occured during %s!",
                         popAction.__name__,
@@ -106,9 +107,13 @@ class SafePOPMixin:
                     raise exception(
                         f"A POP error occured during {popAction.__name__}!",
                     ) from error
-                self.checkResponse(response, popAction.__name__, expectedStatus, exception)
+                self.checkResponse(
+                    response, popAction.__name__, expectedStatus, exception
+                )
                 return response
+
             return safeAction
+
         return safeWrapper
 
     @safe(exception=MailAccountError)
@@ -122,6 +127,10 @@ class SafePOPMixin:
     @safe(exception=MailAccountError)
     def safe_noop(self, *args, **kwargs):
         return self._mailClient.noop(*args, **kwargs)
+
+    @safe(exception=MailAccountError)
+    def safe_stat(self, *args, **kwargs):
+        return self._mailClient.stat(*args, **kwargs)
 
     @safe(exception=MailAccountError)
     def safe_list(self, *args, **kwargs):

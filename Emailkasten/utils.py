@@ -26,10 +26,9 @@ from typing import TYPE_CHECKING, Any
 
 from allauth.account.adapter import DefaultAccountAdapter
 from constance import config
-from django.conf import settings
 from typing_extensions import override
 
-from Emailkasten.settings import CONSTANCE_CONFIG
+from Emailkasten.settings import CONSTANCE_CONFIG, DEFAULT_REGISTRATION_ENABLED
 
 
 if TYPE_CHECKING:
@@ -46,14 +45,15 @@ class ToggleSignupAccountAdapter(DefaultAccountAdapter):
     def is_open_for_signup(self, request: Request) -> bool:
         """Checks whether signups are allowed.
 
-        Args;
+        Args:
             request: The signup request.
 
         Returns:
             Whether signups are allowed.
         """
-        allow_signups = super().is_open_for_signup(request)
-        return os.getenv("REGISTRATION_ENABLED", allow_signups)
+        return bool(
+            int(os.getenv("REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED))
+        )
 
 
 def get_config(setting: str) -> Any:

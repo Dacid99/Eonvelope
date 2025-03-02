@@ -17,11 +17,6 @@ EMailkasten documentation
    rst/import-graph
    rst/db-graph
    rst/api-schema
-   Emailkasten
-   core
-   api
-   web
-   test
 
 `Latest mypy report <mypy_report/index.html>`_
 

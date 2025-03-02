@@ -44,7 +44,6 @@ from api.v1.views.DatabaseStatsView import DatabaseStatsView
 from api.v1.views.EMailViewSet import EMailViewSet
 from api.v1.views.MailboxViewSet import MailboxViewSet
 from api.v1.views.MailingListViewSet import MailingListViewSet
-from api.v1.views.UserViewSet import UserViewSet
 
 
 router = DefaultRouter()
@@ -75,7 +74,6 @@ router.register(
 router.register(
     rf"{EMailViewSet.BASENAME}", EMailViewSet, basename=EMailViewSet.BASENAME
 )
-router.register(rf"{UserViewSet.BASENAME}", UserViewSet, basename=UserViewSet.BASENAME)
 
 urlpatterns = [
     path("", include(router.urls)),

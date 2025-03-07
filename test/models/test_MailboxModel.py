@@ -32,9 +32,9 @@ import pytest
 from django.db import IntegrityError
 from model_bakery import baker
 
-from core.constants import TestStatusCodes
 from core.models.AccountModel import AccountModel
 from core.models.MailboxModel import MailboxModel
+from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
@@ -125,7 +125,6 @@ def test_MailboxModel_unique():
         (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP_SSL_Fetcher.PROTOCOL, IMAP_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
-        ("EXCHANGE", []),
     ],
 )
 def test_MailboxModel_getAvailableFetchingCriteria(
@@ -144,24 +143,16 @@ def test_MailboxModel_getAvailableFetchingCriteria(
 
 
 @pytest.mark.django_db
-def test_fetch(mocker, mailbox):
-    mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
-
-    mailbox.fetch("ALL")
-
-    mock_get_fetcher.assert_called_once()
-    mock_get_fetcher.return_value.__enter__.return_value.fetchEmails.assert_called_once()
-
-
-@pytest.mark.django_db
 def test_test_connection_success(mocker, mock_logger, mailbox):
     mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
     mock_fetcher_test = mock_get_fetcher.return_value.__enter__.return_value.test
-    mock_fetcher_test.return_value = TestStatusCodes.OK
+    mailbox.is_healthy = False
+    mailbox.save(update_fields=["is_healthy"])
 
-    result = mailbox.test_connection()
+    mailbox.test_connection()
 
-    assert result == TestStatusCodes.OK
+    mailbox.refresh_from_db()
+    assert mailbox.is_healthy is True
     mock_get_fetcher.assert_called_once_with()
     mock_fetcher_test.assert_called_once_with(mailbox)
     mock_logger.info.assert_called()
@@ -169,19 +160,41 @@ def test_test_connection_success(mocker, mock_logger, mailbox):
 
 
 @pytest.mark.django_db
-def test_test_connection_failure(mocker, mock_logger, mailbox):
+def test_test_connection_badProtocol(mocker, mock_logger, mailbox) -> None:
     mock_get_fetcher = mocker.patch(
         "core.models.AccountModel.AccountModel.get_fetcher", side_effect=ValueError
     )
     mock_fetcher_test = mock_get_fetcher.return_value.__enter__.return_value.test
 
-    result = mailbox.test_connection()
+    with pytest.raises(ValueError):
+        mailbox.test_connection()
 
-    assert result == TestStatusCodes.ERROR
     mock_get_fetcher.assert_called_once_with()
     mock_fetcher_test.assert_not_called()
     mock_logger.info.assert_called()
-    mock_logger.error.assert_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("test_side_effect", [MailboxError, MailAccountError])
+def test_test_connection_failure(
+    mocker, mock_logger, mailbox, test_side_effect
+) -> None:
+    mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
+    mock_fetcher_test = mock_get_fetcher.return_value.__enter__.return_value.test
+    mock_fetcher_test.side_effect = test_side_effect
+    mailbox.is_healthy = True
+    mailbox.save(update_fields=["is_healthy"])
+
+    with pytest.raises(test_side_effect):
+        mailbox.test_connection()
+
+    if test_side_effect == MailboxError:
+        assert mailbox.is_healthy is False
+    elif test_side_effect == MailAccountError:
+        assert mailbox.account.is_healthy is False
+    mock_get_fetcher.assert_called_once_with()
+    mock_fetcher_test.assert_called_once_with(mailbox)
+    mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
@@ -194,9 +207,13 @@ def test_fetch_success(mocker, mock_logger, mailbox):
     mock_EMailModel_createFromBytes = mocker.patch(
         "core.models.MailboxModel.EMailModel.createFromEmailBytes"
     )
+    mailbox.is_healthy = False
+    mailbox.save(update_fields=["is_healthy"])
 
     mailbox.fetch("criterion")
 
+    mailbox.refresh_from_db()
+    assert mailbox.is_healthy is True
     mock_fetcher_fetchEmails.assert_called_once_with(mailbox, "criterion")
     mock_EMailModel_createFromBytes.call_count == 4
     mock_logger.info.assert_called()
@@ -204,29 +221,10 @@ def test_fetch_success(mocker, mock_logger, mailbox):
 
 
 @pytest.mark.django_db
-def test_fetch_duplicate(mocker, mock_logger, mailbox):
-    mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
-    mock_fetcher_fetchEmails = (
-        mock_get_fetcher.return_value.__enter__.return_value.fetchEmails
-    )
-    mock_fetcher_fetchEmails.return_value = [b"123", b"567", b"098", b"112233"]
-    mock_EMailModel_createFromBytes = mocker.patch(
-        "core.models.MailboxModel.EMailModel.createFromEmailBytes"
-    )
-    mock_EMailModel_createFromBytes.side_effect = IntegrityError
-
-    mailbox.fetch("criterion")
-
-    mock_fetcher_fetchEmails.assert_called_once_with(mailbox, "criterion")
-    mock_EMailModel_createFromBytes.call_count == 4
-    mock_logger.info.assert_called()
-    mock_logger.exception.assert_called()
-
-
-@pytest.mark.django_db
-def test_fetch_exception(mocker, mock_logger, mailbox):
+def test_fetch_failure(mocker, mock_logger, mailbox) -> None:
     mock_get_fetcher = mocker.patch(
-        "core.models.AccountModel.AccountModel.get_fetcher", side_effect=Exception
+        "core.models.AccountModel.AccountModel.get_fetcher",
+        side_effect=MailboxError,
     )
     mock_fetcher_fetchEmails = (
         mock_get_fetcher.return_value.__enter__.return_value.fetchEmails
@@ -235,10 +233,14 @@ def test_fetch_exception(mocker, mock_logger, mailbox):
     mock_EMailModel_createFromBytes = mocker.patch(
         "core.models.MailboxModel.EMailModel.createFromEmailBytes"
     )
+    mailbox.is_healthy = True
+    mailbox.save(update_fields=["is_healthy"])
 
-    with pytest.raises(Exception):
+    with pytest.raises(MailboxError):
         mailbox.fetch("criterion")
 
+    mailbox.refresh_from_db()
+    assert mailbox.is_healthy is False
     mock_fetcher_fetchEmails.assert_not_called()
     mock_EMailModel_createFromBytes.assert_not_called()
     mock_logger.info.assert_called()

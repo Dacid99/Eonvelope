@@ -26,12 +26,12 @@ import os
 from typing import TYPE_CHECKING, Final
 
 from dirtyfields import DirtyFieldsMixin
-from django.db import IntegrityError, models
+from django.db import models
 
 from core.models.EMailModel import EMailModel
 from Emailkasten.utils import get_config
 
-from ..constants import TestStatusCodes
+from ..utils.fetchers.exceptions import MailAccountError, MailboxError
 from ..utils.fetchers.IMAPFetcher import IMAPFetcher
 from ..utils.fetchers.POP3Fetcher import POP3Fetcher
 from ..utils.mailParsing import parseMailboxName
@@ -115,47 +115,64 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             availableFetchingOptions = []
         return availableFetchingOptions
 
-    def test_connection(self) -> int:
+    def test_connection(self) -> None:
         """Tests whether the data in the model is correct.
 
         Tests connecting and logging in to the mailhost and account.
         The :attr:`core.models.MailboxModel.is_healthy` flag is set accordingly.
         Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
 
-        Returns:
-            The resultcode of the test.
+        Raises:
+            MailAccountError: If the test is fails due to an issue with the account.
+            MailboxError: If the test is fails due to an issue with the mailbox.
         """
 
         logger.info("Testing %s ...", self)
         try:
             with self.account.get_fetcher() as fetcher:
-                result = fetcher.test(self)
-        except ValueError:
-            logger.error("Account %s has unknown protocol!", self)
-            result = TestStatusCodes.ERROR
-
-        logger.info("Successfully tested account to be %s.", result)
-        return result
+                fetcher.test(self)
+        except MailboxError as error:
+            logger.info("Failed testing %s failed with error: %s.", self, error)
+            self.is_healthy = False
+            self.save(update_fields=["is_healthy"])
+            raise
+        except MailAccountError as error:
+            logger.info("Failed testing %s  with error %s.", self.account, error)
+            self.account.is_healthy = False
+            self.account.save(update_fields=["is_healthy"])
+            raise
+        self.is_healthy = True
+        self.save(update_fields=["is_healthy"])
+        logger.info("Successfully tested mailbox")
 
     def fetch(self, criterion: str) -> None:
         """Fetches emails from this mailbox based on :attr:`criterion` and adds them to the db.
 
+        If successful, marks this mailbox as healthy, otherwise unhealthy.
+
         Args:
             criterion: The criterion used to fetch emails from the mailbox.
+
+        Raises:
+            MailboxError: If fetching failed.
         """
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
-        with self.account.get_fetcher() as fetcher:
-            fetchedMails = fetcher.fetchEmails(self, criterion)
+        try:
+            with self.account.get_fetcher() as fetcher:
+                fetchedMails = fetcher.fetchEmails(self, criterion)
+        except MailboxError:
+            self.is_healthy = False
+            self.save(update_fields=["is_healthy"])
+            raise
+        self.is_healthy = True
+        self.save(update_fields=["is_healthy"])
         logger.info("Successfully fetched emails.")
+
         logger.info("Saving fetched emails ...")
         for fetchedMail in fetchedMails:
-            try:
-                EMailModel.createFromEmailBytes(fetchedMail, self)
-                logger.info("Successfully saved fetched emails.")
-            except IntegrityError:
-                logger.exception(
-                    "Email already exists in db, preprocessing apparently failed!"
-                )
+            EMailModel.createFromEmailBytes(fetchedMail, self)
+
+        logger.info("Successfully saved fetched emails.")
 
     def addFromMailboxFile(self, file_data: bytes, file_format: str) -> None:
         """Adds emails from a mailbox file to the db.

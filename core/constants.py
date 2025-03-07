@@ -24,6 +24,7 @@ from typing import Final
 
 class MailFetchingCriteria:
     """Namespace class for all implemented mail fetching criteria constants.
+
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
     Note that IMAP does not support time just dates. So we are always refering to full days.
     POP does not support queries at all, so everything will be fetched.
@@ -115,35 +116,9 @@ class MailFetchingProtocols:
         return getattr(self, key)
 
 
-class TestStatusCodes:
-    """Namespace class for all status codes for the tests of mailaccounts and mailboxes."""
-
-    OK: Final[int] = 0
-    """Everything worked fine"""
-
-    ABORTED: Final[int] = 1
-    """The operation was aborted, try again."""
-
-    BAD_RESPONSE: Final[int] = 2
-    """The server did not return status OK."""
-
-    ERROR: Final[int] = 3
-    """There was an IMAP error, the account is unhealthy."""
-
-    UNEXPECTED_ERROR: Final[int] = 4
-    """An unexpected error occured, try again and check the logs."""
-
-    INFOS: Final[list[str]] = [
-        "Everything worked as expected.",
-        "The operation was aborted, please try again.",
-        "The server returned a bad status, the unhealthy flag set.",
-        "There was an error, the unhealthy flag set.",
-        "An unexpected error occured, please try again and check the logs.",
-    ]
-
-
 class HeaderFields:
     """Namespace class with all header fields that have their own column in the emails table.
+
     For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml.
     """
 

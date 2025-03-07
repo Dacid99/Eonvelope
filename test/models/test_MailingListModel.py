@@ -101,16 +101,16 @@ def test_MailingListModel_fromEmailMessage(mocker):
 
     result = MailingListModel.fromEmailMessage(emailMessage)
 
-    mock_getHeader.call_count == 7
+    assert mock_getHeader.call_count == 7
     mock_getHeader.assert_has_calls(
         [
             mocker.call(emailMessage, "List-Id"),
-            mocker.call(emailMessage, "List-Owner"),
-            mocker.call(emailMessage, "List-Subscribe"),
-            mocker.call(emailMessage, "List-Unsubscribe"),
-            mocker.call(emailMessage, "List-Post"),
-            mocker.call(emailMessage, "List-Help"),
-            mocker.call(emailMessage, "List-Archive"),
+            mocker.call(emailMessage, "List-Owner", fallbackCallable=lambda: ""),
+            mocker.call(emailMessage, "List-Subscribe", fallbackCallable=lambda: ""),
+            mocker.call(emailMessage, "List-Unsubscribe", fallbackCallable=lambda: ""),
+            mocker.call(emailMessage, "List-Post", fallbackCallable=lambda: ""),
+            mocker.call(emailMessage, "List-Help", fallbackCallable=lambda: ""),
+            mocker.call(emailMessage, "List-Archive", fallbackCallable=lambda: ""),
         ]
     )
     assert isinstance(result, MailingListModel)
@@ -124,7 +124,7 @@ def test_MailingListModel_fromEmailMessage(mocker):
 
 
 @pytest.mark.django_db
-def test_fromHeader_duplicate(mocker, mailingList):
+def test_fromEmailMessage_duplicate(mocker, mailingList) -> None:
     emailMessage = EmailMessage()
     mock_getHeader = mocker.patch(
         "core.models.MailingListModel.getHeader", return_value=mailingList.list_id
@@ -133,7 +133,7 @@ def test_fromHeader_duplicate(mocker, mailingList):
     result = MailingListModel.fromEmailMessage(emailMessage)
 
     assert result == mailingList
-    mock_getHeader.assert_called_with(emailMessage, "List-Id")
+    mock_getHeader.assert_called_once_with(emailMessage, "List-Id")
 
 
 @pytest.mark.django_db
@@ -145,7 +145,6 @@ def test_MailingListModel_fromEmailMessage_no_list_id(mocker, mock_logger):
 
     result = MailingListModel.fromEmailMessage(emailMessage)
 
-    mock_getHeader.call_count == 1
-    mock_getHeader.assert_called_with(emailMessage, "List-Id")
     assert result is None
+    mock_getHeader.assert_called_once_with(emailMessage, "List-Id")
     mock_logger.debug.assert_called()

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.v1.views.AccountViewSet`.
+"""Test module for :mod:`api.v1.views.MailboxViewSet`.
 
 Fixtures:
     :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
@@ -34,13 +34,15 @@ import pytest
 from django.forms.models import model_to_dict
 from model_bakery import baker
 from rest_framework import status
-from test_AccountViewSet import fixture_accountModel
 
 from api.v1.views.MailboxViewSet import MailboxViewSet
 from core.constants import MailFetchingCriteria
 from core.models.DaemonModel import DaemonModel
 from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
+from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+
+from .test_AccountViewSet import fixture_accountModel
 
 
 if TYPE_CHECKING:
@@ -385,7 +387,7 @@ def test_test_mailbox_auth_other(
 
 
 @pytest.mark.django_db
-def test_test_mailbox_auth_owner(
+def test_test_mailbox_success_auth_owner(
     mailboxModel, owner_apiClient, custom_detail_action_url, mocker
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated owner user client."""
@@ -403,6 +405,43 @@ def test_test_mailbox_auth_owner(
     assert (
         response.data["mailbox"] == MailboxViewSet.serializer_class(mailboxModel).data
     )
+    assert response.data["result"] is True
+    assert "error" not in response.data
+    mock_test_connection.assert_called_once_with()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "test_connection_side_effect", [MailboxError, MailAccountError]
+)
+def test_test_mailbox_failure_auth_owner(
+    faker,
+    mailboxModel,
+    owner_apiClient,
+    custom_detail_action_url,
+    mocker,
+    test_connection_side_effect,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test` action with the authenticated owner user client."""
+    fake_error_message = faker.sentence()
+    mock_test_connection = mocker.patch(
+        "api.v1.views.MailboxViewSet.MailboxModel.test_connection",
+        side_effect=test_connection_side_effect(fake_error_message),
+    )
+
+    response = owner_apiClient.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_TEST, mailboxModel
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert (
+        response.data["mailbox"] == MailboxViewSet.serializer_class(mailboxModel).data
+    )
+    assert response.data["result"] is False
+    assert "error" in response.data
+    assert fake_error_message in response.data["error"]
     mock_test_connection.assert_called_once_with()
 
 

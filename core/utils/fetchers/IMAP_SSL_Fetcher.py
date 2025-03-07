@@ -22,6 +22,7 @@ from __future__ import annotations
 import imaplib
 
 from ... import constants
+from .exceptions import MailAccountError
 from .IMAPFetcher import IMAPFetcher
 
 
@@ -43,5 +44,15 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
         if timeout := self.account.timeout:
             kwargs["timeout"] = timeout
 
-        self._mailhost = imaplib.IMAP4_SSL(**kwargs)
-        self.logger.debug("Successfully connected to %s.", str(self.account))
+        try:
+            self._mailClient = imaplib.IMAP4_SSL(**kwargs)
+        except Exception as error:
+            self.logger.exception(
+                "An %s occured connecting to %s!",
+                error.__class__.__name__,
+                self.account,
+            )
+            raise MailAccountError(
+                f"An {error.__class__.__name__} occured connecting to {self.account}!"
+            ) from error
+        self.logger.info("Successfully connected to %s.", str(self.account))

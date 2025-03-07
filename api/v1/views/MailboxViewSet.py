@@ -31,10 +31,10 @@ from rest_framework.response import Response
 from typing_extensions import override
 
 from core import constants
-from core.constants import TestStatusCodes
 from core.models.DaemonModel import DaemonModel
 from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
+from core.utils.fetchers.exceptions import FetcherError, MailboxError
 
 from ..filters.MailboxFilter import MailboxFilter
 from ..serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
@@ -130,19 +130,23 @@ class MailboxViewSet(viewsets.ModelViewSet):
             pk: The private key of the mailbox to test. Defaults to None.
 
         Returns:
-            A response containing the updated mailbox data and the test resultcode.
+            A response containing the updated mailbox data and the test result.
         """
         mailbox = self.get_object()
-        result = mailbox.test_connection()
-
         mailboxSerializer = self.get_serializer(mailbox)
-        return Response(
+        response = Response(
             {
                 "detail": "Tested mailbox",
                 "mailbox": mailboxSerializer.data,
-                "result": TestStatusCodes.INFOS[result],
             }
         )
+        try:
+            mailbox.test_connection()
+        except FetcherError as error:
+            response.data.update({"result": False, "error": str(error)})
+        else:
+            response.data.update({"result": True})
+        return response
 
     URL_PATH_FETCH_ALL = "fetch-all"
     URL_NAME_FETCH_ALL = "fetch-all"
@@ -164,8 +168,18 @@ class MailboxViewSet(viewsets.ModelViewSet):
             A response with the mailbox data.
         """
         mailbox = self.get_object()
-        mailbox.fetch(constants.MailFetchingCriteria.ALL)
         mailboxSerializer = self.get_serializer(mailbox)
+        try:
+            mailbox.fetch(constants.MailFetchingCriteria.ALL)
+        except MailboxError as error:
+            return Response(
+                {
+                    "detail": "Error with mailbox occured!",
+                    "mailbox": mailboxSerializer.data,
+                    "error": str(error),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         return Response(
             {"detail": "All mails fetched", "mailbox": mailboxSerializer.data}
         )

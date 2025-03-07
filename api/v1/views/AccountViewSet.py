@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, Final
 
 from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
@@ -32,8 +32,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from typing_extensions import override
 
-from core.constants import TestStatusCodes
 from core.models.AccountModel import AccountModel
+from core.utils.fetchers.exceptions import MailAccountError
 
 from ..filters.AccountFilter import AccountFilter
 from ..serializers.account_serializers.AccountSerializer import AccountSerializer
@@ -111,11 +111,20 @@ class AccountViewSet(viewsets.ModelViewSet):
             A response containing the updated account data.
         """
         account = self.get_object()
-        account.update_mailboxes()
-
         accountSerializer = self.get_serializer(account)
+        try:
+            account.update_mailboxes()
+        except MailAccountError as error:
+            return Response(
+                data={
+                    "detail": "Error with mailaccount occured!",
+                    "account": accountSerializer.data,
+                    "error": str(error),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
         return Response(
-            data={"status": "Updated mailboxes", "account": accountSerializer.data}
+            data={"detail": "Updated mailboxes", "account": accountSerializer.data}
         )
 
     URL_PATH_TEST = "test"
@@ -132,19 +141,23 @@ class AccountViewSet(viewsets.ModelViewSet):
             pk: The private key of the account to test. Defaults to None.
 
         Returns:
-            A response containing the updated account data and the test resultcode.
+            A response containing the updated account data and the test result.
         """
         account = self.get_object()
-        result = account.test_connection()
-
         accountSerializer = self.get_serializer(account)
-        return Response(
+        response = Response(
             {
                 "detail": "Tested mailaccount",
                 "account": accountSerializer.data,
-                "result": TestStatusCodes.INFOS[result],
             }
         )
+        try:
+            account.test_connection()
+        except MailAccountError as error:
+            response.data.update({"result": False, "error": str(error)})
+        else:
+            response.data.update({"result": True})
+        return response
 
     URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
     URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"

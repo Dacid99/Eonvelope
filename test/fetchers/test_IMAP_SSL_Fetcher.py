@@ -18,107 +18,73 @@
 
 """Test file for the :class:`core.utils.fetchers.IMAP_SSL_Fetcher`."""
 
-import imaplib
-from unittest.mock import MagicMock, patch
 
 import pytest
 
-from core.models.AccountModel import AccountModel
-from core.utils.fetchers.IMAPFetcher import IMAPFetcher
+from core.constants import MailFetchingProtocols
+from core.utils.fetchers.exceptions import MailAccountError
+from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
+
+from ..models.test_MailboxModel import fixture_mailboxModel
+from .test_IMAPFetcher import FakeIMAP4error, fixture_mock_logger
 
 
-@pytest.fixture(name="mock_account")
-def fixture_mock_account():
-    """Fixture for a mocked AccountModel.
-
-    Todo:
-        Needs to be replaced by model_bakery.
-    """
-    account = MagicMock(spec=AccountModel)
-    account.mail_host = "imap.example.com"
-    account.mail_host_port = 993
-    account.mail_address = "user@example.com"
-    account.password = "password"
-    account.is_healthy = True
-    return account
+@pytest.fixture(name="imap_ssl_mailbox")
+def fixture_imap_ssl_mailbox(mailbox):
+    mailbox.account.protocol = MailFetchingProtocols.IMAP_SSL
+    mailbox.account.save(update_fields=["protocol"])
+    return mailbox
 
 
-# Test for IMAP connection success
-@patch("IMAPFetcher.connectToHost")
-@patch("IMAPFetcher.login")
-@patch("logging.getLogger")
-def test_imapfetcher_success(mock_logger, mock_login, mock_connect, mock_account):
-    """Test successful connection and login to IMAP server."""
-
-    # Call the constructor, which triggers connectToHost and login
-    fetcher = IMAPFetcher(mock_account)
-
-    # Assert that connectToHost and login were called
-    mock_connect.assert_called_once()
-    mock_login.assert_called_once()
-
-    # Assert the account's health status is marked as healthy
-    mock_account.save.assert_called_once_with()
-    mock_account.is_healthy = True  # This will be set in the real method
-
-    # Ensure the logger didn't log an error
-    mock_logger().error.assert_not_called()
+@pytest.fixture(name="mock_IMAP4_SSL")
+def fixture_mock_IMAP4_SSL(mocker, faker):
+    mock_IMAP4_SSL = mocker.patch(
+        "core.utils.fetchers.IMAP_SSL_Fetcher.imaplib.IMAP4_SSL", autospec=True
+    )
+    mock_IMAP4_SSL.error = FakeIMAP4error
+    fake_response = faker.sentence().encode("utf-8")
+    mock_IMAP4_SSL.return_value.login.return_value = ("OK", [fake_response])
+    mock_IMAP4_SSL.return_value.noop.return_value = ("OK", [fake_response])
+    mock_IMAP4_SSL.return_value.check.return_value = ("OK", [fake_response])
+    mock_IMAP4_SSL.return_value.list.return_value = ("OK", fake_response.split())
+    mock_IMAP4_SSL.return_value.select.return_value = ("OK", [fake_response])
+    mock_IMAP4_SSL.return_value.unselect.return_value = ("OK", [fake_response])
+    mock_IMAP4_SSL.return_value.uid.return_value = ("OK", [fake_response, b""])
+    mock_IMAP4_SSL.return_value.logout.return_value = ("BYE", [fake_response])
+    return mock_IMAP4_SSL
 
 
-# Test for IMAP connection failure
-@patch("IMAPFetcher.connectToHost", side_effect=imaplib.IMAP4.error)
-@patch("logging.getLogger")
-def test_imapfetcher_imap_error(mock_logger, mock_connect, mock_account):
-    """Test handling of IMAP connection error."""
-
-    # Call the constructor, which should raise an error in connectToHost
-    fetcher = IMAPFetcher(mock_account)
-
-    # Assert that the account is marked as unhealthy
-    mock_account.save.assert_called_once_with()
-    mock_account.is_healthy = False
-
-    # Ensure that the appropriate error message was logged
-    mock_logger().error.assert_called_once()
-
-
-# Test for IMAP connection failure
-@patch("imaplib.IMAP4.list", return_value=["NO", "errorcode"])
-@patch("IMAPFetcher.login")
-@patch("IMAPFetcher.connectToHost")
-@patch("logging.getLogger")
-def test_imapfetcher_badresponse_fetchMailboxes(
-    mock_logger, mock_connect, mock_login, mock_list, mock_account
+@pytest.mark.django_db
+def test_IMAPFetcher_connectToHost_success(
+    imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL
 ):
-    """Test handling of IMAP connection error."""
+    IMAP_SSL_Fetcher(imap_ssl_mailbox.account)
 
-    # Call the constructor, which should raise an error in connectToHost
-    fetcher = IMAPFetcher(mock_account)
-    fetcher.fetchMailboxes()
+    kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
+    if port := imap_ssl_mailbox.account.mail_host_port:
+        kwargs["port"] = port
+    if timeout := imap_ssl_mailbox.account.timeout:
+        kwargs["timeout"] = timeout
+    mock_IMAP4_SSL.assert_called_with(**kwargs)
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
 
-    # Assert that the account is marked as unhealthy
-    mock_account.save.assert_called_once_with()
-    mock_account.is_healthy = False
 
-    # Ensure that the appropriate error message was logged
-    mock_logger().error.assert_called_once()
+@pytest.mark.django_db
+def test_IMAPFetcher_connectToHost_exception(
+    imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL
+):
+    mock_IMAP4_SSL.side_effect = AssertionError
 
+    with pytest.raises(MailAccountError, match="AssertionError occured"):
+        IMAP_SSL_Fetcher(imap_ssl_mailbox.account)
 
-# Test for unexpected error
-@patch(
-    "myapp.emailfetcher.IMAPFetcher.connectToHost",
-    side_effect=Exception("Unexpected error"),
-)
-@patch("myapp.emailfetcher.logging.getLogger")
-def test_imapfetcher_unexpected_error(mock_logger, mock_connect, mock_account):
-    """Test handling of unexpected errors during connection."""
-
-    # Call the constructor, which should raise an unexpected exception
-    fetcher = IMAPFetcher(mock_account)
-
-    # Assert that the account is marked as unhealthy
-    mock_account.save.assert_called_once_with()
-    mock_account.is_healthy = False
-
-    # Ensure that the appropriate error message was logged
-    mock_logger().error.assert_called_once()
+    kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
+    if port := imap_ssl_mailbox.account.mail_host_port:
+        kwargs["port"] = port
+    if timeout := imap_ssl_mailbox.account.timeout:
+        kwargs["timeout"] = timeout
+    mock_IMAP4_SSL.assert_called_with(**kwargs)
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_called()

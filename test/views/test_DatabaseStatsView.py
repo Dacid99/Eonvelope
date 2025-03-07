@@ -26,12 +26,13 @@ import pytest
 from django.forms.models import model_to_dict
 from django.urls import reverse
 from rest_framework import status
-from test_AccountViewSet import fixture_accountModel
-from test_AttachmentViewSet import fixture_attachmentModel
-from test_EMailViewSet import fixture_emailModel
-from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.DatabaseStatsView import DatabaseStatsView
+
+from .test_AccountViewSet import fixture_accountModel
+from .test_AttachmentViewSet import fixture_attachmentModel
+from .test_EMailViewSet import fixture_emailModel
+from .test_MailboxViewSet import fixture_mailboxModel
 
 
 if TYPE_CHECKING:

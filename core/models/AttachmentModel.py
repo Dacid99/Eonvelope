@@ -23,10 +23,9 @@ from __future__ import annotations
 import logging
 import os
 from hashlib import md5
-from typing import TYPE_CHECKING, Any, Final
+from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models
-from typing_extensions import override
 
 from Emailkasten.utils import get_config
 

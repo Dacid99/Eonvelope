@@ -21,10 +21,9 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import Any
+from typing import Any, override
 
 from django.db import models
-from typing_extensions import override
 
 from Emailkasten.utils import get_config
 

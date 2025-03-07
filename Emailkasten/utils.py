@@ -22,11 +22,10 @@ from __future__ import annotations
 
 import logging
 import os
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, override
 
 from allauth.account.adapter import DefaultAccountAdapter
 from constance import config
-from typing_extensions import override
 
 from Emailkasten.settings import CONSTANCE_CONFIG, DEFAULT_REGISTRATION_ENABLED
 

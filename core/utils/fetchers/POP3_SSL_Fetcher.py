@@ -21,8 +21,7 @@
 from __future__ import annotations
 
 import poplib
-
-from typing_extensions import override
+from typing import override
 
 from ... import constants
 from .exceptions import MailAccountError

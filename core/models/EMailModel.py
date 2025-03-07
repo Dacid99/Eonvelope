@@ -26,10 +26,9 @@ import logging
 import os
 from email import policy
 from hashlib import md5
-from typing import TYPE_CHECKING, Any, Final
+from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models, transaction
-from typing_extensions import override
 
 from core.constants import HeaderFields
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
@@ -326,8 +325,9 @@ class EMailModel(models.Model):
 
         Returns:
             The :class:`core.models.EMailModel.EMailModel` instance with data from the bytes.
-            If the email already exists in the db returns None.
-            None if there is no Message-ID header in :attr:`emailMessage` or the mail is spam and is supposed to be thrown out.
+            None if there is no Message-ID header in :attr:`emailMessage`,
+                if the mail already exists in the db or
+                if the mail is spam and is supposed to be thrown out.
         """
         emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)
 

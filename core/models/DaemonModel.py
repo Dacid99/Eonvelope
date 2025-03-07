@@ -23,11 +23,10 @@ from __future__ import annotations
 import logging
 import os
 import uuid
-from typing import TYPE_CHECKING, Any, Final
+from typing import TYPE_CHECKING, Any, Final, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
-from typing_extensions import override
 
 import Emailkasten.constants
 from Emailkasten.utils import get_config

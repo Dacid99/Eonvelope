@@ -21,9 +21,7 @@
 from __future__ import annotations
 
 import poplib
-from typing import TYPE_CHECKING, Final
-
-from typing_extensions import override
+from typing import TYPE_CHECKING, Final, override
 
 from core.utils.fetchers.BaseFetcher import BaseFetcher
 from core.utils.fetchers.SafePOPMixin import SafePOPMixin

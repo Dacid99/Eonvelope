@@ -1,7 +1,7 @@
 preview = false
 fix = true
 unsafe-fixes = false
-target-version = "py311"
+target-version = "py312"
 line-length = 88  # consistent with blacks default
 extend-exclude = ["manage.py", "*migrations*", "docs", "validation", "docker", ".vscode", ".pytest_cache", "__pycache__"]
 output-format = "full"

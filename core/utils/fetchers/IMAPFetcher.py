@@ -22,10 +22,9 @@ from __future__ import annotations
 
 import datetime
 import imaplib
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Final, override
 
 from django.utils import timezone
-from typing_extensions import override
 
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from core.utils.fetchers.SafeIMAPMixin import SafeIMAPMixin

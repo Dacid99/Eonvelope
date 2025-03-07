@@ -20,7 +20,6 @@
 - attachment/inline content name as first fallback for filename
 - database statistics
 - replace daemons with celery
-- migrate to python 3.12
 - rework test:
   - consistent naming
   - more autouse

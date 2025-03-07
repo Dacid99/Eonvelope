@@ -1,6 +1,8 @@
 # Setup
 
-Your global python version should be at least *3.11*.
+Your global python version should be at least *3.12*.
+
+If necessary you can install it via [the deadsnakes ppa](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa).
 
 First install the packages required for the build environment, on debian based distros:
 

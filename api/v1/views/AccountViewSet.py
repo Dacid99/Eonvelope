@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Final, override
 
 from django.db import IntegrityError
 from django_filters.rest_framework import DjangoFilterBackend
@@ -30,7 +30,6 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from typing_extensions import override
 
 from core.models.AccountModel import AccountModel
 from core.utils.fetchers.exceptions import MailAccountError

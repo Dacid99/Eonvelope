@@ -135,7 +135,7 @@ class MailboxViewSet(viewsets.ModelViewSet):
         response = Response(
             {
                 "detail": "Tested mailbox",
-                "account": mailboxSerializer.data,
+                "mailbox": mailboxSerializer.data,
             }
         )
         try:

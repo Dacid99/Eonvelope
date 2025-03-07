@@ -35,6 +35,7 @@ import core.models.AccountModel
 from core.constants import MailFetchingProtocols
 from core.models.AccountModel import AccountModel
 from core.models.MailboxModel import MailboxModel
+from core.utils.fetchers.exceptions import MailAccountError
 from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
@@ -163,9 +164,13 @@ def test_get_fetcher_failure(mock_logger, account):
 @pytest.mark.django_db
 def test_test_connection_success(mocker, mock_logger, account):
     mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
+    account.is_healthy = False
+    account.save(update_fields=["is_healthy"])
 
     account.test_connection()
 
+    account.refresh_from_db()
+    assert account.is_healthy is True
     mock_get_fetcher.assert_called_once_with()
     mock_get_fetcher.return_value.__enter__.return_value.test.assert_called_once_with()
     mock_logger.info.assert_called()
@@ -173,18 +178,35 @@ def test_test_connection_success(mocker, mock_logger, account):
 
 
 @pytest.mark.django_db
-def test_test_connection_failure(mocker, mock_logger, account):
+def test_test_connection_badProtocol(mocker, mock_logger, account):
     mock_get_fetcher = mocker.patch(
         "core.models.AccountModel.AccountModel.get_fetcher", side_effect=ValueError
     )
 
-    account.test_connection()
+    with pytest.raises(ValueError):
+        account.test_connection()
 
-    account.refresh_from_db()
     mock_get_fetcher.assert_called_once_with()
     mock_get_fetcher.return_value.__enter__.return_value.test.assert_not_called()
     mock_logger.info.assert_called()
-    mock_logger.exception.assert_called()
+
+
+@pytest.mark.django_db
+def test_test_connection_failure(mocker, mock_logger, account) -> None:
+    mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
+    mock_fetcher_test = mock_get_fetcher.return_value.__enter__.return_value.test
+    mock_fetcher_test.side_effect = MailAccountError
+    account.is_healthy = True
+    account.save(update_fields=["is_healthy"])
+
+    with pytest.raises(MailAccountError):
+        account.test_connection()
+
+    account.refresh_from_db()
+    assert account.is_healthy is False
+    mock_get_fetcher.assert_called_once_with()
+    mock_fetcher_test.assert_called_once_with()
+    mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
@@ -197,9 +219,13 @@ def test_update_mailboxes_success(mocker, mock_logger, account):
     spy_MaiboxModel_fromData = mocker.spy(
         core.models.AccountModel.MailboxModel, "fromData"
     )
+    account.is_healthy = False
+    account.save(update_fields=["is_healthy"])
 
     account.update_mailboxes()
 
+    account.refresh_from_db()
+    assert account.is_healthy is True
     mock_fetchMailboxes.assert_called_once_with()
     assert spy_MaiboxModel_fromData.call_count == 3
     account.refresh_from_db()
@@ -231,19 +257,23 @@ def test_update_mailboxes_duplicate(mocker, mock_logger, account):
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_exception(mocker, mock_logger, account):
+def test_update_mailboxes_failure(mocker, mock_logger, account):
     mock_get_fetcher = mocker.patch("core.models.AccountModel.AccountModel.get_fetcher")
     mock_fetchMailboxes = (
         mock_get_fetcher.return_value.__enter__.return_value.fetchMailboxes
     )
-    mock_fetchMailboxes.side_effect = Exception
+    mock_fetchMailboxes.side_effect = MailAccountError
     spy_MaiboxModel_fromData = mocker.spy(
         core.models.AccountModel.MailboxModel, "fromData"
     )
+    account.is_healthy = True
+    account.save(update_fields=["is_healthy"])
 
-    with pytest.raises(Exception):
+    with pytest.raises(MailAccountError):
         account.update_mailboxes()
 
+    account.refresh_from_db()
+    assert account.is_healthy is False
     mock_fetchMailboxes.assert_called_once_with()
     spy_MaiboxModel_fromData.assert_not_called()
     account.refresh_from_db()

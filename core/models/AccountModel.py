@@ -150,20 +150,31 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         Tests connecting and logging in to the mailhost and account.
         The :attr:`core.models.AccountModel.is_healthy` flag is set accordingly.
         Relies on the `test` method of the :mod:`core.utils.fetchers` classes.
+
+        Raises:
+            MailAccountError: If the test is fails.
         """
         logger.info("Testing %s ...", self)
         try:
             with self.get_fetcher() as fetcher:
                 fetcher.test()
-        except MailAccountError:
+        except MailAccountError as error:
+            logger.info("Testing %s failed with error: %s.", self, error)
             self.is_healthy = False
             self.save(update_fields=["is_healthy"])
             raise
-
+        self.is_healthy = True
+        self.save(update_fields=["is_healthy"])
         logger.info("Successfully tested account.")
 
     def update_mailboxes(self) -> None:
-        """Scans the given mailaccount for unknown mailboxes, parses and inserts them into the database."""
+        """Scans the given mailaccount for unknown mailboxes, parses and inserts them into the database.
+
+        If successful, marks this account as healthy, otherwise unhealthy.
+
+        Raises:
+            MailAccountError: If scanning for mailboxes failed.
+        """
 
         logger.info("Updating mailboxes in %s...", self)
         try:
@@ -173,6 +184,8 @@ class AccountModel(DirtyFieldsMixin, models.Model):
             self.is_healthy = False
             self.save(update_fields=["is_healthy"])
             raise
+        self.is_healthy = True
+        self.save(update_fields=["is_healthy"])
 
         for mailboxData in mailboxList:
             mailbox = MailboxModel.fromData(mailboxData, self)

@@ -33,13 +33,14 @@ import pytest
 from django.forms.models import model_to_dict
 from model_bakery import baker
 from rest_framework import status
-from test_AccountViewSet import fixture_accountModel
-from test_CorrespondentViewSet import fixture_correspondentModel
-from test_EMailViewSet import fixture_emailModel
-from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.MailingListViewSet import MailingListViewSet
 from core.models.MailingListModel import MailingListModel
+
+from .test_AccountViewSet import fixture_accountModel
+from .test_CorrespondentViewSet import fixture_correspondentModel
+from .test_EMailViewSet import fixture_emailModel
+from .test_MailboxViewSet import fixture_mailboxModel
 
 
 if TYPE_CHECKING:

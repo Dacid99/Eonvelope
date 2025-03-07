@@ -18,12 +18,13 @@
 
 import pytest
 from model_bakery import baker
-from test_AccountViewSet import fixture_accountModel
-from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
 from Emailkasten.utils import get_config
+
+from .test_AccountViewSet import fixture_accountModel
+from .test_MailboxViewSet import fixture_mailboxModel
 
 
 @pytest.fixture(name="emails")

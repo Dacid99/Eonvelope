@@ -35,6 +35,7 @@ from rest_framework import status
 
 from api.v1.views.AccountViewSet import AccountViewSet
 from core.models.AccountModel import AccountModel
+from core.utils.fetchers.exceptions import MailAccountError
 
 
 if TYPE_CHECKING:
@@ -425,7 +426,7 @@ def test_test_auth_other(
 
 
 @pytest.mark.django_db
-def test_test_auth_owner(
+def test_test_success_auth_owner(
     accountModel, owner_apiClient, custom_detail_action_url, mocker
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
@@ -443,6 +444,35 @@ def test_test_auth_owner(
     assert (
         response.data["account"] == AccountViewSet.serializer_class(accountModel).data
     )
+    assert response.data["result"] is True
+    assert "error" not in response.data
+    mock_test_connection.assert_called_once_with()
+
+
+@pytest.mark.django_db
+def test_test_failure_auth_owner(
+    faker, accountModel, owner_apiClient, custom_detail_action_url, mocker
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
+    fake_error_message = faker.sentence()
+    mock_test_connection = mocker.patch(
+        "api.v1.views.AccountViewSet.AccountModel.test_connection",
+        side_effect=MailAccountError(fake_error_message),
+    )
+
+    response = owner_apiClient.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_TEST, accountModel
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert (
+        response.data["account"] == AccountViewSet.serializer_class(accountModel).data
+    )
+    assert response.data["result"] is False
+    assert "error" in response.data
+    assert fake_error_message in response.data["error"]
     mock_test_connection.assert_called_once_with()
 
 

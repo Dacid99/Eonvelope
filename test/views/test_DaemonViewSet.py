@@ -34,11 +34,12 @@ import pytest
 from django.forms.models import model_to_dict
 from model_bakery import baker
 from rest_framework import status
-from test_AccountViewSet import fixture_accountModel
-from test_MailboxViewSet import fixture_mailboxModel
 
 from api.v1.views.DaemonViewSet import DaemonViewSet
 from core.models.DaemonModel import DaemonModel
+
+from .test_AccountViewSet import fixture_accountModel
+from .test_MailboxViewSet import fixture_mailboxModel
 
 
 if TYPE_CHECKING:

@@ -37,7 +37,7 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
 
     def connectToHost(self) -> None:
         """Overrides :func:`core.utils.fetchers.IMAPFetcher.connectToHost` to use :class:`imaplib.IMAP4_SSL`."""
-        self.logger.debug("Connecting to %s ...", str(self.account))
+        self.logger.debug("Connecting to %s ...", self.account)
         kwargs = {"host": self.account.mail_host, "ssl_context": None}
         if port := self.account.mail_host_port:
             kwargs["port"] = port
@@ -55,4 +55,4 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
             raise MailAccountError(
                 f"An {error.__class__.__name__} occured connecting to {self.account}!"
             ) from error
-        self.logger.info("Successfully connected to %s.", str(self.account))
+        self.logger.info("Successfully connected to %s.", self.account)

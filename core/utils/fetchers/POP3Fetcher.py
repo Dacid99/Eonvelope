@@ -75,7 +75,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         Raises:
             MailAccountError: If an error occurs or a bad response is returned.
         """
-        self.logger.debug("Connecting to %s ...", str(self.account))
+        self.logger.debug("Connecting to %s ...", self.account)
 
         kwargs = {"host": self.account.mail_host}
         if port := self.account.mail_host_port:
@@ -93,7 +93,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
             raise MailAccountError(
                 f"An {error.__class__.__name__} occured connecting to {self.account}!"
             ) from error
-        self.logger.info("Successfully connected to %s.", str(self.account))
+        self.logger.info("Successfully connected to %s.", self.account)
 
     @override
     def test(self, mailbox: MailboxModel | None = None) -> None:
@@ -108,14 +108,14 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         """
         super().test(mailbox)
 
-        self.logger.debug("Testing %s ...", str(self.account))
+        self.logger.debug("Testing %s ...", self.account)
         self.safe_noop()
-        self.logger.debug("Successfully tested %s.", str(self.account))
+        self.logger.debug("Successfully tested %s.", self.account)
 
         if mailbox is not None:
-            self.logger.debug("Testing %s ...", str(mailbox))
+            self.logger.debug("Testing %s ...", mailbox)
             self.safe_stat()
-            self.logger.debug("Successfully tested %s.", str(mailbox))
+            self.logger.debug("Successfully tested %s.", mailbox)
 
     @override
     def fetchEmails(
@@ -139,18 +139,18 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
                 If :attr:`criterion` is not :attr:`Emailkasten.MailFetchingCriteria.ALL`.
             MailAccountError: If an error occurs or a bad response is returned.
         """
-        self.logger.debug("Fetching all messages in %s ...", str(mailbox))
+        self.logger.debug("Fetching all messages in %s ...", mailbox)
 
         super().fetchEmails(mailbox, criterion)
 
-        self.logger.debug("Listing all messages in %s ...", str(mailbox))
+        self.logger.debug("Listing all messages in %s ...", mailbox)
 
         __, messageNumbersList, __ = self.safe_list()
 
         messageCount = len(messageNumbersList)
-        self.logger.info("Found %s messages in %s.", messageCount, str(mailbox))
+        self.logger.info("Found %s messages in %s.", messageCount, mailbox)
 
-        self.logger.debug("Retrieving all messages in %s ...", str(mailbox))
+        self.logger.debug("Retrieving all messages in %s ...", mailbox)
         mailDataList = []
         for number in range(messageCount):
             try:
@@ -159,16 +159,16 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
                 self.logger.warning(
                     "Failed to fetch message %s from %s!",
                     number,
-                    str(mailbox),
+                    mailbox,
                     exc_info=True,
                 )
                 continue
 
             fullMessage = b"\n".join(messageData)
             mailDataList.append(fullMessage)
-        self.logger.debug("Successfully retrieved all messages in %s.", str(mailbox))
+        self.logger.debug("Successfully retrieved all messages in %s.", mailbox)
 
-        self.logger.debug("Successfully fetched all messages in %s.", str(mailbox))
+        self.logger.debug("Successfully fetched all messages in %s.", mailbox)
 
         return mailDataList
 
@@ -187,9 +187,9 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
     @override
     def close(self) -> None:
         """Logs out of the account and closes the connection to the POP server if it is open."""
-        self.logger.debug("Closing connection to %s ...", str(self.account))
+        self.logger.debug("Closing connection to %s ...", self.account)
         if self._mailClient is None:
-            self.logger.debug("Connection to %s is already closed.", str(self.account))
+            self.logger.debug("Connection to %s is already closed.", self.account)
             return
         self.safe_quit()
-        self.logger.info("Successfully closed connection to %s.", str(self.account))
+        self.logger.info("Successfully closed connection to %s.", self.account)

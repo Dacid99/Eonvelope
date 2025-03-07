@@ -106,7 +106,7 @@ class EMailArchiverDaemon(threading.Thread):
             while not self._stopEvent.is_set():
                 self.cycle()
                 time.sleep(self._daemonModel.cycle_interval)
-            self.logger.info("%s finished successfully", str(self._daemonModel))
+            self.logger.info("%s finished successfully", self._daemonModel)
         except Exception:
             self.logger.exception(
                 "%s crashed! Attempting to restart ...",

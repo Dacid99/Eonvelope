@@ -57,7 +57,7 @@ def post_save_is_healthy(
         if "is_healthy" in instance.get_dirty_fields():
             logger.debug(
                 "%s has become healthy, flagging its account as healthy ...",
-                str(instance),
+                instance,
             )
             instance.account.is_healthy = True
             instance.account.save(update_fields=["is_healthy"])
@@ -65,7 +65,7 @@ def post_save_is_healthy(
     elif "is_healthy" in instance.get_dirty_fields():
         logger.debug(
             "%s has become unhealthy, flagging its daemons as unhealthy ...",
-            str(instance),
+            instance,
         )
         instance.daemons.update(is_healthy=False)
         logger.debug("Successfully flagged account as healthy.")

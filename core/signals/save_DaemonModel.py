@@ -51,7 +51,7 @@ def post_save_daemon(
 
     if instance.is_healthy and "is_healthy" in instance.get_dirty_fields():
         logger.debug(
-            "%s has become healthy, flagging its mailbox as healthy ...", str(instance)
+            "%s has become healthy, flagging its mailbox as healthy ...", instance
         )
         instance.mailbox.is_healthy = True
         instance.mailbox.save(update_fields=["is_healthy"])

@@ -97,14 +97,14 @@ class StorageModel(models.Model):
 
         If the result exceeds this limit, creates a new storage directory via :func:`_addNewDirectory`.
         """
-        logger.debug("Incrementing subdirectory count of %s ..", str(self))
+        logger.debug("Incrementing subdirectory count of %s ..", self)
 
         self.subdirectory_count += 1
         self.save(update_fields=["subdirectory_count"])
         if self.subdirectory_count >= get_config("STORAGE_MAX_SUBDIRS_PER_DIR"):
             logger.debug(
                 "Max number of subdirectories in %s reached, adding new storage ...",
-                str(self),
+                self,
             )
             self._addNewDirectory()
             logger.debug("Successfully added new storage.")

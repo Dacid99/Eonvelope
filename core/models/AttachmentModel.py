@@ -122,7 +122,7 @@ class AttachmentModel(models.Model):
         super().delete(*args, **kwargs)
 
         if self.file_path:
-            logger.debug("Removing %s from storage ...", str(self))
+            logger.debug("Removing %s from storage ...", self)
             try:
                 os.remove(self.file_path)
                 logger.debug(

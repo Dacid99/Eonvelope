@@ -28,7 +28,6 @@
   - sort args
   - AssertionErrors for injected side_effects
   - no pytest.raises(Exception)
--remove str() where unnecessary
 
 ### Work in progress
 

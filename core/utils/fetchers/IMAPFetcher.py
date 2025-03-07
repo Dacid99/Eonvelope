@@ -113,7 +113,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
         Raises:
             MailAccountError: If an error occurs or a bad response is returned.
         """
-        self.logger.debug("Connecting to %s ...", str(self.account))
+        self.logger.debug("Connecting to %s ...", self.account)
         kwargs = {"host": self.account.mail_host}
         if port := self.account.mail_host_port:
             kwargs["port"] = port
@@ -130,7 +130,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
             raise MailAccountError(
                 f"An {error.__class__.__name__} occured connecting to {self.account}!"
             ) from error
-        self.logger.info("Successfully connected to %s.", str(self.account))
+        self.logger.info("Successfully connected to %s.", self.account)
 
     @override
     def test(self, mailbox: MailboxModel | None = None) -> None:
@@ -146,16 +146,16 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
         """
         super().test(mailbox)
 
-        self.logger.debug("Testing %s ...", str(self.account))
+        self.logger.debug("Testing %s ...", self.account)
         self.safe_noop()
         self.logger.debug("Successfully tested %s.", self.account)
 
         if mailbox is not None:
-            self.logger.debug("Testing %s ...", str(mailbox))
+            self.logger.debug("Testing %s ...", mailbox)
             self.safe_select(mailbox.name, readonly=True)
             self.safe_check()
             self.safe_unselect()
-            self.logger.debug("Successfully tested %s.", str(mailbox))
+            self.logger.debug("Successfully tested %s.", mailbox)
 
     @override
     def fetchEmails(
@@ -189,26 +189,22 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
         self.logger.debug(
             "Searching and fetching %s messages in %s...",
             searchCriterion,
-            str(mailbox),
+            mailbox,
         )
-        self.logger.debug("Opening mailbox %s ...", str(mailbox))
+        self.logger.debug("Opening mailbox %s ...", mailbox)
         self.safe_select(mailbox.name, readonly=True)
         self.logger.debug("Successfully opened mailbox.")
 
-        self.logger.debug(
-            "Searching %s messages in %s ...", searchCriterion, str(mailbox)
-        )
+        self.logger.debug("Searching %s messages in %s ...", searchCriterion, mailbox)
         __, messageUIDs = self.safe_uid("SEARCH", searchCriterion)
         self.logger.info(
             "Found %s messages with uIDs %s in %s.",
             searchCriterion,
             messageUIDs,
-            str(mailbox),
+            mailbox,
         )
 
-        self.logger.debug(
-            "Fetching %s messages in %s ...", searchCriterion, str(mailbox)
-        )
+        self.logger.debug("Fetching %s messages in %s ...", searchCriterion, mailbox)
         mailDataList = []
         for uID in messageUIDs[0].split():
             try:
@@ -217,7 +213,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
                 self.logger.warning(
                     "Failed to fetch message %s from %s!",
                     uID,
-                    str(mailbox),
+                    mailbox,
                     exc_info=True,
                 )
                 continue
@@ -225,17 +221,17 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
         self.logger.debug(
             "Successfully fetched %s messages from %s.",
             searchCriterion,
-            str(mailbox),
+            mailbox,
         )
 
-        self.logger.debug("Leaving mailbox %s ...", str(mailbox))
+        self.logger.debug("Leaving mailbox %s ...", mailbox)
         self.safe_unselect()
         self.logger.debug("Successfully left mailbox.")
 
         self.logger.debug(
             "Successfully searched and fetched %s messages in %s.",
             searchCriterion,
-            str(mailbox),
+            mailbox,
         )
 
         return mailDataList
@@ -253,7 +249,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
         Raises:
             MailAccountError: If an error occurs or a bad response is returned.
         """
-        self.logger.debug("Fetching mailboxes at %s ...", str(self.account))
+        self.logger.debug("Fetching mailboxes at %s ...", self.account)
         __, mailboxes = self.safe_list()
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
         return mailboxes
@@ -261,9 +257,9 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
     @override
     def close(self) -> None:
         """Logs out of the account and closes the connection to the IMAP server if it is open."""
-        self.logger.debug("Closing connection to %s ...", str(self.account))
+        self.logger.debug("Closing connection to %s ...", self.account)
         if self._mailClient is None:
-            self.logger.debug("Connection to %s is already closed.", str(self.account))
+            self.logger.debug("Connection to %s is already closed.", self.account)
             return
         self.safe_logout()
-        self.logger.info("Successfully closed connection to %s.", str(self.account))
+        self.logger.info("Successfully closed connection to %s.", self.account)

@@ -43,6 +43,6 @@ def pre_delete_stop_daemon(
         instance: The instance that has been saved.
         **kwargs: Other keyword arguments.
     """
-    logger.debug("Stopping daemon of deleted daemon %s ..", str(instance))
+    logger.debug("Stopping daemon of deleted daemon %s ..", instance)
     EMailArchiverDaemonRegistry.stopDaemon(instance)
-    logger.debug("Successfully stopped daemon of deleted daemon %s.", str(instance))
+    logger.debug("Successfully stopped daemon of deleted daemon %s.", instance)

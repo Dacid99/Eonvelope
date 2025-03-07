@@ -49,7 +49,7 @@ def post_save_is_healthy(
     if not instance.is_healthy and "is_healthy" in instance.get_dirty_fields():
         logger.debug(
             "%s has become unhealthy, flagging all its mailboxes as unhealthy ...",
-            str(instance),
+            instance,
         )
         mailboxEntries = instance.mailboxes.all()
         for mailboxEntry in mailboxEntries:

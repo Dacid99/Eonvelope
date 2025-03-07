@@ -61,7 +61,7 @@ class EMailArchiverDaemonRegistry:
         if cls.isRunning(daemonModel):
             daemonInstance = cls._runningDaemons[daemonModel.id]
             daemonInstance.update()
-            cls.logger.debug("Updated daemon %s", str(daemonModel))
+            cls.logger.debug("Updated daemon %s", daemonModel)
 
     @classmethod
     def testDaemon(cls, daemonModel: DaemonModel) -> bool:
@@ -75,12 +75,12 @@ class EMailArchiverDaemonRegistry:
         """
         try:
             newDaemon = EMailArchiverDaemon(daemonModel)
-            cls.logger.debug("Testing daemon %s ...", str(daemonModel))
+            cls.logger.debug("Testing daemon %s ...", daemonModel)
             newDaemon.cycle()
-            cls.logger.debug("Successfully tested daemon %s.", str(daemonModel))
+            cls.logger.debug("Successfully tested daemon %s.", daemonModel)
             daemonModel.refresh_from_db()
         except Exception:
-            cls.logger.exception("Failed to test daemon %s !", str(daemonModel))
+            cls.logger.exception("Failed to test daemon %s !", daemonModel)
             return False
         else:
             return daemonModel.is_healthy
@@ -96,14 +96,14 @@ class EMailArchiverDaemonRegistry:
             `True` if the daemon was started, `False` if it was already running.
         """
         if not cls.isRunning(daemonModel):
-            cls.logger.debug("Starting daemon %s ...", str(daemonModel))
+            cls.logger.debug("Starting daemon %s ...", daemonModel)
             newDaemon = EMailArchiverDaemon(daemonModel)
             newDaemon.start()
             cls._runningDaemons[daemonModel.id] = newDaemon
-            cls.logger.debug("Successfully started daemon %s .", str(daemonModel))
+            cls.logger.debug("Successfully started daemon %s .", daemonModel)
             return True
         cls.logger.debug(
-            "Did not start daemon %s, it was already running.", str(daemonModel)
+            "Did not start daemon %s, it was already running.", daemonModel
         )
         return False
 
@@ -118,12 +118,11 @@ class EMailArchiverDaemonRegistry:
             `True` if the daemon was stopped, `False` if it wasnt running.
         """
         if cls.isRunning(daemonModel):
-            cls.logger.debug("Stopping daemon %s ...", str(daemonModel))
+            cls.logger.debug("Stopping daemon %s ...", daemonModel)
             daemon = cls._runningDaemons.pop(daemonModel.id)
             daemon.stop()
-            cls.logger.debug("Successfully stopped daemon %s .", str(daemonModel))
+            cls.logger.debug("Successfully stopped daemon %s .", daemonModel)
             return True
-        cls.logger.debug(
-            "Did not stop daemon %s, it was not running.", str(daemonModel)
-        )
+
+        cls.logger.debug("Did not stop daemon %s, it was not running.", daemonModel)
         return False

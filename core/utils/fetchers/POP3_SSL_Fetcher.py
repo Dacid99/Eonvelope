@@ -40,7 +40,7 @@ class POP3_SSL_Fetcher(POP3Fetcher):
     @override
     def connectToHost(self) -> None:
         """Overrides :func:`core.utils.fetchers.POP3Fetcher.connectToHost` to use :class:`poplib.POP3_SSL`."""
-        self.logger.debug("Connecting to %s ...", str(self.account))
+        self.logger.debug("Connecting to %s ...", self.account)
 
         kwargs = {"host": self.account.mail_host, "context": None}
         if port := self.account.mail_host_port:
@@ -58,4 +58,4 @@ class POP3_SSL_Fetcher(POP3Fetcher):
             raise MailAccountError(
                 f"An {error.__class__.__name__} occured connecting to {self.account}!"
             ) from error
-        self.logger.info("Successfully connected to %s.", str(self.account))
+        self.logger.info("Successfully connected to %s.", self.account)

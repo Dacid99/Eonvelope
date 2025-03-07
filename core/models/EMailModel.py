@@ -178,7 +178,7 @@ class EMailModel(models.Model):
         super().delete(*args, **kwargs)
 
         if self.eml_filepath:
-            logger.debug("Removing %s from storage ...", str(self))
+            logger.debug("Removing %s from storage ...", self)
             try:
                 os.remove(self.eml_filepath)
                 logger.debug(
@@ -194,7 +194,7 @@ class EMailModel(models.Model):
                 )
 
         if self.prerender_filepath:
-            logger.debug("Removing %s from storage ...", str(self))
+            logger.debug("Removing %s from storage ...", self)
             try:
                 os.remove(self.prerender_filepath)
                 logger.debug(

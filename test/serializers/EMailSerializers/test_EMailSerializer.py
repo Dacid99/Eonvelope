@@ -53,6 +53,9 @@ def test_output(email):
     assert serializerData["is_favorite"] == email.is_favorite
     assert "mailbox" in serializerData
     assert serializerData["mailbox"] == email.mailbox.id
+    assert "headers" not in serializerData
+    assert "x_spam" in serializerData
+    assert serializerData["x_spam"] == email.x_spam
     assert "created" in serializerData
     assert datetime.fromisoformat(serializerData["created"]) == email.created
     assert "updated" in serializerData
@@ -65,7 +68,7 @@ def test_output(email):
     assert serializerData["mailinglist"] is None
     assert "correspondents" in serializerData
     assert serializerData["correspondents"] == []
-    assert len(serializerData) == 16
+    assert len(serializerData) == 17
 
 
 @pytest.mark.django_db
@@ -86,6 +89,8 @@ def test_input(email):
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == email.is_favorite
     assert "mailbox" not in serializerData
+    assert "headers" not in serializerData
+    assert "x_spam" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData
     assert "replies" not in serializerData

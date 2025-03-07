@@ -53,7 +53,7 @@ def test_output(mailbox):
     assert datetime.fromisoformat(serializerData["created"]) == mailbox.created
     assert "updated" in serializerData
     assert datetime.fromisoformat(serializerData["updated"]) == mailbox.updated
-    assert len(serializerData) == 10
+    assert len(serializerData) == 9
 
 
 @pytest.mark.django_db

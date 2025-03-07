@@ -39,8 +39,8 @@ def test_output(correspondent):
     assert serializerData["id"] == correspondent.id
     assert "emails" in serializerData
     assert serializerData["emails"] == []
-    assert "mailinglist" in serializerData
-    assert serializerData["mailinglist"] == []
+    assert "mailinglists" in serializerData
+    assert serializerData["mailinglists"] == []
     assert "email_name" in serializerData
     assert serializerData["email_name"] == correspondent.email_name
     assert "email_address" in serializerData
@@ -63,7 +63,7 @@ def test_input(correspondent):
 
     assert "id" not in serializerData
     assert "emails" not in serializerData
-    assert "mailinglist" not in serializerData
+    assert "mailinglists" not in serializerData
     assert "email_name" in serializerData
     assert serializerData["email_name"] == correspondent.email_name
     assert "email_address" not in serializerData

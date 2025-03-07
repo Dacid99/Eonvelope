@@ -69,7 +69,7 @@ def test_output(email):
     assert "correspondents" in serializerData
     assert serializerData["correspondents"] == []
 
-    assert len(serializerData) == 17
+    assert len(serializerData) == 16
 
 
 @pytest.mark.django_db

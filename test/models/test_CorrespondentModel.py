@@ -38,12 +38,12 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
 
-@pytest.fixture(name="mock_logger")
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker) -> MagicMock:
-    """Mocks the :class:`core.models.MailingListMoCorrespondentModeldel.logger`.
+    """Mocks the :attr:`core.models.CorrespondentModel.logger`.
 
     Returns:
-        The email instance for testing.
+        The mocked logger instance.
     """
     return mocker.patch("core.models.CorrespondentModel.logger")
 
@@ -59,7 +59,7 @@ def fixture_correspondentModel() -> CorrespondentModel:
 
 
 @pytest.mark.django_db
-def test_CorrespondentModel_creation(correspondent):
+def test_CorrespondentModel_default_creation(correspondent):
     """Tests the correct default creation of :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
     assert correspondent.email_name is not None
@@ -116,7 +116,7 @@ def test_fromHeader_duplicate(mocker, faker, correspondent):
 
 
 @pytest.mark.django_db
-def test_fromHeader_no_address(mocker, mock_logger, faker, correspondent):
+def test_fromHeader_no_address(mocker, faker, mock_logger):
     mock_parseCorrespondentHeader = mocker.patch(
         "core.models.CorrespondentModel.parseCorrespondentHeader",
         return_value=(faker.name(), ""),

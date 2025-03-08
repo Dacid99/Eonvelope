@@ -39,13 +39,13 @@ def fixture_mock_logger(mocker):
     return mocker.patch("core.models.AttachmentModel.logger")
 
 
-@pytest.fixture(name="mock_os_remove")
+@pytest.fixture(name="mock_os_remove", autouse=True)
 def fixture_mock_os_remove(mocker):
     return mocker.patch("core.models.AttachmentModel.os.remove")
 
 
 @pytest.fixture(name="attachment")
-def fixture_attachmentModel(faker, mock_os_remove) -> AttachmentModel:
+def fixture_attachmentModel(faker) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Returns:
@@ -55,7 +55,7 @@ def fixture_attachmentModel(faker, mock_os_remove) -> AttachmentModel:
 
 
 @pytest.mark.django_db
-def test_AttachmentModel_creation(attachment):
+def test_AttachmentModel_default_creation(attachment):
     """Tests the correct default creation of :class:`core.models.AttachmentModel.AttachmentModel`."""
 
     assert attachment.file_name is not None
@@ -128,7 +128,7 @@ def test_delete_attachmentfile_success(mock_logger, attachment, mock_os_remove):
 @pytest.mark.django_db
 @pytest.mark.parametrize("side_effect", [FileNotFoundError, OSError, Exception])
 def test_delete_attachmentfile_failure(
-    attachment, mock_logger, mock_os_remove, side_effect
+    mock_logger, attachment, mock_os_remove, side_effect
 ):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal throws an exception.
@@ -148,7 +148,7 @@ def test_delete_attachmentfile_failure(
 
 
 @pytest.mark.django_db
-def test_delete_attachmentfile_delete_error(mocker, attachment, mock_logger):
+def test_delete_attachmentfile_delete_error(mocker, mock_logger, attachment):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if delete throws an exception.
     """
@@ -177,7 +177,7 @@ def test_save_data_settings(mocker, attachment, save_attachments, expectedCalls)
 
     attachment.save(attachmentData=mock_data)
 
-    mock_save_to_storage.call_count == expectedCalls
+    assert mock_save_to_storage.call_count == expectedCalls
     mock_super_save.assert_called()
 
 
@@ -200,12 +200,12 @@ def test_save_data_failure(mocker, attachment):
     mock_super_save = mocker.patch("core.models.AttachmentModel.models.Model.save")
     mock_save_to_storage = mocker.patch(
         "core.models.AttachmentModel.AttachmentModel.save_to_storage",
-        side_effect=Exception,
+        side_effect=AssertionError,
     )
     attachment.email.mailbox.save_attachments = True
     mock_data = mocker.MagicMock(spec=Message)
 
-    with pytest.raises(Exception):
+    with pytest.raises(AssertionError):
         attachment.save(attachmentData=mock_data)
 
     mock_super_save.assert_called()

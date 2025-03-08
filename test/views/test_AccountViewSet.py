@@ -42,7 +42,7 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="accountModel")
+@pytest.fixture(name="accountModel", autouse=True)
 def fixture_accountModel(owner_user) -> AccountModel:
     """Creates an :class:`core.models.AccountModel.AccountModel` owned by :attr:`owner_user`.
 
@@ -68,12 +68,11 @@ def fixture_accountPayload(owner_user) -> dict[str, Any]:
     accountData = baker.prepare(AccountModel, user=owner_user)
     payload = model_to_dict(accountData)
     payload.pop("id")
-    cleanPayload = {key: value for key, value in payload.items() if value is not None}
-    return cleanPayload
+    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.mark.django_db
-def test_list_noauth(accountModel, noauth_apiClient, list_url):
+def test_list_noauth(noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(AccountViewSet))
 
@@ -83,7 +82,7 @@ def test_list_noauth(accountModel, noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(accountModel, other_apiClient, list_url):
+def test_list_auth_other(other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(AccountViewSet))
 
@@ -93,7 +92,7 @@ def test_list_auth_other(accountModel, other_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(accountModel, owner_apiClient, list_url):
+def test_list_auth_owner(owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(list_url(AccountViewSet))
 
@@ -318,7 +317,10 @@ def test_delete_auth_owner(accountModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_scan_mailboxes_noauth(
-    accountModel, noauth_apiClient, custom_detail_action_url, mocker
+    mocker,
+    accountModel,
+    noauth_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.scan_mailboxes` action with an unauthenticated user client."""
     mock_update_mailboxes = mocker.patch(
@@ -338,7 +340,10 @@ def test_scan_mailboxes_noauth(
 
 @pytest.mark.django_db
 def test_scan_mailboxes_auth_other(
-    accountModel, other_apiClient, custom_detail_action_url, mocker
+    mocker,
+    accountModel,
+    other_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated other user client."""
     mock_update_mailboxes = mocker.patch(
@@ -359,7 +364,10 @@ def test_scan_mailboxes_auth_other(
 
 @pytest.mark.django_db
 def test_scan_mailboxes_auth_owner(
-    accountModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker,
+    accountModel,
+    owner_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.scan_mailboxes` action with the authenticated owner user client."""
     mock_update_mailboxes = mocker.patch(
@@ -380,7 +388,12 @@ def test_scan_mailboxes_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_noauth(accountModel, noauth_apiClient, custom_detail_action_url, mocker):
+def test_test_noauth(
+    mocker,
+    accountModel,
+    noauth_apiClient,
+    custom_detail_action_url,
+):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with an unauthenticated user client."""
     mock_test_connection = mocker.patch(
         "api.v1.views.AccountViewSet.AccountModel.test_connection"
@@ -403,7 +416,10 @@ def test_test_noauth(accountModel, noauth_apiClient, custom_detail_action_url, m
 
 @pytest.mark.django_db
 def test_test_auth_other(
-    accountModel, other_apiClient, custom_detail_action_url, mocker
+    mocker,
+    accountModel,
+    other_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated other user client."""
     mock_test_connection = mocker.patch(
@@ -427,7 +443,10 @@ def test_test_auth_other(
 
 @pytest.mark.django_db
 def test_test_success_auth_owner(
-    accountModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker,
+    accountModel,
+    owner_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
     mock_test_connection = mocker.patch(
@@ -451,7 +470,11 @@ def test_test_success_auth_owner(
 
 @pytest.mark.django_db
 def test_test_failure_auth_owner(
-    faker, accountModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker,
+    faker,
+    accountModel,
+    owner_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
     fake_error_message = faker.sentence()

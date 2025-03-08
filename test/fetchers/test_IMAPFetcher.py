@@ -52,7 +52,7 @@ def fixture_imapMailbox(mailbox):
     return mailbox
 
 
-@pytest.fixture(name="mock_IMAP4")
+@pytest.fixture(name="mock_IMAP4", autouse=True)
 def fixture_mock_IMAP4(mocker, faker):
     mock_IMAP4 = mocker.patch(
         "core.utils.fetchers.IMAPFetcher.imaplib.IMAP4", autospec=True
@@ -353,7 +353,7 @@ def test_IMAPFetcher_fetchEmails_success(mocker, imapMailbox, mock_logger, mock_
 
 
 @pytest.mark.django_db
-def test_IMAPFetcher_fetchEmails_wrongMailbox(imapMailbox, mock_logger, mock_IMAP4):
+def test_IMAPFetcher_fetchEmails_wrongMailbox(imapMailbox, mock_logger):
     wrongMailbox = baker.make(MailboxModel)
 
     with pytest.raises(ValueError, match="is not in"):
@@ -363,7 +363,7 @@ def test_IMAPFetcher_fetchEmails_wrongMailbox(imapMailbox, mock_logger, mock_IMA
 
 
 @pytest.mark.django_db
-def test_IMAPFetcher_fetchEmails_badCriterion(imapMailbox, mock_logger, mock_IMAP4):
+def test_IMAPFetcher_fetchEmails_badCriterion(imapMailbox, mock_logger):
     with pytest.raises(ValueError, match="not available via"):
         IMAPFetcher(imapMailbox.account).fetchEmails(imapMailbox, "NONE")
 
@@ -557,7 +557,7 @@ def test_IMAPFetcher_close_exception(imapMailbox, mock_logger, mock_IMAP4):
 
 
 @pytest.mark.django_db
-def test_IMAPFetcher___str__(imapMailbox, mock_IMAP4):
+def test_IMAPFetcher___str__(imapMailbox):
     result = str(IMAPFetcher(imapMailbox.account))
 
     assert str(imapMailbox.account) in result

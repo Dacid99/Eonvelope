@@ -36,7 +36,7 @@ def fixture_imap_ssl_mailbox(mailbox):
     return mailbox
 
 
-@pytest.fixture(name="mock_IMAP4_SSL")
+@pytest.fixture(name="mock_IMAP4_SSL", autouse=True)
 def fixture_mock_IMAP4_SSL(mocker, faker):
     mock_IMAP4_SSL = mocker.patch(
         "core.utils.fetchers.IMAP_SSL_Fetcher.imaplib.IMAP4_SSL", autospec=True

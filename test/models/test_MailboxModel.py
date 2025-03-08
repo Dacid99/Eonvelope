@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
 
-@pytest.fixture(name="mock_logger")
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker) -> MagicMock:
     """Mocks :attr:`core.models.MailboxModel.logger`.
 
@@ -67,7 +67,7 @@ def fixture_mailboxModel() -> MailboxModel:
 
 
 @pytest.mark.django_db
-def test_MailboxModel_creation(mailbox):
+def test_MailboxModel_default_creation(mailbox):
     """Tests the correct default creation of :class:`core.models.MailboxModel.MailboxModel`."""
 
     assert mailbox.name is not None
@@ -304,9 +304,10 @@ def test_addFromMailboxFile_bad_format(
     )
     fake_mbox = bytes(faker.sentence(7), encoding="utf-8")
 
-    with override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"):
-        with pytest.raises(ValueError):
-            mailbox.addFromMailboxFile(fake_mbox, "unimplemented")
+    with override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"), pytest.raises(
+        ValueError
+    ):
+        mailbox.addFromMailboxFile(fake_mbox, "unimplemented")
 
     mock_open.assert_not_called()
     mock_EMailModel_createFromEmailBytes.assert_not_called()

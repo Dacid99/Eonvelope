@@ -37,6 +37,16 @@ from core.models.MailboxModel import MailboxModel
 from Emailkasten.utils import get_config
 
 
+@pytest.fixture(name="mock_logger", autouse=True)
+def fixture_mock_logger(mocker):
+    """Mocks the :attr:`core.models.DaemonModel.logger`.
+
+    Returns:
+        The mocked logger instance.
+    """
+    return mocker.patch("core.models.DaemonModel.logger")
+
+
 @pytest.fixture(name="daemon")
 def fixture_daemonModel(faker) -> DaemonModel:
     """Creates an :class:`core.models.DaemonModel.DaemonModel`.
@@ -48,7 +58,7 @@ def fixture_daemonModel(faker) -> DaemonModel:
 
 
 @pytest.mark.django_db
-def test_DaemonModel_creation(daemon):
+def test_DaemonModel_default_creation(daemon):
     """Tests the correct default creation of :class:`core.models.DaemonModel.DaemonModel`."""
 
     assert daemon.uuid is not None

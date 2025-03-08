@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
 
-@pytest.fixture(name="mock_logger")
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker) -> MagicMock:
     """Mocks the :class:`core.models.MailingListModel.logger`.
 
@@ -59,7 +59,7 @@ def fixture_mailingListModel() -> MailingListModel:
 
 
 @pytest.mark.django_db
-def test_MailingListModel_creation(mailingList):
+def test_MailingListModel_default_creation(mailingList):
     """Tests the correct default creation of :class:`core.models.MailingListModel.MailingListModel`."""
 
     assert mailingList.list_id is not None

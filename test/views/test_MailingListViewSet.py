@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="mailingListModel")
+@pytest.fixture(name="mailingListModel", autouse=True)
 def fixture_mailingListModel(correspondentModel, emailModel) -> MailingListModel:
     """Creates an :class:`core.models.MailingListModel.MailingListModel` owned by :attr:`owner_user`.
 
@@ -75,12 +75,11 @@ def fixture_mailingListPayload(correspondentModel, emailModel) -> dict[str, Any]
     correspondentData = baker.prepare(MailingListModel, emails=[emailModel])
     payload = model_to_dict(correspondentData)
     payload.pop("id")
-    cleanPayload = {key: value for key, value in payload.items() if value is not None}
-    return cleanPayload
+    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.mark.django_db
-def test_list_noauth(mailingListModel, noauth_apiClient, list_url):
+def test_list_noauth(noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(MailingListViewSet))
 
@@ -90,7 +89,7 @@ def test_list_noauth(mailingListModel, noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(mailingListModel, other_apiClient, list_url):
+def test_list_auth_other(other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(MailingListViewSet))
 
@@ -100,7 +99,7 @@ def test_list_auth_other(mailingListModel, other_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(mailingListModel, owner_apiClient, list_url):
+def test_list_auth_owner(owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(list_url(MailingListViewSet))
 

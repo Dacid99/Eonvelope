@@ -28,7 +28,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.contrib.auth.models import User
-from django.db import IntegrityError, connection, transaction
+from django.db import IntegrityError
 from model_bakery import baker
 
 import core.models.AccountModel
@@ -46,12 +46,12 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
 
-@pytest.fixture(name="mock_logger")
+@pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker) -> MagicMock:
-    """Mocks :attr:`core.models.AccountModel.logger`.
+    """Mocks the :attr:`core.models.AccountModel.logger`.
 
     Returns:
-        The mocker logger instance.
+        The mocked logger instance.
     """
     return mocker.patch("core.models.AccountModel.logger")
 
@@ -67,7 +67,7 @@ def fixture_accountModel() -> AccountModel:
 
 
 @pytest.mark.django_db
-def test_AccountModel_creation(account):
+def test_AccountModel_default_creation(account):
     """Tests the correct default creation of :class:`core.models.AccountModel.AccountModel`."""
 
     assert account.mail_address is not None

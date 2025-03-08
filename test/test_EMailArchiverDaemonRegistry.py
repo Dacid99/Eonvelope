@@ -21,10 +21,11 @@ import pytest
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 
 from .models.test_DaemonModel import fixture_daemonModel
+import contextlib
 
 
-@pytest.fixture(name="mock_logger")
-def fixture_mock_logger(mocker, monkeypatch):
+@pytest.fixture(name="mock_logger", autouse=True)
+def fixture_mock_logger(mocker):
     mock_logger = mocker.Mock()
     mocker.patch(
         "core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.logger",
@@ -38,10 +39,8 @@ def fixture_mock_runningDaemon(mocker, daemon):
     mock_runningDaemon = mocker.MagicMock()
     EMailArchiverDaemonRegistry._runningDaemons[daemon.id] = mock_runningDaemon
     yield mock_runningDaemon
-    try:
+    with contextlib.suppress(KeyError):
         EMailArchiverDaemonRegistry._runningDaemons.pop(daemon.id)
-    except KeyError:
-        pass
 
 
 @pytest.fixture(name="patch_EMailArchiverDaemon")

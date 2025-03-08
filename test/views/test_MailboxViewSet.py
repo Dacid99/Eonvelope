@@ -49,7 +49,7 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="mailboxModel")
+@pytest.fixture(name="mailboxModel", autouse=True)
 def fixture_mailboxModel(accountModel) -> MailboxModel:
     """Creates an :class:`core.models.MailboxModel.MailboxModel` owned by :attr:`owner_user`.
 
@@ -77,12 +77,11 @@ def fixture_mailboxPayload(accountModel) -> dict[str, Any]:
     )
     payload = model_to_dict(mailboxData)
     payload.pop("id")
-    cleanPayload = {key: value for key, value in payload.items() if value is not None}
-    return cleanPayload
+    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.mark.django_db
-def test_list_noauth(mailboxModel, noauth_apiClient, list_url):
+def test_list_noauth(noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(MailboxViewSet))
 
@@ -92,7 +91,7 @@ def test_list_noauth(mailboxModel, noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(mailboxModel, other_apiClient, list_url):
+def test_list_auth_other(other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(MailboxViewSet))
 
@@ -102,7 +101,7 @@ def test_list_auth_other(mailboxModel, other_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(mailboxModel, owner_apiClient, list_url):
+def test_list_auth_owner(owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(list_url(MailboxViewSet))
 
@@ -340,7 +339,10 @@ def test_add_daemon_auth_owner(mailboxModel, owner_apiClient, custom_detail_acti
 
 @pytest.mark.django_db
 def test_test_mailbox_noauth(
-    mailboxModel, noauth_apiClient, custom_detail_action_url, mocker
+    mocker,
+    mailboxModel,
+    noauth_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with an unauthenticated user client."""
     mock_test_connection = mocker.patch(
@@ -364,7 +366,7 @@ def test_test_mailbox_noauth(
 
 @pytest.mark.django_db
 def test_test_mailbox_auth_other(
-    mailboxModel, other_apiClient, custom_detail_action_url, mocker
+    mocker, mailboxModel, other_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated other user client."""
     mock_test_connection = mocker.patch(
@@ -388,7 +390,7 @@ def test_test_mailbox_auth_other(
 
 @pytest.mark.django_db
 def test_test_mailbox_success_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated owner user client."""
     mock_test_connection = mocker.patch(
@@ -447,7 +449,7 @@ def test_test_mailbox_failure_auth_owner(
 
 @pytest.mark.django_db
 def test_fetch_all_noauth(
-    mailboxModel, noauth_apiClient, custom_detail_action_url, mocker
+    mocker, mailboxModel, noauth_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with an unauthenticated user client."""
     mock_MailboxModel_fetch = mocker.patch(
@@ -469,7 +471,10 @@ def test_fetch_all_noauth(
 
 @pytest.mark.django_db
 def test_fetch_all_auth_other(
-    mailboxModel, other_apiClient, custom_detail_action_url, mocker
+    mocker,
+    mailboxModel,
+    other_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with the authenticated other user client."""
     mock_MailboxModel_fetch = mocker.patch(
@@ -491,7 +496,7 @@ def test_fetch_all_auth_other(
 
 @pytest.mark.django_db
 def test_fetch_all_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with the authenticated owner user client."""
     mock_MailboxModel_fetch = mocker.patch(
@@ -513,7 +518,11 @@ def test_fetch_all_auth_owner(
 
 @pytest.mark.django_db
 def test_upload_eml_noauth(
-    mailboxModel, noauth_apiClient, custom_detail_action_url, mocker, faker
+    mocker,
+    faker,
+    mailboxModel,
+    noauth_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with an unauthenticated user client."""
     mock_EMailModel_createFromEmailBytes = mocker.patch(
@@ -539,7 +548,11 @@ def test_upload_eml_noauth(
 
 @pytest.mark.django_db
 def test_upload_eml_auth_other(
-    mailboxModel, other_apiClient, custom_detail_action_url, mocker, faker
+    mocker,
+    faker,
+    mailboxModel,
+    other_apiClient,
+    custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated other user client."""
     mock_EMailModel_createFromEmailBytes = mocker.patch(
@@ -565,7 +578,7 @@ def test_upload_eml_auth_other(
 
 @pytest.mark.django_db
 def test_upload_eml_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+    mocker, faker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
     mock_EMailModel_createFromEmailBytes = mocker.patch(
@@ -593,7 +606,7 @@ def test_upload_eml_auth_owner(
 
 @pytest.mark.django_db
 def test_upload_eml_no_file_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+    mocker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
     mock_EMailModel_createFromEmailBytes = mocker.patch(
@@ -615,7 +628,7 @@ def test_upload_eml_no_file_auth_owner(
 
 @pytest.mark.django_db
 def test_upload_mailbox_noauth(
-    mailboxModel, noauth_apiClient, custom_detail_action_url, mocker, faker
+    mocker, faker, mailboxModel, noauth_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with an unauthenticated user client."""
     mock_MailboxModel_addFromMailboxFile = mocker.patch(
@@ -642,7 +655,7 @@ def test_upload_mailbox_noauth(
 
 @pytest.mark.django_db
 def test_upload_mailbox_auth_other(
-    mailboxModel, other_apiClient, custom_detail_action_url, mocker, faker
+    mocker, faker, mailboxModel, other_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated other user client."""
     mock_MailboxModel_addFromMailboxFile = mocker.patch(
@@ -669,7 +682,7 @@ def test_upload_mailbox_auth_other(
 
 @pytest.mark.django_db
 def test_upload_mailbox_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+    mocker, faker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
     mock_MailboxModel_addFromMailboxFile = mocker.patch(
@@ -698,7 +711,7 @@ def test_upload_mailbox_auth_owner(
 
 @pytest.mark.django_db
 def test_upload_mailbox_no_file_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+    mocker, faker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
     mock_MailboxModel_addFromMailboxFile = mocker.patch(
@@ -722,7 +735,7 @@ def test_upload_mailbox_no_file_auth_owner(
 
 @pytest.mark.django_db
 def test_upload_mailbox_no_format_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+    mocker, faker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
     mock_MailboxModel_addFromMailboxFile = mocker.patch(
@@ -748,7 +761,7 @@ def test_upload_mailbox_no_format_auth_owner(
 
 @pytest.mark.django_db
 def test_upload_mailbox_bad_format_auth_owner(
-    mailboxModel, owner_apiClient, custom_detail_action_url, mocker, faker
+    mocker, faker, mailboxModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
     mock_MailboxModel_addFromMailboxFile = mocker.patch(

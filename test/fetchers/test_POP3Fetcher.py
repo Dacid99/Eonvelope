@@ -295,7 +295,7 @@ def test_POP3Fetcher_fetchEmails_success(mocker, pop3mailbox, mock_logger, mock_
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetchEmails_wrongMailbox(pop3mailbox, mock_logger, mock_POP3):
+def test_POP3Fetcher_fetchEmails_wrongMailbox(pop3mailbox, mock_logger):
     wrongMailbox = baker.make(MailboxModel)
 
     with pytest.raises(ValueError, match="is not in"):
@@ -305,7 +305,7 @@ def test_POP3Fetcher_fetchEmails_wrongMailbox(pop3mailbox, mock_logger, mock_POP
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetchEmails_badCriterion(pop3mailbox, mock_logger, mock_POP3):
+def test_POP3Fetcher_fetchEmails_badCriterion(pop3mailbox, mock_logger):
     with pytest.raises(ValueError, match="not available via"):
         POP3Fetcher(pop3mailbox.account).fetchEmails(pop3mailbox, "NONE")
 
@@ -383,7 +383,7 @@ def test_POP3Fetcher_fetchEmails_exception_ignored(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetchMailboxes(pop3mailbox, mock_POP3):
+def test_POP3Fetcher_fetchMailboxes(pop3mailbox):
     result = POP3Fetcher(pop3mailbox.account).fetchMailboxes()
 
     assert result == [b"INBOX"]
@@ -435,7 +435,7 @@ def test_POP3Fetcher_close_exception(pop3mailbox, mock_logger, mock_POP3):
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher___str__(pop3mailbox, mock_POP3):
+def test_POP3Fetcher___str__(pop3mailbox):
     result = str(POP3Fetcher(pop3mailbox.account))
 
     assert str(pop3mailbox.account) in result

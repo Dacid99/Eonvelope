@@ -34,7 +34,6 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
     from pyfakefs.fake_filesystem import FakeFilesystem
-    from pytest_mock.plugin import MockerFixture
 
 
 @pytest.fixture(name="mock_logger", autouse=True)
@@ -46,6 +45,7 @@ def fixture_mock_logger(mocker) -> MagicMock:
 @pytest.fixture(name="mock_filesystem", autouse=True)
 def fixture_mock_filesystem() -> Generator[FakeFilesystem, None, None]:
     """Mocks a Linux filesystem for realistic testing.
+
     Contains different files with various permission settings for the 'other' users and contents .
 
     Note:
@@ -80,7 +80,10 @@ def fixture_mock_filesystem() -> Generator[FakeFilesystem, None, None]:
     ],
 )
 def test_StorageModel_initial_single_creation(
-    STORAGE_PATH, expectedCritical, mock_logger, mock_filesystem, override_config
+    mock_logger,
+    override_config,
+    STORAGE_PATH,
+    expectedCritical,
 ) -> None:
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
@@ -103,7 +106,7 @@ def test_StorageModel_initial_single_creation(
 @pytest.mark.override_config(
     STORAGE_PATH="empty-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
 )
-def test_StorageModel_initial_many_creation(mock_logger, mock_filesystem):
+def test_StorageModel_initial_many_creation(mock_logger):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
     for number in range(2 * 3 + 1):
@@ -127,7 +130,7 @@ def test_StorageModel_initial_many_creation(mock_logger, mock_filesystem):
 @pytest.mark.override_config(
     STORAGE_PATH="empty-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
 )
-def test_health_check_success(mock_logger, mock_filesystem, mocker):
+def test_health_check_success():
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
     for number in range(2 * 3 + 1):
@@ -142,7 +145,7 @@ def test_health_check_success(mock_logger, mock_filesystem, mocker):
 @pytest.mark.override_config(
     STORAGE_PATH="empty-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
 )
-def test_health_check_failed_duplicate_current(mock_logger, mock_filesystem):
+def test_health_check_failed_duplicate_current(mock_logger):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
     for number in range(2 * 3 + 1):
@@ -159,7 +162,7 @@ def test_health_check_failed_duplicate_current(mock_logger, mock_filesystem):
 @pytest.mark.override_config(
     STORAGE_PATH="conflicting-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
 )
-def test_health_check_failed_dirty_storage(mock_logger, mock_filesystem):
+def test_health_check_failed_dirty_storage(mock_logger):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
     for number in range(2 * 3 + 1):

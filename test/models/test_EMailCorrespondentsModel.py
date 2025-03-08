@@ -46,7 +46,7 @@ def fixture_emailCorrespondentsModel() -> EMailCorrespondentsModel:
 
 
 @pytest.mark.django_db
-def test_EMailCorrespondentsModel_creation(emailCorrespondent):
+def test_EMailCorrespondentsModel_default_creation(emailCorrespondent):
     """Tests the correct default creation of :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
     assert emailCorrespondent.email is not None

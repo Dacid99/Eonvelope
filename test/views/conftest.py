@@ -36,22 +36,21 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.contrib.auth.models import User
-from django.db.models import Model
 from django.urls import reverse
 from model_bakery import baker
 from rest_framework.test import APIClient
-from rest_framework.viewsets import ModelViewSet
 
 
 if TYPE_CHECKING:
     from collections.abc import Callable
 
+    from django.db.models import Model
+    from rest_framework.viewsets import ModelViewSet
 
-@pytest.fixture(name="owner_user")
+
+@pytest.fixture(name="owner_user", autouse=True)
 def fixture_owner_user() -> User:
-    """Creates a :class:`django.contrib.auth.models.User`
-    that represents the owner of the data.
-    Invoked as owner_user.
+    """Creates a :class:`django.contrib.auth.models.User` that owns the data.
 
     Returns:
         The owner user instance.
@@ -59,11 +58,9 @@ def fixture_owner_user() -> User:
     return baker.make(User)
 
 
-@pytest.fixture(name="other_user")
+@pytest.fixture(name="other_user", autouse=True)
 def fixture_other_user() -> User:
-    """Creates a :class:`django.contrib.auth.models.User`
-    that represents another user that is not the owner of the data.
-    Invoked as other_user.
+    """Creates a :class:`django.contrib.auth.models.User` that is not the owner of the data.
 
     Returns:
        The other user instance.
@@ -83,8 +80,7 @@ def fixture_noauth_apiClient() -> APIClient:
 
 @pytest.fixture(name="other_apiClient")
 def fixture_other_apiClient(noauth_apiClient, other_user) -> APIClient:
-    """Creates a :class:`rest_framework.test.APIClient` instance
-    that is authenticated as :attr:`other_user`.
+    """Creates a :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`other_user`.
 
     Args:
         noauth_apiClient: Depends on :func:`fixture_noauth_apiClient`.
@@ -99,8 +95,7 @@ def fixture_other_apiClient(noauth_apiClient, other_user) -> APIClient:
 
 @pytest.fixture(name="owner_apiClient")
 def fixture_owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
-    """Creates a :class:`rest_framework.test.APIClient` instance
-    that is authenticated as :attr:`owner_user`.
+    """Creates a :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`owner_user`.
 
     Args:
         noauth_apiClient: Depends on :func:`fixture_noauth_apiClient`.
@@ -162,3 +157,15 @@ def fixture_custom_detail_action_url() -> (
             args=[instance.id],
         )
     )
+
+
+@pytest.fixture(name="mock_os_remove", autouse=True)
+def fixture_mock_AttachmentModel_os_remove(mocker):
+    """Patches os.remove in AttachmentModel to prevent errors."""
+    return mocker.patch("core.models.AttachmentModel.os.remove")
+
+
+@pytest.fixture(name="mock_os_remove", autouse=True)
+def fixture_mock_EMailModel_os_remove(mocker):
+    """Patches os.remove in EMailModel to prevent errors."""
+    return mocker.patch("core.models.EMailModel.os.remove")

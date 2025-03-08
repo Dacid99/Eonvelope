@@ -45,6 +45,11 @@ def fixture_mock_logger(mocker):
     return mocker.patch("core.models.EMailModel.logger")
 
 
+@pytest.fixture(name="mock_os_remove", autouse=True)
+def fixture_mock_os_remove(mocker):
+    return mocker.patch("core.models.EMailModel.os.remove")
+
+
 @pytest.fixture(name="email")
 def fixture_emailModel() -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel`.
@@ -64,7 +69,7 @@ def fixture_emailConversation(email) -> None:
 
 
 @pytest.mark.django_db
-def test_EMailModel_creation(email):
+def test_EMailModel_default_creation(email):
     """Tests the correct default creation of :class:`core.models.EMailModel.EMailModel`."""
 
     assert email.message_id is not None
@@ -163,11 +168,10 @@ def test_EMailModel_unique():
 
 
 @pytest.mark.django_db
-def test_delete_email_success(faker, mocker, mock_logger, email):
+def test_delete_email_success(mocker, faker, mock_logger, email, mock_os_remove):
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if the file removal is successful.
     """
-    mock_os_remove = mocker.patch("core.models.EMailModel.os.remove")
     email.eml_filepath = faker.file_path(extension="eml")
     email.prerender_filepath = faker.file_path(extension="png")
     email.save()
@@ -196,14 +200,12 @@ def test_delete_email_success(faker, mocker, mock_logger, email):
     ],
 )
 def test_delete_email_remove_error(
-    mocker, faker, email, mock_logger, side_effects
+    mocker, faker, mock_logger, email, mock_os_remove, side_effects
 ) -> None:
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if the file removal throws an exception.
     """
-    mock_os_remove = mocker.patch(
-        "core.models.EMailModel.os.remove", side_effect=side_effects
-    )
+    mock_os_remove.side_effect = side_effects
     email.eml_filepath = faker.file_path(extension="eml")
     email.prerender_filepath = faker.file_path(extension="png")
     email.save()
@@ -223,19 +225,18 @@ def test_delete_email_remove_error(
 
 
 @pytest.mark.django_db
-def test_delete_email_delete_error(mocker, faker, email, mock_logger):
+def test_delete_email_delete_error(mocker, faker, mock_logger, email, mock_os_remove):
     """Tests :func:`core.models.EMailModel.EMailModel.delete`
     if delete throws an exception.
     """
     mock_delete = mocker.patch(
-        "core.models.EMailModel.models.Model.delete", side_effect=ValueError
+        "core.models.EMailModel.models.Model.delete", side_effect=AssertionError
     )
-    mock_os_remove = mocker.patch("core.models.EMailModel.os.remove")
     email.eml_filepath = faker.file_path(extension="eml")
     email.prerender_filepath = faker.file_path(extension="png")
     email.save()
 
-    with pytest.raises(ValueError):
+    with pytest.raises(AssertionError):
         email.delete()
 
     mock_delete.assert_called_once()
@@ -250,12 +251,12 @@ def test_save_data_settings(mocker, email, save_to_eml, expectedCalls):
     mock_save_to_storage = mocker.patch(
         "core.models.EMailModel.EMailModel.save_to_storage"
     )
-    email.mailbox.save_toEML = save_to_eml
     mock_data = mocker.MagicMock(spec=Message)
+    email.mailbox.save_toEML = save_to_eml
 
     email.save(attachmentData=mock_data)
 
-    mock_save_to_storage.call_count == expectedCalls
+    assert mock_save_to_storage.call_count == expectedCalls
     mock_super_save.assert_called()
 
 
@@ -278,12 +279,12 @@ def test_save_data_failure(mocker, email):
     mock_super_save = mocker.patch("core.models.EMailModel.models.Model.save")
     mock_save_to_storage = mocker.patch(
         "core.models.EMailModel.EMailModel.save_to_storage",
-        side_effect=Exception,
+        side_effect=AssertionError,
     )
-    email.mailbox.save_toEML = True
     mock_data = mocker.MagicMock(spec=Message)
+    email.mailbox.save_toEML = True
 
-    with pytest.raises(Exception):
+    with pytest.raises(AssertionError):
         email.save(emailData=mock_data)
 
     mock_super_save.assert_called()
@@ -370,8 +371,6 @@ def test_EMailModel_createFromEmailBytes_success(
     assert email.attachments.count() == attachments_count
     assert email.correspondents.distinct().count() == correspondents_count
     assert email.correspondents.count() == emailcorrespondents_count
-    for key, header in email.headers.items():
-        print(key + ":\t" + header)
     assert len(email.headers) == header_count
     assert email.mailbox == mailbox
     if attachments_count > 0:
@@ -397,6 +396,7 @@ def test_EMailModel_createFromEmailBytes_duplicate(
     mock_AttachmentModel_save_to_storage = mocker.patch(
         "core.models.EMailModel.AttachmentModel.save_to_storage"
     )
+
     with override_config(THROW_OUT_SPAM=False):
         result = EMailModel.createFromEmailBytes(
             f"Message-ID: {email.message_id}".encode(), email.mailbox
@@ -425,8 +425,8 @@ def test_EMailModel_createFromEmailBytes_duplicate(
 )
 def test_EMailModel_createFromEmailBytes_spam(
     mocker,
-    mock_logger,
     override_config,
+    mock_logger,
     mailbox,
     X_Spam_Flag,
     THROW_OUT_SPAM,
@@ -456,6 +456,7 @@ def test_EMailModel_createFromEmailBytes_dberror(
     mock_EMailModel_save = mocker.patch(
         "core.models.EMailModel.EMailModel.save", side_effect=IntegrityError
     )
+
     with override_config(THROW_OUT_SPAM=False):
         result = EMailModel.createFromEmailBytes(b"Message-ID: something", mailbox)
 

@@ -49,7 +49,7 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="correspondentModel")
+@pytest.fixture(name="correspondentModel", autouse=True)
 def fixture_correspondentModel(emailModel) -> CorrespondentModel:
     """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` owned by :attr:`owner_user`.
 
@@ -75,12 +75,11 @@ def fixture_correspondentPayload(emailModel) -> dict[str, Any]:
     correspondentData = baker.prepare(CorrespondentModel, emails=[emailModel])
     payload = model_to_dict(correspondentData)
     payload.pop("id")
-    cleanPayload = {key: value for key, value in payload.items() if value is not None}
-    return cleanPayload
+    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.mark.django_db
-def test_list_noauth(correspondentModel, noauth_apiClient, list_url):
+def test_list_noauth(noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(CorrespondentViewSet))
 
@@ -90,7 +89,7 @@ def test_list_noauth(correspondentModel, noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(correspondentModel, other_apiClient, list_url):
+def test_list_auth_other(other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(CorrespondentViewSet))
 

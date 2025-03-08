@@ -37,7 +37,6 @@ from .test_MailboxViewSet import fixture_mailboxModel
 
 if TYPE_CHECKING:
     from collections.abc import Callable
-    from typing import Any
 
     from rest_framework.viewsets import ModelViewSet
 
@@ -97,7 +96,7 @@ def test_post_noauth(noauth_apiClient, url):
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_user, other_apiClient, url):
+def test_post_auth_other(other_apiClient, url):
     """Tests the post method with the authenticated other user client."""
     response = other_apiClient.post(url(DatabaseStatsView), data={})
 
@@ -107,7 +106,7 @@ def test_post_auth_other(other_user, other_apiClient, url):
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_user, owner_apiClient, url):
+def test_post_auth_owner(owner_apiClient, url):
     """Tests the post method with the authenticated owner user client."""
     response = owner_apiClient.post(url(DatabaseStatsView), data={})
 

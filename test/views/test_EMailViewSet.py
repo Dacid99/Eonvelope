@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="emailModel")
+@pytest.fixture(name="emailModel", autouse=True)
 def fixture_emailModel(faker, mailboxModel) -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel` owned by :attr:`owner_user`.
 
@@ -78,12 +78,11 @@ def fixture_emailPayload(mailboxModel) -> dict[str, Any]:
     emailData = baker.prepare(EMailModel, mailbox=mailboxModel)
     payload = model_to_dict(emailData)
     payload.pop("id")
-    cleanPayload = {key: value for key, value in payload.items() if value is not None}
-    return cleanPayload
+    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.mark.django_db
-def test_list_noauth(emailModel, noauth_apiClient, list_url):
+def test_list_noauth(noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(EMailViewSet))
 
@@ -93,7 +92,7 @@ def test_list_noauth(emailModel, noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(emailModel, other_apiClient, list_url):
+def test_list_auth_other(other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(EMailViewSet))
 
@@ -103,7 +102,7 @@ def test_list_auth_other(emailModel, other_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(emailModel, owner_apiClient, list_url):
+def test_list_auth_owner(owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(list_url(EMailViewSet))
 
@@ -306,7 +305,7 @@ def test_delete_nonexistant_auth_owner(emailModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_download_noauth(
-    emailModel, noauth_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, noauth_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with an unauthenticated user client."""
     mock_open = mocker.patch("api.v1.views.EMailViewSet.open")
@@ -327,7 +326,7 @@ def test_download_noauth(
 
 @pytest.mark.django_db
 def test_download_auth_other(
-    emailModel, other_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, other_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated other user client."""
     mock_open = mocker.patch("api.v1.views.EMailViewSet.open")
@@ -348,7 +347,7 @@ def test_download_auth_other(
 
 @pytest.mark.django_db
 def test_download_no_file_auth_owner(
-    emailModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
     mock_open = mocker.patch("api.v1.views.EMailViewSet.open")
@@ -369,7 +368,7 @@ def test_download_no_file_auth_owner(
 
 @pytest.mark.django_db
 def test_download_auth_owner(
-    emailModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
     mockedFileContent = b"This is a 24 bytes file."
@@ -398,7 +397,7 @@ def test_download_auth_owner(
 
 @pytest.mark.django_db
 def test_prerender_noauth(
-    emailModel, noauth_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, noauth_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with an unauthenticated user client."""
     mock_open = mocker.patch("api.v1.views.EMailViewSet.open")
@@ -419,7 +418,7 @@ def test_prerender_noauth(
 
 @pytest.mark.django_db
 def test_prerender_auth_other(
-    emailModel, other_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, other_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated other user client."""
     mock_open = mocker.patch("api.v1.views.EMailViewSet.open")
@@ -440,7 +439,7 @@ def test_prerender_auth_other(
 
 @pytest.mark.django_db
 def test_prerender_no_file_auth_owner(
-    emailModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
     mock_open = mocker.patch("api.v1.views.EMailViewSet.open")
@@ -461,7 +460,7 @@ def test_prerender_no_file_auth_owner(
 
 @pytest.mark.django_db
 def test_prerender_auth_owner(
-    emailModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
     mockedFileContent = b"This is a 24 bytes file."
@@ -490,7 +489,7 @@ def test_prerender_auth_owner(
 
 @pytest.mark.django_db
 def test_subConversation_noauth(
-    emailModel, noauth_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, noauth_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with an unauthenticated user client."""
     mock_subConversation = mocker.patch(
@@ -509,7 +508,7 @@ def test_subConversation_noauth(
 
 @pytest.mark.django_db
 def test_subConversation_auth_other(
-    emailModel, other_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, other_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated other user client."""
     mock_subConversation = mocker.patch(
@@ -528,7 +527,7 @@ def test_subConversation_auth_other(
 
 @pytest.mark.django_db
 def test_subConversation_auth_owner(
-    emailModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
     mock_subConversation = mocker.patch(
@@ -550,7 +549,7 @@ def test_subConversation_auth_owner(
 
 @pytest.mark.django_db
 def test_fullConversation_noauth(
-    emailModel, noauth_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, noauth_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with an unauthenticated user client."""
     mock_fullConversation = mocker.patch(
@@ -569,7 +568,7 @@ def test_fullConversation_noauth(
 
 @pytest.mark.django_db
 def test_fullConversation_auth_other(
-    emailModel, other_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, other_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated other user client."""
     mock_fullConversation = mocker.patch(
@@ -588,7 +587,7 @@ def test_fullConversation_auth_other(
 
 @pytest.mark.django_db
 def test_fullConversation_auth_owner(
-    emailModel, owner_apiClient, custom_detail_action_url, mocker
+    mocker, emailModel, owner_apiClient, custom_detail_action_url
 ):
     """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download` action with the authenticated owner user client."""
     mock_fullConversation = mocker.patch(

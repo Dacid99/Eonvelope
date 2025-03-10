@@ -70,7 +70,9 @@ class DatabaseStatsView(RetrieveAPIView):
             account__user=self.request.user
         ).count()
         mailinglist_count = (
-            MailingListModel.objects.filter(emails__account__user=self.request.user)
+            MailingListModel.objects.filter(
+                emails__mailbox__account__user=self.request.user
+            )
             .distinct()
             .count()
         )

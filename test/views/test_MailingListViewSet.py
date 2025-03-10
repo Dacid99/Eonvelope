@@ -19,8 +19,6 @@
 """Test module for :mod:`api.v1.views.MailingListViewSet`.
 
 Fixtures:
-    :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
-    :func:`fixture_mailingListModel`: Creates an email in `accountModel`.
     :func:`fixture_mailingListPayload`: Creates clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
 
 """
@@ -37,28 +35,9 @@ from rest_framework import status
 from api.v1.views.MailingListViewSet import MailingListViewSet
 from core.models.MailingListModel import MailingListModel
 
-from .test_AccountViewSet import fixture_accountModel
-from .test_CorrespondentViewSet import fixture_correspondentModel
-from .test_EMailViewSet import fixture_emailModel
-from .test_MailboxViewSet import fixture_mailboxModel
-
 
 if TYPE_CHECKING:
     from typing import Any
-
-
-@pytest.fixture(name="mailingListModel", autouse=True)
-def fixture_mailingListModel(correspondentModel, emailModel) -> MailingListModel:
-    """Creates an :class:`core.models.MailingListModel.MailingListModel` owned by :attr:`owner_user`.
-
-    Args:
-        correspondentModel: Depends on :func:`fixture_correspondentModel`.
-        emailModel: Depends on :func:`fixture_emailModel`.
-
-    Returns:
-        The email instance for testing.
-    """
-    return baker.make(MailingListModel, emails=[emailModel])
 
 
 @pytest.fixture(name="mailingListPayload")

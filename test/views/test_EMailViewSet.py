@@ -19,10 +19,7 @@
 """Test module for :mod:`api.v1.views.EMailViewSet`.
 
 Fixtures:
-    :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
-    :func:`fixture_emailModel`: Creates an email in `accountModel`.
     :func:`fixture_emailPayload`: Creates clean :class:`core.models.EMailModel.EMailModel` payload for a patch, post or put request.
-
 """
 
 from __future__ import annotations
@@ -38,31 +35,9 @@ from rest_framework import status
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
 
-from .test_AccountViewSet import fixture_accountModel
-from .test_MailboxViewSet import fixture_mailboxModel
-
 
 if TYPE_CHECKING:
     from typing import Any
-
-
-@pytest.fixture(name="emailModel", autouse=True)
-def fixture_emailModel(faker, mailboxModel) -> EMailModel:
-    """Creates an :class:`core.models.EMailModel.EMailModel` owned by :attr:`owner_user`.
-
-    Args:
-        mailboxModel: Depends on :func:`fixture_mailboxModel`.
-
-    Returns:
-        The email instance for testing.
-    """
-    return baker.make(
-        EMailModel,
-        x_spam="NO",
-        mailbox=mailboxModel,
-        eml_filepath=faker.file_path(extension="eml"),
-        prerender_filepath=faker.file_path(extension="png"),
-    )
 
 
 @pytest.fixture(name="emailPayload")

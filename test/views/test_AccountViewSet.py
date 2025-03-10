@@ -19,9 +19,7 @@
 """Test module for :mod:`api.v1.views.AccountViewSet`.
 
 Fixtures:
-    :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
     :func:`fixture_accountPayload`: Creates clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
-
 """
 
 from __future__ import annotations
@@ -40,19 +38,6 @@ from core.utils.fetchers.exceptions import MailAccountError
 
 if TYPE_CHECKING:
     from typing import Any
-
-
-@pytest.fixture(name="accountModel", autouse=True)
-def fixture_accountModel(owner_user) -> AccountModel:
-    """Creates an :class:`core.models.AccountModel.AccountModel` owned by :attr:`owner_user`.
-
-    Args:
-        owner_user: Depends on :func:`fixture_owner_user`.
-
-    Returns:
-        The account instance for testing.
-    """
-    return baker.make(AccountModel, user=owner_user)
 
 
 @pytest.fixture(name="accountPayload")

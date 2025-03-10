@@ -23,61 +23,66 @@ from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
 from Emailkasten.utils import get_config
 
-from .test_AccountViewSet import fixture_accountModel
-from .test_MailboxViewSet import fixture_mailboxModel
 
-
-@pytest.fixture(name="emails")
-def fixture_emails(mailboxModel):
+@pytest.fixture(name="emailBunchCount", autouse=True)
+def fixture_emailBunchCount(mailboxModel):
     """Create a bunch of :class:`core.models.EMailModel.EMailModel`s owned by :attr:`owner_user`.
 
     Args:
         mailboxModel: Depends on :func:`fixture_mailboxModel`.
 
     Returns:
-        The email instance for testing.
+        All emails in the db belonging to `owner_user`.
     """
-    return baker.make(EMailModel, x_spam="NO", mailbox=mailboxModel, _quantity=25)
+    baker.make(EMailModel, mailbox=mailboxModel, _quantity=24)
+    return EMailModel.objects.filter(
+        mailbox__account__user=mailboxModel.account.user
+    ).count()
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("page_query, page_size_query", [(1, 10), (2, 5), (3, 10)])
-def test_Pagination(emails, list_url, owner_apiClient, page_query, page_size_query):
+def test_Pagination(
+    list_url, owner_apiClient, emailBunchCount, page_query, page_size_query
+):
     query = {"page": page_query, "page_size": page_size_query}
 
     response = owner_apiClient.get(list_url(EMailViewSet), query)
 
-    assert response.data["count"] == len(emails)
+    assert response.data["count"] == emailBunchCount
     assert len(response.data["results"]) == min(
-        page_size_query, len(emails) - (page_query - 1) * page_size_query
+        page_size_query, emailBunchCount - (page_query - 1) * page_size_query
     )
     assert (
         min(item["id"] for item in response.data["results"])
         == (page_query - 1) * page_size_query + 1
     )
     assert max(item["id"] for item in response.data["results"]) == min(
-        (page_query) * page_size_query, len(emails)
+        (page_query) * page_size_query, emailBunchCount
     )
 
 
 @pytest.mark.django_db
-def test_Pagination_max(monkeypatch, emails, list_url, owner_apiClient):
-    monkeypatch.setattr("api.v1.pagination.Pagination.max_page_size", len(emails) // 2)
-    query = {"page": 1, "page_size": len(emails)}
+def test_Pagination_max(monkeypatch, list_url, owner_apiClient, emailBunchCount):
+    monkeypatch.setattr(
+        "api.v1.pagination.Pagination.max_page_size", emailBunchCount // 2
+    )
+    query = {"page": 1, "page_size": emailBunchCount}
 
     response = owner_apiClient.get(list_url(EMailViewSet), query)
 
-    assert response.data["count"] == len(emails)
-    assert len(response.data["results"]) == len(emails) // 2
+    assert response.data["count"] == emailBunchCount
+    assert len(response.data["results"]) == emailBunchCount // 2
     assert min(item["id"] for item in response.data["results"]) == 1
-    assert max(item["id"] for item in response.data["results"]) == len(emails) // 2
+    assert max(item["id"] for item in response.data["results"]) == emailBunchCount // 2
 
 
 @pytest.mark.django_db
-def test_Pagination_default(emails, list_url, owner_apiClient):
+def test_Pagination_default(list_url, owner_apiClient, emailBunchCount):
+
     response = owner_apiClient.get(list_url(EMailViewSet))
 
-    assert response.data["count"] == len(emails)
+    assert response.data["count"] == emailBunchCount
     assert len(response.data["results"]) == get_config("API_DEFAULT_PAGE_SIZE")
     assert min(item["id"] for item in response.data["results"]) == 1
     assert max(item["id"] for item in response.data["results"]) == get_config(

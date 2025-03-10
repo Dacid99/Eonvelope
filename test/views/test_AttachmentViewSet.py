@@ -19,11 +19,7 @@
 """Test module for :mod:`api.v1.views.AttachmentViewSet`.
 
 Fixtures:
-    :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
-    :func:`fixture_emailModel`: Creates an email in `accountModel`.
-    :func:`fixture_attachmentModel`: Creates an attachment in `emailModel`.
-    :func:`fixture_emailPayload`: Creates clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
-
+    :func:`fixture_attachmentPayload`: Creates clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
 """
 
 from __future__ import annotations
@@ -38,28 +34,9 @@ from rest_framework import status
 from api.v1.views.AttachmentViewSet import AttachmentViewSet
 from core.models.AttachmentModel import AttachmentModel
 
-from .test_AccountViewSet import fixture_accountModel
-from .test_EMailViewSet import fixture_emailModel
-from .test_MailboxViewSet import fixture_mailboxModel
-
 
 if TYPE_CHECKING:
     from typing import Any
-
-
-@pytest.fixture(name="attachmentModel", autouse=True)
-def fixture_attachmentModel(faker, emailModel) -> AttachmentModel:
-    """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
-
-    Args:
-        emailModel: Depends on :func:`fixture_emailModel`.
-
-    Returns:
-        The attachment instance for testing.
-    """
-    return baker.make(
-        AttachmentModel, email=emailModel, file_path=faker.file_path(extension="pdf")
-    )
 
 
 @pytest.fixture(name="attachmentPayload")

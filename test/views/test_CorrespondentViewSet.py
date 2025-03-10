@@ -19,10 +19,7 @@
 """Test module for :mod:`api.v1.views.CorrespondentViewSet`.
 
 Fixtures:
-    :func:`fixture_accountModel`: Creates an account owned by `owner_user`.
-    :func:`fixture_correspondentModel`: Creates an email in `accountModel`.
     :func:`fixture_correspondentPayload`: Creates clean :class:`core.models.CorrespondentModel.CorrespondentModel` payload for a patch, post or put request.
-
 """
 
 from __future__ import annotations
@@ -40,26 +37,9 @@ from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer im
 from api.v1.views.CorrespondentViewSet import CorrespondentViewSet
 from core.models.CorrespondentModel import CorrespondentModel
 
-from .test_AccountViewSet import fixture_accountModel
-from .test_EMailViewSet import fixture_emailModel
-from .test_MailboxViewSet import fixture_mailboxModel
-
 
 if TYPE_CHECKING:
     from typing import Any
-
-
-@pytest.fixture(name="correspondentModel", autouse=True)
-def fixture_correspondentModel(emailModel) -> CorrespondentModel:
-    """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` owned by :attr:`owner_user`.
-
-    Args:
-        emailModel: Depends on :func:`fixture_emailModel`.
-
-    Returns:
-        The email instance for testing.
-    """
-    return baker.make(CorrespondentModel)
 
 
 @pytest.fixture(name="correspondentPayload")

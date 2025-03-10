@@ -23,16 +23,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
-from django.forms.models import model_to_dict
 from django.urls import reverse
 from rest_framework import status
 
 from api.v1.views.DatabaseStatsView import DatabaseStatsView
-
-from .test_AccountViewSet import fixture_accountModel
-from .test_AttachmentViewSet import fixture_attachmentModel
-from .test_EMailViewSet import fixture_emailModel
-from .test_MailboxViewSet import fixture_mailboxModel
 
 
 if TYPE_CHECKING:
@@ -52,7 +46,7 @@ def fixture_url() -> Callable[[type[ModelViewSet]], str]:
 
 
 @pytest.mark.django_db
-def test_list_noauth(attachmentModel, noauth_apiClient, url):
+def test_list_noauth(noauth_apiClient, url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(url(DatabaseStatsView))
 
@@ -62,7 +56,7 @@ def test_list_noauth(attachmentModel, noauth_apiClient, url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(attachmentModel, other_apiClient, url):
+def test_list_auth_other(other_apiClient, url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(url(DatabaseStatsView))
 
@@ -74,13 +68,13 @@ def test_list_auth_other(attachmentModel, other_apiClient, url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(attachmentModel, owner_apiClient, url):
+def test_list_auth_owner(owner_apiClient, url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(url(DatabaseStatsView))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["email_count"] == 1
-    assert response.data["correspondent_count"] == 0
+    assert response.data["correspondent_count"] == 1
     assert response.data["attachment_count"] == 1
     assert response.data["account_count"] == 1
 

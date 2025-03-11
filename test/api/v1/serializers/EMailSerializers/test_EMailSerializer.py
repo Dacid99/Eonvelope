@@ -24,8 +24,7 @@ import pytest
 from django.forms.models import model_to_dict
 
 from api.v1.serializers.email_serializers.EMailSerializer import EMailSerializer
-
-from .....core.models.test_EMailModel import fixture_emailModel
+from test.core.conftest import fixture_emailModel
 
 
 @pytest.mark.django_db

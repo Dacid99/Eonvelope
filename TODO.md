@@ -10,7 +10,6 @@
 - combined filter for correspondent with mention
 - refine storage management error correction
 - streamable logs for daemons
-- disable all signals in tests
 - threadsafe db operations in daemons
 - filtertest for choices
 - move all signals into models
@@ -21,11 +20,11 @@
 - replace daemons with celery
 - rework test:
   - consistent naming
-  - unify model fixtures
   - consistent mock_open
-  - complete coverage
-  - extract often used fixtures
   - replace bad return_value constructions with actual mock
+  - extract often used fixtures
+  - disable all signals in tests
+  - serializer tests should use views model fixtures
 - emailcorrespondentsmodelserializers are inconsistent
 
 ### Work in progress

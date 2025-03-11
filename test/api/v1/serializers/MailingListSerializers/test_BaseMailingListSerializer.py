@@ -26,8 +26,7 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.mailinglist_serializers.BaseMailingListSerializer import (
     BaseMailingListSerializer,
 )
-
-from .....core.models.test_MailingListModel import fixture_mailingListModel
+from test.core.conftest import fixture_mailingListModel
 
 
 @pytest.mark.django_db

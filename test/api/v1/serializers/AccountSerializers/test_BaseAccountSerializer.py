@@ -26,8 +26,7 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.account_serializers.BaseAccountSerializer import (
     BaseAccountSerializer,
 )
-
-from .....core.models.test_AccountModel import fixture_accountModel
+from test.core.conftest import fixture_accountModel
 
 
 @pytest.mark.django_db
@@ -53,8 +52,9 @@ def test_output(account):
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == account.is_favorite
     assert "created" in serializerData
-
+    assert datetime.fromisoformat(serializerData["created"]) == account.created
     assert "updated" in serializerData
+    assert datetime.fromisoformat(serializerData["created"]) == account.updated
 
     assert "user" not in serializerData
     assert len(serializerData) == 10

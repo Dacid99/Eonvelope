@@ -26,8 +26,7 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import (
     BaseCorrespondentSerializer,
 )
-
-from .....core.models.test_CorrespondentModel import fixture_correspondentModel
+from test.core.conftest import fixture_correspondentModel
 
 
 @pytest.mark.django_db

@@ -26,11 +26,7 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.attachment_serializers.BaseAttachmentSerializer import (
     BaseAttachmentSerializer,
 )
-
-from .....core.models.test_AttachmentModel import (
-    fixture_attachmentModel,
-    fixture_mock_os_remove,
-)
+from test.core.conftest import fixture_attachmentModel
 
 
 @pytest.mark.django_db

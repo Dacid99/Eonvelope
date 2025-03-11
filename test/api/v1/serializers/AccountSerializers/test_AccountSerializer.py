@@ -24,8 +24,7 @@ import pytest
 from django.forms.models import model_to_dict
 
 from api.v1.serializers.account_serializers.AccountSerializer import AccountSerializer
-
-from .....core.models.test_AccountModel import fixture_accountModel
+from test.core.conftest import fixture_accountModel
 
 
 @pytest.mark.django_db

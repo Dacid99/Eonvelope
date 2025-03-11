@@ -26,10 +26,7 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.emailcorrespondents_serializers.BaseEMailCorrespondentSerializer import (
     BaseEMailCorrespondentSerializer,
 )
-
-from .....core.models.test_EMailCorrespondentsModel import (
-    fixture_emailCorrespondentsModel,
-)
+from test.core.conftest import fixture_emailCorrespondentsModel
 
 
 @pytest.mark.django_db

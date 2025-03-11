@@ -35,8 +35,7 @@ from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
 from core.models.MailingListModel import MailingListModel
 
-from ...conftest import TEST_EMAIL_PARAMETERS
-from .test_MailboxModel import fixture_mailboxModel
+from ..conftest import TEST_EMAIL_PARAMETERS
 
 
 @pytest.fixture(name="mock_logger", autouse=True)
@@ -48,16 +47,6 @@ def fixture_mock_logger(mocker):
 @pytest.fixture(name="mock_os_remove", autouse=True)
 def fixture_mock_os_remove(mocker):
     return mocker.patch("core.models.EMailModel.os.remove", autospec=True)
-
-
-@pytest.fixture(name="email")
-def fixture_emailModel() -> EMailModel:
-    """Creates an :class:`core.models.EMailModel.EMailModel`.
-
-    Returns:
-        The email instance for testing.
-    """
-    return baker.make(EMailModel)
 
 
 @pytest.fixture(name="emailConversation")

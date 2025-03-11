@@ -25,7 +25,6 @@ from core.constants import EmailProtocolChoices
 from core.utils.fetchers.exceptions import MailAccountError
 from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 
-from ...models.test_MailboxModel import fixture_mailboxModel
 from .test_IMAPFetcher import FakeIMAP4error, fixture_mock_logger
 
 

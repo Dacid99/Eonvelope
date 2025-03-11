@@ -47,16 +47,6 @@ def fixture_mock_logger(mocker):
     return mocker.patch("core.models.DaemonModel.logger", autospec=True)
 
 
-@pytest.fixture(name="daemon")
-def fixture_daemonModel(faker) -> DaemonModel:
-    """Creates an :class:`core.models.DaemonModel.DaemonModel`.
-
-    Returns:
-        The daemon instance for testing.
-    """
-    return baker.make(DaemonModel, log_filepath=faker.file_path(extension="log"))
-
-
 @pytest.mark.django_db
 def test_DaemonModel_default_creation(daemon):
     """Tests the correct default creation of :class:`core.models.DaemonModel.DaemonModel`."""

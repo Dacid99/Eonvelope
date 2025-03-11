@@ -27,8 +27,6 @@ from core.EMailArchiverDaemon import EMailArchiverDaemon
 from core.models.DaemonModel import DaemonModel
 from core.signals.save_DaemonModel import post_save_daemon
 
-from .models.test_DaemonModel import fixture_daemonModel
-
 
 @pytest.fixture(name="mock_logging_FileHandler", autouse=True)
 def fixture_mock_logging_FileHandler(mocker):

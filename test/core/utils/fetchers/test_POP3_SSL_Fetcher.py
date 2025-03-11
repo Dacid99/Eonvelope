@@ -24,7 +24,6 @@ from core.constants import EmailProtocolChoices
 from core.utils.fetchers.exceptions import MailAccountError
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 
-from ...models.test_MailboxModel import fixture_mailboxModel
 from .test_POP3Fetcher import fixture_mock_logger
 
 

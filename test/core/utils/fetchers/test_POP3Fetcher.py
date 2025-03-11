@@ -28,8 +28,6 @@ from core.models.MailboxModel import MailboxModel
 from core.utils.fetchers.exceptions import MailAccountError
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
 
-from ...models.test_MailboxModel import fixture_mailboxModel
-
 
 @pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):

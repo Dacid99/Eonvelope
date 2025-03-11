@@ -22,8 +22,6 @@ import pytest
 
 from core.models.DaemonModel import DaemonModel
 
-from ..models.test_DaemonModel import fixture_daemonModel
-
 
 @pytest.fixture(name="mock_logger", autouse=True)
 def fixture_mock_logger(mocker):

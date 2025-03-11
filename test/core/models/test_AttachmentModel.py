@@ -44,16 +44,6 @@ def fixture_mock_os_remove(mocker):
     return mocker.patch("core.models.AttachmentModel.os.remove", autospec=True)
 
 
-@pytest.fixture(name="attachment")
-def fixture_attachmentModel(faker) -> AttachmentModel:
-    """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
-
-    Returns:
-        The attachment instance for testing.
-    """
-    return baker.make(AttachmentModel, file_path=faker.file_path(extension="pdf"))
-
-
 @pytest.mark.django_db
 def test_AttachmentModel_default_creation(attachment):
     """Tests the correct default creation of :class:`core.models.AttachmentModel.AttachmentModel`."""

@@ -32,18 +32,6 @@ from core.models.CorrespondentModel import CorrespondentModel
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.models.EMailModel import EMailModel
 
-from .test_EMailModel import fixture_emailModel
-
-
-@pytest.fixture(name="emailCorrespondent")
-def fixture_emailCorrespondentsModel() -> EMailCorrespondentsModel:
-    """Creates an :class:`core.models.EMailModel.EMailModel` instance for testing.
-
-    Returns:
-        The emailCorrespondent instance for testing.
-    """
-    return baker.make(EMailCorrespondentsModel)
-
 
 @pytest.mark.django_db
 def test_EMailCorrespondentsModel_default_creation(emailCorrespondent):

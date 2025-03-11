@@ -23,7 +23,7 @@
   - consistent naming
   - unify model fixtures
   - consistent mock_open
-  - coverage fix
+  - complete coverage
   - extract often used fixtures
   - replace bad return_value constructions with actual mock
 - emailcorrespondentsmodelserializers are inconsistent

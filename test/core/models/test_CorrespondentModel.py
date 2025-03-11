@@ -48,16 +48,6 @@ def fixture_mock_logger(mocker) -> MagicMock:
     return mocker.patch("core.models.CorrespondentModel.logger", autospec=True)
 
 
-@pytest.fixture(name="correspondent")
-def fixture_correspondentModel() -> CorrespondentModel:
-    """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
-
-    Returns:
-        The email instance for testing.
-    """
-    return baker.make(CorrespondentModel)
-
-
 @pytest.mark.django_db
 def test_CorrespondentModel_default_creation(correspondent):
     """Tests the correct default creation of :class:`core.models.CorrespondentModel.CorrespondentModel`."""

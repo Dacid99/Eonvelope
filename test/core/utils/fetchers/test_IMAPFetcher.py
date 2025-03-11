@@ -28,8 +28,6 @@ from core.models.MailboxModel import MailboxModel
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 
-from ...models.test_MailboxModel import fixture_mailboxModel
-
 
 class FakeIMAP4error(Exception):
     pass

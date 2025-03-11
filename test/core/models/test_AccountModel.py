@@ -56,16 +56,6 @@ def fixture_mock_logger(mocker) -> MagicMock:
     return mocker.patch("core.models.AccountModel.logger", autospec=True)
 
 
-@pytest.fixture(name="account")
-def fixture_accountModel() -> AccountModel:
-    """Creates an :class:`core.models.AccountModel.AccountModel` .
-
-    Returns:
-        The account instance for testing.
-    """
-    return baker.make(AccountModel)
-
-
 @pytest.mark.django_db
 def test_AccountModel_default_creation(account):
     """Tests the correct default creation of :class:`core.models.AccountModel.AccountModel`."""

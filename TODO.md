@@ -26,6 +26,7 @@
   - coverage fix
   - extract often used fixtures
   - replace bad return_value constructions with actual mock
+- emailcorrespondentsmodelserializers are inconsistent
 
 ### Work in progress
 

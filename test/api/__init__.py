@@ -16,5 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-
-"""Emailkasten.utils package containing utility for Emailkasten project."""
+"""Test package for the :mod:`api` package of Emailkasten project."""

@@ -39,12 +39,12 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="accountPayload")
-def fixture_accountPayload(owner_user) -> dict[str, Any]:
+@pytest.fixture
+def accountPayload(owner_user) -> dict[str, Any]:
     """Creates clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
 
     Args:
-        owner_user: Depends on :func:`fixture_owner_user`.
+        owner_user: Depends on :func:`owner_user`.
 
     Returns:
         The clean payload.

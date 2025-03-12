@@ -25,18 +25,18 @@ from core.constants import EmailProtocolChoices
 from core.utils.fetchers.exceptions import MailAccountError
 from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 
-from .test_IMAPFetcher import FakeIMAP4error, fixture_mock_logger
+from .test_IMAPFetcher import FakeIMAP4error, mock_logger
 
 
-@pytest.fixture(name="imap_ssl_mailbox")
-def fixture_imap_ssl_mailbox(mailbox):
-    mailbox.account.protocol = EmailProtocolChoices.IMAP_SSL
-    mailbox.account.save(update_fields=["protocol"])
-    return mailbox
+@pytest.fixture
+def imap_ssl_mailboxModel(mailboxModel):
+    mailboxModel.account.protocol = EmailProtocolChoices.IMAP_SSL
+    mailboxModel.account.save(update_fields=["protocol"])
+    return mailboxModel
 
 
-@pytest.fixture(name="mock_IMAP4_SSL", autouse=True)
-def fixture_mock_IMAP4_SSL(mocker, faker):
+@pytest.fixture(autouse=True)
+def mock_IMAP4_SSL(mocker, faker):
     mock_IMAP4_SSL = mocker.patch(
         "core.utils.fetchers.IMAP_SSL_Fetcher.imaplib.IMAP4_SSL", autospec=True
     )
@@ -55,14 +55,14 @@ def fixture_mock_IMAP4_SSL(mocker, faker):
 
 @pytest.mark.django_db
 def test_IMAPFetcher_connectToHost_success(
-    imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL
+    imap_ssl_mailboxModel, mock_logger, mock_IMAP4_SSL
 ):
-    IMAP_SSL_Fetcher(imap_ssl_mailbox.account)
+    IMAP_SSL_Fetcher(imap_ssl_mailboxModel.account)
 
-    kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
-    if port := imap_ssl_mailbox.account.mail_host_port:
+    kwargs = {"host": imap_ssl_mailboxModel.account.mail_host, "ssl_context": None}
+    if port := imap_ssl_mailboxModel.account.mail_host_port:
         kwargs["port"] = port
-    if timeout := imap_ssl_mailbox.account.timeout:
+    if timeout := imap_ssl_mailboxModel.account.timeout:
         kwargs["timeout"] = timeout
     mock_IMAP4_SSL.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()
@@ -72,17 +72,17 @@ def test_IMAPFetcher_connectToHost_success(
 
 @pytest.mark.django_db
 def test_IMAPFetcher_connectToHost_exception(
-    imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL
+    imap_ssl_mailboxModel, mock_logger, mock_IMAP4_SSL
 ):
     mock_IMAP4_SSL.side_effect = AssertionError
 
     with pytest.raises(MailAccountError, match="AssertionError occured"):
-        IMAP_SSL_Fetcher(imap_ssl_mailbox.account)
+        IMAP_SSL_Fetcher(imap_ssl_mailboxModel.account)
 
-    kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
-    if port := imap_ssl_mailbox.account.mail_host_port:
+    kwargs = {"host": imap_ssl_mailboxModel.account.mail_host, "ssl_context": None}
+    if port := imap_ssl_mailboxModel.account.mail_host_port:
         kwargs["port"] = port
-    if timeout := imap_ssl_mailbox.account.timeout:
+    if timeout := imap_ssl_mailboxModel.account.timeout:
         kwargs["timeout"] = timeout
     mock_IMAP4_SSL.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()

@@ -66,8 +66,8 @@ if TYPE_CHECKING:
     from rest_framework.viewsets import ModelViewSet
 
 
-@pytest.fixture(name="owner_user", autouse=True)
-def fixture_owner_user(django_user_model) -> AbstractUser:
+@pytest.fixture(autouse=True)
+def owner_user(django_user_model) -> AbstractUser:
     """Creates a user that owns the data.
 
     Returns:
@@ -76,8 +76,8 @@ def fixture_owner_user(django_user_model) -> AbstractUser:
     return baker.make(django_user_model)
 
 
-@pytest.fixture(name="other_user", autouse=True)
-def fixture_other_user(django_user_model) -> AbstractUser:
+@pytest.fixture(autouse=True)
+def other_user(django_user_model) -> AbstractUser:
     """Creates a user that is not the owner of the data.
 
     Returns:
@@ -86,8 +86,8 @@ def fixture_other_user(django_user_model) -> AbstractUser:
     return baker.make(django_user_model)
 
 
-@pytest.fixture(name="noauth_apiClient")
-def fixture_noauth_apiClient() -> APIClient:
+@pytest.fixture
+def noauth_apiClient() -> APIClient:
     """Creates an unauthenticated :class:`rest_framework.test.APIClient` instance.
 
     Returns:
@@ -96,8 +96,8 @@ def fixture_noauth_apiClient() -> APIClient:
     return APIClient()
 
 
-@pytest.fixture(name="other_apiClient")
-def fixture_other_apiClient(noauth_apiClient, other_user) -> APIClient:
+@pytest.fixture
+def other_apiClient(noauth_apiClient, other_user) -> APIClient:
     """Creates a :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`other_user`.
 
     Args:
@@ -111,8 +111,8 @@ def fixture_other_apiClient(noauth_apiClient, other_user) -> APIClient:
     return noauth_apiClient
 
 
-@pytest.fixture(name="owner_apiClient")
-def fixture_owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
+@pytest.fixture
+def owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
     """Creates a :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`owner_user`.
 
     Args:
@@ -126,8 +126,8 @@ def fixture_owner_apiClient(noauth_apiClient, owner_user) -> APIClient:
     return noauth_apiClient
 
 
-@pytest.fixture(name="list_url", scope="session")
-def fixture_list_url() -> Callable[[type[ModelViewSet]], str]:
+@pytest.fixture(scope="session")
+def list_url() -> Callable[[type[ModelViewSet]], str]:
     """Gets the viewsets url for list actions.
 
     Returns:
@@ -136,8 +136,8 @@ def fixture_list_url() -> Callable[[type[ModelViewSet]], str]:
     return lambda viewsetClass: reverse(f"{viewsetClass.BASENAME}-list")
 
 
-@pytest.fixture(name="detail_url", scope="session")
-def fixture_detail_url() -> Callable[[type[ModelViewSet], Model], str]:
+@pytest.fixture(scope="session")
+def detail_url() -> Callable[[type[ModelViewSet], Model], str]:
     """Gets the viewsets url for detail actions.
 
     Returns:
@@ -148,8 +148,8 @@ def fixture_detail_url() -> Callable[[type[ModelViewSet], Model], str]:
     )
 
 
-@pytest.fixture(name="custom_list_action_url", scope="session")
-def fixture_custom_list_action_url() -> Callable[[type[ModelViewSet], str], str]:
+@pytest.fixture(scope="session")
+def custom_list_action_url() -> Callable[[type[ModelViewSet], str], str]:
     """Gets the viewsets url for custom list actions.
 
     Returns:
@@ -160,10 +160,8 @@ def fixture_custom_list_action_url() -> Callable[[type[ModelViewSet], str], str]
     )
 
 
-@pytest.fixture(name="custom_detail_action_url", scope="session")
-def fixture_custom_detail_action_url() -> (
-    Callable[[type[ModelViewSet], str, Model], str]
-):
+@pytest.fixture(scope="session")
+def custom_detail_action_url() -> Callable[[type[ModelViewSet], str, Model], str]:
     """Gets the viewsets url for custom detail actions.
 
     Returns:
@@ -177,20 +175,14 @@ def fixture_custom_detail_action_url() -> (
     )
 
 
-@pytest.fixture(name="mock_os_remove", autouse=True)
-def fixture_mock_AttachmentModel_os_remove(mocker):
-    """Patches os.remove in AttachmentModel to prevent errors."""
-    return mocker.patch("core.models.AttachmentModel.os.remove", autospec=True)
+@pytest.fixture(autouse=True)
+def mock_os_remove(mocker):
+    """Patches os.remove to prevent errors."""
+    return mocker.patch("os.remove", autospec=True)
 
 
-@pytest.fixture(name="mock_os_remove", autouse=True)
-def fixture_mock_EMailModel_os_remove(mocker):
-    """Patches os.remove in EMailModel to prevent errors."""
-    return mocker.patch("core.models.EMailModel.os.remove", autospec=True)
-
-
-@pytest.fixture(name="accountModel", autouse=True)
-def fixture_accountModel(owner_user) -> AccountModel:
+@pytest.fixture(autouse=True)
+def accountModel(owner_user) -> AccountModel:
     """Creates an :class:`core.models.AccountModel.AccountModel` owned by :attr:`owner_user`.
 
     Args:
@@ -202,8 +194,8 @@ def fixture_accountModel(owner_user) -> AccountModel:
     return baker.make(AccountModel, user=owner_user)
 
 
-@pytest.fixture(name="mailboxModel", autouse=True)
-def fixture_mailboxModel(accountModel) -> MailboxModel:
+@pytest.fixture(autouse=True)
+def mailboxModel(accountModel) -> MailboxModel:
     """Creates an :class:`core.models.MailboxModel.MailboxModel` owned by :attr:`owner_user`.
 
     Args:
@@ -215,8 +207,8 @@ def fixture_mailboxModel(accountModel) -> MailboxModel:
     return baker.make(MailboxModel, account=accountModel)
 
 
-@pytest.fixture(name="daemonModel", autouse=True)
-def fixture_daemonModel(faker, mailboxModel) -> DaemonModel:
+@pytest.fixture(autouse=True)
+def daemonModel(faker, mailboxModel) -> DaemonModel:
     """Creates an :class:`core.models.DaemonModel.DaemonModel` owned by :attr:`owner_user`.
 
     Args:
@@ -232,8 +224,8 @@ def fixture_daemonModel(faker, mailboxModel) -> DaemonModel:
     )
 
 
-@pytest.fixture(name="correspondentModel", autouse=True)
-def fixture_correspondentModel() -> CorrespondentModel:
+@pytest.fixture(autouse=True)
+def correspondentModel() -> CorrespondentModel:
     """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` owned by :attr:`owner_user`.
 
     Returns:
@@ -242,8 +234,8 @@ def fixture_correspondentModel() -> CorrespondentModel:
     return baker.make(CorrespondentModel)
 
 
-@pytest.fixture(name="mailingListModel", autouse=True)
-def fixture_mailingListModel() -> MailingListModel:
+@pytest.fixture(autouse=True)
+def mailingListModel() -> MailingListModel:
     """Creates an :class:`core.models.MailingListModel.MailingListModel` owned by :attr:`owner_user`.
 
     Returns:
@@ -252,10 +244,8 @@ def fixture_mailingListModel() -> MailingListModel:
     return baker.make(MailingListModel)
 
 
-@pytest.fixture(name="emailModel", autouse=True)
-def fixture_emailModel(
-    faker, correspondentModel, mailboxModel, mailingListModel
-) -> EMailModel:
+@pytest.fixture(autouse=True)
+def emailModel(faker, correspondentModel, mailboxModel, mailingListModel) -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel` owned by :attr:`owner_user`.
 
     Args:
@@ -279,8 +269,8 @@ def fixture_emailModel(
     return emailModel
 
 
-@pytest.fixture(name="attachmentModel", autouse=True)
-def fixture_attachmentModel(faker, emailModel) -> AttachmentModel:
+@pytest.fixture(autouse=True)
+def attachmentModel(faker, emailModel) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Args:

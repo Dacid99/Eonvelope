@@ -45,14 +45,14 @@ if TYPE_CHECKING:
     from pyfakefs.fake_filesystem import FakeFilesystem
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker) -> MagicMock:
+@pytest.fixture(autouse=True)
+def mock_logger(mocker) -> MagicMock:
     """Mocks :attr:`core.utils.fileManagment.logger` of the module."""
     return mocker.patch("core.utils.fileManagment.logger", autospec=True)
 
 
-@pytest.fixture(name="mock_filesystem", autouse=True)
-def fixture_mock_filesystem() -> Generator[FakeFilesystem, None, None]:
+@pytest.fixture(autouse=True)
+def mock_filesystem() -> Generator[FakeFilesystem, None, None]:
     """Mocks a Linux filesystem for realistic testing.
 
     Contains different files with various permission settings for the 'other' users and contents .

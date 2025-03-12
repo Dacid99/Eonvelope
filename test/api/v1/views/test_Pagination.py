@@ -24,8 +24,8 @@ from core.models.EMailModel import EMailModel
 from Emailkasten.utils import get_config
 
 
-@pytest.fixture(name="emailBunchCount", autouse=True)
-def fixture_emailBunchCount(mailboxModel):
+@pytest.fixture(autouse=True)
+def emailBunchCount(mailboxModel):
     """Create a bunch of :class:`core.models.EMailModel.EMailModel`s owned by :attr:`owner_user`.
 
     Args:

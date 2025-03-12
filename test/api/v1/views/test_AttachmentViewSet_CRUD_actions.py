@@ -39,8 +39,8 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="attachmentPayload")
-def fixture_attachmentPayload(emailModel) -> dict[str, Any]:
+@pytest.fixture
+def attachmentPayload(emailModel) -> dict[str, Any]:
     """Creates clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
 
     Args:

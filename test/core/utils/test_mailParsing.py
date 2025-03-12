@@ -38,29 +38,29 @@ import core.constants
 import core.utils.mailParsing
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker):
+@pytest.fixture(autouse=True)
+def mock_logger(mocker):
     """Mocks :attr:`logger` of the module."""
     return mocker.patch("core.utils.mailParsing.logger", autospec=True)
 
 
-@pytest.fixture(name="fake_single_header")
-def fixture_fake_single_header(faker):
+@pytest.fixture
+def fake_single_header(faker):
     return (faker.word(), faker.sentence(nb_words=5))
 
 
-@pytest.fixture(name="fake_date_headervalue")
-def fixture_fake_date_headervalue(faker):
+@pytest.fixture
+def fake_date_headervalue(faker):
     return faker.date_time(tzinfo=zoneinfo.ZoneInfo(faker.timezone()))
 
 
-@pytest.fixture(name="fake_multi_header")
-def fixture_fake_multi_header(faker):
+@pytest.fixture
+def fake_multi_header(faker):
     return (faker.word(), [faker.sentence(nb_words=5), faker.name(), faker.file_name()])
 
 
-@pytest.fixture(name="emailMessage")
-def fixture_emailMessage(fake_single_header, fake_multi_header):
+@pytest.fixture
+def emailMessage(fake_single_header, fake_multi_header):
     """A valid :class:`email.message.EmailMessage`."""
     testMessage = EmailMessage()
     testMessage.add_header(*fake_single_header)
@@ -69,23 +69,23 @@ def fixture_emailMessage(fake_single_header, fake_multi_header):
     return testMessage
 
 
-@pytest.fixture(name="bad_emailMessage")
-def fixture_bad_emailMessage():
+@pytest.fixture
+def bad_emailMessage():
     """A valid :class:`email.message.EmailMessage`."""
     testMessage = EmailMessage()
     testMessage.add_header("Date", "not a datetime str")
     return testMessage
 
 
-@pytest.fixture(name="empty_emailMessage")
-def fixture_empty_emailMessage():
+@pytest.fixture
+def empty_emailMessage():
     """An invalid :class:`email.message.Message`."""
     testMessage = EmailMessage()
     return testMessage
 
 
-@pytest.fixture(name="no_emailMessage")
-def fixture_no_emailMessage():
+@pytest.fixture
+def no_emailMessage():
     """A none message."""
     testMessage = None
     return testMessage

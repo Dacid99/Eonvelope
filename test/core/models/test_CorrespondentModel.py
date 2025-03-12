@@ -20,7 +20,7 @@
 """Test module for :mod:`core.models.CorrespondentModel`.
 
 Fixtures:
-    :func:`fixture_correspondentModel`: Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
+    :func:`fixture_correspondentModelModel`: Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
 """
 from __future__ import annotations
 
@@ -38,8 +38,8 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker) -> MagicMock:
+@pytest.fixture(autouse=True)
+def mock_logger(mocker) -> MagicMock:
     """Mocks the :attr:`core.models.CorrespondentModel.logger`.
 
     Returns:
@@ -49,31 +49,31 @@ def fixture_mock_logger(mocker) -> MagicMock:
 
 
 @pytest.mark.django_db
-def test_CorrespondentModel_default_creation(correspondent):
+def test_CorrespondentModel_default_creation(correspondentModel):
     """Tests the correct default creation of :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
-    assert correspondent.email_name is not None
-    assert isinstance(correspondent.email_name, str)
-    assert correspondent.email_address is not None
-    assert isinstance(correspondent.email_address, str)
-    assert correspondent.is_favorite is False
-    assert correspondent.updated is not None
-    assert isinstance(correspondent.updated, datetime.datetime)
-    assert correspondent.created is not None
-    assert isinstance(correspondent.created, datetime.datetime)
+    assert correspondentModel.email_name is not None
+    assert isinstance(correspondentModel.email_name, str)
+    assert correspondentModel.email_address is not None
+    assert isinstance(correspondentModel.email_address, str)
+    assert correspondentModel.is_favorite is False
+    assert correspondentModel.updated is not None
+    assert isinstance(correspondentModel.updated, datetime.datetime)
+    assert correspondentModel.created is not None
+    assert isinstance(correspondentModel.created, datetime.datetime)
 
-    assert correspondent.email_address in str(correspondent)
+    assert correspondentModel.email_address in str(correspondentModel)
 
 
 @pytest.mark.django_db
-def test_CorrespondentModel_unique(correspondent):
+def test_CorrespondentModel_unique(correspondentModel):
     """Tests the unique constraint in :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
     with pytest.raises(IntegrityError):
         baker.make(
             CorrespondentModel,
-            email_name=correspondent.email_name,
-            email_address=correspondent.email_address,
+            email_name=correspondentModel.email_name,
+            email_address=correspondentModel.email_address,
         )
 
 
@@ -85,26 +85,26 @@ def test_fromHeader_success(mocker, faker):
         return_value=(faker.name(), faker.email()),
     )
 
-    result = CorrespondentModel.fromHeader("correspondent header")
+    result = CorrespondentModel.fromHeader("correspondentModel header")
 
     assert isinstance(result, CorrespondentModel)
-    mock_parseCorrespondentHeader.assert_called_once_with("correspondent header")
+    mock_parseCorrespondentHeader.assert_called_once_with("correspondentModel header")
     assert result.email_name == mock_parseCorrespondentHeader.return_value[0]
     assert result.email_address == mock_parseCorrespondentHeader.return_value[1]
 
 
 @pytest.mark.django_db
-def test_fromHeader_duplicate(mocker, faker, correspondent):
+def test_fromHeader_duplicate(mocker, faker, correspondentModel):
     mock_parseCorrespondentHeader = mocker.patch(
         "core.models.CorrespondentModel.parseCorrespondentHeader",
         autospec=True,
-        return_value=(faker.name(), correspondent.email_address),
+        return_value=(faker.name(), correspondentModel.email_address),
     )
 
-    result = CorrespondentModel.fromHeader("correspondent header")
+    result = CorrespondentModel.fromHeader("correspondentModel header")
 
-    assert result == correspondent
-    mock_parseCorrespondentHeader.assert_called_once_with("correspondent header")
+    assert result == correspondentModel
+    mock_parseCorrespondentHeader.assert_called_once_with("correspondentModel header")
 
 
 @pytest.mark.django_db
@@ -115,8 +115,8 @@ def test_fromHeader_no_address(mocker, faker, mock_logger):
         return_value=(faker.name(), ""),
     )
 
-    result = CorrespondentModel.fromHeader("correspondent header")
+    result = CorrespondentModel.fromHeader("correspondentModel header")
 
     assert result is None
-    mock_parseCorrespondentHeader.assert_called_once_with("correspondent header")
+    mock_parseCorrespondentHeader.assert_called_once_with("correspondentModel header")
     mock_logger.debug.assert_called()

@@ -23,23 +23,23 @@ import pytest
 from core.models.DaemonModel import DaemonModel
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker):
+@pytest.fixture(autouse=True)
+def mock_logger(mocker):
     """Mocks :attr:`core.signals.save_AccountModel.logger` of the module."""
     return mocker.patch("core.signals.delete_DaemonModel.logger", autospec=True)
 
 
 @pytest.mark.django_db
-def test_pre_delete_stop_daemon(mocker, mock_logger, daemon):
+def test_pre_delete_stop_daemon(mocker, mock_logger, daemonModel):
     """Tests :func:`core.signals.deleteDaemonModel.pre_delete_stop_daemon`."""
     mock_EMailArchiverDaemon_stopDaemon = mocker.patch(
         "core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.stopDaemon",
         autospec=True,
     )
 
-    daemon.delete()
+    daemonModel.delete()
 
     with pytest.raises(DaemonModel.DoesNotExist):
-        daemon.refresh_from_db()
+        daemonModel.refresh_from_db()
     mock_EMailArchiverDaemon_stopDaemon.assert_called_once()
     mock_logger.debug.assert_called()

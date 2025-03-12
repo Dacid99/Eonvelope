@@ -32,34 +32,34 @@ from core.models.EMailModel import EMailModel
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
-@pytest.fixture(name="mock_MailboxModel_test_connection")
-def fixture_mock_MailboxModel_test_connection(mocker):
+@pytest.fixture
+def mock_MailboxModel_test_connection(mocker):
     return mocker.patch(
         "api.v1.views.MailboxViewSet.MailboxModel.test_connection", autospec=True
     )
 
 
-@pytest.fixture(name="mock_MailboxModel_fetch")
-def fixture_mock_MailboxModel_fetch(mocker):
+@pytest.fixture
+def mock_MailboxModel_fetch(mocker):
     return mocker.patch("api.v1.views.MailboxViewSet.MailboxModel.fetch", autospec=True)
 
 
-@pytest.fixture(name="mock_EMailModel_createFromEmailBytes")
-def fixture_mock_EMailModel_createFromEmailBytes(mocker):
+@pytest.fixture
+def mock_EMailModel_createFromEmailBytes(mocker):
     return mocker.patch(
         "api.v1.views.MailboxViewSet.EMailModel.createFromEmailBytes", autospec=True
     )
 
 
-@pytest.fixture(name="mock_MailboxModel_addFromMailboxFile")
-def fixture_mock_MailboxModel_addFromMailboxFile(mocker):
+@pytest.fixture
+def mock_MailboxModel_addFromMailboxFile(mocker):
     return mocker.patch(
         "api.v1.views.MailboxViewSet.MailboxModel.addFromMailboxFile", autospec=True
     )
 
 
-@pytest.fixture(name="fake_file")
-def fixture_fake_file(faker):
+@pytest.fixture
+def fake_file(faker):
     fake_file_content = faker.text().encode()
     return BytesIO(fake_file_content)
 

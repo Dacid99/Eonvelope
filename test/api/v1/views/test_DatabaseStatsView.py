@@ -35,8 +35,8 @@ if TYPE_CHECKING:
     from rest_framework.viewsets import ModelViewSet
 
 
-@pytest.fixture(name="url")
-def fixture_url() -> Callable[[type[ModelViewSet]], str]:
+@pytest.fixture
+def url() -> Callable[[type[ModelViewSet]], str]:
     """Gets the viewsets url for list actions.
 
     Returns:

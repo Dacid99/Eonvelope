@@ -19,7 +19,7 @@
 """Test module for :mod:`core.models.AttachmentModel`.
 
 Fixtures:
-    :func:`fixture_attachmentModel`: Creates an :class:`core.models.AttachmentModel.AttachmentModel` instance for testing.
+    :func:`fixture_attachmentModelModel`: Creates an :class:`core.models.AttachmentModel.AttachmentModel` instance for testing.
 """
 
 import datetime
@@ -33,64 +33,64 @@ from core.models.AttachmentModel import AttachmentModel
 from core.models.EMailModel import EMailModel
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker):
+@pytest.fixture(autouse=True)
+def mock_logger(mocker):
     """Mocks :attr:`core.models.AttachmentModel.logger` of the module."""
     return mocker.patch("core.models.AttachmentModel.logger", autospec=True)
 
 
-@pytest.fixture(name="mock_os_remove", autouse=True)
-def fixture_mock_os_remove(mocker):
+@pytest.fixture(autouse=True)
+def mock_os_remove(mocker):
     return mocker.patch("core.models.AttachmentModel.os.remove", autospec=True)
 
 
 @pytest.mark.django_db
-def test_AttachmentModel_default_creation(attachment):
+def test_AttachmentModel_default_creation(attachmentModel):
     """Tests the correct default creation of :class:`core.models.AttachmentModel.AttachmentModel`."""
 
-    assert attachment.file_name is not None
-    assert isinstance(attachment.file_name, str)
-    assert attachment.file_path is not None
-    assert isinstance(attachment.file_path, str)
-    assert attachment.datasize is not None
-    assert isinstance(attachment.datasize, int)
-    assert attachment.is_favorite is False
-    assert attachment.email is not None
-    assert isinstance(attachment.email, EMailModel)
-    assert attachment.updated is not None
-    assert isinstance(attachment.updated, datetime.datetime)
-    assert attachment.created is not None
-    assert isinstance(attachment.created, datetime.datetime)
+    assert attachmentModel.file_name is not None
+    assert isinstance(attachmentModel.file_name, str)
+    assert attachmentModel.file_path is not None
+    assert isinstance(attachmentModel.file_path, str)
+    assert attachmentModel.datasize is not None
+    assert isinstance(attachmentModel.datasize, int)
+    assert attachmentModel.is_favorite is False
+    assert attachmentModel.email is not None
+    assert isinstance(attachmentModel.email, EMailModel)
+    assert attachmentModel.updated is not None
+    assert isinstance(attachmentModel.updated, datetime.datetime)
+    assert attachmentModel.created is not None
+    assert isinstance(attachmentModel.created, datetime.datetime)
 
-    assert attachment.file_name in str(attachment)
-    assert str(attachment.email) in str(attachment)
+    assert attachmentModel.file_name in str(attachmentModel)
+    assert str(attachmentModel.email) in str(attachmentModel)
 
 
 @pytest.mark.django_db
-def test_AttachmentModel_foreign_key_deletion(attachment):
+def test_AttachmentModel_foreign_key_deletion(attachmentModel):
     """Tests the on_delete foreign key constraint in :class:`core.models.AttachmentModel.AttachmentModel`."""
 
-    assert attachment is not None
-    attachment.email.delete()
+    assert attachmentModel is not None
+    attachmentModel.email.delete()
     with pytest.raises(AttachmentModel.DoesNotExist):
-        attachment.refresh_from_db()
+        attachmentModel.refresh_from_db()
 
 
 @pytest.mark.django_db
 def test_AttachmentModel_unique():
     """Tests the unique constraints of :class:`core.models.AttachmentModel.AttachmentModel`."""
 
-    attachment_1 = baker.make(AttachmentModel, file_path="test")
-    attachment_2 = baker.make(AttachmentModel, file_path="test")
-    assert attachment_1.file_path == attachment_2.file_path
-    assert attachment_1.email != attachment_2.email
+    attachmentModel_1 = baker.make(AttachmentModel, file_path="test")
+    attachmentModel_2 = baker.make(AttachmentModel, file_path="test")
+    assert attachmentModel_1.file_path == attachmentModel_2.file_path
+    assert attachmentModel_1.email != attachmentModel_2.email
 
     email = baker.make(EMailModel, x_spam="NO")
 
-    attachment_1 = baker.make(AttachmentModel, file_path="path_1", email=email)
-    attachment_2 = baker.make(AttachmentModel, file_path="path_2", email=email)
-    assert attachment_1.file_path != attachment_2.file_path
-    assert attachment_1.email == attachment_2.email
+    attachmentModel_1 = baker.make(AttachmentModel, file_path="path_1", email=email)
+    attachmentModel_2 = baker.make(AttachmentModel, file_path="path_2", email=email)
+    assert attachmentModel_1.file_path != attachmentModel_2.file_path
+    assert attachmentModel_1.email == attachmentModel_2.email
 
     baker.make(AttachmentModel, file_path="test", email=email)
     with pytest.raises(IntegrityError):
@@ -98,16 +98,18 @@ def test_AttachmentModel_unique():
 
 
 @pytest.mark.django_db
-def test_delete_attachmentfile_success(mock_logger, attachment, mock_os_remove):
+def test_delete_attachmentModelfile_success(
+    mock_logger, attachmentModel, mock_os_remove
+):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal is successful.
     """
-    file_path = attachment.file_path
+    file_path = attachmentModel.file_path
 
-    attachment.delete()
+    attachmentModel.delete()
 
     with pytest.raises(AttachmentModel.DoesNotExist):
-        attachment.refresh_from_db()
+        attachmentModel.refresh_from_db()
     mock_os_remove.assert_called_with(file_path)
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
@@ -117,20 +119,20 @@ def test_delete_attachmentfile_success(mock_logger, attachment, mock_os_remove):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("side_effect", [FileNotFoundError, OSError, Exception])
-def test_delete_attachmentfile_failure(
-    mock_logger, attachment, mock_os_remove, side_effect
+def test_delete_attachmentModelfile_failure(
+    mock_logger, attachmentModel, mock_os_remove, side_effect
 ):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal throws an exception.
     """
     mock_os_remove.side_effect = side_effect
-    file_path = attachment.file_path
+    file_path = attachmentModel.file_path
 
-    attachment.delete()
+    attachmentModel.delete()
 
     mock_os_remove.assert_called_with(file_path)
     with pytest.raises(AttachmentModel.DoesNotExist):
-        attachment.refresh_from_db()
+        attachmentModel.refresh_from_db()
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.exception.assert_called()
@@ -138,8 +140,8 @@ def test_delete_attachmentfile_failure(
 
 
 @pytest.mark.django_db
-def test_delete_attachmentfile_delete_error(
-    mocker, mock_logger, mock_os_remove, attachment
+def test_delete_attachmentModelfile_delete_error(
+    mocker, mock_logger, mock_os_remove, attachmentModel
 ):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if delete throws an exception.
@@ -151,7 +153,7 @@ def test_delete_attachmentfile_delete_error(
     )
 
     with pytest.raises(ValueError):
-        attachment.delete()
+        attachmentModel.delete()
 
     mock_delete.assert_called_once()
     mock_os_remove.assert_not_called()
@@ -160,40 +162,40 @@ def test_delete_attachmentfile_delete_error(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("save_attachments, expectedCalls", [(True, 1), (False, 0)])
-def test_save_data_settings(mocker, attachment, save_attachments, expectedCalls):
+def test_save_data_settings(mocker, attachmentModel, save_attachments, expectedCalls):
     mock_super_save = mocker.patch(
         "core.models.AttachmentModel.models.Model.save", autospec=True
     )
     mock_save_to_storage = mocker.patch(
         "core.models.AttachmentModel.AttachmentModel.save_to_storage", autospec=True
     )
-    attachment.email.mailbox.save_attachments = save_attachments
+    attachmentModel.email.mailbox.save_attachments = save_attachments
     mock_data = mocker.MagicMock(spec=Message)
 
-    attachment.save(attachmentData=mock_data)
+    attachmentModel.save(attachmentData=mock_data)
 
     assert mock_save_to_storage.call_count == expectedCalls
     mock_super_save.assert_called()
 
 
 @pytest.mark.django_db
-def test_save_no_data(mocker, attachment):
+def test_save_no_data(mocker, attachmentModel):
     mock_super_save = mocker.patch(
         "core.models.AttachmentModel.models.Model.save", autospec=True
     )
     mock_save_to_storage = mocker.patch(
         "core.models.AttachmentModel.AttachmentModel.save_to_storage", autospec=True
     )
-    attachment.email.mailbox.save_attachments = True
+    attachmentModel.email.mailbox.save_attachmentModels = True
 
-    attachment.save()
+    attachmentModel.save()
 
-    mock_super_save.assert_called_once_with(attachment)
+    mock_super_save.assert_called_once_with(attachmentModel)
     mock_save_to_storage.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_save_data_failure(mocker, attachment):
+def test_save_data_failure(mocker, attachmentModel):
     mock_super_save = mocker.patch(
         "core.models.AttachmentModel.models.Model.save", autospec=True
     )
@@ -202,11 +204,11 @@ def test_save_data_failure(mocker, attachment):
         autospec=True,
         side_effect=AssertionError,
     )
-    attachment.email.mailbox.save_attachments = True
+    attachmentModel.email.mailbox.save_attachmentModels = True
     mock_data = mocker.MagicMock(spec=Message)
 
     with pytest.raises(AssertionError):
-        attachment.save(attachmentData=mock_data)
+        attachmentModel.save(attachmentData=mock_data)
 
     mock_super_save.assert_called()
     mock_save_to_storage.assert_called()

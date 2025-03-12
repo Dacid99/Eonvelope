@@ -19,7 +19,7 @@
 """Test module for :mod:`core.models.MailingListModel`.
 
 Fixtures:
-    :func:`fixture_mailingListModel`: Creates an :class:`core.models.MailingListModel.MailingListModel` instance for testing.
+    :func:`fixture_mailingListModelModel`: Creates an :class:`core.models.MailingListModel.MailingListModel` instance for testing.
 """
 from __future__ import annotations
 
@@ -38,8 +38,8 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker) -> MagicMock:
+@pytest.fixture(autouse=True)
+def mock_logger(mocker) -> MagicMock:
     """Mocks the :class:`core.models.MailingListModel.logger`.
 
     Returns:
@@ -49,37 +49,37 @@ def fixture_mock_logger(mocker) -> MagicMock:
 
 
 @pytest.mark.django_db
-def test_MailingListModel_default_creation(mailingList):
+def test_MailingListModel_default_creation(mailingListModel):
     """Tests the correct default creation of :class:`core.models.MailingListModel.MailingListModel`."""
 
-    assert mailingList.list_id is not None
-    assert isinstance(mailingList.list_id, str)
-    assert mailingList.list_owner is not None
-    assert isinstance(mailingList.list_owner, str)
-    assert mailingList.list_subscribe is not None
-    assert isinstance(mailingList.list_subscribe, str)
-    assert mailingList.list_unsubscribe is not None
-    assert isinstance(mailingList.list_unsubscribe, str)
-    assert mailingList.list_post is not None
-    assert isinstance(mailingList.list_post, str)
-    assert mailingList.list_help is not None
-    assert isinstance(mailingList.list_help, str)
-    assert mailingList.list_archive is not None
-    assert isinstance(mailingList.list_archive, str)
-    assert mailingList.is_favorite is False
-    assert mailingList.updated is not None
-    assert isinstance(mailingList.updated, datetime.datetime)
-    assert mailingList.created is not None
-    assert isinstance(mailingList.created, datetime.datetime)
+    assert mailingListModel.list_id is not None
+    assert isinstance(mailingListModel.list_id, str)
+    assert mailingListModel.list_owner is not None
+    assert isinstance(mailingListModel.list_owner, str)
+    assert mailingListModel.list_subscribe is not None
+    assert isinstance(mailingListModel.list_subscribe, str)
+    assert mailingListModel.list_unsubscribe is not None
+    assert isinstance(mailingListModel.list_unsubscribe, str)
+    assert mailingListModel.list_post is not None
+    assert isinstance(mailingListModel.list_post, str)
+    assert mailingListModel.list_help is not None
+    assert isinstance(mailingListModel.list_help, str)
+    assert mailingListModel.list_archive is not None
+    assert isinstance(mailingListModel.list_archive, str)
+    assert mailingListModel.is_favorite is False
+    assert mailingListModel.updated is not None
+    assert isinstance(mailingListModel.updated, datetime.datetime)
+    assert mailingListModel.created is not None
+    assert isinstance(mailingListModel.created, datetime.datetime)
 
-    assert mailingList.list_id in str(mailingList)
+    assert mailingListModel.list_id in str(mailingListModel)
 
 
 @pytest.mark.django_db
-def test_MailingListModel_unique(mailingList):
+def test_MailingListModel_unique(mailingListModel):
     """Tests the unique constraints of :class:`core.models.MailingListModel.MailingListModel`."""
     with pytest.raises(IntegrityError):
-        baker.make(MailingListModel, list_id=mailingList.list_id)
+        baker.make(MailingListModel, list_id=mailingListModel.list_id)
 
 
 @pytest.mark.django_db
@@ -116,17 +116,17 @@ def test_MailingListModel_fromEmailMessage(mocker):
 
 
 @pytest.mark.django_db
-def test_fromEmailMessage_duplicate(mocker, mailingList) -> None:
+def test_fromEmailMessage_duplicate(mocker, mailingListModel) -> None:
     emailMessage = EmailMessage()
     mock_getHeader = mocker.patch(
         "core.models.MailingListModel.getHeader",
         autospec=True,
-        return_value=mailingList.list_id,
+        return_value=mailingListModel.list_id,
     )
 
     result = MailingListModel.fromEmailMessage(emailMessage)
 
-    assert result == mailingList
+    assert result == mailingListModel
     mock_getHeader.assert_called_once_with(emailMessage, "List-Id")
 
 

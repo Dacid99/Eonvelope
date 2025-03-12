@@ -26,46 +26,46 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.daemon_serializers.BaseDaemonSerializer import (
     BaseDaemonSerializer,
 )
-from test.core.conftest import fixture_daemonModel
+from test.core.conftest import daemonModel
 
 
 @pytest.mark.django_db
-def test_output(daemon):
+def test_output(daemonModel):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseDaemonSerializer(instance=daemon).data
+    serializerData = BaseDaemonSerializer(instance=daemonModel).data
 
     assert "id" in serializerData
-    assert serializerData["id"] == daemon.id
+    assert serializerData["id"] == daemonModel.id
     assert "log_filepath" not in serializerData
     assert "uuid" in serializerData
-    assert serializerData["uuid"] == str(daemon.uuid)
+    assert serializerData["uuid"] == str(daemonModel.uuid)
     assert "mailbox" in serializerData
-    assert serializerData["mailbox"] == daemon.mailbox.id
+    assert serializerData["mailbox"] == daemonModel.mailbox.id
     assert "fetching_criterion" in serializerData
-    assert serializerData["fetching_criterion"] == daemon.fetching_criterion
+    assert serializerData["fetching_criterion"] == daemonModel.fetching_criterion
     assert "cycle_interval" in serializerData
-    assert serializerData["cycle_interval"] == daemon.cycle_interval
+    assert serializerData["cycle_interval"] == daemonModel.cycle_interval
     assert "restart_time" in serializerData
-    assert serializerData["restart_time"] == daemon.restart_time
+    assert serializerData["restart_time"] == daemonModel.restart_time
     assert "log_backup_count" in serializerData
-    assert serializerData["log_backup_count"] == daemon.log_backup_count
+    assert serializerData["log_backup_count"] == daemonModel.log_backup_count
     assert "logfile_size" in serializerData
-    assert serializerData["logfile_size"] == daemon.logfile_size
+    assert serializerData["logfile_size"] == daemonModel.logfile_size
     assert "is_running" in serializerData
-    assert serializerData["is_running"] == daemon.is_running
+    assert serializerData["is_running"] == daemonModel.is_running
     assert "is_healthy" in serializerData
-    assert serializerData["is_healthy"] == daemon.is_healthy
+    assert serializerData["is_healthy"] == daemonModel.is_healthy
     assert "created" in serializerData
-    assert datetime.fromisoformat(serializerData["created"]) == daemon.created
+    assert datetime.fromisoformat(serializerData["created"]) == daemonModel.created
     assert "updated" in serializerData
-    assert datetime.fromisoformat(serializerData["updated"]) == daemon.updated
+    assert datetime.fromisoformat(serializerData["updated"]) == daemonModel.updated
     assert len(serializerData) == 12
 
 
 @pytest.mark.django_db
-def test_input(daemon):
+def test_input(daemonModel):
     """Tests for the expected input of the serializer."""
-    serializer = BaseDaemonSerializer(data=model_to_dict(daemon))
+    serializer = BaseDaemonSerializer(data=model_to_dict(daemonModel))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
@@ -74,15 +74,15 @@ def test_input(daemon):
     assert "uuid" not in serializerData
     assert "mailbox" not in serializerData
     assert "fetching_criterion" in serializerData
-    assert serializerData["fetching_criterion"] == daemon.fetching_criterion
+    assert serializerData["fetching_criterion"] == daemonModel.fetching_criterion
     assert "cycle_interval" in serializerData
-    assert serializerData["cycle_interval"] == daemon.cycle_interval
+    assert serializerData["cycle_interval"] == daemonModel.cycle_interval
     assert "restart_time" in serializerData
-    assert serializerData["restart_time"] == daemon.restart_time
+    assert serializerData["restart_time"] == daemonModel.restart_time
     assert "log_backup_count" in serializerData
-    assert serializerData["log_backup_count"] == daemon.log_backup_count
+    assert serializerData["log_backup_count"] == daemonModel.log_backup_count
     assert "logfile_size" in serializerData
-    assert serializerData["logfile_size"] == daemon.logfile_size
+    assert serializerData["logfile_size"] == daemonModel.logfile_size
     assert "is_running" not in serializerData
     assert "is_healthy" not in serializerData
     assert "created" not in serializerData
@@ -91,8 +91,8 @@ def test_input(daemon):
 
 
 @pytest.mark.django_db
-def test_validation_failure(daemon):
+def test_validation_failure(daemonModel):
     """Tests validation of :attr:`core.models.DaemonModel.DaemonModel.fetching_criterion`."""
-    daemon.fetching_criterion = "OTHER"
-    serializer = BaseDaemonSerializer(data=model_to_dict(daemon))
+    daemonModel.fetching_criterion = "OTHER"
+    serializer = BaseDaemonSerializer(data=model_to_dict(daemonModel))
     assert not serializer.is_valid()

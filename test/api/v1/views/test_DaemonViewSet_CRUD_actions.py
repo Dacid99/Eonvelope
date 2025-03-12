@@ -39,8 +39,8 @@ if TYPE_CHECKING:
     from typing import Any
 
 
-@pytest.fixture(name="daemonPayload")
-def fixture_daemonPayload(faker, mailboxModel) -> dict[str, Any]:
+@pytest.fixture
+def daemonPayload(faker, mailboxModel) -> dict[str, Any]:
     """Creates clean :class:`core.models.DaemonModel.DaemonModel` payload for a patch, post or put request.
 
     Args:

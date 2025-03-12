@@ -26,16 +26,16 @@ from rest_framework import status
 from api.v1.views.AttachmentViewSet import AttachmentViewSet
 
 
-@pytest.fixture(name="mock_open")
-def fixture_mock_open(mocker, faker):
+@pytest.fixture
+def mock_open(mocker, faker):
     fake_content = faker.text().encode("utf-8")
     mock_open = mocker.mock_open(read_data=fake_content)
     mocker.patch("api.v1.views.AttachmentViewSet.open", mock_open)
     return mock_open
 
 
-@pytest.fixture(name="mock_os_path_exists")
-def fixture_mock_os_path_exists(mocker):
+@pytest.fixture
+def mock_os_path_exists(mocker):
     return mocker.patch(
         "api.v1.views.AttachmentViewSet.os.path.exists",
         autospec=True,

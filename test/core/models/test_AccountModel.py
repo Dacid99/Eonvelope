@@ -46,8 +46,8 @@ if TYPE_CHECKING:
     from unittest.mock import MagicMock
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker) -> MagicMock:
+@pytest.fixture(autouse=True)
+def mock_logger(mocker) -> MagicMock:
     """Mocks the :attr:`core.models.AccountModel.logger`.
 
     Returns:
@@ -56,16 +56,16 @@ def fixture_mock_logger(mocker) -> MagicMock:
     return mocker.patch("core.models.AccountModel.logger", autospec=True)
 
 
-@pytest.fixture(name="mock_fetcher")
-def fixture_mock_fetcher(mocker, faker) -> MagicMock:
+@pytest.fixture
+def mock_fetcher(mocker, faker) -> MagicMock:
     mock_fetcher = mocker.MagicMock(spec=BaseFetcher)
     mock_fetcher.__enter__.return_value = mock_fetcher
     mock_fetcher.fetchMailboxes.return_value = [word.encode() for word in faker.words()]
     return mock_fetcher
 
 
-@pytest.fixture(name="mock_AccountModel_get_fetcher")
-def fixture_mock_AccountModel_get_fetcher(mocker, mock_fetcher) -> MagicMock:
+@pytest.fixture
+def mock_AccountModel_get_fetcher(mocker, mock_fetcher) -> MagicMock:
     return mocker.patch(
         "core.models.AccountModel.AccountModel.get_fetcher",
         autospec=True,
@@ -74,41 +74,43 @@ def fixture_mock_AccountModel_get_fetcher(mocker, mock_fetcher) -> MagicMock:
 
 
 @pytest.mark.django_db
-def test_AccountModel_default_creation(django_user_model, account):
+def test_AccountModel_default_creation(django_user_model, accountModel):
     """Tests the correct default creation of :class:`core.models.AccountModel.AccountModel`."""
 
-    assert account.mail_address is not None
-    assert isinstance(account.mail_address, str)
-    assert account.password is not None
-    assert isinstance(account.password, str)
-    assert account.mail_host is not None
-    assert isinstance(account.mail_host, str)
-    assert account.mail_host_port is None
-    assert account.protocol is not None
-    assert isinstance(account.protocol, str)
-    assert any(account.protocol == protocol for protocol in EmailProtocolChoices.values)
-    assert account.timeout is None
-    assert account.is_healthy is True
-    assert account.is_favorite is False
-    assert account.user is not None
-    assert isinstance(account.user, django_user_model)
-    assert account.updated is not None
-    assert isinstance(account.updated, datetime.datetime)
-    assert account.created is not None
-    assert isinstance(account.created, datetime.datetime)
+    assert accountModel.mail_address is not None
+    assert isinstance(accountModel.mail_address, str)
+    assert accountModel.password is not None
+    assert isinstance(accountModel.password, str)
+    assert accountModel.mail_host is not None
+    assert isinstance(accountModel.mail_host, str)
+    assert accountModel.mail_host_port is None
+    assert accountModel.protocol is not None
+    assert isinstance(accountModel.protocol, str)
+    assert any(
+        accountModel.protocol == protocol for protocol in EmailProtocolChoices.values
+    )
+    assert accountModel.timeout is None
+    assert accountModel.is_healthy is True
+    assert accountModel.is_favorite is False
+    assert accountModel.user is not None
+    assert isinstance(accountModel.user, django_user_model)
+    assert accountModel.updated is not None
+    assert isinstance(accountModel.updated, datetime.datetime)
+    assert accountModel.created is not None
+    assert isinstance(accountModel.created, datetime.datetime)
 
-    assert account.mail_address in str(account)
-    assert account.protocol in str(account)
+    assert accountModel.mail_address in str(accountModel)
+    assert accountModel.protocol in str(accountModel)
 
 
 @pytest.mark.django_db
-def test_AccountModel_foreign_key_deletion(account):
+def test_AccountModel_foreign_key_deletion(accountModel):
     """Tests the on_delete foreign key constraint in :class:`core.models.AccountModel.AccountModel`."""
 
-    assert account is not None
-    account.user.delete()
+    assert accountModel is not None
+    accountModel.user.delete()
     with pytest.raises(AccountModel.DoesNotExist):
-        account.refresh_from_db()
+        accountModel.refresh_from_db()
 
 
 @pytest.mark.django_db
@@ -143,31 +145,31 @@ def test_AccountModel_unique(django_user_model):
     ],
 )
 def test_get_fetcher_success(
-    mocker, mock_logger, account, protocol, expectedFetcherClass
+    mocker, mock_logger, accountModel, protocol, expectedFetcherClass
 ):
     mocker.patch(
         f"core.models.AccountModel.{expectedFetcherClass.__name__}.__init__",
         return_value=None,
     )
-    account.protocol = protocol
+    accountModel.protocol = protocol
 
-    fetcher = account.get_fetcher()
+    fetcher = accountModel.get_fetcher()
 
     assert isinstance(fetcher, expectedFetcherClass)
     mock_logger.error.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_get_fetcher_bad_protocol(mock_logger, account):
-    account.is_healthy = True
-    account.save(update_fields=["is_healthy"])
-    account.protocol = "OTHER"
+def test_get_fetcher_bad_protocol(mock_logger, accountModel):
+    accountModel.is_healthy = True
+    accountModel.save(update_fields=["is_healthy"])
+    accountModel.protocol = "OTHER"
 
     with pytest.raises(ValueError):
-        account.get_fetcher()
+        accountModel.get_fetcher()
 
-    account.refresh_from_db()
-    assert account.is_healthy is False
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is False
     mock_logger.error.assert_called()
 
 
@@ -182,21 +184,21 @@ def test_get_fetcher_bad_protocol(mock_logger, account):
     ],
 )
 def test_get_fetcher_init_failure(
-    mocker, mock_logger, account, protocol, expectedFetcherClass
+    mocker, mock_logger, accountModel, protocol, expectedFetcherClass
 ):
-    account.is_healthy = True
-    account.save(update_fields=["is_healthy"])
+    accountModel.is_healthy = True
+    accountModel.save(update_fields=["is_healthy"])
     mocker.patch(
         f"core.models.AccountModel.{expectedFetcherClass.__name__}.__init__",
         side_effect=MailAccountError,
     )
-    account.protocol = protocol
+    accountModel.protocol = protocol
 
     with pytest.raises(MailAccountError):
-        account.get_fetcher()
+        accountModel.get_fetcher()
 
-    account.refresh_from_db()
-    assert account.is_healthy is False
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is False
     mock_logger.exception.assert_called()
 
 
@@ -211,42 +213,42 @@ def test_get_fetcher_init_failure(
     ],
 )
 def test_get_fetcher_class_success(
-    mock_logger, account, protocol, expectedFetcherClass
+    mock_logger, accountModel, protocol, expectedFetcherClass
 ):
-    account.protocol = protocol
+    accountModel.protocol = protocol
 
-    fetcherClass = account.get_fetcher_class()
+    fetcherClass = accountModel.get_fetcher_class()
 
     assert fetcherClass == expectedFetcherClass
     mock_logger.error.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_get_fetcher_class_failure(mock_logger, account):
-    account.is_healthy = True
-    account.protocol = "OTHER"
-    account.save(update_fields=["is_healthy"])
+def test_get_fetcher_class_failure(mock_logger, accountModel):
+    accountModel.is_healthy = True
+    accountModel.protocol = "OTHER"
+    accountModel.save(update_fields=["is_healthy"])
 
     with pytest.raises(ValueError):
-        account.get_fetcher_class()
+        accountModel.get_fetcher_class()
 
-    account.refresh_from_db()
-    assert account.is_healthy is False
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is False
     mock_logger.error.assert_called()
 
 
 @pytest.mark.django_db
 def test_test_connection_success(
-    mock_logger, account, mock_fetcher, mock_AccountModel_get_fetcher
+    mock_logger, accountModel, mock_fetcher, mock_AccountModel_get_fetcher
 ):
-    account.is_healthy = False
-    account.save(update_fields=["is_healthy"])
+    accountModel.is_healthy = False
+    accountModel.save(update_fields=["is_healthy"])
 
-    account.test_connection()
+    accountModel.test_connection()
 
-    account.refresh_from_db()
-    assert account.is_healthy is True
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is True
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.test.assert_called_once_with()
     mock_logger.info.assert_called()
     mock_logger.error.assert_not_called()
@@ -254,146 +256,150 @@ def test_test_connection_success(
 
 @pytest.mark.django_db
 def test_test_connection_badProtocol(
-    mock_logger, account, mock_fetcher, mock_AccountModel_get_fetcher
+    mock_logger, accountModel, mock_fetcher, mock_AccountModel_get_fetcher
 ):
     mock_AccountModel_get_fetcher.side_effect = ValueError
 
     with pytest.raises(ValueError):
-        account.test_connection()
+        accountModel.test_connection()
 
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.test.assert_not_called()
     mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
 def test_test_connection_failure(
-    mock_logger, account, mock_fetcher, mock_AccountModel_get_fetcher
+    mock_logger, accountModel, mock_fetcher, mock_AccountModel_get_fetcher
 ) -> None:
     mock_fetcher.test.side_effect = MailAccountError
-    account.is_healthy = True
-    account.save(update_fields=["is_healthy"])
+    accountModel.is_healthy = True
+    accountModel.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailAccountError):
-        account.test_connection()
+        accountModel.test_connection()
 
-    account.refresh_from_db()
-    assert account.is_healthy is False
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is False
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.test.assert_called_once_with()
     mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
 def test_test_connection_get_fetcher_error(
-    mock_logger, account, mock_AccountModel_get_fetcher
+    mock_logger, accountModel, mock_AccountModel_get_fetcher
 ) -> None:
     mock_AccountModel_get_fetcher.side_effect = MailAccountError
-    account.is_healthy = True
-    account.save(update_fields=["is_healthy"])
+    accountModel.is_healthy = True
+    accountModel.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailAccountError):
-        account.test_connection()
+        accountModel.test_connection()
 
-    account.refresh_from_db()
-    assert account.is_healthy is False
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is False
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_AccountModel_get_fetcher.return_value.test.assert_not_called()
     mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
 def test_update_mailboxes_success(
-    mocker, mock_logger, account, mock_fetcher, mock_AccountModel_get_fetcher
+    mocker, mock_logger, accountModel, mock_fetcher, mock_AccountModel_get_fetcher
 ):
     spy_MailboxModel_fromData = mocker.spy(
         core.models.AccountModel.MailboxModel, "fromData"
     )
-    account.is_healthy = False
-    account.save(update_fields=["is_healthy"])
+    accountModel.is_healthy = False
+    accountModel.save(update_fields=["is_healthy"])
 
-    account.update_mailboxes()
+    accountModel.update_mailboxes()
 
-    account.refresh_from_db()
-    assert account.is_healthy is True
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is True
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_called_once_with()
     assert spy_MailboxModel_fromData.call_count == len(
         mock_fetcher.fetchMailboxes.return_value
     )
-    assert account.mailboxes.count() == len(mock_fetcher.fetchMailboxes.return_value)
+    assert accountModel.mailboxes.count() == len(
+        mock_fetcher.fetchMailboxes.return_value
+    )
     mock_logger.debug.assert_called()
     mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db(transaction=True)
 def test_update_mailboxes_duplicate(
-    mocker, mock_logger, account, mock_fetcher, mock_AccountModel_get_fetcher
+    mocker, mock_logger, accountModel, mock_fetcher, mock_AccountModel_get_fetcher
 ):
-    baker.make(MailboxModel, account=account, name="INBOX")
+    baker.make(MailboxModel, account=accountModel, name="INBOX")
     mock_fetcher.fetchMailboxes.return_value[0] = b"INBOX"
     spy_MaiboxModel_fromData = mocker.spy(
         core.models.AccountModel.MailboxModel, "fromData"
     )
 
-    assert account.mailboxes.count() == 1
+    assert accountModel.mailboxes.count() == 1
 
-    account.update_mailboxes()
+    accountModel.update_mailboxes()
 
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_called_once_with()
     assert spy_MaiboxModel_fromData.call_count == len(
         mock_fetcher.fetchMailboxes.return_value
     )
-    account.refresh_from_db()
-    assert account.mailboxes.count() == len(mock_fetcher.fetchMailboxes.return_value)
+    accountModel.refresh_from_db()
+    assert accountModel.mailboxes.count() == len(
+        mock_fetcher.fetchMailboxes.return_value
+    )
     mock_logger.debug.assert_called()
     mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
 def test_update_mailboxes_failure(
-    mocker, mock_logger, account, mock_fetcher, mock_AccountModel_get_fetcher
+    mocker, mock_logger, accountModel, mock_fetcher, mock_AccountModel_get_fetcher
 ):
     mock_fetcher.fetchMailboxes.side_effect = MailAccountError
     spy_MaiboxModel_fromData = mocker.spy(
         core.models.AccountModel.MailboxModel, "fromData"
     )
-    account.is_healthy = True
-    account.save(update_fields=["is_healthy"])
+    accountModel.is_healthy = True
+    accountModel.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailAccountError):
-        account.update_mailboxes()
+        accountModel.update_mailboxes()
 
-    account.refresh_from_db()
-    assert account.is_healthy is False
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is False
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_called_once_with()
     spy_MaiboxModel_fromData.assert_not_called()
-    account.refresh_from_db()
-    assert account.mailboxes.count() == 0
+    accountModel.refresh_from_db()
+    assert accountModel.mailboxes.count() == 0
     mock_logger.info.assert_called()
 
 
 @pytest.mark.django_db
 def test_update_mailboxes_get_fetcher_error(
-    mocker, mock_logger, account, mock_fetcher, mock_AccountModel_get_fetcher
+    mocker, mock_logger, accountModel, mock_fetcher, mock_AccountModel_get_fetcher
 ):
     mock_AccountModel_get_fetcher.side_effect = MailAccountError
     spy_MaiboxModel_fromData = mocker.spy(
         core.models.AccountModel.MailboxModel, "fromData"
     )
-    account.is_healthy = True
-    account.save(update_fields=["is_healthy"])
+    accountModel.is_healthy = True
+    accountModel.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailAccountError):
-        account.update_mailboxes()
+        accountModel.update_mailboxes()
 
-    account.refresh_from_db()
-    assert account.is_healthy is True
-    mock_AccountModel_get_fetcher.assert_called_once_with(account)
+    accountModel.refresh_from_db()
+    assert accountModel.is_healthy is True
+    mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_not_called()
     spy_MaiboxModel_fromData.assert_not_called()
-    account.refresh_from_db()
-    assert account.mailboxes.count() == 0
+    accountModel.refresh_from_db()
+    assert accountModel.mailboxes.count() == 0
     mock_logger.info.assert_called()

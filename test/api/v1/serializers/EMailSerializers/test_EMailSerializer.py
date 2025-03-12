@@ -24,41 +24,41 @@ import pytest
 from django.forms.models import model_to_dict
 
 from api.v1.serializers.email_serializers.EMailSerializer import EMailSerializer
-from test.core.conftest import fixture_emailModel
+from test.core.conftest import emailModel
 
 
 @pytest.mark.django_db
-def test_output(email):
+def test_output(emailModel):
     """Tests for the expected output of the serializer."""
-    serializerData = EMailSerializer(instance=email).data
+    serializerData = EMailSerializer(instance=emailModel).data
 
     assert "id" in serializerData
-    assert serializerData["id"] == email.id
+    assert serializerData["id"] == emailModel.id
     assert "message_id" in serializerData
-    assert serializerData["message_id"] == email.message_id
+    assert serializerData["message_id"] == emailModel.message_id
     assert "datetime" in serializerData
-    assert datetime.fromisoformat(serializerData["datetime"]) == email.datetime
+    assert datetime.fromisoformat(serializerData["datetime"]) == emailModel.datetime
     assert "email_subject" in serializerData
-    assert serializerData["email_subject"] == email.email_subject
+    assert serializerData["email_subject"] == emailModel.email_subject
     assert "plain_bodytext" in serializerData
-    assert serializerData["plain_bodytext"] == email.plain_bodytext
+    assert serializerData["plain_bodytext"] == emailModel.plain_bodytext
     assert "html_bodytext" in serializerData
-    assert serializerData["html_bodytext"] == email.html_bodytext
+    assert serializerData["html_bodytext"] == emailModel.html_bodytext
     assert "inReplyTo" in serializerData
     assert serializerData["inReplyTo"] is None
     assert "datasize" in serializerData
-    assert serializerData["datasize"] == email.datasize
+    assert serializerData["datasize"] == emailModel.datasize
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == email.is_favorite
+    assert serializerData["is_favorite"] == emailModel.is_favorite
     assert "mailbox" in serializerData
-    assert serializerData["mailbox"] == email.mailbox.id
+    assert serializerData["mailbox"] == emailModel.mailbox.id
     assert "headers" not in serializerData
     assert "x_spam" in serializerData
-    assert serializerData["x_spam"] == email.x_spam
+    assert serializerData["x_spam"] == emailModel.x_spam
     assert "created" in serializerData
-    assert datetime.fromisoformat(serializerData["created"]) == email.created
+    assert datetime.fromisoformat(serializerData["created"]) == emailModel.created
     assert "updated" in serializerData
-    assert datetime.fromisoformat(serializerData["updated"]) == email.updated
+    assert datetime.fromisoformat(serializerData["updated"]) == emailModel.updated
     assert "replies" in serializerData
     assert serializerData["replies"] == []
     assert "attachments" in serializerData
@@ -71,9 +71,9 @@ def test_output(email):
 
 
 @pytest.mark.django_db
-def test_input(email):
+def test_input(emailModel):
     """Tests for the expected input of the serializer."""
-    serializer = EMailSerializer(data=model_to_dict(email))
+    serializer = EMailSerializer(data=model_to_dict(emailModel))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
@@ -86,7 +86,7 @@ def test_input(email):
     assert "inReplyTo" not in serializerData
     assert "datasize" not in serializerData
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == email.is_favorite
+    assert serializerData["is_favorite"] == emailModel.is_favorite
     assert "mailbox" not in serializerData
     assert "headers" not in serializerData
     assert "x_spam" not in serializerData

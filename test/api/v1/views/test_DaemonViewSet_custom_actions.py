@@ -28,16 +28,16 @@ from rest_framework import status
 from api.v1.views.DaemonViewSet import DaemonViewSet
 
 
-@pytest.fixture(name="mock_open")
-def fixture_mock_open(mocker, faker):
+@pytest.fixture
+def mock_open(mocker, faker):
     fake_content = faker.text().encode("utf-8")
     mock_open = mocker.mock_open(read_data=fake_content)
     mocker.patch("api.v1.views.DaemonViewSet.open", mock_open)
     return mock_open
 
 
-@pytest.fixture(name="mock_os_path_exists")
-def fixture_mock_os_path_exists(mocker):
+@pytest.fixture
+def mock_os_path_exists(mocker):
     return mocker.patch(
         "api.v1.views.DaemonViewSet.os.path.exists",
         autospec=True,
@@ -45,8 +45,8 @@ def fixture_mock_os_path_exists(mocker):
     )
 
 
-@pytest.fixture(name="mock_MailboxModel_getAvailableFetchingCriteria")
-def fixture_mock_MailboxModel_getAvailableFetchingCriteria(mocker, faker):
+@pytest.fixture
+def mock_MailboxModel_getAvailableFetchingCriteria(mocker, faker):
     return mocker.patch(
         "api.v1.views.MailboxViewSet.MailboxModel.getAvailableFetchingCriteria",
         autospec=True,
@@ -54,8 +54,8 @@ def fixture_mock_MailboxModel_getAvailableFetchingCriteria(mocker, faker):
     )
 
 
-@pytest.fixture(name="mock_EMailArchiverDaemonRegistry_testDaemon")
-def fixture_mock_EMailArchiverDaemonRegistry_testDaemon(mocker):
+@pytest.fixture
+def mock_EMailArchiverDaemonRegistry_testDaemon(mocker):
     return mocker.patch(
         "api.v1.views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon",
         autospec=True,
@@ -63,8 +63,8 @@ def fixture_mock_EMailArchiverDaemonRegistry_testDaemon(mocker):
     )
 
 
-@pytest.fixture(name="mock_EMailArchiverDaemonRegistry_startDaemon")
-def fixture_mock_EMailArchiverDaemonRegistry_startDaemon(mocker):
+@pytest.fixture
+def mock_EMailArchiverDaemonRegistry_startDaemon(mocker):
     return mocker.patch(
         "api.v1.views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon",
         autospec=True,
@@ -72,8 +72,8 @@ def fixture_mock_EMailArchiverDaemonRegistry_startDaemon(mocker):
     )
 
 
-@pytest.fixture(name="mock_EMailArchiverDaemonRegistry_stopDaemon")
-def fixture_mock_EMailArchiverDaemonRegistry_stopDaemon(mocker):
+@pytest.fixture
+def mock_EMailArchiverDaemonRegistry_stopDaemon(mocker):
     return mocker.patch(
         "api.v1.views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon",
         autospec=True,

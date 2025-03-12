@@ -28,16 +28,16 @@ from rest_framework import status
 from api.v1.views.EMailViewSet import EMailViewSet
 
 
-@pytest.fixture(name="mock_open")
-def fixture_mock_open(mocker, faker):
+@pytest.fixture
+def mock_open(mocker, faker):
     fake_content = faker.text().encode("utf-8")
     mock_open = mocker.mock_open(read_data=fake_content)
     mocker.patch("api.v1.views.EMailViewSet.open", mock_open)
     return mock_open
 
 
-@pytest.fixture(name="mock_os_path_exists")
-def fixture_mock_os_path_exists(mocker):
+@pytest.fixture
+def mock_os_path_exists(mocker):
     return mocker.patch(
         "api.v1.views.EMailViewSet.os.path.exists",
         autospec=True,
@@ -45,8 +45,8 @@ def fixture_mock_os_path_exists(mocker):
     )
 
 
-@pytest.fixture(name="mock_EMailModel_subConversation")
-def fixture_mock_EMailModel_subConversation(mocker, emailModel):
+@pytest.fixture
+def mock_EMailModel_subConversation(mocker, emailModel):
     return mocker.patch(
         "api.v1.views.EMailViewSet.EMailModel.subConversation",
         autospec=True,
@@ -54,8 +54,8 @@ def fixture_mock_EMailModel_subConversation(mocker, emailModel):
     )
 
 
-@pytest.fixture(name="mock_EMailModel_fullConversation")
-def fixture_mock_EMailModel_fullConversation(mocker, emailModel):
+@pytest.fixture
+def mock_EMailModel_fullConversation(mocker, emailModel):
     return mocker.patch(
         "api.v1.views.EMailViewSet.EMailModel.fullConversation",
         autospec=True,

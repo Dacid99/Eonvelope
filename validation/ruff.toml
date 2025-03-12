@@ -106,4 +106,5 @@ parametrize-values-type = "list"
 "/**/test/**/test_**.py" = [  # extend ignores for test_* files, so excluding conftests
   "S101", # asserts
   "F401", # unused import
+  "F811", # redefinition of unused
 ]

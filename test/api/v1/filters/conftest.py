@@ -327,8 +327,8 @@ DATETIME_TEST_PARAMETERS = [
 ]
 
 
-@pytest.fixture(name="account_queryset", scope="module")
-def fixture_account_queryset(django_db_setup, django_db_blocker):
+@pytest.fixture(scope="session")
+def account_queryset(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
             with freeze_time(DATETIME_TEST_ITEMS[number]):
@@ -345,8 +345,8 @@ def fixture_account_queryset(django_db_setup, django_db_blocker):
         return AccountModel.objects.all()
 
 
-@pytest.fixture(name="mailbox_queryset", scope="module")
-def fixture_mailbox_queryset(django_db_setup, django_db_blocker, account_queryset):
+@pytest.fixture(scope="session")
+def mailbox_queryset(django_db_setup, django_db_blocker, account_queryset):
     with django_db_blocker.unblock():
         for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
             with freeze_time(DATETIME_TEST_ITEMS[number]):
@@ -363,10 +363,8 @@ def fixture_mailbox_queryset(django_db_setup, django_db_blocker, account_queryse
         return MailboxModel.objects.all()
 
 
-@pytest.fixture(name="daemon_queryset", scope="module")
-def fixture_daemon_queryset(
-    faker, django_db_setup, django_db_blocker, mailbox_queryset
-):
+@pytest.fixture(scope="session")
+def daemon_queryset(django_db_setup, django_db_blocker, mailbox_queryset):
     with django_db_blocker.unblock():
         for number, int_test_item in enumerate(INT_TEST_ITEMS):
             with freeze_time(DATETIME_TEST_ITEMS[number]):
@@ -376,14 +374,14 @@ def fixture_daemon_queryset(
                     is_running=BOOL_TEST_ITEMS[number],
                     is_healthy=BOOL_TEST_ITEMS[number],
                     mailbox=mailbox_queryset.get(id=number + 1),
-                    log_filepath=faker.file_path(),
+                    log_filepath=TEXT_TEST_ITEMS[number],
                 )
 
         return DaemonModel.objects.all()
 
 
-@pytest.fixture(name="correspondent_queryset", scope="module")
-def fixture_correspondent_queryset(django_db_setup, django_db_blocker):
+@pytest.fixture(scope="session")
+def correspondent_queryset(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
             with freeze_time(DATETIME_TEST_ITEMS[number]):
@@ -397,8 +395,8 @@ def fixture_correspondent_queryset(django_db_setup, django_db_blocker):
         return CorrespondentModel.objects.all()
 
 
-@pytest.fixture(name="mailinglist_queryset", scope="module")
-def fixture_mailinglist_queryset(django_db_setup, django_db_blocker):
+@pytest.fixture(scope="session")
+def mailinglist_queryset(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
         for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
             with freeze_time(DATETIME_TEST_ITEMS[number]):
@@ -417,8 +415,8 @@ def fixture_mailinglist_queryset(django_db_setup, django_db_blocker):
         return MailingListModel.objects.all()
 
 
-@pytest.fixture(name="email_queryset", scope="module")
-def fixture_email_queryset(
+@pytest.fixture(scope="session")
+def email_queryset(
     django_db_setup,
     django_db_blocker,
     mailbox_queryset,
@@ -450,8 +448,8 @@ def fixture_email_queryset(
         return EMailModel.objects.all()
 
 
-@pytest.fixture(name="attachment_queryset", scope="module")
-def fixture_attachment_queryset(django_db_setup, django_db_blocker, email_queryset):
+@pytest.fixture(scope="session")
+def attachment_queryset(django_db_setup, django_db_blocker, email_queryset):
     with django_db_blocker.unblock():
         for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
             with freeze_time(DATETIME_TEST_ITEMS[number]):

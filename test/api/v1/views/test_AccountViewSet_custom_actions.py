@@ -27,15 +27,15 @@ from api.v1.views.AccountViewSet import AccountViewSet
 from core.utils.fetchers.exceptions import MailAccountError
 
 
-@pytest.fixture(name="mock_AccountModel_update_mailboxes")
-def fixture_mock_AccountModel_update_mailboxes(mocker):
+@pytest.fixture
+def mock_AccountModel_update_mailboxes(mocker):
     return mocker.patch(
         "api.v1.views.AccountViewSet.AccountModel.update_mailboxes", autospec=True
     )
 
 
-@pytest.fixture(name="mock_AccountModel_test_connection")
-def fixture_mock_AccountModel_test_connection(mocker):
+@pytest.fixture
+def mock_AccountModel_test_connection(mocker):
     return mocker.patch(
         "api.v1.views.AccountViewSet.AccountModel.test_connection", autospec=True
     )

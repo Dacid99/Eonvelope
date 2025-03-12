@@ -25,11 +25,11 @@ from core.models.AccountModel import AccountModel
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 
-from .test_save_DaemonModel import fixture_mock_updateDaemon
+from .test_save_DaemonModel import mock_updateDaemon
 
 
-@pytest.fixture(name="mailbox")
-def fixture_mailbox(faker):
+@pytest.fixture
+def mailboxModel(faker):
     """Fixture for a :class:`core.models.MailboxModel.MailboxModel` with daemons and a account."""
     account = baker.make(AccountModel)
     mailbox = baker.make(MailboxModel, account=account)
@@ -53,27 +53,27 @@ def fixture_mailbox(faker):
     ],
 )
 def test_illegal_states(
-    mailbox,
+    mailboxModel,
     mock_updateDaemon,
     account_is_healthy,
     mailbox_is_healthy,
     daemons_is_healthy,
 ):
     """Tests for existance of states that are impossible under the is_healthy signal chain."""
-    mailbox.account.is_healthy = account_is_healthy
-    mailbox.account.save(update_fields=["is_healthy"])
-    mailbox.refresh_from_db()
-    mailbox.is_healthy = mailbox_is_healthy
-    mailbox.save(update_fields=["is_healthy"])
-    for daemon in mailbox.daemons.all():
+    mailboxModel.account.is_healthy = account_is_healthy
+    mailboxModel.account.save(update_fields=["is_healthy"])
+    mailboxModel.refresh_from_db()
+    mailboxModel.is_healthy = mailbox_is_healthy
+    mailboxModel.save(update_fields=["is_healthy"])
+    for daemon in mailboxModel.daemons.all():
         daemon.is_healthy = daemons_is_healthy
         daemon.save(update_fields=["is_healthy"])
 
-    mailbox.refresh_from_db()
+    mailboxModel.refresh_from_db()
     with pytest.raises(AssertionError):
-        assert mailbox.account.is_healthy is account_is_healthy
-        assert mailbox.is_healthy is mailbox_is_healthy
-        for daemon in mailbox.daemons.all():
+        assert mailboxModel.account.is_healthy is account_is_healthy
+        assert mailboxModel.is_healthy is mailbox_is_healthy
+        for daemon in mailboxModel.daemons.all():
             assert daemon.is_healthy is daemons_is_healthy
 
 
@@ -88,7 +88,7 @@ def test_illegal_states(
     ],
 )
 def test_toggle_AccountModel_is_healthy(
-    mailbox,
+    mailboxModel,
     mock_updateDaemon,
     account_is_healthy_start,
     mailbox_is_healthy_start,
@@ -100,29 +100,29 @@ def test_toggle_AccountModel_is_healthy(
     """Tests the expected propagation of health states through the models
     if :attr:`core.models.AccountModel.AccountModel.is_healthy` is changed.
     """
-    mailbox.account.is_healthy = account_is_healthy_start
-    mailbox.account.save(update_fields=["is_healthy"])
-    mailbox.refresh_from_db()
-    mailbox.is_healthy = mailbox_is_healthy_start
-    mailbox.save(update_fields=["is_healthy"])
-    for daemon in mailbox.daemons.all():
+    mailboxModel.account.is_healthy = account_is_healthy_start
+    mailboxModel.account.save(update_fields=["is_healthy"])
+    mailboxModel.refresh_from_db()
+    mailboxModel.is_healthy = mailbox_is_healthy_start
+    mailboxModel.save(update_fields=["is_healthy"])
+    for daemon in mailboxModel.daemons.all():
         daemon.is_healthy = daemons_is_healthy_start
         daemon.save(update_fields=["is_healthy"])
 
-    assert mailbox.account.is_healthy is account_is_healthy_start
-    assert mailbox.is_healthy is mailbox_is_healthy_start
-    for daemon in mailbox.daemons.all():
+    assert mailboxModel.account.is_healthy is account_is_healthy_start
+    assert mailboxModel.is_healthy is mailbox_is_healthy_start
+    for daemon in mailboxModel.daemons.all():
         assert daemon.is_healthy is daemons_is_healthy_start
 
-    mailbox.account.is_healthy = not mailbox.account.is_healthy
-    mailbox.account.save(update_fields=["is_healthy"])
+    mailboxModel.account.is_healthy = not mailboxModel.account.is_healthy
+    mailboxModel.account.save(update_fields=["is_healthy"])
 
-    mailbox.refresh_from_db()
-    for daemon in mailbox.daemons.all():
+    mailboxModel.refresh_from_db()
+    for daemon in mailboxModel.daemons.all():
         daemon.refresh_from_db()
         assert daemon.is_healthy is daemons_is_healthy_end
-    assert mailbox.is_healthy is mailbox_is_healthy_end
-    assert mailbox.account.is_healthy is account_is_healthy_end
+    assert mailboxModel.is_healthy is mailbox_is_healthy_end
+    assert mailboxModel.account.is_healthy is account_is_healthy_end
 
 
 @pytest.mark.django_db
@@ -136,7 +136,7 @@ def test_toggle_AccountModel_is_healthy(
     ],
 )
 def test_toggle_MailboxModel_is_healthy(
-    mailbox,
+    mailboxModel,
     mock_updateDaemon,
     account_is_healthy_start,
     mailbox_is_healthy_start,
@@ -148,29 +148,29 @@ def test_toggle_MailboxModel_is_healthy(
     """Tests the expected propagation of health states through the models
     if :attr:`core.models.MailboxModel.MailboxModel.is_healthy` is changed.
     """
-    mailbox.account.is_healthy = account_is_healthy_start
-    mailbox.account.save(update_fields=["is_healthy"])
-    mailbox.refresh_from_db()
-    mailbox.is_healthy = mailbox_is_healthy_start
-    mailbox.save(update_fields=["is_healthy"])
-    for daemon in mailbox.daemons.all():
+    mailboxModel.account.is_healthy = account_is_healthy_start
+    mailboxModel.account.save(update_fields=["is_healthy"])
+    mailboxModel.refresh_from_db()
+    mailboxModel.is_healthy = mailbox_is_healthy_start
+    mailboxModel.save(update_fields=["is_healthy"])
+    for daemon in mailboxModel.daemons.all():
         daemon.is_healthy = daemons_is_healthy_start
         daemon.save(update_fields=["is_healthy"])
 
-    assert mailbox.account.is_healthy is account_is_healthy_start
-    assert mailbox.is_healthy is mailbox_is_healthy_start
-    for daemon in mailbox.daemons.all():
+    assert mailboxModel.account.is_healthy is account_is_healthy_start
+    assert mailboxModel.is_healthy is mailbox_is_healthy_start
+    for daemon in mailboxModel.daemons.all():
         assert daemon.is_healthy is daemons_is_healthy_start
 
-    mailbox.is_healthy = not mailbox.is_healthy
-    mailbox.save(update_fields=["is_healthy"])
+    mailboxModel.is_healthy = not mailboxModel.is_healthy
+    mailboxModel.save(update_fields=["is_healthy"])
 
-    mailbox.refresh_from_db()
-    daemons = mailbox.daemons.all()
+    mailboxModel.refresh_from_db()
+    daemons = mailboxModel.daemons.all()
     for daemon in daemons:
         assert daemon.is_healthy is daemons_is_healthy_end
-    assert mailbox.is_healthy is mailbox_is_healthy_end
-    assert mailbox.account.is_healthy is account_is_healthy_end
+    assert mailboxModel.is_healthy is mailbox_is_healthy_end
+    assert mailboxModel.account.is_healthy is account_is_healthy_end
 
 
 @pytest.mark.django_db
@@ -184,7 +184,7 @@ def test_toggle_MailboxModel_is_healthy(
     ],
 )
 def test_toggle_DaemonModel_is_healthy(
-    mailbox,
+    mailboxModel,
     mock_updateDaemon,
     account_is_healthy_start,
     mailbox_is_healthy_start,
@@ -196,27 +196,27 @@ def test_toggle_DaemonModel_is_healthy(
     """Tests the expected propagation of health states through the models
     if :attr:`core.models.DaemonModel.DaemonModel.is_healthy` is changed.
     """
-    mailbox.account.is_healthy = account_is_healthy_start
-    mailbox.account.save(update_fields=["is_healthy"])
-    mailbox.refresh_from_db()
-    mailbox.is_healthy = mailbox_is_healthy_start
-    mailbox.save(update_fields=["is_healthy"])
-    for daemon in mailbox.daemons.all():
+    mailboxModel.account.is_healthy = account_is_healthy_start
+    mailboxModel.account.save(update_fields=["is_healthy"])
+    mailboxModel.refresh_from_db()
+    mailboxModel.is_healthy = mailbox_is_healthy_start
+    mailboxModel.save(update_fields=["is_healthy"])
+    for daemon in mailboxModel.daemons.all():
         daemon.is_healthy = daemons_is_healthy_start
         daemon.save(update_fields=["is_healthy"])
 
-    assert mailbox.account.is_healthy is account_is_healthy_start
-    assert mailbox.is_healthy is mailbox_is_healthy_start
-    for daemon in mailbox.daemons.all():
+    assert mailboxModel.account.is_healthy is account_is_healthy_start
+    assert mailboxModel.is_healthy is mailbox_is_healthy_start
+    for daemon in mailboxModel.daemons.all():
         assert daemon.is_healthy is daemons_is_healthy_start
 
-    for daemon in mailbox.daemons.all():
+    for daemon in mailboxModel.daemons.all():
         daemon.is_healthy = not daemon.is_healthy
         daemon.save(update_fields=["is_healthy"])
 
-    mailbox.refresh_from_db()
-    daemons = mailbox.daemons.all()
+    mailboxModel.refresh_from_db()
+    daemons = mailboxModel.daemons.all()
     for daemon in daemons:
         assert daemon.is_healthy is daemons_is_healthy_end
-    assert mailbox.is_healthy is mailbox_is_healthy_end
-    assert mailbox.account.is_healthy is account_is_healthy_end
+    assert mailboxModel.is_healthy is mailbox_is_healthy_end
+    assert mailboxModel.account.is_healthy is account_is_healthy_end

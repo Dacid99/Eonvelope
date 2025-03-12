@@ -24,18 +24,18 @@ from core.constants import EmailProtocolChoices
 from core.utils.fetchers.exceptions import MailAccountError
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 
-from .test_POP3Fetcher import fixture_mock_logger
+from .test_POP3Fetcher import mock_logger
 
 
-@pytest.fixture(name="pop3_ssl_mailbox")
-def fixture_pop_ssl_Mailbox(mailbox):
-    mailbox.account.protocol = EmailProtocolChoices.POP3_SSL
-    mailbox.account.save(update_fields=["protocol"])
-    return mailbox
+@pytest.fixture
+def pop3_ssl_mailboxModel(mailboxModel):
+    mailboxModel.account.protocol = EmailProtocolChoices.POP3_SSL
+    mailboxModel.account.save(update_fields=["protocol"])
+    return mailboxModel
 
 
-@pytest.fixture(name="mock_POP3_SSL", autouse=True)
-def fixture_mock_POP3_SSL(mocker, faker):
+@pytest.fixture(autouse=True)
+def mock_POP3_SSL(mocker, faker):
     mock_POP3_SSL = mocker.patch(
         "core.utils.fetchers.POP3_SSL_Fetcher.poplib.POP3_SSL", autospec=True
     )
@@ -52,14 +52,14 @@ def fixture_mock_POP3_SSL(mocker, faker):
 
 @pytest.mark.django_db
 def test_POP3Fetcher_connectToHost_success(
-    pop3_ssl_mailbox, mock_logger, mock_POP3_SSL
+    pop3_ssl_mailboxModel, mock_logger, mock_POP3_SSL
 ):
-    POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
+    POP3_SSL_Fetcher(pop3_ssl_mailboxModel.account)
 
-    kwargs = {"host": pop3_ssl_mailbox.account.mail_host, "context": None}
-    if port := pop3_ssl_mailbox.account.mail_host_port:
+    kwargs = {"host": pop3_ssl_mailboxModel.account.mail_host, "context": None}
+    if port := pop3_ssl_mailboxModel.account.mail_host_port:
         kwargs["port"] = port
-    if timeout := pop3_ssl_mailbox.account.timeout:
+    if timeout := pop3_ssl_mailboxModel.account.timeout:
         kwargs["timeout"] = timeout
     mock_POP3_SSL.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()
@@ -69,17 +69,17 @@ def test_POP3Fetcher_connectToHost_success(
 
 @pytest.mark.django_db
 def test_POP3Fetcher_connectToHost_exception(
-    pop3_ssl_mailbox, mock_logger, mock_POP3_SSL
+    pop3_ssl_mailboxModel, mock_logger, mock_POP3_SSL
 ):
     mock_POP3_SSL.side_effect = AssertionError
 
     with pytest.raises(MailAccountError, match="AssertionError occured"):
-        POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
+        POP3_SSL_Fetcher(pop3_ssl_mailboxModel.account)
 
-    kwargs = {"host": pop3_ssl_mailbox.account.mail_host, "context": None}
-    if port := pop3_ssl_mailbox.account.mail_host_port:
+    kwargs = {"host": pop3_ssl_mailboxModel.account.mail_host, "context": None}
+    if port := pop3_ssl_mailboxModel.account.mail_host_port:
         kwargs["port"] = port
-    if timeout := pop3_ssl_mailbox.account.timeout:
+    if timeout := pop3_ssl_mailboxModel.account.timeout:
         kwargs["timeout"] = timeout
     mock_POP3_SSL.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()

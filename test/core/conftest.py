@@ -44,18 +44,18 @@ from core.models.MailboxModel import MailboxModel
 from core.models.MailingListModel import MailingListModel
 
 
-@pytest.fixture(name="account")
-def fixture_accountModel() -> AccountModel:
+@pytest.fixture
+def accountModel() -> AccountModel:
     """Creates an :class:`core.models.AccountModel.AccountModel` .
 
     Returns:
-        The account instance for testing.
+        The accountModel instance for testing.
     """
     return baker.make(AccountModel)
 
 
-@pytest.fixture(name="attachment")
-def fixture_attachmentModel(faker) -> AttachmentModel:
+@pytest.fixture
+def attachmentModel(faker) -> AttachmentModel:
     """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Returns:
@@ -64,62 +64,62 @@ def fixture_attachmentModel(faker) -> AttachmentModel:
     return baker.make(AttachmentModel, file_path=faker.file_path(extension="pdf"))
 
 
-@pytest.fixture(name="correspondent")
-def fixture_correspondentModel() -> CorrespondentModel:
+@pytest.fixture
+def correspondentModel() -> CorrespondentModel:
     """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
 
     Returns:
-        The correspondent instance for testing.
+        The correspondentModel instance for testing.
     """
     return baker.make(CorrespondentModel)
 
 
-@pytest.fixture(name="daemon")
-def fixture_daemonModel(faker) -> DaemonModel:
+@pytest.fixture
+def daemonModel(faker) -> DaemonModel:
     """Creates an :class:`core.models.DaemonModel.DaemonModel`.
 
     Returns:
-        The daemon instance for testing.
+        The daemonModel instance for testing.
     """
     return baker.make(DaemonModel, log_filepath=faker.file_path(extension="log"))
 
 
-@pytest.fixture(name="email")
-def fixture_emailModel() -> EMailModel:
+@pytest.fixture
+def emailModel() -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel`.
 
     Returns:
-        The email instance for testing.
+        The emailModel instance for testing.
     """
     return baker.make(EMailModel)
 
 
-@pytest.fixture(name="emailCorrespondent")
-def fixture_emailCorrespondentsModel() -> EMailCorrespondentsModel:
+@pytest.fixture
+def emailCorrespondentModel() -> EMailCorrespondentsModel:
     """Creates an :class:`core.models.EMailModel.EMailModel` instance for testing.
 
     Returns:
-        The emailCorrespondent instance for testing.
+        The emailCorrespondentModel instance for testing.
     """
     return baker.make(EMailCorrespondentsModel)
 
 
-@pytest.fixture(name="mailbox")
-def fixture_mailboxModel() -> MailboxModel:
+@pytest.fixture
+def mailboxModel() -> MailboxModel:
     """Creates an :class:`core.models.MailboxModel.MailboxModel`.
 
     Returns:
-        The mailbox instance for testing.
+        The mailboxModel instance for testing.
     """
     return baker.make(MailboxModel)
 
 
-@pytest.fixture(name="mailingList")
-def fixture_mailingListModel() -> MailingListModel:
+@pytest.fixture
+def mailingListModel() -> MailingListModel:
     """Creates an :class:`core.models.MailboxModel.MailboxModel`.
 
     Returns:
-        The mailingList instance for testing.
+        The mailingListModel instance for testing.
     """
     return baker.make(MailingListModel)
 

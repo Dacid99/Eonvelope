@@ -24,29 +24,31 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.emailcorrespondents_serializers.CorrespondentEMailSerializer import (
     CorrespondentEMailSerializer,
 )
-from test.core.conftest import fixture_emailCorrespondentsModel
+from test.core.conftest import emailCorrespondentModel
 
 
 @pytest.mark.django_db
-def test_output(emailCorrespondent):
+def test_output(emailCorrespondentModel):
     """Tests for the expected output of the serializer."""
-    serializerData = CorrespondentEMailSerializer(instance=emailCorrespondent).data
+    serializerData = CorrespondentEMailSerializer(instance=emailCorrespondentModel).data
 
     assert "id" not in serializerData
     assert "email" in serializerData
     assert isinstance(serializerData["email"], dict)
     assert "correspondent" not in serializerData
     assert "mention" in serializerData
-    assert serializerData["mention"] == emailCorrespondent.mention
+    assert serializerData["mention"] == emailCorrespondentModel.mention
     assert "created" not in serializerData
     assert "updated" not in serializerData
     assert len(serializerData) == 2
 
 
 @pytest.mark.django_db
-def test_input(emailCorrespondent):
+def test_input(emailCorrespondentModel):
     """Tests for the expected input of the serializer."""
-    serializer = CorrespondentEMailSerializer(data=model_to_dict(emailCorrespondent))
+    serializer = CorrespondentEMailSerializer(
+        data=model_to_dict(emailCorrespondentModel)
+    )
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

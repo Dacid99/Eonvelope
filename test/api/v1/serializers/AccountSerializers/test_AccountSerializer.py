@@ -24,65 +24,65 @@ import pytest
 from django.forms.models import model_to_dict
 
 from api.v1.serializers.account_serializers.AccountSerializer import AccountSerializer
-from test.core.conftest import fixture_accountModel
+from test.core.conftest import accountModel
 
 
 @pytest.mark.django_db
-def test_output(account):
+def test_output(accountModel):
     """Tests for the expected output of the serializer."""
-    serializerData = AccountSerializer(instance=account).data
+    serializerData = AccountSerializer(instance=accountModel).data
 
     assert "id" in serializerData
-    assert serializerData["id"] == account.id
+    assert serializerData["id"] == accountModel.id
     assert "password" not in serializerData
     assert "mail_address" in serializerData
-    assert serializerData["mail_address"] == account.mail_address
+    assert serializerData["mail_address"] == accountModel.mail_address
     assert "mailboxes" in serializerData
     assert serializerData["mailboxes"] == []
     assert "mail_host" in serializerData
-    assert serializerData["mail_host"] == account.mail_host
+    assert serializerData["mail_host"] == accountModel.mail_host
     assert "mail_host_port" in serializerData
-    assert serializerData["mail_host_port"] == account.mail_host_port
+    assert serializerData["mail_host_port"] == accountModel.mail_host_port
     assert "protocol" in serializerData
-    assert serializerData["protocol"] == account.protocol
+    assert serializerData["protocol"] == accountModel.protocol
     assert "timeout" in serializerData
-    assert serializerData["timeout"] == account.timeout
+    assert serializerData["timeout"] == accountModel.timeout
     assert "is_healthy" in serializerData
-    assert serializerData["is_healthy"] == account.is_healthy
+    assert serializerData["is_healthy"] == accountModel.is_healthy
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == account.is_favorite
+    assert serializerData["is_favorite"] == accountModel.is_favorite
     assert "created" in serializerData
-    assert datetime.fromisoformat(serializerData["created"]) == account.created
+    assert datetime.fromisoformat(serializerData["created"]) == accountModel.created
     assert "updated" in serializerData
-    assert datetime.fromisoformat(serializerData["updated"]) == account.updated
+    assert datetime.fromisoformat(serializerData["updated"]) == accountModel.updated
     assert "user" not in serializerData
     assert len(serializerData) == 11
 
 
 @pytest.mark.django_db
-def test_input(account):
+def test_input(accountModel):
     """Tests for the expected input of the serializer."""
-    serializer = AccountSerializer(data=model_to_dict(account))
+    serializer = AccountSerializer(data=model_to_dict(accountModel))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
     assert "id" not in serializerData
     assert "password" in serializerData
-    assert serializerData["password"] == account.password
+    assert serializerData["password"] == accountModel.password
     assert "mail_address" in serializerData
-    assert serializerData["mail_address"] == account.mail_address
+    assert serializerData["mail_address"] == accountModel.mail_address
     assert "mailboxes" not in serializerData
     assert "mail_host" in serializerData
-    assert serializerData["mail_host"] == account.mail_host
+    assert serializerData["mail_host"] == accountModel.mail_host
     assert "mail_host_port" in serializerData
-    assert serializerData["mail_host_port"] == account.mail_host_port
+    assert serializerData["mail_host_port"] == accountModel.mail_host_port
     assert "protocol" in serializerData
-    assert serializerData["protocol"] == account.protocol
+    assert serializerData["protocol"] == accountModel.protocol
     assert "timeout" in serializerData
-    assert serializerData["timeout"] == account.timeout
+    assert serializerData["timeout"] == accountModel.timeout
     assert "is_healthy" not in serializerData
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == account.is_favorite
+    assert serializerData["is_favorite"] == accountModel.is_favorite
     assert "created" not in serializerData
     assert "updated" not in serializerData
     assert "user" not in serializerData

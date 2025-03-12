@@ -24,20 +24,20 @@ import pytest
 from Emailkasten.utils import get_config
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker):
+@pytest.fixture(autouse=True)
+def mock_logger(mocker):
     return mocker.patch("Emailkasten.utils.logger", autospec=True)
 
 
-@pytest.fixture(name="mock_getattr", autouse=True)
-def fixture_mock_getattr(mocker):
+@pytest.fixture(autouse=True)
+def mock_getattr(mocker):
     return mocker.patch(
         "Emailkasten.utils.getattr", return_value="test-value from constance"
     )
 
 
-@pytest.fixture(name="mock_constance_settings", autouse=True)
-def fixture_mock_constance_settings(monkeypatch):
+@pytest.fixture(autouse=True)
+def mock_constance_settings(monkeypatch):
     monkeypatch.setattr(
         "Emailkasten.utils.CONSTANCE_CONFIG",
         {"TEST_CONFIG": ("test-value from settings", "A test value", str)},

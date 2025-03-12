@@ -28,8 +28,8 @@ from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 
 
-@pytest.fixture(name="mock_updateDaemon")
-def fixture_mock_updateDaemon(mocker):
+@pytest.fixture
+def mock_updateDaemon(mocker):
     """Patches the :func:`core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon`
     function called in the signal.
     """
@@ -39,8 +39,8 @@ def fixture_mock_updateDaemon(mocker):
     )
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker):
+@pytest.fixture(autouse=True)
+def mock_logger(mocker):
     """Mocks :attr:`core.signals.save_DaemonModel.logger` of the module."""
     return mocker.patch("core.signals.save_DaemonModel.logger", autospec=True)
 

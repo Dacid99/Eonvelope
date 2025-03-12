@@ -19,7 +19,7 @@
 """Test module for :mod:`core.models.DaemonModel`.
 
 Fixtures:
-    :func:`fixture_daemonModel`: Creates an :class:`core.models.DaemonModel.DaemonModel` instance for testing.
+    :func:`fixture_daemonModelModel`: Creates an :class:`core.models.DaemonModel.DaemonModel` instance for testing.
 """
 
 import datetime
@@ -37,8 +37,8 @@ from core.models.MailboxModel import MailboxModel
 from Emailkasten.utils import get_config
 
 
-@pytest.fixture(name="mock_logger", autouse=True)
-def fixture_mock_logger(mocker):
+@pytest.fixture(autouse=True)
+def mock_logger(mocker):
     """Mocks the :attr:`core.models.DaemonModel.logger`.
 
     Returns:
@@ -48,57 +48,57 @@ def fixture_mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_DaemonModel_default_creation(daemon):
+def test_DaemonModel_default_creation(daemonModel):
     """Tests the correct default creation of :class:`core.models.DaemonModel.DaemonModel`."""
 
-    assert daemon.uuid is not None
-    assert isinstance(daemon.uuid, UUID)
-    assert daemon.mailbox is not None
-    assert isinstance(daemon.mailbox, MailboxModel)
-    assert daemon.fetching_criterion == constants.EmailFetchingCriterionChoices.ALL
-    assert daemon.cycle_interval == get_config("DAEMON_CYCLE_PERIOD_DEFAULT")
-    assert daemon.restart_time == get_config("DAEMON_RESTART_TIME_DEFAULT")
-    assert daemon.is_running is False
-    assert daemon.is_healthy is True
-    assert daemon.log_filepath is not None
-    assert daemon.log_backup_count == get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
-    assert daemon.logfile_size == get_config("DAEMON_LOGFILE_SIZE_DEFAULT")
+    assert daemonModel.uuid is not None
+    assert isinstance(daemonModel.uuid, UUID)
+    assert daemonModel.mailbox is not None
+    assert isinstance(daemonModel.mailbox, MailboxModel)
+    assert daemonModel.fetching_criterion == constants.EmailFetchingCriterionChoices.ALL
+    assert daemonModel.cycle_interval == get_config("DAEMON_CYCLE_PERIOD_DEFAULT")
+    assert daemonModel.restart_time == get_config("DAEMON_RESTART_TIME_DEFAULT")
+    assert daemonModel.is_running is False
+    assert daemonModel.is_healthy is True
+    assert daemonModel.log_filepath is not None
+    assert daemonModel.log_backup_count == get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
+    assert daemonModel.logfile_size == get_config("DAEMON_LOGFILE_SIZE_DEFAULT")
 
-    assert daemon.updated is not None
-    assert isinstance(daemon.updated, datetime.datetime)
-    assert daemon.created is not None
-    assert isinstance(daemon.created, datetime.datetime)
+    assert daemonModel.updated is not None
+    assert isinstance(daemonModel.updated, datetime.datetime)
+    assert daemonModel.created is not None
+    assert isinstance(daemonModel.created, datetime.datetime)
 
-    assert str(daemon.uuid) in str(daemon)
-    assert str(daemon.mailbox) in str(daemon)
+    assert str(daemonModel.uuid) in str(daemonModel)
+    assert str(daemonModel.mailbox) in str(daemonModel)
 
 
 @pytest.mark.django_db
-def test_MailboxModel_foreign_key_deletion(daemon):
+def test_MailboxModel_foreign_key_deletion(daemonModel):
     """Tests the on_delete foreign key constraint in :class:`core.models.AccountModel.AccountModel`."""
 
-    assert daemon is not None
-    daemon.mailbox.delete()
+    assert daemonModel is not None
+    daemonModel.mailbox.delete()
     with pytest.raises(DaemonModel.DoesNotExist):
-        daemon.refresh_from_db()
+        daemonModel.refresh_from_db()
 
 
 @pytest.mark.django_db
-def test_DaemonModel_unique(daemon):
+def test_DaemonModel_unique(daemonModel):
     """Tests the unique constraints of :class:`core.models.DaemonModel.DaemonModel`."""
 
     with pytest.raises(IntegrityError):
-        baker.make(DaemonModel, log_filepath=daemon.log_filepath)
+        baker.make(DaemonModel, log_filepath=daemonModel.log_filepath)
 
 
 @pytest.mark.django_db
-def test_DaemonModel_save_logfileCreation(daemon):
-    daemon.log_filepath = None
+def test_DaemonModel_save_logfileCreation(daemonModel):
+    daemonModel.log_filepath = None
 
-    daemon.save()
+    daemonModel.save()
 
-    daemon.refresh_from_db()
-    assert daemon.log_filepath == os.path.join(
+    daemonModel.refresh_from_db()
+    assert daemonModel.log_filepath == os.path.join(
         Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
-        f"daemon_{daemon.uuid}.log",
+        f"daemon_{daemonModel.uuid}.log",
     )

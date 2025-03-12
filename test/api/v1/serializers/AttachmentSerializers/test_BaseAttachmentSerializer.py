@@ -26,40 +26,40 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.attachment_serializers.BaseAttachmentSerializer import (
     BaseAttachmentSerializer,
 )
-from test.core.conftest import fixture_attachmentModel
+from test.core.conftest import attachmentModel
 
 
 @pytest.mark.django_db
-def test_output(attachment):
+def test_output(attachmentModel):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseAttachmentSerializer(instance=attachment).data
+    serializerData = BaseAttachmentSerializer(instance=attachmentModel).data
 
     assert "id" in serializerData
-    assert serializerData["id"] == attachment.id
+    assert serializerData["id"] == attachmentModel.id
     assert "file_path" not in serializerData
     assert "file_name" in serializerData
-    assert serializerData["file_name"] == attachment.file_name
+    assert serializerData["file_name"] == attachmentModel.file_name
     assert "content_disposition" in serializerData
-    assert serializerData["content_disposition"] == attachment.content_disposition
+    assert serializerData["content_disposition"] == attachmentModel.content_disposition
     assert "content_type" in serializerData
-    assert serializerData["content_type"] == attachment.content_type
+    assert serializerData["content_type"] == attachmentModel.content_type
     assert "datasize" in serializerData
-    assert serializerData["datasize"] == attachment.datasize
+    assert serializerData["datasize"] == attachmentModel.datasize
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == attachment.is_favorite
+    assert serializerData["is_favorite"] == attachmentModel.is_favorite
     assert "email" in serializerData
-    assert serializerData["email"] == attachment.email.id
+    assert serializerData["email"] == attachmentModel.email.id
     assert "created" in serializerData
-    assert datetime.fromisoformat(serializerData["created"]) == attachment.created
+    assert datetime.fromisoformat(serializerData["created"]) == attachmentModel.created
     assert "updated" in serializerData
-    assert datetime.fromisoformat(serializerData["updated"]) == attachment.updated
+    assert datetime.fromisoformat(serializerData["updated"]) == attachmentModel.updated
     assert len(serializerData) == 9
 
 
 @pytest.mark.django_db
-def test_input(attachment):
+def test_input(attachmentModel):
     """Tests for the expected input of the serializer."""
-    serializer = BaseAttachmentSerializer(data=model_to_dict(attachment))
+    serializer = BaseAttachmentSerializer(data=model_to_dict(attachmentModel))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
@@ -70,7 +70,7 @@ def test_input(attachment):
     assert "content_type" not in serializerData
     assert "datasize" not in serializerData
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == attachment.is_favorite
+    assert serializerData["is_favorite"] == attachmentModel.is_favorite
     assert "email" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData

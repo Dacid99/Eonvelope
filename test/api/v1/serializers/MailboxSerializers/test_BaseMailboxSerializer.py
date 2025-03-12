@@ -26,39 +26,39 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.mailbox_serializers.BaseMailboxSerializer import (
     BaseMailboxSerializer,
 )
-from test.core.conftest import fixture_mailboxModel
+from test.core.conftest import mailboxModel
 
 
 @pytest.mark.django_db
-def test_output(mailbox):
+def test_output(mailboxModel):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseMailboxSerializer(instance=mailbox).data
+    serializerData = BaseMailboxSerializer(instance=mailboxModel).data
 
     assert "id" in serializerData
-    assert serializerData["id"] == mailbox.id
+    assert serializerData["id"] == mailboxModel.id
     assert "name" in serializerData
-    assert serializerData["name"] == mailbox.name
+    assert serializerData["name"] == mailboxModel.name
     assert "account" in serializerData
-    assert serializerData["account"] == mailbox.account.id
+    assert serializerData["account"] == mailboxModel.account.id
     assert "save_attachments" in serializerData
-    assert serializerData["save_attachments"] == mailbox.save_attachments
+    assert serializerData["save_attachments"] == mailboxModel.save_attachments
     assert "save_toEML" in serializerData
-    assert serializerData["save_toEML"] == mailbox.save_toEML
+    assert serializerData["save_toEML"] == mailboxModel.save_toEML
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == mailbox.is_favorite
+    assert serializerData["is_favorite"] == mailboxModel.is_favorite
     assert "is_healthy" in serializerData
-    assert serializerData["is_healthy"] == mailbox.is_healthy
+    assert serializerData["is_healthy"] == mailboxModel.is_healthy
     assert "created" in serializerData
-    assert datetime.fromisoformat(serializerData["created"]) == mailbox.created
+    assert datetime.fromisoformat(serializerData["created"]) == mailboxModel.created
     assert "updated" in serializerData
-    assert datetime.fromisoformat(serializerData["updated"]) == mailbox.updated
+    assert datetime.fromisoformat(serializerData["updated"]) == mailboxModel.updated
     assert len(serializerData) == 9
 
 
 @pytest.mark.django_db
-def test_input(mailbox):
+def test_input(mailboxModel):
     """Tests for the expected input of the serializer."""
-    serializer = BaseMailboxSerializer(data=model_to_dict(mailbox))
+    serializer = BaseMailboxSerializer(data=model_to_dict(mailboxModel))
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 
@@ -66,11 +66,11 @@ def test_input(mailbox):
     assert "name" not in serializerData
     assert "account" not in serializerData
     assert "save_attachments" in serializerData
-    assert serializerData["save_attachments"] == mailbox.save_attachments
+    assert serializerData["save_attachments"] == mailboxModel.save_attachments
     assert "save_toEML" in serializerData
-    assert serializerData["save_toEML"] == mailbox.save_toEML
+    assert serializerData["save_toEML"] == mailboxModel.save_toEML
     assert "is_favorite" in serializerData
-    assert serializerData["is_favorite"] == mailbox.is_favorite
+    assert serializerData["is_favorite"] == mailboxModel.is_favorite
     assert "is_healthy" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData

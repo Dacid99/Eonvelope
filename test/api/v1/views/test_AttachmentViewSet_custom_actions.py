@@ -26,20 +26,34 @@ from rest_framework import status
 from api.v1.views.AttachmentViewSet import AttachmentViewSet
 
 
-@pytest.mark.django_db
-def test_download_noauth(
-    mocker, attachmentModel, noauth_apiClient, custom_detail_action_url
-):
-    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
-    with an unauthenticated user client.
-    """
-    mock_open = mocker.patch("api.v1.views.AttachmentViewSet.open")
-    mock_os_path_exists = mocker.patch(
+@pytest.fixture(name="mock_open")
+def fixture_mock_open(mocker, faker):
+    fake_content = faker.text().encode("utf-8")
+    mock_open = mocker.mock_open(read_data=fake_content)
+    mocker.patch("api.v1.views.AttachmentViewSet.open", mock_open)
+    return mock_open
+
+
+@pytest.fixture(name="mock_os_path_exists")
+def fixture_mock_os_path_exists(mocker):
+    return mocker.patch(
         "api.v1.views.AttachmentViewSet.os.path.exists",
         autospec=True,
         return_value=True,
     )
 
+
+@pytest.mark.django_db
+def test_download_noauth(
+    attachmentModel,
+    noauth_apiClient,
+    custom_detail_action_url,
+    mock_open,
+    mock_os_path_exists,
+):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with an unauthenticated user client.
+    """
     response = noauth_apiClient.get(
         custom_detail_action_url(
             AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel
@@ -53,18 +67,15 @@ def test_download_noauth(
 
 @pytest.mark.django_db
 def test_download_auth_other(
-    mocker, attachmentModel, other_apiClient, custom_detail_action_url
+    attachmentModel,
+    other_apiClient,
+    custom_detail_action_url,
+    mock_open,
+    mock_os_path_exists,
 ):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated other user client.
     """
-    mock_open = mocker.patch("api.v1.views.AttachmentViewSet.open")
-    mock_os_path_exists = mocker.patch(
-        "api.v1.views.AttachmentViewSet.os.path.exists",
-        autospec=True,
-        return_value=True,
-    )
-
     response = other_apiClient.get(
         custom_detail_action_url(
             AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel
@@ -78,17 +89,17 @@ def test_download_auth_other(
 
 @pytest.mark.django_db
 def test_download_no_file_auth_owner(
-    mocker, attachmentModel, owner_apiClient, custom_detail_action_url
+    attachmentModel,
+    owner_apiClient,
+    custom_detail_action_url,
+    mock_open,
+    mock_os_path_exists,
 ):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated owner user client.
     """
-    mock_open = mocker.patch("api.v1.views.AttachmentViewSet.open")
-    mock_os_path_exists = mocker.patch(
-        "api.v1.views.AttachmentViewSet.os.path.exists",
-        autospec=True,
-        return_value=False,
-    )
+    mock_open.side_effect = FileNotFoundError
+    mock_os_path_exists.return_value = False
 
     response = owner_apiClient.get(
         custom_detail_action_url(
@@ -103,20 +114,15 @@ def test_download_no_file_auth_owner(
 
 @pytest.mark.django_db
 def test_download_auth_owner(
-    mocker, attachmentModel, owner_apiClient, custom_detail_action_url
+    attachmentModel,
+    owner_apiClient,
+    custom_detail_action_url,
+    mock_open,
+    mock_os_path_exists,
 ):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated owner user client.
     """
-    mockedFileContent = b"This is a 24 bytes file."
-    mock_open = mocker.mock_open(read_data=mockedFileContent)
-    mocker.patch("api.v1.views.AttachmentViewSet.open", mock_open)
-    mock_os_path_exists = mocker.patch(
-        "api.v1.views.AttachmentViewSet.os.path.exists",
-        autospec=True,
-        return_value=True,
-    )
-
     response = owner_apiClient.get(
         custom_detail_action_url(
             AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD, attachmentModel
@@ -128,7 +134,7 @@ def test_download_auth_owner(
     mock_open.assert_called_once_with(attachmentModel.file_path, "rb")
     assert "Content-Disposition" in response.headers
     assert f'filename="{attachmentModel.file_name}"' in response["Content-Disposition"]
-    assert b"".join(response.streaming_content) == mockedFileContent
+    assert b"".join(response.streaming_content) == mock_open().read()
 
 
 @pytest.mark.django_db

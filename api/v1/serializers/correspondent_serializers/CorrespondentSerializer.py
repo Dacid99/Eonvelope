@@ -71,16 +71,10 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
             The serialized emails connected to the instance to be serialized.
             An empty list if the the user is not authenticated.
         """
-        request = self.context.get("request")
-        user = getattr(request, "user", None)
-        if user is not None:
-            correspondentemails = EMailCorrespondentsModel.objects.filter(
-                correspondent=instance, email__mailbox__account__user=user
-            ).distinct()
-            return CorrespondentEMailSerializer(
-                correspondentemails, many=True, read_only=True
-            ).data
-        return []
+        correspondentemails = instance.emails.all().distinct()
+        return CorrespondentEMailSerializer(
+            correspondentemails, many=True, read_only=True
+        ).data
 
     def get_mailinglists(self, instance: CorrespondentModel) -> ReturnDict | None:
         """Serializes the emails connected to the instance to be serialized.
@@ -90,15 +84,7 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
 
         Returns:
             The serialized emails connected to the instance to be serialized.
-            An empty list if the the user is not authenticated.
         """
-        request = self.context.get("request")
-        user = getattr(request, "user", None)
-        if user is not None:
-            mailinglists = MailingListModel.objects.filter(
-                emails__correspondents=instance, emails__mailbox__account__user=user
-            ).distinct()
-            return SimpleMailingListSerializer(
-                mailinglists, many=True, read_only=True
-            ).data
-        return []
+        emails = instance.emails.all()
+        mailinglists = [email.mailinglist for email in emails]
+        return SimpleMailingListSerializer(mailinglists, many=True, read_only=True).data

@@ -26,12 +26,13 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.emailcorrespondents_serializers.EMailCorrespondentsSerializer import (
     EMailCorrespondentSerializer,
 )
-from test.core.conftest import emailCorrespondentModel
 
 
 @pytest.mark.django_db
-def test_output(emailCorrespondentModel):
+def test_output(emailModel):
     """Tests for the expected output of the serializer."""
+    emailCorrespondentModel = emailModel.emailcorrespondents.first()
+
     serializerData = EMailCorrespondentSerializer(instance=emailCorrespondentModel).data
 
     assert "id" not in serializerData
@@ -46,8 +47,10 @@ def test_output(emailCorrespondentModel):
 
 
 @pytest.mark.django_db
-def test_input(emailCorrespondentModel):
+def test_input(emailModel):
     """Tests for the expected input of the serializer."""
+    emailCorrespondentModel = emailModel.emailcorrespondents.first()
+
     serializer = EMailCorrespondentSerializer(
         data=model_to_dict(emailCorrespondentModel)
     )

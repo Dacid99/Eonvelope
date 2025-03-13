@@ -26,7 +26,6 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
     MailboxWithDaemonSerializer,
 )
-from test.core.conftest import mailboxModel
 
 
 @pytest.mark.django_db

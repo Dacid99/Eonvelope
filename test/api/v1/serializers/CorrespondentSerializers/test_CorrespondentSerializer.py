@@ -26,20 +26,23 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.correspondent_serializers.CorrespondentSerializer import (
     CorrespondentSerializer,
 )
-from test.core.conftest import correspondentModel
 
 
 @pytest.mark.django_db
-def test_output(correspondentModel):
+def test_output(correspondentModel, emailModel):
     """Tests for the expected output of the serializer."""
     serializerData = CorrespondentSerializer(instance=correspondentModel).data
 
     assert "id" in serializerData
     assert serializerData["id"] == correspondentModel.id
     assert "emails" in serializerData
-    assert serializerData["emails"] == []
+    assert isinstance(serializerData["emails"], list)
+    assert len(serializerData["emails"]) == 1
+    assert isinstance(serializerData["emails"][0], dict)
     assert "mailinglists" in serializerData
-    assert serializerData["mailinglists"] == []
+    assert isinstance(serializerData["mailinglists"], list)
+    assert len(serializerData["mailinglists"]) == 1
+    assert isinstance(serializerData["mailinglists"][0], dict)
     assert "email_name" in serializerData
     assert serializerData["email_name"] == correspondentModel.email_name
     assert "email_address" in serializerData
@@ -58,7 +61,7 @@ def test_output(correspondentModel):
 
 
 @pytest.mark.django_db
-def test_input(correspondentModel):
+def test_input(correspondentModel, emailModel):
     """Tests for the expected input of the serializer."""
     serializer = CorrespondentSerializer(data=model_to_dict(correspondentModel))
     assert serializer.is_valid()

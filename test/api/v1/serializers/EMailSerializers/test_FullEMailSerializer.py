@@ -24,11 +24,10 @@ import pytest
 from django.forms.models import model_to_dict
 
 from api.v1.serializers.email_serializers.FullEMailSerializer import FullEMailSerializer
-from test.core.conftest import emailModel
 
 
 @pytest.mark.django_db
-def test_output(emailModel):
+def test_output(emailModel, attachmentModel):
     """Tests for the expected output of the serializer."""
     serializerData = FullEMailSerializer(instance=emailModel).data
 
@@ -65,17 +64,21 @@ def test_output(emailModel):
     assert "replies" in serializerData
     assert serializerData["replies"] == []
     assert "attachments" in serializerData
-    assert serializerData["attachments"] == []
+    assert isinstance(serializerData["attachments"], list)
+    assert len(serializerData["attachments"]) == 1
+    assert isinstance(serializerData["attachments"][0], dict)
     assert "mailinglist" in serializerData
-    assert serializerData["mailinglist"] is None
+    assert isinstance(serializerData["mailinglist"], dict)
     assert "correspondents" in serializerData
-    assert serializerData["correspondents"] == []
+    assert isinstance(serializerData["correspondents"], list)
+    assert len(serializerData["correspondents"]) == 1
+    assert isinstance(serializerData["correspondents"][0], dict)
 
     assert len(serializerData) == 18
 
 
 @pytest.mark.django_db
-def test_input(emailModel):
+def test_input(emailModel, attachmentModel):
     """Tests for the expected input of the serializer."""
     serializer = FullEMailSerializer(data=model_to_dict(emailModel))
     assert serializer.is_valid()

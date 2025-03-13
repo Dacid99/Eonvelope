@@ -26,11 +26,10 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.mailinglist_serializers.MailingListSerializer import (
     MailingListSerializer,
 )
-from test.core.conftest import mailingListModel
 
 
 @pytest.mark.django_db
-def test_output(mailingListModel):
+def test_output(mailingListModel, emailModel):
     """Tests for the expected output of the serializer."""
     serializerData = MailingListSerializer(instance=mailingListModel).data
 
@@ -54,19 +53,23 @@ def test_output(mailingListModel):
     assert serializerData["is_favorite"] == mailingListModel.is_favorite
     assert "from_correspondents" in serializerData
     assert isinstance(serializerData["from_correspondents"], list)
+    assert len(serializerData["from_correspondents"]) == 1
+    assert isinstance(serializerData["from_correspondents"][0], dict)
     assert "created" in serializerData
     assert datetime.fromisoformat(serializerData["created"]) == mailingListModel.created
     assert "updated" in serializerData
     assert datetime.fromisoformat(serializerData["updated"]) == mailingListModel.updated
     assert "emails" in serializerData
-    assert serializerData["emails"] == []
+    assert isinstance(serializerData["emails"], list)
+    assert len(serializerData["emails"]) == 1
+    assert isinstance(serializerData["emails"][0], dict)
     assert "email_number" in serializerData
-    assert serializerData["email_number"] == 0
+    assert serializerData["email_number"] == 1
     assert len(serializerData) == 14
 
 
 @pytest.mark.django_db
-def test_input(mailingListModel):
+def test_input(mailingListModel, emailModel):
     """Tests for the expected input of the serializer."""
     serializer = MailingListSerializer(data=model_to_dict(mailingListModel))
     assert serializer.is_valid()

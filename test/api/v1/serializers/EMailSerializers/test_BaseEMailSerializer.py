@@ -24,7 +24,6 @@ import pytest
 from django.forms.models import model_to_dict
 
 from api.v1.serializers.email_serializers.BaseEMailSerializer import BaseEMailSerializer
-from test.core.conftest import emailModel
 
 
 @pytest.mark.django_db
@@ -64,9 +63,11 @@ def test_output(emailModel):
     assert datetime.fromisoformat(serializerData["updated"]) == emailModel.updated
     assert "attachments" not in serializerData
     assert "mailinglist" in serializerData
-    assert serializerData["mailinglist"] is None
+    assert serializerData["mailinglist"] == emailModel.mailinglist.id
     assert "correspondents" in serializerData
-    assert serializerData["correspondents"] == []
+    assert isinstance(serializerData["correspondents"], list)
+    assert len(serializerData["correspondents"]) == 1
+    assert isinstance(serializerData["correspondents"][0], int)
 
     assert len(serializerData) == 16
 

@@ -24,11 +24,10 @@ import pytest
 from django.forms.models import model_to_dict
 
 from api.v1.serializers.account_serializers.AccountSerializer import AccountSerializer
-from test.core.conftest import accountModel
 
 
 @pytest.mark.django_db
-def test_output(accountModel):
+def test_output(accountModel, mailboxModel):
     """Tests for the expected output of the serializer."""
     serializerData = AccountSerializer(instance=accountModel).data
 
@@ -38,7 +37,9 @@ def test_output(accountModel):
     assert "mail_address" in serializerData
     assert serializerData["mail_address"] == accountModel.mail_address
     assert "mailboxes" in serializerData
-    assert serializerData["mailboxes"] == []
+    assert isinstance(serializerData["mailboxes"], list)
+    assert len(serializerData["mailboxes"]) == 1
+    assert isinstance(serializerData["mailboxes"][0], dict)
     assert "mail_host" in serializerData
     assert serializerData["mail_host"] == accountModel.mail_host
     assert "mail_host_port" in serializerData
@@ -60,7 +61,7 @@ def test_output(accountModel):
 
 
 @pytest.mark.django_db
-def test_input(accountModel):
+def test_input(accountModel, mailboxModel):
     """Tests for the expected input of the serializer."""
     serializer = AccountSerializer(data=model_to_dict(accountModel))
     assert serializer.is_valid()

@@ -40,8 +40,24 @@ from __future__ import annotations
 
 import os
 from io import BytesIO
+from typing import TYPE_CHECKING
 
 import pytest
+from model_bakery import baker
+
+from core.constants import HeaderFields
+from core.models.AccountModel import AccountModel
+from core.models.AttachmentModel import AttachmentModel
+from core.models.CorrespondentModel import CorrespondentModel
+from core.models.DaemonModel import DaemonModel
+from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
+from core.models.EMailModel import EMailModel
+from core.models.MailboxModel import MailboxModel
+from core.models.MailingListModel import MailingListModel
+
+
+if TYPE_CHECKING:
+    from django.contrib.auth.models import AbstractUser
 
 
 def pytest_configure(config):
@@ -58,3 +74,129 @@ def fake_file_bytes(faker):
 @pytest.fixture
 def fake_file(fake_file_bytes):
     return BytesIO(fake_file_bytes)
+
+
+@pytest.fixture
+def owner_user(django_user_model) -> AbstractUser:
+    """Creates a user that owns the data.
+
+    Returns:
+        The owner user instance.
+    """
+    return baker.make(django_user_model)
+
+
+@pytest.fixture
+def other_user(django_user_model) -> AbstractUser:
+    """Creates a user that is not the owner of the data.
+
+    Returns:
+       The other user instance.
+    """
+    return baker.make(django_user_model)
+
+
+@pytest.fixture
+def accountModel(owner_user) -> AccountModel:
+    """Creates an :class:`core.models.AccountModel.AccountModel` owned by :attr:`owner_user`.
+
+    Args:
+        owner_user: Depends on :func:`owner_user`.
+
+    Returns:
+        The account instance for testing.
+    """
+    return baker.make(AccountModel, user=owner_user)
+
+
+@pytest.fixture
+def mailboxModel(accountModel) -> MailboxModel:
+    """Creates an :class:`core.models.MailboxModel.MailboxModel` owned by :attr:`owner_user`.
+
+    Args:
+        accountModel: Depends on :func:`accountModel`.
+
+    Returns:
+        The mailbox instance for testing.
+    """
+    return baker.make(MailboxModel, account=accountModel)
+
+
+@pytest.fixture
+def daemonModel(faker, mailboxModel) -> DaemonModel:
+    """Creates an :class:`core.models.DaemonModel.DaemonModel` owned by :attr:`owner_user`.
+
+    Args:
+        mailboxModel: Depends on :func:`mailboxModel`.
+
+    Returns:
+        The daemon instance for testing.
+    """
+    return baker.make(
+        DaemonModel,
+        log_filepath=faker.file_path(extension="log"),
+        mailbox=mailboxModel,
+    )
+
+
+@pytest.fixture
+def correspondentModel() -> CorrespondentModel:
+    """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` owned by :attr:`owner_user`.
+
+    Returns:
+        The correspondent instance for testing.
+    """
+    return baker.make(CorrespondentModel)
+
+
+@pytest.fixture
+def mailingListModel() -> MailingListModel:
+    """Creates an :class:`core.models.MailingListModel.MailingListModel` owned by :attr:`owner_user`.
+
+    Returns:
+        The mailinglist instance for testing.
+    """
+    return baker.make(MailingListModel)
+
+
+@pytest.fixture
+def emailModel(faker, correspondentModel, mailboxModel, mailingListModel) -> EMailModel:
+    """Creates an :class:`core.models.EMailModel.EMailModel` owned by :attr:`owner_user`.
+
+    Args:
+        correspondentModel: Depends on :func:`fixture_correspondentModel`.
+        mailboxModel: Depends on :func:`fixture_mailboxModel`.
+        mailinglistModel: Depends on :func:`fixture_mailinglistModel`.
+
+    Returns:
+        The email instance for testing.
+    """
+    emailModel = baker.make(
+        EMailModel,
+        mailbox=mailboxModel,
+        mailinglist=mailingListModel,
+        eml_filepath=faker.file_path(extension="eml"),
+        prerender_filepath=faker.file_path(extension="png"),
+    )
+    baker.make(
+        EMailCorrespondentsModel,
+        email=emailModel,
+        correspondent=correspondentModel,
+        mention=HeaderFields.Correspondents.FROM,
+    )
+    return emailModel
+
+
+@pytest.fixture
+def attachmentModel(faker, emailModel) -> AttachmentModel:
+    """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
+
+    Args:
+        emailModel: Depends on :func:`fixture_emailModel`.
+
+    Returns:
+        The attachment instance for testing.
+    """
+    return baker.make(
+        AttachmentModel, email=emailModel, file_path=faker.file_path(extension="pdf")
+    )

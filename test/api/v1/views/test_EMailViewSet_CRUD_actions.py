@@ -56,7 +56,7 @@ def emailPayload(mailboxModel) -> dict[str, Any]:
 
 
 @pytest.mark.django_db
-def test_list_noauth(noauth_apiClient, list_url):
+def test_list_noauth(emailModel, noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(EMailViewSet))
 
@@ -66,7 +66,7 @@ def test_list_noauth(noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(other_apiClient, list_url):
+def test_list_auth_other(emailModel, other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(EMailViewSet))
 
@@ -76,7 +76,7 @@ def test_list_auth_other(other_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(owner_apiClient, list_url):
+def test_list_auth_owner(emailModel, owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(list_url(EMailViewSet))
 

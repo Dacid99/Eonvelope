@@ -26,7 +26,6 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.daemon_serializers.BaseDaemonSerializer import (
     BaseDaemonSerializer,
 )
-from test.core.conftest import daemonModel
 
 
 @pytest.mark.django_db

@@ -59,7 +59,7 @@ def correspondentPayload(emailModel) -> dict[str, Any]:
 
 
 @pytest.mark.django_db
-def test_list_noauth(noauth_apiClient, list_url):
+def test_list_noauth(correspondentModel, emailModel, noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(CorrespondentViewSet))
 
@@ -69,7 +69,7 @@ def test_list_noauth(noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(other_apiClient, list_url):
+def test_list_auth_other(correspondentModel, emailModel, other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(CorrespondentViewSet))
 
@@ -79,7 +79,7 @@ def test_list_auth_other(other_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(correspondentModel, owner_apiClient, list_url):
+def test_list_auth_owner(correspondentModel, emailModel, owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(list_url(CorrespondentViewSet))
 
@@ -92,7 +92,7 @@ def test_list_auth_owner(correspondentModel, owner_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_get_noauth(correspondentModel, noauth_apiClient, detail_url):
+def test_get_noauth(correspondentModel, emailModel, noauth_apiClient, detail_url):
     """Tests the get method with an unauthenticated user client."""
     response = noauth_apiClient.get(
         detail_url(CorrespondentViewSet, correspondentModel)
@@ -104,7 +104,7 @@ def test_get_noauth(correspondentModel, noauth_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(correspondentModel, other_apiClient, detail_url):
+def test_get_auth_other(correspondentModel, emailModel, other_apiClient, detail_url):
     """Tests the get method with the authenticated other user client."""
     response = other_apiClient.get(detail_url(CorrespondentViewSet, correspondentModel))
 
@@ -114,7 +114,7 @@ def test_get_auth_other(correspondentModel, other_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(correspondentModel, owner_apiClient, detail_url):
+def test_get_auth_owner(correspondentModel, emailModel, owner_apiClient, detail_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(detail_url(CorrespondentViewSet, correspondentModel))
 
@@ -124,7 +124,7 @@ def test_get_auth_owner(correspondentModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_patch_noauth(
-    correspondentModel, noauth_apiClient, correspondentPayload, detail_url
+    correspondentModel, emailModel, noauth_apiClient, correspondentPayload, detail_url
 ):
     """Tests the patch method with an unauthenticated user client."""
     response = noauth_apiClient.patch(
@@ -140,7 +140,7 @@ def test_patch_noauth(
 
 @pytest.mark.django_db
 def test_patch_auth_other(
-    correspondentModel, other_apiClient, correspondentPayload, detail_url
+    correspondentModel, emailModel, other_apiClient, correspondentPayload, detail_url
 ):
     """Tests the patch method with the authenticated other user client."""
     response = other_apiClient.patch(
@@ -156,7 +156,7 @@ def test_patch_auth_other(
 
 @pytest.mark.django_db
 def test_patch_auth_owner(
-    correspondentModel, owner_apiClient, correspondentPayload, detail_url
+    correspondentModel, emailModel, owner_apiClient, correspondentPayload, detail_url
 ):
     """Tests the patch method with the authenticated owner user client."""
     response = owner_apiClient.patch(
@@ -172,7 +172,7 @@ def test_patch_auth_owner(
 
 @pytest.mark.django_db
 def test_put_noauth(
-    correspondentModel, noauth_apiClient, correspondentPayload, detail_url
+    correspondentModel, emailModel, noauth_apiClient, correspondentPayload, detail_url
 ):
     """Tests the put method with an unauthenticated user client."""
     response = noauth_apiClient.put(
@@ -188,7 +188,7 @@ def test_put_noauth(
 
 @pytest.mark.django_db
 def test_put_auth_other(
-    correspondentModel, other_apiClient, correspondentPayload, detail_url
+    correspondentModel, emailModel, other_apiClient, correspondentPayload, detail_url
 ):
     """Tests the put method with the authenticated other user client."""
     response = other_apiClient.put(
@@ -204,7 +204,7 @@ def test_put_auth_other(
 
 @pytest.mark.django_db
 def test_put_auth_owner(
-    correspondentModel, owner_apiClient, correspondentPayload, detail_url
+    correspondentModel, emailModel, owner_apiClient, correspondentPayload, detail_url
 ):
     """Tests the put method with the authenticated owner user client."""
     response = owner_apiClient.put(
@@ -267,7 +267,7 @@ def test_post_auth_owner(owner_apiClient, correspondentPayload, list_url):
 
 
 @pytest.mark.django_db
-def test_delete_noauth(correspondentModel, noauth_apiClient, detail_url):
+def test_delete_noauth(correspondentModel, emailModel, noauth_apiClient, detail_url):
     """Tests the delete method with an unauthenticated user client."""
     response = noauth_apiClient.delete(
         detail_url(CorrespondentViewSet, correspondentModel)
@@ -279,7 +279,7 @@ def test_delete_noauth(correspondentModel, noauth_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_other(correspondentModel, other_apiClient, detail_url):
+def test_delete_auth_other(correspondentModel, emailModel, other_apiClient, detail_url):
     """Tests the delete method with the authenticated other user client."""
     response = other_apiClient.delete(
         detail_url(CorrespondentViewSet, correspondentModel)
@@ -291,7 +291,7 @@ def test_delete_auth_other(correspondentModel, other_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_owner(correspondentModel, owner_apiClient, detail_url):
+def test_delete_auth_owner(correspondentModel, emailModel, owner_apiClient, detail_url):
     """Tests the delete method with the authenticated owner user client."""
     response = owner_apiClient.delete(
         detail_url(CorrespondentViewSet, correspondentModel)

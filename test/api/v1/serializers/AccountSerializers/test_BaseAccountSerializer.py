@@ -26,7 +26,6 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.account_serializers.BaseAccountSerializer import (
     BaseAccountSerializer,
 )
-from test.core.conftest import accountModel
 
 
 @pytest.mark.django_db

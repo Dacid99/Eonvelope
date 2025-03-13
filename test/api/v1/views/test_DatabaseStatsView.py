@@ -68,14 +68,14 @@ def test_list_auth_other(other_apiClient, url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(owner_apiClient, url):
+def test_list_auth_owner(emailModel, owner_apiClient, url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(url(DatabaseStatsView))
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["email_count"] == 1
     assert response.data["correspondent_count"] == 1
-    assert response.data["attachment_count"] == 1
+    assert response.data["attachment_count"] == 0
     assert response.data["account_count"] == 1
 
 

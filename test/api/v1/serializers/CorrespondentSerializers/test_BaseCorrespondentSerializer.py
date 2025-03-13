@@ -26,11 +26,10 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer import (
     BaseCorrespondentSerializer,
 )
-from test.core.conftest import correspondentModel
 
 
 @pytest.mark.django_db
-def test_output(correspondentModel):
+def test_output(correspondentModel, emailModel):
     """Tests for the expected output of the serializer."""
     serializerData = BaseCorrespondentSerializer(instance=correspondentModel).data
 
@@ -56,7 +55,7 @@ def test_output(correspondentModel):
 
 
 @pytest.mark.django_db
-def test_input(correspondentModel):
+def test_input(correspondentModel, emailModel):
     """Tests for the expected input of the serializer."""
     serializer = BaseCorrespondentSerializer(data=model_to_dict(correspondentModel))
     assert serializer.is_valid()

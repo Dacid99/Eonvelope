@@ -57,7 +57,7 @@ def mailingListPayload(emailModel) -> dict[str, Any]:
 
 
 @pytest.mark.django_db
-def test_list_noauth(noauth_apiClient, list_url):
+def test_list_noauth(mailingListModel, emailModel, noauth_apiClient, list_url):
     """Tests the list method with an unauthenticated user client."""
     response = noauth_apiClient.get(list_url(MailingListViewSet))
 
@@ -67,7 +67,7 @@ def test_list_noauth(noauth_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(other_apiClient, list_url):
+def test_list_auth_other(mailingListModel, emailModel, other_apiClient, list_url):
     """Tests the list method with the authenticated other user client."""
     response = other_apiClient.get(list_url(MailingListViewSet))
 
@@ -77,7 +77,7 @@ def test_list_auth_other(other_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(owner_apiClient, list_url):
+def test_list_auth_owner(mailingListModel, emailModel, owner_apiClient, list_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(list_url(MailingListViewSet))
 
@@ -87,7 +87,7 @@ def test_list_auth_owner(owner_apiClient, list_url):
 
 
 @pytest.mark.django_db
-def test_get_noauth(mailingListModel, noauth_apiClient, detail_url):
+def test_get_noauth(mailingListModel, emailModel, noauth_apiClient, detail_url):
     """Tests the get method with an unauthenticated user client."""
     response = noauth_apiClient.get(detail_url(MailingListViewSet, mailingListModel))
 
@@ -97,7 +97,7 @@ def test_get_noauth(mailingListModel, noauth_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(mailingListModel, other_apiClient, detail_url):
+def test_get_auth_other(mailingListModel, emailModel, other_apiClient, detail_url):
     """Tests the get method with the authenticated other user client."""
     response = other_apiClient.get(detail_url(MailingListViewSet, mailingListModel))
 
@@ -107,7 +107,7 @@ def test_get_auth_other(mailingListModel, other_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(mailingListModel, owner_apiClient, detail_url):
+def test_get_auth_owner(mailingListModel, emailModel, owner_apiClient, detail_url):
     """Tests the list method with the authenticated owner user client."""
     response = owner_apiClient.get(detail_url(MailingListViewSet, mailingListModel))
 
@@ -117,7 +117,7 @@ def test_get_auth_owner(mailingListModel, owner_apiClient, detail_url):
 
 @pytest.mark.django_db
 def test_patch_noauth(
-    mailingListModel, noauth_apiClient, mailingListPayload, detail_url
+    mailingListModel, emailModel, noauth_apiClient, mailingListPayload, detail_url
 ):
     """Tests the patch method with an unauthenticated user client."""
     response = noauth_apiClient.patch(
@@ -133,7 +133,7 @@ def test_patch_noauth(
 
 @pytest.mark.django_db
 def test_patch_auth_other(
-    mailingListModel, other_apiClient, mailingListPayload, detail_url
+    mailingListModel, emailModel, other_apiClient, mailingListPayload, detail_url
 ):
     """Tests the patch method with the authenticated other user client."""
     response = other_apiClient.patch(
@@ -149,7 +149,7 @@ def test_patch_auth_other(
 
 @pytest.mark.django_db
 def test_patch_auth_owner(
-    mailingListModel, owner_apiClient, mailingListPayload, detail_url
+    mailingListModel, emailModel, owner_apiClient, mailingListPayload, detail_url
 ):
     """Tests the patch method with the authenticated owner user client."""
     response = owner_apiClient.patch(
@@ -164,7 +164,9 @@ def test_patch_auth_owner(
 
 
 @pytest.mark.django_db
-def test_put_noauth(mailingListModel, noauth_apiClient, mailingListPayload, detail_url):
+def test_put_noauth(
+    mailingListModel, emailModel, noauth_apiClient, mailingListPayload, detail_url
+):
     """Tests the put method with an unauthenticated user client."""
     response = noauth_apiClient.put(
         detail_url(MailingListViewSet, mailingListModel), data=mailingListPayload
@@ -179,7 +181,7 @@ def test_put_noauth(mailingListModel, noauth_apiClient, mailingListPayload, deta
 
 @pytest.mark.django_db
 def test_put_auth_other(
-    mailingListModel, other_apiClient, mailingListPayload, detail_url
+    mailingListModel, emailModel, other_apiClient, mailingListPayload, detail_url
 ):
     """Tests the put method with the authenticated other user client."""
     response = other_apiClient.put(
@@ -195,7 +197,7 @@ def test_put_auth_other(
 
 @pytest.mark.django_db
 def test_put_auth_owner(
-    mailingListModel, owner_apiClient, mailingListPayload, detail_url
+    mailingListModel, emailModel, owner_apiClient, mailingListPayload, detail_url
 ):
     """Tests the put method with the authenticated owner user client."""
     response = owner_apiClient.put(
@@ -252,7 +254,7 @@ def test_post_auth_owner(owner_apiClient, mailingListPayload, list_url):
 
 
 @pytest.mark.django_db
-def test_delete_noauth(mailingListModel, noauth_apiClient, detail_url):
+def test_delete_noauth(mailingListModel, emailModel, noauth_apiClient, detail_url):
     """Tests the delete method with an unauthenticated user client."""
     response = noauth_apiClient.delete(detail_url(MailingListViewSet, mailingListModel))
 
@@ -262,7 +264,7 @@ def test_delete_noauth(mailingListModel, noauth_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_other(mailingListModel, other_apiClient, detail_url):
+def test_delete_auth_other(mailingListModel, emailModel, other_apiClient, detail_url):
     """Tests the delete method with the authenticated other user client."""
     response = other_apiClient.delete(detail_url(MailingListViewSet, mailingListModel))
 
@@ -272,7 +274,7 @@ def test_delete_auth_other(mailingListModel, other_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_owner(mailingListModel, owner_apiClient, detail_url):
+def test_delete_auth_owner(mailingListModel, emailModel, owner_apiClient, detail_url):
     """Tests the delete method with the authenticated owner user client."""
     response = owner_apiClient.delete(detail_url(MailingListViewSet, mailingListModel))
 
@@ -282,7 +284,9 @@ def test_delete_auth_owner(mailingListModel, owner_apiClient, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_nonexistant_auth_owner(mailingListModel, owner_apiClient, detail_url):
+def test_delete_nonexistant_auth_owner(
+    mailingListModel, emailModel, owner_apiClient, detail_url
+):
     """Tests the delete method with the authenticated owner user client."""
     old_id = mailingListModel.id
     mailingListModel.id = 10

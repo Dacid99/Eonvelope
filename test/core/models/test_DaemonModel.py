@@ -50,7 +50,6 @@ def mock_logger(mocker):
 @pytest.mark.django_db
 def test_DaemonModel_default_creation(daemonModel):
     """Tests the correct default creation of :class:`core.models.DaemonModel.DaemonModel`."""
-
     assert daemonModel.uuid is not None
     assert isinstance(daemonModel.uuid, UUID)
     assert daemonModel.mailbox is not None
@@ -63,12 +62,14 @@ def test_DaemonModel_default_creation(daemonModel):
     assert daemonModel.log_filepath is not None
     assert daemonModel.log_backup_count == get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
     assert daemonModel.logfile_size == get_config("DAEMON_LOGFILE_SIZE_DEFAULT")
-
     assert daemonModel.updated is not None
     assert isinstance(daemonModel.updated, datetime.datetime)
     assert daemonModel.created is not None
     assert isinstance(daemonModel.created, datetime.datetime)
 
+
+@pytest.mark.django_db
+def test_DaemonModel___str__(daemonModel):
     assert str(daemonModel.uuid) in str(daemonModel)
     assert str(daemonModel.mailbox) in str(daemonModel)
 
@@ -76,9 +77,10 @@ def test_DaemonModel_default_creation(daemonModel):
 @pytest.mark.django_db
 def test_MailboxModel_foreign_key_deletion(daemonModel):
     """Tests the on_delete foreign key constraint in :class:`core.models.AccountModel.AccountModel`."""
-
     assert daemonModel is not None
+
     daemonModel.mailbox.delete()
+
     with pytest.raises(DaemonModel.DoesNotExist):
         daemonModel.refresh_from_db()
 
@@ -86,7 +88,6 @@ def test_MailboxModel_foreign_key_deletion(daemonModel):
 @pytest.mark.django_db
 def test_DaemonModel_unique(daemonModel):
     """Tests the unique constraints of :class:`core.models.DaemonModel.DaemonModel`."""
-
     with pytest.raises(IntegrityError):
         baker.make(DaemonModel, log_filepath=daemonModel.log_filepath)
 

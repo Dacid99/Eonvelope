@@ -31,6 +31,8 @@ Fixtures:
 
 from __future__ import annotations
 
+from email.message import Message
+
 import pytest
 from model_bakery import baker
 
@@ -122,6 +124,11 @@ def mailingListModel() -> MailingListModel:
         The mailingListModel instance for testing.
     """
     return baker.make(MailingListModel)
+
+
+@pytest.fixture
+def mock_message(mocker):
+    return mocker.MagicMock(spec=Message)
 
 
 TEST_EMAILS = [

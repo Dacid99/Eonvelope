@@ -39,9 +39,22 @@ def test_(Classname_methodname)|(functionname)_case(args in order from furthest 
 from __future__ import annotations
 
 import os
+from io import BytesIO
+
+import pytest
 
 
 def pytest_configure(config):
     """Configures the path for pytest to be the directory of this file for consistent relative paths."""
     pytest_ini_dir = os.path.dirname(os.path.abspath(config.inifile))
     os.chdir(pytest_ini_dir)
+
+
+@pytest.fixture
+def fake_file_bytes(faker):
+    return faker.text().encode()
+
+
+@pytest.fixture
+def fake_file(fake_file_bytes):
+    return BytesIO(fake_file_bytes)

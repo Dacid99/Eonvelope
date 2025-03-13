@@ -29,9 +29,8 @@ from api.v1.views.EMailViewSet import EMailViewSet
 
 
 @pytest.fixture
-def mock_open(mocker, faker):
-    fake_content = faker.text().encode("utf-8")
-    mock_open = mocker.mock_open(read_data=fake_content)
+def mock_open(mocker, fake_file_bytes):
+    mock_open = mocker.mock_open(read_data=fake_file_bytes)
     mocker.patch("api.v1.views.EMailViewSet.open", mock_open)
     return mock_open
 

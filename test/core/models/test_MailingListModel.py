@@ -48,6 +48,15 @@ def mock_logger(mocker) -> MagicMock:
     return mocker.patch("core.models.MailingListModel.logger", autospec=True)
 
 
+@pytest.fixture
+def mock_getHeader(mocker, faker):
+    return mocker.patch(
+        "core.models.MailingListModel.getHeader",
+        autospec=True,
+        return_value=faker.word(),
+    )
+
+
 @pytest.mark.django_db
 def test_MailingListModel_default_creation(mailingListModel):
     """Tests the correct default creation of :class:`core.models.MailingListModel.MailingListModel`."""
@@ -72,6 +81,9 @@ def test_MailingListModel_default_creation(mailingListModel):
     assert mailingListModel.created is not None
     assert isinstance(mailingListModel.created, datetime.datetime)
 
+
+@pytest.mark.django_db
+def test_MailingListModel___str__(mailingListModel):
     assert mailingListModel.list_id in str(mailingListModel)
 
 
@@ -83,26 +95,19 @@ def test_MailingListModel_unique(mailingListModel):
 
 
 @pytest.mark.django_db
-def test_MailingListModel_fromEmailMessage(mocker):
-    emailMessage = EmailMessage()
-    mock_getHeader = mocker.patch(
-        "core.models.MailingListModel.getHeader",
-        autospec=True,
-        return_value="list header",
-    )
-
-    result = MailingListModel.fromEmailMessage(emailMessage)
+def test_MailingListModel_fromEmailMessage(mocker, mock_message, mock_getHeader):
+    result = MailingListModel.fromEmailMessage(mock_message)
 
     assert mock_getHeader.call_count == 7
     mock_getHeader.assert_has_calls(
         [
-            mocker.call(emailMessage, "List-Id"),
-            mocker.call(emailMessage, "List-Owner", fallbackCallable=lambda: ""),
-            mocker.call(emailMessage, "List-Subscribe", fallbackCallable=lambda: ""),
-            mocker.call(emailMessage, "List-Unsubscribe", fallbackCallable=lambda: ""),
-            mocker.call(emailMessage, "List-Post", fallbackCallable=lambda: ""),
-            mocker.call(emailMessage, "List-Help", fallbackCallable=lambda: ""),
-            mocker.call(emailMessage, "List-Archive", fallbackCallable=lambda: ""),
+            mocker.call(mock_message, "List-Id"),
+            mocker.call(mock_message, "List-Owner", fallbackCallable=lambda: ""),
+            mocker.call(mock_message, "List-Subscribe", fallbackCallable=lambda: ""),
+            mocker.call(mock_message, "List-Unsubscribe", fallbackCallable=lambda: ""),
+            mocker.call(mock_message, "List-Post", fallbackCallable=lambda: ""),
+            mocker.call(mock_message, "List-Help", fallbackCallable=lambda: ""),
+            mocker.call(mock_message, "List-Archive", fallbackCallable=lambda: ""),
         ]
     )
     assert isinstance(result, MailingListModel)
@@ -116,29 +121,24 @@ def test_MailingListModel_fromEmailMessage(mocker):
 
 
 @pytest.mark.django_db
-def test_fromEmailMessage_duplicate(mocker, mailingListModel) -> None:
-    emailMessage = EmailMessage()
-    mock_getHeader = mocker.patch(
-        "core.models.MailingListModel.getHeader",
-        autospec=True,
-        return_value=mailingListModel.list_id,
-    )
-
-    result = MailingListModel.fromEmailMessage(emailMessage)
+def test_fromEmailMessage_duplicate(
+    mailingListModel, mock_message, mock_getHeader
+) -> None:
+    mock_getHeader.return_value = mailingListModel.list_id
+    result = MailingListModel.fromEmailMessage(mock_message)
 
     assert result == mailingListModel
-    mock_getHeader.assert_called_once_with(emailMessage, "List-Id")
+    mock_getHeader.assert_called_once_with(mock_message, "List-Id")
 
 
 @pytest.mark.django_db
-def test_MailingListModel_fromEmailMessage_no_list_id(mocker, mock_logger):
-    emailMessage = EmailMessage()
-    mock_getHeader = mocker.patch(
-        "core.models.MailingListModel.getHeader", autospec=True, return_value=None
-    )
+def test_MailingListModel_fromEmailMessage_no_list_id(
+    mock_message, mock_logger, mock_getHeader
+):
+    mock_getHeader.return_value = None
 
-    result = MailingListModel.fromEmailMessage(emailMessage)
+    result = MailingListModel.fromEmailMessage(mock_message)
 
     assert result is None
-    mock_getHeader.assert_called_once_with(emailMessage, "List-Id")
+    mock_getHeader.assert_called_once_with(mock_message, "List-Id")
     mock_logger.debug.assert_called()

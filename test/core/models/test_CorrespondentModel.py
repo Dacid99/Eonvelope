@@ -48,6 +48,15 @@ def mock_logger(mocker) -> MagicMock:
     return mocker.patch("core.models.CorrespondentModel.logger", autospec=True)
 
 
+@pytest.fixture
+def mock_parseCorrespondentHeader(mocker, faker):
+    return mocker.patch(
+        "core.models.CorrespondentModel.parseCorrespondentHeader",
+        autospec=True,
+        return_value=(faker.name(), faker.email()),
+    )
+
+
 @pytest.mark.django_db
 def test_CorrespondentModel_default_creation(correspondentModel):
     """Tests the correct default creation of :class:`core.models.CorrespondentModel.CorrespondentModel`."""
@@ -62,6 +71,9 @@ def test_CorrespondentModel_default_creation(correspondentModel):
     assert correspondentModel.created is not None
     assert isinstance(correspondentModel.created, datetime.datetime)
 
+
+@pytest.mark.django_db
+def test_CorrespondentModel___str__(correspondentModel):
     assert correspondentModel.email_address in str(correspondentModel)
 
 
@@ -78,13 +90,7 @@ def test_CorrespondentModel_unique(correspondentModel):
 
 
 @pytest.mark.django_db
-def test_fromHeader_success(mocker, faker):
-    mock_parseCorrespondentHeader = mocker.patch(
-        "core.models.CorrespondentModel.parseCorrespondentHeader",
-        autospec=True,
-        return_value=(faker.name(), faker.email()),
-    )
-
+def test_fromHeader_success(mock_parseCorrespondentHeader):
     result = CorrespondentModel.fromHeader("correspondentModel header")
 
     assert isinstance(result, CorrespondentModel)
@@ -94,11 +100,10 @@ def test_fromHeader_success(mocker, faker):
 
 
 @pytest.mark.django_db
-def test_fromHeader_duplicate(mocker, faker, correspondentModel):
-    mock_parseCorrespondentHeader = mocker.patch(
-        "core.models.CorrespondentModel.parseCorrespondentHeader",
-        autospec=True,
-        return_value=(faker.name(), correspondentModel.email_address),
+def test_fromHeader_duplicate(correspondentModel, mock_parseCorrespondentHeader):
+    mock_parseCorrespondentHeader.return_value = (
+        mock_parseCorrespondentHeader.return_value[0],
+        correspondentModel.email_address,
     )
 
     result = CorrespondentModel.fromHeader("correspondentModel header")
@@ -108,11 +113,10 @@ def test_fromHeader_duplicate(mocker, faker, correspondentModel):
 
 
 @pytest.mark.django_db
-def test_fromHeader_no_address(mocker, faker, mock_logger):
-    mock_parseCorrespondentHeader = mocker.patch(
-        "core.models.CorrespondentModel.parseCorrespondentHeader",
-        autospec=True,
-        return_value=(faker.name(), ""),
+def test_fromHeader_no_address(mock_logger, mock_parseCorrespondentHeader):
+    mock_parseCorrespondentHeader.return_value = (
+        mock_parseCorrespondentHeader.return_value[0],
+        "",
     )
 
     result = CorrespondentModel.fromHeader("correspondentModel header")

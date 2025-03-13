@@ -58,12 +58,6 @@ def mock_MailboxModel_addFromMailboxFile(mocker):
     )
 
 
-@pytest.fixture
-def fake_file(faker):
-    fake_file_content = faker.text().encode()
-    return BytesIO(fake_file_content)
-
-
 @pytest.mark.django_db
 def test_add_daemon_noauth(mailboxModel, noauth_apiClient, custom_detail_action_url):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with an unauthenticated user client."""
@@ -253,7 +247,6 @@ def test_fetch_all_noauth(
 
 @pytest.mark.django_db
 def test_fetch_all_auth_other(
-    mocker,
     mailboxModel,
     other_apiClient,
     custom_detail_action_url,
@@ -277,7 +270,6 @@ def test_fetch_all_auth_other(
 
 @pytest.mark.django_db
 def test_fetch_all_success_auth_owner(
-    mocker,
     mailboxModel,
     owner_apiClient,
     custom_detail_action_url,
@@ -333,11 +325,11 @@ def test_fetch_all_failure_auth_owner(
 
 @pytest.mark.django_db
 def test_upload_eml_noauth(
+    fake_file,
     mailboxModel,
     noauth_apiClient,
     custom_detail_action_url,
     mock_EMailModel_createFromEmailBytes,
-    fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with an unauthenticated user client."""
     assert EMailModel.objects.all().count() == 1
@@ -359,11 +351,11 @@ def test_upload_eml_noauth(
 
 @pytest.mark.django_db
 def test_upload_eml_auth_other(
+    fake_file,
     mailboxModel,
     other_apiClient,
     custom_detail_action_url,
     mock_EMailModel_createFromEmailBytes,
-    fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated other user client."""
     assert EMailModel.objects.all().count() == 1
@@ -385,11 +377,11 @@ def test_upload_eml_auth_other(
 
 @pytest.mark.django_db
 def test_upload_eml_auth_owner(
+    fake_file,
     mailboxModel,
     owner_apiClient,
     custom_detail_action_url,
     mock_EMailModel_createFromEmailBytes,
-    fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
 

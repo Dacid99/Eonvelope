@@ -29,6 +29,7 @@ import pytest
 from django.db import IntegrityError
 from model_bakery import baker
 
+import core.models.AttachmentModel
 from core.models.AttachmentModel import AttachmentModel
 from core.models.EMailModel import EMailModel
 
@@ -42,6 +43,18 @@ def mock_logger(mocker):
 @pytest.fixture(autouse=True)
 def mock_os_remove(mocker):
     return mocker.patch("core.models.AttachmentModel.os.remove", autospec=True)
+
+
+@pytest.fixture
+def mock_AttachmentModel_save_to_storage(mocker):
+    return mocker.patch(
+        "core.models.AttachmentModel.AttachmentModel.save_to_storage", autospec=True
+    )
+
+
+@pytest.fixture
+def spy_Model_save(mocker):
+    return mocker.spy(core.models.AttachmentModel.models.Model, "save")
 
 
 @pytest.mark.django_db
@@ -62,6 +75,9 @@ def test_AttachmentModel_default_creation(attachmentModel):
     assert attachmentModel.created is not None
     assert isinstance(attachmentModel.created, datetime.datetime)
 
+
+@pytest.mark.django_db
+def test_AttachmentModel___str__(attachmentModel):
     assert attachmentModel.file_name in str(attachmentModel)
     assert str(attachmentModel.email) in str(attachmentModel)
 
@@ -99,7 +115,7 @@ def test_AttachmentModel_unique():
 
 @pytest.mark.django_db
 def test_delete_attachmentModelfile_success(
-    mock_logger, attachmentModel, mock_os_remove
+    attachmentModel, mock_logger, mock_os_remove
 ):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal is successful.
@@ -120,7 +136,7 @@ def test_delete_attachmentModelfile_success(
 @pytest.mark.django_db
 @pytest.mark.parametrize("side_effect", [FileNotFoundError, OSError, Exception])
 def test_delete_attachmentModelfile_failure(
-    mock_logger, attachmentModel, mock_os_remove, side_effect
+    attachmentModel, mock_logger, mock_os_remove, side_effect
 ):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if the file removal throws an exception.
@@ -141,7 +157,10 @@ def test_delete_attachmentModelfile_failure(
 
 @pytest.mark.django_db
 def test_delete_attachmentModelfile_delete_error(
-    mocker, mock_logger, mock_os_remove, attachmentModel
+    mocker,
+    attachmentModel,
+    mock_logger,
+    mock_os_remove,
 ):
     """Tests :func:`core.models.AttachmentModel.AttachmentModel.delete`
     if delete throws an exception.
@@ -162,67 +181,55 @@ def test_delete_attachmentModelfile_delete_error(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("save_attachments, expectedCalls", [(True, 1), (False, 0)])
-def test_save_data_settings(mocker, attachmentModel, save_attachments, expectedCalls):
-    mock_super_save = mocker.patch(
-        "core.models.AttachmentModel.models.Model.save", autospec=True
-    )
-    mock_save_to_storage = mocker.patch(
-        "core.models.AttachmentModel.AttachmentModel.save_to_storage", autospec=True
-    )
+def test_save_data_settings(
+    attachmentModel,
+    mock_message,
+    mock_AttachmentModel_save_to_storage,
+    spy_Model_save,
+    save_attachments,
+    expectedCalls,
+):
     attachmentModel.email.mailbox.save_attachments = save_attachments
-    mock_data = mocker.MagicMock(spec=Message)
 
-    attachmentModel.save(attachmentData=mock_data)
+    attachmentModel.save(attachmentData=mock_message)
 
-    assert mock_save_to_storage.call_count == expectedCalls
-    mock_super_save.assert_called()
+    assert mock_AttachmentModel_save_to_storage.call_count == expectedCalls
+    spy_Model_save.assert_called()
 
 
 @pytest.mark.django_db
-def test_save_no_data(mocker, attachmentModel):
-    mock_super_save = mocker.patch(
-        "core.models.AttachmentModel.models.Model.save", autospec=True
-    )
-    mock_save_to_storage = mocker.patch(
-        "core.models.AttachmentModel.AttachmentModel.save_to_storage", autospec=True
-    )
+def test_save_no_data(
+    attachmentModel, mock_AttachmentModel_save_to_storage, spy_Model_save
+):
     attachmentModel.email.mailbox.save_attachmentModels = True
 
     attachmentModel.save()
 
-    mock_super_save.assert_called_once_with(attachmentModel)
-    mock_save_to_storage.assert_not_called()
+    spy_Model_save.assert_called_once_with(attachmentModel)
+    mock_AttachmentModel_save_to_storage.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_save_data_failure(mocker, attachmentModel):
-    mock_super_save = mocker.patch(
-        "core.models.AttachmentModel.models.Model.save", autospec=True
-    )
-    mock_save_to_storage = mocker.patch(
-        "core.models.AttachmentModel.AttachmentModel.save_to_storage",
-        autospec=True,
-        side_effect=AssertionError,
-    )
+def test_save_data_failure(
+    attachmentModel, mock_message, mock_AttachmentModel_save_to_storage, spy_Model_save
+):
+    mock_AttachmentModel_save_to_storage.side_effect = AssertionError
     attachmentModel.email.mailbox.save_attachmentModels = True
-    mock_data = mocker.MagicMock(spec=Message)
 
     with pytest.raises(AssertionError):
-        attachmentModel.save(attachmentData=mock_data)
+        attachmentModel.save(attachmentData=mock_message)
 
-    mock_super_save.assert_called()
-    mock_save_to_storage.assert_called()
+    spy_Model_save.assert_called()
+    mock_AttachmentModel_save_to_storage.assert_called()
 
 
 @pytest.mark.django_db
-def test_fromData(mocker):
-    mock_data = mocker.MagicMock(spec=Message)
+def test_fromData(mock_message):
+    result = AttachmentModel.fromData(mock_message, None)
 
-    result = AttachmentModel.fromData(mock_data, None)
-
-    mock_data.get_filename.assert_called_once_with()
-    mock_data.as_bytes.assert_called_once_with()
-    mock_data.as_bytes.return_value.__len__.assert_called_once()
+    mock_message.get_filename.assert_called_once_with()
+    mock_message.as_bytes.assert_called_once_with()
+    mock_message.as_bytes.return_value.__len__.assert_called_once()
     assert isinstance(result, AttachmentModel)
-    assert result.file_name == mock_data.get_filename.return_value
-    assert result.datasize == mock_data.as_bytes.return_value.__len__.return_value
+    assert result.file_name == mock_message.get_filename.return_value
+    assert result.datasize == mock_message.as_bytes.return_value.__len__.return_value

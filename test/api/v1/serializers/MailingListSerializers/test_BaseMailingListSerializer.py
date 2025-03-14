@@ -29,9 +29,11 @@ from api.v1.serializers.mailinglist_serializers.BaseMailingListSerializer import
 
 
 @pytest.mark.django_db
-def test_output(mailingListModel):
+def test_output(mailingListModel, request_context):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseMailingListSerializer(instance=mailingListModel).data
+    serializerData = BaseMailingListSerializer(
+        instance=mailingListModel, context=request_context
+    ).data
 
     assert "id" in serializerData
     assert serializerData["id"] == mailingListModel.id
@@ -59,9 +61,11 @@ def test_output(mailingListModel):
 
 
 @pytest.mark.django_db
-def test_input(mailingListModel):
+def test_input(mailingListModel, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = BaseMailingListSerializer(data=model_to_dict(mailingListModel))
+    serializer = BaseMailingListSerializer(
+        data=model_to_dict(mailingListModel), context=request_context
+    )
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

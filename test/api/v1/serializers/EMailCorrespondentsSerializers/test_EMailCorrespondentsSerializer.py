@@ -29,11 +29,13 @@ from api.v1.serializers.emailcorrespondents_serializers.EMailCorrespondentsSeria
 
 
 @pytest.mark.django_db
-def test_output(emailModel):
+def test_output(emailModel, request_context):
     """Tests for the expected output of the serializer."""
     emailCorrespondentModel = emailModel.emailcorrespondents.first()
 
-    serializerData = EMailCorrespondentSerializer(instance=emailCorrespondentModel).data
+    serializerData = EMailCorrespondentSerializer(
+        instance=emailCorrespondentModel, context=request_context
+    ).data
 
     assert "id" not in serializerData
     assert "email" not in serializerData
@@ -47,12 +49,12 @@ def test_output(emailModel):
 
 
 @pytest.mark.django_db
-def test_input(emailModel):
+def test_input(emailModel, request_context):
     """Tests for the expected input of the serializer."""
     emailCorrespondentModel = emailModel.emailcorrespondents.first()
 
     serializer = EMailCorrespondentSerializer(
-        data=model_to_dict(emailCorrespondentModel)
+        data=model_to_dict(emailCorrespondentModel), context=request_context
     )
     assert serializer.is_valid()
     serializerData = serializer.validated_data

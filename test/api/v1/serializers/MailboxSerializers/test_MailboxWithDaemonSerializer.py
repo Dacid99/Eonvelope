@@ -29,14 +29,18 @@ from api.v1.serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
 
 
 @pytest.mark.django_db
-def test_output(mailboxModel):
+def test_output(mailboxModel, request_context):
     """Tests for the expected output of the serializer."""
-    serializerData = MailboxWithDaemonSerializer(instance=mailboxModel).data
+    serializerData = MailboxWithDaemonSerializer(
+        instance=mailboxModel, context=request_context
+    ).data
 
     assert "id" in serializerData
     assert serializerData["id"] == mailboxModel.id
     assert "daemons" in serializerData
-    assert serializerData["daemons"] == []
+    assert isinstance(serializerData["daemons"], list)
+    assert len(serializerData["daemons"]) == 1
+    assert isinstance(serializerData["daemons"][0], dict)
     assert "name" in serializerData
     assert serializerData["name"] == mailboxModel.name
     assert "account" in serializerData
@@ -57,9 +61,11 @@ def test_output(mailboxModel):
 
 
 @pytest.mark.django_db
-def test_input(mailboxModel):
+def test_input(mailboxModel, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = MailboxWithDaemonSerializer(data=model_to_dict(mailboxModel))
+    serializer = MailboxWithDaemonSerializer(
+        data=model_to_dict(mailboxModel), context=request_context
+    )
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

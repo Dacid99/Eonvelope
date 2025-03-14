@@ -29,9 +29,11 @@ from api.v1.serializers.daemon_serializers.BaseDaemonSerializer import (
 
 
 @pytest.mark.django_db
-def test_output(daemonModel):
+def test_output(daemonModel, request_context):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseDaemonSerializer(instance=daemonModel).data
+    serializerData = BaseDaemonSerializer(
+        instance=daemonModel, context=request_context
+    ).data
 
     assert "id" in serializerData
     assert serializerData["id"] == daemonModel.id
@@ -62,9 +64,11 @@ def test_output(daemonModel):
 
 
 @pytest.mark.django_db
-def test_input(daemonModel):
+def test_input(daemonModel, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = BaseDaemonSerializer(data=model_to_dict(daemonModel))
+    serializer = BaseDaemonSerializer(
+        data=model_to_dict(daemonModel), context=request_context
+    )
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

@@ -29,9 +29,11 @@ from api.v1.serializers.attachment_serializers.BaseAttachmentSerializer import (
 
 
 @pytest.mark.django_db
-def test_output(attachmentModel):
+def test_output(attachmentModel, request_context):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseAttachmentSerializer(instance=attachmentModel).data
+    serializerData = BaseAttachmentSerializer(
+        instance=attachmentModel, context=request_context
+    ).data
 
     assert "id" in serializerData
     assert serializerData["id"] == attachmentModel.id
@@ -56,9 +58,11 @@ def test_output(attachmentModel):
 
 
 @pytest.mark.django_db
-def test_input(attachmentModel):
+def test_input(attachmentModel, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = BaseAttachmentSerializer(data=model_to_dict(attachmentModel))
+    serializer = BaseAttachmentSerializer(
+        data=model_to_dict(attachmentModel), context=request_context
+    )
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

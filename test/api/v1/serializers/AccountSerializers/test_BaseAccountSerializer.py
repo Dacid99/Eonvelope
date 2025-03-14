@@ -29,9 +29,11 @@ from api.v1.serializers.account_serializers.BaseAccountSerializer import (
 
 
 @pytest.mark.django_db
-def test_output(accountModel):
+def test_output(accountModel, request_context):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseAccountSerializer(instance=accountModel).data
+    serializerData = BaseAccountSerializer(
+        instance=accountModel, context=request_context
+    ).data
 
     assert "id" in serializerData
     assert serializerData["id"] == accountModel.id
@@ -60,9 +62,11 @@ def test_output(accountModel):
 
 
 @pytest.mark.django_db
-def test_input(accountModel):
+def test_input(accountModel, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = BaseAccountSerializer(data=model_to_dict(accountModel))
+    serializer = BaseAccountSerializer(
+        data=model_to_dict(accountModel), context=request_context
+    )
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

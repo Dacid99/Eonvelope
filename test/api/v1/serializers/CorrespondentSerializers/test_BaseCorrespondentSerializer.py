@@ -29,9 +29,11 @@ from api.v1.serializers.correspondent_serializers.BaseCorrespondentSerializer im
 
 
 @pytest.mark.django_db
-def test_output(correspondentModel, emailModel):
+def test_output(correspondentModel, request_context):
     """Tests for the expected output of the serializer."""
-    serializerData = BaseCorrespondentSerializer(instance=correspondentModel).data
+    serializerData = BaseCorrespondentSerializer(
+        instance=correspondentModel, context=request_context
+    ).data
 
     assert "id" in serializerData
     assert serializerData["id"] == correspondentModel.id
@@ -55,9 +57,11 @@ def test_output(correspondentModel, emailModel):
 
 
 @pytest.mark.django_db
-def test_input(correspondentModel, emailModel):
+def test_input(correspondentModel, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = BaseCorrespondentSerializer(data=model_to_dict(correspondentModel))
+    serializer = BaseCorrespondentSerializer(
+        data=model_to_dict(correspondentModel), context=request_context
+    )
     assert serializer.is_valid()
     serializerData = serializer.validated_data
 

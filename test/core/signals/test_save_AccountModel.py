@@ -21,7 +21,6 @@
 import pytest
 from model_bakery import baker
 
-from core.models.AccountModel import AccountModel
 from core.models.MailboxModel import MailboxModel
 
 
@@ -32,30 +31,54 @@ def mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_AccountModel_post_save_from_healthy(mock_logger):
+def test_AccountModel_post_save_from_healthy(mock_logger, accountModel_with_mailboxes):
     """Tests the post_save function of :class:`core.models.AccountModel.AccountModel`."""
+    accountModel_with_mailboxes.is_healthy = True
+    accountModel_with_mailboxes.save(update_fields=["is_healthy"])
+    for mailbox in accountModel_with_mailboxes.mailboxes.all():
+        mailbox.is_healthy = True
+        mailbox.save(update_fields=["is_healthy"])
 
-    account = baker.make(AccountModel, is_healthy=True)
-    baker.make(MailboxModel, account=account, is_healthy=True, _quantity=2)
+    accountModel_with_mailboxes.refresh_from_db()
+    assert accountModel_with_mailboxes.is_healthy is True
+    for mailbox in accountModel_with_mailboxes.mailboxes.all():
+        mailbox.refresh_from_db()
+        assert mailbox.is_healthy is True
 
-    account.is_healthy = False
-    account.save(update_fields=["is_healthy"])
+    accountModel_with_mailboxes.is_healthy = False
+    accountModel_with_mailboxes.save(update_fields=["is_healthy"])
 
-    for mailbox in account.mailboxes.all():
+    accountModel_with_mailboxes.refresh_from_db()
+    assert accountModel_with_mailboxes.is_healthy is False
+    for mailbox in accountModel_with_mailboxes.mailboxes.all():
+        mailbox.refresh_from_db()
         assert mailbox.is_healthy is False
     mock_logger.debug.assert_called()
 
 
 @pytest.mark.django_db
-def test_AccountModel_post_save_from_unhealthy(mock_logger):
+def test_AccountModel_post_save_from_unhealthy(
+    accountModel_with_mailboxes, mock_logger
+):
     """Tests the post_save function of :class:`core.models.AccountModel.AccountModel`."""
+    accountModel_with_mailboxes.is_healthy = False
+    accountModel_with_mailboxes.save(update_fields=["is_healthy"])
+    for mailbox in accountModel_with_mailboxes.mailboxes.all():
+        mailbox.is_healthy = False
+        mailbox.save(update_fields=["is_healthy"])
 
-    account = baker.make(AccountModel, is_healthy=False)
-    baker.make(MailboxModel, account=account, is_healthy=False, _quantity=2)
-
-    account.is_healthy = True
-    account.save(update_fields=["is_healthy"])
-
-    for mailbox in account.mailboxes.all():
+    accountModel_with_mailboxes.refresh_from_db()
+    assert accountModel_with_mailboxes.is_healthy is False
+    for mailbox in accountModel_with_mailboxes.mailboxes.all():
+        mailbox.refresh_from_db()
         assert mailbox.is_healthy is False
-    mock_logger.debug.assert_not_called()
+
+    accountModel_with_mailboxes.is_healthy = True
+    accountModel_with_mailboxes.save(update_fields=["is_healthy"])
+
+    accountModel_with_mailboxes.refresh_from_db()
+    assert accountModel_with_mailboxes.is_healthy is True
+    for mailbox in accountModel_with_mailboxes.mailboxes.all():
+        mailbox.refresh_from_db()
+        assert mailbox.is_healthy is False
+    mock_logger.debug.assert_called()

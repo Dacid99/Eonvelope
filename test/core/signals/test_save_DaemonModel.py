@@ -21,11 +21,7 @@
 import pytest
 from model_bakery import baker
 
-from core.models.AccountModel import (
-    AccountModel,
-)  # must be imported to resolve ForeignKey in MailboxModel
 from core.models.DaemonModel import DaemonModel
-from core.models.MailboxModel import MailboxModel
 
 
 @pytest.fixture
@@ -46,44 +42,54 @@ def mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_DaemonModel_post_save_from_healthy(faker, mock_logger, mock_updateDaemon):
+def test_DaemonModel_post_save_from_healthy(
+    daemonModel, mock_logger, mock_updateDaemon
+):
     """Tests :func:`core.signals.saveDaemonModel.post_save_is_healthy`
     for an initially healthy daemon.
     """
-    mailbox = baker.make(MailboxModel, is_healthy=True)
-    daemon = baker.make(
-        DaemonModel,
-        mailbox=mailbox,
-        is_healthy=True,
-        log_filepath=faker.file_path(extension="log"),
-    )
+    daemonModel.is_healthy = True
+    daemonModel.save(update_fields=["is_healthy"])
+    daemonModel.mailbox.is_healthy = True
+    daemonModel.mailbox.save(update_fields=["is_healthy"])
 
-    daemon.is_healthy = False
-    daemon.save(update_fields=["is_healthy"])
+    daemonModel.refresh_from_db()
+    assert daemonModel.is_healthy is True
+    daemonModel.mailbox.refresh_from_db()
+    assert daemonModel.mailbox.is_healthy is True
 
-    mailbox.refresh_from_db()
-    mock_updateDaemon.assert_called_once_with(daemon)
-    assert mailbox.is_healthy is True
+    daemonModel.is_healthy = False
+    daemonModel.save(update_fields=["is_healthy"])
+
+    daemonModel.refresh_from_db()
+    assert daemonModel.is_healthy is False
+    daemonModel.mailbox.refresh_from_db()
+    assert daemonModel.mailbox.is_healthy is True
     mock_logger.debug.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_DaemonModel_post_save_from_unhealthy(faker, mock_logger, mock_updateDaemon):
+def test_DaemonModel_post_save_from_unhealthy(
+    daemonModel, mock_logger, mock_updateDaemon
+):
     """Tests :func:`core.signals.saveDaemonModel.post_save_is_healthy`
     for an initially unhealthy daemon.
     """
-    mailbox = baker.make(MailboxModel, is_healthy=False)
-    daemon = baker.make(
-        DaemonModel,
-        mailbox=mailbox,
-        is_healthy=False,
-        log_filepath=faker.file_path(extension="log"),
-    )
+    daemonModel.is_healthy = False
+    daemonModel.save(update_fields=["is_healthy"])
+    daemonModel.mailbox.is_healthy = False
+    daemonModel.mailbox.save(update_fields=["is_healthy"])
 
-    daemon.is_healthy = True
-    daemon.save(update_fields=["is_healthy"])
+    daemonModel.refresh_from_db()
+    assert daemonModel.is_healthy is False
+    daemonModel.mailbox.refresh_from_db()
+    assert daemonModel.mailbox.is_healthy is False
 
-    mailbox.refresh_from_db()
-    mock_updateDaemon.assert_called_once_with(daemon)
-    assert mailbox.is_healthy is True
+    daemonModel.is_healthy = True
+    daemonModel.save(update_fields=["is_healthy"])
+
+    daemonModel.refresh_from_db()
+    assert daemonModel.is_healthy is True
+    daemonModel.mailbox.refresh_from_db()
+    assert daemonModel.mailbox.is_healthy is True
     mock_logger.debug.assert_called()

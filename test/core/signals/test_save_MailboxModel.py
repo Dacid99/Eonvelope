@@ -21,7 +21,6 @@
 import pytest
 from model_bakery import baker
 
-from core.models.AccountModel import AccountModel
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 
@@ -33,54 +32,60 @@ def mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_from_healthy(faker, mock_logger):
+def test_MailboxModel_post_save_from_healthy(mailboxModel_with_daemons, mock_logger):
     """Tests behaviour of :func:`core.signals.saveMailboxModel.post_save_is_healthy`."""
-    account = baker.make(AccountModel, is_healthy=True)
-    mailbox = baker.make(MailboxModel, account=account, is_healthy=True)
-    baker.make(
-        DaemonModel,
-        mailbox=mailbox,
-        is_healthy=True,
-        log_filepath=faker.file_path(extension="log"),
-    )
-    baker.make(
-        DaemonModel,
-        mailbox=mailbox,
-        is_healthy=True,
-        log_filepath=faker.file_path(extension="log"),
-    )
+    mailboxModel_with_daemons.account.is_healthy = True
+    mailboxModel_with_daemons.account.save(update_fields=["is_healthy"])
+    mailboxModel_with_daemons.is_healthy = True
+    mailboxModel_with_daemons.save(update_fields=["is_healthy"])
+    for daemon in mailboxModel_with_daemons.daemons.all():
+        daemon.is_healthy = True
+        daemon.save(update_fields=["is_healthy"])
 
-    mailbox.is_healthy = False
-    mailbox.save(update_fields=["is_healthy"])
-    for daemon in mailbox.daemons.all():
+    mailboxModel_with_daemons.refresh_from_db()
+    assert mailboxModel_with_daemons.is_healthy is True
+    mailboxModel_with_daemons.account.refresh_from_db()
+    assert mailboxModel_with_daemons.account.is_healthy is True
+    for daemon in mailboxModel_with_daemons.daemons.all():
+        assert daemon.is_healthy is True
+
+    mailboxModel_with_daemons.is_healthy = False
+    mailboxModel_with_daemons.save(update_fields=["is_healthy"])
+
+    mailboxModel_with_daemons.refresh_from_db()
+    assert mailboxModel_with_daemons.is_healthy is False
+    mailboxModel_with_daemons.account.refresh_from_db()
+    assert mailboxModel_with_daemons.account.is_healthy is True
+    for daemon in mailboxModel_with_daemons.daemons.all():
         assert daemon.is_healthy is False
-    account.refresh_from_db()
-    assert account.is_healthy is True
     mock_logger.debug.assert_called()
 
 
 @pytest.mark.django_db
-def test_MailboxModel_post_save_from_unhealthy(faker, mock_logger):
+def test_MailboxModel_post_save_from_unhealthy(mailboxModel_with_daemons, mock_logger):
     """Tests behaviour of :func:`core.signals.saveMailboxModel.post_save_is_healthy`."""
-    account = baker.make(AccountModel, is_healthy=False)
-    mailbox = baker.make(MailboxModel, account=account, is_healthy=False)
-    baker.make(
-        DaemonModel,
-        mailbox=mailbox,
-        is_healthy=False,
-        log_filepath=faker.file_path(extension="log"),
-    )
-    baker.make(
-        DaemonModel,
-        mailbox=mailbox,
-        is_healthy=False,
-        log_filepath=faker.file_path(extension="log"),
-    )
+    mailboxModel_with_daemons.account.is_healthy = False
+    mailboxModel_with_daemons.account.save(update_fields=["is_healthy"])
+    mailboxModel_with_daemons.is_healthy = False
+    mailboxModel_with_daemons.save(update_fields=["is_healthy"])
+    for daemon in mailboxModel_with_daemons.daemons.all():
+        daemon.is_healthy = False
+        daemon.save(update_fields=["is_healthy"])
 
-    mailbox.is_healthy = True
-    mailbox.save(update_fields=["is_healthy"])
-    for daemon in mailbox.daemons.all():
+    mailboxModel_with_daemons.refresh_from_db()
+    assert mailboxModel_with_daemons.is_healthy is False
+    mailboxModel_with_daemons.account.refresh_from_db()
+    assert mailboxModel_with_daemons.account.is_healthy is False
+    for daemon in mailboxModel_with_daemons.daemons.all():
         assert daemon.is_healthy is False
-    account.refresh_from_db()
-    assert account.is_healthy is True
+
+    mailboxModel_with_daemons.is_healthy = True
+    mailboxModel_with_daemons.save(update_fields=["is_healthy"])
+
+    mailboxModel_with_daemons.refresh_from_db()
+    assert mailboxModel_with_daemons.is_healthy is True
+    mailboxModel_with_daemons.account.refresh_from_db()
+    assert mailboxModel_with_daemons.account.is_healthy is True
+    for daemon in mailboxModel_with_daemons.daemons.all():
+        assert daemon.is_healthy is False
     mock_logger.debug.assert_called()

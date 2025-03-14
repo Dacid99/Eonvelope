@@ -61,6 +61,8 @@ def mock_MailboxModel_addFromMailboxFile(mocker):
 @pytest.mark.django_db
 def test_add_daemon_noauth(mailboxModel, noauth_apiClient, custom_detail_action_url):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with an unauthenticated user client."""
+    assert mailboxModel.daemons.all().count() == 1
+
     response = noauth_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, mailboxModel
@@ -70,12 +72,14 @@ def test_add_daemon_noauth(mailboxModel, noauth_apiClient, custom_detail_action_
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data["save_attachments"]
-    assert mailboxModel.daemons.all().count() == 0
+    assert mailboxModel.daemons.all().count() == 1
 
 
 @pytest.mark.django_db
 def test_add_daemon_auth_other(mailboxModel, other_apiClient, custom_detail_action_url):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated other user client."""
+    assert mailboxModel.daemons.all().count() == 1
+
     response = other_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, mailboxModel
@@ -85,12 +89,14 @@ def test_add_daemon_auth_other(mailboxModel, other_apiClient, custom_detail_acti
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data["save_attachments"]
-    assert mailboxModel.daemons.all().count() == 0
+    assert mailboxModel.daemons.all().count() == 1
 
 
 @pytest.mark.django_db
 def test_add_daemon_auth_owner(mailboxModel, owner_apiClient, custom_detail_action_url):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated owner user client."""
+    assert mailboxModel.daemons.all().count() == 1
+
     response = owner_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, mailboxModel
@@ -102,7 +108,7 @@ def test_add_daemon_auth_owner(mailboxModel, owner_apiClient, custom_detail_acti
         response.data["mailbox"] == MailboxViewSet.serializer_class(mailboxModel).data
     )
 
-    assert mailboxModel.daemons.all().count() == 1
+    assert mailboxModel.daemons.all().count() == 2
 
 
 @pytest.mark.django_db
@@ -218,6 +224,8 @@ def test_fetch_all_noauth(
     mock_MailboxModel_fetch,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with an unauthenticated user client."""
+    assert mailboxModel.daemons.all().count() == 1
+
     response = noauth_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH_ALL, mailboxModel
@@ -226,7 +234,7 @@ def test_fetch_all_noauth(
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_MailboxModel_fetch.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -239,6 +247,8 @@ def test_fetch_all_auth_other(
     mock_MailboxModel_fetch,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch_all` action with the authenticated other user client."""
+    assert mailboxModel.daemons.all().count() == 1
+
     response = other_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH_ALL, mailboxModel
@@ -247,7 +257,7 @@ def test_fetch_all_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_MailboxModel_fetch.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -316,6 +326,8 @@ def test_upload_eml_noauth(
     mock_EMailModel_createFromEmailBytes,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with an unauthenticated user client."""
+    assert mailboxModel.emails.all().count() == 1
+
     response = noauth_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, mailboxModel
@@ -326,7 +338,7 @@ def test_upload_eml_noauth(
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_EMailModel_createFromEmailBytes.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -340,6 +352,8 @@ def test_upload_eml_auth_other(
     mock_EMailModel_createFromEmailBytes,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated other user client."""
+    assert mailboxModel.emails.all().count() == 1
+
     response = other_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, mailboxModel
@@ -350,7 +364,7 @@ def test_upload_eml_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_EMailModel_createFromEmailBytes.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -390,6 +404,8 @@ def test_upload_eml_no_file_auth_owner(
     mock_EMailModel_createFromEmailBytes,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
+    assert mailboxModel.emails.all().count() == 1
+
     response = owner_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, mailboxModel
@@ -398,7 +414,7 @@ def test_upload_eml_no_file_auth_owner(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     mock_EMailModel_createFromEmailBytes.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -415,6 +431,8 @@ def test_upload_mailbox_noauth(
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with an unauthenticated user client."""
     fake_format = faker.word()
 
+    assert mailboxModel.emails.all().count() == 1
+
     response = noauth_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MAILBOX, mailboxModel
@@ -425,7 +443,7 @@ def test_upload_mailbox_noauth(
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     mock_MailboxModel_addFromMailboxFile.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -442,6 +460,8 @@ def test_upload_mailbox_auth_other(
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated other user client."""
     fake_format = faker.word()
 
+    assert mailboxModel.emails.all().count() == 1
+
     response = other_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MAILBOX, mailboxModel
@@ -452,7 +472,7 @@ def test_upload_mailbox_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_MailboxModel_addFromMailboxFile.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -497,6 +517,8 @@ def test_upload_mailbox_no_file_auth_owner(
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
     fake_format = faker.word()
 
+    assert mailboxModel.emails.all().count() == 1
+
     response = owner_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MAILBOX, mailboxModel
@@ -506,7 +528,7 @@ def test_upload_mailbox_no_file_auth_owner(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     mock_MailboxModel_addFromMailboxFile.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -520,6 +542,8 @@ def test_upload_mailbox_no_format_auth_owner(
     fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
+    assert mailboxModel.emails.all().count() == 1
+
     response = owner_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MAILBOX, mailboxModel
@@ -530,7 +554,7 @@ def test_upload_mailbox_no_format_auth_owner(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     mock_MailboxModel_addFromMailboxFile.assert_not_called()
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 
@@ -548,6 +572,8 @@ def test_upload_mailbox_bad_format_auth_owner(
     mock_MailboxModel_addFromMailboxFile.side_effect = ValueError
     fake_format = faker.word()
 
+    assert mailboxModel.emails.all().count() == 1
+
     response = owner_apiClient.post(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MAILBOX, mailboxModel
@@ -560,7 +586,7 @@ def test_upload_mailbox_bad_format_auth_owner(
     mock_MailboxModel_addFromMailboxFile.assert_called_once_with(
         mailboxModel, fake_file.getvalue(), fake_format
     )
-    assert mailboxModel.emails.all().count() == 0
+    assert mailboxModel.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
 

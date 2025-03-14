@@ -55,6 +55,21 @@ if TYPE_CHECKING:
     from rest_framework.viewsets import ModelViewSet
 
 
+@pytest.fixture(autouse=True)
+def complete_database(
+    owner_user,
+    other_user,
+    accountModel,
+    attachmentModel,
+    correspondentModel,
+    daemonModel,
+    emailModel,
+    mailboxModel,
+    mailingListModel,
+):
+    return
+
+
 @pytest.fixture
 def noauth_apiClient() -> APIClient:
     """Creates an unauthenticated :class:`rest_framework.test.APIClient` instance.

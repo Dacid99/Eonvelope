@@ -75,7 +75,7 @@ def test_list_auth_owner(emailModel, owner_apiClient, url):
     assert response.status_code == status.HTTP_200_OK
     assert response.data["email_count"] == 1
     assert response.data["correspondent_count"] == 1
-    assert response.data["attachment_count"] == 0
+    assert response.data["attachment_count"] == 1
     assert response.data["account_count"] == 1
 
 

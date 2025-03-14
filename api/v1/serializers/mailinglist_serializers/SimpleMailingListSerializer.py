@@ -22,12 +22,15 @@ from __future__ import annotations
 
 from rest_framework import serializers
 
+from ..email_serializers.BaseEMailSerializer import BaseEMailSerializer
 from .BaseMailingListSerializer import BaseMailingListSerializer
 
 
 # ruff: noqa: TC001 TC002
 # TYPE_CHECKING guard doesnt work with drf-spectacular: https://github.com/tfranzel/drf-spectacular/issues/390
 if True:
+    from rest_framework.utils.serializer_helpers import ReturnDict
+
     from core.models.MailingListModel import MailingListModel
 
 
@@ -37,16 +40,21 @@ class SimpleMailingListSerializer(BaseMailingListSerializer):
     Includes a method field for the count of elements in :attr:`core.models.MailingList.MailingList.emails`.
     """
 
-    email_number = serializers.SerializerMethodField(read_only=True)
-    """The number of mails by the mailinglist. Set via :func:`get_email_number`."""
+    emails = serializers.SerializerMethodField(read_only=True)
+    """The mails by the mailinglist. Set via :func:`get_emails`."""
 
-    def get_email_number(self, instance: MailingListModel) -> int:
-        """Gets the number of mails sent by the mailinglist.
+    def get_emails(self, instance: MailingListModel) -> ReturnDict | list:
+        """Serializes the correspondents connected to the instance to be serialized.
 
         Args:
-            instance:  The instance being serialized.
+            instance: The instance being serialized.
 
         Returns:
-           The number of mails referencing by the instance.
+            The serialized From correspondents connected to the instance to be serialized.
         """
-        return instance.emails.count()
+        request = self.context.get("request")
+        user = getattr(request, "user", None)
+        if user is not None:
+            emails = instance.emails.filter(mailbox__account__user=user)
+            return BaseEMailSerializer(emails, many=True, read_only=True).data
+        return []

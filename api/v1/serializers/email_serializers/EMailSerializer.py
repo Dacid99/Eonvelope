@@ -88,7 +88,7 @@ class EMailSerializer(BaseEMailSerializer):
         Returns:
             The serialized correspondents connected to the instance to be serialized.
         """
-        emailcorrespondents = instance.correspondents.all().distinct()
+        emailcorrespondents = instance.emailcorrespondents.all().distinct()
         return EMailCorrespondentSerializer(
             emailcorrespondents, many=True, read_only=True
         ).data

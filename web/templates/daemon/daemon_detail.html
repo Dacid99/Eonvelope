@@ -1,0 +1,29 @@
+{% extends base.html %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      <span class="badge bg-secondary text-center">
+        {% if daemon.is_running %}
+          <i class="fa-regular fa-play"></i>
+        {% else %}
+          <i class="fa-regular fa-pause"></i>
+        {% endif %}
+      </span>
+      {% include "partials/_health_badge.html" with object=daemon %}
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">{{ daemon.uuid }}</h2>
+      <h3 class="card-subtitle link-primary"><a href="{% url 'mailbox-detail' daemon.mailbox.pk %}">{{ daemon.mailbox.name }}</a></h3>
+      <h3 class="card-subtitle link-primary"><a href="{% url 'account-detail' daemon.mailbox.account.pk %}">{{ daemon.mailbox.account.mail_address }}</a></h3>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Criterion: {{ daemon.fetching_criterion }}</li>
+        <li class="list-group-item">Cycle period: {{ daemon.cycle_interval }}</li>
+        <li class="list-group-item">Restart time: {{ daemon.restart_time }}</li>
+        <li class="list-group-item">Logfile backups: {{ daemon.log_backup_count }}</li>
+        <li class="list-group-item">Logfile max size: {{ daemon.logfile_size }}</li>
+      </ul>
+    </div>
+    {% include "partials/_dates_card-footer.html" with object=daemon %}
+  </div>
+{% endblock %}

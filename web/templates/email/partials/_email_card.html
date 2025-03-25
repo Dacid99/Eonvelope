@@ -1,0 +1,15 @@
+<a href="{% url 'email-detail' email.pk %}">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ email.message_id }}
+                {% include "partials/_favorite_badge.html" with object=email %}
+            </h5>
+            <small>{{ email.created }}</small>
+            <h6 class="card-subtitle">{{ email.mailbox.name }}</h6>
+            <h6 class="card-subtitle"><a href="mailto:{{ email.mailbox.account.mail_address }}" class="link-info">{{ email.mailbox.account.mail_address }}</a></h6>
+            <p class="card-text">Subject: {{ email.email_subject }}</p>
+            <p class="card-text">Date received: {{ email.datetime }}</p>
+        </div>
+    </div>
+</a>

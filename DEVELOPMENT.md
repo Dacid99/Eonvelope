@@ -64,3 +64,4 @@ git config core.hooksPath validation/githooks/
 - isort
 - ANSI colors (iliazeus.vscode-ansi) (for validation reports)
 - reStructuredText (lextudio.restructuredtext) for docs
+- bootstrap 5 intellisense etc.

@@ -1,0 +1,9 @@
+{% extends base.html %}
+
+{% block content %}
+    <form method="get">
+        {{ filter.form.as_p }}
+        <input type="submit" />
+    </form>
+    {% include "correspondent/partials/_correspondent_list.html" with correspondents=filter.qs %}
+{% endblock %}

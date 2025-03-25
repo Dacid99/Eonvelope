@@ -1,0 +1,33 @@
+{% extends base.html %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      {% include "partials/_favorite_badge.html" with object=mailinglist %}
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">{{ mailinglist.list_id }}</h2>
+      <h3 class="card-subtitle">{{ mailinglist.list_owner }}</h3>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Subscribe: <a href="mailto:{{ mailinglist.list_subscribe }}" class="link-info">{{ mailinglist.list_subscribe }}</a></li>
+        <li class="list-group-item">Unsubscribe: <a href="mailto:{{ mailinglist.list_unsubscribe }}" class="link-info">{{ mailinglist.list_unsubscribe }}</a></li>
+        <li class="list-group-item">Post: <a href="mailto:{{ mailinglist.list_post }}" class="link-info">{{ mailinglist.list_post }}</a></li>
+        <li class="list-group-item">Archive: {{ mailinglist.list_archive }}</li>
+        <li class="list-group-item">Help: {{ mailinglist.list_help }}</li>
+      </ul>
+    </div>
+    {% include "partials/_dates_card-footer.html" with object=mailinglist %}
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Emails</h4>
+        {% include "email/partials/_email_list.html" with emails=mailinglist.emails %}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Correspondents</h4>
+        {% include "correspondent/partials/_correspondent_list.html" with correspondents=mailinglist.emails.correspondents %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

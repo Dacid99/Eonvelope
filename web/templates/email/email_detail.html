@@ -1,0 +1,75 @@
+{% extends base.html %}
+<head><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      {% include "partials/_favorite_badge.html" with object=email%}
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">{{ email.message_id }}</h2>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Subject: {{ email.email_subject }}</li>
+        <li class="list-group-item">Date received: {{ email.datetime }}</li>
+        <li class="list-group-item">X-Spam: {{ email.x_spam }}</li>
+        <li class="list-group-item list-group-item-action"><a href="{% url 'mailinglist-detail' email.mailinglist.pk %}">Mailinglist: {{ email.mailinglist.list_id }}</a></li>
+        <li class="list-group-item list-group-item-action"><a href="{% url 'mailbox-detail' email.mailbox.pk %}">Mailbox: {{ email.mailbox.name }}</a></li>
+        <li class="list-group-item list-group-item-action"><a href="{% url 'account-detail' email.mailbox.account.pk %}">Account: {{ email.mailbox.account.mail_address }}</a></li>
+        <li class="list-group-item list-group-item-action"><a href="{% url 'email-detail' email.inReplyTo.pk %}">In reply to: {{ email.inReplyTo.message_id }}</a></li>
+        <li class="list-group-item">
+          <p class="d-inline-flex gap-1">
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#plain-text" aria-expanded="false"  aria-controls="Show plain-text">
+              Plaintext version
+            </button>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false" aria-controls="Show plain-text and html-text">
+              Show both
+            </button>
+            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#html-text" aria-expanded="false" aria-controls="Show html-text">
+              Html version
+            </button>
+          </p>
+          <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="plain-text">
+                <div class="card card-body">
+                  {{ email.plain_bodytext }}
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="collapse multi-collapse" id="html-text">
+                <div class="card card-body">
+                  {{ email.html_bodytext }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    {% include "partials/_dates_card-footer.html" with object=email %}
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Correspondents</h4>
+        {% include "correspondent/partials/_correspondent_list.html" with correspondents=email.correspondents %}
+      </div>
+    </div>
+    <div class="card">
+      <div id="headers-accordion" class="card-body accordion accordion-item">
+        <h4 class="card-title accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="headers-collapse" data-bs-target="#headers-collapse" aria-expanded="true" aria-controls="Collapse headers">
+            Headers
+          </button>
+        </h4>
+        <div id="headers-collapse" class="card-body accordion-collapse collapse" data-bs-parent="#headers-accordion">
+          <div class="accordion-body">
+            <ul class="list-group list-group-flush">
+              {% for headername, headervalue in email.headers %}
+              <li class="list-group-item">{{ headername }}: {{ headervalue }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

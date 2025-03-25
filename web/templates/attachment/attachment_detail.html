@@ -1,0 +1,19 @@
+{% extends base.html %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      {% include "partials/_favorite_badge.html" with object=attachment%}
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">{{ attachment.file_name }}</h2>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item list-group-item-action link-primary"><a href="{% url 'email-detail' attachment.email.pk %}">Email: {{ attachment.email.message_id }}</a></li>
+        <li class="list-group-item">Content Type: {{ attachment.content_type }}</li>
+        <li class="list-group-item">Content Disposition: {{ attachment.content_disposition }}</li>
+        <li class="list-group-item">Size: {{ attachment.datasize }} bytes</li>
+      </ul>
+    </div>
+    {% include "partials/_dates_card-footer.html" with object=form %}
+  </div>
+{% endblock %}

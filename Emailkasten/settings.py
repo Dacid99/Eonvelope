@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     "health_check.db",
     "health_check.storage",
     "health_check.cache",
+    "django_bootstrap5",
+    "fontawesomefree",
     "Emailkasten",
     "core",
     "api",
@@ -116,7 +118,7 @@ ROOT_URLCONF = "Emailkasten.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "web/templates/"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

@@ -1,0 +1,25 @@
+{% extends base.html %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      {% include "partials/_favorite_badge.html" with object=mailbox%}
+      {% include "partials/_health_badge.html" with object=mailbox %}
+    </div>
+    <div class="card-body">
+      <h2 class="card-title">{{ mailbox.name }}</h2>
+      <h2 class="card-subtitle link-primary"><a href="{% url 'account-detail' mailbox.account.pk %}">{{ mailbox.account.mail_address }}</a></h2>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">Save attachments: {{ mailbox.save_attachments }}</li>
+        <li class="list-group-item">Save mails as .eml: {{ mailbox.save_toEML }}</li>
+      </ul>
+    </div>
+    {% include "partials/_dates_card-footer.html" with object=mailbox %}
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Daemons</h4>
+        {% include "daemon/partials/_daemon_list.html" with daemons=mailbox.daemons %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

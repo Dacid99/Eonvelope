@@ -1,0 +1,13 @@
+<a href="{% url 'mailinglist-detail' mailinglist.pk %}">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ mailinglist.mail_address }}
+                {% include "partials/_favorite_badge.html" with object=mailinglist %}
+            </h5>
+            <small>{{ mailinglist.created }}</small>
+            <h6 class="card-subtitle">{{ mailinglist.list_id }}</h6>
+            <p class="card-text">Owner: {{ mailinglist.list_owner }}</p>
+        </div>
+    </div>
+</a>

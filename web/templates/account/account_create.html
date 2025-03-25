@@ -1,0 +1,15 @@
+<div class="object-form">
+  <form method="POST">
+    {% csrf_token %}
+
+    <h2>{{ form.mail_address }}</h2>
+    <p>Host: {{ form.mail_host }}</p>
+    <p>Protocol: {{ form.protocol }}</p>
+    <p>Port: {{ form.mail_host_port }}</p>
+    <p>Timeout: {{ form.timeout }}</p>
+
+    <button type="submit">Save</button>
+  </form>
+  <p class="timestamp">Added: {{ form.created }}</p>
+  <p class="timestamp">Last changed: {{ form.updated }}</p>
+</div>

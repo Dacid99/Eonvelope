@@ -1,0 +1,13 @@
+<a href="{% url 'account-detail' account.pk %}">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                {% include "partials/_health_badge.html" with object=account %}
+                <a href="mailto:{{ account.mail_address }}" class="link-info">{{ account.mail_address }}</a>
+                {% include "partials/_favorite_badge.html" with object=account %}
+            </h5>
+            <small>{{ account.created }}</small>
+            <p class="card-text">Protocol: {{ account.protocol }}</p>
+        </div>
+    </div>
+</a>

@@ -1,0 +1,13 @@
+<a href="{% url 'attachment-detail' attachment.pk %}">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">
+                {{ attachment.file_name }}
+                {% include "partials/_favorite_badge.html" with object=attachment %}
+            </h5>
+            <small>{{ attachment.created }}</small>
+            <p class="card-text">Type: {{ attachment.content_type }}</p>
+            <p class="card-text">Size: {{ attachment.datasize }} bytes</p>
+        </div>
+    </div>
+</a>

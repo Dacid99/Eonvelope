@@ -1,0 +1,9 @@
+{% extends base.html %}
+
+{% block content %}
+    <form method="get">
+        {{ filter.form.as_p }}
+        <input type="submit" />
+    </form>
+    {% include "mailinglist/partials/_mailinglist_list.html" with mailinglists=filter.qs %}
+{% endblock %}

@@ -1,0 +1,6 @@
+<ul class="list-group">
+    {% for daemon in daemons %}
+    <li class="list-group-item list-group-item-action">
+        {% include "daemon/partials/_daemon_card.html" %}
+    </li>
+</ul>

@@ -1,0 +1,20 @@
+{% extends base.html %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      {% include "partials/_favorite_badge.html" with object=account%}
+    </div>
+    <div class="card-body">
+      <h2 class="card-title"><a href="mailto:{{ correspondent.email_address }}" class="link-info">{{ correspondent.email_address }}</a></h2>
+      <h3 class="card-subtitle">{{ correspondent.email_name }}</h3>
+    </div>
+    {% include "partials/_dates_card-footer.html" with object=account %}
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Emails</h4>
+        {% include "email/partials/_email_list.html" with emails=correspondent.emails %}
+      </div>
+    </div>
+  </div>
+{% endblock %}

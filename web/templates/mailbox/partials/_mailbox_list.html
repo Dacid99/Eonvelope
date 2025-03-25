@@ -1,0 +1,6 @@
+<ul class="list-group">
+    {% for mailbox in mailboxes %}
+    <li class="list-group-item list-group-item-action">
+        {% include "mailbox/partials/_mailbox_card.html" %}
+    </li>
+</ul>

@@ -18,3 +18,4 @@ freezegun
 black
 ruff
 autotyping
+djlint

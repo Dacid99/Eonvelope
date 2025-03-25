@@ -3,42 +3,59 @@ source .venv/bin/activate
 
 set -o pipefail
 
+CONFIG_PATH="validation/"
+REPORT_PATH="validation/reports/"
 
-CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.py$')
 
-if [ -z "$CHANGED_FILES" ]; then
+CHANGED_PY_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.py$')
+
+if [ -z "$CHANGED_PY_FILES" ]; then
   echo "No Python files in commit."
-  exit 0
+else
+  ruff
+
+  black --config=$CONFIG_PATH'black_config' $CHANGED_PY_FILES > $REPORT_PATH'black_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Formatting code failed, please check "$REPORT_PATH"black_precommit.ansi ."
+    exit 1
+  fi
+
+  git add $CHANGED_PY_FILES
+
+  # lint
+  pylint --rcfile=$CONFIG_PATH'pylintrc_code' $CHANGED_PY_FILES > $REPORT_PATH'pylint_code_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Pylint for code failed, please check "$REPORT_PATH"pylint_code_precommit.ansi ."
+    exit 1
+  fi
+
+  pylint --rcfile=$CONFIG_PATH'pylintrc_docs' $CHANGED_PY_FILES > $REPORT_PATH'pylint_docs_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Pylint for docs failed, please check "$REPORT_PATH"pylint_docs_precommit.ansi ."
+    exit 1
+  fi
+
+  pylint --rcfile=$CONFIG_PATH'pylintrc_style' $CHANGED_PY_FILES > $REPORT_PATH'pylint_style_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Pylint for style failed, please check "$REPORT_PATH"pylint_style_precommit.ansi ."
+    exit 1
+  fi
 fi
 
-#format
 
-black --config=validation/black_config $CHANGED_FILES > validation/reports/black_precommit.ansi
-if [ $? -ne 0 ]; then
-  echo "Formatting code failed, please check validation/reports/black_precommit.ansi ."
-  exit 1
+CHANGED_HTML_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.html$')
+
+if [ -z "$CHANGED_HTML_FILES" ]; then
+  echo "No html files in commit."
+else
+  djlint --reformat --configuration $CONFIG_PATH'djlintrc' $CHANGED_PY_FILES > $REPORT_PATH'djlint_precommit.ansi'
+  djlint --lint --configuration $CONFIG_PATH'djlintrc' $CHANGED_PY_FILES >> $REPORT_PATH'djlint_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Djlint failed, please check "$REPORT_PATH"djlint_precommit.ansi ."
+    exit 1
+  fi
 fi
 
-git add $CHANGED_FILES
-
-# lint
-pylint --rcfile=validation/pylintrc_code $CHANGED_FILES > validation/reports/pylint_code_precommit.ansi
-if [ $? -ne 0 ]; then
-  echo "Pylinting code failed, please check validation/reports/pylint_code_precommit.ansi ."
-  exit 1
-fi
-
-pylint --rcfile=validation/pylintrc_docs $CHANGED_FILES > validation/reports/pylint_docs_precommit.ansi
-if [ $? -ne 0 ]; then
-  echo "Pylinting docs failed, please check validation/reports/pylint_docs_precommit.ansi ."
-  exit 1
-fi
-
-pylint --rcfile=validation/pylintrc_style $CHANGED_FILES > validation/reports/pylint_style_precommit.ansi
-if [ $? -ne 0 ]; then
-  echo "Pylinting style failed, please check validation/reports/pylint_style_precommit.ansi ."
-  exit 1
-fi
 
 echo "All precommit actions passed successfully."
 exit 0

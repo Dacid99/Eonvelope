@@ -13,6 +13,9 @@ testlint: pylintrc_style
 rufflint: ruff.toml
 	ruff check --config=$< ../Emailkasten ../core/ ../api/ ../web/ ../test/ | tee reports/ruff.ansi
 
+templatelint: djlintrc curlylint.toml
+	djlint --configuration djlintrc ../web/templates | tee -a reports/htmllint.ansi
+
 check: mypy.ini
 	mypy --config-file $< ../Emailkasten ../test/ ../core/ ../api/ ../web/ | tee reports/mypy/mypy.ansi
 

@@ -15,3 +15,5 @@ pillow
 imgkit
 email-validator
 imap-tools
+django-bootstrap5
+fontawesomefree

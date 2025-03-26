@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models
 
+from core.mixins.HasDownloadMixin import HasDownloadMixin
 from Emailkasten.utils import get_config
 
 from ..utils.fileManagment import saveStore
@@ -43,7 +44,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AttachmentModel(models.Model):
+class AttachmentModel(HasDownloadMixin, models.Model):
     """Database model for an attachment file in a mail."""
 
     file_name = models.CharField(max_length=255)
@@ -199,3 +200,8 @@ class AttachmentModel(models.Model):
         new_attachment.email = email
 
         return new_attachment
+
+    @override
+    @property
+    def has_download(self):
+        return self.file_path is not None

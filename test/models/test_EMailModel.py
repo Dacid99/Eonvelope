@@ -465,3 +465,20 @@ def test_EMailModel_createFromEmailBytes_dberror(
     mock_logger.warning.assert_not_called()
     mock_logger.exception.assert_called()
     mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "eml_filepath, expected_has_download",
+    [
+        (None, False),
+        ("some/file/path", True),
+    ],
+)
+def test_EMailModel_has_download(email, eml_filepath, expected_has_download):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.has_download` in the two relevant cases."""
+    email.eml_filepath = eml_filepath
+
+    result = email.has_download
+
+    assert result == expected_has_download

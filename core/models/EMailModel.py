@@ -31,6 +31,7 @@ from typing import TYPE_CHECKING, Any, Final, override
 from django.db import models, transaction
 
 from core.constants import HeaderFields
+from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.utils.fileManagment import saveStore
 from Emailkasten.utils import get_config
@@ -53,7 +54,7 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class EMailModel(models.Model):
+class EMailModel(HasDownloadMixin, models.Model):
     """Database model for an email."""
 
     message_id = models.CharField(max_length=255)
@@ -436,3 +437,8 @@ class EMailModel(models.Model):
             )
             return None
         return new_email
+
+    @override
+    @property
+    def has_download(self):
+        return self.eml_filepath is not None

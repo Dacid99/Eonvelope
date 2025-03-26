@@ -46,6 +46,8 @@ from api.v1.views.MailboxViewSet import MailboxViewSet
 from api.v1.views.MailingListViewSet import MailingListViewSet
 
 
+app_name = "v1"
+
 router = DefaultRouter()
 router.register(
     rf"{AccountViewSet.BASENAME}", AccountViewSet, basename=AccountViewSet.BASENAME

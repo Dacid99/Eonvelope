@@ -17,10 +17,10 @@
         <div class="card-body">
             <h2 class="card-title">{{ daemon.uuid }}</h2>
             <h3 class="card-subtitle link-primary">
-                <a href="{% url 'mailbox-detail' daemon.mailbox.pk %}">{{ daemon.mailbox.name }}</a>
+                <a href="{% url 'web:mailbox-detail' daemon.mailbox.pk %}">{{ daemon.mailbox.name }}</a>
             </h3>
             <h3 class="card-subtitle link-primary">
-                <a href="{% url 'account-detail' daemon.mailbox.account.pk %}">{{ daemon.mailbox.account.mail_address }}</a>
+                <a href="{% url 'web:account-detail' daemon.mailbox.account.pk %}">{{ daemon.mailbox.account.mail_address }}</a>
             </h3>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Criterion: {{ daemon.fetching_criterion }}</li>

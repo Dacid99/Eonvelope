@@ -24,16 +24,16 @@
                 <li class="list-group-item">Date received: {{ email.datetime }}</li>
                 <li class="list-group-item">X-Spam: {{ email.x_spam }}</li>
                 <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'mailinglist-detail' email.mailinglist.pk %}">Mailinglist: {{ email.mailinglist.list_id }}</a>
+                    <a href="{% url 'web:mailinglist-detail' email.mailinglist.pk %}">Mailinglist: {{ email.mailinglist.list_id }}</a>
                 </li>
                 <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'mailbox-detail' email.mailbox.pk %}">Mailbox: {{ email.mailbox.name }}</a>
+                    <a href="{% url 'web:mailbox-detail' email.mailbox.pk %}">Mailbox: {{ email.mailbox.name }}</a>
                 </li>
                 <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'account-detail' email.mailbox.account.pk %}">Account: {{ email.mailbox.account.mail_address }}</a>
+                    <a href="{% url 'web:account-detail' email.mailbox.account.pk %}">Account: {{ email.mailbox.account.mail_address }}</a>
                 </li>
                 <li class="list-group-item list-group-item-action">
-                    <a href="{% url 'email-detail' email.inReplyTo.pk %}">In reply to: {{ email.inReplyTo.message_id }}</a>
+                    <a href="{% url 'web:email-detail' email.inReplyTo.pk %}">In reply to: {{ email.inReplyTo.message_id }}</a>
                 </li>
                 <li class="list-group-item">
                     <p class="d-inline-flex gap-1">

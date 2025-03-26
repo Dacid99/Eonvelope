@@ -44,6 +44,8 @@ from .views.mailbox_views import MailboxDetailView, MailboxFilterView
 from .views.mailinglist_views import MailingListDetailView, MailingListFilterView
 
 
+app_name = "web"
+
 urlpatterns = [
     path(
         "accounts/",

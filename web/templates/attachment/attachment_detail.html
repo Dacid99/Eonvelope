@@ -11,7 +11,7 @@
             <h2 class="card-title">{{ attachment.file_name }}</h2>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item list-group-item-action link-primary">
-                    <a href="{% url 'email-detail' attachment.email.pk %}">Email: {{ attachment.email.message_id }}</a>
+                    <a href="{% url 'web:email-detail' attachment.email.pk %}">Email: {{ attachment.email.message_id }}</a>
                 </li>
                 <li class="list-group-item">Content Type: {{ attachment.content_type }}</li>
                 <li class="list-group-item">Content Disposition: {{ attachment.content_disposition }}</li>

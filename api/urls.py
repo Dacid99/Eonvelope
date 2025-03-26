@@ -43,6 +43,8 @@ from drf_spectacular.views import (
 
 SCHEMA_NAME = "schema"
 
+app_name = "api"
+
 urlpatterns = [
     path("schema/", SpectacularAPIView.as_view(), name=SCHEMA_NAME),
     path(

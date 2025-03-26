@@ -50,22 +50,45 @@ logger = logging.getLogger(__name__)
 class AccountModel(DirtyFieldsMixin, models.Model):
     """Database model for the account data of a mail account."""
 
-    mail_address = models.EmailField(max_length=255)
+    mail_address = models.EmailField(
+        max_length=255,
+        verbose_name="Email address",
+        help_text="The mail address to the account.",
+    )
     """The mail address of the account. Unique together with :attr:`user`."""
 
-    password = models.CharField(max_length=255)
+    password = models.CharField(max_length=255, verbose_name="Password")
     """The password to log into the account."""
 
-    mail_host = models.CharField(max_length=255)
+    mail_host = models.CharField(
+        max_length=255,
+        verbose_name="Mailserver-URL",
+        help_text="The URL of the mailserver for the chosen protocol.",
+    )
     """The url of the mail server where the account is located."""
 
-    mail_host_port = models.IntegerField(null=True)
+    mail_host_port = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Mailserver-Port",
+        help_text="The port of the mailserver for the chosen protocol.",
+    )
     """The port of the mail server. Can be null if the default port of the protocol is used."""
 
-    protocol = models.CharField(choices=EmailProtocolChoices.choices, max_length=10)
+    protocol = models.CharField(
+        choices=EmailProtocolChoices.choices,
+        max_length=10,
+        verbose_name="Email Protocol",
+        help_text="The email protocol implemented by the server.",
+    )
     """The mail protocol of the mail server."""
 
-    timeout = models.IntegerField(null=True)
+    timeout = models.IntegerField(
+        null=True,
+        blank=True,
+        verbose_name="Connection Timeout",
+        help_text="Timeout for the connection to the mailserver.",
+    )
     """The timeout parameter for the connection to the host. Can be null."""
 
     is_healthy = models.BooleanField(default=True)

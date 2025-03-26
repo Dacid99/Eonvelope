@@ -34,7 +34,13 @@ logger = logging.getLogger(__name__)
 class CorrespondentModel(models.Model):
     """Database model for the correspondent data found in a mail."""
 
-    email_name = models.CharField(max_length=255, blank=True, default="")
+    email_name = models.CharField(
+        max_length=255,
+        default="",
+        blank=True,
+        verbose_name="Mailer name",
+        help_text="The mailer name of the correspondent.",
+    )
     """The mailer name. Can be blank if none has been found."""
 
     email_address = models.CharField(max_length=255, unique=True)

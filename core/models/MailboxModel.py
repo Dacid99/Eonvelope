@@ -55,11 +55,17 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
     """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
 
     save_attachments = models.BooleanField(
-        default=get_config("DEFAULT_SAVE_ATTACHMENTS")
+        default=get_config("DEFAULT_SAVE_ATTACHMENTS"),
+        verbose_name="Save attachments",
+        help_text="Whether the attachments from the emails in this mailbox will be saved.",
     )
     """Whether to save attachments of the mails found in this mailbox. :attr:`constance.get_config('DEFAULT_SAVE_ATTACHMENTS')` by default."""
 
-    save_toEML = models.BooleanField(default=get_config("DEFAULT_SAVE_TO_EML"))
+    save_toEML = models.BooleanField(
+        default=get_config("DEFAULT_SAVE_TO_EML"),
+        verbose_name="Save as .eml",
+        help_text="Whether the emails in this mailbox will be stored in .eml files.",
+    )
     """Whether to save the mails found in this mailbox as .eml files. :attr:`constance.get_config('DEFAULT_SAVE_TO_EML')` by default."""
 
     is_favorite = models.BooleanField(default=False)

@@ -19,7 +19,7 @@
 """Test module for :mod:`api.v1.views.MailingListViewSet`'s basic CRUD actions.
 
 Fixtures:
-    :func:`fixture_mailingListPayload`: Creates clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
+    :func:`fixture_mailingListPayload`: Fixture creating clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
 
 """
 
@@ -42,7 +42,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def mailingListPayload(emailModel) -> dict[str, Any]:
-    """Creates clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
+    """Fixture creating clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
 
     Args:
         emailModel: Depends on :func:`fixture_emailModel`.

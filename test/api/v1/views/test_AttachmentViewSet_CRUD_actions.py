@@ -19,7 +19,7 @@
 """Test module for :mod:`api.v1.views.AttachmentViewSet`'s basic CRUD actions.
 
 Fixtures:
-    :func:`fixture_attachmentPayload`: Creates clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
+    :func:`fixture_attachmentPayload`: Fixture creating clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def attachmentPayload(emailModel) -> dict[str, Any]:
-    """Creates clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
+    """Fixture creating clean :class:`core.models.AttachmentModel.AttachmentModel` payload for a patch, post or put request.
 
     Args:
         emailModel: Depends on :func:`fixture_emailModel`.

@@ -49,6 +49,7 @@ def mock_logger(mocker) -> MagicMock:
 
 @pytest.fixture
 def mock_getHeader(mocker, faker):
+    """Fixture mocking :func:`core.models.MailingListModel.getHeader`."""
     return mocker.patch(
         "core.models.MailingListModel.getHeader",
         autospec=True,

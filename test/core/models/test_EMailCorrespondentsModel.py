@@ -45,11 +45,13 @@ def mock_CorrespondentModel_fromHeader(mocker, faker):
 
 @pytest.fixture
 def fake_header_name(faker):
+    """Fixture providing a random correspondent header name."""
     return faker.random_element(HeaderFields.Correspondents.values)
 
 
 @pytest.fixture
 def fake_header(faker):
+    """Fixture providing a random header value."""
     return faker.sentence()
 
 

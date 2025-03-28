@@ -60,19 +60,21 @@ if TYPE_CHECKING:
     from django.contrib.auth.models import AbstractUser
 
 
-def pytest_configure(config):
+def pytest_configure(config) -> None:
     """Configures the path for pytest to be the directory of this file for consistent relative paths."""
     pytest_ini_dir = os.path.dirname(os.path.abspath(config.inifile))
     os.chdir(pytest_ini_dir)
 
 
 @pytest.fixture
-def fake_file_bytes(faker):
+def fake_file_bytes(faker) -> bytes:
+    """Fixture providing random bytes to mock file content."""
     return faker.text().encode()
 
 
 @pytest.fixture
-def fake_file(fake_file_bytes):
+def fake_file(fake_file_bytes) -> BytesIO:
+    """Fixture providing a filestream with random content."""
     return BytesIO(fake_file_bytes)
 
 

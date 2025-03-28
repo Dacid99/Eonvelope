@@ -19,7 +19,7 @@
 """Test module for :mod:`api.v1.views.AccountViewSet`'s basic CRUD actions.
 
 Fixtures:
-    :func:`fixture_accountPayload`: Creates clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
+    :func:`fixture_accountPayload`: Fixture creating clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def accountPayload(owner_user) -> dict[str, Any]:
-    """Creates clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
+    """Fixture creating clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
 
     Args:
         owner_user: Depends on :func:`owner_user`.

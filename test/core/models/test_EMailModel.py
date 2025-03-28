@@ -47,11 +47,13 @@ def mock_logger(mocker):
 
 @pytest.fixture(autouse=True)
 def mock_os_remove(mocker):
+    """Fixture patching :func`os.remove` to avoid errors."""
     return mocker.patch("core.models.EMailModel.os.remove", autospec=True)
 
 
 @pytest.fixture
 def emailModel_with_filepaths(faker, emailModel):
+    """Fixture adding filepaths to `emailModel`."""
     emailModel.eml_filepath = faker.file_path(extension="eml")
     emailModel.prerender_filepath = faker.file_path(extension="png")
     emailModel.save()
@@ -60,11 +62,13 @@ def emailModel_with_filepaths(faker, emailModel):
 
 @pytest.fixture
 def spy_Model_save(mocker):
+    """Fixture spying on :func:`django.db.models.Model.save`."""
     return mocker.spy(core.models.EMailModel.models.Model, "save")
 
 
 @pytest.fixture
 def mock_EMailModel_save_to_storage(mocker):
+    """Fixture patching :func:`core.models.EMailModel.EMailModel.save_to_storage`."""
     return mocker.patch(
         "core.models.EMailModel.EMailModel.save_to_storage", autospec=True
     )
@@ -72,6 +76,7 @@ def mock_EMailModel_save_to_storage(mocker):
 
 @pytest.fixture
 def mock_EMailModel_render_to_storage(mocker):
+    """Fixture patching :func:`core.models.EMailModel.EMailModel.render_to_storage`."""
     return mocker.patch(
         "core.models.EMailModel.EMailModel.render_to_storage", autospec=True
     )
@@ -79,6 +84,7 @@ def mock_EMailModel_render_to_storage(mocker):
 
 @pytest.fixture
 def emailConversation(emailModel):
+    """Fixture creating a conversation around `emailModel`."""
     replyMails = baker.make(EMailModel, inReplyTo=emailModel, _quantity=3)
     baker.make(EMailModel, inReplyTo=replyMails[1], _quantity=2)
     replyReplyMail = baker.make(EMailModel, inReplyTo=replyMails[0])

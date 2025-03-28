@@ -21,19 +21,21 @@
 import pytest
 from model_bakery import baker
 
+from core.models.AccountModel import AccountModel
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 
 
 @pytest.fixture
-def accountModel_with_mailboxes(accountModel, mailboxModel):
+def accountModel_with_mailboxes(accountModel, mailboxModel) -> AccountModel:
+    """Fixture adding a mailbox to `accountModel`."""
     baker.make(MailboxModel, account=accountModel)
     return accountModel
 
 
 @pytest.fixture
-def mailboxModel_with_daemons(faker, mailboxModel, daemonModel):
-    """Fixture for a :class:`core.models.MailboxModel.MailboxModel` with daemons and a account."""
+def mailboxModel_with_daemons(faker, mailboxModel, daemonModel) -> MailboxModel:
+    """Fixture adding a daemon to `mailboxModel`."""
     baker.make(
         DaemonModel,
         mailbox=mailboxModel,

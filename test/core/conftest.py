@@ -19,14 +19,14 @@
 """Conftest for :mod:`test.core`.
 
 Fixtures:
-    :func:`fixture_accountModel`: Creates an :class:`core.models.AccountModel.AccountModel` instance for testing.
-    :func:`fixture_attachmentModel`: Creates an :class:`core.models.AttachmentModel.AttachmentModel` instance for testing.
-    :func:`fixture_correspondentModel`: Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
-    :func:`fixture_daemonModel`: Creates an :class:`core.models.DaemonModel.DaemonModel` instance for testing.
-    :func:`fixture_emailModel`: Creates an :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel` instance for testing.
-    :func:`fixture_emailCorrespondentsModel`: Creates an :class:`core.models.EMailModel.EMailModel` instance for testing.
-    :func:`fixture_mailboxModel`: Creates an :class:`core.models.MailboxModel.MailboxModel` instance for testing.
-    :func:`fixture_mailinglistModel`: Creates an :class:`core.models.MailingListModel.MailingListModel` instance for testing.
+    :func:`fixture_accountModel`: Fixture creating an :class:`core.models.AccountModel.AccountModel` instance for testing.
+    :func:`fixture_attachmentModel`: Fixture creating an :class:`core.models.AttachmentModel.AttachmentModel` instance for testing.
+    :func:`fixture_correspondentModel`: Fixture creating an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
+    :func:`fixture_daemonModel`: Fixture creating an :class:`core.models.DaemonModel.DaemonModel` instance for testing.
+    :func:`fixture_emailModel`: Fixture creating an :class:`core.models.EMailCorrespondentsModel.EMailCorrespondentsModel` instance for testing.
+    :func:`fixture_emailCorrespondentsModel`: Fixture creating an :class:`core.models.EMailModel.EMailModel` instance for testing.
+    :func:`fixture_mailboxModel`: Fixture creating an :class:`core.models.MailboxModel.MailboxModel` instance for testing.
+    :func:`fixture_mailinglistModel`: Fixture creating an :class:`core.models.MailingListModel.MailingListModel` instance for testing.
 """
 
 from __future__ import annotations
@@ -48,7 +48,7 @@ from core.models.MailingListModel import MailingListModel
 
 @pytest.fixture
 def accountModel() -> AccountModel:
-    """Creates an :class:`core.models.AccountModel.AccountModel` .
+    """Fixture creating an :class:`core.models.AccountModel.AccountModel` .
 
     Returns:
         The accountModel instance for testing.
@@ -58,7 +58,7 @@ def accountModel() -> AccountModel:
 
 @pytest.fixture
 def attachmentModel(faker) -> AttachmentModel:
-    """Creates an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
+    """Fixture creating an :class:`core.models.AttachmentModel.AttachmentModel` owned by :attr:`owner_user`.
 
     Returns:
         The attachment instance for testing.
@@ -68,7 +68,7 @@ def attachmentModel(faker) -> AttachmentModel:
 
 @pytest.fixture
 def correspondentModel() -> CorrespondentModel:
-    """Creates an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
+    """Fixture creating an :class:`core.models.CorrespondentModel.CorrespondentModel` instance for testing.
 
     Returns:
         The correspondentModel instance for testing.
@@ -78,7 +78,7 @@ def correspondentModel() -> CorrespondentModel:
 
 @pytest.fixture
 def daemonModel(faker) -> DaemonModel:
-    """Creates an :class:`core.models.DaemonModel.DaemonModel`.
+    """Fixture creating an :class:`core.models.DaemonModel.DaemonModel`.
 
     Returns:
         The daemonModel instance for testing.
@@ -88,7 +88,7 @@ def daemonModel(faker) -> DaemonModel:
 
 @pytest.fixture
 def emailModel() -> EMailModel:
-    """Creates an :class:`core.models.EMailModel.EMailModel`.
+    """Fixture creating an :class:`core.models.EMailModel.EMailModel`.
 
     Returns:
         The emailModel instance for testing.
@@ -98,7 +98,7 @@ def emailModel() -> EMailModel:
 
 @pytest.fixture
 def emailCorrespondentModel() -> EMailCorrespondentsModel:
-    """Creates an :class:`core.models.EMailModel.EMailModel` instance for testing.
+    """Fixture creating an :class:`core.models.EMailModel.EMailModel` instance for testing.
 
     Returns:
         The emailCorrespondentModel instance for testing.
@@ -108,7 +108,7 @@ def emailCorrespondentModel() -> EMailCorrespondentsModel:
 
 @pytest.fixture
 def mailboxModel() -> MailboxModel:
-    """Creates an :class:`core.models.MailboxModel.MailboxModel`.
+    """Fixture creating an :class:`core.models.MailboxModel.MailboxModel`.
 
     Returns:
         The mailboxModel instance for testing.
@@ -118,7 +118,7 @@ def mailboxModel() -> MailboxModel:
 
 @pytest.fixture
 def mailingListModel() -> MailingListModel:
-    """Creates an :class:`core.models.MailboxModel.MailboxModel`.
+    """Fixture creating an :class:`core.models.MailboxModel.MailboxModel`.
 
     Returns:
         The mailingListModel instance for testing.
@@ -128,6 +128,11 @@ def mailingListModel() -> MailingListModel:
 
 @pytest.fixture
 def mock_message(mocker):
+    """Fixture providing a mock :class:`email.message.Message` instance.
+
+    Returns:
+        :class:`unittest.mock.MagicMock`: The mock :class:`email.message.Message`.
+    """
     return mocker.MagicMock(spec=Message)
 
 

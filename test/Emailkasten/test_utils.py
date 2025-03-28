@@ -18,7 +18,6 @@
 
 """Test file for the :mod:`Emailkasten.utils` module."""
 
-
 import pytest
 
 from Emailkasten.utils import get_config
@@ -26,11 +25,13 @@ from Emailkasten.utils import get_config
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
+    """Fixture mocking the modules logger instance."""
     return mocker.patch("Emailkasten.utils.logger", autospec=True)
 
 
 @pytest.fixture(autouse=True)
 def mock_getattr(mocker):
+    """Fixture mocking `getattr` to mock accessing constance values."""
     return mocker.patch(
         "Emailkasten.utils.getattr", return_value="test-value from constance"
     )
@@ -38,6 +39,7 @@ def mock_getattr(mocker):
 
 @pytest.fixture(autouse=True)
 def mock_constance_settings(monkeypatch):
+    """Fixture replacing the constance settings."""
     monkeypatch.setattr(
         "Emailkasten.utils.CONSTANCE_CONFIG",
         {"TEST_CONFIG": ("test-value from settings", "A test value", str)},
@@ -45,6 +47,7 @@ def mock_constance_settings(monkeypatch):
 
 
 def test_get_config_success(mock_logger, mock_getattr):
+    """Tests getting a constance value in case of success."""
     config_value = get_config("TEST_CONFIG")
 
     mock_getattr.assert_called_once()
@@ -56,6 +59,7 @@ def test_get_config_success(mock_logger, mock_getattr):
 
 
 def test_get_config_workaround_success(mock_logger, mock_getattr):
+    """Tests getting a constance value in case of success via the workaround."""
     mock_getattr.side_effect = Exception
 
     config_value = get_config("TEST_CONFIG")
@@ -69,6 +73,7 @@ def test_get_config_workaround_success(mock_logger, mock_getattr):
 
 
 def test_get_config_workaround_failure(mock_logger, mock_getattr):
+    """Tests getting a constance value in case of failure."""
     mock_getattr.side_effect = ValueError("Constance value not found")
 
     with pytest.raises(KeyError):

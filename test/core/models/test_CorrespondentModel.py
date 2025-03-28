@@ -50,6 +50,7 @@ def mock_logger(mocker) -> MagicMock:
 
 @pytest.fixture
 def mock_parseCorrespondentHeader(mocker, faker):
+    """Fixture mocking :func:`core.models.CorrespondentModel.parseCorrespondentHeader`."""
     return mocker.patch(
         "core.models.CorrespondentModel.parseCorrespondentHeader",
         autospec=True,

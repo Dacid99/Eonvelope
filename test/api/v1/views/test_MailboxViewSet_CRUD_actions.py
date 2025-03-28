@@ -19,7 +19,7 @@
 """Test module for :mod:`api.v1.views.MailboxViewSet`'s basic CRUD actions.
 
 Fixtures:
-    :func:`fixture_mailboxPayload`: Creates clean :class:`core.models.MailboxModel.MailboxModel` payload for a patch, post or put request.
+    :func:`fixture_mailboxPayload`: Fixture creating clean :class:`core.models.MailboxModel.MailboxModel` payload for a patch, post or put request.
 """
 
 from __future__ import annotations
@@ -46,7 +46,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def mailboxPayload(accountModel) -> dict[str, Any]:
-    """Creates clean :class:`core.models.MailboxModel.MailboxModel` payload for a patch, post or put request.
+    """Fixture creating clean :class:`core.models.MailboxModel.MailboxModel` payload for a patch, post or put request.
 
     Args:
         accountModel: Depends on :func:`fixture_accountModel`.

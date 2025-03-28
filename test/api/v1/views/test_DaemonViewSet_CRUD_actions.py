@@ -19,7 +19,7 @@
 """Test module for :mod:`api.v1.views.DaemonViewSet`'s basic CRUD actions.
 
 Fixtures:
-    :func:`fixture_daemonPayload`: Creates clean :class:`core.models.DaemonModel.DaemonModel` payload for a patch, post or put request.
+    :func:`fixture_daemonPayload`: Fixture creating clean :class:`core.models.DaemonModel.DaemonModel` payload for a patch, post or put request.
 """
 
 from __future__ import annotations
@@ -41,7 +41,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def daemonPayload(faker, mailboxModel) -> dict[str, Any]:
-    """Creates clean :class:`core.models.DaemonModel.DaemonModel` payload for a patch, post or put request.
+    """Fixture creating clean :class:`core.models.DaemonModel.DaemonModel` payload for a patch, post or put request.
 
     Args:
         mailboxModel: Depends on :func:`fixture_mailboxModel`.

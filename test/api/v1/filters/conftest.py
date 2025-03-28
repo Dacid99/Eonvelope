@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import datetime
+from typing import TYPE_CHECKING
 
 import pytest
 from django.core.management import call_command
@@ -35,7 +36,19 @@ from core.models.MailboxModel import MailboxModel
 from core.models.MailingListModel import MailingListModel
 
 
+if TYPE_CHECKING:
+    from django.db.models.query import QuerySet
+
+
 def datetime_quarter(datetimeObject: datetime.datetime) -> int:
+    """Calculate the quarter of the year for a given datetime.
+
+    Args:
+        datetimeObject: The datetime to calculate the quarter of.
+
+    Returns:
+        An `int` from 1-4 indicating the datetimes quarter of the year.
+    """
     return (datetimeObject.month - 1) // 3 + 1
 
 
@@ -330,13 +343,15 @@ DATETIME_TEST_PARAMETERS = [
 
 @pytest.fixture(scope="package")
 def unblocked_db(django_db_setup, django_db_blocker):
+    """Fixture safely unblocking the database for scoped db fixtures."""
     with django_db_blocker.unblock():
         yield
         call_command("flush", "--no-input")
 
 
 @pytest.fixture(scope="package")
-def account_queryset(unblocked_db):
+def account_queryset(unblocked_db) -> QuerySet[AccountModel, AccountModel]:
+    """Fixture adding accounts with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
@@ -353,7 +368,10 @@ def account_queryset(unblocked_db):
 
 
 @pytest.fixture(scope="package")
-def mailbox_queryset(unblocked_db, account_queryset):
+def mailbox_queryset(
+    unblocked_db, account_queryset
+) -> QuerySet[MailboxModel, MailboxModel]:
+    """Fixture adding mailboxes with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
@@ -370,7 +388,10 @@ def mailbox_queryset(unblocked_db, account_queryset):
 
 
 @pytest.fixture(scope="package")
-def daemon_queryset(unblocked_db, mailbox_queryset):
+def daemon_queryset(
+    unblocked_db, mailbox_queryset
+) -> QuerySet[DaemonModel, DaemonModel]:
+    """Fixture adding daemons with the test attributes to the database and returns them in a queryset."""
     for number, int_test_item in enumerate(INT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
@@ -386,7 +407,10 @@ def daemon_queryset(unblocked_db, mailbox_queryset):
 
 
 @pytest.fixture(scope="package")
-def correspondent_queryset(unblocked_db):
+def correspondent_queryset(
+    unblocked_db,
+) -> QuerySet[CorrespondentModel, CorrespondentModel]:
+    """Fixture adding correspondents with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
@@ -400,7 +424,8 @@ def correspondent_queryset(unblocked_db):
 
 
 @pytest.fixture(scope="package")
-def mailinglist_queryset(unblocked_db):
+def mailinglist_queryset(unblocked_db) -> QuerySet[MailingListModel, MailingListModel]:
+    """Fixture adding mailinglists with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
@@ -424,7 +449,8 @@ def email_queryset(
     mailbox_queryset,
     correspondent_queryset,
     mailinglist_queryset,
-):
+) -> QuerySet[EMailModel, EMailModel]:
+    """Fixture adding emails with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             new_email = baker.make(
@@ -450,7 +476,10 @@ def email_queryset(
 
 
 @pytest.fixture(scope="package")
-def attachment_queryset(unblocked_db, email_queryset):
+def attachment_queryset(
+    unblocked_db, email_queryset
+) -> QuerySet[AttachmentModel, AttachmentModel]:
+    """Fixture adding attachments with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(

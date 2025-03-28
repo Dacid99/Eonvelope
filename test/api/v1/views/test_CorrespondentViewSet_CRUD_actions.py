@@ -19,7 +19,7 @@
 """Test module for :mod:`api.v1.views.CorrespondentViewSet`'s basic CRUD actions.
 
 Fixtures:
-    :func:`fixture_correspondentPayload`: Creates clean :class:`core.models.CorrespondentModel.CorrespondentModel` payload for a patch, post or put request.
+    :func:`fixture_correspondentPayload`: Fixture creating clean :class:`core.models.CorrespondentModel.CorrespondentModel` payload for a patch, post or put request.
 """
 
 from __future__ import annotations
@@ -44,7 +44,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def correspondentPayload(emailModel) -> dict[str, Any]:
-    """Creates clean :class:`core.models.CorrespondentModel.CorrespondentModel` payload for a patch, post or put request.
+    """Fixture creating clean :class:`core.models.CorrespondentModel.CorrespondentModel` payload for a patch, post or put request.
 
     Args:
         emailModel: Depends on :func:`fixture_emailModel`.

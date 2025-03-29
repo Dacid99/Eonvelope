@@ -127,12 +127,12 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             with self.account.get_fetcher() as fetcher:
                 fetcher.test(self)
         except MailboxError as error:
-            logger.info("Failed testing %s failed with error: %s.", self, error)
+            logger.info("Failed testing %s with error: %s.", self, error)
             self.is_healthy = False
             self.save(update_fields=["is_healthy"])
             raise
         except MailAccountError as error:
-            logger.info("Failed testing %s  with error %s.", self.account, error)
+            logger.info("Failed testing %s with error %s.", self.account, error)
             self.account.is_healthy = False
             self.account.save(update_fields=["is_healthy"])
             raise
@@ -152,13 +152,13 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
             MailboxError: If fetching failed.
         """
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
-        try:
-            with self.account.get_fetcher() as fetcher:
+        with self.account.get_fetcher() as fetcher:
+            try:
                 fetchedMails = fetcher.fetchEmails(self, criterion)
-        except MailboxError:
-            self.is_healthy = False
-            self.save(update_fields=["is_healthy"])
-            raise
+            except MailboxError:
+                self.is_healthy = False
+                self.save(update_fields=["is_healthy"])
+                raise
         self.is_healthy = True
         self.save(update_fields=["is_healthy"])
         logger.info("Successfully fetched emails.")

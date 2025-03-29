@@ -109,12 +109,7 @@ class DaemonViewSet(viewsets.ModelViewSet):
         daemon = self.get_object()
 
         availableFetchingOptions = daemon.mailbox.getAvailableFetchingCriteria()
-        if availableFetchingOptions:
-            return Response({"options": availableFetchingOptions})
-        return Response(
-            {"error": "No fetching options available for this mailbox!"},
-            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-        )
+        return Response({"options": availableFetchingOptions})
 
     URL_PATH_TEST = "test"
     URL_NAME_TEST = "test"

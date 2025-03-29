@@ -22,9 +22,6 @@ from __future__ import annotations
 
 from rest_framework import serializers
 
-from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from core.models.MailingListModel import MailingListModel
-
 from ..emailcorrespondents_serializers.CorrespondentEMailSerializer import (
     CorrespondentEMailSerializer,
 )
@@ -61,7 +58,7 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
     via :func:`get_mailinglists`.
     """
 
-    def get_emails(self, instance: CorrespondentModel) -> ReturnDict | None:
+    def get_emails(self, instance: CorrespondentModel) -> ReturnDict | list:
         """Serializes the emails connected to the instance to be serialized.
 
         Args:
@@ -74,15 +71,15 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
         request = self.context.get("request")
         user = getattr(request, "user", None)
         if user is not None:
-            correspondentemails = EMailCorrespondentsModel.objects.filter(
-                correspondent=instance, email__mailbox__account__user=user
+            correspondentemails = instance.correspondentemails.filter(
+                email__mailbox__account__user=user
             ).distinct()
             return CorrespondentEMailSerializer(
                 correspondentemails, many=True, read_only=True
             ).data
         return []
 
-    def get_mailinglists(self, instance: CorrespondentModel) -> ReturnDict | None:
+    def get_mailinglists(self, instance: CorrespondentModel) -> ReturnDict | list:
         """Serializes the emails connected to the instance to be serialized.
 
         Args:
@@ -90,14 +87,12 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
 
         Returns:
             The serialized emails connected to the instance to be serialized.
-            An empty list if the the user is not authenticated.
         """
         request = self.context.get("request")
         user = getattr(request, "user", None)
         if user is not None:
-            mailinglists = MailingListModel.objects.filter(
-                emails__correspondents=instance, emails__mailbox__account__user=user
-            ).distinct()
+            emails = instance.emails.filter(mailbox__account__user=user).all()
+            mailinglists = [email.mailinglist for email in emails]
             return SimpleMailingListSerializer(
                 mailinglists, many=True, read_only=True
             ).data

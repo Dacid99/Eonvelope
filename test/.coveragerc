@@ -6,9 +6,19 @@ omit =
     */docs/*
     */docker/*
     */.venv/*
+    */venv/*
     */manage.py
+    */asgi.py
+    */wsgi.py
+branch=True
 [report]
 format=total
+exclude_also =
+    if TYPE_CHECKING
+    if getattr\(self, "swagger_fake_view", False\):
+include_namespace_packages=True
+precision=2
+show_missing=True
 [html]
 directory = ../docs/build/html/pytest/cov
 show_contexts=True

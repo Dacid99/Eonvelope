@@ -25,11 +25,10 @@ from typing import TYPE_CHECKING, Final
 
 import django.db
 from dirtyfields import DirtyFieldsMixin
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.db import models
 
-from core.constants import EmailProtocolChoices
-
+from ..constants import EmailProtocolChoices
 from ..utils.fetchers.exceptions import MailAccountError
 from ..utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from ..utils.fetchers.IMAPFetcher import IMAPFetcher
@@ -77,7 +76,9 @@ class AccountModel(DirtyFieldsMixin, models.Model):
     is_favorite = models.BooleanField(default=False)
     """Flags favorite accounts. False by default."""
 
-    user = models.ForeignKey(User, related_name="accounts", on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        get_user_model(), related_name="accounts", on_delete=models.CASCADE
+    )
     """The user this account belongs to. Deletion of that `user` deletes this correspondent."""
 
     created = models.DateTimeField(auto_now_add=True)
@@ -145,7 +146,9 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         )
 
     def get_fetcher(self) -> BaseFetcher:
-        """Convenience method: Instantiates the fetcher from :class:`core.utils.fetchers` corresponding to :attr:`protocol`.
+        """Instantiates the fetcher from :class:`core.utils.fetchers` corresponding to :attr:`protocol`.
+
+        Handles possible errors instantiating the fetcher.
 
         Returns:
             A fetcher instance for the account.
@@ -153,8 +156,17 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         Raises:
             ValueError: If the protocol doesnt match any fetcher class.
                 Marks the account as unhealthy in this case.
+            MailAccountError: If the fetcher fails to initialize.
+                Marks the account as unhealthy in this case.
         """
-        return self.get_fetcher_class()(self)
+        try:
+            fetcher = self.get_fetcher_class()(self)
+        except MailAccountError:
+            logger.exception("Failed to instantiate fetcher for %s!", self)
+            self.is_healthy = False
+            self.save(update_fields=["is_healthy"])
+            raise
+        return fetcher
 
     def test_connection(self) -> None:
         """Tests whether the data in the model is correct.
@@ -189,13 +201,13 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         """
 
         logger.info("Updating mailboxes in %s...", self)
-        try:
-            with self.get_fetcher() as fetcher:
+        with self.get_fetcher() as fetcher:
+            try:
                 mailboxList = fetcher.fetchMailboxes()
-        except MailAccountError:
-            self.is_healthy = False
-            self.save(update_fields=["is_healthy"])
-            raise
+            except MailAccountError:
+                self.is_healthy = False
+                self.save(update_fields=["is_healthy"])
+                raise
         self.is_healthy = True
         self.save(update_fields=["is_healthy"])
 

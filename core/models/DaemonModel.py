@@ -125,9 +125,7 @@ class DaemonModel(DirtyFieldsMixin, models.Model):
         Returns:
             The string representation of the daemon, using :attr:`uuid` and :attr:`mailbox`.
         """
-        return (
-            f"Mailfetcher daemon configuration {self.uuid} for mailbox {self.mailbox}"
-        )
+        return f"Emailfetcherdaemon {self.uuid} for mailbox {self.mailbox}"
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:

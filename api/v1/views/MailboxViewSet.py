@@ -170,14 +170,14 @@ class MailboxViewSet(viewsets.ModelViewSet):
         mailboxSerializer = self.get_serializer(mailbox)
         try:
             mailbox.fetch(constants.EmailFetchingCriterionChoices.ALL)
-        except MailboxError as error:
+        except FetcherError as error:
             return Response(
                 {
-                    "detail": "Error with mailbox occured!",
+                    "detail": "Error with mailaccount or mailbox occured!",
                     "mailbox": mailboxSerializer.data,
                     "error": str(error),
                 },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(
             {"detail": "All mails fetched", "mailbox": mailboxSerializer.data}

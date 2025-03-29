@@ -18,8 +18,3 @@
 
 
 """Emailkasten.utils package containing utility for Emailkasten project."""
-
-from __future__ import annotations
-
-
-default_app_config = "Emailkasten.apps.Emailkasten.Config"

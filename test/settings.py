@@ -19,7 +19,7 @@
 """Settings for testing of the django project."""
 from __future__ import annotations
 
-from Emailkasten.settings import *  # pylint: disable=wildcard-import, unused-wildcard-import ; all settings need to be imported
+from Emailkasten.settings import *  # noqa: F403 ; pylint: disable=wildcard-import, unused-wildcard-import ; all settings need to be imported
 
 
 DATABASES = {

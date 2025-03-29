@@ -120,7 +120,7 @@ class AccountViewSet(viewsets.ModelViewSet):
                     "account": accountSerializer.data,
                     "error": str(error),
                 },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                status=status.HTTP_400_BAD_REQUEST,
             )
         return Response(
             data={"detail": "Updated mailboxes", "account": accountSerializer.data}

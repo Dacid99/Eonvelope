@@ -63,6 +63,7 @@ ignore = [
   "COM812", # trailing comma, redundant with `black`
   "D202",   # allow blank line after function docstring
   "D203",   # no blank line before class docstring
+  "D205",   # docstring summary can span more than one line
   "D401",   # docstring does not need to be imperative
   "D417",  # must be disabled for google style docs
   "ISC003",  # prefer explicit string concat over implicit concat
@@ -106,4 +107,5 @@ parametrize-values-type = "list"
 "/**/test/**/test_**.py" = [  # extend ignores for test_* files, so excluding conftests
   "S101", # asserts
   "F401", # unused import
+  "F811", # redefinition of unused
 ]

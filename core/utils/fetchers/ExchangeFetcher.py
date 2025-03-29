@@ -18,101 +18,101 @@
 
 """Module with the :class:`ExchangeFetcher` class."""
 
-from __future__ import annotations
+# from __future__ import annotations
 
-import logging
-from typing import TYPE_CHECKING, Literal
+# import logging
+# from typing import TYPE_CHECKING, Literal
 
-import exchangelib
+# import exchangelib
 
-from core import constants
+# from core import constants
 
-from ..exchangeMailParsing import ExchangeMailParser
-
-
-if TYPE_CHECKING:
-    from types import TracebackType
+# from ..exchangeMailParsing import ExchangeMailParser
 
 
-class ExchangeFetcher:
-    PROTOCOL = constants.EmailProtocolChoices.EXCHANGE
+# if TYPE_CHECKING:
+#     from types import TracebackType
 
-    AVAILABLE_FETCHING_CRITERIA = [
-        constants.EmailFetchingCriterionChoices.ALL,
-        constants.EmailFetchingCriterionChoices.UNSEEN,
-        constants.EmailFetchingCriterionChoices.RECENT,
-        constants.EmailFetchingCriterionChoices.NEW,
-        constants.EmailFetchingCriterionChoices.OLD,
-        constants.EmailFetchingCriterionChoices.FLAGGED,
-        constants.EmailFetchingCriterionChoices.DRAFT,
-        constants.EmailFetchingCriterionChoices.ANSWERED,
-        constants.EmailFetchingCriterionChoices.DAILY,
-        constants.EmailFetchingCriterionChoices.WEEKLY,
-        constants.EmailFetchingCriterionChoices.MONTHLY,
-        constants.EmailFetchingCriterionChoices.ANNUALLY,
-    ]
 
-    def __init__(
-        self,
-        username,
-        password,
-        primary_smtp_address=None,
-        server="outlook.office365.com",
-        fullname=None,
-        access_type=exchangelib.DELEGATE,
-        autodiscover=True,
-        locale=None,
-        default_timezone=None,
-    ) -> None:
-        self.logger = logging.getLogger(__name__)
+# class ExchangeFetcher:
+#     PROTOCOL = constants.EmailProtocolChoices.EXCHANGE
 
-        self.__credentials = exchangelib.Credentials(username, password)
-        self.__config = exchangelib.Configuration(
-            server=server, credentials=self.__credentials
-        )
+#     AVAILABLE_FETCHING_CRITERIA = [
+#         constants.EmailFetchingCriterionChoices.ALL,
+#         constants.EmailFetchingCriterionChoices.UNSEEN,
+#         constants.EmailFetchingCriterionChoices.RECENT,
+#         constants.EmailFetchingCriterionChoices.NEW,
+#         constants.EmailFetchingCriterionChoices.OLD,
+#         constants.EmailFetchingCriterionChoices.FLAGGED,
+#         constants.EmailFetchingCriterionChoices.DRAFT,
+#         constants.EmailFetchingCriterionChoices.ANSWERED,
+#         constants.EmailFetchingCriterionChoices.DAILY,
+#         constants.EmailFetchingCriterionChoices.WEEKLY,
+#         constants.EmailFetchingCriterionChoices.MONTHLY,
+#         constants.EmailFetchingCriterionChoices.ANNUALLY,
+#     ]
 
-        self.__mailhost = exchangelib.Account(
-            primary_smtp_address=primary_smtp_address,
-            fullname=fullname,
-            access_type=access_type,
-            autodiscover=autodiscover,
-            locale=locale,
-            default_timezone=default_timezone,
-        )
+#     def __init__(
+#         self,
+#         username,
+#         password,
+#         primary_smtp_address=None,
+#         server="outlook.office365.com",
+#         fullname=None,
+#         access_type=exchangelib.DELEGATE,
+#         autodiscover=True,
+#         locale=None,
+#         default_timezone=None,
+#     ) -> None:
+#         self.logger = logging.getLogger(__name__)
 
-    def fetchAllAndPrint(self) -> None:
-        for message in self.__mailhost.inbox.all().order_by("-datetime_received")[:10]:
-            mailParser = ExchangeMailParser(message)
-            print(mailParser.parseFrom())
+#         self.__credentials = exchangelib.Credentials(username, password)
+#         self.__config = exchangelib.Configuration(
+#             server=server, credentials=self.__credentials
+#         )
 
-    def close(self) -> None:
-        pass
+#         self.__mailhost = exchangelib.Account(
+#             primary_smtp_address=primary_smtp_address,
+#             fullname=fullname,
+#             access_type=access_type,
+#             autodiscover=autodiscover,
+#             locale=locale,
+#             default_timezone=default_timezone,
+#         )
 
-    def __enter__(self) -> ExchangeFetcher:
-        """Framework method for use of class in 'with' statement, creates an instance."""
-        self.logger.debug(str(self.__class__.__name__) + "._enter_")
-        return self
+#     def fetchAllAndPrint(self) -> None:
+#         for message in self.__mailhost.inbox.all().order_by("-datetime_received")[:10]:
+#             mailParser = ExchangeMailParser(message)
+#             print(mailParser.parseFrom())
 
-    def __exit__(
-        self,
-        exc_type: BaseException | None,
-        exc_value: BaseException | None,
-        traceback: TracebackType | None,
-    ) -> Literal[True]:
-        """Framework method for use of class in 'with' statement, closes an instance.
+#     def close(self) -> None:
+#         pass
 
-        Args:
-            exc_type: The exception type that raised close.
-            exc_value: The exception value that raised close.
-            traceback: The exception traceback that raised close.
+#     def __enter__(self) -> ExchangeFetcher:
+#         """Framework method for use of class in 'with' statement, creates an instance."""
+#         self.logger.debug(str(self.__class__.__name__) + "._enter_")
+#         return self
 
-        Returns:
-            True, exceptions are consumed.
-        """
-        self.logger.debug("Exiting")
-        self.close()
-        if exc_value or exc_type:
-            self.logger.error(
-                "Unexpected error %s occured!", exc_type, exc_info=exc_value
-            )
-        return True
+#     def __exit__(
+#         self,
+#         exc_type: BaseException | None,
+#         exc_value: BaseException | None,
+#         traceback: TracebackType | None,
+#     ) -> Literal[True]:
+#         """Framework method for use of class in 'with' statement, closes an instance.
+
+#         Args:
+#             exc_type: The exception type that raised close.
+#             exc_value: The exception value that raised close.
+#             traceback: The exception traceback that raised close.
+
+#         Returns:
+#             True, exceptions are consumed.
+#         """
+#         self.logger.debug("Exiting")
+#         self.close()
+#         if exc_value or exc_type:
+#             self.logger.error(
+#                 "Unexpected error %s occured!", exc_type, exc_info=exc_value
+#             )
+#         return True

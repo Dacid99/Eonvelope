@@ -46,16 +46,24 @@ class EMailArchiverDaemon(threading.Thread):
         Args:
             daemonModel: The data of the daemon.
         """
-        super().__init__(daemon=True, name=__name__ + f"_{daemonModel.uuid}")
         self._daemonModel: DaemonModel = daemonModel
+        super().__init__(daemon=True, name=str(self))
 
         self._stopEvent: threading.Event = threading.Event()
 
         self._setupLogger()
 
+    def __str__(self) -> str:
+        """Returns a string representation of the daemon instance.
+
+        Returns:
+            A string specifying the uuid and classname of this instance.
+        """
+        return f"{self.__class__.__name__} {self._daemonModel}"
+
     def _setupLogger(self) -> None:
         """Sets up the logger for the daemon with an additional filehandler for its own logfile."""
-        self.logger = logging.getLogger(__name__ + f".daemon_{self._daemonModel.id}")
+        self.logger = logging.getLogger(str(self))
         fileHandler = logging.handlers.RotatingFileHandler(
             filename=self._daemonModel.log_filepath,
             backupCount=self._daemonModel.log_backup_count,

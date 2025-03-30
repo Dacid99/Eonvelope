@@ -24,7 +24,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.views.generic import DetailView
 
-from api.v1.filters.AccountFilter import AccountFilter
 from core.models.AccountModel import AccountModel
 
 
@@ -33,8 +32,8 @@ class AccountDetailView(LoginRequiredMixin, DetailView):
 
     model = AccountModel
     template_name = "account/account_detail.html"
+    context_object_name = "account"
     URL_NAME = "account-detail"
-    filterset_class = AccountFilter
 
     @override
     def get_queryset(self) -> QuerySet:

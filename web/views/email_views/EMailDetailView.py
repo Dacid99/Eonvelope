@@ -24,7 +24,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.views.generic import DetailView
 
-from api.v1.filters.EMailFilter import EMailFilter
 from core.models.EMailModel import EMailModel
 
 
@@ -33,8 +32,8 @@ class EMailDetailView(LoginRequiredMixin, DetailView):
 
     model = EMailModel
     template_name = "email/email_detail.html"
+    context_object_name = "email"
     URL_NAME = "email-detail"
-    filterset_class = EMailFilter
 
     @override
     def get_queryset(self) -> QuerySet:

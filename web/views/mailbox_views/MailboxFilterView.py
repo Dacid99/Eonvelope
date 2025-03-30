@@ -22,18 +22,20 @@ from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.views.generic import ListView
+from django_filters.views import FilterView
 
+from api.v1.filters.MailboxFilter import MailboxFilter
 from core.models.MailboxModel import MailboxModel
 
 
-class MailboxFilterView(LoginRequiredMixin, ListView):
+class MailboxFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.MailboxModel.MailboxModel` instances."""
 
     model = MailboxModel
-    template_name = "mailbox_filter_list.html"
+    template_name = "mailbox/mailbox_filter_list.html"
     context_object_name = "mailboxes"
     URL_NAME = "mailbox-list"
+    filterset_class = MailboxFilter
 
     @override
     def get_queryset(self) -> QuerySet:

@@ -24,7 +24,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.views.generic import DetailView
 
-from api.v1.filters.DaemonFilter import DaemonFilter
 from core.models.DaemonModel import DaemonModel
 
 
@@ -33,8 +32,8 @@ class DaemonDetailView(LoginRequiredMixin, DetailView):
 
     model = DaemonModel
     template_name = "daemon/daemon_detail.html"
+    context_object_name = "daemon"
     URL_NAME = "daemon-detail"
-    filterset_class = DaemonFilter
 
     @override
     def get_queryset(self) -> QuerySet:

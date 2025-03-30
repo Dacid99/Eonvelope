@@ -24,7 +24,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.views.generic import DetailView
 
-from api.v1.filters.MailboxFilter import MailboxFilter
 from core.models.MailboxModel import MailboxModel
 
 
@@ -33,8 +32,8 @@ class MailboxDetailView(LoginRequiredMixin, DetailView):
 
     model = MailboxModel
     template_name = "mailbox/mailbox_detail.html"
+    context_object_name = "mailbox"
     URL_NAME = "mailbox-detail"
-    filterset_class = MailboxFilter
 
     @override
     def get_queryset(self) -> QuerySet:

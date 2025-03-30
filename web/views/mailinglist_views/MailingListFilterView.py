@@ -22,18 +22,20 @@ from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.views.generic import ListView
+from django_filters.views import FilterView
 
+from api.v1.filters.MailingListFilter import MailingListFilter
 from core.models.MailingListModel import MailingListModel
 
 
-class MailingListFilterView(LoginRequiredMixin, ListView):
+class MailingListFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.MailingListModel.MailingListModel` instances."""
 
     model = MailingListModel
-    template_name = "mailinglist_filter_list.html"
+    template_name = "mailinglist/mailinglist_filter_list.html"
     context_object_name = "mailinglists"
     URL_NAME = "mailinglist-list"
+    filterset_class = MailingListFilter
 
     @override
     def get_queryset(self) -> QuerySet:

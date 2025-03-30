@@ -24,7 +24,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.views.generic import DetailView
 
-from api.v1.filters.AttachmentFilter import AttachmentFilter
 from core.models.AttachmentModel import AttachmentModel
 
 
@@ -33,8 +32,8 @@ class AttachmentDetailView(LoginRequiredMixin, DetailView):
 
     model = AttachmentModel
     template_name = "attachment/attachment_detail.html"
+    context_object_name = "attachment"
     URL_NAME = "attachment-detail"
-    filterset_class = AttachmentFilter
 
     @override
     def get_queryset(self) -> QuerySet:

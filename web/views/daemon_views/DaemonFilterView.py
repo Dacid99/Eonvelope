@@ -22,18 +22,20 @@ from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.views.generic import ListView
+from django_filters.views import FilterView
 
+from api.v1.filters.DaemonFilter import DaemonFilter
 from core.models.DaemonModel import DaemonModel
 
 
-class DaemonFilterView(LoginRequiredMixin, ListView):
+class DaemonFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.DaemonModel.DaemonModel` instances."""
 
     model = DaemonModel
-    template_name = "daemon_filter_list.html"
+    template_name = "daemon/daemon_filter_list.html"
     context_object_name = "daemons"
     URL_NAME = "daemon-list"
+    filterset_class = DaemonFilter
 
     @override
     def get_queryset(self) -> QuerySet:

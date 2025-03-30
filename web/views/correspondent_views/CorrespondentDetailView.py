@@ -24,7 +24,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.views.generic import DetailView
 
-from api.v1.filters.CorrespondentFilter import CorrespondentFilter
 from core.models.CorrespondentModel import CorrespondentModel
 
 
@@ -33,8 +32,8 @@ class CorrespondentDetailView(LoginRequiredMixin, DetailView):
 
     model = CorrespondentModel
     template_name = "correspondent/correspondent_detail.html"
+    context_object_name = "correspondent"
     URL_NAME = "correspondent-detail"
-    filterset_class = CorrespondentFilter
 
     @override
     def get_queryset(self) -> QuerySet:

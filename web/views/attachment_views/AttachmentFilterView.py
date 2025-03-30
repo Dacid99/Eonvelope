@@ -22,18 +22,20 @@ from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.views.generic import ListView
+from django_filters.views import FilterView
 
+from api.v1.filters.AttachmentFilter import AttachmentFilter
 from core.models.AttachmentModel import AttachmentModel
 
 
-class AttachmentFilterView(LoginRequiredMixin, ListView):
+class AttachmentFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.AttachmentModel.AttachmentModel` instances."""
 
     model = AttachmentModel
-    template_name = "attachment_filter_list.html"
+    template_name = "attachment/attachment_filter_list.html"
     context_object_name = "attachments"
     URL_NAME = "attachment-list"
+    filterset_class = AttachmentFilter
 
     @override
     def get_queryset(self) -> QuerySet:

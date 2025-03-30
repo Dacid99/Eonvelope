@@ -22,18 +22,20 @@ from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.views.generic import ListView
+from django_filters.views import FilterView
 
+from api.v1.filters.CorrespondentFilter import CorrespondentFilter
 from core.models.CorrespondentModel import CorrespondentModel
 
 
-class CorrespondentFilterView(LoginRequiredMixin, ListView):
+class CorrespondentFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.CorrespondentModel.CorrespondentModel` instances."""
 
     model = CorrespondentModel
-    template_name = "correspondent_filter_list.html"
+    template_name = "correspondent/correspondent_filter_list.html"
     context_object_name = "correspondents"
     URL_NAME = "correspondent-list"
+    filterset_class = CorrespondentFilter
 
     @override
     def get_queryset(self) -> QuerySet:

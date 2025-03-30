@@ -12,10 +12,7 @@ To make it easier to read and understand your pull requests please follow these 
 
 - Avoid suppressing warnings (e.g. by pylint and ruff) by annotations, this only hides potential issues. If such a warning is raised either fix it or explain why you cant in a comment. Only if the correct way to do something raises a warning a suppression should be used. Every suppression needs a comment why it is inevitable.
 
-- Commits should have a clear commit message prefaced with a keyword of what has been done.
-  Examples:
-  - fix: error where xyz fails when calling abc
-  - implementation: view for the object xyz
+- Commits should have a clear and descriptive commit message in a standardized format, please refer to [this article which desribes the format used for this project](https://www.seyhan.me/blog/post/lost-art-of-commit-messages).
 
 - Every single commit should be able to run, so the changes made in it must be complete. If not that has to be indicated in the commit message.
   The completing commit then mentions the commit it completes.

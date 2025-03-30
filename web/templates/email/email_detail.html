@@ -82,7 +82,7 @@
             <div class="card-body">
                 <h4 class="card-title">Correspondents</h4>
 
-                {% include "correspondent/partials/_correspondent_list.html" with correspondents=email.correspondents.all.distinct %}
+                {% include "emailcorrespondents/partials/_emailcorrespondents_list.html" with emailcorrespondents=email.emailcorrespondents.all %}
 
             </div>
         </div>

@@ -1,0 +1,11 @@
+<ul class="list-group">
+
+    {% for emailcorrespondent in emailcorrespondents %}
+        <li class="list-group-item list-group-item-action">
+
+            {% include "emailcorrespondents/partials/_emailcorrespondent_card.html" %}
+
+        </li>
+    {% endfor %}
+
+</ul>

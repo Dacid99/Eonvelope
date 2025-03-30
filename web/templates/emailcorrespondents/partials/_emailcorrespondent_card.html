@@ -1,0 +1,9 @@
+<a href="{% url 'web:correspondent-detail' emailcorrespondent.correspondent.pk %}">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ emailcorrespondent.mention }}</h5>
+            <h6 class="card-subtitle">{{ emailcorrespondent.correspondent.email_address }}</h6>
+            <h6 class="card-subtitle">{{ emailcorrespondent.correspondent.email_name }}</h6>
+        </div>
+    </div>
+</a>

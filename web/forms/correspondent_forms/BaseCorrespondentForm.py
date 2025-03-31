@@ -48,5 +48,5 @@ class BaseCorrespondentForm(forms.ModelForm):
         model: Final[type[Model]] = CorrespondentModel
         """The model behind the form."""
 
-        fields: ClassVar[list[str]] = ["email_name"]
+        fields: ClassVar[list[str]] = ["email_name", "is_favorite"]
         """Exposes only the :attr:`core.models.CorrespondentModel.CorrespondentModel.email_name` field."""

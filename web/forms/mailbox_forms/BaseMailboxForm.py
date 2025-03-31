@@ -48,5 +48,5 @@ class BaseMailboxForm(forms.ModelForm):
         model: Final[type[Model]] = MailboxModel
         """The model to serialize."""
 
-        fields: ClassVar[list[str]] = ["save_toEML", "save_attachments"]
+        fields: ClassVar[list[str]] = ["save_toEML", "save_attachments", "is_favorite"]
         """Exposes all fields that the user should be able to change."""

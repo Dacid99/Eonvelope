@@ -55,5 +55,6 @@ class BaseAccountForm(forms.ModelForm):
             "protocol",
             "mail_host_port",
             "timeout",
+            "is_favorite",
         ]
         """Exposes all fields that the user should be able to change."""

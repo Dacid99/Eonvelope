@@ -85,6 +85,8 @@ def test_EMailCorrespondentsModel_foreign_key_email_deletion(emailCorrespondentM
 
     with pytest.raises(EMailCorrespondentsModel.DoesNotExist):
         emailCorrespondentModel.refresh_from_db()
+    emailCorrespondentModel.correspondent.refresh_from_db()
+    assert emailCorrespondentModel.correspondent is not None
 
 
 @pytest.mark.django_db
@@ -96,6 +98,8 @@ def test_EMailCorrespondentsModel_foreign_key_correspondent_deletion(
 
     with pytest.raises(EMailCorrespondentsModel.DoesNotExist):
         emailCorrespondentModel.refresh_from_db()
+    emailCorrespondentModel.email.refresh_from_db()
+    assert emailCorrespondentModel.email is not None
 
 
 @pytest.mark.django_db

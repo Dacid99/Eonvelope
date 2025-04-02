@@ -37,28 +37,31 @@ from django.urls import include, path
 
 from .views.account_views import (
     AccountCreateView,
-    AccountDetailView,
+    AccountDetailWithDeleteView,
     AccountFilterView,
     AccountUpdateOrDeleteView,
 )
-from .views.attachment_views import AttachmentDetailView, AttachmentFilterView
+from .views.attachment_views import AttachmentDetailWithDeleteView, AttachmentFilterView
 from .views.correspondent_views import (
-    CorrespondentDetailView,
+    CorrespondentDetailWithDeleteView,
     CorrespondentFilterView,
     CorrespondentUpdateOrDeleteView,
 )
 from .views.daemon_views import (
-    DaemonDetailView,
+    DaemonDetailWithDeleteView,
     DaemonFilterView,
     DaemonUpdateOrDeleteView,
 )
-from .views.email_views import EMailDetailView, EMailFilterView
+from .views.email_views import EMailDetailWithDeleteView, EMailFilterView
 from .views.mailbox_views import (
-    MailboxDetailView,
+    MailboxDetailWithDeleteView,
     MailboxFilterView,
     MailboxUpdateOrDeleteView,
 )
-from .views.mailinglist_views import MailingListDetailView, MailingListFilterView
+from .views.mailinglist_views import (
+    MailingListDetailWithDeleteView,
+    MailingListFilterView,
+)
 
 
 app_name = "web"
@@ -72,8 +75,8 @@ urlpatterns = [
     ),
     path(
         "accounts/<int:pk>/details/",
-        AccountDetailView.AccountDetailView.as_view(),
-        name=AccountDetailView.AccountDetailView.URL_NAME,
+        AccountDetailWithDeleteView.AccountDetailWithDeleteView.as_view(),
+        name=AccountDetailWithDeleteView.AccountDetailWithDeleteView.URL_NAME,
     ),
     path(
         "accounts/<int:pk>/edit/",
@@ -92,8 +95,8 @@ urlpatterns = [
     ),
     path(
         "attachments/<int:pk>/details/",
-        AttachmentDetailView.AttachmentDetailView.as_view(),
-        name=AttachmentDetailView.AttachmentDetailView.URL_NAME,
+        AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView.as_view(),
+        name=AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView.URL_NAME,
     ),
     path(
         "correspondents/",
@@ -102,8 +105,8 @@ urlpatterns = [
     ),
     path(
         "correspondents/<int:pk>/details/",
-        CorrespondentDetailView.CorrespondentDetailView.as_view(),
-        name=CorrespondentDetailView.CorrespondentDetailView.URL_NAME,
+        CorrespondentDetailWithDeleteView.CorrespondentDetailWithDeleteView.as_view(),
+        name=CorrespondentDetailWithDeleteView.CorrespondentDetailWithDeleteView.URL_NAME,
     ),
     path(
         "correspondents/<int:pk>/edit/",
@@ -117,8 +120,8 @@ urlpatterns = [
     ),
     path(
         "daemons/<int:pk>/details/",
-        DaemonDetailView.DaemonDetailView.as_view(),
-        name=DaemonDetailView.DaemonDetailView.URL_NAME,
+        DaemonDetailWithDeleteView.DaemonDetailWithDeleteView.as_view(),
+        name=DaemonDetailWithDeleteView.DaemonDetailWithDeleteView.URL_NAME,
     ),
     path(
         "daemons/<int:pk>/edit/",
@@ -132,8 +135,8 @@ urlpatterns = [
     ),
     path(
         "emails/<int:pk>/details/",
-        EMailDetailView.EMailDetailView.as_view(),
-        name=EMailDetailView.EMailDetailView.URL_NAME,
+        EMailDetailWithDeleteView.EMailDetailWithDeleteView.as_view(),
+        name=EMailDetailWithDeleteView.EMailDetailWithDeleteView.URL_NAME,
     ),
     path(
         "mailboxes/",
@@ -142,8 +145,8 @@ urlpatterns = [
     ),
     path(
         "mailboxes/<int:pk>/details/",
-        MailboxDetailView.MailboxDetailView.as_view(),
-        name=MailboxDetailView.MailboxDetailView.URL_NAME,
+        MailboxDetailWithDeleteView.MailboxDetailWithDeleteView.as_view(),
+        name=MailboxDetailWithDeleteView.MailboxDetailWithDeleteView.URL_NAME,
     ),
     path(
         "mailboxes/<int:pk>/edit/",
@@ -157,7 +160,7 @@ urlpatterns = [
     ),
     path(
         "mailinglists/<int:pk>/details/",
-        MailingListDetailView.MailingListDetailView.as_view(),
-        name=MailingListDetailView.MailingListDetailView.URL_NAME,
+        MailingListDetailWithDeleteView.MailingListDetailWithDeleteView.as_view(),
+        name=MailingListDetailWithDeleteView.MailingListDetailWithDeleteView.URL_NAME,
     ),
 ]

@@ -16,26 +16,30 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`DaemonDetailView` view."""
+"""Module with the :class:`EMailDetailWithDeleteView` view."""
 
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
+from django.views.generic.edit import DeletionMixin
 
-from core.models.DaemonModel import DaemonModel
+from core.models.EMailModel import EMailModel
+from web.views.email_views.EMailFilterView import EMailFilterView
 
 
-class DaemonDetailView(LoginRequiredMixin, DetailView):
-    """View for a single :class:`core.models.DaemonModel.DaemonModel` instance."""
+class EMailDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
+    """View for a single :class:`core.models.EMailModel.EMailModel` instance."""
 
-    model = DaemonModel
-    template_name = "daemon/daemon_detail.html"
-    context_object_name = "daemon"
-    URL_NAME = DaemonModel.get_detail_web_url_name()
+    URL_NAME = EMailModel.get_detail_web_url_name()
+    model = EMailModel
+    template_name = "email/email_detail.html"
+    context_object_name = "email"
+    success_url = reverse_lazy("web:" + EMailFilterView.URL_NAME)
 
     @override
     def get_queryset(self) -> QuerySet:
         """Restricts the queryset to objects owned by the requesting user."""
-        return DaemonModel.objects.filter(mailbox__account__user=self.request.user)
+        return EMailModel.objects.filter(mailbox__account__user=self.request.user)

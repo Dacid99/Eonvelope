@@ -16,24 +16,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailingListDetailView` view."""
+"""Module with the :class:`MailingListDetailWithDeleteView` view."""
 
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
+from django.views.generic.edit import DeletionMixin
 
 from core.models.MailingListModel import MailingListModel
+from web.views.mailinglist_views.MailingListFilterView import MailingListFilterView
 
 
-class MailingListDetailView(LoginRequiredMixin, DetailView):
+class MailingListDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
     """View for a single :class:`core.models.MailingListModel.MailingListModel` instance."""
 
+    URL_NAME = MailingListModel.get_detail_web_url_name()
     model = MailingListModel
     template_name = "mailinglist/mailinglist_detail.html"
     context_object_name = "mailinglist"
-    URL_NAME = MailingListModel.get_detail_web_url_name()
+    success_url = reverse_lazy("web:" + MailingListFilterView.URL_NAME)
 
     @override
     def get_queryset(self) -> QuerySet:

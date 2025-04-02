@@ -11,6 +11,8 @@
             <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
                 <div class="btn-group" role="group" aria-label="Edit button group">
 
+                    {% include "partials/_delete-button.html" with object=correspondent %}
+
                     {% include "partials/_edit-button.html" with object=correspondent %}
 
                 </div>

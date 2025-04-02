@@ -16,26 +16,32 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`EMailDetailView` view."""
+"""Module with the :class:`AttachmentDetailWithDeleteView` view."""
 
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
+from django.views.generic.edit import DeletionMixin
 
-from core.models.EMailModel import EMailModel
+from core.models.AttachmentModel import AttachmentModel
+from web.views.attachment_views.AttachmentFilterView import AttachmentFilterView
 
 
-class EMailDetailView(LoginRequiredMixin, DetailView):
-    """View for a single :class:`core.models.EMailModel.EMailModel` instance."""
+class AttachmentDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
+    """View for a single :class:`core.models.AttachmentModel.AttachmentModel` instance."""
 
-    model = EMailModel
-    template_name = "email/email_detail.html"
-    context_object_name = "email"
-    URL_NAME = EMailModel.get_detail_web_url_name()
+    URL_NAME = AttachmentModel.get_detail_web_url_name()
+    model = AttachmentModel
+    template_name = "attachment/attachment_detail.html"
+    context_object_name = "attachment"
+    success_url = reverse_lazy("web:" + AttachmentFilterView.URL_NAME)
 
     @override
     def get_queryset(self) -> QuerySet:
         """Restricts the queryset to objects owned by the requesting user."""
-        return EMailModel.objects.filter(mailbox__account__user=self.request.user)
+        return AttachmentModel.objects.filter(
+            email__mailbox__account__user=self.request.user
+        )

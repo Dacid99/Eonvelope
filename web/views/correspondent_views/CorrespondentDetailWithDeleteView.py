@@ -16,26 +16,34 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailboxDetailView` view."""
+"""Module with the :class:`CorrespondentDetailWithDeleteView` view."""
 
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
+from django.urls import reverse_lazy
 from django.views.generic import DetailView
+from django.views.generic.edit import DeletionMixin
 
-from core.models.MailboxModel import MailboxModel
+from core.models.CorrespondentModel import CorrespondentModel
+from web.views.correspondent_views.CorrespondentFilterView import (
+    CorrespondentFilterView,
+)
 
 
-class MailboxDetailView(LoginRequiredMixin, DetailView):
-    """View for a single :class:`core.models.MailboxModel.MailboxModel` instance."""
+class CorrespondentDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
+    """View for a single :class:`core.models.CorrespondentModel.CorrespondentModel` instance."""
 
-    model = MailboxModel
-    template_name = "mailbox/mailbox_detail.html"
-    context_object_name = "mailbox"
-    URL_NAME = MailboxModel.get_detail_web_url_name()
+    URL_NAME = CorrespondentModel.get_detail_web_url_name()
+    model = CorrespondentModel
+    template_name = "correspondent/correspondent_detail.html"
+    context_object_name = "correspondent"
+    success_url = reverse_lazy("web:" + CorrespondentFilterView.URL_NAME)
 
     @override
     def get_queryset(self) -> QuerySet:
         """Restricts the queryset to objects owned by the requesting user."""
-        return MailboxModel.objects.filter(account__user=self.request.user)
+        return CorrespondentModel.objects.filter(
+            emails__mailbox__account__user=self.request.user
+        ).distinct()

@@ -16,44 +16,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.v1.views.MailingListViewSet`'s basic CRUD actions.
-
-Fixtures:
-    :func:`fixture_mailingListPayload`: Fixture creating clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
-
-"""
+"""Test module for :mod:`api.v1.views.MailingListViewSet`'s basic CRUD actions."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import pytest
-from django.forms.models import model_to_dict
-from model_bakery import baker
 from rest_framework import status
 
 from api.v1.views.MailingListViewSet import MailingListViewSet
 from core.models.MailingListModel import MailingListModel
-
-
-if TYPE_CHECKING:
-    from typing import Any
-
-
-@pytest.fixture
-def mailingListPayload(emailModel) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.MailingListModel.MailingListModel` payload for a patch, post or put request.
-
-    Args:
-        emailModel: Depends on :func:`fixture_emailModel`.
-
-    Returns:
-        The clean payload.
-    """
-    mailinglistData = baker.prepare(MailingListModel, emails=[emailModel])
-    payload = model_to_dict(mailinglistData)
-    payload.pop("id")
-    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.mark.django_db

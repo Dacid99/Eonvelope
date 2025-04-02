@@ -1,4 +1,4 @@
-<a href="{% url 'web:mailinglist-detail' pk=mailinglist.pk %}">
+<a href="{{ mailinglist.get_absolute_url }}">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">

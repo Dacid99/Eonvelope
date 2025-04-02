@@ -1,4 +1,4 @@
-<a href="{% url 'web:daemon-detail' pk=daemon.pk %}">
+<a href="{{ daemon.get_absolute_url }}">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">

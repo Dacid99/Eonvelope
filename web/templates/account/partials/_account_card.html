@@ -1,4 +1,4 @@
-<a href="{% url 'web:account-detail' pk=account.pk %}">
+<a href="{{ account.get_absolute_url }}">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">

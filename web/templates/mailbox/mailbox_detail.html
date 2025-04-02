@@ -17,7 +17,7 @@
 
             <h2 class="card-title">{{ mailbox.name }}</h2>
             <h3 class="card-subtitle link-primary">
-                <a href="{% url 'web:account-detail' pk=mailbox.account.pk %}">{{ mailbox.account.mail_address }}</a>
+                <a href="{{ mailbox.account.get_absolute_url }}">{{ mailbox.account.mail_address }}</a>
             </h3>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Save attachments: {{ mailbox.save_attachments }}</li>

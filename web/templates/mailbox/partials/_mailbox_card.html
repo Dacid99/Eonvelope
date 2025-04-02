@@ -1,4 +1,4 @@
-<a href="{% url 'web:mailbox-detail' pk=mailbox.pk %}">
+<a href="{{ mailbox.get_absolute_url }}">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">

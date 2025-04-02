@@ -1,4 +1,4 @@
-<a href="{% url 'web:attachment-detail' pk=attachment.pk %}">
+<a href="{{ attachment.get_absolute_url }}">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">

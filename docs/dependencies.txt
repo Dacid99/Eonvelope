@@ -1,9 +1,0 @@
-sphinx
-sphinx-rtd-theme
-sphinxcontrib-napoleon
-sphinxcontrib-apidoc
-sphinxcontrib-django
-sphinx-autodoc-typehints
-myst-parser
-pydeps
-pydotplus

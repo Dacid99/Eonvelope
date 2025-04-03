@@ -12,17 +12,43 @@ sudo apt-get -y update && apt-get -y install build-essential default-mysql-clien
 
 Then to install the python dependencies start a new virtual environment and activate it:
 
+
+[Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies of this project.
+
+First install [pipx](https://pipx.pypa.io/stable/installation/) and use it to install poetry:
+
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
+pipx install poetry
 ```
 
-Then install the dependencies:
+You can then add the tab completions for it by:
 
 ```bash
-pip install -Ur dependencies.txt
-pip install -Ur dev-dependencies.txt
-pip install -Ur docs/dependencies.txt
+poetry completions bash >> ~/.bash_completion
+```
+
+If you prefer to have the virtual environment inside the project root (which we recommend), you need to change one poetry config:
+
+```bash
+poetry config virtualenvs.in-project true
+```
+
+Then install all the dependencies to a virtual environment:
+
+```bash
+poetry install --with dev,docs
+```
+
+Finally you can activate the venv with
+
+```bash
+eval $(poetry env activate)
+```
+
+or if you have set up the venv in the project root as explained above
+
+```bash
+source .venv/bin/activate
 ```
 
 Depending on your OS, the mysqlclient package may cause problems, this can usually be solved by installing a missing system package.
@@ -61,6 +87,6 @@ git config core.hooksPath validation/githooks/
 - pylint (with setting "pylint.args": ["--rcfile=validation/pylintrc(_strict)_extension"] )
 - mypy (with setting "mypy-type-checker.args": ["--config-file=validation/mypy_extension.ini"] )
 - black (with setting "mypy-type-checker.args": ["--config=validation/black_config"] )
-- isort
+- python poetry
 - ANSI colors (iliazeus.vscode-ansi) (for validation reports)
 - reStructuredText (lextudio.restructuredtext) for docs

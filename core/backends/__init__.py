@@ -16,30 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""The apps module for :mod:`core`."""
-from __future__ import annotations
-
-from django.apps import AppConfig
-from health_check.plugins import plugin_dir
-
-
-class CoreConfig(AppConfig):
-    """App config for :mod:`core`."""
-
-    default_auto_field = "django.db.models.BigAutoField"
-    name = "core"
-
-    def ready(self) -> None:
-        """Imports all model signals."""
-        # ruff: noqa: F401
-        # pylint: disable=import-outside-toplevel, unused-import ; this is the way it is intended by django
-        from .backends import StorageIntegrityCheckBackend
-
-        plugin_dir.register(StorageIntegrityCheckBackend)
-
-        from .signals import (
-            delete_DaemonModel,
-            save_AccountModel,
-            save_DaemonModel,
-            save_MailboxModel,
-        )
+"""core.backends package containing additional backends for the Emailkasten application."""

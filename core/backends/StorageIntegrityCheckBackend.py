@@ -16,30 +16,25 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""The apps module for :mod:`core`."""
-from __future__ import annotations
+"""Module with the :class:`core.backends.StorageIntegrityCheckBackend.StorageIntegrityCheckBackend` class."""
 
-from django.apps import AppConfig
-from health_check.plugins import plugin_dir
+from health_check.backends import BaseHealthCheckBackend, HealthCheckException
+
+from core.models.StorageModel import StorageModel
 
 
-class CoreConfig(AppConfig):
-    """App config for :mod:`core`."""
+class StorageIntegrityCheckBackend(BaseHealthCheckBackend):
+    """Health check backend for :func:`core.models.StorageModel.StorageModel.healthcheck`."""
 
-    default_auto_field = "django.db.models.BigAutoField"
-    name = "core"
+    critical_service = False
 
-    def ready(self) -> None:
-        """Imports all model signals."""
-        # ruff: noqa: F401
-        # pylint: disable=import-outside-toplevel, unused-import ; this is the way it is intended by django
-        from .backends import StorageIntegrityCheckBackend
+    def check_status(self) -> None:
+        """Implements the healthcheck.
 
-        plugin_dir.register(StorageIntegrityCheckBackend)
-
-        from .signals import (
-            delete_DaemonModel,
-            save_AccountModel,
-            save_DaemonModel,
-            save_MailboxModel,
-        )
+        Raises:
+            HealthCheckException: If :func:`core.models.StorageModel.StorageModel.healthcheck` fails.
+        """
+        if not StorageModel.healthcheck():
+            raise HealthCheckException(
+                "The storage integrity is compromised, check the logs for critical level errors!"
+            )

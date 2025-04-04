@@ -77,6 +77,8 @@ INSTALLED_APPS = [
     "health_check.db",
     "health_check.storage",
     "health_check.cache",
+    "health_check.contrib.migrations",
+    "health_check.contrib.psutil",
     "Emailkasten",
     "core",
     "api",

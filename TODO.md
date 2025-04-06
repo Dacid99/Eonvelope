@@ -8,7 +8,6 @@
 - custom additional healthchecks
 - user divided storage to make file_paths unique again
 - combined filter for correspondent with mention
-- refine storage management error correction
 - streamable logs for daemons
 - threadsafe db operations in daemons
 - filtertest for choices

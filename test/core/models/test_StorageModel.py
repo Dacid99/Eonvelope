@@ -61,29 +61,33 @@ def mock_filesystem() -> Generator[FakeFilesystem, None, None]:
 
         patcher.fs.create_dir("/empty-storage")
 
-        patcher.fs.create_dir("/full-storage")
-        patcher.fs.create_file("/full-storage/file", contents="Im not empty!")
+        patcher.fs.create_dir("/non-empty-storage")
+        patcher.fs.create_file("/non-empty-storage/file", contents="Im not empty!")
 
-        patcher.fs.create_dir("/conflicting-storage/0")
-        patcher.fs.create_file("/conflicting-storage/0/test", contents="Im not empty!")
+        patcher.fs.create_dir("/conflicting-storage-v1/0")
+        patcher.fs.create_file(
+            "/conflicting-storage-v1/0/test", contents="Im not empty!"
+        )
+
+        patcher.fs.create_file("/conflicting-storage-v2/0", contents="Im not empty!")
 
         yield patcher.fs
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "STORAGE_PATH, expectedCritical",
+    "STORAGE_PATH",
     [
-        ("empty-storage", False),
-        ("full-storage", True),
-        ("conflicting-storage", True),
+        ("empty-storage"),
+        ("non-empty-storage"),
+        ("conflicting-storage-v1"),
+        ("conflicting-storage-v2"),
     ],
 )
 def test_StorageModel_initial_single_creation(
     mock_logger,
     override_config,
     STORAGE_PATH,
-    expectedCritical,
 ):
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
@@ -91,8 +95,7 @@ def test_StorageModel_initial_single_creation(
         subdirectory = StorageModel.getSubdirectory("test")
 
     assert os.path.isdir(subdirectory)
-    assert subdirectory == os.path.join(STORAGE_PATH, "0", "test")
-    mock_logger.critical.called = expectedCritical
+    assert subdirectory.startswith(STORAGE_PATH)
     mock_logger.info.assert_called()
 
     assert StorageModel.objects.count() == 1
@@ -112,7 +115,6 @@ def test_StorageModel_initial_many_creation(mock_logger):
     for number in range(2 * 3 + 1):
         StorageModel.getSubdirectory(f"test_{number}")
 
-    mock_logger.critical.assert_not_called()
     mock_logger.info.assert_called()
 
     assert StorageModel.objects.filter(current=True).count() == 1
@@ -130,7 +132,21 @@ def test_StorageModel_initial_many_creation(mock_logger):
 @pytest.mark.override_config(
     STORAGE_PATH="empty-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
 )
-def test_StorageModel_health_check_success():
+def test_StorageModel_single_creation_healthcheck_success():
+    """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
+
+    StorageModel.getSubdirectory("test")
+
+    health = StorageModel.healthcheck()
+
+    assert health
+
+
+@pytest.mark.django_db
+@pytest.mark.override_config(
+    STORAGE_PATH="empty-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
+)
+def test_StorageModel_many_creation_health_check_success():
     """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
 
     for number in range(2 * 3 + 1):
@@ -146,8 +162,7 @@ def test_StorageModel_health_check_success():
     STORAGE_PATH="empty-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
 )
 def test_StorageModel_health_check_failed_duplicate_current(mock_logger):
-    """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
-
+    """Tests the storage healthcheck in case of a duplicate `current` directory."""
     for number in range(2 * 3 + 1):
         StorageModel.getSubdirectory(f"test_{number}")
     StorageModel.objects.create(directory_number=10, current=True)
@@ -159,16 +174,24 @@ def test_StorageModel_health_check_failed_duplicate_current(mock_logger):
 
 
 @pytest.mark.django_db
-@pytest.mark.override_config(
-    STORAGE_PATH="conflicting-storage", STORAGE_MAX_SUBDIRS_PER_DIR=3
+@pytest.mark.parametrize(
+    "STORAGE_PATH",
+    [
+        ("non-empty-storage"),
+        ("conflicting-storage-v1"),
+        ("conflicting-storage-v2"),
+    ],
 )
-def test_StorageModel_health_check_failed_dirty_storage(mock_logger):
-    """Tests the correct initial allocation of storage by :class:`core.models.StorageModel.StorageModel`."""
+def test_StorageModel_health_check_failed_dirty_storage(
+    override_config, mock_logger, STORAGE_PATH
+):
+    """Tests the storage healthcheck in case of dirty storage."""
 
-    for number in range(2 * 3 + 1):
-        StorageModel.getSubdirectory(f"test_{number}")
+    with override_config(STORAGE_PATH=STORAGE_PATH, STORAGE_MAX_SUBDIRS_PER_DIR=3):
+        for number in range(2 * 3 + 1):
+            StorageModel.getSubdirectory(f"test_{number}")
 
-    health = StorageModel.healthcheck()
+        health = StorageModel.healthcheck()
 
     assert not health
     mock_logger.critical.assert_called()

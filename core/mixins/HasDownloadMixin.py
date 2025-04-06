@@ -19,6 +19,9 @@
 """Module with the :class:`HasDownloadMixin` mixin."""
 
 
+from django.urls import reverse
+
+
 class HasDownloadMixin:
     """Mixin providing a property to check whether a model instance provides a download."""
 
@@ -26,3 +29,7 @@ class HasDownloadMixin:
     def has_download(self) -> bool:
         """Checks whether a download is possible for the instance."""
         return False
+
+    def get_absolute_download_url(self) -> str:
+        """Returns the url of the download api endpoint."""
+        return reverse(f"api:v1:{self.BASENAME}-download", kwargs={"pk": self.pk})

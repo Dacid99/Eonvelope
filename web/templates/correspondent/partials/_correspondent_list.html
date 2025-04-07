@@ -1,11 +1,5 @@
-<ul class="list-group">
+{% for correspondent in correspondents %}
 
-    {% for correspondent in correspondents %}
-        <li class="list-group-item list-group-item-action">
+    {% include "correspondent/partials/_correspondent_card.html" %}
 
-            {% include "correspondent/partials/_correspondent_card.html" %}
-
-        </li>
-    {% endfor %}
-
-</ul>
+{% endfor %}

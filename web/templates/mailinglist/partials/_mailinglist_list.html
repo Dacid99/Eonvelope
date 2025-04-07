@@ -1,11 +1,5 @@
-<ul class="list-group">
+{% for mailinglist in mailinglists %}
 
-    {% for mailinglist in mailinglists %}
-        <li class="list-group-item list-group-item-action">
+    {% include "mailinglist/partials/_mailinglist_card.html" %}
 
-            {% include "mailinglist/partials/_mailinglist_card.html" %}
-
-        </li>
-    {% endfor %}
-
-</ul>
+{% endfor %}

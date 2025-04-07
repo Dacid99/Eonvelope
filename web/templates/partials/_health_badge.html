@@ -1,7 +1,9 @@
-<span class="badge bg-secondary text-end shadow">
-    {% if object.is_healthy %}
-        <i class="fa-regular fa-circle-check textsuccess"></i>
-    {% else %}
-        <i class="fa-solid fa-exclamation text-danger"></i>
-    {% endif %}
-</span>
+{% if object.is_healthy %}
+    <span class="badge bg-secondary text-end shadow text-bg-success">
+        <i class="fa-regular fa-circle-check text-light"></i>
+    </span>
+{% else %}
+    <span class="badge bg-secondary text-end shadow text-bg-danger">
+        <i class="fa-solid fa-exclamation text-light"></i>
+    </span>
+{% endif %}

@@ -11,9 +11,10 @@
 
             </h5>
 
-            {% include "partials/_dates_card-p.html" with object=account %}
+            <div class="card-text">Protocol: {{ account.protocol }}</div>
 
-            <p class="card-text">Protocol: {{ account.protocol }}</p>
+            {% include "partials/_dates_card-small.html" with object=account %}
+
         </div>
     </div>
 </a>

@@ -13,16 +13,16 @@
                     {% endif %}
                 </span>
                 {{ daemon.uuid }}
-
-                {% include "partials/_dates_card-p.html" with object=daemon %}
-
             </h5>
             <h6 class="card-subtitle">{{ daemon.mailbox.name }}</h6>
             <h6 class="card-subtitle">
                 <a href="mailto:{{ daemon.mailbox.account.mail_address }}"
                    class="link-info">{{ daemon.mailbox.account.mail_address }}</a>
             </h6>
-            <p class="card-text">Criterion: {{ daemon.fetching_criterion }}</p>
+            <div class="card-text">Criterion: {{ daemon.fetching_criterion }}</div>
+
+            {% include "partials/_dates_card-small.html" with object=daemon %}
+
         </div>
     </div>
 </a>

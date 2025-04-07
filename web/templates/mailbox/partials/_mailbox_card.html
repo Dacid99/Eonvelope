@@ -3,20 +3,20 @@
         <div class="card-body">
             <h5 class="card-title">
 
-                {% include "partials/_health_badge.html" with object=mailbox %}
+                {% include "partials/_favorite_badge.html" with object=mailbox %}
 
                 {{ mailbox.name }}
 
-                {% include "partials/_favorite_badge.html" with object=mailbox %}
+                {% include "partials/_health_badge.html" with object=mailbox %}
 
             </h5>
-
-            {% include "partials/_dates_card-p.html" with object=mailbox %}
-
             <h6 class="card-subtitle">
                 <a href="mailto:{{ correspondent.email_address }}" class="link-info">{{ mailbox.account.mail_address }}</a>
             </h6>
-            <p class="card-text">Protocol: {{ mailbox.protocol }}</p>
+            <div class="card-text">Protocol: {{ mailbox.protocol }}</div>
+
+            {% include "partials/_dates_card-small.html" with object=mailbox %}
+
         </div>
     </div>
 </a>

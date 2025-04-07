@@ -8,15 +8,16 @@
 
             </h5>
 
-            {% include "partials/_dates_card-p.html" with object=email %}
-
             <h6 class="card-subtitle">{{ email.mailbox.name }}</h6>
             <h6 class="card-subtitle">
                 <a href="mailto:{{ email.mailbox.account.mail_address }}"
                    class="link-info">{{ email.mailbox.account.mail_address }}</a>
             </h6>
-            <p class="card-text">Subject: {{ email.email_subject }}</p>
-            <p class="card-text">Date received: {{ email.datetime }}</p>
+            <div class="card-text">Subject: {{ email.email_subject }}</div>
+            <div class="card-text">Date received: {{ email.datetime }}</div>
+
+            {% include "partials/_dates_card-small.html" with object=email %}
+
         </div>
     </div>
 </a>

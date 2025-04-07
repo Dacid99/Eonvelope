@@ -3,17 +3,15 @@
 {% block content %}
     <div class="card">
         <div class="card-header d-flex justify-content-end">
-            <div class="btn-toolbar p-2"
-                 role="toolbar"
-                 aria-label="Toolbar with buttons">
-                <div class="btn-group" role="group" aria-label="Edit button group">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=daemon %}
 
                     {% include "partials/_end_edit-button.html" with object=daemon %}
 
                 </div>
-                <div class="btn-group" role="group" aria-label="Close button group">
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
 
                     {% include "partials/_close_to_list-button.html" with object=daemon %}
 
@@ -29,35 +27,35 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <label for="{{ form.fetching_criterion.id_for_label }}" class="form-label">
-                            {{ form.fetching_criterion.label }}
+                            {{ form.fetching_criterion.label }}:
                         </label>
                         {{ form.fetching_criterion.errors }}
                         {{ form.fetching_criterion }}
                     </li>
                     <li class="list-group-item">
                         <label for="{{ form.cycle_interval.id_for_label }}" class="form-label">
-                            {{ form.cycle_interval.label }}
+                            {{ form.cycle_interval.label }}:
                         </label>
                         {{ form.cycle_interval.errors }}
                         {{ form.cycle_interval }}
                     </li>
                     <li class="list-group-item">
                         <label for="{{ form.restart_time.id_for_label }}" class="form-label">
-                            {{ form.restart_time.label }}
+                            {{ form.restart_time.label }}:
                         </label>
                         {{ form.restart_time.errors }}
                         {{ form.restart_time }}
                     </li>
                     <li class="list-group-item">
                         <label for="{{ form.log_backup_count.id_for_label }}" class="form-label">
-                            {{ form.log_backup_count.label }}
+                            {{ form.log_backup_count.label }}:
                         </label>
                         {{ form.log_backup_count.errors }}
                         {{ form.log_backup_count }}
                     </li>
                     <li class="list-group-item">
                         <label for="{{ form.logfile_size.id_for_label }}" class="form-label">
-                            {{ form.logfile_size.label }}
+                            {{ form.logfile_size.label }}:
                         </label>
                         {{ form.logfile_size.errors }}
                         {{ form.logfile_size }}
@@ -73,4 +71,7 @@
         {% include "partials/_dates_card-footer.html" with object=daemon %}
 
     </div>
+
+    {% include "partials/_delete-modal.html" with object=daemon %}
+
 {% endblock content %}

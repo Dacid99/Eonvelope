@@ -1,11 +1,5 @@
-<ul class="list-group">
+{% for email in emails %}
 
-    {% for email in emails %}
-        <li class="list-group-item list-group-item-action">
+    {% include "email/partials/_email_card.html" %}
 
-            {% include "email/partials/_email_card.html" %}
-
-        </li>
-    {% endfor %}
-
-</ul>
+{% endfor %}

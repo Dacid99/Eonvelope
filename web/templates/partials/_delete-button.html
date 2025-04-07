@@ -4,32 +4,3 @@
         data-bs-target="#delete-modal">
     <i class="fa fa-trash" aria-hidden="true"></i>
 </button>
-
-<div class="modal fade"
-     id="delete-modal"
-     tabindex="-1"
-     aria-labelledby="delete-modal-label"
-     aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="delete-modal-label">Delete {{ object }}</h2>
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete {{ object }}?</p>
-                <p>This will delete data depending on it as well!</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <form method="post">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-danger" name="delete">Delete</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>

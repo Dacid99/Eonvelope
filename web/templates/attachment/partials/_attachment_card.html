@@ -2,16 +2,17 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">
-                {{ attachment.file_name }}
 
                 {% include "partials/_favorite_badge.html" with object=attachment %}
 
+                {{ attachment.file_name }}
             </h5>
 
-            {% include "partials/_dates_card-p.html" with object=attachment %}
+            <div class="card-text">Type: {{ attachment.content_type }}</div>
+            <div class="card-text">Size: {{ attachment.datasize }} bytes</div>
 
-            <p class="card-text">Type: {{ attachment.content_type }}</p>
-            <p class="card-text">Size: {{ attachment.datasize }} bytes</p>
+            {% include "partials/_dates_card-small.html" with object=attachment %}
+
         </div>
     </div>
 </a>

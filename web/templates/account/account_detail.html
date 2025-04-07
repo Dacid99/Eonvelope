@@ -3,24 +3,22 @@
 {% block content %}
     <div class="card">
         <div class="card-header d-flex justify-content-between">
-            <div class="p-2">
+            <div>
 
                 {% include "partials/_favorite_badge.html" with object=account %}
 
                 {% include "partials/_health_badge.html" with object=account %}
 
             </div>
-            <div class="btn-toolbar p-2"
-                 role="toolbar"
-                 aria-label="Toolbar with buttons">
-                <div class="btn-group" role="group" aria-label="Edit button group">
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=account %}
 
                     {% include "partials/_edit-button.html" with object=account %}
 
                 </div>
-                <div class="btn-group" role="group" aria-label="Close button group">
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
 
                     {% include "partials/_close_to_list-button.html" with object=account %}
 
@@ -50,4 +48,7 @@
             </div>
         </div>
     </div>
+
+    {% include "partials/_delete-modal.html" with object=account %}
+
 {% endblock content %}

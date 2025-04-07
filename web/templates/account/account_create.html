@@ -7,16 +7,21 @@
                 {% csrf_token %}
                 <h2 class="card-title">
                     <label for="{{ form.mail_address.id_for_label }}" class="form-label">
-                        {{ form.mail_address.label }}
+                        {{ form.mail_address.label }}:
                     </label>
                     {{ form.mail_address.errors }}
                     {{ form.mail_address }}
                 </h2>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
+                        <label for="{{ form.password.id_for_label }}" class="form-label">{{ form.password.label }}:</label>
+                        {{ form.password.errors }}
+                        {{ form.password }}
+                    </li>
+                    <li class="list-group-item">
                         {{ form. }}
                         <label for="{{ form.mail_host.id_for_label }}" class="form-label">
-                            {{ form.mail_host.label }}
+                            {{ form.mail_host.label }}:
                         </label>
                         {{ form.mail_host.errors }}
                         {{ form.mail_host }}
@@ -28,7 +33,7 @@
                     </li>
                     <li class="list-group-item">
                         <label for="{{ form.mail_host_port.id_for_label }}" class="form-label">
-                            {{ form.mail_host_port.label }}
+                            {{ form.mail_host_port.label }}:
                         </label>
                         {{ form.mail_host_port.errors }}
                         {{ form.mail_host_port }}

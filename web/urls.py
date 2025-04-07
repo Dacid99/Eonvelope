@@ -52,6 +52,7 @@ from .views.daemon_views import (
     DaemonFilterView,
     DaemonUpdateOrDeleteView,
 )
+from .views.DashboardView import DashboardView
 from .views.email_views import EMailDetailWithDeleteView, EMailFilterView
 from .views.mailbox_views import (
     MailboxDetailWithDeleteView,
@@ -67,6 +68,7 @@ from .views.mailinglist_views import (
 app_name = "web"
 
 urlpatterns = [
+    path("dashboard/", DashboardView.as_view(), name=DashboardView.URL_NAME),
     path(
         "accounts/",
         AccountFilterView.AccountFilterView.as_view(),

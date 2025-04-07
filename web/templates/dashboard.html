@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Dashboard -
+{% endblock title %}
+
+{% block content %}
+    <h1 class="my-3">Welcome to Emailkasten</h1>
+
+    <div class="row justify-content-evenly">
+        <div class="col-8">
+            <div class="card">
+                <h4 class="card-header">Latest Emails</h4>
+                <div class="card-body">
+
+                    {% include "email/partials/_email_list.html" with emails=latest_emails %}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <h4 class="card-header">Database stats</h4>
+                <div class="card-body">
+                    <table class="table-sm table-active">
+                        <thead>
+                            <th scope="col">Data</th>
+                            <th scope="col">Count</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:email-filter-list' %}">Emails</a>
+                                </td>
+                                <td>{{ emails_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:correspondent-filter-list' %}">Correspondents</a>
+                                </td>
+                                <td>{{ correspondents_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:mailinglist-filter-list' %}">Mailinglists</a>
+                                </td>
+                                <td>{{ mailinglists_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:attachment-filter-list' %}">Attachments</a>
+                                </td>
+                                <td>{{ attachments_count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}

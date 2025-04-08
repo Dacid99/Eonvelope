@@ -151,7 +151,12 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
 
         htmlFileName = os.path.basename(htmlFilePath)
         with open(htmlFilePath, "rb") as htmlFile:
-            return FileResponse(htmlFile, as_attachment=True, filename=htmlFileName)
+            return FileResponse(
+                htmlFile,
+                as_attachment=False,
+                filename=htmlFileName,
+                content_type="text/html",
+            )
 
     URL_PATH_FULLCONVERSATION = "full-conversation"
     URL_NAME_FULLCONVERSATION = "full-conversation"

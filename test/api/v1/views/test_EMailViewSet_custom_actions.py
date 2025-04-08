@@ -149,6 +149,9 @@ def test_download_auth_owner(
         f'filename="{os.path.basename(emailModel.eml_filepath)}"'
         in response["Content-Disposition"]
     )
+    assert "attachment" in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert response.headers["Content-Type"] == "message/rfc822"
     assert b"".join(response.streaming_content) == mock_open().read()
 
 
@@ -238,6 +241,9 @@ def test_download_html_auth_owner(
         f'filename="{os.path.basename(emailModel.html_filepath)}"'
         in response["Content-Disposition"]
     )
+    assert "inline" in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert response.headers["Content-Type"] == "text/html"
     assert b"".join(response.streaming_content) == mock_open().read()
 
 

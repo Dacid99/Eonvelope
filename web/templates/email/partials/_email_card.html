@@ -1,7 +1,9 @@
 <a href="{{ email.get_absolute_url }}">
     <div class="card">
-        <div class="row g-0">
-            <div class="col-md-8">
+        {% if email.has_thumbnail %}
+            <div class="row g-0">
+                <div class="col-md-8">
+                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">
                         {{ email.message_id }}
@@ -21,12 +23,14 @@
                     {% include "partials/_dates_card-small.html" with object=email %}
 
                 </div>
+                {% if email.has_thumbnail %}
+                </div>
+                <div class="col-md-4">
+                    <iframe src="{{ email.get_absolute_thumbnail_url }}"
+                            class="h-100 w-100 rounded"
+                            alt="Image for {{ email }}"></iframe>
+                </div>
             </div>
-            <div class="col-md-4">
-                <iframe src="{{ email.get_absolute_thumbnail_url }}"
-                        class="h-100 w-100 rounded"
-                        alt="Image for {{ email }}"></iframe>
-            </div>
-        </div>
+        {% endif %}
     </div>
 </a>

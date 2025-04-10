@@ -5,8 +5,10 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="row">
-        <div class="col-6">
+    {% if email.has_thumbnail %}
+        <div class="row">
+            <div class="col-6">
+            {% endif %}
             <div class="card">
                 <div class="card-header d-flex justify-content-between">
                     <div>
@@ -128,15 +130,17 @@
                         </div>
                     </div>
                 </div>
+                {% if email.has_thumbnail %}
+                </div>
             </div>
-        </div>
-        <div class="col-6">
-            <iframe src="{{ email.get_absolute_thumbnail_url }}"
-                    class="w-100 h-100 rounded"
-                    title="Email content"
-                    sandbox="allow-same-origin">
+            <div class="col-6">
+                <iframe src="{{ email.get_absolute_thumbnail_url }}"
+                        class="w-100 h-100 rounded"
+                        title="Email content"
+                        sandbox="allow-same-origin">
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         {% include "partials/_delete-modal.html" with object=email %}
 

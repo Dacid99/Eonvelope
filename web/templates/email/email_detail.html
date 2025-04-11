@@ -5,35 +5,36 @@
 {% endblock title %}
 
 {% block content %}
-    {% if email.has_thumbnail %}
-        <div class="row">
-            <div class="col-6">
-            {% endif %}
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div>
+    <div class="card">
+        {% if email.has_thumbnail %}
 
-                        {% include "partials/_favorite_badge.html" with object=email %}
+            <div class="card-header d-flex justify-content-between">
+                <div>
+
+                    {% include "partials/_favorite_badge.html" with object=email %}
+
+                </div>
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+                    <div class="btn-group me-3" role="group" aria-label="Action button group">
+
+                        {% include "partials/_download-button.html" with object=email %}
 
                     </div>
-                    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
-                        <div class="btn-group me-3" role="group" aria-label="Action button group">
+                    <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
-                            {% include "partials/_download-button.html" with object=email %}
+                        {% include "partials/_delete-button.html" with object=email %}
 
-                        </div>
-                        <div class="btn-group me-3" role="group" aria-label="Edit button group">
+                    </div>
+                    <div class="btn-group ms-3" role="group" aria-label="Close button group">
 
-                            {% include "partials/_delete-button.html" with object=email %}
+                        {% include "partials/_close_to_list-button.html" with object=email %}
 
-                        </div>
-                        <div class="btn-group ms-3" role="group" aria-label="Close button group">
-
-                            {% include "partials/_close_to_list-button.html" with object=email %}
-
-                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                {% endif %}
                 <div class="card-body">
                     <h2 class="card-title">{{ email.message_id }}</h2>
                     <ul class="list-group list-group-flush">
@@ -56,92 +57,92 @@
                                 <a href="{% url 'web:email-detail' email.inReplyTo.pk %}">In reply to: {{ email.inReplyTo.message_id }}</a>
                             </li>
                         {% endif %}
-                        <li class="list-group-item">
-                            <p class="d-inline-flex gap-1">
-                                <button class="btn btn-primary"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#plain-text"
-                                        aria-expanded="false"
-                                        aria-controls="Show plain-text">Plaintext version</button>
-                                <button class="btn btn-primary"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target=".multi-collapse"
-                                        aria-expanded="false"
-                                        aria-controls="Show plain-text and html-text">
-                                    Show both
-                                </button>
-                                <button class="btn btn-primary"
-                                        type="button"
-                                        data-bs-toggle="collapse"
-                                        data-bs-target="#html-text"
-                                        aria-expanded="false"
-                                        aria-controls="Show html-text">Html version</button>
-                            </p>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="collapse multi-collapse" id="plain-text">
-                                        <div class="card card-body">{{ email.plain_bodytext }}</div>
-                                    </div>
+                        <div class="accordion accordion-flush" id="content-accordion">
+                            <li class="list-group-item accordion-item">
+                                <div class="accordion-header" id="plain-text-header">
+                                    <button class="accordion-button collapsed p-0"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#plain-text"
+                                            aria-expanded="true"
+                                            aria-controls="plain-text">Plain bodytext</button>
                                 </div>
-                                <div class="col">
-                                    <div class="collapse multi-collapse" id="html-text">
-                                        <div class="card card-body">{{ email.html_bodytext }}</div>
-                                    </div>
+                                <div id="plain-text"
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby="plain-text-header"
+                                     data-bs-parent="content-accordion">
+                                    <div class="accordion-body">{{ email.plain_bodytext }}</div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
+                            <li class="list-group-item accordion-item">
+                                <div class="accordion-header" id="html-text-header">
+                                    <button class="accordion-button collapsed p-0"
+                                            type="button"
+                                            data-bs-toggle="collapse"
+                                            data-bs-target="#html-text"
+                                            aria-expanded="true"
+                                            aria-controls="html-text">Html bodytext</button>
+                                </div>
+                                <div id="html-text"
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby="html-text-header"
+                                     data-bs-parent="content-accordion">
+                                    <div class="accordion-body">{{ email.html_bodytext }}</div>
+                                </div>
+                            </li>
+                        </div>
                     </ul>
                 </div>
 
-                {% include "partials/_dates_card-footer.html" with object=email %}
-
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Correspondents</h4>
-
-                        {% include "emailcorrespondents/partials/_emailcorrespondents_list.html" with emailcorrespondents=email.emailcorrespondents.all %}
-
-                    </div>
-                </div>
-                <div class="card">
-                    <div id="headers-accordion" class="card-body accordion accordion-item">
-                        <h4 class="card-title accordion-header">
-                            <button class="accordion-button"
-                                    type="button"
-                                    data-bs-toggle="headers-collapse"
-                                    data-bs-target="#headers-collapse"
-                                    aria-expanded="true"
-                                    aria-controls="Collapse headers">Headers</button>
-                        </h4>
-                        <div id="headers-collapse"
-                             class="card-body accordion-collapse collapse"
-                             data-bs-parent="#headers-accordion">
-                            <div class="accordion-body">
-                                <ul class="list-group list-group-flush">
-
-                                    {% for headername, headervalue in email.headers %}
-                                        <li class="list-group-item">{{ headername }}: {{ headervalue }}</li>
-                                    {% endfor %}
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 {% if email.has_thumbnail %}
                 </div>
-            </div>
-            <div class="col-6">
-                <iframe src="{{ email.get_absolute_thumbnail_url }}"
-                        class="w-100 h-100 rounded"
-                        title="Email content"
-                        sandbox="allow-same-origin">
+                <div class="col-6">
+                    <iframe src="{{ email.get_absolute_thumbnail_url }}"
+                            class="w-100 h-100 p-1"
+                            title="Email content"
+                            sandbox="allow-same-origin"></iframe>
                 </div>
             </div>
         {% endif %}
 
-        {% include "partials/_delete-modal.html" with object=email %}
+        {% include "partials/_dates_card-footer.html" with object=email %}
 
-    {% endblock content %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Correspondents</h4>
+
+                {% include "emailcorrespondents/partials/_emailcorrespondents_list.html" with emailcorrespondents=email.emailcorrespondents.all %}
+
+            </div>
+        </div>
+        <div class="card accordion" id="accordionFlushExample">
+            <div class="accordion-item">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne"
+                        aria-expanded="false"
+                        aria-controls="flush-collapseOne">
+                    <h4 class="card-title" id="flush-headingOne">Headers</h4>
+                </button>
+                <div id="flush-collapseOne"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="flush-headingOne"
+                     data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <ul class="list-group list-group-flush">
+
+                            {% for headername, headervalue in email.headers %}
+                                <li class="list-group-item">{{ headername }}: {{ headervalue }}</li>
+                            {% endfor %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/_delete-modal.html" with object=email %}
+
+{% endblock content %}

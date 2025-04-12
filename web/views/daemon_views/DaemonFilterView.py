@@ -24,8 +24,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django_filters.views import FilterView
 
-from api.v1.filters.DaemonFilter import DaemonFilter
 from core.models.DaemonModel import DaemonModel
+
+from ...filters.DaemonFilter import DaemonFilter
 
 
 class DaemonFilterView(LoginRequiredMixin, FilterView):

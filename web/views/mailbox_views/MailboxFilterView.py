@@ -24,8 +24,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django_filters.views import FilterView
 
-from api.v1.filters.MailboxFilter import MailboxFilter
 from core.models.MailboxModel import MailboxModel
+
+from ...filters.MailboxFilter import MailboxFilter
 
 
 class MailboxFilterView(LoginRequiredMixin, FilterView):

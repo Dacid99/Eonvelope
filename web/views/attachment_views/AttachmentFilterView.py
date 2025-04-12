@@ -24,8 +24,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django_filters.views import FilterView
 
-from api.v1.filters.AttachmentFilter import AttachmentFilter
 from core.models.AttachmentModel import AttachmentModel
+
+from ...filters.AttachmentFilter import AttachmentFilter
 
 
 class AttachmentFilterView(LoginRequiredMixin, FilterView):

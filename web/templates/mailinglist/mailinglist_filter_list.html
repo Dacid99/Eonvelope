@@ -5,11 +5,7 @@
 {% endblock title %}
 
 {% block content %}
-    <form method="get">
-        {{ filter.form.as_p }}
-        <input type="submit" />
-    </form>
 
-    {% include "mailinglist/partials/_mailinglist_list.html" with mailinglists=filter.qs %}
+    {% include "mailinglist/partials/_mailinglist_filter_list.html" %}
 
 {% endblock content %}

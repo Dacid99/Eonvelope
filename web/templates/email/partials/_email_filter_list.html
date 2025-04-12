@@ -1,0 +1,6 @@
+<form method="get">
+    {{ filter.form.as_p }}
+    <input type="submit" />
+</form>
+
+{% include "email/partials/_email_list.html" with emails=filter.qs %}

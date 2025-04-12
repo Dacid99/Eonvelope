@@ -5,11 +5,7 @@
 {% endblock title %}
 
 {% block content %}
-    <form method="get">
-        {{ filter.form.as_p }}
-        <input type="submit" />
-    </form>
 
-    {% include "correspondent/partials/_correspondent_list.html" with correspondents=filter.qs %}
+    {% include "correspondent/partials/_correspondent_filter_list.html" %}
 
 {% endblock content %}

@@ -7,11 +7,7 @@
 {% include "account/partials/_add_button.html" with object=account %}
 
 {% block content %}
-    <form method="get">
-        {{ filter.form.as_p }}
-        <input type="submit" />
-    </form>
 
-    {% include "account/partials/_account_list.html" with accounts=filter.qs %}
+    {% include "account/partials/_account_filter_list.html" %}
 
 {% endblock content %}

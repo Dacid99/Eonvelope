@@ -5,11 +5,7 @@
 {% endblock title %}
 
 {% block content %}
-    <form method="get">
-        {{ filter.form.as_p }}
-        <input type="submit" />
-    </form>
 
-    {% include "attachment/partials/_attachment_list.html" with attachments=filter.qs %}
+    {% include "attachment/partials/_attachment_filter_list.html" %}
 
 {% endblock content %}

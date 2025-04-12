@@ -16,3 +16,5 @@ imap-tools
 django-bootstrap5
 fontawesomefree
 html-sanitizer
+django-crispy-forms
+crispy-bootstrap5

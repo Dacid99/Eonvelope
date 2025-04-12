@@ -1,6 +1,9 @@
+{% load crispy_forms_tags %}
+
 <form method="get">
-    {{ filter.form.as_p }}
-    <input type="submit" />
+    {{ filter\.form|crispy }}
+    <button type="submit" class="btn btn-primary">Filter</button>
+
 </form>
 
 {% include "emailcorrespondents/partials/_correspondentemail_list.html" with correspondentemails=filter.qs %}

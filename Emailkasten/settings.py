@@ -78,6 +78,8 @@ INSTALLED_APPS = [
     "health_check.storage",
     "health_check.cache",
     "django_bootstrap5",
+    "crispy_forms",
+    "crispy_bootstrap5",
     "fontawesomefree",
     "Emailkasten",
     "core",
@@ -130,6 +132,10 @@ TEMPLATES = [
         },
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 WSGI_APPLICATION = "Emailkasten.wsgi.application"
 

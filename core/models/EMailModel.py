@@ -233,8 +233,7 @@ class EMailModel(HasDownloadMixin, HasPrerenderMixin, URLMixin, models.Model):
 
         @saveStore
         def writeMessageToEML(emlFile: BufferedWriter, emailData: bytes) -> None:
-            emlGenerator = email.generator.BytesGenerator(emlFile)
-            emlGenerator.flatten(emailData)
+            emlFile.write(emailData)
 
         logger.debug("Storing %s as eml ...", self)
 
@@ -268,7 +267,7 @@ class EMailModel(HasDownloadMixin, HasPrerenderMixin, URLMixin, models.Model):
             htmlFile: BufferedWriter, emailData: bytes
         ) -> None:
             htmlMessage = eml2html(emailData)
-            htmlFile.write(htmlMessage)
+            htmlFile.write(htmlMessage.encode())
 
         logger.debug("Rendering and storing %s  ...", self)
 

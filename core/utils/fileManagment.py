@@ -70,7 +70,7 @@ def saveStore(storingFunc: Callable) -> Callable:
             logger.debug("Creating and writing to file %s...", filePath)
 
         try:
-            with open(filePath, "wb") as file:
+            with open(filePath, "wb", encoding="utf-8") as file:
                 storingFunc(file, *args, **kwargs)
         except PermissionError:
             logger.exception(

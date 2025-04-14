@@ -34,6 +34,7 @@ Including another URLconf
 from __future__ import annotations
 
 from django.urls import path
+from django.views.generic import RedirectView
 
 from .views.account_views import (
     AccountCreateView,
@@ -69,6 +70,7 @@ app_name = "web"
 
 urlpatterns = [
     path("dashboard/", DashboardView.as_view(), name=DashboardView.URL_NAME),
+    path("", RedirectView.as_view(url="dashboard/", permanent=True)),
     path(
         "accounts/",
         AccountFilterView.AccountFilterView.as_view(),

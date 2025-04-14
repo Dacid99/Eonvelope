@@ -18,19 +18,24 @@
 
 """Module with the :class:`AccountDetailWithDeleteView` view."""
 
-from typing import override
+from typing import Any, override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
+from django.http import HttpRequest, HttpResponse
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import DeletionMixin
+from rest_framework import status
 
 from core.models.AccountModel import AccountModel
+from web.mixins.TestActionMixin import TestActionMixin
 from web.views.account_views.AccountFilterView import AccountFilterView
 
 
-class AccountDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
+class AccountDetailWithDeleteView(
+    LoginRequiredMixin, DetailView, DeletionMixin, TestActionMixin
+):
     """View for a single :class:`core.models.AccountModel.AccountModel` instance."""
 
     URL_NAME = AccountModel.get_detail_web_url_name()
@@ -43,3 +48,11 @@ class AccountDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin)
     def get_queryset(self) -> QuerySet:
         """Restricts the queryset to objects owned by the requesting user."""
         return super().get_queryset().filter(user=self.request.user)
+
+    @override
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        if "delete" in request.POST:
+            return DeletionMixin.post(self, request)
+        if "test" in request.POST:
+            return TestActionMixin.post(self, request)
+        return HttpResponse(status=status.HTTP_204_NO_CONTENT)

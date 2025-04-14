@@ -144,5 +144,23 @@ def custom_detail_action_url() -> Callable[[type[ModelViewSet], str, Model], str
 
 @pytest.fixture(autouse=True)
 def mock_os_remove(mocker):
-    """Patches os.remove to prevent errors."""
+    """Patches :func:`os.remove` to prevent errors."""
     return mocker.patch("os.remove", autospec=True)
+
+
+@pytest.fixture
+def mock_AccountModel_test_connection(mocker):
+    """Patches :func:`core.models.AccountModel.AccountModel.test_connection` for testing of the test action."""
+    return mocker.patch(
+        "core.models.AccountModel.AccountModel.test_connection",
+        autospec=True,
+    )
+
+
+@pytest.fixture
+def mock_MailboxModel_test_connection(mocker):
+    """Patches :func:`core.models.MailboxModel.MailboxModel.test_connection` for testing of the test action."""
+    return mocker.patch(
+        "core.models.MailboxModel.MailboxModel.test_connection",
+        autospec=True,
+    )

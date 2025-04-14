@@ -1,0 +1,17 @@
+{% if test_result %}
+    <div class="alert alert-{% if test_result.status %}success{% else %}danger{% endif %} alert-dismissible"
+         role="alert">
+        <h4 class="alert-heading">Test result</h4>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+        <p>
+            {% if test_result.status %}
+                Test was successful!
+            {% else %}
+                {{ test_result.error }}
+            {% endif %}
+        </p>
+    </div>
+{% endif %}

@@ -4,9 +4,9 @@
     Accounts -
 {% endblock title %}
 
-{% include "account/partials/_add_button.html" with object=account %}
-
 {% block content %}
+
+    {% include "account/partials/_add_button.html" %}
 
     {% include "account/partials/_account_filter_list.html" %}
 

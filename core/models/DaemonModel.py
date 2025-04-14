@@ -23,13 +23,15 @@ from __future__ import annotations
 import logging
 import os
 import uuid
-from typing import TYPE_CHECKING, Any, Final, override
+from typing import TYPE_CHECKING, Any, Final, Literal, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.urls import reverse
 
 import Emailkasten.constants
+from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.mixins.URLMixin import URLMixin
 from Emailkasten.utils import get_config
 
@@ -44,7 +46,7 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class DaemonModel(DirtyFieldsMixin, URLMixin, models.Model):
+class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
     """Database model for the daemon fetching a mailbox."""
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False)
@@ -164,3 +166,14 @@ class DaemonModel(DirtyFieldsMixin, URLMixin, models.Model):
                     "fetching_criterion": "This fetching criterion is not available for this mailbox!"
                 }
             )
+
+    @override
+    @property
+    def has_download(self) -> Literal[True]:
+        """Daemon always has a logfile."""
+        return True
+
+    @override
+    def get_absolute_download_url(self) -> str:
+        """Returns the url of the log download api endpoint."""
+        return reverse(f"api:v1:{self.BASENAME}-log-download", kwargs={"pk": self.pk})

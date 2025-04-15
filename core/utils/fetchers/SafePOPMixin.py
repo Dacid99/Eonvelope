@@ -18,7 +18,6 @@
 
 """Module with the SafePOPMixin mixin."""
 
-import poplib
 from collections.abc import Callable
 from typing import Any
 
@@ -127,10 +126,6 @@ class SafePOPMixin:
     @safe(exception=MailAccountError)
     def safe_noop(self, *args, **kwargs):
         return self._mailClient.noop(*args, **kwargs)
-
-    @safe(exception=MailAccountError)
-    def safe_stat(self, *args, **kwargs):
-        return self._mailClient.stat(*args, **kwargs)
 
     @safe(exception=MailAccountError)
     def safe_list(self, *args, **kwargs):

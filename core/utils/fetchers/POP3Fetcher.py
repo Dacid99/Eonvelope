@@ -114,7 +114,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
 
         if mailbox is not None:
             self.logger.debug("Testing %s ...", mailbox)
-            self.safe_stat()
+            self.safe_list()
             self.logger.debug("Successfully tested %s.", mailbox)
 
     @override

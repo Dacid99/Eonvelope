@@ -27,14 +27,16 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import DeletionMixin
-from rest_framework import status
 
 from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from core.models.DaemonModel import DaemonModel
+from web.mixins.CustomActionMixin import CustomActionMixin
 from web.views.daemon_views.DaemonFilterView import DaemonFilterView
 
 
-class DaemonDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
+class DaemonDetailWithDeleteView(
+    LoginRequiredMixin, DetailView, DeletionMixin, CustomActionMixin
+):
     """View for a single :class:`core.models.DaemonModel.DaemonModel` instance."""
 
     URL_NAME = DaemonModel.get_detail_web_url_name()
@@ -52,18 +54,21 @@ class DaemonDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         if "delete" in request.POST:
             return DeletionMixin.post(self, request)
-        return self.handle_start_stop_action(request)
+        return CustomActionMixin.post(self, request)
 
-    def handle_start_stop_action(self, request: HttpRequest):
+    def handle_start_daemon(self, request: HttpRequest) -> HttpResponse:
         self.object = self.get_object()
-        if "start-daemon" in request.POST:
-            start_result = EMailArchiverDaemonRegistry.startDaemon(self.object)
-            result_context = {"start_result": {"status": start_result}}
-        elif "stop-daemon" in request.POST:
-            stop_result = EMailArchiverDaemonRegistry.stopDaemon(self.object)
-            result_context = {"stop_result": {"status": stop_result}}
-        else:
-            return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+        start_result = EMailArchiverDaemonRegistry.startDaemon(self.object)
+        result_context = {"start_result": {"status": start_result}}
+        self.object.refresh_from_db()
+        context = self.get_context_data(object=self.object)
+        context.update(result_context)
+        return render(request, self.template_name, context)
+
+    def handle_stop_daemon(self, request: HttpRequest) -> HttpResponse:
+        self.object = self.get_object()
+        stop_result = EMailArchiverDaemonRegistry.stopDaemon(self.object)
+        result_context = {"stop_result": {"status": stop_result}}
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
         context.update(result_context)

@@ -22,19 +22,23 @@ from typing import Any, override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import DeletionMixin
-from rest_framework import status
 
+from core.constants import EmailFetchingCriterionChoices
+from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
+from core.utils.fetchers.exceptions import FetcherError
+from web.mixins.CustomActionMixin import CustomActionMixin
 from web.mixins.TestActionMixin import TestActionMixin
 from web.views.mailbox_views.MailboxFilterView import MailboxFilterView
 
 
 class MailboxDetailWithDeleteView(
-    LoginRequiredMixin, DetailView, DeletionMixin, TestActionMixin
+    LoginRequiredMixin, DetailView, DeletionMixin, CustomActionMixin, TestActionMixin
 ):
     """View for a single :class:`core.models.MailboxModel.MailboxModel` instance."""
 
@@ -53,6 +57,22 @@ class MailboxDetailWithDeleteView(
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         if "delete" in request.POST:
             return DeletionMixin.post(self, request)
-        if "test" in request.POST:
-            return TestActionMixin.post(self, request)
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+        return CustomActionMixin.post(self, request)
+
+    def handle_fetch_all(self, request: HttpRequest) -> HttpResponse:
+        self.object = self.get_object()
+        self.perform_fetch_all()
+        self.object.refresh_from_db()
+        context = self.get_context_data(object=self.object)
+        return render(request, self.template_name, context)
+
+    def perform_fetch_all(self) -> None:
+        try:
+            self.object.fetch(EmailFetchingCriterionChoices.ALL)
+        except FetcherError:
+            pass
+
+    def handle_add_daemon(self, request: HttpRequest) -> HttpResponseRedirect:
+        self.object = self.get_object()
+        new_daemon = DaemonModel.objects.create(mailbox=self.object)
+        return HttpResponseRedirect(new_daemon.get_absolute_edit_url())

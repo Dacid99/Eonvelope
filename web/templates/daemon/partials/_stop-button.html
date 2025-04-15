@@ -2,6 +2,6 @@
     {% csrf_token %}
     <button type="submit"
             class="btn btn-outline-primary"
-            name="stop-daemon"
+            name="stop_daemon"
             {% if not daemon.is_running %}disabled{% endif %}>Stop</button>
 </form>

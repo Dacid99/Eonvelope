@@ -158,10 +158,28 @@ def mock_AccountModel_test_connection(mocker):
 
 
 @pytest.fixture
+def mock_AccountModel_update_mailboxes(mocker):
+    """Patches :func:`core.models.AccountModel.AccountModel.update_mailboxes` for testing of the test action."""
+    return mocker.patch(
+        "core.models.AccountModel.AccountModel.update_mailboxes",
+        autospec=True,
+    )
+
+
+@pytest.fixture
 def mock_MailboxModel_test_connection(mocker):
     """Patches :func:`core.models.MailboxModel.MailboxModel.test_connection` for testing of the test action."""
     return mocker.patch(
         "core.models.MailboxModel.MailboxModel.test_connection",
+        autospec=True,
+    )
+
+
+@pytest.fixture
+def mock_MailboxModel_fetch(mocker):
+    """Patches :func:`core.models.MailboxModel.MailboxModel.fetch` for testing of the test action."""
+    return mocker.patch(
+        "core.models.MailboxModel.MailboxModel.fetch",
         autospec=True,
     )
 

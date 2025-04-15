@@ -23,6 +23,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import status
 
+from core.constants import EmailFetchingCriterionChoices
+from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from web.views.mailbox_views.MailboxDetailWithDeleteView import (
@@ -111,11 +113,11 @@ def test_post_delete_auth_owner(mailboxModel, owner_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_test_noauth(
-    accountModel, client, detail_url, login_url, mock_MailboxModel_test_connection
+    mailboxModel, client, detail_url, login_url, mock_MailboxModel_test_connection
 ):
     """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
-        detail_url(MailboxDetailWithDeleteView, accountModel),
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
         {"test": "Test"},
     )
 
@@ -123,18 +125,18 @@ def test_post_test_noauth(
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(login_url)
     assert response.url.endswith(
-        f"?next={detail_url(MailboxDetailWithDeleteView, accountModel)}"
+        f"?next={detail_url(MailboxDetailWithDeleteView, mailboxModel)}"
     )
     mock_MailboxModel_test_connection.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_post_test_auth_other(
-    accountModel, other_client, detail_url, mock_MailboxModel_test_connection
+    mailboxModel, other_client, detail_url, mock_MailboxModel_test_connection
 ):
     """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
-        detail_url(MailboxDetailWithDeleteView, accountModel),
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
         {"test": "Test"},
     )
 
@@ -144,11 +146,11 @@ def test_post_test_auth_other(
 
 @pytest.mark.django_db
 def test_post_test_success_auth_owner(
-    accountModel, owner_client, detail_url, mock_MailboxModel_test_connection
+    mailboxModel, owner_client, detail_url, mock_MailboxModel_test_connection
 ):
     """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
-        detail_url(MailboxDetailWithDeleteView, accountModel),
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
         {"test": "Test"},
     )
 
@@ -159,14 +161,14 @@ def test_post_test_success_auth_owner(
 
 @pytest.mark.django_db
 def test_post_test_failure_mailaccounterror_auth_owner(
-    faker, accountModel, owner_client, detail_url, mock_MailboxModel_test_connection
+    faker, mailboxModel, owner_client, detail_url, mock_MailboxModel_test_connection
 ):
     """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     fake_error_message = faker.sentence()
     mock_MailboxModel_test_connection.side_effect = MailAccountError(fake_error_message)
 
     response = owner_client.post(
-        detail_url(MailboxDetailWithDeleteView, accountModel),
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
         {"test": "Test"},
     )
 
@@ -178,14 +180,14 @@ def test_post_test_failure_mailaccounterror_auth_owner(
 
 @pytest.mark.django_db
 def test_post_test_failure_mailboxerror_auth_owner(
-    faker, accountModel, owner_client, detail_url, mock_MailboxModel_test_connection
+    faker, mailboxModel, owner_client, detail_url, mock_MailboxModel_test_connection
 ):
     """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     fake_error_message = faker.sentence()
     mock_MailboxModel_test_connection.side_effect = MailboxError(fake_error_message)
 
     response = owner_client.post(
-        detail_url(MailboxDetailWithDeleteView, accountModel),
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
         {"test": "Test"},
     )
 
@@ -193,3 +195,120 @@ def test_post_test_failure_mailboxerror_auth_owner(
     assert isinstance(response, HttpResponse)
     mock_MailboxModel_test_connection.assert_called_once()
     assert fake_error_message in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_post_fetch_all_noauth(
+    mailboxModel, client, detail_url, login_url, mock_MailboxModel_fetch
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
+    response = client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+        {"fetch_all": "Fetch content"},
+    )
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert isinstance(response, HttpResponseRedirect)
+    assert response.url.startswith(login_url)
+    assert response.url.endswith(
+        f"?next={detail_url(MailboxDetailWithDeleteView, mailboxModel)}"
+    )
+    mock_MailboxModel_fetch.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_fetch_all_auth_other(
+    mailboxModel, other_client, detail_url, mock_MailboxModel_fetch
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
+    response = other_client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+        {"fetch_all": "Fetch content"},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_MailboxModel_fetch.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_fetch_all_success_auth_owner(
+    mailboxModel, owner_client, detail_url, mock_MailboxModel_fetch
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    response = owner_client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+        {"fetch_all": "Fetch content"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    mock_MailboxModel_fetch.assert_called_once_with(
+        mailboxModel, EmailFetchingCriterionChoices.ALL
+    )
+
+
+@pytest.mark.django_db
+def test_post_fetch_all_failure_auth_owner(
+    mailboxModel, owner_client, detail_url, mock_MailboxModel_fetch
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    response = owner_client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+        {"fetch_all": "Fetch content"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    mock_MailboxModel_fetch.assert_called_once_with(
+        mailboxModel, EmailFetchingCriterionChoices.ALL
+    )
+
+
+@pytest.mark.django_db
+def test_post_add_daemon_noauth(mailboxModel, client, detail_url, login_url):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
+    assert DaemonModel.objects.count() == 1
+
+    response = client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+        {"add_daemon": "Add daemon"},
+    )
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert isinstance(response, HttpResponseRedirect)
+    assert response.url.startswith(login_url)
+    assert response.url.endswith(
+        f"?next={detail_url(MailboxDetailWithDeleteView, mailboxModel)}"
+    )
+    assert DaemonModel.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_post_add_daemon_auth_other(mailboxModel, other_client, detail_url):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
+    assert DaemonModel.objects.count() == 1
+
+    response = other_client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+        {"add_daemon": "Add daemon"},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert DaemonModel.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_post_add_daemon_success_auth_owner(mailboxModel, owner_client, detail_url):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    assert DaemonModel.objects.count() == 1
+
+    response = owner_client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+        {"add_daemon": "Add daemon"},
+    )
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert isinstance(response, HttpResponseRedirect)
+    assert DaemonModel.objects.count() == 2
+    added_daemon = DaemonModel.objects.get(pk=2)
+    assert response.url == added_daemon.get_absolute_edit_url()

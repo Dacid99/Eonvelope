@@ -18,7 +18,6 @@
 
 """Module with :class:`web.mixins.TestActionMixin.TestActionMixin`."""
 
-from typing import Any
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
@@ -29,16 +28,16 @@ from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 class TestActionMixin:
     """Mixin to provide test button handling for views."""
 
-    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
-        """A post request triggers the objects test."""
+    def handle_test(self, request: HttpRequest) -> HttpResponse:
+        """The handler method for the `test` action."""
         self.object = self.get_object()
-        test_result = self.run_test()
+        test_result = self.perform_test()
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
         context["test_result"] = test_result
         return render(request, self.template_name, context)
 
-    def run_test(self) -> dict[str, bool | str]:
+    def perform_test(self) -> dict[str, bool | str]:
         """Handling of the object test.
 
         Returns:

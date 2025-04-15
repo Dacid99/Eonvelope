@@ -2,6 +2,6 @@
     {% csrf_token %}
     <button type="submit"
             class="btn btn-outline-primary"
-            name="start_daemon"
-            {% if daemon.is_running %}disabled{% endif %}>Start</button>
+            name="fetch_all"
+            {% if not mailbox.is_healthy %}disabled{% endif %}>Fetch content</button>
 </form>

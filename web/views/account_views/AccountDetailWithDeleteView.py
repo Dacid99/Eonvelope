@@ -23,18 +23,20 @@ from typing import Any, override
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import DeletionMixin
-from rest_framework import status
 
 from core.models.AccountModel import AccountModel
+from core.utils.fetchers.exceptions import MailAccountError
+from web.mixins.CustomActionMixin import CustomActionMixin
 from web.mixins.TestActionMixin import TestActionMixin
 from web.views.account_views.AccountFilterView import AccountFilterView
 
 
 class AccountDetailWithDeleteView(
-    LoginRequiredMixin, DetailView, DeletionMixin, TestActionMixin
+    LoginRequiredMixin, DetailView, DeletionMixin, CustomActionMixin, TestActionMixin
 ):
     """View for a single :class:`core.models.AccountModel.AccountModel` instance."""
 
@@ -53,6 +55,17 @@ class AccountDetailWithDeleteView(
     def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
         if "delete" in request.POST:
             return DeletionMixin.post(self, request)
-        if "test" in request.POST:
-            return TestActionMixin.post(self, request)
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT)
+        return CustomActionMixin.post(self, request)
+
+    def handle_update_mailboxes(self, request: HttpRequest) -> HttpResponse:
+        self.object = self.get_object()
+        self.perform_update_mailboxes()
+        self.object.refresh_from_db()
+        context = self.get_context_data(object=self.object)
+        return render(request, self.template_name, context)
+
+    def perform_update_mailboxes(self) -> None:
+        try:
+            self.object.update_mailboxes()
+        except MailAccountError:
+            pass

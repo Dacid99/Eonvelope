@@ -117,7 +117,7 @@ def test_post_start_noauth(
     """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"start-daemon": "Start"},
+        {"start_daemon": "Start"},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -136,7 +136,7 @@ def test_post_start_auth_other(
     """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"start-daemon": "Start"},
+        {"start_daemon": "Start"},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -150,7 +150,7 @@ def test_post_start_success_auth_owner(
     """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"start-daemon": "Start"},
+        {"start_daemon": "Start"},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -169,7 +169,7 @@ def test_post_start_failure_auth_owner(
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"start-daemon": "Start"},
+        {"start_daemon": "Start"},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -189,7 +189,7 @@ def test_post_stop_noauth(
     """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"stop-daemon": "Stop"},
+        {"stop_daemon": "Stop"},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -208,7 +208,7 @@ def test_post_stop_auth_other(
     """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"stop-daemon": "Stop"},
+        {"stop_daemon": "Stop"},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -222,7 +222,7 @@ def test_post_stop_success_auth_owner(
     """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"stop-daemon": "Stop"},
+        {"stop_daemon": "Stop"},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -240,7 +240,7 @@ def test_post_stop_failure_auth_owner(
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, daemonModel),
-        {"stop-daemon": "Stop"},
+        {"stop_daemon": "Stop"},
     )
 
     assert response.status_code == status.HTTP_200_OK

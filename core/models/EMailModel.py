@@ -31,7 +31,7 @@ from django.db import models, transaction
 
 from core.constants import HeaderFields
 from core.mixins.HasDownloadMixin import HasDownloadMixin
-from core.mixins.HasThumbnailMixin import HasPrerenderMixin
+from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.utils.fileManagment import saveStore
@@ -55,7 +55,7 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class EMailModel(HasDownloadMixin, HasPrerenderMixin, URLMixin, models.Model):
+class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
     """Database model for an email."""
 
     message_id = models.CharField(max_length=255)

@@ -22,7 +22,7 @@
 from django.urls import reverse
 
 
-class HasPrerenderMixin:
+class HasThumbnailMixin:
     """Mixin providing a property to check whether a model instance provides a thumbail image."""
 
     @property

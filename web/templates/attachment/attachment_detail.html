@@ -30,18 +30,32 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <h2 class="card-title">{{ attachment.file_name }}</h2>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item list-group-item-action link-primary">
-                    <a href="{% url 'web:email-detail' attachment.email.pk %}">Email: {{ attachment.email.message_id }}</a>
-                </li>
-                <li class="list-group-item">Content Type: {{ attachment.content_type }}</li>
-                <li class="list-group-item">Content Disposition: {{ attachment.content_disposition }}</li>
-                <li class="list-group-item">Size: {{ attachment.datasize }} bytes</li>
-                <li class="list-group-item">Date received: {{ attachment.email.datetime }}</li>
-            </ul>
-        </div>
+        {% if attachment.has_thumbnail %}
+            <div class="row">
+                <div class="col-6">
+                {% endif %}
+                <div class="card-body">
+                    <h2 class="card-title">{{ attachment.file_name }}</h2>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-group-item-action link-primary">
+                            <a href="{% url 'web:email-detail' attachment.email.pk %}">Email: {{ attachment.email.message_id }}</a>
+                        </li>
+                        <li class="list-group-item">Content Type: {{ attachment.content_type }}</li>
+                        <li class="list-group-item">Content Disposition: {{ attachment.content_disposition }}</li>
+                        <li class="list-group-item">Size: {{ attachment.datasize }} bytes</li>
+                        <li class="list-group-item">Date received: {{ attachment.email.datetime }}</li>
+                    </ul>
+                </div>
+
+                {% if email.has_thumbnail %}
+                </div>
+                <div class="col-6">
+                    <img src="{{ attachment.get_absolute_thumbnail_url }}"
+                         class="img-fluid p-1"
+                         alt="Image attachment" />
+                </div>
+            </div>
+        {% endif %}
 
         {% include "partials/_dates_card_uneditable-footer.html" with object=attachment %}
 

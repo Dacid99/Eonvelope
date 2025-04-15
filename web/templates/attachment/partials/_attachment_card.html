@@ -1,18 +1,31 @@
 <a href="{{ attachment.get_absolute_url }}">
     <div class="card">
-        <div class="card-body">
-            <h5 class="card-title align-items-center">
-                {{ attachment.file_name }}
+        {% if attachment.has_thumbnail %}
+            <div class="row g-0">
+                <div class="col-md-8">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title align-items-center">
+                        {{ attachment.file_name }}
 
-                {% include "partials/_favorite_badge.html" with object=attachment %}
+                        {% include "partials/_favorite_badge.html" with object=attachment %}
 
-            </h5>
-            <div class="card-text">Type: {{ attachment.content_type }}</div>
-            <div class="card-text">Size: {{ attachment.datasize }} bytes</div>
-            <div class="card-text">Date received: {{ attachment.email.datetime }}</div>
+                    </h5>
+                    <div class="card-text">Type: {{ attachment.content_type }}</div>
+                    <div class="card-text">Size: {{ attachment.datasize }} bytes</div>
+                    <div class="card-text">Date received: {{ attachment.email.datetime }}</div>
 
-            {% include "partials/_dates_card-small.html" with object=attachment %}
+                    {% include "partials/_dates_card-small.html" with object=attachment %}
 
-        </div>
+                </div>
+                {% if attachment.has_thumbnail %}
+                </div>
+                <div class="col-md-4">
+                    <img src="{{ attachment.get_absolute_thumbnail_url }}"
+                         class="img-fluid rounded"
+                         alt="Image attachment" />
+                </div>
+            </div>
+        {% endif %}
     </div>
 </a>

@@ -26,8 +26,10 @@ from hashlib import md5
 from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models
+from django.urls import reverse
 
 from core.mixins.HasDownloadMixin import HasDownloadMixin
+from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
 from Emailkasten.utils import get_config
 
@@ -45,7 +47,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AttachmentModel(HasDownloadMixin, URLMixin, models.Model):
+class AttachmentModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
     """Database model for an attachment file in a mail."""
 
     file_name = models.CharField(max_length=255)
@@ -208,3 +210,13 @@ class AttachmentModel(HasDownloadMixin, URLMixin, models.Model):
     @property
     def has_download(self):
         return self.file_path is not None
+
+    @override
+    @property
+    def has_thumbnail(self):
+        return self.content_type.startswith("image")
+
+    @override
+    def get_absolute_thumbnail_url(self) -> str:
+        """Returns the url of the thumbail download api endpoint."""
+        return reverse(f"api:v1:{self.BASENAME}-download", kwargs={"pk": self.pk})

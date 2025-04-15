@@ -21,6 +21,7 @@
 import logging
 
 import pytest
+from imap_tools.imap_utf7 import utf7_encode
 from model_bakery import baker
 
 from core.constants import EmailProtocolChoices
@@ -352,7 +353,7 @@ def test_IMAPFetcher_fetchEmails_success(
         expectedUidFetchCalls
     )
     mock_IMAP4.return_value.select.assert_called_once_with(
-        imap_mailboxModel.name, readonly=True
+        utf7_encode(imap_mailboxModel.name), readonly=True
     )
     assert mock_IMAP4.return_value.uid.call_count == len(expectedUidFetchCalls) + 1
     mock_IMAP4.return_value.uid.assert_has_calls(
@@ -398,7 +399,7 @@ def test_IMAPFetcher_fetchEmails_badResponse(
     assert mock_IMAP4.return_value.select.call_count == expectedCalls[0]
     if expectedCalls[0]:
         mock_IMAP4.return_value.select.assert_called_with(
-            imap_mailboxModel.name, readonly=True
+            utf7_encode(imap_mailboxModel.name), readonly=True
         )
 
     assert mock_IMAP4.return_value.uid.call_count == expectedCalls[1]
@@ -424,7 +425,7 @@ def test_IMAPFetcher_fetchEmails_exception(
     assert mock_IMAP4.return_value.select.call_count == expectedCalls[0]
     if expectedCalls[0]:
         mock_IMAP4.return_value.select.assert_called_with(
-            imap_mailboxModel.name, readonly=True
+            utf7_encode(imap_mailboxModel.name), readonly=True
         )
 
     assert mock_IMAP4.return_value.uid.call_count == expectedCalls[1]
@@ -451,7 +452,7 @@ def test_IMAPFetcher_fetchEmails_badResponse_ignored(
         expectedUidFetchCalls
     )
     mock_IMAP4.return_value.select.assert_called_once_with(
-        imap_mailboxModel.name, readonly=True
+        utf7_encode(imap_mailboxModel.name), readonly=True
     )
     assert mock_IMAP4.return_value.uid.call_count == len(expectedUidFetchCalls) + 1
     mock_IMAP4.return_value.uid.assert_has_calls(
@@ -479,7 +480,7 @@ def test_IMAPFetcher_fetchEmails_exception_ignored(
         expectedUidFetchCalls
     )
     mock_IMAP4.return_value.select.assert_called_with(
-        imap_mailboxModel.name, readonly=True
+        utf7_encode(imap_mailboxModel.name), readonly=True
     )
     assert mock_IMAP4.return_value.uid.call_count == len(expectedUidFetchCalls) + 1
     mock_IMAP4.return_value.uid.assert_has_calls(

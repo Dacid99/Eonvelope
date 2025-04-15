@@ -25,6 +25,7 @@ import imaplib
 from typing import TYPE_CHECKING, Final, override
 
 from django.utils import timezone
+from imap_tools.imap_utf7 import utf7_encode
 
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from core.utils.fetchers.SafeIMAPMixin import SafeIMAPMixin
@@ -192,7 +193,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
             mailbox,
         )
         self.logger.debug("Opening mailbox %s ...", mailbox)
-        self.safe_select(mailbox.name, readonly=True)
+        self.safe_select(utf7_encode(mailbox.name), readonly=True)
         self.logger.debug("Successfully opened mailbox.")
 
         self.logger.debug("Searching %s messages in %s ...", searchCriterion, mailbox)

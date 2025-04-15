@@ -59,13 +59,24 @@ class AccountDetailWithDeleteView(
 
     def handle_update_mailboxes(self, request: HttpRequest) -> HttpResponse:
         self.object = self.get_object()
-        self.perform_update_mailboxes()
+        result = self.perform_update_mailboxes()
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
+        context.update({"action_result": result})
         return render(request, self.template_name, context)
 
-    def perform_update_mailboxes(self) -> None:
+    def perform_update_mailboxes(self) -> dict[str, bool | str]:
+        result = {"status": None, "message": None, "error": None}
         try:
             self.object.update_mailboxes()
-        except MailAccountError:
-            pass
+        except MailAccountError as error:
+            result.update(
+                {
+                    "status": False,
+                    "message": "Updating mailboxes failed",
+                    "error": str(error),
+                }
+            )
+        else:
+            result.update({"status": True, "message": "Updating mailboxes successful"})
+        return result

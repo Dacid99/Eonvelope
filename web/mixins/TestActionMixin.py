@@ -22,7 +22,7 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
-from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from core.utils.fetchers.exceptions import FetcherError
 
 
 class TestActionMixin:
@@ -31,10 +31,10 @@ class TestActionMixin:
     def handle_test(self, request: HttpRequest) -> HttpResponse:
         """The handler method for the `test` action."""
         self.object = self.get_object()
-        test_result = self.perform_test()
+        result = self.perform_test()
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
-        context["test_result"] = test_result
+        context["action_result"] = result
         return render(request, self.template_name, context)
 
     def perform_test(self) -> dict[str, bool | str]:
@@ -43,13 +43,13 @@ class TestActionMixin:
         Returns:
             Data containing the status and, if provided, the error message of the test.
         """
-        result = {"status": None, "error": None}
+        result = {"status": None, "message": None, "error": None}
         try:
             self.object.test_connection()
-        except MailAccountError as error:
-            result.update({"status": False, "error": str(error)})
-        except MailboxError as error:
-            result.update({"status": False, "error": str(error)})
+        except FetcherError as error:
+            result.update(
+                {"status": False, "message": "Test failed", "error": str(error)}
+            )
         else:
-            result.update({"status": True})
+            result.update({"status": True, "message": "Test successful"})
         return result

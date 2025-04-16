@@ -311,7 +311,7 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
         Returns:
             Whether the mail is considered spam.
         """
-        return bool(self.x_spam) and self.x_spam != "NO"
+        return "YES" in str(self.x_spam)
 
     @staticmethod
     def createFromEmailBytes(

@@ -40,6 +40,7 @@
                         <li class="list-group-item">Subject: {{ email.email_subject }}</li>
                         <li class="list-group-item">Date received: {{ email.datetime|date:"d-m-Y" }}</li>
                         <li class="list-group-item">X-Spam: {{ email.x_spam }}</li>
+                        <li class="list-group-item">Datasize: {{ email.datasize }}</li>
                         {% if email.mailinglist %}
                             <li class="list-group-item list-group-item-action">
                                 Mailinglist: <a href="{{ email.mailinglist.get_absolute_url }}"

@@ -12,7 +12,9 @@
                 {% include "partials/_favorite_badge.html" with object=email %}
 
             </div>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "partials/_download-button.html" with object=email %}
@@ -44,21 +46,21 @@
                         {% if email.mailinglist %}
                             <li class="list-group-item list-group-item-action">
                                 Mailinglist: <a href="{{ email.mailinglist.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Mailinglist: {{ email.mailinglist.list_id }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Mailinglist: {{ email.mailinglist.list_id }}</a>
                             </li>
                         {% endif %}
                         <li class="list-group-item list-group-item-action">
                             Mailbox: <a href="{{ email.mailbox.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.name }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.name }}</a>
                         </li>
                         <li class="list-group-item list-group-item-action">
                             Account: <a href="{{ email.mailbox.account.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.account.mail_address }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.account.mail_address }}</a>
                         </li>
                         {% if email.inReplyTo %}
                             <li class="list-group-item list-group-item-action">
                                 In reply to: <a href="{{ email.inReplyTo.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.inReplyTo.message_id }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.inReplyTo.message_id }}</a>
                             </li>
                         {% endif %}
                         <div class="accordion accordion-flush" id="content-accordion">
@@ -91,7 +93,9 @@
                                      class="accordion-collapse collapse"
                                      aria-labelledby="html-text-header"
                                      data-bs-parent="content-accordion">
-                                    <div class="accordion-body">{{ email.html_bodytext }}</div>
+                                    <div class="accordion-body">
+                                        <code>{{ email.html_bodytext }}</code>
+                                    </div>
                                 </div>
                             </li>
                         </div>

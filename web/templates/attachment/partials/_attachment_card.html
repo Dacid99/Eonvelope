@@ -1,5 +1,5 @@
 <a href="{{ attachment.get_absolute_url }}"
-   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
         {% if attachment.has_thumbnail %}
             <div class="row g-0">
@@ -15,7 +15,7 @@
                     <div class="card-text">Type: {{ attachment.content_type }}</div>
                     <div class="card-text">
                         Email: <a href="{{ attachment.email.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
                     </div>
                     <div class="card-text">Date received: {{ attachment.email.datetime }}</div>
 

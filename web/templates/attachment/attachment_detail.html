@@ -12,7 +12,9 @@
                 {% include "partials/_favorite_badge.html" with object=attachment %}
 
             </div>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "partials/_download-button.html" with object=attachment %}
@@ -39,7 +41,7 @@
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item list-group-item-action ">
                             Email: <a href="{{ attachment.email.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
                         </li>
                         <li class="list-group-item">Content Type: {{ attachment.content_type }}</li>
                         <li class="list-group-item">Content Disposition: {{ attachment.content_disposition }}</li>

@@ -10,14 +10,16 @@
 
     <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center">
-            <div>
+            <div class="align-items-center">
 
                 {% include "partials/_favorite_badge.html" with object=account %}
 
                 {% include "partials/_health_badge.html" with object=account %}
 
             </div>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "partials/_test-button.html" %}
@@ -42,7 +44,7 @@
         <div class="card-body">
             <h2 class="card-title">
                 <a href="mailto:{{ account.mail_address }}"
-                   class="link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ account.mail_address }}</a>
+                   class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ account.mail_address }}</a>
             </h2>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Host: {{ account.mail_host }}</li>

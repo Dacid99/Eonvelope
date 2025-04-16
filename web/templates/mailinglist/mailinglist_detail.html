@@ -12,7 +12,9 @@
                 {% include "partials/_favorite_badge.html" with object=mailinglist %}
 
             </div>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=mailinglist %}
@@ -32,15 +34,15 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">
                     Subscribe: <a href="mailto:{{ mailinglist.list_subscribe }}"
-    class="link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_subscribe }}</a>
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_subscribe }}</a>
                 </li>
                 <li class="list-group-item">
                     Unsubscribe: <a href="mailto:{{ mailinglist.list_unsubscribe }}"
-    class="link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_unsubscribe }}</a>
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_unsubscribe }}</a>
                 </li>
                 <li class="list-group-item">
                     Post: <a href="mailto:{{ mailinglist.list_post }}"
-    class="link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_post }}</a>
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_post }}</a>
                 </li>
                 <li class="list-group-item">Archive: {{ mailinglist.list_archive }}</li>
                 <li class="list-group-item">Help: {{ mailinglist.list_help }}</li>

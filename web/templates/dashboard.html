@@ -8,7 +8,7 @@
     <h1 class="my-3">Welcome to Emailkasten</h1>
 
     <div class="row justify-content-evenly">
-        <div class="col-8">
+        <div class="col-9">
             <div class="card">
                 <h4 class="card-header">Latest Emails</h4>
                 <div class="card-body">
@@ -18,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-3">
             <div class="card">
                 <h4 class="card-header">Database stats</h4>
                 <div class="card-body">
@@ -31,28 +31,28 @@
                             <tr>
                                 <td>
                                     <a href="{% url 'web:email-filter-list' %}"
-                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Emails</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Emails</a>
                                 </td>
                                 <td>{{ emails_count }}</td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="{% url 'web:correspondent-filter-list' %}"
-                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Correspondents</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Correspondents</a>
                                 </td>
                                 <td>{{ correspondents_count }}</td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="{% url 'web:mailinglist-filter-list' %}"
-                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Mailinglists</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Mailinglists</a>
                                 </td>
                                 <td>{{ mailinglists_count }}</td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="{% url 'web:attachment-filter-list' %}"
-                                       class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Attachments</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Attachments</a>
                                 </td>
                                 <td>{{ attachments_count }}</td>
                             </tr>

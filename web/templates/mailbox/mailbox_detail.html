@@ -17,7 +17,9 @@
                 {% include "partials/_health_badge.html" with object=mailbox %}
 
             </div>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "partials/_test-button.html" %}
@@ -45,7 +47,7 @@
             <h2 class="card-title">{{ mailbox.name }}</h2>
             <h3 class="card-subtitle">
                 Account: <a href="{{ mailbox.account.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailbox.account.mail_address }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailbox.account.mail_address }}</a>
             </h3>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Save attachments: {{ mailbox.save_attachments }}</li>

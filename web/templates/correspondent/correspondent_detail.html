@@ -12,7 +12,9 @@
                 {% include "partials/_favorite_badge.html" with object=correspondent %}
 
             </div>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=correspondent %}
@@ -30,7 +32,7 @@
         <div class="card-body">
             <h2 class="card-title">
                 <a href="mailto:{{ correspondent.email_address }}"
-                   class="link-info link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ correspondent.email_address }}</a>
+                   class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ correspondent.email_address }}</a>
             </h2>
             <h3 class="card-subtitle">{{ correspondent.email_name }}</h3>
         </div>

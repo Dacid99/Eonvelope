@@ -1,10 +1,13 @@
 <a href="{{ emailcorrespondent.email.get_absolute_url }}"
-   class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">{{ emailcorrespondent.mention }}</h5>
-            <h6 class="card-subtitle">{{ emailcorrespondent.email.message_id }}</h6>
-            <h6 class="card-subtitle">{{ emailcorrespondent.email.email_subject }}</h6>
+            <h6 class="card-subtitle">
+                {{ emailcorrespondent.email.message_id }}
+                <br>
+                {{ emailcorrespondent.email.email_subject }}
+            </h6>
         </div>
     </div>
 </a>

@@ -19,7 +19,9 @@
                 {% include "partials/_health_badge.html" with object=daemon %}
 
             </div>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with buttons">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "daemon/partials/_start-button.html" %}
@@ -47,11 +49,10 @@
             <h2 class="card-title">{{ daemon.uuid }}</h2>
             <h3 class="card-subtitle">
                 Mailbox: <a href="{{ daemon.mailbox.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.name }}</a>
-            </h3>
-            <h3 class="card-subtitle">
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.name }}</a>
+                <br>
                 Account: <a href="{{ daemon.mailbox.account.get_absolute_url }}"
-    class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.account.mail_address }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.account.mail_address }}</a>
             </h3>
             <ul class="list-group list-group-flush">
                 <li class="list-group-item">Criterion: {{ daemon.fetching_criterion }}</li>

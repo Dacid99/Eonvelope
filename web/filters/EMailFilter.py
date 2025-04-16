@@ -94,5 +94,5 @@ class EMailFilter(django_filters.FilterSet):
                 | Q(html_bodytext__icontains=value)
                 | Q(headers__has_key=value)
                 | Q(correspondents__email_address=value)
-            )
+            ).distinct()
         return queryset

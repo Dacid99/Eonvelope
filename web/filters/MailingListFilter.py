@@ -91,5 +91,5 @@ class MailingListFilter(django_filters.FilterSet):
                 | Q(list_post__icontains=value)
                 | Q(list_help__icontains=value)
                 | Q(list_archive__icontains=value)
-            )
+            ).distinct()
         return queryset

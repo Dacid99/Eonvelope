@@ -1,8 +1,5 @@
-{% load crispy_forms_tags %}
+{% include "partials/_filter-form.html" %}
 
-<form method="get" class="form">
-    {{ filter.form|crispy }}
-    <button type="submit" class="btn btn-primary">Filter</button>
-</form>
+<hr>
 
 {% include "account/partials/_account_list.html" with accounts=filter.qs %}

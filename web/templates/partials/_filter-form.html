@@ -1,0 +1,6 @@
+{% load crispy_forms_tags %}
+
+<form method="get" class="form">
+    {{ filter.form|crispy }}
+    <button type="submit" class="btn btn-primary">Filter</button>
+</form>

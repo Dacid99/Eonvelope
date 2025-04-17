@@ -358,7 +358,17 @@ def test_EMailModel_fullConversation(emailConversation, start_id):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "x_spam, expectedResult", [(None, False), ("YES", True), ("NO", False)]
+    "x_spam, expectedResult",
+    [
+        (None, False),
+        ("", False),
+        ("YES", True),
+        ("NO", False),
+        ("NO, YES", True),
+        ("YES, YES", True),
+        ("NO, NO", False),
+        ("CRAZY", False),
+    ],
 )
 def test_EMailModel_isSpam(emailModel, x_spam, expectedResult):
     """Tests :func:`core.models.EMailModel.EMailModel.isSpam`."""
@@ -453,8 +463,16 @@ def test_EMailModel_createFromEmailBytes_duplicate(
     [
         ("YES", True, True),
         ("NO", True, False),
+        ("YES, NO", True, True),
+        ("NO, YES", True, True),
+        ("NO, NO", True, False),
+        ("SOMETHING", True, False),
         ("YES", False, False),
         ("NO", False, False),
+        ("YES, NO", False, False),
+        ("NO, YES", False, False),
+        ("NO, NO", False, False),
+        ("SOMETHING", False, False),
     ],
 )
 def test_EMailModel_createFromEmailBytes_spam(

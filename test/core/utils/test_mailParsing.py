@@ -35,7 +35,7 @@ from email.utils import format_datetime
 import pytest
 
 import core.constants
-import core.utils.mailParsing
+from core.utils.mailParsing import is_X_Spam
 
 
 @pytest.fixture(autouse=True)
@@ -298,3 +298,23 @@ def test_parseMailboxName_success(nameBytes, expectedName):
     result = core.utils.mailParsing.parseMailboxName(nameBytes)
 
     assert result == expectedName
+
+
+@pytest.mark.parametrize(
+    "x_spam, expectedResult",
+    [
+        (None, False),
+        ("", False),
+        ("YES", True),
+        ("NO", False),
+        ("NO, YES", True),
+        ("YES, YES", True),
+        ("NO, NO", False),
+        ("CRAZY", False),
+    ],
+)
+def test_is_X_Spam(x_spam, expectedResult):
+    """Tests :func:`core.models.EMailModel.EMailModel.isSpam`."""
+    result = is_X_Spam(x_spam)
+
+    assert result is expectedResult

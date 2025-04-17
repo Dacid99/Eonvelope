@@ -35,7 +35,7 @@ from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.utils.fileManagment import saveStore
-from core.utils.mailParsing import eml2html
+from core.utils.mailParsing import eml2html, is_X_Spam
 from Emailkasten.utils import get_config
 
 from ..utils.mailParsing import getHeader, parseDatetimeHeader
@@ -313,7 +313,7 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
         Returns:
             Whether the mail is considered spam.
         """
-        return "YES" in str(self.x_spam)
+        return is_X_Spam(self.x_spam)
 
     @staticmethod
     def createFromEmailBytes(
@@ -341,7 +341,7 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
         x_spam = getHeader(
             emailMessage, HeaderFields.X_SPAM, fallbackCallable=lambda: ""
         )
-        if x_spam != "NO" and get_config("THROW_OUT_SPAM"):
+        if is_X_Spam(x_spam) and get_config("THROW_OUT_SPAM"):
             logger.debug(
                 "Skipping email with Message-ID %s in %s, it is flagged as spam.",
                 message_id,

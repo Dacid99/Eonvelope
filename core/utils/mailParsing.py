@@ -237,3 +237,15 @@ def eml2html(emailBytes: bytes) -> str:
             f"<p><hr><p><b>Attached Files:</b><p><ul>{attachmentsFooter}</ul></html>",
         )
     return get_sanitizer().sanitize(html)
+
+
+def is_X_Spam(x_spam_header: str | None) -> bool:
+    """Evaluates a x_spam header spam marker.
+
+    Args:
+        x_spam_header: The X-Spam-Flag header to evaluate.
+
+    Returns:
+        Whether the header marks its mail as spam.
+    """
+    return "YES" in str(x_spam_header)

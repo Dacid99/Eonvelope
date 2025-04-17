@@ -16,6 +16,9 @@
             </div>
         </div>
         <div class="card-body">
+
+            {% load django_bootstrap5 %}
+
             <form method="post">
                 {% csrf_token %}
                 <ul class="list-group list-group-flush">

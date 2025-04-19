@@ -67,4 +67,5 @@ urlpatterns = [
     # web
     path("", include("web.urls")),
     path("users/", include("allauth.urls")),
+    path("users/", include("django.conf.urls.i18n")),
 ]

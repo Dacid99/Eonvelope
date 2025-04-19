@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
+    "django.contrib.humanize",
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
@@ -70,6 +71,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.usersessions",
     "dj_rest_auth",
     "constance",
     "constance.backends.database",
@@ -84,6 +86,7 @@ INSTALLED_APPS = [
     "Emailkasten",
     "core",
     "api",
+    "web",
 ]
 
 REST_FRAMEWORK = {
@@ -120,7 +123,10 @@ ROOT_URLCONF = "Emailkasten.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "web/templates/"],
+        "DIRS": [
+            BASE_DIR / "web" / "templates",
+            BASE_DIR / "Emailkasten" / "templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

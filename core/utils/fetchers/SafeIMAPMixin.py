@@ -18,9 +18,10 @@
 
 """Module with the SafeIMAPMixin mixin."""
 
-import imaplib
 from collections.abc import Callable
 from typing import Any
+
+from django.utils.translation import gettext as _
 
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError, MailboxError
 
@@ -64,9 +65,16 @@ class SafeIMAPMixin:
             exception: If the response status doesnt match the expectation.
         """
         if response[0] != expectedStatus:
-            self.logger.error("Bad server response for %s:\n%s", commandName, response)
+            self.logger.error(
+                "Bad server response for %s:\n%s",
+                commandName,
+                response,
+            )
             if exception is not None:
-                raise exception(f"Bad server response for {commandName}:\n{response}")
+                raise exception(
+                    _("Bad server response for %(commandName)s:\n%(response)s")
+                    % {"commandName": commandName, "response": response}
+                )
         self.logger.debug("Server responded %s as expected.", response[0])
 
     @staticmethod
@@ -104,7 +112,11 @@ class SafeIMAPMixin:
                     )
                     if exception is not None:
                         raise exception(
-                            f"An {error.__class__.__name__} occured during {imapAction.__name__}!",
+                            _("An %(error_class_name)s occured during %(action_name)s!")
+                            % {
+                                "error_class_name": error.__class__.__name__,
+                                "action_name": imapAction.__name__,
+                            },
                         ) from error
                     return None
                 else:

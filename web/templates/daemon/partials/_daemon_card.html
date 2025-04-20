@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a href="{{ daemon.get_absolute_url }}"
    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
@@ -7,19 +9,18 @@
                 <div>
 
                     {% include "daemon/partials/_is_running-badge.html" %}
-
                     {% include "partials/_health_badge.html" with object=daemon %}
 
                 </div>
             </h5>
             <h6 class="card-subtitle">
-                Mailbox: <a href="{{ daemon.mailbox.get_absolute_url }}"
+                {% translate "Mailbox" %}: <a href="{{ daemon.mailbox.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.name }}</a>
                 <br>
-                Account: <a href="{{ daemon.mailbox.account.get_absolute_url }}"
+                {% translate "Account" %}: <a href="{{ daemon.mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.account.mail_address }}</a>
             </h6>
-            <div class="card-text">Criterion: {{ daemon.fetching_criterion }}</div>
+            <div class="card-text">{% translate "Criterion" %}: {{ daemon.fetching_criterion }}</div>
 
             {% include "partials/_dates_card-small.html" with object=daemon %}
 

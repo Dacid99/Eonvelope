@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Correspondent Details -
+    {% translate "Correspondent Details" %} -
 {% endblock title %}
 
 {% block content %}
@@ -18,7 +20,6 @@
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=correspondent %}
-
                     {% include "partials/_edit-button.html" with object=correspondent %}
 
                 </div>
@@ -41,7 +42,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Emails</h4>
+                <h4 class="card-title">{% translate "Emails" %}</h4>
 
                 {% include "emailcorrespondents/partials/_correspondentemails_list.html" with emailcorrespondents=correspondent.correspondentemails.all %}
 

@@ -28,6 +28,7 @@ from hashlib import md5
 from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models, transaction
+from django.utils.translation import gettext_lazy as _
 
 from core.constants import HeaderFields
 from core.mixins.HasDownloadMixin import HasDownloadMixin
@@ -138,7 +139,9 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
 
     BASENAME = "email"
 
-    DELETE_NOTICE = "This will delete this email and all its attachments but not its correspondents or mailinglists."
+    DELETE_NOTICE = _(
+        "This will delete this email and all its attachments but not its correspondents or mailinglists."
+    )
 
     class Meta:
         """Metadata class for the model."""
@@ -160,7 +163,13 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
         Returns:
             The string representation of the email, using :attr:`message_id`, :attr:`datetime` and :attr:`mailbox`.
         """
-        return f"Email with ID {self.message_id}, received on {self.datetime} from {self.mailbox}"
+        return _(
+            "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
+        ) % {
+            "message_id": self.message_id,
+            "datetime": self.datetime,
+            "mailbox": self.mailbox,
+        }
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:

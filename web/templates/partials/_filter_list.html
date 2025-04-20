@@ -1,9 +1,11 @@
+{% load i18n %}
+
 <div class="d-grid m-1">
     <button class="btn btn-outline-primary"
             type="button"
             data-bs-toggle="offcanvas"
             data-bs-target="#offcanvasFilter"
-            aria-controls="offcanvasFilter">Show filter options</button>
+            aria-controls="offcanvasFilter">{% translate "Show filter options" %}</button>
 </div>
 <hr>
 
@@ -16,7 +18,7 @@
      id="offcanvasFilter"
      aria-labelledby="offcanvasFilterLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasFilterLabel">Filter options</h5>
+        <h5 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h5>
         <button type="button"
                 class="btn-close"
                 data-bs-dismiss="offcanvas"

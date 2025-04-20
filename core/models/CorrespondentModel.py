@@ -23,6 +23,7 @@ from __future__ import annotations
 import logging
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from core.mixins.URLMixin import URLMixin
 from core.utils.mailParsing import parseCorrespondentHeader
@@ -39,8 +40,8 @@ class CorrespondentModel(URLMixin, models.Model):
         max_length=255,
         default="",
         blank=True,
-        verbose_name="Mailer name",
-        help_text="The mailer name of the correspondent.",
+        verbose_name=_("Mailer name"),
+        help_text=_("The mailer name of the correspondent."),
     )
     """The mailer name. Can be blank if none has been found."""
 
@@ -58,7 +59,7 @@ class CorrespondentModel(URLMixin, models.Model):
 
     BASENAME = "correspondent"
 
-    DELETE_NOTICE = "This will only delete this correspondent, not its emails."
+    DELETE_NOTICE = _("This will only delete this correspondent, not its emails.")
 
     class Meta:
         """Metadata class for the model."""
@@ -72,7 +73,9 @@ class CorrespondentModel(URLMixin, models.Model):
         Returns:
             The string representation of the correspondent, using :attr:`email_address`.
         """
-        return f"Correspondent with address {self.email_address}"
+        return _("Correspondent with address %(email_address)s") % {
+            "email_address": self.email_address
+        }
 
     @staticmethod
     def fromHeader(header: str) -> CorrespondentModel | None:

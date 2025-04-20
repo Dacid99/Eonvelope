@@ -1,7 +1,9 @@
+{% load i18n %}
+
 <form method="post">
     {% csrf_token %}
     <button type="submit"
             class="btn btn-outline-primary"
             name="start_daemon"
-            {% if daemon.is_running %}disabled{% endif %}>Start</button>
+            {% if daemon.is_running %}disabled{% endif %}>{% translate "Start" %}</button>
 </form>

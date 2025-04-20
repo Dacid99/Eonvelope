@@ -1,6 +1,6 @@
-{% load crispy_forms_tags %}
+{% load i18n crispy_forms_tags %}
 
 <form method="get" class="form">
     {{ filter.form|crispy }}
-    <button type="submit" class="btn btn-primary">Filter</button>
+    <button type="submit" class="btn btn-primary">{% translate "Filter" %}</button>
 </form>

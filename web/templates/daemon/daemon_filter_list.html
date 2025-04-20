@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Daemons -
+    {% translate "Daemons" %} -
 {% endblock title %}
 
 {% block content %}
-    <h2>Daemons</h2>
+    <h2>{% translate "Daemons" %}</h2>
 
     {% include "daemon/partials/_daemon_filter_list.html" %}
 

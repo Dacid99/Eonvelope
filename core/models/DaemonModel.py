@@ -29,6 +29,7 @@ from dirtyfields import DirtyFieldsMixin
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 import Emailkasten.constants
 from core.mixins.HasDownloadMixin import HasDownloadMixin
@@ -61,22 +62,24 @@ class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         choices=EmailFetchingCriterionChoices.choices,
         default=EmailFetchingCriterionChoices.ALL,
         max_length=10,
-        verbose_name="Fetching Criterion",
-        help_text="The selection criterion for emails to archive.",
+        verbose_name=_("Fetching Criterion"),
+        help_text=_("The selection criterion for emails to archive."),
     )
     """The fetching criterion for this mailbox. :attr:`Emailkasten.constants.EmailFetchingCriterionChoices.ALL` by default."""
 
     cycle_interval = models.PositiveIntegerField(
         default=get_config("DAEMON_CYCLE_PERIOD_DEFAULT"),
-        verbose_name="Cycle Period",
-        help_text="The time between two daemon runs in seconds.",
+        verbose_name=_("Cycle Period"),
+        help_text=_("The time between two daemon runs in seconds."),
     )
     """The period with which the daemon is running. :attr:`constance.config('DAEMON_CYCLE_PERIOD_DEFAULT')` by default."""
 
     restart_time = models.PositiveIntegerField(
         default=get_config("DAEMON_RESTART_TIME_DEFAULT"),
-        verbose_name="Restart time",
-        help_text="The time to wait before restarting the daemon after a crash in seconds.",
+        verbose_name=_("Restart time"),
+        help_text=_(
+            "The time to wait before restarting the daemon after a crash in seconds."
+        ),
     )
     """The time after which a crashed daemon restarts. :attr:`constance.config('DAEMON_RESTART_TIME_DEFAULT')` by default."""
 
@@ -99,15 +102,15 @@ class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
 
     log_backup_count = models.PositiveSmallIntegerField(
         default=get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT"),
-        verbose_name="Logfile Backup Count",
-        help_text="The number of historical logfiles to keep.",
+        verbose_name=_("Logfile Backup Count"),
+        help_text=_("The number of historical logfiles to keep."),
     )
     """The number of backup logfiles for the daemon. :attr:`constance.config('DAEMON_LOG_BACKUP_COUNT_DEFAULT')` by default."""
 
     logfile_size = models.PositiveIntegerField(
         default=get_config("DAEMON_LOGFILE_SIZE_DEFAULT"),
-        verbose_name="Logfile Maximum Size",
-        help_text="The maximum size of a logfile in bytes.",
+        verbose_name=_("Logfile Maximum Size"),
+        help_text=_("The maximum size of a logfile in bytes."),
     )
     """The maximum size of a logfile for the daemon in bytes. :attr:`constance.config('DAEMON_LOGFILE_SIZE_DEFAULT')` by default."""
 
@@ -119,7 +122,7 @@ class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
 
     BASENAME = "daemon"
 
-    DELETE_NOTICE = "This will only delete this daemon, not its mailbox."
+    DELETE_NOTICE = _("This will only delete this daemon, not its mailbox.")
 
     class Meta:
         """Metadata class for the model."""
@@ -143,7 +146,10 @@ class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         Returns:
             The string representation of the daemon, using :attr:`uuid` and :attr:`mailbox`.
         """
-        return f"Emailfetcherdaemon {self.uuid} for mailbox {self.mailbox}"
+        return _("Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s") % {
+            "uuid": self.uuid,
+            "mailbox": self.mailbox,
+        }
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:

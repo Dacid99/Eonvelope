@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Edit Mailbox -
+    {% translate "Edit Mailbox" %} -
 {% endblock title %}
 
 {% block content %}
@@ -13,7 +15,6 @@
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=mailbox %}
-
                     {% include "partials/_end_edit-button.html" with object=mailbox %}
 
                 </div>
@@ -39,7 +40,6 @@
                 </ul>
 
                 {% include "partials/_submit_edit-button.html" %}
-
                 {% include "partials/_cancel_edit-button.html" with object=mailbox %}
 
             </form>

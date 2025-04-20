@@ -28,6 +28,7 @@ from dirtyfields import DirtyFieldsMixin
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from ..constants import EmailProtocolChoices
 from ..mixins.URLMixin import URLMixin
@@ -53,46 +54,46 @@ class AccountModel(DirtyFieldsMixin, URLMixin, models.Model):
 
     mail_address = models.EmailField(
         max_length=255,
-        verbose_name="Email address",
-        help_text="The mail address to the account.",
+        verbose_name=_("Email address"),
+        help_text=_("The mail address to the account."),
     )
     """The mail address of the account. Unique together with :attr:`user`."""
 
     password = models.CharField(
         max_length=255,
-        verbose_name="Password",
-        help_text="The password to the account.",
+        verbose_name=_("Password"),
+        help_text=_("The password to the account."),
     )
     """The password to log into the account."""
 
     mail_host = models.CharField(
         max_length=255,
-        verbose_name="Mailserver-URL",
-        help_text="The URL of the mailserver for the chosen protocol.",
+        verbose_name=_("Mailserver-URL"),
+        help_text=_("The URL of the mailserver for the chosen protocol."),
     )
     """The url of the mail server where the account is located."""
 
     mail_host_port = models.PositiveIntegerField(
         null=True,
         blank=True,
-        verbose_name="Mailserver-Portnumber",
-        help_text="The port of the mailserver for the chosen protocol.",
+        verbose_name=_("Mailserver-Portnumber"),
+        help_text=_("The port of the mailserver for the chosen protocol."),
     )
     """The port of the mail server. Can be null if the default port of the protocol is used."""
 
     protocol = models.CharField(
         choices=EmailProtocolChoices.choices,
         max_length=10,
-        verbose_name="Email Protocol",
-        help_text="The email protocol implemented by the server.",
+        verbose_name=_("Email Protocol"),
+        help_text=_("The email protocol implemented by the server."),
     )
     """The mail protocol of the mail server."""
 
     timeout = models.PositiveIntegerField(
         null=True,
         blank=True,
-        verbose_name="Connection Timeout",
-        help_text="Timeout for the connection to the mailserver.",
+        verbose_name=_("Connection Timeout"),
+        help_text=_("Timeout for the connection to the mailserver."),
     )
     """The timeout parameter for the connection to the host. Can be null."""
 
@@ -118,7 +119,9 @@ class AccountModel(DirtyFieldsMixin, URLMixin, models.Model):
 
     BASENAME = "account"
 
-    DELETE_NOTICE = "This will delete this account and all mailboxes, emails and attachments found in it!"
+    DELETE_NOTICE = _(
+        "This will delete this account and all mailboxes, emails and attachments found in it!"
+    )
 
     class Meta:
         """Metadata class for the model."""
@@ -146,7 +149,10 @@ class AccountModel(DirtyFieldsMixin, URLMixin, models.Model):
         Returns:
             The string representation of the account, using :attr:`mail_address`, :attr:`mail_host` and :attr:`protocol`.
         """
-        return f"Account {self.mail_address} with protocol {self.protocol}"
+        return _("Account %(mail_address)s with protocol %(protocol)s") % {
+            "mail_address": self.mail_address,
+            "protocol": self.protocol,
+        }
 
     @override
     def clean(self) -> None:

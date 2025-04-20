@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Account Details -
+    {% translate "Account Details" %}% -
 {% endblock title %}
 
 {% block content %}
@@ -13,7 +15,6 @@
             <div class="align-items-center">
 
                 {% include "partials/_favorite_badge.html" with object=account %}
-
                 {% include "partials/_health_badge.html" with object=account %}
 
             </div>
@@ -23,14 +24,12 @@
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "partials/_test-button.html" %}
-
                     {% include "account/partials/_update_mailboxes-button.html" %}
 
                 </div>
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" %}
-
                     {% include "partials/_edit-button.html" with object=account %}
 
                 </div>
@@ -47,10 +46,10 @@
                    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ account.mail_address }}</a>
             </h2>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Host: {{ account.mail_host }}</li>
-                <li class="list-group-item">Protocol: {{ account.protocol }}</li>
-                <li class="list-group-item">Port: {{ account.mail_host_port }}</li>
-                <li class="list-group-item">Timeout: {{ account.timeout }}</li>
+                <li class="list-group-item">{% translate "Host" %}: {{ account.mail_host }}</li>
+                <li class="list-group-item">{% translate "Protocol" %}: {{ account.protocol }}</li>
+                <li class="list-group-item">{% translate "Port" %}: {{ account.mail_host_port }}</li>
+                <li class="list-group-item">{% translate "Timeout" %}: {{ account.timeout }}</li>
             </ul>
         </div>
 
@@ -58,7 +57,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Mailboxes</h4>
+                <h4 class="card-title">{% translate "Mailboxes" %}</h4>
 
                 {% include "mailbox/partials/_mailbox_list.html" with mailboxes=account.mailboxes.all %}
 

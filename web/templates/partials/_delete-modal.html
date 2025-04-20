@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <div class="modal fade"
      id="delete-modal"
      tabindex="-1"
@@ -6,7 +8,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 class="modal-title" id="delete-modal-label">Delete {{ object }}</h2>
+                <h2 class="modal-title" id="delete-modal-label">
+                    {% blocktranslate %}Delete {{ object }}{% endblocktranslate %}
+                </h2>
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
@@ -14,15 +18,17 @@
             </div>
             <div class="modal-body">
                 <p>
-                    <strong>Are you sure you want to delete {{ object }}?</strong>
+                    <strong>{% blocktranslate %}Are you sure you want to delete {{ object }}?{% endblocktranslate %}</strong>
                 </p>
                 <p>{{ object.DELETE_NOTICE }}</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {% translate "Close" %}
+                </button>
                 <form method="post">
                     {% csrf_token %}
-                    <button type="submit" class="btn btn-danger" name="delete">Delete</button>
+                    <button type="submit" class="btn btn-danger" name="delete">{% translate "Delete" %}</button>
                 </form>
             </div>
         </div>

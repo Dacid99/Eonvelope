@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.mixins.HasThumbnailMixin import HasThumbnailMixin
@@ -86,7 +87,7 @@ class AttachmentModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Mode
 
     BASENAME = "attachment"
 
-    DELETE_NOTICE = "This will only delete this attachment, not the email."
+    DELETE_NOTICE = _("This will only delete this attachment, not the email.")
 
     class Meta:
         """Metadata class for the model."""
@@ -108,7 +109,10 @@ class AttachmentModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Mode
         Returns:
             The string representation of the attachment, using :attr:`file_name` and :attr:`email`.
         """
-        return f"Attachment {self.file_name} from {self.email}"
+        return _("Attachment %(file_name)s from %(email)s") % {
+            "file_name": self.file_name,
+            "email": self.email,
+        }
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:

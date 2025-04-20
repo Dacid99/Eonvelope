@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Accounts -
+    {% translate "Accounts" %} -
 {% endblock title %}
 
 {% block content %}
-
     <div class="d-flex justify-content-between align-items-center mb-2">
-        <h2>Accounts</h2>
+        <h2>{% translate "Accounts" %}</h2>
 
         {% include "account/partials/_add_button.html" %}
 

@@ -1,10 +1,12 @@
+{% load i18n %}
+
 {% if stop_result %}
     <div class="alert alert-{% if stop_result.status %}success{% else %}warning{% endif %} alert-dismissible"
          role="alert">
         {% if stop_result.status %}
-            Daemon stopped successfully
+            {% translate "Daemon stopped successfully" %}
         {% else %}
-            Daemon was not running
+            {% translate "Daemon was not running" %}
         {% endif %}
         <button type="button"
                 class="btn-close"

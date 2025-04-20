@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a href="{{ email.get_absolute_url }}"
    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
@@ -12,16 +14,15 @@
                         {% include "partials/_favorite_badge.html" with object=email %}
 
                     </h5>
-
                     <h6 class="card-subtitle">
-                        Mailbox: <a href="{{ email.mailbox.get_absolute_url }}"
+                        {% translate "Mailbox" %}: <a href="{{ email.mailbox.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.name }}</a>
                         <br>
-                        Account: <a href="{{ email.mailbox.account.get_absolute_url }}"
+                        {% translate "Account" %}: <a href="{{ email.mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.account.mail_address }}</a>
                     </h6>
-                    <div class="card-text">Subject: {{ email.email_subject }}</div>
-                    <div class="card-text">Date received: {{ email.datetime }}</div>
+                    <div class="card-text">{% translate "Subject" %}: {{ email.email_subject }}</div>
+                    <div class="card-text">{% translate "Date received" %}: {{ email.datetime }}</div>
 
                     {% include "partials/_dates_card-small.html" with object=email %}
 

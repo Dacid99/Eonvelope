@@ -21,6 +21,8 @@
 from collections.abc import Callable
 from typing import Any
 
+from django.utils.translation import gettext as _
+
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 
 
@@ -65,7 +67,10 @@ class SafePOPMixin:
         if not status.startswith(expectedStatus):
             self.logger.error("Bad server response for %s:\n%s", commandName, response)
             if exception is not None:
-                raise exception(f"Bad server response for {commandName}:\n{response}")
+                raise exception(
+                    _("Bad server response for %(commandName)s:\n%(response)s")
+                    % {"commandName": commandName, "response": response}
+                )
         self.logger.debug("Server responded %s as expected.", status)
 
     @staticmethod
@@ -102,7 +107,11 @@ class SafePOPMixin:
                     )
                     if exception is not None:
                         raise exception(
-                            f"An {error.__class__.__name__} occured during {popAction.__name__}!",
+                            _("An %(error_class_name)s occured during %(action_name)s!")
+                            % {
+                                "error_class_name": error.__class__.__name__,
+                                "action_name": popAction.__name__,
+                            },
                         ) from error
                     return None
                 else:

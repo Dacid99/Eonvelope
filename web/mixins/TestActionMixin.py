@@ -21,6 +21,7 @@
 
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
+from django.utils.translation import gettext as _
 
 from core.utils.fetchers.exceptions import FetcherError
 
@@ -48,8 +49,8 @@ class TestActionMixin:
             self.object.test_connection()
         except FetcherError as error:
             result.update(
-                {"status": False, "message": "Test failed", "error": str(error)}
+                {"status": False, "message": _("Test failed"), "error": str(error)}
             )
         else:
-            result.update({"status": True, "message": "Test successful"})
+            result.update({"status": True, "message": _("Test successful")})
         return result

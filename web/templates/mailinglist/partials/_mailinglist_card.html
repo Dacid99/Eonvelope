@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a href="{{ mailinglist.get_absolute_url }}"
    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
@@ -8,7 +10,7 @@
                 {% include "partials/_favorite_badge.html" with object=mailinglist %}
 
             </h5>
-            <h6 class="card-subtitle">Owner: {{ mailinglist.list_owner }}</h6>
+            <h6 class="card-subtitle">{% translate "Owner" %}: {{ mailinglist.list_owner }}</h6>
 
             {% include "partials/_dates_card-small.html" with object=mailinglist %}
 

@@ -24,6 +24,7 @@ import logging
 from typing import TYPE_CHECKING
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from core.mixins.URLMixin import URLMixin
 
@@ -73,7 +74,7 @@ class MailingListModel(URLMixin, models.Model):
 
     BASENAME = "mailinglist"
 
-    DELETE_NOTICE = "This will delete this mailinglist and all its emails!"
+    DELETE_NOTICE = _("This will delete this mailinglist and all its emails!")
 
     class Meta:
         """Metadata class for the model."""
@@ -87,7 +88,10 @@ class MailingListModel(URLMixin, models.Model):
         Returns:
             The string representation of the mailinglist, using :attr:`list_id`.
         """
-        return f"Mailinglist {self.list_id}"
+        return _("Mailinglist %(list_id)s from %(list_owner)s") % {
+            "list_id": self.list_id,
+            "list_owner": self.list_owner,
+        }
 
     @staticmethod
     def fromEmailMessage(emailMessage: EmailMessage) -> MailingListModel | None:

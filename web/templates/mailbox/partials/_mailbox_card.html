@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a href="{{ mailbox.get_absolute_url }}"
    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
@@ -16,10 +18,10 @@
                 </div>
             </h5>
             <h6 class="card-subtitle">
-                Account: <a href="{{ mailbox.account.get_absolute_url }}"
+                {% translate "Account" %}: <a href="{{ mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailbox.account.mail_address }}</a>
             </h6>
-            <div class="card-text">Protocol: {{ mailbox.protocol }}</div>
+            <div class="card-text">{% translate "Protocol" %}: {{ mailbox.protocol }}</div>
 
             {% include "partials/_dates_card-small.html" with object=mailbox %}
 

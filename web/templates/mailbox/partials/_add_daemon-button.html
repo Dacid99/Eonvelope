@@ -1,4 +1,8 @@
+{% load i18n %}
+
 <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-outline-primary" name="add_daemon">Add daemon</button>
+    <button type="submit" class="btn btn-outline-primary" name="add_daemon">
+        {% translate "Add daemon" %}
+    </button>
 </form>

@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a href="{{ account.get_absolute_url }}"
    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
@@ -15,8 +17,7 @@
 
                 </div>
             </h5>
-
-            <div class="card-text">Protocol: {{ account.protocol }}</div>
+            <div class="card-text">{% translate "Protocol" %}: {{ account.protocol }}</div>
 
             {% include "partials/_dates_card-small.html" with object=account %}
 

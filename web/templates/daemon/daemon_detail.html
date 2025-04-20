@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Daemon Details -
+    {% translate "Daemon Details" %} -
 {% endblock title %}
 
 {% block content %}
 
     {% include "daemon/partials/_start-alert.html" %}
-
     {% include "daemon/partials/_stop-alert.html" %}
 
     <div class="card">
@@ -15,7 +16,6 @@
             <div>
 
                 {% include "daemon/partials/_is_running-badge.html" %}
-
                 {% include "partials/_health_badge.html" with object=daemon %}
 
             </div>
@@ -25,16 +25,13 @@
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "daemon/partials/_start-button.html" %}
-
                     {% include "daemon/partials/_stop-button.html" %}
-
                     {% include "daemon/partials/_download_logs-button.html" %}
 
                 </div>
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=daemon %}
-
                     {% include "partials/_edit-button.html" with object=daemon %}
 
                 </div>
@@ -48,18 +45,20 @@
         <div class="card-body">
             <h2 class="card-title">{{ daemon.uuid }}</h2>
             <h3 class="card-subtitle">
-                Mailbox: <a href="{{ daemon.mailbox.get_absolute_url }}"
+                {% translate "Mailbox" %}: <a href="{{ daemon.mailbox.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.name }}</a>
                 <br>
-                Account: <a href="{{ daemon.mailbox.account.get_absolute_url }}"
+                {% translate "Account" %}: <a href="{{ daemon.mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.account.mail_address }}</a>
             </h3>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Criterion: {{ daemon.fetching_criterion }}</li>
-                <li class="list-group-item">Cycle period: {{ daemon.cycle_interval }}</li>
-                <li class="list-group-item">Restart time: {{ daemon.restart_time }}</li>
-                <li class="list-group-item">Logfile backups: {{ daemon.log_backup_count }}</li>
-                <li class="list-group-item">Logfile max size: {{ daemon.logfile_size }} bytes</li>
+                <li class="list-group-item">{% translate "Criterion" %}: {{ daemon.fetching_criterion }}</li>
+                <li class="list-group-item">{% translate "Cycle period" %}: {{ daemon.cycle_interval }}</li>
+                <li class="list-group-item">{% translate "Restart time" %}: {{ daemon.restart_time }}</li>
+                <li class="list-group-item">{% translate "Logfile backups" %}: {{ daemon.log_backup_count }}</li>
+                <li class="list-group-item">
+                    {% translate "Logfile max size" %}: {{ daemon.logfile_size }} bytes
+                </li>
             </ul>
         </div>
 

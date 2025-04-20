@@ -24,6 +24,7 @@ import os
 from typing import Any, override
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from Emailkasten.utils import get_config
 
@@ -73,7 +74,10 @@ class StorageModel(models.Model):
             The string representation of the storage directory, using :attr:`path` and the state of the directory.
         """
         state = "Current" if self.current else "Archived"
-        return f"{state} storage directory {self.path}"
+        return _("%(state)s storage directory %(path)s") % {
+            "state": state,
+            "path": self.path,
+        }
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:

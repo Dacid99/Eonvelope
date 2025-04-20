@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Mailbox Details -
+    {% translate "Mailbox Details" %} -
 {% endblock title %}
 
 {% block content %}
@@ -13,7 +15,6 @@
             <div>
 
                 {% include "partials/_favorite_badge.html" with object=mailbox %}
-
                 {% include "partials/_health_badge.html" with object=mailbox %}
 
             </div>
@@ -23,16 +24,13 @@
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "partials/_test-button.html" %}
-
                     {% include "mailbox/partials/_fetch_all-button.html" %}
-
                     {% include "mailbox/partials/_add_daemon-button.html" %}
 
                 </div>
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=mailbox %}
-
                     {% include "partials/_edit-button.html" with object=mailbox %}
 
                 </div>
@@ -46,13 +44,13 @@
         <div class="card-body">
             <h2 class="card-title">{{ mailbox.name }}</h2>
             <h3 class="card-subtitle">
-                Account: <a href="{{ mailbox.account.get_absolute_url }}"
+                {% translate "Account" %}: <a href="{{ mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailbox.account.mail_address }}</a>
             </h3>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item">Save attachments: {{ mailbox.save_attachments }}</li>
-                <li class="list-group-item">Save mails as .eml: {{ mailbox.save_toEML }}</li>
-                <li class="list-group-item">Save mails as .html: {{ mailbox.save_toHTML }}</li>
+                <li class="list-group-item">{% translate "Save attachments" %}: {{ mailbox.save_attachments }}</li>
+                <li class="list-group-item">{% translate "Save mails as .eml" %}: {{ mailbox.save_toEML }}</li>
+                <li class="list-group-item">{% translate "Save mails as .html" %}: {{ mailbox.save_toHTML }}</li>
             </ul>
         </div>
 
@@ -60,7 +58,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Daemons</h4>
+                <h4 class="card-title">{% translate "Daemons" %}</h4>
 
                 {% include "daemon/partials/_daemon_list.html" with daemons=mailbox.daemons.all %}
 
@@ -68,7 +66,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Emails</h4>
+                <h4 class="card-title">{% translate "Emails" %}</h4>
 
                 {% include "email/partials/_email_list.html" with emails=mailbox.emails.all %}
 

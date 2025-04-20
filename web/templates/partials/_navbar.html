@@ -1,7 +1,9 @@
+{% load i18n %}
+
 <header>
     <nav class="navbar navbar-expand-lg bg-light sticky-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'web:dashboard' %}">Emailkasten</a>
+            <a class="navbar-brand" href="{% url 'web:dashboard' %}">{% translate "Emailkasten" %}</a>
             <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
@@ -13,18 +15,18 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link link-dark" href="{% url 'web:email-filter-list' %}">Emails</a>
+                    <a class="nav-link link-dark" href="{% url 'web:email-filter-list' %}">{% translate "Emails" %}</a>
                     <a class="nav-link link-dark"
-                       href="{% url 'web:attachment-filter-list' %}">Attachments</a>
+                       href="{% url 'web:attachment-filter-list' %}">{% translate "Attachments" %}</a>
                     <a class="nav-link link-dark"
-                       href="{% url 'web:correspondent-filter-list' %}">Correspondents</a>
+                       href="{% url 'web:correspondent-filter-list' %}">{% translate "Correspondents" %}</a>
                     <a class="nav-link link-dark"
-                       href="{% url 'web:mailinglist-filter-list' %}">Mailinglists</a>
+                       href="{% url 'web:mailinglist-filter-list' %}">{% translate "Mailinglists" %}</a>
                 </div>
                 <div class="navbar-nav me-auto">
-                    <a class="nav-link link-dark" href="{% url 'web:account-filter-list' %}">Accounts</a>
-                    <a class="nav-link link-dark" href="{% url 'web:mailbox-filter-list' %}">Mailboxes</a>
-                    <a class="nav-link link-dark" href="{% url 'web:daemon-filter-list' %}">Daemons</a>
+                    <a class="nav-link link-dark" href="{% url 'web:account-filter-list' %}">{% translate "Accounts" %}</a>
+                    <a class="nav-link link-dark" href="{% url 'web:mailbox-filter-list' %}">{% translate "Mailboxes" %}</a>
+                    <a class="nav-link link-dark" href="{% url 'web:daemon-filter-list' %}">{% translate "Daemons" %}</a>
                 </div>
                 <div class="navbar-nav">
                     {% if user.is_authenticated %}

@@ -2,7 +2,7 @@
     "use_gitignore": true,
     "ignore_case": false,
     "ignore": "H030,H031,H006",
-    "max_blank_lines": 2,
+    "max_blank_lines": 3,
     "max_line_length": 100,
     "profile": "django",
     "extension": "html",

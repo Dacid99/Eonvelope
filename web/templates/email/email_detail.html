@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Email Details -
+    {% translate "Email Details" %} -
 {% endblock title %}
 
 {% block content %}
@@ -39,28 +41,32 @@
                 <div class="card-body">
                     <h2 class="card-title">{{ email.message_id }}</h2>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Subject: {{ email.email_subject }}</li>
-                        <li class="list-group-item">Date received: {{ email.datetime|date:"DATE_FORMAT" }}</li>
-                        <li class="list-group-item">Time received: {{ email.datetime|time:"TIME_FORMAT" }}</li>
-                        <li class="list-group-item">X-Spam: {{ email.x_spam }}</li>
-                        <li class="list-group-item">Datasize: {{ email.datasize }}</li>
+                        <li class="list-group-item">{% translate "Subject" %}: {{ email.email_subject }}</li>
+                        <li class="list-group-item">
+                            {% translate "Date received" %}: {{ email.datetime|date:"DATE_FORMAT" }}
+                        </li>
+                        <li class="list-group-item">
+                            {% translate "Time received" %}: {{ email.datetime|time:"TIME_FORMAT" }}
+                        </li>
+                        <li class="list-group-item">{% translate "X-Spam" %}: {{ email.x_spam }}</li>
+                        <li class="list-group-item">{% translate "Datasize" %}: {{ email.datasize }}</li>
                         {% if email.mailinglist %}
                             <li class="list-group-item list-group-item-action">
-                                Mailinglist: <a href="{{ email.mailinglist.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Mailinglist: {{ email.mailinglist.list_id }}</a>
+                                {% translate "Mailinglist" %}: <a href="{{ email.mailinglist.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Mailinglist" %}: {{ email.mailinglist.list_id }}</a>
                             </li>
                         {% endif %}
                         <li class="list-group-item list-group-item-action">
-                            Mailbox: <a href="{{ email.mailbox.get_absolute_url }}"
+                            {% translate "Mailbox" %}: <a href="{{ email.mailbox.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.name }}</a>
                         </li>
                         <li class="list-group-item list-group-item-action">
-                            Account: <a href="{{ email.mailbox.account.get_absolute_url }}"
+                            {% translate "Account" %}: <a href="{{ email.mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.mailbox.account.mail_address }}</a>
                         </li>
                         {% if email.inReplyTo %}
                             <li class="list-group-item list-group-item-action">
-                                In reply to: <a href="{{ email.inReplyTo.get_absolute_url }}"
+                                {% translate "In reply to" %}: <a href="{{ email.inReplyTo.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email.inReplyTo.message_id }}</a>
                             </li>
                         {% endif %}
@@ -72,7 +78,9 @@
                                             data-bs-toggle="collapse"
                                             data-bs-target="#plain-text"
                                             aria-expanded="true"
-                                            aria-controls="plain-text">Plain bodytext</button>
+                                            aria-controls="plain-text">
+                                        {% translate "Plain bodytext" %}
+                                    </button>
                                 </div>
                                 <div id="plain-text"
                                      class="accordion-collapse collapse"
@@ -88,7 +96,9 @@
                                             data-bs-toggle="collapse"
                                             data-bs-target="#html-text"
                                             aria-expanded="true"
-                                            aria-controls="html-text">Html bodytext</button>
+                                            aria-controls="html-text">
+                                        {% translate "Html bodytext" %}
+                                    </button>
                                 </div>
                                 <div id="html-text"
                                      class="accordion-collapse collapse"
@@ -102,7 +112,6 @@
                         </div>
                     </ul>
                 </div>
-
                 {% if email.has_thumbnail %}
                 </div>
                 <div class="col-6">
@@ -118,7 +127,7 @@
 
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Correspondents</h4>
+                <h4 class="card-title">{% translate "Correspondents" %}</h4>
 
                 {% include "emailcorrespondents/partials/_emailcorrespondents_list.html" with emailcorrespondents=email.emailcorrespondents.all %}
 
@@ -127,7 +136,7 @@
         {% if email.attachments.exists %}
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Attachments</h4>
+                    <h4 class="card-title">{% translate "Attachments" %}</h4>
 
                     {% include "attachment/partials/_attachment_list.html" with attachments=email.attachments.all %}
 
@@ -142,7 +151,7 @@
                         data-bs-target="#flush-collapseOne"
                         aria-expanded="false"
                         aria-controls="flush-collapseOne">
-                    <h4 class="card-title" id="flush-headingOne">Headers</h4>
+                    <h4 class="card-title" id="flush-headingOne">{% translate "Headers" %}</h4>
                 </button>
                 <div id="flush-collapseOne"
                      class="accordion-collapse collapse"
@@ -162,7 +171,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Conversation</h4>
+                <h4 class="card-title">{% translate "Conversation" %}</h4>
 
                 {% include "email/partials/_email_list.html" with emails=email.fullConversation %}
 

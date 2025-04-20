@@ -23,6 +23,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from core.constants import HeaderFields
 
@@ -85,7 +86,13 @@ class EMailCorrespondentsModel(models.Model):
         Returns:
             The string representation of the emailcorrespondent, using :attr:`email`, :attr:`correspondent` and :attr:`mention`.
         """
-        return f"EMail-Correspondent connection from email {self.email} to correspondent {self.correspondent} with mention {self.mention}"
+        return _(
+            "EMail-Correspondent connection from email %(email)s to correspondent %(correspondent)s with mention %(mention)s"
+        ) % {
+            "email": self.email,
+            "correspondent": self.correspondent,
+            "mention": self.mention,
+        }
 
     @staticmethod
     def createFromHeader(

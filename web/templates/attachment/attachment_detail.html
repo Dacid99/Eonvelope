@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Attachment Details -
+    {% translate "Attachment Details" %} -
 {% endblock title %}
 
 {% block content %}
@@ -40,16 +42,19 @@
                     <h2 class="card-title">{{ attachment.file_name }}</h2>
                     <ul class="list-group list-group-flush">
                         <li class="list-group-item list-group-item-action ">
-                            Email: <a href="{{ attachment.email.get_absolute_url }}"
+                            {% translate "Email" %}: <a href="{{ attachment.email.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
                         </li>
-                        <li class="list-group-item">Content Type: {{ attachment.content_type }}</li>
-                        <li class="list-group-item">Content Disposition: {{ attachment.content_disposition }}</li>
-                        <li class="list-group-item">Size: {{ attachment.datasize }} bytes</li>
-                        <li class="list-group-item">Date received: {{ attachment.email.datetime }}</li>
+                        <li class="list-group-item">{% translate "Content Type" %}: {{ attachment.content_type }}</li>
+                        <li class="list-group-item">
+                            {% translate "Content Disposition" %}: {{ attachment.content_disposition }}
+                        </li>
+                        <li class="list-group-item">
+                            {% translate "Size" %}: {{ attachment.datasize }} {% translate "bytes" %}
+                        </li>
+                        <li class="list-group-item">{% translate "Date received" %}: {{ attachment.email.datetime }}</li>
                     </ul>
                 </div>
-
                 {% if attachment.has_thumbnail %}
                 </div>
                 <div class="col-6">

@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Mailinglists -
+    {% translate "Mailinglists" %} -
 {% endblock title %}
 
 {% block content %}
-    <h2>Mailinglists</h2>
+    <h2>{% translate "Mailinglists" %}</h2>
 
     {% include "mailinglist/partials/_mailinglist_filter_list.html" %}
 

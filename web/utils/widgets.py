@@ -22,6 +22,7 @@
 from typing import Any, override
 
 from django.forms import SelectDateWidget
+from django.utils.translation import gettext as _
 
 
 class AdaptedSelectDateWidget(SelectDateWidget):
@@ -32,7 +33,11 @@ class AdaptedSelectDateWidget(SelectDateWidget):
         """Extended to ensure a default backward selection of years."""
         super().__init__(
             *args,
-            empty_label=("--- Year ---", "--- Month ---", "--- Day ---"),
-            **kwargs
+            empty_label=(
+                f"--- {_("Year")} ---",
+                f"--- {_("Month")} ---",
+                f"--- {_("Day")} ---",
+            ),
+            **kwargs,
         )
         self.years = range(self.years.stop - 9, self.years.start - 9, -1)

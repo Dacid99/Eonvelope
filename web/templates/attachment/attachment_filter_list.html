@@ -1,11 +1,13 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Attachments -
+    {% translate "Attachments" %} -
 {% endblock title %}
 
 {% block content %}
-    <h2>Attachments</h2>
+    <h2>{% translate "Attachments" %}</h2>
 
     {% include "attachment/partials/_attachment_filter_list.html" %}
 

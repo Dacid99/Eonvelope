@@ -1,0 +1,136 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-20 21:26+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: Emailkasten/settings.py:333
+msgid "Emailkasten API"
+msgstr ""
+
+#: Emailkasten/settings.py:334
+msgid "The API schema for the Emailkasten server."
+msgstr ""
+
+#: Emailkasten/settings.py:353
+msgid "The default page size for paginated API response data"
+msgstr ""
+
+#: Emailkasten/settings.py:358
+msgid "The maximum page size for paginated API response data"
+msgstr ""
+
+#: Emailkasten/settings.py:363
+msgid "The default cycle period setting of a daemon in seconds"
+msgstr ""
+
+#: Emailkasten/settings.py:368
+msgid "The default restart time setting of a daemon in seconds"
+msgstr ""
+
+#: Emailkasten/settings.py:373
+msgid "The default number of daemon logfiles to keep"
+msgstr ""
+
+#: Emailkasten/settings.py:378
+msgid "The default maximum size of a daemon logfile in bytes"
+msgstr ""
+
+#: Emailkasten/settings.py:384
+msgid ""
+"The maximum numbers of subdirectories in one storage unit. Must not exceed "
+"64000 for ext4 filesystem!"
+msgstr ""
+
+#: Emailkasten/settings.py:391
+msgid ""
+"The path to the storage for the saved data. Must match the path in the "
+"docker-compose.yml to ensure data persistence!"
+msgstr ""
+
+#: Emailkasten/settings.py:397
+msgid "Whether or not to ignore emails that have a spam flag"
+msgstr ""
+
+#: Emailkasten/settings.py:403
+msgid ""
+"A list of content types prefixes to parse as files even if they are not "
+"marked as such. For an exhaustive list of all available types see https://"
+"www.iana.org/assignments/media-types/media-types.xhtml#text"
+msgstr ""
+
+#: Emailkasten/settings.py:410
+msgid ""
+"A list of content types prefixes to not parse as files even if they are "
+"marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
+msgstr ""
+
+#: Emailkasten/settings.py:416
+msgid "The path where intermediate files will be placed"
+msgstr ""
+
+#: Emailkasten/settings.py:436
+msgid "The html template to wrap around plain text for html conversion."
+msgstr ""
+
+#: Emailkasten/settings.py:441
+msgid "The default mailbox setting whether to store mails as eml."
+msgstr ""
+
+#: Emailkasten/settings.py:446
+msgid "The default mailbox setting whether to convert and store mails as html."
+msgstr ""
+
+#: Emailkasten/settings.py:451
+msgid "The default mailbox setting whether to store attachments."
+msgstr ""
+
+#: Emailkasten/settings.py:458
+msgid "Default Values"
+msgstr ""
+
+#: Emailkasten/settings.py:469
+msgid "Processing Settings"
+msgstr ""
+
+#: Emailkasten/settings.py:478
+msgid "Storage Settings"
+msgstr ""
+
+#: Emailkasten/settings.py:482
+msgid "API Settings"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:33
+msgid "Go to Emailkasten"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:54
+#: Emailkasten/templates/allauth/layouts/base.html:58
+msgid "Select Language"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:76
+msgid "Sign Out"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:80
+msgid "Sign In"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:83
+msgid "Sign Up"
+msgstr ""

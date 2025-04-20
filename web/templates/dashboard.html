@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 
 {% block title %}
-    Dashboard -
+
+    {% load i18n %}
+
+    {% translate "Dashboard" %} -
 {% endblock title %}
 
 {% block content %}
-    <h1 class="my-3">Welcome to Emailkasten</h1>
-
+    <h1 class="my-3">{% translate "Welcome to Emailkasten" %}</h1>
     <div class="row justify-content-evenly">
         <div class="col-9">
             <div class="card">
-                <h4 class="card-header">Latest Emails</h4>
+                <h4 class="card-header">{% translate "Latest Emails" %}</h4>
                 <div class="card-body">
 
                     {% include "email/partials/_email_list.html" with emails=latest_emails %}
@@ -20,7 +22,7 @@
         </div>
         <div class="col-3">
             <div class="card">
-                <h4 class="card-header">Database stats</h4>
+                <h4 class="card-header">{% translate "Database stats" %}</h4>
                 <div class="card-body">
                     <table class="table">
                         <thead>
@@ -31,28 +33,28 @@
                             <tr>
                                 <td>
                                     <a href="{% url 'web:email-filter-list' %}"
-                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Emails</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Emails" %}</a>
                                 </td>
                                 <td>{{ emails_count }}</td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="{% url 'web:correspondent-filter-list' %}"
-                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Correspondents</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Correspondents" %}</a>
                                 </td>
                                 <td>{{ correspondents_count }}</td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="{% url 'web:mailinglist-filter-list' %}"
-                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Mailinglists</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Mailinglists" %}</a>
                                 </td>
                                 <td>{{ mailinglists_count }}</td>
                             </tr>
                             <tr>
                                 <td>
                                     <a href="{% url 'web:attachment-filter-list' %}"
-                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">Attachments</a>
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Attachments" %}</a>
                                 </td>
                                 <td>{{ attachments_count }}</td>
                             </tr>
@@ -65,5 +67,4 @@
 
         </div>
     </div>
-
 {% endblock content %}

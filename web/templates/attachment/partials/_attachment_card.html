@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a href="{{ attachment.get_absolute_url }}"
    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
     <div class="card">
@@ -12,12 +14,12 @@
                         {% include "partials/_favorite_badge.html" with object=attachment %}
 
                     </h5>
-                    <div class="card-text">Type: {{ attachment.content_type }}</div>
+                    <div class="card-text">{% translate "Type" %}: {{ attachment.content_type }}</div>
                     <div class="card-text">
-                        Email: <a href="{{ attachment.email.get_absolute_url }}"
+                        {% translate "Email" %}: <a href="{{ attachment.email.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
                     </div>
-                    <div class="card-text">Date received: {{ attachment.email.datetime }}</div>
+                    <div class="card-text">{% translate "Date received" %}: {{ attachment.email.datetime }}</div>
 
                     {% include "partials/_dates_card-small.html" with object=attachment %}
 

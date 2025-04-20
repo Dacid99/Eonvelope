@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Edit Daemon -
+    {% translate "Edit Daemon" %} -
 {% endblock title %}
 
 {% block content %}
@@ -13,7 +15,6 @@
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=daemon %}
-
                     {% include "partials/_end_edit-button.html" with object=daemon %}
 
                 </div>
@@ -27,10 +28,10 @@
         <div class="card-body">
             <h2 class="card-title">{{ daemon.uuid }}</h2>
             <h3 class="card-subtitle">
-                Mailbox: <a href="{{ daemon.mailbox.get_absolute_url }}"
+                {% translate "Mailbox" %}: <a href="{{ daemon.mailbox.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.name }}</a>
                 <br>
-                Account: <a href="{{ daemon.mailbox.account.get_absolute_url }}"
+                {% translate "Account" %}: <a href="{{ daemon.mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ daemon.mailbox.account.mail_address }}</a>
             </h3>
 
@@ -47,7 +48,6 @@
                 </ul>
 
                 {% include "partials/_submit_edit-button.html" %}
-
                 {% include "partials/_cancel_edit-button.html" with object=daemon %}
 
             </form>

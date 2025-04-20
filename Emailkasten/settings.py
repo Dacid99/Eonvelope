@@ -112,6 +112,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -284,14 +285,34 @@ LOGGING = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = "en-us"
 
+
+LANGUAGES = [
+    ("en", "English"),
+    ("de", "Deutsch"),
+]
+
+
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
 TIME_ZONE = "UTC"
 
 USE_I18N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    BASE_DIR / "Emailkasten" / "locale",
+    BASE_DIR / "core" / "locale",
+    BASE_DIR / "api" / "locale",
+    BASE_DIR / "web" / "locale",
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
@@ -309,8 +330,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # DRF Spectacular
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Emailkasten API",
-    "DESCRIPTION": "The API schema for the Emailkasten server.",
+    "TITLE": _("Emailkasten API"),
+    "DESCRIPTION": _("The API schema for the Emailkasten server."),
     "VERSION": "0.0.1",
     "SERVE_INCLUDE_SCHEMA": True,
 }
@@ -412,7 +433,7 @@ CONSTANCE_CONFIG = {
             <pre>%s</pre>
         </body>
         </html>""",
-        "The html template to wrap around plain text for html conversion.",
+        _("The html template to wrap around plain text for html conversion."),
         str,
     ),
     "DEFAULT_SAVE_TO_EML": (

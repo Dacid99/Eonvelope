@@ -1,4 +1,6 @@
+{% load i18n %}
+
 <div class="card-footer text-end">
-    <small class="text-muted">Added: {{ object.created|date:"DATETIME_FORMAT" }}</small>
-    <small class="text-muted">Last changed: {{ object.updated|timesince|default:"-" }}</small>
+    <small class="text-muted">{% translate "Added" %}: {{ object.created|date:"DATETIME_FORMAT" }}</small>
+    <small class="text-muted">{% translate "Last changed" %}: {{ object.updated|timesince|default:"-" }}</small>
 </div>

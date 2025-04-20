@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Edit Correspondent -
+    {% translate "Edit Correspondent" %} -
 {% endblock title %}
 
 {% block content %}
@@ -13,7 +15,6 @@
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=correspondent %}
-
                     {% include "partials/_end_edit-button.html" with object=correspondent %}
 
                 </div>
@@ -31,11 +32,9 @@
 
             <form method="post">
                 {% csrf_token %}
-
                 {% bootstrap_field form.email_name %}
 
                 {% include "partials/_submit_edit-button.html" %}
-
                 {% include "partials/_cancel_edit-button.html" with object=correspondent %}
 
             </form>

@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% block title %}
-    Add Account -
+    {% translate "Add Account" %} -
 {% endblock title %}
 
 {% block content %}
     <div class="card">
         <div class="card-header d-flex justify-content-end align-items-center">
             <div class="btn-group ms-3" role="group" aria-label="Close button group">
-
                 <a class="btn-close"
                    href="{% url 'web:account-filter-list' %}"
                    role="button"></a>
-
             </div>
         </div>
         <div class="card-body">
@@ -34,7 +34,7 @@
 
                 <a type="button"
                    class="btn btn-secondary"
-                   href="{% url 'web:account-filter-list' %}">Cancel</a>
+                   href="{% url 'web:account-filter-list' %}">{% translate "Cancel" %}</a>
             </form>
         </div>
     </div>

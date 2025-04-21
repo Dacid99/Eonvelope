@@ -19,14 +19,14 @@
 """Test module for :mod:`web.views.mailbox_views.MailboxFilterView`."""
 
 import pytest
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
 from web.views.mailbox_views.MailboxFilterView import MailboxFilterView
 
 
 @pytest.mark.django_db
-def test_view_noauth(client, list_url, login_url):
+def test_get_noauth(client, list_url, login_url):
     """Tests :class:`web.views.mailbox_views.MailboxFilterView.MailboxFilterView` with an unauthenticated user client."""
     response = client.get(list_url(MailboxFilterView))
 
@@ -37,16 +37,20 @@ def test_view_noauth(client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_view_auth_other(other_client, list_url):
+def test_get_auth_other(other_client, list_url):
     """Tests :class:`web.views.mailbox_views.MailboxFilterView.MailboxFilterView` with the authenticated other user client."""
     response = other_client.get(list_url(MailboxFilterView))
 
     assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "mailbox/mailbox_filter_list.html" in [t.name for t in response.templates]
 
 
 @pytest.mark.django_db
-def test_view_auth_owner(owner_client, list_url):
+def test_get_auth_owner(owner_client, list_url):
     """Tests :class:`web.views.mailbox_views.MailboxFilterView.MailboxFilterView` with the authenticated owner user client."""
     response = owner_client.get(list_url(MailboxFilterView))
 
     assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "mailbox/mailbox_filter_list.html" in [t.name for t in response.templates]

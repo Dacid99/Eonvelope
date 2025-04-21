@@ -62,6 +62,8 @@ def test_get_auth_owner(mailboxModel, owner_client, detail_url):
     response = owner_client.get(detail_url(MailboxDetailWithDeleteView, mailboxModel))
 
     assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     assert mailboxModel.name in response.content.decode()
 
 
@@ -156,6 +158,7 @@ def test_post_test_success_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
+    assert "mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     mock_MailboxModel_test_connection.assert_called_once()
 
 
@@ -223,6 +226,7 @@ def test_post_fetch_all_success_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
+    assert "mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     mock_MailboxModel_fetch.assert_called_once_with(
         mailboxModel, EmailFetchingCriterionChoices.ALL
     )
@@ -243,6 +247,7 @@ def test_post_fetch_all_failure_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
+    assert "mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     mock_MailboxModel_fetch.assert_called_once_with(
         mailboxModel, EmailFetchingCriterionChoices.ALL
     )

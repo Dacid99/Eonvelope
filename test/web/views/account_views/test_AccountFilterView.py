@@ -19,14 +19,14 @@
 """Test module for :mod:`web.views.account_views.AccountFilterView`."""
 
 import pytest
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
 from web.views.account_views.AccountFilterView import AccountFilterView
 
 
 @pytest.mark.django_db
-def test_view_noauth(client, list_url, login_url):
+def test_get_noauth(client, list_url, login_url):
     """Tests :class:`web.views.account_views.AccountFilterView.AccountFilterView` with an unauthenticated user client."""
     response = client.get(list_url(AccountFilterView))
 
@@ -37,18 +37,20 @@ def test_view_noauth(client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_view_auth_other(other_client, list_url):
+def test_get_auth_other(other_client, list_url):
     """Tests :class:`web.views.account_views.AccountFilterView.AccountFilterView` with the authenticated other user client."""
     response = other_client.get(list_url(AccountFilterView))
 
     assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "account/account_filter_list.html" in [t.name for t in response.templates]
 
 
 @pytest.mark.django_db
-def test_view_auth_owner(owner_client, list_url):
+def test_get_auth_owner(owner_client, list_url):
     """Tests :class:`web.views.account_views.AccountFilterView.AccountFilterView` with the authenticated owner user client."""
     response = owner_client.get(list_url(AccountFilterView))
 
     assert response.status_code == status.HTTP_200_OK
-    with open("list.html", "w") as f:
-        f.write(response.content.decode())
+    assert isinstance(response, HttpResponse)
+    assert "account/account_filter_list.html" in [t.name for t in response.templates]

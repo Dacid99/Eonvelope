@@ -19,7 +19,7 @@
 """Test module for :mod:`web.views.account_views.AccountUpdateOrDeleteView`."""
 
 import pytest
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import status
 
@@ -56,6 +56,8 @@ def test_get_auth_owner(accountModel, owner_client, detail_url):
     response = owner_client.get(detail_url(AccountUpdateOrDeleteView, accountModel))
 
     assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "account/account_edit.html" in [t.name for t in response.templates]
     assert accountModel.mail_address in response.content.decode()
     with open("edit.html", "w") as f:
         f.write(response.content.decode())

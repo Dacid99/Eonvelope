@@ -45,6 +45,8 @@ def test_get_auth_other(other_client, list_url):
     response = other_client.get(list_url(AccountCreateView))
 
     assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "account/account_create.html" in [t.name for t in response.templates]
 
 
 @pytest.mark.django_db
@@ -53,6 +55,8 @@ def test_get_auth_owner(owner_client, list_url):
     response = owner_client.get(list_url(AccountCreateView))
 
     assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "account/account_create.html" in [t.name for t in response.templates]
 
 
 @pytest.mark.django_db
@@ -123,5 +127,5 @@ def test_post_duplicate_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
-    assert "This account already exists" in response.content.decode()
+    assert "account/account_create.html" in [t.name for t in response.templates]
     assert AccountModel.objects.all().count() == 1

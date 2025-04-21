@@ -47,6 +47,7 @@ def test_get_auth_other(daemonModel, other_client, detail_url):
     response = other_client.get(detail_url(DaemonUpdateOrDeleteView, daemonModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     assert str(daemonModel.uuid) not in response.content.decode()
 
 
@@ -87,6 +88,7 @@ def test_post_update_auth_other(daemonModel, daemonPayload, other_client, detail
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     daemonModel.refresh_from_db()
     assert daemonModel.restart_time != daemonPayload["restart_time"]
     assert daemonModel.log_backup_count != daemonPayload["log_backup_count"]
@@ -134,6 +136,7 @@ def test_post_delete_auth_other(daemonModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     daemonModel.refresh_from_db()
     assert daemonModel is not None
 

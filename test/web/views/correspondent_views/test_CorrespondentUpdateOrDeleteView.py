@@ -53,6 +53,7 @@ def test_get_auth_other(correspondentModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     assert correspondentModel.email_address not in response.content.decode()
 
 
@@ -102,6 +103,7 @@ def test_post_update_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     correspondentModel.refresh_from_db()
     assert correspondentModel.email_name != correspondentPayload["email_name"]
 
@@ -150,6 +152,7 @@ def test_post_delete_auth_other(correspondentModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     correspondentModel.refresh_from_db()
     assert correspondentModel is not None
 

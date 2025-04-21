@@ -51,6 +51,7 @@ def test_get_auth_other(accountModel, other_client, detail_url):
     response = other_client.get(detail_url(AccountDetailWithDeleteView, accountModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     assert accountModel.mail_address not in response.content.decode()
 
 
@@ -92,6 +93,7 @@ def test_post_delete_auth_other(accountModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     accountModel.refresh_from_db()
     assert accountModel is not None
 
@@ -141,6 +143,7 @@ def test_post_test_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     mock_AccountModel_test_connection.assert_not_called()
 
 
@@ -210,6 +213,7 @@ def test_post_update_mailboxes_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     mock_AccountModel_update_mailboxes.assert_not_called()
 
 

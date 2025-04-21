@@ -52,6 +52,7 @@ def test_get_auth_other(attachmentModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     assert attachmentModel.file_name not in response.content.decode()
 
 
@@ -91,6 +92,7 @@ def test_post_delete_auth_other(attachmentModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     attachmentModel.refresh_from_db()
     assert attachmentModel is not None
 

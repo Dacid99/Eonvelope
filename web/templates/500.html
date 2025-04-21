@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Internal Error" %}
+{% endblock title %}
+
+{% block content %}
+    <div class="flex-grow-1 bg-body-secondary d-flex flex-column justify-content-center">
+        <div class="flex-grow-0 flex-shrink-0 container">
+            <div class="row justify-content-md-center">
+                <div class="col col-lg-4">
+                    <div class="bg-white shadow rounded-4">
+                        <div id="content" class="p-5">
+
+                            <h1>{% translate "Internal Error" %}</h1>
+                            <p>{% translate "An unexpected error occured while processing your request." %}</p>
+                            <p>
+                                {% translate "First aid: Try again. If the error persists please inform your admin or write an issue report." %}
+                            </p>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

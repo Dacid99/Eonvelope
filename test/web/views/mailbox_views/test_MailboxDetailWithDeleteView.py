@@ -53,6 +53,7 @@ def test_get_auth_other(mailboxModel, other_client, detail_url):
     response = other_client.get(detail_url(MailboxDetailWithDeleteView, mailboxModel))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     assert mailboxModel.name not in response.content.decode()
 
 
@@ -94,6 +95,7 @@ def test_post_delete_auth_other(mailboxModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     mailboxModel.refresh_from_db()
     assert mailboxModel is not None
 
@@ -143,6 +145,7 @@ def test_post_test_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     mock_MailboxModel_test_connection.assert_not_called()
 
 
@@ -211,6 +214,7 @@ def test_post_fetch_all_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     mock_MailboxModel_fetch.assert_not_called()
 
 
@@ -284,6 +288,7 @@ def test_post_add_daemon_auth_other(mailboxModel, other_client, detail_url):
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [t.name for t in response.templates]
     assert DaemonModel.objects.count() == 1
 
 

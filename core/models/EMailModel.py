@@ -407,7 +407,7 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
                 payload = part.get_payload(decode=True)
                 charset = part.get_content_charset("utf-8")
                 new_email.html_bodytext += payload.decode(charset, errors="replace")
-            elif contentDisposition is not None or (
+            elif contentDisposition in ["inline", "attachment"] or (
                 any(
                     contentType.startswith(type_to_save)
                     for type_to_save in get_config("SAVE_CONTENT_TYPE_PREFIXES")

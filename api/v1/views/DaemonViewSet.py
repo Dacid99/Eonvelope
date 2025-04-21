@@ -35,6 +35,7 @@ from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
 from core.models.DaemonModel import DaemonModel
 
 from ..filters.DaemonFilter import DaemonFilter
+from ..mixins.NoCreateMixin import NoCreateMixin
 from ..serializers.daemon_serializers.BaseDaemonSerializer import BaseDaemonSerializer
 
 
@@ -44,8 +45,11 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class DaemonViewSet(viewsets.ModelViewSet):
-    """Viewset for the :class:`core.models.DaemonModel.DaemonModel`."""
+class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet):
+    """Viewset for the :class:`core.models.DaemonModel.DaemonModel`.
+
+    Provides all but the create method.
+    """
 
     BASENAME = "daemons"
     serializer_class = BaseDaemonSerializer
@@ -78,14 +82,6 @@ class DaemonViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return DaemonModel.objects.none()
         return DaemonModel.objects.filter(mailbox__account__user=self.request.user)
-
-    @override
-    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Disables the POST method for this viewset."""
-        return Response(
-            {"detail": "POST method is not allowed on this endpoint."},
-            status=status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
 
     URL_PATH_FETCHING_OPTIONS = "fetching-options"
     URL_NAME_FETCHING_OPTIONS = "fetching-options"

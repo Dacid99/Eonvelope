@@ -36,6 +36,7 @@ from core.models.MailboxModel import MailboxModel
 from core.utils.fetchers.exceptions import FetcherError, MailboxError
 
 from ..filters.MailboxFilter import MailboxFilter
+from ..mixins.NoCreateMixin import NoCreateMixin
 from ..serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
     MailboxWithDaemonSerializer,
 )
@@ -47,8 +48,11 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class MailboxViewSet(viewsets.ModelViewSet):
-    """Viewset for the :class:`core.models.MailboxModel.MailboxModel`."""
+class MailboxViewSet(NoCreateMixin, viewsets.ModelViewSet):
+    """Viewset for the :class:`core.models.MailboxModel.MailboxModel`.
+
+    Provides all but the create method.
+    """
 
     BASENAME = "mailboxes"
     serializer_class = MailboxWithDaemonSerializer
@@ -79,14 +83,6 @@ class MailboxViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return MailboxModel.objects.none()
         return MailboxModel.objects.filter(account__user=self.request.user)
-
-    @override
-    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
-        """Disables the POST method for this viewset."""
-        return Response(
-            {"detail": "POST method is not allowed on this endpoint."},
-            status=status.HTTP_405_METHOD_NOT_ALLOWED,
-        )
 
     URL_PATH_ADD_DAEMON = "add-daemon"
     URL_NAME_ADD_DAEMON = "add-daemon"

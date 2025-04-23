@@ -19,6 +19,7 @@
 """Module with the :class:`UploadEmailForm` form class."""
 
 from django import forms
+from django.utils.translation import gettext_lazy as _
 
 from core.constants import SupportedEmailUploadFormats
 
@@ -29,11 +30,11 @@ class UploadEmailForm(forms.Form):
     file_format = forms.ChoiceField(
         choices=SupportedEmailUploadFormats.choices,
         required=True,
-        label="File format",
-        help_text="Select the format of the email file you want to upload.",
+        label=_("File format"),
+        help_text=_("Select the format of the email file you want to upload."),
     )
     file = forms.FileField(
         required=True,
-        label="Email or Mailbox file",
-        help_text="Pick a file for upload.",
+        label=_("Email or Mailbox file"),
+        help_text=_("Pick a file for upload."),
     )

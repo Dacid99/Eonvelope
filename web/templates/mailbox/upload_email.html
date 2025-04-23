@@ -10,14 +10,16 @@
     <div class="card">
         <div class="card-header">
             <div class="btn-toolbar align-items-center">
-                <a role="button" class="btn btn-outline-primary" href="{{ mailbox.get_absolute_url }}"">
-                    <i class="fa fa-backward"></i>{% translate "Back to mailbox" %}
+                <a role="button"
+                   class="btn btn-outline-primary"
+                   href="{{ mailbox.get_absolute_url }}">
+                    <i class="fa-solid fa-arrow-left m-1"></i>{% translate "Back to mailbox" %}
                 </a>
             </div>
         </div>
         <div class="card-body">
-            <div class="card-title">{% translate "Upload emails to the mailbox" %}</div>
-            <form method="post">
+            <h3 class="card-title">{% translate "Upload emails to the mailbox" %}</h3>
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% bootstrap_form form %}
 

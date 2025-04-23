@@ -1,6 +1,6 @@
 {% extends "allauth/layouts/base.html" %}
 
-{% load allauth %}
+{% load allauth i18n %}
 
 {% block body %}
     <div class="flex-grow-1 row">
@@ -11,7 +11,7 @@
                     <li class="nav-item">
                         <a class=" 
                             {% block nav_class_email %}nav-link{% endblock nav_class_email %}
-                         " href="{{ email_url_ }}">Change Email</a>
+                         " href="{{ email_url_ }}">{% translate "Change Email" %}</a>
                     </li>
                 {% endif %}
                 {% url 'account_change_password' as change_password_url_ %}
@@ -19,7 +19,7 @@
                     <li class="nav-item">
                         <a class=" 
                             {% block nav_class_password %}nav-link{% endblock nav_class_password %}
-                         " href="{{ change_password_url_ }}">Change Password</a>
+                         " href="{{ change_password_url_ }}">{% translate "Change Password" %}</a>
                     </li>
                 {% endif %}
                 {% url 'usersessions_list' as usersessions_list_url_ %}
@@ -27,7 +27,7 @@
                     <li class="nav-item">
                         <a class=" 
                             {% block nav_class_usersessions %}nav-link{% endblock nav_class_usersessions %}
-                         " href="{{ usersessions_list_url_ }}">Sessions</a>
+                         " href="{{ usersessions_list_url_ }}">{% translate "Sessions" %}</a>
                     </li>
                 {% endif %}
                 {% if user.is_staff %}

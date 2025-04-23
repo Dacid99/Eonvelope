@@ -29,6 +29,7 @@ from dirtyfields import DirtyFieldsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.mixins.UploadMixin import UploadMixin
 from core.mixins.URLMixin import URLMixin
 from core.models.EMailModel import EMailModel
 from Emailkasten.utils import get_config
@@ -45,7 +46,7 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class MailboxModel(DirtyFieldsMixin, URLMixin, models.Model):
+class MailboxModel(DirtyFieldsMixin, URLMixin, UploadMixin, models.Model):
     """Database model for a mailbox in a mail account."""
 
     name = models.CharField(max_length=255)

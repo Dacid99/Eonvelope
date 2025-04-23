@@ -59,6 +59,7 @@ from .views.mailbox_views import (
     MailboxDetailWithDeleteView,
     MailboxFilterView,
     MailboxUpdateOrDeleteView,
+    UploadEmailView,
 )
 from .views.mailinglist_views import (
     MailingListDetailWithDeleteView,
@@ -155,6 +156,11 @@ urlpatterns = [
         "mailboxes/<int:pk>/edit/",
         MailboxUpdateOrDeleteView.MailboxUpdateOrDeleteView.as_view(),
         name=MailboxUpdateOrDeleteView.MailboxUpdateOrDeleteView.URL_NAME,
+    ),
+    path(
+        "mailboxes/<int:pk>/upload/",
+        UploadEmailView.UploadEmailView.as_view(),
+        name=UploadEmailView.UploadEmailView.URL_NAME,
     ),
     path(
         "mailinglists/",

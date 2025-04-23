@@ -15,6 +15,7 @@
             <div>
 
                 {% include "partials/_favorite_badge.html" with object=mailbox %}
+
                 {% include "partials/_health_badge.html" with object=mailbox %}
 
             </div>
@@ -24,13 +25,16 @@
                 <div class="btn-group me-3" role="group" aria-label="Action button group">
 
                     {% include "partials/_test-button.html" %}
+
                     {% include "mailbox/partials/_fetch_all-button.html" %}
                     {% include "mailbox/partials/_add_daemon-button.html" %}
+                    {% include "mailbox/partials/_upload_email-button.html" %}
 
                 </div>
                 <div class="btn-group me-3" role="group" aria-label="Edit button group">
 
                     {% include "partials/_delete-button.html" with object=mailbox %}
+
                     {% include "partials/_edit-button.html" with object=mailbox %}
 
                 </div>

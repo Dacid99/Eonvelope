@@ -154,3 +154,14 @@ class HeaderFields:
             "Disposition-Notification-To",
             "Disposition-Notification-To",
         )
+
+
+class SupportedEmailUploadFormats(TextChoices):
+    """All fileformats that are supported for upload of emaildata."""
+
+    EML = "eml", _(".eml")
+    MBOX = "mbox", _(".mbox")
+    MH = "mh", _(".mh")
+    BABYL = "babyl", _(".babyl")
+    MMDF = "mmdf", _(".mmdf")
+    MAILDIR = "maildir", _(".maildir")

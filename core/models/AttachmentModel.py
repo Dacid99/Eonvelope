@@ -34,7 +34,7 @@ from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
 from Emailkasten.utils import get_config
 
-from ..utils.fileManagment import saveStore
+from ..utils.fileManagment import clean_filename, saveStore
 from .StorageModel import StorageModel
 
 
@@ -118,8 +118,10 @@ class AttachmentModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Mode
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Extended :django::func:`django.models.Model.save` method.
 
+        Cleans the filename.
         Saves the data to storage if configured.
         """
+        self.file_name = clean_filename(self.file_name)
         attachmentData = kwargs.pop("attachmentData", None)
         super().save(*args, **kwargs)
         if attachmentData is not None and self.email.mailbox.save_attachments:

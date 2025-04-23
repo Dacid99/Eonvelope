@@ -35,7 +35,7 @@ from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from core.utils.fileManagment import saveStore
+from core.utils.fileManagment import clean_filename, saveStore
 from core.utils.mailParsing import eml2html, is_X_Spam
 from Emailkasten.utils import get_config
 
@@ -249,7 +249,8 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
         logger.debug("Storing %s as eml ...", self)
 
         dirPath = StorageModel.getSubdirectory(self.message_id)
-        preliminary_file_path = os.path.join(dirPath, self.message_id + ".eml")
+        clean_message_id = clean_filename(self.message_id)
+        preliminary_file_path = os.path.join(dirPath, clean_message_id + ".eml")
         if file_path := writeMessageToEML(preliminary_file_path, emailData):
             self.eml_filepath = file_path
             self.save(update_fields=["eml_filepath"])
@@ -283,7 +284,8 @@ class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
         logger.debug("Rendering and storing %s  ...", self)
 
         dirPath = StorageModel.getSubdirectory(self.message_id)
-        preliminary_file_path = os.path.join(dirPath, self.message_id + ".html")
+        clean_message_id = clean_filename(self.message_id)
+        preliminary_file_path = os.path.join(dirPath, clean_message_id + ".html")
         if file_path := convertAndStoreHtmlMessage(preliminary_file_path, emailData):
             self.html_filepath = file_path
             self.save(update_fields=["html_filepath"])

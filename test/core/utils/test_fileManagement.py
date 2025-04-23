@@ -162,3 +162,19 @@ def test_saveStore(
     assert mock_logger.exception.call_count == expectedErrors
 
     mock_logger.debug.assert_called()
+
+
+@pytest.mark.parametrize(
+    "filename, expectedResult",
+    [
+        ("pof/dejfoe", "pof_dejfoe"),
+        ("abc etet?t ", "abcetet?t"),
+        ("p hnbh~o", "phnbh_o"),
+        ("qwe..e", "qwe__e"),
+        (".<and*~/%>", "_<and*__%>"),
+    ],
+)
+def test_clean_filename(filename, expectedResult):
+    result = core.utils.fileManagment.clean_filename(filename)
+
+    assert result == expectedResult

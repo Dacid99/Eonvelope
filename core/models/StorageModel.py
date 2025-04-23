@@ -28,6 +28,8 @@ from django.utils.translation import gettext_lazy as _
 
 from Emailkasten.utils import get_config
 
+from ..utils.fileManagment import clean_filename
+
 
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
@@ -158,7 +160,8 @@ class StorageModel(models.Model):
             )
             logger.info("Successfully created first storage directory.")
 
-        subdirectoryPath = os.path.join(storageEntry.path, subdirectoryName)
+        clean_subdirectoryPath = clean_filename(subdirectoryName)
+        subdirectoryPath = os.path.join(storageEntry.path, clean_subdirectoryPath)
         if not os.path.isdir(subdirectoryPath):
             logger.debug(
                 "Creating new subdirectory in the current storage directory ..."

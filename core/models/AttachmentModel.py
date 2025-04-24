@@ -29,6 +29,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
+from core.mixins.FavoriteMixin import FavoriteMixin
 from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
@@ -48,7 +49,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AttachmentModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
+class AttachmentModel(
+    HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models.Model
+):
     """Database model for an attachment file in a mail."""
 
     file_name = models.CharField(max_length=255)

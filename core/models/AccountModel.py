@@ -30,6 +30,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.mixins.FavoriteMixin import FavoriteMixin
+
 from ..constants import EmailProtocolChoices
 from ..mixins.URLMixin import URLMixin
 from ..utils.fetchers.exceptions import MailAccountError
@@ -49,7 +51,7 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class AccountModel(DirtyFieldsMixin, URLMixin, models.Model):
+class AccountModel(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
     """Database model for the account data of a mail account."""
 
     mail_address = models.EmailField(

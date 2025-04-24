@@ -31,6 +31,7 @@ from django.db import models, transaction
 from django.utils.translation import gettext_lazy as _
 
 from core.constants import HeaderFields
+from core.mixins.FavoriteMixin import FavoriteMixin
 from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
@@ -56,7 +57,9 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class EMailModel(HasDownloadMixin, HasThumbnailMixin, URLMixin, models.Model):
+class EMailModel(
+    HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models.Model
+):
     """Database model for an email."""
 
     message_id = models.CharField(max_length=255)

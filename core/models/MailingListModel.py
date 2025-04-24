@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.mixins.FavoriteMixin import FavoriteMixin
 from core.mixins.URLMixin import URLMixin
 
 from ..constants import HeaderFields
@@ -39,7 +40,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class MailingListModel(URLMixin, models.Model):
+class MailingListModel(URLMixin, FavoriteMixin, models.Model):
     """Database model for a mailinglist."""
 
     list_id = models.CharField(max_length=255, unique=True)

@@ -25,6 +25,7 @@ import logging
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from core.mixins.FavoriteMixin import FavoriteMixin
 from core.mixins.URLMixin import URLMixin
 from core.utils.mailParsing import parseCorrespondentHeader
 
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 """The logger instance for the module."""
 
 
-class CorrespondentModel(URLMixin, models.Model):
+class CorrespondentModel(URLMixin, FavoriteMixin, models.Model):
     """Database model for the correspondent data found in a mail."""
 
     email_name = models.CharField(

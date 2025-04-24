@@ -24,11 +24,10 @@ from typing import TYPE_CHECKING, Final
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.CorrespondentModel import CorrespondentModel
 
 from ..filters.CorrespondentFilter import CorrespondentFilter
@@ -43,11 +42,10 @@ from ..serializers.correspondent_serializers.CorrespondentSerializer import (
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.permissions import BasePermission
-    from rest_framework.request import Request
     from rest_framework.serializers import BaseSerializer
 
 
-class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
+class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet, ToggleFavoriteMixin):
     """Viewset for the :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
     BASENAME = CorrespondentModel.BASENAME
@@ -81,27 +79,3 @@ class CorrespondentViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == "list":
             return BaseCorrespondentSerializer
         return super().get_serializer_class()
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle_favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the correspondent.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the correspondent to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        correspondent = self.get_object()
-        correspondent.is_favorite = not correspondent.is_favorite
-        correspondent.save(update_fields=["is_favorite"])
-        return Response({"detail": "Correspondent marked as favorite"})

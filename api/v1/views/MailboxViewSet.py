@@ -29,6 +29,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core import constants
 from core.models.DaemonModel import DaemonModel
 from core.models.EMailModel import EMailModel
@@ -47,7 +48,7 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class MailboxViewSet(viewsets.ModelViewSet):
+class MailboxViewSet(viewsets.ModelViewSet, ToggleFavoriteMixin):
     """Viewset for the :class:`core.models.MailboxModel.MailboxModel`."""
 
     BASENAME = MailboxModel.BASENAME
@@ -264,27 +265,3 @@ class MailboxViewSet(viewsets.ModelViewSet):
                 "mailbox": mailboxSerializer.data,
             }
         )
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the mailbox.
-
-        Args:
-            request: The request triggering the action.
-            pk: int: The private key of the mailbox to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        mailbox = self.get_object()
-        mailbox.is_favorite = not mailbox.is_favorite
-        mailbox.save(update_fields=["is_favorite"])
-        return Response({"detail": "Mailbox marked as favorite"})

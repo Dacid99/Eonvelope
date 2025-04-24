@@ -29,8 +29,8 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.AttachmentModel import AttachmentModel
 
 from ..filters.AttachmentFilter import AttachmentFilter
@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
+class AttachmentViewSet(viewsets.ReadOnlyModelViewSet, ToggleFavoriteMixin):
     """Viewset for the :class:`core.models.AttachmentModel.AttachmentModel`."""
 
     BASENAME = AttachmentModel.BASENAME
@@ -110,27 +110,3 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet):
             as_attachment=True,
             filename=attachmentFileName,
         )
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the attachment.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the attachment to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        attachment = self.get_object()
-        attachment.is_favorite = not attachment.is_favorite
-        attachment.save(update_fields=["is_favorite"])
-        return Response({"detail": "Attachment marked as favorite"})

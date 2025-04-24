@@ -31,6 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.EMailModel import EMailModel
 
 from ..filters.EMailFilter import EMailFilter
@@ -44,7 +45,7 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class EMailViewSet(viewsets.ReadOnlyModelViewSet):
+class EMailViewSet(viewsets.ReadOnlyModelViewSet, ToggleFavoriteMixin):
     """Viewset for the :class:`core.models.EMailModel.EMailModel`."""
 
     BASENAME = EMailModel.BASENAME
@@ -208,27 +209,3 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet):
         conversation = email.subConversation()
         conversationSerializer = EMailSerializer(conversation, many=True)
         return Response({"emails": conversationSerializer.data})
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle_favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the email.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the email to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        email = self.get_object()
-        email.is_favorite = not email.is_favorite
-        email.save(update_fields=["is_favorite"])
-        return Response({"detail": "Email marked as favorite"})

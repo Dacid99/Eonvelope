@@ -24,11 +24,10 @@ from typing import TYPE_CHECKING, Final, override
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import mixins, viewsets
-from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.MailingListModel import MailingListModel
 
 from ..filters.MailingListFilter import MailingListFilter
@@ -40,10 +39,11 @@ from ..serializers.mailinglist_serializers.MailingListSerializer import (
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.permissions import BasePermission
-    from rest_framework.request import Request
 
 
-class MailingListViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin):
+class MailingListViewSet(
+    viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin, ToggleFavoriteMixin
+):
     """Viewset for the :class:`core.models.MailingListModel.MailingListModel`.
 
     Provides every read-only and a destroy action.
@@ -80,27 +80,3 @@ class MailingListViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin
         return MailingListModel.objects.filter(
             emails__mailbox__account__user=self.request.user
         ).distinct()
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the mailinglist.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the mailinglist to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        mailinglist = self.get_object()
-        mailinglist.is_favorite = not mailinglist.is_favorite
-        mailinglist.save(update_fields=["is_favorite"])
-        return Response({"detail": "Mailinglist marked as favorite"})

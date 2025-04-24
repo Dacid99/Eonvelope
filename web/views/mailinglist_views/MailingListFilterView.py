@@ -32,11 +32,12 @@ from ...filters.MailingListFilter import MailingListFilter
 class MailingListFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.MailingListModel.MailingListModel` instances."""
 
+    URL_NAME = MailingListModel.get_list_web_url_name()
     model = MailingListModel
     template_name = "web/mailinglist/mailinglist_filter_list.html"
     context_object_name = "mailinglists"
-    URL_NAME = MailingListModel.get_list_web_url_name()
     filterset_class = MailingListFilter
+    paginate_by = 25
 
     @override
     def get_queryset(self) -> QuerySet:

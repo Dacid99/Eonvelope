@@ -32,10 +32,11 @@ from ...filters.AccountFilter import AccountFilter
 class AccountFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.AccountModel.AccountModel` instances."""
 
+    URL_NAME = AccountModel.get_list_web_url_name()
     model = AccountModel
     template_name = "web/account/account_filter_list.html"
-    URL_NAME = AccountModel.get_list_web_url_name()
     filterset_class = AccountFilter
+    paginate_by = 25
 
     @override
     def get_queryset(self) -> QuerySet:

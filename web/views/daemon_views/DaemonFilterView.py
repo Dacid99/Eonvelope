@@ -32,11 +32,12 @@ from ...filters.DaemonFilter import DaemonFilter
 class DaemonFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.DaemonModel.DaemonModel` instances."""
 
+    URL_NAME = DaemonModel.get_list_web_url_name()
     model = DaemonModel
     template_name = "web/daemon/daemon_filter_list.html"
     context_object_name = "daemons"
-    URL_NAME = DaemonModel.get_list_web_url_name()
     filterset_class = DaemonFilter
+    paginate_by = 25
 
     @override
     def get_queryset(self) -> QuerySet:

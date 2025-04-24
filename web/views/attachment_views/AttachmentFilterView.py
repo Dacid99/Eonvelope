@@ -32,11 +32,12 @@ from ...filters.AttachmentFilter import AttachmentFilter
 class AttachmentFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.AttachmentModel.AttachmentModel` instances."""
 
+    URL_NAME = AttachmentModel.get_list_web_url_name()
     model = AttachmentModel
     template_name = "web/attachment/attachment_filter_list.html"
     context_object_name = "attachments"
-    URL_NAME = AttachmentModel.get_list_web_url_name()
     filterset_class = AttachmentFilter
+    paginate_by = 25
 
     @override
     def get_queryset(self) -> QuerySet:

@@ -2,6 +2,6 @@
 
 {% block list %}
 
-    {% include "web/correspondent/partials/_correspondent_list.html" with correspondents=filter.qs %}
+    {% include "web/correspondent/partials/_correspondent_list.html" with correspondents=page_obj %}
 
 {% endblock list %}

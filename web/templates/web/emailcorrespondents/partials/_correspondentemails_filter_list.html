@@ -2,6 +2,6 @@
 
 {% block list %}
 
-    {% include "web/emailcorrespondents/partials/_correspondentemail_list.html" with correspondentemails=filter.qs %}
+    {% include "web/emailcorrespondents/partials/_correspondentemail_list.html" with correspondentemails=page_obj %}
 
 {% endblock list %}

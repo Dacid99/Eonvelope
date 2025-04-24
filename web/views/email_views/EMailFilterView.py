@@ -32,11 +32,12 @@ from ...filters.EMailFilter import EMailFilter
 class EMailFilterView(LoginRequiredMixin, FilterView):
     """View for filtering listed :class:`core.models.EMailModel.EMailModel` instances."""
 
+    URL_NAME = EMailModel.get_list_web_url_name()
     model = EMailModel
     template_name = "web/email/email_filter_list.html"
     context_object_name = "emails"
-    URL_NAME = EMailModel.get_list_web_url_name()
     filterset_class = EMailFilter
+    paginate_by = 25
 
     @override
     def get_queryset(self) -> QuerySet:

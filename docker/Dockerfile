@@ -10,7 +10,7 @@ RUN pip install --upgrade pip --no-cache-dir
 RUN pip install -Ur dependencies.txt --no-cache-dir
 RUN python manage.py collectstatic --noinput
 RUN python manage.py makemigrations
-RUN django-admin compilemessages
+RUN python manage.py compilemessages
 RUN chmod +x docker/entrypoint.sh
 EXPOSE 8000
 ENTRYPOINT [ "./docker/entrypoint.sh" ]

@@ -60,7 +60,12 @@
 
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">{% translate "Mailboxes" %}</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">{% translate "Mailboxes" %}</h4>
+                    <a role="button"
+                       class="btn btn-outline-primary"
+                       href="{% url 'account-emails' with pk=account.pk %}">{% translate "View all" %}</a>
+                </div>
 
                 {% include "web/mailbox/partials/_mailbox_list.html" with mailboxes=account.mailboxes.all %}
 

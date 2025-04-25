@@ -29,6 +29,7 @@
                     {% include "web/mailbox/partials/_fetch_all-button.html" %}
 
                     {% include "web/mailbox/partials/_add_daemon-button.html" %}
+
                     {% include "web/mailbox/partials/_upload_email-button.html" %}
 
                 </div>
@@ -71,7 +72,12 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">{% translate "Emails" %}</h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">{% translate "Emails" %}</h4>
+                    <a role="button"
+                       class="btn btn-outline-primary"
+                       href="{% url 'mailbox-emails' with pk=mailbox.pk %}">{% translate "View all" %}</a>
+                </div>
 
                 {% include "web/email/partials/_email_list.html" with emails=mailbox.emails.all %}
 

@@ -76,7 +76,7 @@
                     <h4 class="card-title">{% translate "Emails" %}</h4>
                     <a role="button"
                        class="btn btn-outline-primary"
-                       href="{% url 'mailbox-emails' with pk=mailbox.pk %}">{% translate "View all" %}</a>
+                       href="{% url 'web:mailbox-emails' mailbox.pk %}">{% translate "View all" %}</a>
                 </div>
 
                 {% include "web/email/partials/_email_list.html" with emails=mailbox.emails.all %}

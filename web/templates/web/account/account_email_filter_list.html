@@ -8,7 +8,10 @@
 
 {% block content %}
     <h2>{% translate "Emails" %}</h2>
-    <h4>{% translate "in" %} {{ account.mail_address }}</h4>
+    <h4>
+        {% translate "in" %} <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+    href="{{ account.get_absolute_url }}">{{ account.mail_address }}</a>
+    </h4>
 
     {% include "web/email/partials/_email_filter_list.html" %}
 

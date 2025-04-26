@@ -24,7 +24,7 @@ from django.urls import reverse
 class URLMixin:
     """Mixin to add url features to a :class:`django.db.models.Model`."""
 
-    BASENAME = None
+    BASENAME: str | None = None
 
     def get_absolute_url(self) -> str:
         """Gets the detail webview url for the model instance.

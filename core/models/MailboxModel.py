@@ -23,7 +23,7 @@ from __future__ import annotations
 import logging
 import mailbox
 import os
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Final, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
@@ -118,6 +118,7 @@ class MailboxModel(
         ]
         """:attr:`name` and :attr:`account` in combination are unique."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 

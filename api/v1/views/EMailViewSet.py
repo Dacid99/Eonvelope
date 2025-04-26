@@ -151,6 +151,7 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet, ToggleFavoriteMixin):
 
         htmlFileName = os.path.basename(htmlFilePath)
         response = FileResponse(
+            # pylint: disable-next=consider-using-with
             open(  # noqa: SIM115 ;  this is the recommended usage for FileResponse, see https://docs.djangoproject.com/en/5.2/ref/request-response/
                 htmlFilePath, "rb"
             ),

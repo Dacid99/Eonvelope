@@ -19,7 +19,7 @@
 """Module with the SafePOPMixin mixin."""
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Self
 
 from django.utils.translation import gettext as _
 
@@ -96,7 +96,7 @@ class SafePOPMixin:
         """
 
         def safeWrapper(popAction: Callable) -> Callable:
-            def safeAction(self, *args: Any, **kwargs: Any) -> Any:
+            def safeAction(self: Self, *args: Any, **kwargs: Any) -> Any:
                 try:
                     response = popAction(self, *args, **kwargs)
                 except Exception as error:
@@ -125,25 +125,31 @@ class SafePOPMixin:
         return safeWrapper
 
     @safe(exception=MailAccountError)
-    def safe_user(self, *args, **kwargs):
+    def safe_user(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.user`."""
         return self._mailClient.user(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_pass_(self, *args, **kwargs):
+    def safe_pass_(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.pass_`."""
         return self._mailClient.pass_(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_noop(self, *args, **kwargs):
+    def safe_noop(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.noop`."""
         return self._mailClient.noop(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_list(self, *args, **kwargs):
+    def safe_list(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.list`."""
         return self._mailClient.list(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_retr(self, *args, **kwargs):
+    def safe_retr(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.retr`."""
         return self._mailClient.retr(*args, **kwargs)
 
     @safe(exception=None)
-    def safe_quit(self, *args, **kwargs):
+    def safe_quit(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.quit`."""
         return self._mailClient.quit(*args, **kwargs)

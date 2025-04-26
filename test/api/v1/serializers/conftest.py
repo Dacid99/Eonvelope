@@ -41,6 +41,7 @@ from core.models.MailboxModel import MailboxModel
 
 @pytest.fixture(autouse=True)
 def request_context(mocker, owner_user):
+    """Provides a mocked request context the tests."""
     mock_request = mocker.MagicMock(spec=Request)
     mock_request.user = owner_user
     return {"request": mock_request}
@@ -59,6 +60,7 @@ def complete_database(
     mailboxModel,
     mailingListModel,
 ):
+    """Autouse all models for the tests."""
     other_accountModel = baker.make(AccountModel, user=other_user)
     other_mailboxModel = baker.make(MailboxModel, account=other_accountModel)
     baker.make(

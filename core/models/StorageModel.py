@@ -69,6 +69,7 @@ class StorageModel(models.Model):
         db_table = "storage"
         """The name of the database table for the storage status."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 

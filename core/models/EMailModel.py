@@ -113,8 +113,12 @@ class EMailModel(
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mails. False by default."""
 
-    correspondents: models.ManyToManyField[CorrespondentModel] = models.ManyToManyField(
-        "CorrespondentModel", through="EMailCorrespondentsModel", related_name="emails"
+    correspondents: models.ManyToManyField[CorrespondentModel, CorrespondentModel] = (
+        models.ManyToManyField(
+            "CorrespondentModel",
+            through="EMailCorrespondentsModel",
+            related_name="emails",
+        )
     )
     """The correspondents that are mentioned in this mail. Bridges through :class:`core.models.EMailCorrespondentsModel`."""
 
@@ -160,6 +164,7 @@ class EMailModel(
         ]
         """`message_id` and :attr:`mailbox` in combination are unique."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
@@ -350,7 +355,9 @@ class EMailModel(
         message_id = getHeader(
             emailMessage,
             HeaderFields.MESSAGE_ID,
-            fallbackCallable=lambda: md5(emailBytes).hexdigest(),
+            fallbackCallable=lambda: md5(  # noqa: S324 ; no safe hash required here
+                emailBytes
+            ).hexdigest(),
         )
         x_spam = getHeader(
             emailMessage, HeaderFields.X_SPAM, fallbackCallable=lambda: ""
@@ -455,10 +462,10 @@ class EMailModel(
 
     @override
     @property
-    def has_download(self):
+    def has_download(self) -> bool:
         return self.eml_filepath is not None
 
     @override
     @property
-    def has_thumbnail(self):
+    def has_thumbnail(self) -> bool:
         return self.html_filepath is not None

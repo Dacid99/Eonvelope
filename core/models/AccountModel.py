@@ -145,6 +145,7 @@ class AccountModel(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
         Choices for :attr:`protocol` are enforced on db level.
         """
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 

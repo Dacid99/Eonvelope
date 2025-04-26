@@ -31,7 +31,7 @@ from ..utils.widgets import AdaptedSelectDateWidget
 class DaemonFilter(django_filters.FilterSet):
     """The filter class for :class:`core.models.MailboxModel`."""
 
-    o = django_filters.OrderingFilter(
+    order = django_filters.OrderingFilter(
         fields=[
             "uuid",
             "cycle_interval",

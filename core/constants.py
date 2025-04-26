@@ -99,7 +99,7 @@ class EmailProtocolChoices(TextChoices):
     """The POP3 protocol over SSL"""
 
     # EXCHANGE = "EXCHANGE", _("Microsoft Exchange")
-    """Microsofts Exchange protocol"""
+    # """Microsofts Exchange protocol"""
 
 
 class HeaderFields:

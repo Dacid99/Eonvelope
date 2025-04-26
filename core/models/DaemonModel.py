@@ -140,6 +140,7 @@ class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         ]
         """Choices for :attr:`fetching_criterion` are enforced on db level."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 

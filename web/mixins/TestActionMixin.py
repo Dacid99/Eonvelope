@@ -30,7 +30,14 @@ class TestActionMixin:
     """Mixin to provide test button handling for views."""
 
     def handle_test(self, request: HttpRequest) -> HttpResponse:
-        """The handler method for the `test` action."""
+        """Handler function for the `test` action.
+
+        Args:
+            request: The action request to handle.
+
+        Return:
+            A template response with the updated view after the action.
+        """
         self.object = self.get_object()
         result = self.perform_test()
         self.object.refresh_from_db()
@@ -39,7 +46,7 @@ class TestActionMixin:
         return render(request, self.template_name, context)
 
     def perform_test(self) -> dict[str, bool | str]:
-        """Handling of the object test.
+        """Performs the object test.
 
         Returns:
             Data containing the status and, if provided, the error message of the test.

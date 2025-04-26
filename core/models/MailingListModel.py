@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -83,6 +83,7 @@ class MailingListModel(URLMixin, FavoriteMixin, models.Model):
         db_table = "mailinglists"
         """The name of the database table for the mailinglists."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
@@ -100,7 +101,6 @@ class MailingListModel(URLMixin, FavoriteMixin, models.Model):
 
         Args:
             emailMessage: The email message to parse the malinglistdata from.
-            correspondent: The correspondent for the new mailinglist.
 
         Returns:
             The :class:`core.models.MailingListModel.MailingListModel` instance with data from the message.

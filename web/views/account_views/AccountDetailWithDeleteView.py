@@ -68,6 +68,14 @@ class AccountDetailWithDeleteView(
         return CustomActionMixin.post(self, request)
 
     def handle_update_mailboxes(self, request: HttpRequest) -> HttpResponse:
+        """Handler function for the `update-mailboxes` action.
+
+        Args:
+            request: The action request to handle.
+
+        Return:
+            A template response with the updated view after the action.
+        """
         self.object = self.get_object()
         result = self.perform_update_mailboxes()
         self.object.refresh_from_db()
@@ -76,6 +84,11 @@ class AccountDetailWithDeleteView(
         return render(request, self.template_name, context)
 
     def perform_update_mailboxes(self) -> dict[str, bool | str]:
+        """Performs updating of the accounts mailboxes.
+
+        Returns:
+            Data containing the status, message and, if provided, the error message of the action.
+        """
         result = {"status": None, "message": None, "error": None}
         try:
             self.object.update_mailboxes()

@@ -18,8 +18,6 @@
 
 """Module with :class:`web.mixins.CustomActionMixin.CustomActionMixin`."""
 
-from typing import Any
-
 from django.http import HttpRequest, HttpResponse
 from rest_framework import status
 
@@ -33,8 +31,9 @@ class CustomActionMixin:
     """
 
     _handler_method_prefix = "handle_"
+    """The name prefix of methods considered request handlers."""
 
-    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+    def post(self, request: HttpRequest) -> HttpResponse:
         """Creates response to a post request.
 
         If no action matches the existing handlers, responds with Http204.
@@ -44,7 +43,8 @@ class CustomActionMixin:
             request: The post request to handle.
 
         Returns:
-            The response to the post request.
+            The handlers response to the request.
+            If no matching handler is found Http204.
         """
         for attr in dir(self):
             if (

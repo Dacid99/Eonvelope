@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import logging
+from typing import override
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -68,6 +69,7 @@ class CorrespondentModel(URLMixin, FavoriteMixin, models.Model):
         db_table = "correspondents"
         """The name of the database table for the correspondents."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 

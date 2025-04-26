@@ -173,7 +173,11 @@ def parseMailboxName(mailboxBytes: bytes) -> str:
     Returns:
         The serverside name of the mailbox
     """
-    return imap_tools.imap_utf7.utf7_decode(mailboxBytes).split('"/"')[-1].strip()
+    return (
+        imap_tools.imap_utf7.utf7_decode(mailboxBytes)
+        .rsplit('"/"', maxsplit=1)[-1]
+        .strip()
+    )
 
 
 def eml2html(emailBytes: bytes) -> str:

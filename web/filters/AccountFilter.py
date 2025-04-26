@@ -38,7 +38,7 @@ if TYPE_CHECKING:
 class AccountFilter(django_filters.FilterSet):
     """The filter class for :class:`core.models.AccountModel`."""
 
-    o = django_filters.OrderingFilter(
+    order = django_filters.OrderingFilter(
         fields=[
             "mail_address",
             "mail_host",

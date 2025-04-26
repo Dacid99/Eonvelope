@@ -106,6 +106,7 @@ class AttachmentModel(
         ]
         """:attr:`file_path` and :attr:`email` in combination are unique."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
@@ -205,7 +206,9 @@ class AttachmentModel(
         new_attachment = AttachmentModel()
         new_attachment.file_name = (
             attachmentData.get_filename()
-            or md5(attachmentData.as_bytes()).hexdigest()
+            or md5(  # noqa: S324 ; no safe hash required here
+                attachmentData.as_bytes()
+            ).hexdigest()
             + f".{attachmentData.get_content_subtype()}"
         )
         new_attachment.content_disposition = (
@@ -219,12 +222,12 @@ class AttachmentModel(
 
     @override
     @property
-    def has_download(self):
+    def has_download(self) -> bool:
         return self.file_path is not None
 
     @override
     @property
-    def has_thumbnail(self):
+    def has_thumbnail(self) -> bool:
         return self.content_type.startswith("image")
 
     @override

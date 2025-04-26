@@ -56,22 +56,3 @@ class BaseDaemonForm(forms.ModelForm):
             "logfile_size",
         ]
         """Exposes all fields that the user should be able to change."""
-
-    # def clean_fetching_criterion(self) -> str:
-    #     """Check whether the fetching criterion is available for the mailbox of the daemon.
-
-    #     Returns:
-    #         The validated fetching criterion.
-
-    #     Raises:
-    #         :restframework::class:`forms.ValidationError`: If the given fetching criterion is not available for the daemon.
-    #     """
-    #     fetching_criterion = self.cleaned_data.get("fetching_criterion")
-    #     if (
-    #         fetching_criterion
-    #         not in self.instance.mailbox.getAvailableFetchingCriteria()
-    #     ):
-    #         raise forms.ValidationError(
-    #             "Fetching criterion not available for this mailbox!"
-    #         )
-    #     return fetching_criterion

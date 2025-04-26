@@ -112,5 +112,5 @@ def clean_filename(filename: str) -> str:
     Returns:
         The cleaned filename without extension.
     """
-    clean_filename = re.sub(r"[/\.~]", "_", filename)
-    return re.sub(r"\s+", "", clean_filename).strip()
+    cleaned_filename = re.sub(r"[/\.~]", "_", filename)
+    return re.sub(r"\s+", "", cleaned_filename).strip()

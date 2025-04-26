@@ -19,7 +19,7 @@
 """Module with the SafeIMAPMixin mixin."""
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Self
 
 from django.utils.translation import gettext as _
 
@@ -101,7 +101,8 @@ class SafeIMAPMixin:
         """
 
         def safeWrapper(imapAction: Callable) -> Callable:
-            def safeAction(self, *args: Any, **kwargs: Any) -> Any:
+
+            def safeAction(self: Self, *args: Any, **kwargs: Any) -> Any:
                 try:
                     response = imapAction(self, *args, **kwargs)
                 except Exception as error:

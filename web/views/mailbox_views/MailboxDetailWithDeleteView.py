@@ -70,6 +70,14 @@ class MailboxDetailWithDeleteView(
         return CustomActionMixin.post(self, request)
 
     def handle_fetch_all(self, request: HttpRequest) -> HttpResponse:
+        """Handler function for the `fetch-all` action.
+
+        Args:
+            request: The action request to handle.
+
+        Return:
+            A template response with the updated view after the action.
+        """
         self.object = self.get_object()
         result = self.perform_fetch_all()
         self.object.refresh_from_db()
@@ -78,6 +86,11 @@ class MailboxDetailWithDeleteView(
         return render(request, self.template_name, context)
 
     def perform_fetch_all(self) -> None:
+        """Performs fetching of the mailboxes emails.
+
+        Returns:
+            Data containing the status, message and, if provided, the error message of the action.
+        """
         result = {"status": None, "message": None, "error": None}
         try:
             self.object.fetch(EmailFetchingCriterionChoices.ALL)
@@ -94,6 +107,14 @@ class MailboxDetailWithDeleteView(
         return result
 
     def handle_add_daemon(self, request: HttpRequest) -> HttpResponseRedirect:
+        """Handler function for the `add-daemon` action.
+
+        Args:
+            request: The action request to handle.
+
+        Return:
+            A template response with the updated view after the action.
+        """
         self.object = self.get_object()
         new_daemon = DaemonModel.objects.create(mailbox=self.object)
         return HttpResponseRedirect(new_daemon.get_absolute_edit_url())

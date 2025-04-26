@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Final, override
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -80,6 +80,7 @@ class EMailCorrespondentsModel(models.Model):
         Choices for :attr:`mention` are enforced on db level.
         """
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 

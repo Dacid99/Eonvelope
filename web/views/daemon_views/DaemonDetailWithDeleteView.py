@@ -57,6 +57,14 @@ class DaemonDetailWithDeleteView(
         return CustomActionMixin.post(self, request)
 
     def handle_start_daemon(self, request: HttpRequest) -> HttpResponse:
+        """Handler function for the `start-daemon` action.
+
+        Args:
+            request: The action request to handle.
+
+        Return:
+            A template response with the updated view after the action.
+        """
         self.object = self.get_object()
         result = EMailArchiverDaemonRegistry.startDaemon(self.object)
         result_context = {"start_result": {"status": result}}
@@ -66,6 +74,14 @@ class DaemonDetailWithDeleteView(
         return render(request, self.template_name, context)
 
     def handle_stop_daemon(self, request: HttpRequest) -> HttpResponse:
+        """Handler function for the `stop-daemon` action.
+
+        Args:
+            request: The action request to handle.
+
+        Return:
+            A template response with the updated view after the action.
+        """
         self.object = self.get_object()
         result = EMailArchiverDaemonRegistry.stopDaemon(self.object)
         result_context = {"stop_result": {"status": result}}

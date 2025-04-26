@@ -124,7 +124,7 @@ ROOT_URLCONF = "Emailkasten.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "Emailkasten" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

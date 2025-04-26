@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable emailModel archiving server
+# Emailkasten - a open-source self-hostable email archiving server
 # Copyright (C) 2024  David & Philipp Aderbauer
 #
 # This program is free software: you can redistribute it and/or modify
@@ -55,7 +55,7 @@ def mock_os_remove(mocker):
 def emailModel_with_filepaths(faker, emailModel):
     """Fixture adding filepaths to `emailModel`."""
     emailModel.eml_filepath = faker.file_path(extension="eml")
-    emailModel.prerender_filepath = faker.file_path(extension="png")
+    emailModel.html_filepath = faker.file_path(extension="png")
     emailModel.save()
     return emailModel
 
@@ -67,18 +67,18 @@ def spy_Model_save(mocker):
 
 
 @pytest.fixture
-def mock_EMailModel_save_to_storage(mocker):
-    """Fixture patching :func:`core.models.EMailModel.EMailModel.save_to_storage`."""
+def mock_EMailModel_save_eml_to_storage(mocker):
+    """Fixture patching :func:`core.models.EMailModel.EMailModel.save_eml_to_storage`."""
     return mocker.patch(
-        "core.models.EMailModel.EMailModel.save_to_storage", autospec=True
+        "core.models.EMailModel.EMailModel.save_eml_to_storage", autospec=True
     )
 
 
 @pytest.fixture
-def mock_EMailModel_render_to_storage(mocker):
-    """Fixture patching :func:`core.models.EMailModel.EMailModel.render_to_storage`."""
+def mock_EMailModel_save_html_to_storage(mocker):
+    """Fixture patching :func:`core.models.EMailModel.EMailModel.save_html_to_storage`."""
     return mocker.patch(
-        "core.models.EMailModel.EMailModel.render_to_storage", autospec=True
+        "core.models.EMailModel.EMailModel.save_html_to_storage", autospec=True
     )
 
 
@@ -109,7 +109,7 @@ def test_EMailModel_fields(emailModel):
     assert emailModel.datasize is not None
     assert isinstance(emailModel.datasize, int)
     assert emailModel.eml_filepath is None
-    assert emailModel.prerender_filepath is None
+    assert emailModel.html_filepath is None
     assert emailModel.is_favorite is False
 
     assert emailModel.mailinglist is None
@@ -204,7 +204,7 @@ def test_EMailModel_delete_emailfiles_success(
     emailModel_with_filepaths.delete()
 
     mock_os_remove.assert_any_call(emailModel_with_filepaths.eml_filepath)
-    mock_os_remove.assert_any_call(emailModel_with_filepaths.prerender_filepath)
+    mock_os_remove.assert_any_call(emailModel_with_filepaths.html_filepath)
     with pytest.raises(EMailModel.DoesNotExist):
         emailModel_with_filepaths.refresh_from_db()
     mock_logger.debug.assert_called()
@@ -233,7 +233,7 @@ def test_EMailModel_delete_emailfiles_remove_error(
     emailModel_with_filepaths.delete()
 
     mock_os_remove.assert_any_call(emailModel_with_filepaths.eml_filepath)
-    mock_os_remove.assert_any_call(emailModel_with_filepaths.prerender_filepath)
+    mock_os_remove.assert_any_call(emailModel_with_filepaths.html_filepath)
     with pytest.raises(EMailModel.DoesNotExist):
         emailModel_with_filepaths.refresh_from_db()
     mock_logger.debug.assert_called()
@@ -269,8 +269,8 @@ def test_EMailModel_save_with_data_success(
     emailModel,
     mock_message,
     spy_Model_save,
-    mock_EMailModel_save_to_storage,
-    mock_EMailModel_render_to_storage,
+    mock_EMailModel_save_eml_to_storage,
+    mock_EMailModel_save_html_to_storage,
     save_to_eml,
     expectedCall,
 ):
@@ -282,18 +282,20 @@ def test_EMailModel_save_with_data_success(
     emailModel.save(emailData=mock_message)
 
     spy_Model_save.assert_called_once_with(emailModel)
-    assert mock_EMailModel_save_to_storage.call_count == expectedCall
+    assert mock_EMailModel_save_eml_to_storage.call_count == expectedCall
     if expectedCall:
-        mock_EMailModel_save_to_storage.assert_called_with(emailModel, mock_message)
-    mock_EMailModel_render_to_storage.assert_called_once_with(emailModel, mock_message)
+        mock_EMailModel_save_eml_to_storage.assert_called_with(emailModel, mock_message)
+    mock_EMailModel_save_html_to_storage.assert_called_once_with(
+        emailModel, mock_message
+    )
 
 
 @pytest.mark.django_db
 def test_EMailModel_save_no_data(
     emailModel,
     spy_Model_save,
-    mock_EMailModel_save_to_storage,
-    mock_EMailModel_render_to_storage,
+    mock_EMailModel_save_eml_to_storage,
+    mock_EMailModel_save_html_to_storage,
 ):
     """Tests :func:`core.models.EMailModel.EMailModel.save`
     in case of success without data to be saved.
@@ -303,8 +305,8 @@ def test_EMailModel_save_no_data(
     emailModel.save()
 
     spy_Model_save.assert_called_once_with(emailModel)
-    mock_EMailModel_save_to_storage.assert_not_called()
-    mock_EMailModel_render_to_storage.assert_not_called()
+    mock_EMailModel_save_eml_to_storage.assert_not_called()
+    mock_EMailModel_save_html_to_storage.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -312,21 +314,21 @@ def test_EMailModel_save_with_data_failure(
     emailModel,
     mock_message,
     spy_Model_save,
-    mock_EMailModel_save_to_storage,
-    mock_EMailModel_render_to_storage,
+    mock_EMailModel_save_eml_to_storage,
+    mock_EMailModel_save_html_to_storage,
 ):
     """Tests :func:`core.models.EMailModel.EMailModel.save`
     in case of success saving data fails with an exception.
     """
-    mock_EMailModel_save_to_storage.side_effect = AssertionError
+    mock_EMailModel_save_eml_to_storage.side_effect = AssertionError
     emailModel.mailbox.save_toEML = True
 
     with pytest.raises(AssertionError):
         emailModel.save(emailData=mock_message)
 
     spy_Model_save.assert_called()
-    mock_EMailModel_save_to_storage.assert_called()
-    mock_EMailModel_render_to_storage.assert_not_called()
+    mock_EMailModel_save_eml_to_storage.assert_called()
+    mock_EMailModel_save_html_to_storage.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -356,7 +358,17 @@ def test_EMailModel_fullConversation(emailConversation, start_id):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "x_spam, expectedResult", [(None, False), ("YES", True), ("NO", False)]
+    "x_spam, expectedResult",
+    [
+        (None, False),
+        ("", False),
+        ("YES", True),
+        ("NO", False),
+        ("NO, YES", True),
+        ("YES, YES", True),
+        ("NO, NO", False),
+        ("CRAZY", False),
+    ],
 )
 def test_EMailModel_isSpam(emailModel, x_spam, expectedResult):
     """Tests :func:`core.models.EMailModel.EMailModel.isSpam`."""
@@ -376,8 +388,8 @@ def test_EMailModel_createFromEmailBytes_success(
     override_config,
     mailboxModel,
     mock_logger,
-    mock_EMailModel_save_to_storage,
-    mock_EMailModel_render_to_storage,
+    mock_EMailModel_save_eml_to_storage,
+    mock_EMailModel_save_html_to_storage,
     mock_AttachmentModel_save_to_storage,
     test_email,
     message_id,
@@ -409,8 +421,8 @@ def test_EMailModel_createFromEmailBytes_success(
     assert emailModel.mailbox == mailboxModel
     if attachments_count > 0:
         mock_AttachmentModel_save_to_storage.assert_called()
-    mock_EMailModel_save_to_storage.assert_called()
-    mock_EMailModel_render_to_storage.assert_called()
+    mock_EMailModel_save_eml_to_storage.assert_called()
+    mock_EMailModel_save_html_to_storage.assert_called()
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
@@ -422,8 +434,8 @@ def test_EMailModel_createFromEmailBytes_duplicate(
     override_config,
     emailModel,
     mock_logger,
-    mock_EMailModel_save_to_storage,
-    mock_EMailModel_render_to_storage,
+    mock_EMailModel_save_eml_to_storage,
+    mock_EMailModel_save_html_to_storage,
     mock_AttachmentModel_save_to_storage,
 ):
     """Tests :func:`core.models.EMailModel.EMailModel.createFromEmailBytes`
@@ -436,8 +448,8 @@ def test_EMailModel_createFromEmailBytes_duplicate(
 
     assert result is None
     mock_AttachmentModel_save_to_storage.assert_not_called()
-    mock_EMailModel_save_to_storage.assert_not_called()
-    mock_EMailModel_render_to_storage.assert_not_called()
+    mock_EMailModel_save_eml_to_storage.assert_not_called()
+    mock_EMailModel_save_html_to_storage.assert_not_called()
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
@@ -451,16 +463,24 @@ def test_EMailModel_createFromEmailBytes_duplicate(
     [
         ("YES", True, True),
         ("NO", True, False),
+        ("YES, NO", True, True),
+        ("NO, YES", True, True),
+        ("NO, NO", True, False),
+        ("SOMETHING", True, False),
         ("YES", False, False),
         ("NO", False, False),
+        ("YES, NO", False, False),
+        ("NO, YES", False, False),
+        ("NO, NO", False, False),
+        ("SOMETHING", False, False),
     ],
 )
 def test_EMailModel_createFromEmailBytes_spam(
     override_config,
     mailboxModel,
     mock_logger,
-    mock_EMailModel_save_to_storage,
-    mock_EMailModel_render_to_storage,
+    mock_EMailModel_save_eml_to_storage,
+    mock_EMailModel_save_html_to_storage,
     mock_AttachmentModel_save_to_storage,
     X_Spam_Flag,
     THROW_OUT_SPAM,
@@ -504,3 +524,37 @@ def test_EMailModel_createFromEmailBytes_dberror(
     mock_logger.warning.assert_not_called()
     mock_logger.exception.assert_called()
     mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "eml_filepath, expected_has_download",
+    [
+        (None, False),
+        ("some/file/path", True),
+    ],
+)
+def test_EMailModel_has_download(emailModel, eml_filepath, expected_has_download):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.has_download` in the two relevant cases."""
+    emailModel.eml_filepath = eml_filepath
+
+    result = emailModel.has_download
+
+    assert result == expected_has_download
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "html_filepath, expected_has_thumbnail",
+    [
+        (None, False),
+        ("some/file/path", True),
+    ],
+)
+def test_EMailModel_has_thumbnail(emailModel, html_filepath, expected_has_thumbnail):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.has_download` in the two relevant cases."""
+    emailModel.html_filepath = html_filepath
+
+    result = emailModel.has_thumbnail
+
+    assert result is expected_has_thumbnail

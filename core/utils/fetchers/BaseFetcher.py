@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, ClassVar
 
 from ...constants import EmailFetchingCriterionChoices
 
@@ -40,10 +40,10 @@ class BaseFetcher(ABC):
     Provides arg-checking for methods.
     """
 
-    PROTOCOL = None
+    PROTOCOL: str | None = None
     """Name of the used protocol, should be one of :class:`MailFetchingProtocols`."""
 
-    AVAILABLE_FETCHING_CRITERIA = []
+    AVAILABLE_FETCHING_CRITERIA: ClassVar[list] = []
     """List of all criteria available for fetching. Should refer to :class:`MailFetchingCriteria`."""
 
     @abstractmethod
@@ -71,7 +71,7 @@ class BaseFetcher(ABC):
         """Opens the connection to the mailserver."""
 
     @abstractmethod
-    def test(self, mailbox: MailboxModel) -> None:
+    def test(self, mailbox: MailboxModel | None) -> None:
         """Tests the connection to the mailaccount and, if given, the mailbox.
 
         Args:
@@ -85,7 +85,7 @@ class BaseFetcher(ABC):
     def fetchEmails(
         self,
         mailbox: MailboxModel,
-        fetchingCriterion: str = EmailFetchingCriterionChoices.ALL,
+        criterion: str = EmailFetchingCriterionChoices.ALL,
     ) -> list[bytes]:
         """Fetches emails based on a criterion from the server.
 
@@ -101,14 +101,14 @@ class BaseFetcher(ABC):
         Raises:
             ValueError: If the :attr:`fetchingCriterion` is not available for this fetcher.
         """
-        if fetchingCriterion not in self.AVAILABLE_FETCHING_CRITERIA:
+        if criterion not in self.AVAILABLE_FETCHING_CRITERIA:
             self.logger.error(
                 "Fetching by %s is not available via protocol %s!",
-                fetchingCriterion,
+                criterion,
                 self.PROTOCOL,
             )
             raise ValueError(
-                f"Fetching by {fetchingCriterion} is not available via protocol {self.PROTOCOL}!"
+                f"Fetching by {criterion} is not available via protocol {self.PROTOCOL}!"
             )
         if mailbox.account != self.account:
             self.logger.error("%s is not a mailbox of %s!", mailbox, self.account)

@@ -1,0 +1,56 @@
+{% extends "web/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Correspondent Details" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+
+                {% include "web/partials/_favorite_badge.html" with object=correspondent %}
+
+            </div>
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
+
+                    {% include "web/partials/_delete-button.html" with object=correspondent %}
+
+                    {% include "web/partials/_edit-button.html" with object=correspondent %}
+
+                </div>
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+
+                    {% include "web/partials/_close_to_list-button.html" with object=correspondent %}
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">
+                <a href="mailto:{{ correspondent.email_address }}"
+                   class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ correspondent.email_address }}</a>
+            </h2>
+            <h3 class="card-subtitle">{{ correspondent.email_name }}</h3>
+        </div>
+
+        {% include "web/partials/_dates_card-footer.html" with object=correspondent %}
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{% translate "Emails" %}</h4>
+
+                {% include "web/emailcorrespondents/partials/_correspondentemails_list.html" with emailcorrespondents=correspondent.correspondentemails.all %}
+
+            </div>
+        </div>
+    </div>
+
+    {% include "web/partials/_delete-modal.html" with object=correspondent %}
+
+{% endblock content %}

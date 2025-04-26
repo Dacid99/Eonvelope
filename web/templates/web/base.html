@@ -1,0 +1,46 @@
+{% load static i18n django_bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+
+            {% block title %}
+            {% endblock title %}
+
+        {% translate "Emailkasten" %}</title>
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+        {% bootstrap_messages %}
+        <link href="{% static 'fontawesomefree/css/fontawesome.css' %}"
+              rel="stylesheet"
+              type="text/css">
+        <link href="{% static 'fontawesomefree/css/brands.css' %}"
+              rel="stylesheet"
+              type="text/css">
+        <link href="{% static 'fontawesomefree/css/solid.css' %}"
+              rel="stylesheet"
+              type="text/css">
+    </head>
+    <body>
+
+        {% include "web/partials/_navbar.html" %}
+
+        <div class="container my-3">
+
+            {% block content %}
+            {% endblock content %}
+
+        </div>
+
+        {% include "web/partials/_footer.html" %}
+
+        {% block scripts %}
+        {% endblock scripts %}
+
+        {% include "web/partials/_toggle_favorite-script.html" %}
+
+    </body>
+</html>

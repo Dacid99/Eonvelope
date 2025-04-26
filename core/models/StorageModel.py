@@ -25,8 +25,11 @@ import os
 from typing import Any, override
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from Emailkasten.utils import get_config
+
+from ..utils.fileManagment import clean_filename
 
 
 logger = logging.getLogger(__name__)
@@ -67,6 +70,7 @@ class StorageModel(models.Model):
         db_table = "storage"
         """The name of the database table for the storage status."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
@@ -74,7 +78,10 @@ class StorageModel(models.Model):
             The string representation of the storage directory, using :attr:`path` and the state of the directory.
         """
         state = "Current" if self.current else "Archived"
-        return f"{state} storage directory {self.path}"
+        return _("%(state)s storage directory %(path)s") % {
+            "state": state,
+            "path": self.path,
+        }
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:
@@ -151,7 +158,8 @@ class StorageModel(models.Model):
             )
             logger.info("Successfully created first storage directory.")
 
-        subdirectoryPath = os.path.join(storageEntry.path, subdirectoryName)
+        clean_subdirectoryPath = clean_filename(subdirectoryName)
+        subdirectoryPath = os.path.join(storageEntry.path, clean_subdirectoryPath)
         while os.path.isfile(subdirectoryPath):
             subdirectoryPath += ".a"
         logger.debug("Creating new subdirectory in the current storage directory ...")

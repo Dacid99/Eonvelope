@@ -1,0 +1,74 @@
+{% extends "web/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Attachment Details" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+
+                {% include "web/partials/_favorite_badge.html" with object=attachment %}
+
+            </div>
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Action button group">
+
+                    {% include "web/partials/_download-button.html" with object=attachment %}
+
+                </div>
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
+
+                    {% include "web/partials/_delete-button.html" with object=attachment %}
+
+                </div>
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+
+                    {% include "web/partials/_close_to_list-button.html" with object=attachment %}
+
+                </div>
+            </div>
+        </div>
+        {% if attachment.has_thumbnail %}
+            <div class="row">
+                <div class="col-6">
+                {% endif %}
+                <div class="card-body">
+                    <h2 class="card-title">{{ attachment.file_name }}</h2>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item list-group-item-action ">
+                            {% translate "Email" %}: <a href="{{ attachment.email.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
+                        </li>
+                        <li class="list-group-item">{% translate "Content Type" %}: {{ attachment.content_type }}</li>
+                        <li class="list-group-item">
+                            {% translate "Content Disposition" %}: {{ attachment.content_disposition }}
+                        </li>
+                        <li class="list-group-item">
+                            {% translate "Size" %}: {{ attachment.datasize }} {% translate "bytes" %}
+                        </li>
+                        <li class="list-group-item">{% translate "Date received" %}: {{ attachment.email.datetime }}</li>
+                    </ul>
+                </div>
+                {% if attachment.has_thumbnail %}
+                </div>
+                <div class="col-6">
+                    <img src="{{ attachment.get_absolute_thumbnail_url }}"
+                         class="img-fluid p-1"
+                         alt="Image attachment" />
+                </div>
+            </div>
+        {% endif %}
+
+        {% include "web/partials/_dates_card_uneditable-footer.html" with object=attachment %}
+
+    </div>
+
+    {% include "web/partials/_delete-modal.html" with object=attachment %}
+
+{% endblock content %}

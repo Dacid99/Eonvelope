@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<a href="{{ attachment.get_absolute_url }}"
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+    <div class="card">
+        {% if attachment.has_thumbnail %}
+            <div class="row g-0">
+                <div class="col-md-10">
+                {% endif %}
+                <div class="card-body">
+                    <div class="d-inline-flex align-items-center">
+                        <h5 class="card-title me-1">{{ attachment.file_name }}</h5>
+
+                        {% include "web/partials/_favorite_badge.html" with object=attachment %}
+
+                    </div>
+                    <div class="card-text">{% translate "Type" %}: {{ attachment.content_type }}</div>
+                    <div class="card-text">
+                        {% translate "Email" %}: <a href="{{ attachment.email.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ attachment.email.message_id }}</a>
+                    </div>
+                    <div class="card-text">{% translate "Date received" %}: {{ attachment.email.datetime }}</div>
+
+                    {% include "web/partials/_dates_card-small.html" with object=attachment %}
+
+                </div>
+                {% if attachment.has_thumbnail %}
+                </div>
+                <div class="col-md-2">
+                    <img src="{{ attachment.get_absolute_thumbnail_url }}"
+                         class="img-fluid rounded"
+                         alt="Image attachment" />
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</a>

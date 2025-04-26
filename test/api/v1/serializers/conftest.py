@@ -33,16 +33,15 @@ from rest_framework.request import Request
 from core.constants import HeaderFields
 from core.models.AccountModel import AccountModel
 from core.models.AttachmentModel import AttachmentModel
-from core.models.CorrespondentModel import CorrespondentModel
 from core.models.DaemonModel import DaemonModel
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
-from core.models.MailingListModel import MailingListModel
 
 
 @pytest.fixture(autouse=True)
 def request_context(mocker, owner_user):
+    """Provides a mocked request context the tests."""
     mock_request = mocker.MagicMock(spec=Request)
     mock_request.user = owner_user
     return {"request": mock_request}
@@ -61,6 +60,7 @@ def complete_database(
     mailboxModel,
     mailingListModel,
 ):
+    """Autouse all models for the tests."""
     other_accountModel = baker.make(AccountModel, user=other_user)
     other_mailboxModel = baker.make(MailboxModel, account=other_accountModel)
     baker.make(
@@ -73,7 +73,7 @@ def complete_database(
         mailbox=other_mailboxModel,
         mailinglist=mailingListModel,
         eml_filepath=faker.file_path(extension="eml"),
-        prerender_filepath=faker.file_path(extension="png"),
+        html_filepath=faker.file_path(extension="png"),
     )
     baker.make(
         EMailCorrespondentsModel,

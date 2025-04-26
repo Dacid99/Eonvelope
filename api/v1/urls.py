@@ -46,39 +46,33 @@ from api.v1.views.MailboxViewSet import MailboxViewSet
 from api.v1.views.MailingListViewSet import MailingListViewSet
 
 
+app_name = "v1"
+
 router = DefaultRouter()
+router.register("accounts", AccountViewSet, basename=AccountViewSet.BASENAME)
+router.register("mailboxes", MailboxViewSet, basename=MailboxViewSet.BASENAME)
+router.register("daemons", DaemonViewSet, basename=DaemonViewSet.BASENAME)
 router.register(
-    rf"{AccountViewSet.BASENAME}", AccountViewSet, basename=AccountViewSet.BASENAME
-)
-router.register(
-    rf"{MailboxViewSet.BASENAME}", MailboxViewSet, basename=MailboxViewSet.BASENAME
-)
-router.register(
-    rf"{DaemonViewSet.BASENAME}", DaemonViewSet, basename=DaemonViewSet.BASENAME
-)
-router.register(
-    rf"{CorrespondentViewSet.BASENAME}",
+    "correspondents",
     CorrespondentViewSet,
     basename=CorrespondentViewSet.BASENAME,
 )
 router.register(
-    rf"{AttachmentViewSet.BASENAME}",
+    "attachments",
     AttachmentViewSet,
     basename=AttachmentViewSet.BASENAME,
 )
 router.register(
-    rf"{MailingListViewSet.BASENAME}",
+    "mailinglists",
     MailingListViewSet,
     basename=MailingListViewSet.BASENAME,
 )
-router.register(
-    rf"{EMailViewSet.BASENAME}", EMailViewSet, basename=EMailViewSet.BASENAME
-)
+router.register("emails", EMailViewSet, basename=EMailViewSet.BASENAME)
 
 urlpatterns = [
     path("", include(router.urls)),
     path(
-        f"{DatabaseStatsView.NAME}/",
+        "stats/",
         DatabaseStatsView.as_view(),
         name=DatabaseStatsView.NAME,
     ),

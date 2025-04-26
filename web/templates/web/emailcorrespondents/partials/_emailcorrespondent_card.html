@@ -1,0 +1,17 @@
+{% load i18n %}
+
+<a href="{{ emailcorrespondent.correspondent.get_absolute_url }}"
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ emailcorrespondent.mention }}</h5>
+            <div class="d-inline-flex align-items-center">
+                <h6 class="card-subtitle me-1">{{ emailcorrespondent.correspondent.email_address }}</h6>
+
+                {% include "web/partials/_favorite_badge.html" with object=correspondentemail.correspondent %}
+
+            </div>
+            <div class="card-text">{{ emailcorrespondent.correspondent.email_name }}</div>
+        </div>
+    </div>
+</a>

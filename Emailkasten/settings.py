@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
+    "django.contrib.humanize",
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
@@ -70,6 +71,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.usersessions",
     "dj_rest_auth",
     "constance",
     "constance.backends.database",
@@ -77,11 +79,16 @@ INSTALLED_APPS = [
     "health_check.db",
     "health_check.storage",
     "health_check.cache",
+    "django_bootstrap5",
+    "crispy_forms",
+    "crispy_bootstrap5",
+    "fontawesomefree",
     "health_check.contrib.migrations",
     "health_check.contrib.psutil",
     "Emailkasten",
     "core",
     "api",
+    "web",
 ]
 
 REST_FRAMEWORK = {
@@ -107,6 +114,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -118,7 +126,7 @@ ROOT_URLCONF = "Emailkasten.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "Emailkasten" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -130,6 +138,10 @@ TEMPLATES = [
         },
     },
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_FAIL_SILENTLY = not DEBUG
 
 WSGI_APPLICATION = "Emailkasten.wsgi.application"
 
@@ -180,10 +192,11 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
+LOGIN_URL = "account_login"
 SESSION_COOKIE_AGE = 1209600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = False
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 
 # Registration
 DEFAULT_REGISTRATION_ENABLED = "0"
@@ -270,33 +283,57 @@ LOGGING = {
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = "en-us"
 
+
+LANGUAGES = [
+    ("en", "English"),
+    ("de", "Deutsch"),
+]
+
+
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
 TIME_ZONE = "UTC"
 
 USE_I18N = True
 
 USE_TZ = True
 
+LOCALE_PATHS = [
+    BASE_DIR / "Emailkasten" / "locale",
+    BASE_DIR / "core" / "locale",
+    BASE_DIR / "api" / "locale",
+    BASE_DIR / "web" / "locale",
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATICFILES_URL = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATIC_ROOT = "/home/david/Desktop/static"
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+FILE_UPLOAD_HANDLERS = [
+    "django.core.files.uploadhandler.MemoryFileUploadHandler",
+    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
+]
+
 # DRF Spectacular
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Emailkasten API",
-    "DESCRIPTION": "The API schema for the Emailkasten server.",
+    "TITLE": _("Emailkasten API"),
+    "DESCRIPTION": _("The API schema for the Emailkasten server."),
     "VERSION": "0.0.1",
     "SERVE_INCLUDE_SCHEMA": True,
 }
@@ -306,6 +343,11 @@ SPECTACULAR_SETTINGS = {
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
+
+CONSTANCE_ADDITIONAL_FIELDS = {
+    "array": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
+    "json": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
+}
 
 CONSTANCE_CONFIG = {
     "API_DEFAULT_PAGE_SIZE": (
@@ -330,12 +372,12 @@ CONSTANCE_CONFIG = {
     ),
     "DAEMON_LOG_BACKUP_COUNT_DEFAULT": (
         5,
-        _("The default restart time setting of a daemon in seconds"),
+        _("The default number of daemon logfiles to keep"),
         int,
     ),
     "DAEMON_LOGFILE_SIZE_DEFAULT": (
         1 * 1024 * 1024,
-        _("The default restart time setting of a daemon in seconds"),
+        _("The default maximum size of a daemon logfile in bytes"),
         int,
     ),
     "STORAGE_MAX_SUBDIRS_PER_DIR": (
@@ -358,79 +400,57 @@ CONSTANCE_CONFIG = {
         bool,
     ),
     "SAVE_CONTENT_TYPE_PREFIXES": (
-        [
-            "image/",
-            "audio/",
-            "video/",
-            "model/",
-            "font/",
-            "application/",
-        ],
+        ["image/", "audio/", "video/", "model/", "font/", "application/"],
         _(
             "A list of content types prefixes to parse as files even if they are not marked as such. For an exhaustive list of all available types see https://www.iana.org/assignments/media-types/media-types.xhtml#text"
         ),
-        list,
+        "array",
     ),
     "DONT_SAVE_CONTENT_TYPE_SUFFIXES": (
-        [
-            "/plain",
-            "/html",
-        ],
+        ["/plain", "/html"],
         _(
-            "A list of content types prefixes to not parse as files even if they are not marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
+            "A list of content types prefixes to not parse as files even if they are marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
         ),
-        list,
+        "array",
     ),
     "TEMPORARY_STORAGE_DIRECTORY": (
-        "/tmp/images",
-        _(
-            "The path where intermediate images of the prerendering process will be placed"
-        ),
+        "/tmp/",
+        _("The path where intermediate files will be placed"),
         str,
     ),
     "HTML_WRAPPER": (
-        """<html>
+        """<!DOCTYPE html>
+        <html>
         <head>
+            <meta charset="UTF-8">
             <style>
-                body {{
+                body {
                     font-family: Arial, sans-serif;
                     font-size: 14px;
                     white-space: pre-wrap;
-                }}
+                }
             </style>
         </head>
         <body>
             <pre>%s</pre>
         </body>
         </html>""",
-        "The html template to wrap around plain text before prerendering",
+        _("The html template to wrap around plain text for html conversion."),
         str,
-    ),
-    "PRERENDER_IMAGETYPE": (
-        "JPEG",
-        _(
-            "The image format for the prerendered eml files. Must be supported by PILLOW, see https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html."
-        ),
-        str,
-    ),
-    "PRERENDER_IMAGE_BACKGROUND_COLOR": (
-        "#ffffff",
-        _("The background color for the prerender images."),
-        str,
-    ),
-    "PRERENDER_IMGKIT_OPTIONS": (
-        {"load-error-handling": "skip"},
-        _("The imgkit options for prerendering the images."),
-        dict,
     ),
     "DEFAULT_SAVE_TO_EML": (
         True,
-        _("The default mailbox setting whether to store mails as eml"),
+        _("The default mailbox setting whether to store mails as eml."),
+        bool,
+    ),
+    "DEFAULT_SAVE_TO_HTML": (
+        True,
+        _("The default mailbox setting whether to convert and store mails as html."),
         bool,
     ),
     "DEFAULT_SAVE_ATTACHMENTS": (
         True,
-        _("The default mailbox setting whether to store attachments"),
+        _("The default mailbox setting whether to store attachments."),
         bool,
     ),
 }
@@ -440,6 +460,8 @@ CONSTANCE_FIELDSETS = (
         _("Default Values"),
         (
             "DEFAULT_SAVE_TO_EML",
+            "DEFAULT_SAVE_TO_HTML",
+            "DEFAULT_SAVE_TO_THUMBNAIL",
             "DEFAULT_SAVE_ATTACHMENTS",
             "DAEMON_CYCLE_PERIOD_DEFAULT",
             "DAEMON_RESTART_TIME_DEFAULT",
@@ -450,9 +472,6 @@ CONSTANCE_FIELDSETS = (
         (
             "THROW_OUT_SPAM",
             "HTML_WRAPPER",
-            "PRERENDER_IMAGETYPE",
-            "PRERENDER_IMAGE_BACKGROUND_COLOR",
-            "PRERENDER_IMGKIT_OPTIONS",
             "SAVE_CONTENT_TYPE_PREFIXES",
             "DONT_SAVE_CONTENT_TYPE_SUFFIXES",
         ),

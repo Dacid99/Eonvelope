@@ -1,0 +1,5 @@
+{% load i18n %}
+
+<div class="card-footer text-end">
+    <small class="text-muted">{% translate "Added" %}: {{ object.created|date:"DATETIME_FORMAT" }}</small>
+</div>

@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<a href="{{ mailbox.get_absolute_url }}"
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-inline-flex align-items-center">
+                    <h5 class="card-title me-1">{{ mailbox.name }}</h5>
+
+                    {% include "web/partials/_favorite_badge.html" with object=mailbox %}
+
+                    <div>
+
+                        {% include "web/partials/_health_badge.html" with object=mailbox %}
+
+                    </div>
+                </div>
+            </div>
+            <h6 class="card-subtitle">
+                {% translate "Account" %}: <a href="{{ mailbox.account.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailbox.account.mail_address }}</a>
+            </h6>
+            <div class="card-text">{% translate "Protocol" %}: {{ mailbox.protocol }}</div>
+
+            {% include "web/partials/_dates_card-small.html" with object=mailbox %}
+
+        </div>
+    </div>
+</a>

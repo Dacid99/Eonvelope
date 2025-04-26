@@ -1,0 +1,23 @@
+{% extends "web/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+    {% translate "Accounts" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2>{% translate "Accounts" %}</h2>
+
+        {% include "web/account/partials/_add_button.html" %}
+
+    </div>
+
+    {% include "web/account/partials/_account_filter_list.html" %}
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'web/js/form-utils.js' %}"></script>
+{% endblock scripts %}

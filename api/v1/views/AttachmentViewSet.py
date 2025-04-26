@@ -29,8 +29,8 @@ from rest_framework import mixins, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.AttachmentModel import AttachmentModel
 
 from ..filters.AttachmentFilter import AttachmentFilter
@@ -45,10 +45,12 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class AttachmentViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin):
+class AttachmentViewSet(
+    viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin, ToggleFavoriteMixin
+):
     """Viewset for the :class:`core.models.AttachmentModel.AttachmentModel`."""
 
-    BASENAME = "attachments"
+    BASENAME = AttachmentModel.BASENAME
     serializer_class = BaseAttachmentSerializer
     filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = AttachmentFilter
@@ -105,31 +107,8 @@ class AttachmentViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin)
             raise Http404("Attachment file not found")
 
         attachmentFileName = attachment.file_name
-        with open(attachmentFilePath, "rb") as attachmentFile:
-            return FileResponse(
-                attachmentFile, as_attachment=True, filename=attachmentFileName
-            )
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the attachment.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the attachment to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        attachment = self.get_object()
-        attachment.is_favorite = not attachment.is_favorite
-        attachment.save(update_fields=["is_favorite"])
-        return Response({"detail": "Attachment marked as favorite"})
+        return FileResponse(
+            open(attachmentFilePath, "rb"),
+            as_attachment=True,
+            filename=attachmentFileName,
+        )

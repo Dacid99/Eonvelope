@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<a href="{{ mailinglist.get_absolute_url }}"
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-inline-flex align-items-center">
+                <h5 class="card-title me-1">{{ mailinglist.list_id }}</h5>
+
+                {% include "web/partials/_favorite_badge.html" with object=mailinglist %}
+
+            </div>
+            <h6 class="card-subtitle">{% translate "Owner" %}: {{ mailinglist.list_owner }}</h6>
+
+            {% include "web/partials/_dates_card-small.html" with object=mailinglist %}
+
+        </div>
+    </div>
+</a>

@@ -26,10 +26,16 @@ from hashlib import md5
 from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
+from core.mixins.FavoriteMixin import FavoriteMixin
+from core.mixins.HasDownloadMixin import HasDownloadMixin
+from core.mixins.HasThumbnailMixin import HasThumbnailMixin
+from core.mixins.URLMixin import URLMixin
 from Emailkasten.utils import get_config
 
-from ..utils.fileManagment import saveStore
+from ..utils.fileManagment import clean_filename, saveStore
 from .StorageModel import StorageModel
 
 
@@ -43,7 +49,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class AttachmentModel(models.Model):
+class AttachmentModel(
+    HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models.Model
+):
     """Database model for an attachment file in a mail."""
 
     file_name = models.CharField(max_length=255)
@@ -63,7 +71,7 @@ class AttachmentModel(models.Model):
     content_type = models.CharField(max_length=255, default="")
     """The type of the file."""
 
-    datasize = models.IntegerField()
+    datasize = models.PositiveIntegerField()
     """The filesize of the attachment."""
 
     is_favorite = models.BooleanField(default=False)
@@ -80,6 +88,10 @@ class AttachmentModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
+    BASENAME = "attachment"
+
+    DELETE_NOTICE = _("This will only delete this attachment, not the email.")
+
     class Meta:
         """Metadata class for the model."""
 
@@ -94,20 +106,26 @@ class AttachmentModel(models.Model):
         ]
         """:attr:`file_path` and :attr:`email` in combination are unique."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
         Returns:
             The string representation of the attachment, using :attr:`file_name` and :attr:`email`.
         """
-        return f"Attachment {self.file_name} from {self.email}"
+        return _("Attachment %(file_name)s from %(email)s") % {
+            "file_name": self.file_name,
+            "email": self.email,
+        }
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Extended :django::func:`django.models.Model.save` method.
 
+        Cleans the filename.
         Saves the data to storage if configured.
         """
+        self.file_name = clean_filename(self.file_name)
         attachmentData = kwargs.pop("attachmentData", None)
         super().save(*args, **kwargs)
         if attachmentData is not None and self.email.mailbox.save_attachments:
@@ -188,7 +206,9 @@ class AttachmentModel(models.Model):
         new_attachment = AttachmentModel()
         new_attachment.file_name = (
             attachmentData.get_filename()
-            or md5(attachmentData.as_bytes()).hexdigest()
+            or md5(  # noqa: S324 ; no safe hash required here
+                attachmentData.as_bytes()
+            ).hexdigest()
             + f".{attachmentData.get_content_subtype()}"
         )
         new_attachment.content_disposition = (
@@ -199,3 +219,18 @@ class AttachmentModel(models.Model):
         new_attachment.email = email
 
         return new_attachment
+
+    @override
+    @property
+    def has_download(self) -> bool:
+        return self.file_path is not None
+
+    @override
+    @property
+    def has_thumbnail(self) -> bool:
+        return self.content_type.startswith("image")
+
+    @override
+    def get_absolute_thumbnail_url(self) -> str:
+        """Returns the url of the thumbail download api endpoint."""
+        return reverse(f"api:v1:{self.BASENAME}-download", kwargs={"pk": self.pk})

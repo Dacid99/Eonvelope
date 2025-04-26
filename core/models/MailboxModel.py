@@ -23,11 +23,15 @@ from __future__ import annotations
 import logging
 import mailbox
 import os
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Final, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
+from core.mixins.FavoriteMixin import FavoriteMixin
+from core.mixins.UploadMixin import UploadMixin
+from core.mixins.URLMixin import URLMixin
 from core.models.EMailModel import EMailModel
 from Emailkasten.utils import get_config
 
@@ -43,7 +47,9 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class MailboxModel(DirtyFieldsMixin, models.Model):
+class MailboxModel(
+    DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Model
+):
     """Database model for a mailbox in a mail account."""
 
     name = models.CharField(max_length=255)
@@ -55,12 +61,29 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
     """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
 
     save_attachments = models.BooleanField(
-        default=get_config("DEFAULT_SAVE_ATTACHMENTS")
+        default=get_config("DEFAULT_SAVE_ATTACHMENTS"),
+        verbose_name=_("Save attachments"),
+        help_text=_(
+            "Whether the attachments from the emails in this mailbox will be saved."
+        ),
     )
     """Whether to save attachments of the mails found in this mailbox. :attr:`constance.get_config('DEFAULT_SAVE_ATTACHMENTS')` by default."""
 
-    save_toEML = models.BooleanField(default=get_config("DEFAULT_SAVE_TO_EML"))
+    save_toEML = models.BooleanField(
+        default=get_config("DEFAULT_SAVE_TO_EML"),
+        verbose_name=_("Save as .eml"),
+        help_text=_("Whether the emails in this mailbox will be stored in .eml files."),
+    )
     """Whether to save the mails found in this mailbox as .eml files. :attr:`constance.get_config('DEFAULT_SAVE_TO_EML')` by default."""
+
+    save_toHTML = models.BooleanField(
+        default=get_config("DEFAULT_SAVE_TO_HTML"),
+        verbose_name=_("Save as .html"),
+        help_text=_(
+            "Whether the emails in this mailbox will be converted and stored in .html files."
+        ),
+    )
+    """Whether to convert and save the mails found in this mailbox as .html files. :attr:`constance.get_config('DEFAULT_SAVE_TO_EML')` by default."""
 
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mailboxes. False by default."""
@@ -76,6 +99,12 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
+    BASENAME = "mailbox"
+
+    DELETE_NOTICE = _(
+        "This will delete this mailbox and all emails and attachments found in it!"
+    )
+
     class Meta:
         """Metadata class for the model."""
 
@@ -89,13 +118,17 @@ class MailboxModel(DirtyFieldsMixin, models.Model):
         ]
         """:attr:`name` and :attr:`account` in combination are unique."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
         Returns:
             The string representation of the mailbox, using :attr:`name` and :attr:`account`.
         """
-        return f"Mailbox {self.name} of {self.account}"
+        return _("Mailbox %(name)s of %(account)s") % {
+            "account": self.account,
+            "name": self.name,
+        }
 
     def getAvailableFetchingCriteria(self) -> list[str]:
         """Gets the available fetching criteria based on the mail protocol of this mailbox.

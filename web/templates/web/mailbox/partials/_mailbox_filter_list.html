@@ -1,0 +1,7 @@
+{% extends "web/partials/_filter_list.html" %}
+
+{% block list %}
+
+    {% include "web/mailbox/partials/_mailbox_list.html" with mailboxes=page_obj %}
+
+{% endblock list %}

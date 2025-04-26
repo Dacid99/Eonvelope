@@ -1,0 +1,26 @@
+{% load i18n %}
+
+<a href="{{ account.get_absolute_url }}"
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-inline-flex align-items-center">
+                    <h5 class="card-title me-1">{{ account.mail_address }}</h5>
+                    <div>
+
+                        {% include "web/partials/_favorite_badge.html" with object=account %}
+
+                    </div>
+                </div>
+
+                {% include "web/partials/_health_badge.html" with object=account %}
+
+            </div>
+            <div class="card-text">{% translate "Protocol" %}: {{ account.protocol }}</div>
+
+            {% include "web/partials/_dates_card-small.html" with object=account %}
+
+        </div>
+    </div>
+</a>

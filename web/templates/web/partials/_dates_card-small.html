@@ -1,0 +1,5 @@
+{% load i18n %}
+
+<div class="card-text text-end">
+    <small class="text-muted">{% translate "Added" %}: {{ object.created|date:"SHORT_DATETIME_FORMAT" }}</small>
+</div>

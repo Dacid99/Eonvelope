@@ -49,6 +49,8 @@ def test_output(mailboxModel, request_context):
     assert serializerData["save_attachments"] == mailboxModel.save_attachments
     assert "save_toEML" in serializerData
     assert serializerData["save_toEML"] == mailboxModel.save_toEML
+    assert "save_toHTML" in serializerData
+    assert serializerData["save_toHTML"] == mailboxModel.save_toHTML
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == mailboxModel.is_favorite
     assert "is_healthy" in serializerData
@@ -57,7 +59,7 @@ def test_output(mailboxModel, request_context):
     assert datetime.fromisoformat(serializerData["created"]) == mailboxModel.created
     assert "updated" in serializerData
     assert datetime.fromisoformat(serializerData["updated"]) == mailboxModel.updated
-    assert len(serializerData) == 10
+    assert len(serializerData) == 11
 
 
 @pytest.mark.django_db
@@ -77,9 +79,11 @@ def test_input(mailboxModel, request_context):
     assert serializerData["save_attachments"] == mailboxModel.save_attachments
     assert "save_toEML" in serializerData
     assert serializerData["save_toEML"] == mailboxModel.save_toEML
+    assert "save_toHTML" in serializerData
+    assert serializerData["save_toHTML"] == mailboxModel.save_toHTML
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == mailboxModel.is_favorite
     assert "is_healthy" not in serializerData
     assert "created" not in serializerData
     assert "updated" not in serializerData
-    assert len(serializerData) == 3
+    assert len(serializerData) == 4

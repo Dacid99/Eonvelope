@@ -1,0 +1,44 @@
+{% load i18n %}
+
+<div class="d-grid m-1">
+    <button class="btn btn-outline-primary"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasFilter"
+            aria-controls="offcanvasFilter">{% translate "Show filter options" %}</button>
+</div>
+
+{% include "web/partials/_filter_pagination.html" %}
+
+<hr>
+
+{% block list %}
+{% endblock list %}
+
+<hr>
+
+{% include "web/partials/_filter_pagination.html" %}
+
+<div class="offcanvas offcanvas-start"
+     data-bs-scroll="true"
+     tabindex="-1"
+     id="offcanvasFilter"
+     aria-labelledby="offcanvasFilterLabel">
+    <div class="offcanvas-header d-flex justify-content-between">
+        <h5 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h5>
+        <div class="btn-group align-items-center">
+
+            {% include "web/partials/_clear_filter-button.html" %}
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+    <div class="offcanvas-body">
+
+        {% include "web/partials/_filter-form.html" %}
+
+    </div>
+</div>

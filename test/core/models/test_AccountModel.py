@@ -27,6 +27,7 @@ import datetime
 from typing import TYPE_CHECKING
 
 import pytest
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 from model_bakery import baker
 
@@ -156,6 +157,17 @@ def test_AccountModel_unique_constraints(django_user_model):
     baker.make(AccountModel, mail_address="abc123", user=user)
     with pytest.raises(IntegrityError):
         baker.make(AccountModel, mail_address="abc123", user=user)
+
+
+@pytest.mark.django_db
+def test_AccountModel_clean(accountModel):
+    """Tests the clean field validation of :class:`core.models.AccountModel.AccountModel`."""
+    account_duplicate = baker.prepare(
+        AccountModel, mail_address=accountModel.mail_address, user=accountModel.user
+    )
+
+    with pytest.raises(ValidationError):
+        account_duplicate.clean()
 
 
 @pytest.mark.django_db

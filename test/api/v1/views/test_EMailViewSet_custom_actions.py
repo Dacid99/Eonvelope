@@ -149,21 +149,24 @@ def test_download_auth_owner(
         f'filename="{os.path.basename(emailModel.eml_filepath)}"'
         in response["Content-Disposition"]
     )
+    assert "attachment" in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert response.headers["Content-Type"] == "message/rfc822"
     assert b"".join(response.streaming_content) == mock_open().read()
 
 
 @pytest.mark.django_db
-def test_prerender_noauth(
+def test_download_html_noauth(
     emailModel,
     noauth_apiClient,
     custom_detail_action_url,
     mock_open,
     mock_os_path_exists,
 ):
-    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with an unauthenticated user client."""
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download_html` action with an unauthenticated user client."""
     response = noauth_apiClient.get(
         custom_detail_action_url(
-            EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel
+            EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD_HTML, emailModel
         )
     )
 
@@ -173,17 +176,17 @@ def test_prerender_noauth(
 
 
 @pytest.mark.django_db
-def test_prerender_auth_other(
+def test_download_html_auth_other(
     emailModel,
     other_apiClient,
     custom_detail_action_url,
     mock_open,
     mock_os_path_exists,
 ):
-    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated other user client."""
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download_html` action with the authenticated other user client."""
     response = other_apiClient.get(
         custom_detail_action_url(
-            EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel
+            EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD_HTML, emailModel
         )
     )
 
@@ -193,51 +196,58 @@ def test_prerender_auth_other(
 
 
 @pytest.mark.django_db
-def test_prerender_no_file_auth_owner(
+def test_download_html_no_file_auth_owner(
     emailModel,
     owner_apiClient,
     custom_detail_action_url,
     mock_open,
     mock_os_path_exists,
 ):
-    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download_html` action with the authenticated owner user client."""
     mock_os_path_exists.return_value = False
     mock_open.side_effect = FileNotFoundError
 
     response = owner_apiClient.get(
         custom_detail_action_url(
-            EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel
+            EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD_HTML, emailModel
         )
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_open.assert_not_called()
-    mock_os_path_exists.assert_called_once_with(emailModel.prerender_filepath)
+    mock_os_path_exists.assert_called_once_with(emailModel.html_filepath)
 
 
 @pytest.mark.django_db
-def test_prerender_auth_owner(
+def test_download_html_auth_owner(
     emailModel,
     owner_apiClient,
     custom_detail_action_url,
     mock_open,
     mock_os_path_exists,
 ):
-    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.prerender` action with the authenticated owner user client."""
+    """Tests the get method :func:`api.v1.views.EMailViewSet.EMailViewSet.download_html` action with the authenticated owner user client."""
     response = owner_apiClient.get(
         custom_detail_action_url(
-            EMailViewSet, EMailViewSet.URL_NAME_PRERENDER, emailModel
+            EMailViewSet, EMailViewSet.URL_NAME_DOWNLOAD_HTML, emailModel
         )
     )
 
     assert response.status_code == status.HTTP_200_OK
-    mock_os_path_exists.assert_called_once_with(emailModel.prerender_filepath)
-    mock_open.assert_called_once_with(emailModel.prerender_filepath, "rb")
+    mock_os_path_exists.assert_called_once_with(emailModel.html_filepath)
+    mock_open.assert_called_once_with(emailModel.html_filepath, "rb")
     assert "Content-Disposition" in response.headers
     assert (
-        f'filename="{os.path.basename(emailModel.prerender_filepath)}"'
+        f'filename="{os.path.basename(emailModel.html_filepath)}"'
         in response["Content-Disposition"]
     )
+    assert "inline" in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert response.headers["Content-Type"] == "text/html"
+    assert "X-Frame-Options" in response.headers
+    assert response.headers["X-Frame-Options"] == "SAMEORIGIN"
+    assert "Content-Security-Policy" in response.headers
+    assert response.headers["Content-Security-Policy"] == "frame-ancestors 'self'"
     assert b"".join(response.streaming_content) == mock_open().read()
 
 

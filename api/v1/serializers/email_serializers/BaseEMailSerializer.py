@@ -50,9 +50,9 @@ class BaseEMailSerializer(serializers.ModelSerializer):
         model: Final[type[Model]] = EMailModel
         """The model to serialize."""
 
-        exclude: ClassVar[list[str]] = ["eml_filepath", "prerender_filepath"]
+        exclude: ClassVar[list[str]] = ["eml_filepath", "html_filepath"]
         """Exclude the :attr:`core.models.EMailModel.EMailModel.eml_filepath`
-        and :attr:`core.models.EMailModel.EMailModel.prerender_filepath` fields.
+        and :attr:`core.models.EMailModel.EMailModel.html_filepath` fields.
         """
 
         read_only_fields: Final[list[str]] = [

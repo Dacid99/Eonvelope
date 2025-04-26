@@ -16,43 +16,16 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.v1.views.AccountViewSet`'s basic CRUD actions.
-
-Fixtures:
-    :func:`fixture_accountPayload`: Fixture creating clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
-"""
+"""Test module for :mod:`api.v1.views.AccountViewSet`'s basic CRUD actions."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import pytest
 from django.forms.models import model_to_dict
-from model_bakery import baker
 from rest_framework import status
 
 from api.v1.views.AccountViewSet import AccountViewSet
 from core.models.AccountModel import AccountModel
-
-
-if TYPE_CHECKING:
-    from typing import Any
-
-
-@pytest.fixture
-def accountPayload(owner_user) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.AccountModel.AccountModel` payload for a patch, post or put request.
-
-    Args:
-        owner_user: Depends on :func:`owner_user`.
-
-    Returns:
-        The clean payload.
-    """
-    accountData = baker.prepare(AccountModel, user=owner_user)
-    payload = model_to_dict(accountData)
-    payload.pop("id")
-    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.mark.django_db

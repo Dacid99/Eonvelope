@@ -35,7 +35,7 @@ from email.utils import format_datetime
 import pytest
 
 import core.constants
-import core.utils.mailParsing
+from core.utils.mailParsing import is_X_Spam
 
 
 @pytest.fixture(autouse=True)
@@ -263,16 +263,24 @@ def test_parseCorrespondentHeader_no_header(mocker, mock_logger):
     [
         (b"INBOX", "INBOX"),
         (
-            b"Dr&AOc-. Bianka F&APY-rste&BBk-r",
+            b'Dr&AOc-. Bianka "/" F&APY-rste&BBk-r',
             "FörsteЙr",
         ),
         (
-            b"Yves Pr&AN8EGQ-uvost",
+            b'Yves "/" Pr&AN8EGQ-uvost',
             "PrßЙuvost",
         ),
         (
-            b"&ZY4mBQDfheQ- &Zg5,jg-",
+            b'&ZY4mBQDfheQ- "/" &Zg5,jg-',
             "明美",
+        ),
+        (
+            b'(\\Sent \\HasNoChildren) "/" "Gesendete Objekte"',
+            '"Gesendete Objekte"',
+        ),
+        (
+            b'(\\HasNoChildren) "/" Archiv/2024',
+            "Archiv/2024",
         ),
     ],
 )
@@ -280,3 +288,23 @@ def test_parseMailboxName_success(nameBytes, expectedName):
     result = core.utils.mailParsing.parseMailboxName(nameBytes)
 
     assert result == expectedName
+
+
+@pytest.mark.parametrize(
+    "x_spam, expectedResult",
+    [
+        (None, False),
+        ("", False),
+        ("YES", True),
+        ("NO", False),
+        ("NO, YES", True),
+        ("YES, YES", True),
+        ("NO, NO", False),
+        ("CRAZY", False),
+    ],
+)
+def test_is_X_Spam(x_spam, expectedResult):
+    """Tests :func:`core.models.EMailModel.EMailModel.isSpam`."""
+    result = is_X_Spam(x_spam)
+
+    assert result is expectedResult

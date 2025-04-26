@@ -1,0 +1,88 @@
+{% extends "web/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Account Details" %}% -
+{% endblock title %}
+
+{% block content %}
+
+    {% include "web/partials/_action_result-alert.html" %}
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="align-items-center">
+
+                {% include "web/partials/_favorite_badge.html" with object=account %}
+
+                {% include "web/partials/_health_badge.html" with object=account %}
+
+            </div>
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Action button group">
+
+                    {% include "web/partials/_test-button.html" %}
+
+                    {% include "web/account/partials/_update_mailboxes-button.html" %}
+
+                </div>
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
+
+                    {% include "web/partials/_delete-button.html" %}
+
+                    {% include "web/partials/_edit-button.html" with object=account %}
+
+                </div>
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+
+                    {% include "web/partials/_close_to_list-button.html" with object=account %}
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">
+                <a href="mailto:{{ account.mail_address }}"
+                   class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ account.mail_address }}</a>
+            </h2>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{% translate "Host" %}: {{ account.mail_host }}</li>
+                <li class="list-group-item">{% translate "Protocol" %}: {{ account.protocol }}</li>
+                <li class="list-group-item">{% translate "Port" %}: {{ account.mail_host_port }}</li>
+                <li class="list-group-item">{% translate "Timeout" %}: {{ account.timeout }}</li>
+            </ul>
+        </div>
+
+        {% include "web/partials/_dates_card-footer.html" with object=account %}
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{% translate "Mailboxes" %}</h4>
+
+                {% include "web/mailbox/partials/_mailbox_list.html" with mailboxes=account.mailboxes.all %}
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">{% translate "Latest Emails" %}</h4>
+                        <a role="button"
+                           class="btn btn-outline-primary"
+                           href="{% url 'web:account-emails' account.pk %}">{% translate "View all" %}</a>
+                    </div>
+                </div>
+
+                {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
+
+            </div>
+        </div>
+    </div>
+
+    {% include "web/partials/_delete-modal.html" with object=account %}
+
+{% endblock content %}

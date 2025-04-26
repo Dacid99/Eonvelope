@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import logging
 import os.path
+import re
 from builtins import open  # required for testing
 from typing import TYPE_CHECKING
 
@@ -98,3 +99,18 @@ def saveStore(storingFunc: Callable) -> Callable:
             return filePath
 
     return saveStoringFunc
+
+
+def clean_filename(filename: str) -> str:
+    r"""Sanitizes dangerous chars and strips whitespace from a filename.
+
+    Chars /, ., ~ are replaced with _.
+
+    Args:
+        The filename without extension.
+
+    Returns:
+        The cleaned filename without extension.
+    """
+    cleaned_filename = re.sub(r"[/\.~]", "_", filename)
+    return re.sub(r"\s+", "", cleaned_filename).strip()

@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Final, override
+from typing import TYPE_CHECKING, Final, override
 
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
@@ -29,11 +29,12 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core import constants
 from core.models.DaemonModel import DaemonModel
 from core.models.EMailModel import EMailModel
 from core.models.MailboxModel import MailboxModel
-from core.utils.fetchers.exceptions import FetcherError, MailboxError
+from core.utils.fetchers.exceptions import FetcherError
 
 from ..filters.MailboxFilter import MailboxFilter
 from ..mixins.NoCreateMixin import NoCreateMixin
@@ -48,13 +49,13 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class MailboxViewSet(NoCreateMixin, viewsets.ModelViewSet):
+class MailboxViewSet(NoCreateMixin, viewsets.ModelViewSet, ToggleFavoriteMixin):
     """Viewset for the :class:`core.models.MailboxModel.MailboxModel`.
 
     Provides all but the create method.
     """
 
-    BASENAME = "mailboxes"
+    BASENAME = MailboxModel.BASENAME
     serializer_class = MailboxWithDaemonSerializer
     filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = MailboxFilter
@@ -260,27 +261,3 @@ class MailboxViewSet(NoCreateMixin, viewsets.ModelViewSet):
                 "mailbox": mailboxSerializer.data,
             }
         )
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle-favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the mailbox.
-
-        Args:
-            request: The request triggering the action.
-            pk: int: The private key of the mailbox to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        mailbox = self.get_object()
-        mailbox.is_favorite = not mailbox.is_favorite
-        mailbox.save(update_fields=["is_favorite"])
-        return Response({"detail": "Mailbox marked as favorite"})

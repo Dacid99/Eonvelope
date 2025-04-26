@@ -21,9 +21,13 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from core.mixins.FavoriteMixin import FavoriteMixin
+from core.mixins.URLMixin import URLMixin
 
 from ..constants import HeaderFields
 from ..utils.mailParsing import getHeader
@@ -36,7 +40,7 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class MailingListModel(models.Model):
+class MailingListModel(URLMixin, FavoriteMixin, models.Model):
     """Database model for a mailinglist."""
 
     list_id = models.CharField(max_length=255, unique=True)
@@ -69,19 +73,27 @@ class MailingListModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
+    BASENAME = "mailinglist"
+
+    DELETE_NOTICE = _("This will delete this mailinglist and all its emails!")
+
     class Meta:
         """Metadata class for the model."""
 
         db_table = "mailinglists"
         """The name of the database table for the mailinglists."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
         Returns:
             The string representation of the mailinglist, using :attr:`list_id`.
         """
-        return f"Mailinglist {self.list_id}"
+        return _("Mailinglist %(list_id)s from %(list_owner)s") % {
+            "list_id": self.list_id,
+            "list_owner": self.list_owner,
+        }
 
     @staticmethod
     def fromEmailMessage(emailMessage: EmailMessage) -> MailingListModel | None:

@@ -1,0 +1,54 @@
+{% extends "web/base.html" %}
+
+{% load i18n django_bootstrap5 %}
+
+{% block title %}
+    {% translate "Edit Account" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-end align-items-center">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
+
+                    {% include "web/partials/_delete-button.html" with object=account %}
+
+                    {% include "web/partials/_end_edit-button.html" with object=account %}
+
+                </div>
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+
+                    {% include "web/partials/_close_to_list-button.html" with object=account %}
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{% bootstrap_field form.mail_address %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.password %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.mail_host %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.protocol %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.mail_host_port %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.timeout %}</li>
+                </ul>
+
+                {% include "web/partials/_submit_edit-button.html" %}
+
+                {% include "web/partials/_cancel_edit-button.html" with object=account %}
+
+            </form>
+        </div>
+
+        {% include "web/partials/_dates_card-footer.html" with object=account %}
+
+    </div>
+
+    {% include "web/partials/_delete-modal.html" with object=account %}
+
+{% endblock content %}

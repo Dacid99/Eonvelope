@@ -1,0 +1,18 @@
+{% extends "web/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+    {% translate "Daemons" %} -
+{% endblock title %}
+
+{% block content %}
+    <h2>{% translate "Daemons" %}</h2>
+
+    {% include "web/daemon/partials/_daemon_filter_list.html" %}
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'web/js/form-utils.js' %}"></script>
+{% endblock scripts %}

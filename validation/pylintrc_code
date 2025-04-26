@@ -191,7 +191,7 @@ function-naming-style=camelCase
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=_,__,pk,OK,CC,TO,ID,id,Id
+good-names=_,__,pk,OK,CC,TO,ID,id,Id,MH,mh
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
@@ -266,7 +266,7 @@ defining-attr-methods=__init__,
 
 # List of member names, which should be excluded from the protected access
 # warning.
-exclude-protected=_asdict,_fields,_replace,_source,_make,os._exit
+exclude-protected=_asdict,_fields,_replace,_source,_make,os._exit,_meta
 
 # List of valid names for the first argument in a class method.
 valid-classmethod-first-arg=cls
@@ -283,7 +283,19 @@ exclude-too-few-public-methods=
 
 # List of qualified class names to ignore when counting class parents (see
 # R0901)
-ignored-parents=
+ignored-parents=django.db.models.enums.Choices,
+                django.db.models.enums.StrEnum,
+                django.db.models.enums.ReprEnum,
+                django.views.generic.list.MultipleObjectTemplateResponseMixin,
+                django.views.generic.detail.SingleObjectTemplateResponseMixin,
+                django.views.generic.base.TemplateResponseMixin,
+                django.views.generic.base.View,
+                django_filters.views.BaseFilterView,
+                django.views.generic.detail.BaseDetailView,
+                django.views.generic.list.BaseListView,
+                django.views.generic.edit.BaseUpdateView,
+                django.views.generic.edit.ModelFormMixin,
+                django.views.generic.base.ContextMixin
 
 # Maximum number of arguments for function / method.
 max-args=5

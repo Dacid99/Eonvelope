@@ -1,0 +1,18 @@
+{% extends "web/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+    {% translate "Correspondents" %} -
+{% endblock title %}
+
+{% block content %}
+    <h2>{% translate "Correspondents" %}</h2>
+
+    {% include "web/correspondent/partials/_correspondent_filter_list.html" %}
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'web/js/form-utils.js' %}"></script>
+{% endblock scripts %}

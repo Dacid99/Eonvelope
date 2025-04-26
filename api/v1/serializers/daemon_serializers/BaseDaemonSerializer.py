@@ -68,25 +68,3 @@ class BaseDaemonSerializer(serializers.ModelSerializer):
         :attr:`core.models.DaemonModel.DaemonModel.created` and
         :attr:`core.models.DaemonModel.DaemonModel.updated` fields are read-only.
         """
-
-    def validate_fetching_criterion(self, value: str) -> str:
-        """Check whether the fetching criterion is available for the mailbox of the serialized daemon.
-
-        Args:
-            value: The given fetching criterion.
-
-        Returns:
-            The validated fetching criterion.
-
-        Raises:
-            :restframework::class:`serializers.ValidationError`: If the given fetching criterion is not available for the daemon.
-        """
-        if (
-            self.instance
-            and self.instance.mailbox
-            and value not in self.instance.mailbox.getAvailableFetchingCriteria()
-        ):
-            raise serializers.ValidationError(
-                "Fetching criterion not available for this mailbox!"
-            )
-        return value

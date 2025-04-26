@@ -21,14 +21,19 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Final, override
 
 import django.db
 from dirtyfields import DirtyFieldsMixin
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from core.mixins.FavoriteMixin import FavoriteMixin
 
 from ..constants import EmailProtocolChoices
+from ..mixins.URLMixin import URLMixin
 from ..utils.fetchers.exceptions import MailAccountError
 from ..utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from ..utils.fetchers.IMAPFetcher import IMAPFetcher
@@ -46,25 +51,52 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class AccountModel(DirtyFieldsMixin, models.Model):
+class AccountModel(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
     """Database model for the account data of a mail account."""
 
-    mail_address = models.EmailField(max_length=255)
+    mail_address = models.EmailField(
+        max_length=255,
+        verbose_name=_("Email address"),
+        help_text=_("The mail address to the account."),
+    )
     """The mail address of the account. Unique together with :attr:`user`."""
 
-    password = models.CharField(max_length=255)
+    password = models.CharField(
+        max_length=255,
+        verbose_name=_("Password"),
+        help_text=_("The password to the account."),
+    )
     """The password to log into the account."""
 
-    mail_host = models.CharField(max_length=255)
+    mail_host = models.CharField(
+        max_length=255,
+        verbose_name=_("Mailserver-URL"),
+        help_text=_("The URL of the mailserver for the chosen protocol."),
+    )
     """The url of the mail server where the account is located."""
 
-    mail_host_port = models.IntegerField(null=True)
+    mail_host_port = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name=_("Mailserver-Portnumber"),
+        help_text=_("The port of the mailserver for the chosen protocol."),
+    )
     """The port of the mail server. Can be null if the default port of the protocol is used."""
 
-    protocol = models.CharField(choices=EmailProtocolChoices.choices, max_length=10)
+    protocol = models.CharField(
+        choices=EmailProtocolChoices.choices,
+        max_length=10,
+        verbose_name=_("Email Protocol"),
+        help_text=_("The email protocol implemented by the server."),
+    )
     """The mail protocol of the mail server."""
 
-    timeout = models.IntegerField(null=True)
+    timeout = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name=_("Connection Timeout"),
+        help_text=_("Timeout for the connection to the mailserver."),
+    )
     """The timeout parameter for the connection to the host. Can be null."""
 
     is_healthy = models.BooleanField(default=True)
@@ -87,6 +119,12 @@ class AccountModel(DirtyFieldsMixin, models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
+    BASENAME = "account"
+
+    DELETE_NOTICE = _(
+        "This will delete this account and all mailboxes, emails and attachments found in it!"
+    )
+
     class Meta:
         """Metadata class for the model."""
 
@@ -107,13 +145,31 @@ class AccountModel(DirtyFieldsMixin, models.Model):
         Choices for :attr:`protocol` are enforced on db level.
         """
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
         Returns:
             The string representation of the account, using :attr:`mail_address`, :attr:`mail_host` and :attr:`protocol`.
         """
-        return f"Account {self.mail_address} with protocol {self.protocol}"
+        return _("Account %(mail_address)s with protocol %(protocol)s") % {
+            "mail_address": self.mail_address,
+            "protocol": self.protocol,
+        }
+
+    @override
+    def clean(self) -> None:
+        """Validation for the unique together constraint on :attr:`mail_account`.
+
+        Raises:
+            ValidationError: If the instance violates the constraint.
+        """
+        if (
+            AccountModel.objects.filter(user=self.user, mail_address=self.mail_address)
+            .exclude(pk=self.pk)
+            .exists()
+        ):
+            raise ValidationError({"mail_address": "This account already exists."})
 
     def get_fetcher_class(self) -> type[BaseFetcher]:
         """Returns the fetcher class from :class:`core.utils.fetchers` corresponding to :attr:`protocol`.

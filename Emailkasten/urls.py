@@ -35,11 +35,37 @@ from __future__ import annotations
 
 from django.contrib import admin
 from django.urls import include, path
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 
+
+SCHEMA_NAME = "schema"
 
 urlpatterns = [
+    # root
     path("admin/", admin.site.urls),
     path("health/", include("health_check.urls")),
-    path("users/", include("allauth.urls")),
+    # api
     path("api/", include("api.urls")),
+    path("api/auth/", include("dj_rest_auth.urls")),
+    path("api/registration/", include("dj_rest_auth.registration.urls")),
+    path("api/browse/", include("rest_framework.urls", namespace="rest_framework")),
+    path("api/schema/", SpectacularAPIView.as_view(), name=SCHEMA_NAME),
+    path(
+        "api/schema/swagger/",
+        SpectacularSwaggerView.as_view(url_name=SCHEMA_NAME),
+        name="swagger-ui",
+    ),
+    path(
+        "api/schema/redoc/",
+        SpectacularRedocView.as_view(url_name=SCHEMA_NAME),
+        name="redoc",
+    ),
+    # web
+    path("", include("web.urls")),
+    path("users/", include("allauth.urls")),
+    path("users/", include("django.conf.urls.i18n")),
 ]

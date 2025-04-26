@@ -1,0 +1,48 @@
+{% extends "web/base.html" %}
+
+{% load i18n django_bootstrap5 %}
+
+{% block title %}
+    {% translate "Edit Correspondent" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-end align-items-center">
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
+
+                    {% include "web/partials/_delete-button.html" with object=correspondent %}
+
+                    {% include "web/partials/_end_edit-button.html" with object=correspondent %}
+
+                </div>
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+
+                    {% include "web/partials/_close_to_list-button.html" with object=correspondent %}
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">{{ correspondent.email_address }}</h2>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_field form.email_name %}
+
+                {% include "web/partials/_submit_edit-button.html" %}
+
+                {% include "web/partials/_cancel_edit-button.html" with object=correspondent %}
+
+            </form>
+        </div>
+
+        {% include "web/partials/_dates_card-footer.html" with object=correspondent %}
+
+    </div>
+
+    {% include "web/partials/_delete-modal.html" with object=correspondent %}
+
+{% endblock content %}

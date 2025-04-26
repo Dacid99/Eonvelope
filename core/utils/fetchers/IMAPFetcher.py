@@ -25,6 +25,7 @@ import imaplib
 from typing import TYPE_CHECKING, Final, override
 
 from django.utils import timezone
+from imap_tools.imap_utf7 import utf7_encode
 
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from core.utils.fetchers.SafeIMAPMixin import SafeIMAPMixin
@@ -68,10 +69,12 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
         EmailFetchingCriterionChoices.ANNUALLY,
     ]
     """List of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
+    IMAP4 does not accept time lookups, only date based.
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4.
     """
 
-    def makeFetchingCriterion(self, criterionName: str) -> str | None:
+    @staticmethod
+    def makeFetchingCriterion(criterionName: str) -> str | None:
         """Returns the formatted criterion for the IMAP request, handles dates in particular.
 
         Args:
@@ -92,7 +95,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
             startTime = timezone.now() - datetime.timedelta(weeks=52)
         else:
             return criterionName
-        return "SENTSINCE " + imaplib.Time2Internaldate(startTime).split(" ")[0]
+        return f"SENTSINCE {imaplib.Time2Internaldate(startTime).split(" ")[0].strip('" ')}"
 
     @override
     def __init__(self, account: AccountModel) -> None:
@@ -152,7 +155,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
 
         if mailbox is not None:
             self.logger.debug("Testing %s ...", mailbox)
-            self.safe_select(mailbox.name, readonly=True)
+            self.safe_select(utf7_encode(mailbox.name), readonly=True)
             self.safe_check()
             self.safe_unselect()
             self.logger.debug("Successfully tested %s.", mailbox)
@@ -192,7 +195,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
             mailbox,
         )
         self.logger.debug("Opening mailbox %s ...", mailbox)
-        self.safe_select(mailbox.name, readonly=True)
+        self.safe_select(utf7_encode(mailbox.name), readonly=True)
         self.logger.debug("Successfully opened mailbox.")
 
         self.logger.debug("Searching %s messages in %s ...", searchCriterion, mailbox)

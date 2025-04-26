@@ -1,22 +1,35 @@
 # ToDo
 
-## To implement
+## Feature ideas
 
+- custom additional healthchecks
 - implement basic exchange
 - custom fetching filters with NOT, OR and custom criteria
-- autostart daemons on restart
-- custom additional healthchecks
-- user divided storage to make file_paths unique again
 - combined filter for correspondent with mention
 - streamable logs for daemons
-- threadsafe db operations in daemons
-- filtertest for choices
-- move all signals into models
-- user validation for serializers to avoid leakage
-- validating choices in serializers and models
 - references header
-- database statistics
-- replace daemons with celery
+- extensive database statistics
+- download mailboxes and accounts
+- option to prohibit daemon for spambox
+- tooltips
+- archiveviews
+- show pdf attachments in pdfjs
+- combo queries via connectors
+- reprocess mail action
+- mechanism to remove all correspondents and mailinglists without emails
+- more daemon logging configs via model
+- streaming daemon logs
+- download for main logfiles
+
+## To refactor
+
+- headerdict accumulation can be easier, message supports dict() or at least .items()
+- check for existance is better with filter().exists()
+- return .non() in serializers not []
+- drf specific filter
+- consistent naming_style
+- move all signals into models
+- base detail/edit template
 - rework test:
   - consistent naming
   - consistent mock_open
@@ -24,8 +37,29 @@
   - extract often used fixtures
   - disable all signals in tests
   - serializer tests should use views model fixtures
-- emailcorrespondentsmodelserializers are inconsistent
-- consistent naming_style
+
+## To test
+
+- test for view context
+- test all inverse foreign key deletions
+
+## To implement
+
+- complete test coverage
+- autostart daemons on restart
+- user divided storage to make file_paths unique again
+- replace daemons with celery, ensure threadsafe db operations in daemons
+- choices for api filters
+- important headers in html repr
+- is_healthy null on creation
+- only show allowed fetching criteria
+- indicator for required form fields
+- default ordering -id
+- favicon.ico for the icon
+- default ssl cert and safest settings
+- memory save upload (chunks instead of read)
+- shortcut urls (api/auth -> api/auth/login, etc)
+- fallback for email_subject
 
 ### Work in progress
 
@@ -33,11 +67,16 @@
 - documentation
 - type annotations
 
-## To test
+## To test hands-on
 
 - complete app
+- mailinglist
 
 ## To fix
+
+- separation of multi correspondentheader not working!
+- cascase doesnt trigger delete!
+- browser is occasionally in quirks mode
 
 # Remember
 

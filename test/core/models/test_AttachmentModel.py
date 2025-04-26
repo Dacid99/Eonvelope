@@ -246,3 +246,22 @@ def test_AttachmentModel_fromData(mock_message):
     assert isinstance(result, AttachmentModel)
     assert result.file_name == mock_message.get_filename.return_value
     assert result.datasize == mock_message.as_bytes.return_value.__len__.return_value
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_path, expected_has_download",
+    [
+        (None, False),
+        ("some/file/path", True),
+    ],
+)
+def test_AttachmentModel_has_download(
+    attachmentModel, file_path, expected_has_download
+):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.has_download` in the two relevant cases."""
+    attachmentModel.file_path = file_path
+
+    result = attachmentModel.has_download
+
+    assert result == expected_has_download

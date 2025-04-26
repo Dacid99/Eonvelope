@@ -107,13 +107,16 @@ def emailCorrespondentModel() -> EMailCorrespondentsModel:
 
 
 @pytest.fixture
-def mailboxModel() -> MailboxModel:
+def mailboxModel(faker) -> MailboxModel:
     """Fixture creating an :class:`core.models.MailboxModel.MailboxModel`.
+
+    Note:
+        `name` must contain non-ASCII chars to allow testing utf7 encoding.
 
     Returns:
         The mailboxModel instance for testing.
     """
-    return baker.make(MailboxModel)
+    return baker.make(MailboxModel, name=faker.name() + "äßμ")
 
 
 @pytest.fixture

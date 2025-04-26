@@ -1,0 +1,46 @@
+{% load i18n %}
+
+<header>
+    <nav class="navbar navbar-expand-lg bg-light sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'web:dashboard' %}">{% translate "Emailkasten" %}</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target=".collapse"
+                    aria-controls="navbar-nav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link link-dark" href="{% url 'web:email-filter-list' %}">{% translate "Emails" %}</a>
+                    <a class="nav-link link-dark"
+                       href="{% url 'web:attachment-filter-list' %}">{% translate "Attachments" %}</a>
+                    <a class="nav-link link-dark"
+                       href="{% url 'web:correspondent-filter-list' %}">{% translate "Correspondents" %}</a>
+                    <a class="nav-link link-dark"
+                       href="{% url 'web:mailinglist-filter-list' %}">{% translate "Mailinglists" %}</a>
+                </div>
+                <div class="navbar-nav me-auto">
+                    <a class="nav-link link-dark" href="{% url 'web:account-filter-list' %}">{% translate "Accounts" %}</a>
+                    <a class="nav-link link-dark" href="{% url 'web:mailbox-filter-list' %}">{% translate "Mailboxes" %}</a>
+                    <a class="nav-link link-dark" href="{% url 'web:daemon-filter-list' %}">{% translate "Daemons" %}</a>
+                </div>
+                <div class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link link-dark text-capitalize"
+                           href="{% url 'account_logout' %}">
+                            {{ user.username }}<i class="fa fa-user-circle" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="nav-link link-dark" href="{% url 'account_login' %}">
+                            Login<i class="fa fa-user-circle" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>

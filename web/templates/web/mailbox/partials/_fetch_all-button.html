@@ -1,0 +1,11 @@
+{% load i18n %}
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit"
+            class="btn btn-outline-primary"
+            name="fetch_all"
+            {% if not mailbox.is_healthy %}disabled{% endif %}>
+        {% translate "Fetch content" %}
+    </button>
+</form>

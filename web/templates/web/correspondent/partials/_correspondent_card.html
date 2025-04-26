@@ -1,0 +1,17 @@
+<a href="{{ correspondent.get_absolute_url }}"
+   class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-inline-flex align-items-center">
+                <h5 class="card-title me-1">{{ correspondent.email_address }}</h5>
+
+                {% include "web/partials/_favorite_badge.html" with object=correspondent %}
+
+            </div>
+            <h6 class="card-subtitle">{{ correspondent.email_name }}</h6>
+
+            {% include "web/partials/_dates_card-small.html" with object=correspondent %}
+
+        </div>
+    </div>
+</a>

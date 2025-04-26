@@ -108,7 +108,7 @@ def list_url() -> Callable[[type[ModelViewSet]], str]:
     Returns:
         The list url.
     """
-    return lambda viewsetClass: reverse(f"{viewsetClass.BASENAME}-list")
+    return lambda viewsetClass: reverse(f"api:v1:{viewsetClass.BASENAME}-list")
 
 
 @pytest.fixture(scope="package")
@@ -119,7 +119,7 @@ def detail_url() -> Callable[[type[ModelViewSet], Model], str]:
         The detail url.
     """
     return lambda viewsetClass, instance: reverse(
-        f"{viewsetClass.BASENAME}-detail", args=[instance.id]
+        f"api:v1:{viewsetClass.BASENAME}-detail", args=[instance.id]
     )
 
 
@@ -131,7 +131,7 @@ def custom_list_action_url() -> Callable[[type[ModelViewSet], str], str]:
         A callable that gets the list url of the viewset from the custom action name.
     """
     return lambda viewsetClass, custom_list_action_url_name: (
-        reverse(f"{viewsetClass.BASENAME}-{custom_list_action_url_name}")
+        reverse(f"api:v1:{viewsetClass.BASENAME}-{custom_list_action_url_name}")
     )
 
 
@@ -144,7 +144,7 @@ def custom_detail_action_url() -> Callable[[type[ModelViewSet], str, Model], str
     """
     return lambda viewsetClass, custom_detail_action_url_name, instance: (
         reverse(
-            f"{viewsetClass.BASENAME}-{custom_detail_action_url_name}",
+            f"api:v1:{viewsetClass.BASENAME}-{custom_detail_action_url_name}",
             args=[instance.id],
         )
     )

@@ -23,6 +23,7 @@ from __future__ import annotations
 from typing import Final
 
 from django.db.models import TextChoices
+from django.utils.translation import gettext_lazy as _
 
 
 class EmailFetchingCriterionChoices(TextChoices):
@@ -33,60 +34,72 @@ class EmailFetchingCriterionChoices(TextChoices):
     POP does not support queries at all, so everything will be fetched.
     """
 
-    RECENT = "RECENT", "RECENT"
+    RECENT = "RECENT", _("All RECENT emails")
     """Filter by "RECENT" flag."""
 
-    UNSEEN = "UNSEEN", "UNSEEN"
+    UNSEEN = "UNSEEN", _("All UNSEEN emails")
     """Filter by "UNSEEN" flag."""
 
-    ALL = "ALL", "ALL"
+    ALL = "ALL", _("All emails")
     """Filter by "ALL" flag."""
 
-    NEW = "NEW", "NEW"
+    NEW = "NEW", _("All RECENT and UNSEEN emails")
     """Filter by "NEW" flag."""
 
-    OLD = "OLD", "OLD"
+    OLD = "OLD", _("All emails that are not NEW")
     """Filter by "OLD" flag."""
 
-    FLAGGED = "FLAGGED", "FLAGGED"
+    FLAGGED = "FLAGGED", _("FLAGGED emails")
     """Filter by "FLAGGED" flag."""
 
-    DRAFT = "DRAFT", "DRAFT"
+    DRAFT = "DRAFT", _("All email DRAFTs")
     """Filter by "DRAFT" flag."""
 
-    ANSWERED = "ANSWERED", "ANSWERED"
+    UNDRAFT = "UNDRAFT", _("All emails that are not DRAFTs")
+    """Filter by "UNDRAFT" flag."""
+
+    ANSWERED = "ANSWERED", _("All ANSWERED emails")
     """Filter by "ANSWERED" flag."""
 
-    DAILY = "DAILY", "Last DAY"
+    UNANSWERED = "UNANSWERED", _("All UNANSWERED emails")
+    """Filter by "UNANSWERED" flag."""
+
+    DELETED = "DELETED", _("All DELETED emails")
+    """Filter by "DELETED" flag."""
+
+    UNDELETED = "UNDELETED", _("All UNDELETED emails")
+    """Filter by "UNDELETED" flag."""
+
+    DAILY = "DAILY", _("All emails received the last DAY")
     """Filter using "SENTSINCE" for mails sent the previous day."""
 
-    WEEKLY = "WEEKLY", "Last WEEK"
+    WEEKLY = "WEEKLY", _("All emails received the last WEEK")
     """Filter using "SENTSINCE" for mails sent the previous week."""
 
-    MONTHLY = "MONTHLY", "Last MONTH"
+    MONTHLY = "MONTHLY", _("All emails receiced the last MONTH")
     """Filter using "SENTSINCE" for mails sent the previous 4 weeks."""
 
-    ANNUALLY = "ANNUALLY", "Last YEAR"
+    ANNUALLY = "ANNUALLY", _("All emails received the last YEAR")
     """Filter using "SENTSINCE" for mails sent the previous 52 weeks."""
 
 
 class EmailProtocolChoices(TextChoices):
     """Namespace class for all implemented mail protocols constants."""
 
-    IMAP = "IMAP", "IMAP4"
+    IMAP = "IMAP", _("IMAP4")
     """The IMAP4 protocol"""
 
-    IMAP_SSL = "IMAP_SSL", "IMAP4 over SSL"
+    IMAP_SSL = "IMAP_SSL", _("IMAP4 over SSL")
     """The IMAP4 protocol over SSL"""
 
-    POP3 = "POP3", "POP3"
+    POP3 = "POP3", _("POP3")
     """The POP3 protocol"""
 
-    POP3_SSL = "POP3_SSL", "POP3 over SSL"
+    POP3_SSL = "POP3_SSL", _("POP3 over SSL")
     """The POP3 protocol over SSL"""
 
-    # EXCHANGE = "EXCHANGE", "Microsoft Exchange"
-    """Microsofts Exchange protocol"""
+    # EXCHANGE = "EXCHANGE", _("Microsoft Exchange")
+    # """Microsofts Exchange protocol"""
 
 
 class HeaderFields:
@@ -118,26 +131,37 @@ class HeaderFields:
         This class holds the choices for `core.models.EMailCorrespondentsModel.mention`.
         """
 
-        FROM = "From", "From"
-        TO = "To", "To"
-        CC = "Cc", "CC"
-        BCC = "Bcc", "BCC"
-        SENDER = "Sender", "Sender"
-        REPLY_TO = "Reply-To", "Reply-To"
-        RESENT_FROM = "Resent-From", "Resent-From"
-        RESENT_TO = "Resent-To", "Resent-To"
-        RESENT_CC = "Resent-Cc", "Resent-Cc"
-        RESENT_BCC = "Resent-Bcc", "Resent-Bcc"
-        RESENT_SENDER = "Resent-Sender", "Resent-Sender"
-        RESENT_REPLY_TO = "Resent-Reply-To", "Resent-Reply-To"
+        FROM = "From", _("From")
+        TO = "To", _("To")
+        CC = "Cc", _("CC")
+        BCC = "Bcc", _("BCC")
+        SENDER = "Sender", _("Sender")
+        REPLY_TO = "Reply-To", _("Reply-To")
+        RESENT_FROM = "Resent-From", _("Resent-From")
+        RESENT_TO = "Resent-To", _("Resent-To")
+        RESENT_CC = "Resent-Cc", _("Resent-Cc")
+        RESENT_BCC = "Resent-Bcc", _("Resent-Bcc")
+        RESENT_SENDER = "Resent-Sender", _("Resent-Sender")
+        RESENT_REPLY_TO = "Resent-Reply-To", _("Resent-Reply-To")
         ENVELOPE_TO = (
             "Envelope-To",
             "Envelope-To",
         )
-        DELIVERED_TO = "Delivered-To", "Delivered-To"
-        RETURN_PATH = "Return-Path", "Return-Path"
-        RETURN_RECEIPT_TO = "Return-Receipt-To", "Return-Receipt-To"
+        DELIVERED_TO = "Delivered-To", _("Delivered-To")
+        RETURN_PATH = "Return-Path", _("Return-Path")
+        RETURN_RECEIPT_TO = "Return-Receipt-To", _("Return-Receipt-To")
         DISPOSITION_NOTIFICATION_TO = (
             "Disposition-Notification-To",
             "Disposition-Notification-To",
         )
+
+
+class SupportedEmailUploadFormats(TextChoices):
+    """All fileformats that are supported for upload of emaildata."""
+
+    EML = "eml", _(".eml")
+    MBOX = "mbox", _(".mbox")
+    MH = "mh", _(".mh")
+    BABYL = "babyl", _(".babyl")
+    MMDF = "mmdf", _(".mmdf")
+    MAILDIR = "maildir", _(".maildir")

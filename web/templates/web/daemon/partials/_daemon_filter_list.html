@@ -1,0 +1,7 @@
+{% extends "web/partials/_filter_list.html" %}
+
+{% block list %}
+
+    {% include "web/daemon/partials/_daemon_list.html" with daemons=page_obj %}
+
+{% endblock list %}

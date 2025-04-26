@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""File with fixtures and configurations required for api/v1/filters tests. Automatically imported to test_ files."""
+
 from __future__ import annotations
 
 import datetime
@@ -120,15 +122,15 @@ TEXT_TEST_PARAMETERS = [
 ]
 
 DATETIME_TEST_ITEMS = [
-    datetime.datetime(2001, 3, 7, 10, 20, 20),
-    datetime.datetime(2002, 6, 13, 11, 30, 30),
-    datetime.datetime(2003, 8, 15, 12, 40, 40),
+    datetime.datetime(2001, 3, 7, 10, 20, 20, tzinfo=datetime.UTC),
+    datetime.datetime(2002, 6, 13, 11, 30, 30, tzinfo=datetime.UTC),
+    datetime.datetime(2003, 8, 15, 12, 40, 40, tzinfo=datetime.UTC),
 ]
-LESSER_DATETIME = datetime.datetime(1990, 2, 5, 5, 10, 10)
-GREATER_DATETIME = datetime.datetime(2020, 10, 24, 20, 50, 50)
+LESSER_DATETIME = datetime.datetime(1990, 2, 5, 5, 10, 10, tzinfo=datetime.UTC)
+GREATER_DATETIME = datetime.datetime(2020, 10, 24, 20, 50, 50, tzinfo=datetime.UTC)
 DISJOINT_DATETIME_RANGE = [
-    datetime.datetime(2020, 10, 24, 20, 50, 50),
-    datetime.datetime(2021, 11, 28, 21, 55, 55),
+    datetime.datetime(2020, 10, 24, 20, 50, 50, tzinfo=datetime.UTC),
+    datetime.datetime(2021, 11, 28, 21, 55, 55, tzinfo=datetime.UTC),
 ]
 
 DATETIME_TEST_PARAMETERS = [

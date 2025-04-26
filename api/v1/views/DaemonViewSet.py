@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Final, override
+from typing import TYPE_CHECKING, Final, override
 
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -51,7 +51,7 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet):
     Provides all but the create method.
     """
 
-    BASENAME = "daemons"
+    BASENAME = DaemonModel.BASENAME
     serializer_class = BaseDaemonSerializer
     filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = DaemonFilter
@@ -226,7 +226,8 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet):
             raise Http404("Log file not found")
 
         daemonLogFilename = os.path.basename(daemonLogFilepath)
-        with open(daemonLogFilepath, "rb") as daemonLogFile:
-            return FileResponse(
-                daemonLogFile, as_attachment=True, filename=daemonLogFilename
-            )
+        return FileResponse(
+            open(daemonLogFilepath, "rb"),
+            as_attachment=True,
+            filename=daemonLogFilename,
+        )

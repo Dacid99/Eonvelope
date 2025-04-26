@@ -21,9 +21,13 @@
 from __future__ import annotations
 
 import logging
+from typing import override
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
+from core.mixins.FavoriteMixin import FavoriteMixin
+from core.mixins.URLMixin import URLMixin
 from core.utils.mailParsing import parseCorrespondentHeader
 
 
@@ -31,10 +35,16 @@ logger = logging.getLogger(__name__)
 """The logger instance for the module."""
 
 
-class CorrespondentModel(models.Model):
+class CorrespondentModel(URLMixin, FavoriteMixin, models.Model):
     """Database model for the correspondent data found in a mail."""
 
-    email_name = models.CharField(max_length=255, blank=True, default="")
+    email_name = models.CharField(
+        max_length=255,
+        default="",
+        blank=True,
+        verbose_name=_("Mailer name"),
+        help_text=_("The mailer name of the correspondent."),
+    )
     """The mailer name. Can be blank if none has been found."""
 
     email_address = models.CharField(max_length=255, unique=True)
@@ -49,19 +59,26 @@ class CorrespondentModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
+    BASENAME = "correspondent"
+
+    DELETE_NOTICE = _("This will only delete this correspondent, not its emails.")
+
     class Meta:
         """Metadata class for the model."""
 
         db_table = "correspondents"
         """The name of the database table for the correspondents."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
         Returns:
             The string representation of the correspondent, using :attr:`email_address`.
         """
-        return f"Correspondent with address {self.email_address}"
+        return _("Correspondent with address %(email_address)s") % {
+            "email_address": self.email_address
+        }
 
     @staticmethod
     def fromHeader(header: str) -> CorrespondentModel | None:

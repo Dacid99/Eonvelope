@@ -1,0 +1,14 @@
+{% if action_result %}
+    <div class="alert alert-{% if action_result.status %}success{% else %}danger{% endif %} alert-dismissible"
+         role="alert">
+        <h4 class="alert-heading mb-0">{{ action_result.message }}</h4>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+        {% if not action_result.status %}
+            <hr>
+            <p class="mb-0">{{ action_result.error }}</p>
+        {% endif %}
+    </div>
+{% endif %}

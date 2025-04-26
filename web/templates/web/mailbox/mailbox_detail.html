@@ -1,0 +1,90 @@
+{% extends "web/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Mailbox Details" %} -
+{% endblock title %}
+
+{% block content %}
+
+    {% include "web/partials/_action_result-alert.html" %}
+
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+
+                {% include "web/partials/_favorite_badge.html" with object=mailbox %}
+
+                {% include "web/partials/_health_badge.html" with object=mailbox %}
+
+            </div>
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Action button group">
+
+                    {% include "web/partials/_test-button.html" %}
+
+                    {% include "web/mailbox/partials/_fetch_all-button.html" %}
+
+                    {% include "web/mailbox/partials/_add_daemon-button.html" %}
+
+                    {% include "web/mailbox/partials/_upload_email-button.html" %}
+
+                </div>
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
+
+                    {% include "web/partials/_delete-button.html" with object=mailbox %}
+
+                    {% include "web/partials/_edit-button.html" with object=mailbox %}
+
+                </div>
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+
+                    {% include "web/partials/_close_to_list-button.html" with object=mailbox %}
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">{{ mailbox.name }}</h2>
+            <h3 class="card-subtitle">
+                {% translate "Account" %}: <a href="{{ mailbox.account.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailbox.account.mail_address }}</a>
+            </h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">{% translate "Save attachments" %}: {{ mailbox.save_attachments }}</li>
+                <li class="list-group-item">{% translate "Save mails as .eml" %}: {{ mailbox.save_toEML }}</li>
+                <li class="list-group-item">{% translate "Save mails as .html" %}: {{ mailbox.save_toHTML }}</li>
+            </ul>
+        </div>
+
+        {% include "web/partials/_dates_card-footer.html" with object=mailbox %}
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{% translate "Daemons" %}</h4>
+
+                {% include "web/daemon/partials/_daemon_list.html" with daemons=mailbox.daemons.all %}
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h4 class="card-title">{% translate "Latest Emails" %}</h4>
+                    <a role="button"
+                       class="btn btn-outline-primary"
+                       href="{% url 'web:mailbox-emails' mailbox.pk %}">{% translate "View all" %}</a>
+                </div>
+
+                {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
+
+            </div>
+        </div>
+    </div>
+
+    {% include "web/partials/_delete-modal.html" with object=mailbox %}
+
+{% endblock content %}

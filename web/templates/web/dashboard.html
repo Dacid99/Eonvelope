@@ -1,0 +1,69 @@
+{% extends "web/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Dashboard" %} -
+{% endblock title %}
+
+{% block content %}
+    <h1 class="my-3">{% translate "Welcome to Emailkasten" %}</h1>
+    <div class="row justify-content-evenly">
+        <div class="col-9">
+            <div class="card">
+                <h4 class="card-header">{% translate "Latest Emails" %}</h4>
+                <div class="card-body">
+
+                    {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
+
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <h4 class="card-header">{% translate "Database stats" %}</h4>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <th scope="col">Data</th>
+                            <th scope="col">Count</th>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:email-filter-list' %}"
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Emails" %}</a>
+                                </td>
+                                <td>{{ emails_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:correspondent-filter-list' %}"
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Correspondents" %}</a>
+                                </td>
+                                <td>{{ correspondents_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:mailinglist-filter-list' %}"
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Mailinglists" %}</a>
+                                </td>
+                                <td>{{ mailinglists_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:attachment-filter-list' %}"
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Attachments" %}</a>
+                                </td>
+                                <td>{{ attachments_count }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {% include "web/account/partials/_add_button.html" %}
+
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,23 @@
+{% extends "web/base.html" %}
+
+{% load static i18n %}
+
+{% block title %}
+    {% translate "Emails" %} -
+{% endblock title %}
+
+{% block content %}
+    <h2>{% translate "Emails" %}</h2>
+    <h4>
+        {% translate "in" %} <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+    href="{{ mailbox.get_absolute_url }}">{{ mailbox.name }}</a> {% translate "of" %} <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+    href="{{ mailbox.account.get_absolute_url }}">{{ mailbox.account.mail_address }}</a>
+    </h4>
+
+    {% include "web/email/partials/_email_filter_list.html" %}
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'web/js/form-utils.js' %}"></script>
+{% endblock scripts %}

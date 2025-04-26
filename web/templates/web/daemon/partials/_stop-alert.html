@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% if stop_result %}
+    <div class="alert alert-{% if stop_result.status %}success{% else %}warning{% endif %} alert-dismissible"
+         role="alert">
+        {% if stop_result.status %}
+            {% translate "Daemon stopped successfully" %}
+        {% else %}
+            {% translate "Daemon was not running" %}
+        {% endif %}
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"></button>
+    </div>
+{% endif %}

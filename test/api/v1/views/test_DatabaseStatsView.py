@@ -42,7 +42,7 @@ def url() -> Callable[[type[ModelViewSet]], str]:
     Returns:
         The list url.
     """
-    return lambda viewClass: reverse(f"{viewClass.NAME}")
+    return lambda viewClass: reverse(f"api:v1:{viewClass.NAME}")
 
 
 @pytest.mark.django_db

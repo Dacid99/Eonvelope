@@ -52,7 +52,7 @@ def test_output(emailModel, request_context):
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == emailModel.is_favorite
     assert "eml_filepath" not in serializerData
-    assert "prerender_filepath" not in serializerData
+    assert "html_filepath" not in serializerData
     assert "mailbox" in serializerData
     assert serializerData["mailbox"] == emailModel.mailbox.id
     assert "headers" in serializerData
@@ -94,7 +94,7 @@ def test_input(emailModel, request_context):
     assert "is_favorite" in serializerData
     assert serializerData["is_favorite"] == emailModel.is_favorite
     assert "eml_filepath" not in serializerData
-    assert "prerender_filepath" not in serializerData
+    assert "html_filepath" not in serializerData
     assert "mailbox" not in serializerData
     assert "headers" not in serializerData
     assert "x_spam" not in serializerData

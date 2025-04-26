@@ -1,0 +1,38 @@
+{% extends "web/base.html" %}
+
+{% load i18n django_bootstrap5 %}
+
+{% block title %}
+    {% translate "Add Account" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-end align-items-center">
+            <div class="btn-group ms-3" role="group" aria-label="Close button group">
+                <a class="btn-close"
+                   href="{% url 'web:account-filter-list' %}"
+                   role="button"></a>
+            </div>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">{% bootstrap_field form.mail_address %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.password %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.mail_host %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.protocol %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.mail_host_port %}</li>
+                    <li class="list-group-item">{% bootstrap_field form.timeout %}</li>
+                </ul>
+
+                {% include "web/partials/_submit_edit-button.html" %}
+
+                <a type="button"
+                   class="btn btn-secondary"
+                   href="{% url 'web:account-filter-list' %}">{% translate "Cancel" %}</a>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

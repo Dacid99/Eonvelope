@@ -18,20 +18,18 @@
 
 """Module with the :class:`SimpleMailingListSerializer` serializer class."""
 
+# ruff: noqa: TC001 TC002
+# TYPE_CHECKING guard doesnt work with drf-spectacular: https://github.com/tfranzel/drf-spectacular/issues/390
+
 from __future__ import annotations
 
 from rest_framework import serializers
+from rest_framework.utils.serializer_helpers import ReturnDict
+
+from core.models.MailingListModel import MailingListModel
 
 from ..email_serializers.BaseEMailSerializer import BaseEMailSerializer
 from .BaseMailingListSerializer import BaseMailingListSerializer
-
-
-# ruff: noqa: TC001 TC002
-# TYPE_CHECKING guard doesnt work with drf-spectacular: https://github.com/tfranzel/drf-spectacular/issues/390
-if True:
-    from rest_framework.utils.serializer_helpers import ReturnDict
-
-    from core.models.MailingListModel import MailingListModel
 
 
 class SimpleMailingListSerializer(BaseMailingListSerializer):

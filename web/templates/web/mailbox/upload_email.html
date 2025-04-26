@@ -1,0 +1,33 @@
+{% extends "web/base.html" %}
+
+{% load i18n django_bootstrap5 %}
+
+{% block title %}
+    {% translate "Upload email" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <div class="btn-toolbar align-items-center">
+                <a role="button"
+                   class="btn btn-outline-primary"
+                   href="{{ mailbox.get_absolute_url }}">
+                    <i class="fa-solid fa-arrow-left m-1"></i>{% translate "Back to mailbox" %}
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <h3 class="card-title">{% translate "Upload emails to the mailbox" %}</h3>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+
+                {% include "web/mailbox/partials/_submit_upload-button.html" %}
+
+                {% include "web/partials/_cancel_edit-button.html" with object=mailbox %}
+
+            </form>
+        </div>
+    </div>
+{% endblock content %}

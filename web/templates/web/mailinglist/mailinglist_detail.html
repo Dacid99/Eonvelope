@@ -1,0 +1,75 @@
+{% extends "web/base.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Mailinglist Details" %} -
+{% endblock title %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+
+                {% include "web/partials/_favorite_badge.html" with object=mailinglist %}
+
+            </div>
+            <div class="btn-toolbar align-items-center"
+                 role="toolbar"
+                 aria-label="Toolbar with buttons">
+                <div class="btn-group me-3" role="group" aria-label="Edit button group">
+
+                    {% include "web/partials/_delete-button.html" with object=mailinglist %}
+
+                </div>
+                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+
+                    {% include "web/partials/_close_to_list-button.html" with object=mailinglist %}
+
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <h2 class="card-title">{{ mailinglist.list_id }}</h2>
+            <h3 class="card-subtitle">{{ mailinglist.list_owner }}</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                    {% translate "Subscribe" %}: <a href="mailto:{{ mailinglist.list_subscribe }}"
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_subscribe }}</a>
+                </li>
+                <li class="list-group-item">
+                    {% translate "Unsubscribe" %}: <a href="mailto:{{ mailinglist.list_unsubscribe }}"
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_unsubscribe }}</a>
+                </li>
+                <li class="list-group-item">
+                    {% translate "Post" %}: <a href="mailto:{{ mailinglist.list_post }}"
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ mailinglist.list_post }}</a>
+                </li>
+                <li class="list-group-item">{% translate "Archive" %}: {{ mailinglist.list_archive }}</li>
+                <li class="list-group-item">{% translate "Help" %}: {{ mailinglist.list_help }}</li>
+            </ul>
+        </div>
+
+        {% include "web/partials/_dates_card_uneditable-footer.html" with object=mailinglist %}
+
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{% translate "Emails" %}</h4>
+
+                {% include "web/email/partials/_email_list.html" with emails=mailinglist.emails.all %}
+
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{% translate "Correspondents" %}</h4>
+
+                {% include "web/correspondent/partials/_correspondent_list.html" with correspondents=mailinglist.emails.correspondents.all.distinct %}
+
+            </div>
+        </div>
+    </div>
+
+    {% include "web/partials/_delete-modal.html" with object=mailinglist %}
+
+{% endblock content %}

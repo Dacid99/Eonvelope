@@ -4,10 +4,12 @@ Your global python version should be at least *3.12*.
 
 If necessary you can install it via [the deadsnakes ppa](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa).
 
+Make sure to also install the python-dev version.
+
 First install the packages required for the build environment, on debian based distros:
 
 ```bash
-sudo apt-get -y update && apt-get -y install build-essential default-mysql-client wkhtmltopdf krb5-user krb5-multidev libmysqlclient-dev pkg-config mysql-server nodejs npm
+sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client krb5-user krb5-multidev libmysqlclient-dev pkg-config mysql-server nodejs npm
 ```
 
 Then to install the python dependencies start a new virtual environment and activate it:
@@ -89,3 +91,4 @@ git config core.hooksPath validation/githooks/
 - python poetry
 - ANSI colors (iliazeus.vscode-ansi) (for validation reports)
 - reStructuredText (lextudio.restructuredtext) for docs
+- bootstrap 5 intellisense etc.

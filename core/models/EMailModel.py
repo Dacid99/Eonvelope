@@ -20,8 +20,7 @@
 
 from __future__ import annotations
 
-import email.generator
-import email.parser
+import email
 import logging
 import os
 from email import policy
@@ -29,14 +28,19 @@ from hashlib import md5
 from typing import TYPE_CHECKING, Any, Final, override
 
 from django.db import models, transaction
+from django.utils.translation import gettext_lazy as _
 
 from core.constants import HeaderFields
+from core.mixins.FavoriteMixin import FavoriteMixin
+from core.mixins.HasDownloadMixin import HasDownloadMixin
+from core.mixins.HasThumbnailMixin import HasThumbnailMixin
+from core.mixins.URLMixin import URLMixin
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
-from core.utils.fileManagment import saveStore
+from core.utils.fileManagment import clean_filename, saveStore
+from core.utils.mailParsing import eml2html, is_X_Spam
 from Emailkasten.utils import get_config
 
 from ..utils.mailParsing import getHeader, parseDatetimeHeader
-from ..utils.mailRendering import renderEML
 from .AttachmentModel import AttachmentModel
 from .MailingListModel import MailingListModel
 from .StorageModel import StorageModel
@@ -53,7 +57,9 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class EMailModel(models.Model):
+class EMailModel(
+    HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models.Model
+):
     """Database model for an email."""
 
     message_id = models.CharField(max_length=255)
@@ -76,7 +82,7 @@ class EMailModel(models.Model):
     )
     """The mail that this mail is a response to. Can be null. Deletion of that replied-to mail sets this field to NULL."""
 
-    datasize = models.IntegerField()
+    datasize = models.PositiveIntegerField()
     """The bytes size of the mail."""
 
     eml_filepath = models.FilePathField(
@@ -92,23 +98,27 @@ class EMailModel(models.Model):
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_EMailModel.post_delete_email_files`.
     """
 
-    prerender_filepath = models.FilePathField(
+    html_filepath = models.FilePathField(
         path=get_config("STORAGE_PATH"),
         max_length=255,
         recursive=True,
-        match=rf".*\.{get_config('PRERENDER_IMAGETYPE')}$",
+        match=r".*\.html$",
         null=True,
     )
-    """The path where the prerender image of the mail is stored.
-    Can be null if the prerendering process was no successful.
-    Must contain :attr:`constance.get_config('STORAGE_PATH')` and end on :attr:`constance.get_config('PRERENDER_IMAGETYPE')`.
+    """The path where the html version of the mail is stored.
+    Can be null if the conversion process was no successful.
+    Must contain :attr:`constance.get_config('STORAGE_PATH')` and end on `.html`.
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_EMailModel.post_delete_email_files`."""
 
     is_favorite = models.BooleanField(default=False)
     """Flags favorite mails. False by default."""
 
-    correspondents: models.ManyToManyField[CorrespondentModel] = models.ManyToManyField(
-        "CorrespondentModel", through="EMailCorrespondentsModel", related_name="emails"
+    correspondents: models.ManyToManyField[CorrespondentModel, CorrespondentModel] = (
+        models.ManyToManyField(
+            "CorrespondentModel",
+            through="EMailCorrespondentsModel",
+            related_name="emails",
+        )
     )
     """The correspondents that are mentioned in this mail. Bridges through :class:`core.models.EMailCorrespondentsModel`."""
 
@@ -134,6 +144,12 @@ class EMailModel(models.Model):
     updated = models.DateTimeField(auto_now=True)
     """The datetime this entry was last updated. Is set automatically."""
 
+    BASENAME = "email"
+
+    DELETE_NOTICE = _(
+        "This will delete this email and all its attachments but not its correspondents or mailinglists."
+    )
+
     class Meta:
         """Metadata class for the model."""
 
@@ -148,13 +164,20 @@ class EMailModel(models.Model):
         ]
         """`message_id` and :attr:`mailbox` in combination are unique."""
 
+    @override
     def __str__(self) -> str:
         """Returns a string representation of the model data.
 
         Returns:
             The string representation of the email, using :attr:`message_id`, :attr:`datetime` and :attr:`mailbox`.
         """
-        return f"Email with ID {self.message_id}, received on {self.datetime} from {self.mailbox}"
+        return _(
+            "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
+        ) % {
+            "message_id": self.message_id,
+            "datetime": self.datetime,
+            "mailbox": self.mailbox,
+        }
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:
@@ -166,14 +189,15 @@ class EMailModel(models.Model):
         super().save(*args, **kwargs)
         if emailData is not None:
             if self.mailbox.save_toEML:
-                self.save_to_storage(emailData)
-            self.render_to_storage(emailData)
+                self.save_eml_to_storage(emailData)
+            if self.mailbox.save_toHTML:
+                self.save_html_to_storage(emailData)
 
     @override
     def delete(self, *args: Any, **kwargs: Any) -> None:
         """Extended :django::func:`django.models.Model.delete` method.
 
-        Deletes :attr:`eml_filepath` and :attr:`prerender_filepath` files on deletion.
+        Deletes :attr:`eml_filepath` and :attr:`html_filepath` files on deletion.
         """
         super().delete(*args, **kwargs)
 
@@ -193,26 +217,24 @@ class EMailModel(models.Model):
                     "An unexpected error occured removing %s!", self.eml_filepath
                 )
 
-        if self.prerender_filepath:
+        if self.html_filepath:
             logger.debug("Removing %s from storage ...", self)
             try:
-                os.remove(self.prerender_filepath)
+                os.remove(self.html_filepath)
                 logger.debug(
-                    "Successfully removed the prerender image file from storage.",
+                    "Successfully removed the html file from storage.",
                     exc_info=True,
                 )
             except FileNotFoundError:
-                logger.exception("%s was not found!", self.prerender_filepath)
+                logger.exception("%s was not found!", self.html_filepath)
             except OSError:
-                logger.exception(
-                    "An OS error occured removing %s!", self.prerender_filepath
-                )
+                logger.exception("An OS error occured removing %s!", self.html_filepath)
             except Exception:
                 logger.exception(
-                    "An unexpected error occured removing %s!", self.prerender_filepath
+                    "An unexpected error occured removing %s!", self.html_filepath
                 )
 
-    def save_to_storage(self, emailData: bytes) -> None:
+    def save_eml_to_storage(self, emailData: bytes) -> None:
         """Saves the email to the storage in eml format.
 
         If the file already exists, does not overwrite.
@@ -230,13 +252,13 @@ class EMailModel(models.Model):
 
         @saveStore
         def writeMessageToEML(emlFile: BufferedWriter, emailData: bytes) -> None:
-            emlGenerator = email.generator.BytesGenerator(emlFile)
-            emlGenerator.flatten(emailData)
+            emlFile.write(emailData)
 
         logger.debug("Storing %s as eml ...", self)
 
         dirPath = StorageModel.getSubdirectory(self.message_id)
-        preliminary_file_path = os.path.join(dirPath, self.message_id + ".eml")
+        clean_message_id = clean_filename(self.message_id)
+        preliminary_file_path = os.path.join(dirPath, clean_message_id + ".eml")
         if file_path := writeMessageToEML(preliminary_file_path, emailData):
             self.eml_filepath = file_path
             self.save(update_fields=["eml_filepath"])
@@ -244,8 +266,8 @@ class EMailModel(models.Model):
         else:
             logger.error("Failed to store %s as eml!", self)
 
-    def render_to_storage(self, emailData: bytes) -> None:
-        """Renders the email and writes the resulting image to the storage.
+    def save_html_to_storage(self, emailData: bytes) -> None:
+        """Converts the email to html and writes the result to the storage.
 
         If the file already exists, does not overwrite.
         If an error occurs, removes the incomplete file.
@@ -254,31 +276,30 @@ class EMailModel(models.Model):
             Uses :func:`core.utils.fileManagment.saveStore` to wrap the storing process.
 
         Args:
-            emailData: The data of the email to be rendered.
+            emailData: The data of the email to be converted.
         """
-        if self.prerender_filepath:
-            logger.debug("%s is already stored as prerender image.", self)
+        if self.html_filepath:
+            logger.debug("%s is already stored as html.", self)
             return
 
-        imageType = get_config("PRERENDER_IMAGETYPE")
-
         @saveStore
-        def renderAndStoreMessage(
-            prerenderFile: BufferedWriter, emailData: bytes
+        def convertAndStoreHtmlMessage(
+            htmlFile: BufferedWriter, emailData: bytes
         ) -> None:
-            renderedMessage = renderEML(emailData)
-            renderedMessage.save(prerenderFile, format=imageType)
+            htmlMessage = eml2html(emailData)
+            htmlFile.write(htmlMessage.encode())
 
         logger.debug("Rendering and storing %s  ...", self)
 
         dirPath = StorageModel.getSubdirectory(self.message_id)
-        preliminary_file_path = os.path.join(dirPath, self.message_id + "." + imageType)
-        if file_path := renderAndStoreMessage(preliminary_file_path, emailData):
-            self.prerender_filepath = file_path
-            self.save(update_fields=["prerender_filepath"])
-            logger.debug("Successfully rendered and stored email.")
+        clean_message_id = clean_filename(self.message_id)
+        preliminary_file_path = os.path.join(dirPath, clean_message_id + ".html")
+        if file_path := convertAndStoreHtmlMessage(preliminary_file_path, emailData):
+            self.html_filepath = file_path
+            self.save(update_fields=["html_filepath"])
+            logger.debug("Successfully converted and stored email.")
         else:
-            logger.error("Failed to render and store %s!", self)
+            logger.error("Failed to convert and store %s!", self)
 
     def subConversation(self) -> list[EMailModel]:
         """Gets all emails that are follow this email in the conversation.
@@ -311,7 +332,7 @@ class EMailModel(models.Model):
         Returns:
             Whether the mail is considered spam.
         """
-        return bool(self.x_spam) and self.x_spam != "NO"
+        return is_X_Spam(self.x_spam)
 
     @staticmethod
     def createFromEmailBytes(
@@ -336,10 +357,10 @@ class EMailModel(models.Model):
                 emailMessage,
                 HeaderFields.MESSAGE_ID,
             )
-            or md5(emailBytes).hexdigest()
+            or md5(emailBytes).hexdigest()  # noqa: S324 ; no safe hash required here
         )
         x_spam = getHeader(emailMessage, HeaderFields.X_SPAM)
-        if x_spam != "NO" and get_config("THROW_OUT_SPAM"):
+        if is_X_Spam(x_spam) and get_config("THROW_OUT_SPAM"):
             logger.debug(
                 "Skipping email with Message-ID %s in %s, it is flagged as spam.",
                 message_id,
@@ -394,7 +415,7 @@ class EMailModel(models.Model):
                 payload = part.get_payload(decode=True)
                 charset = part.get_content_charset("utf-8")
                 new_email.html_bodytext += payload.decode(charset, errors="replace")
-            elif contentDisposition is not None or (
+            elif contentDisposition in ["inline", "attachment"] or (
                 any(
                     contentType.startswith(type_to_save)
                     for type_to_save in get_config("SAVE_CONTENT_TYPE_PREFIXES")
@@ -434,3 +455,13 @@ class EMailModel(models.Model):
             )
             return None
         return new_email
+
+    @override
+    @property
+    def has_download(self) -> bool:
+        return self.eml_filepath is not None
+
+    @override
+    @property
+    def has_thumbnail(self) -> bool:
+        return self.html_filepath is not None

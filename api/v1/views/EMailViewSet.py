@@ -31,6 +31,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.EMailModel import EMailModel
 
 from ..filters.EMailFilter import EMailFilter
@@ -44,13 +45,15 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class EMailViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin):
+class EMailViewSet(
+    viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin, ToggleFavoriteMixin
+):
     """Viewset for the :class:`core.models.EMailModel.EMailModel`.
 
     Provides every read-only and a destroy action.
     """
 
-    BASENAME = "emails"
+    BASENAME = EMailModel.BASENAME
     serializer_class = FullEMailSerializer
     filter_backends: Final[list] = [DjangoFilterBackend, OrderingFilter]
     filterset_class = EMailFilter
@@ -112,24 +115,23 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin):
             raise Http404("EMl file not found")
 
         fileName = os.path.basename(filePath)
-        with open(filePath, "rb") as file:
-            return FileResponse(file, as_attachment=True, filename=fileName)
+        return FileResponse(open(filePath, "rb"), as_attachment=True, filename=fileName)
 
-    URL_PATH_PRERENDER = "prerender"
-    URL_NAME_PRERENDER = "prerender"
+    URL_PATH_DOWNLOAD_HTML = "download-html"
+    URL_NAME_DOWNLOAD_HTML = "download-html"
 
     @action(
         detail=True,
         methods=["get"],
-        url_path=URL_PATH_PRERENDER,
-        url_name=URL_NAME_PRERENDER,
+        url_path=URL_PATH_DOWNLOAD_HTML,
+        url_name=URL_NAME_DOWNLOAD_HTML,
     )
-    def prerender(self, request: Request, pk: int | None = None) -> FileResponse:
-        """Action method downloading the prerender image of the mail.
+    def download_html(self, request: Request, pk: int | None = None) -> FileResponse:
+        """Action method downloading the html version of the mail.
 
         Args:
             request: The request triggering the action.
-            pk: The private key of the attachment to download. Defaults to None.
+            pk: The private key of the email to download. Defaults to None.
 
         Raises:
             Http404: If the filepath is not in the database or it doesnt exist.
@@ -139,15 +141,23 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin):
         """
         email = self.get_object()
 
-        prerenderFilePath = email.prerender_filepath
-        if not prerenderFilePath or not os.path.exists(prerenderFilePath):
-            raise Http404("Prerender image file not found")
+        htmlFilePath = email.html_filepath
+        if not htmlFilePath or not os.path.exists(htmlFilePath):
+            raise Http404("Html file not found")
 
-        prerenderFileName = os.path.basename(prerenderFilePath)
-        with open(prerenderFilePath, "rb") as prerenderFile:
-            return FileResponse(
-                prerenderFile, as_attachment=True, filename=prerenderFileName
-            )
+        htmlFileName = os.path.basename(htmlFilePath)
+        response = FileResponse(
+            # pylint: disable-next=consider-using-with
+            open(  # noqa: SIM115 ;  this is the recommended usage for FileResponse, see https://docs.djangoproject.com/en/5.2/ref/request-response/
+                htmlFilePath, "rb"
+            ),
+            as_attachment=False,
+            filename=htmlFileName,
+            content_type="text/html",
+        )
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+        response.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
+        return response
 
     URL_PATH_FULLCONVERSATION = "full-conversation"
     URL_NAME_FULLCONVERSATION = "full-conversation"
@@ -196,27 +206,3 @@ class EMailViewSet(viewsets.ReadOnlyModelViewSet, mixins.DestroyModelMixin):
         conversation = email.subConversation()
         conversationSerializer = EMailSerializer(conversation, many=True)
         return Response({"emails": conversationSerializer.data})
-
-    URL_PATH_TOGGLE_FAVORITE = "toggle_favorite"
-    URL_NAME_TOGGLE_FAVORITE = "toggle-favorite"
-
-    @action(
-        detail=True,
-        methods=["post"],
-        url_path=URL_PATH_TOGGLE_FAVORITE,
-        url_name=URL_NAME_TOGGLE_FAVORITE,
-    )
-    def toggle_favorite(self, request: Request, pk: int | None = None) -> Response:
-        """Action method toggling the favorite flag of the email.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the email to toggle favorite. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        email = self.get_object()
-        email.is_favorite = not email.is_favorite
-        email.save(update_fields=["is_favorite"])
-        return Response({"detail": "Email marked as favorite"})

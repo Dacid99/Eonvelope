@@ -1,0 +1,5 @@
+<a role="button"
+   class="btn btn-outline-primary {% if not object.has_download %}disabled{% endif %}"
+   {% if object.has_download %}href="{{ object.get_absolute_download_url }}" target="_blank"{% else %}aria-disabled="true"{% endif %}>
+    <i class="fa fa-download" aria-hidden="true"></i>
+</a>

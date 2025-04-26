@@ -18,9 +18,10 @@
 
 """Module with the SafePOPMixin mixin."""
 
-import poplib
 from collections.abc import Callable
-from typing import Any
+from typing import Any, Self
+
+from django.utils.translation import gettext as _
 
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 
@@ -66,7 +67,10 @@ class SafePOPMixin:
         if not status.startswith(expectedStatus):
             self.logger.error("Bad server response for %s:\n%s", commandName, response)
             if exception is not None:
-                raise exception(f"Bad server response for {commandName}:\n{response}")
+                raise exception(
+                    _("Bad server response for %(commandName)s:\n%(response)s")
+                    % {"commandName": commandName, "response": response}
+                )
         self.logger.debug("Server responded %s as expected.", status)
 
     @staticmethod
@@ -92,7 +96,7 @@ class SafePOPMixin:
         """
 
         def safeWrapper(popAction: Callable) -> Callable:
-            def safeAction(self, *args: Any, **kwargs: Any) -> Any:
+            def safeAction(self: Self, *args: Any, **kwargs: Any) -> Any:
                 try:
                     response = popAction(self, *args, **kwargs)
                 except Exception as error:
@@ -103,7 +107,11 @@ class SafePOPMixin:
                     )
                     if exception is not None:
                         raise exception(
-                            f"An {error.__class__.__name__} occured during {popAction.__name__}!",
+                            _("An %(error_class_name)s occured during %(action_name)s!")
+                            % {
+                                "error_class_name": error.__class__.__name__,
+                                "action_name": popAction.__name__,
+                            },
                         ) from error
                     return None
                 else:
@@ -117,29 +125,31 @@ class SafePOPMixin:
         return safeWrapper
 
     @safe(exception=MailAccountError)
-    def safe_user(self, *args, **kwargs):
+    def safe_user(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.user`."""
         return self._mailClient.user(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_pass_(self, *args, **kwargs):
+    def safe_pass_(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.pass_`."""
         return self._mailClient.pass_(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_noop(self, *args, **kwargs):
+    def safe_noop(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.noop`."""
         return self._mailClient.noop(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_stat(self, *args, **kwargs):
-        return self._mailClient.stat(*args, **kwargs)
-
-    @safe(exception=MailAccountError)
-    def safe_list(self, *args, **kwargs):
+    def safe_list(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.list`."""
         return self._mailClient.list(*args, **kwargs)
 
     @safe(exception=MailAccountError)
-    def safe_retr(self, *args, **kwargs):
+    def safe_retr(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.retr`."""
         return self._mailClient.retr(*args, **kwargs)
 
     @safe(exception=None)
-    def safe_quit(self, *args, **kwargs):
+    def safe_quit(self, *args: Any, **kwargs: Any) -> Any:
+        """The :func:`safe` wrapped version of :func:`poplib.POP3.quit`."""
         return self._mailClient.quit(*args, **kwargs)

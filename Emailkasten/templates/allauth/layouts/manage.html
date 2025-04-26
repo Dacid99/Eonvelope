@@ -1,0 +1,64 @@
+{% extends "allauth/layouts/base.html" %}
+
+{% load allauth i18n %}
+
+{% block body %}
+    <div class="flex-grow-1 row">
+        <aside class="col-sm-4 col-md-3 col-lg-2 bg-light">
+            <ul class="p-3 nav nav-pills flex-column">
+                {% url 'account_email' as email_url_ %}
+                {% if email_url_ %}
+                    <li class="nav-item">
+                        <a class=" 
+                            {% block nav_class_email %}nav-link{% endblock nav_class_email %}
+                         " href="{{ email_url_ }}">{% translate "Change Email" %}</a>
+                    </li>
+                {% endif %}
+                {% url 'account_change_password' as change_password_url_ %}
+                {% if change_password_url_ %}
+                    <li class="nav-item">
+                        <a class=" 
+                            {% block nav_class_password %}nav-link{% endblock nav_class_password %}
+                         " href="{{ change_password_url_ }}">{% translate "Change Password" %}</a>
+                    </li>
+                {% endif %}
+                {% url 'usersessions_list' as usersessions_list_url_ %}
+                {% if usersessions_list_url_ %}
+                    <li class="nav-item">
+                        <a class=" 
+                            {% block nav_class_usersessions %}nav-link{% endblock nav_class_usersessions %}
+                         " href="{{ usersessions_list_url_ }}">{% translate "Sessions" %}</a>
+                    </li>
+                {% endif %}
+                {% if user.is_staff %}
+                    <li class="nav-item">
+                        <a class=" 
+                            {% block nav_class_admin %}nav-link{% endblock nav_class_admin %}
+                         " href="{% url 'admin:index' %}">{% translate "Admin panel" %}</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </aside>
+        <main class="col-sm-8 col-md-9 col-lg-10">
+            <div id="content" class="container">
+                {% if messages %}
+                    <div class="pt-4">
+
+                        {% for message in messages %}
+                            {% element alert level=message.tags %}
+                            {% slot message %}
+                            {{ message }}
+                        {% endslot %}
+                    {% endelement %}
+                {% endfor %}
+
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock content %}
+
+    </div>
+</main>
+</div>
+{% endblock body %}

@@ -86,9 +86,9 @@ class EMailViewSet(
         """
         if getattr(self, "swagger_fake_view", False):
             return EMailModel.objects.none()
-        if self.request.user.is_authenticated:
-            return EMailModel.objects.filter(mailbox__account__user=self.request.user)
-        return EMailModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return EMailModel.objects.none()
+        return EMailModel.objects.filter(mailbox__account__user=self.request.user)
 
     URL_PATH_DOWNLOAD = "download"
     URL_NAME_DOWNLOAD = "download"

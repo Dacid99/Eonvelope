@@ -77,11 +77,11 @@ class CorrespondentViewSet(
         """
         if getattr(self, "swagger_fake_view", False):
             return CorrespondentModel.objects.none()
-        if self.request.user.is_authenticated:
-            return CorrespondentModel.objects.filter(
-                emails__mailbox__account__user=self.request.user
-            ).distinct()
-        return CorrespondentModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return CorrespondentModel.objects.none()
+        return CorrespondentModel.objects.filter(
+            emails__mailbox__account__user=self.request.user
+        ).distinct()
 
     @override
     def get_serializer_class(self) -> type[BaseSerializer[CorrespondentModel]]:

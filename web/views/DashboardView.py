@@ -39,33 +39,33 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     @override
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        if self.request.user.is_authenticated:
-            context = super().get_context_data(**kwargs)
+        if not self.request.user.is_authenticated:
+            return {}
+        context = super().get_context_data(**kwargs)
 
-            context["latest_emails"] = EMailModel.objects.filter(
-                mailbox__account__user=self.request.user,
-                created__gte=timezone.now() - timedelta(days=1),
-            ).order_by("-created")
-            context["emails_count"] = EMailModel.objects.filter(
-                mailbox__account__user=self.request.user
-            ).count()
-            context["mailinglists_count"] = (
-                MailingListModel.objects.filter(
-                    emails__mailbox__account__user=self.request.user
-                )
-                .distinct()
-                .count()
+        context["latest_emails"] = EMailModel.objects.filter(
+            mailbox__account__user=self.request.user,
+            created__gte=timezone.now() - timedelta(days=1),
+        ).order_by("-created")
+        context["emails_count"] = EMailModel.objects.filter(
+            mailbox__account__user=self.request.user
+        ).count()
+        context["mailinglists_count"] = (
+            MailingListModel.objects.filter(
+                emails__mailbox__account__user=self.request.user
             )
-            context["attachments_count"] = AttachmentModel.objects.filter(
-                email__mailbox__account__user=self.request.user
-            ).count()
-            context["correspondents_count"] = (
-                CorrespondentModel.objects.filter(
-                    emails__mailbox__account__user=self.request.user
-                )
-                .distinct()
-                .count()
+            .distinct()
+            .count()
+        )
+        context["attachments_count"] = AttachmentModel.objects.filter(
+            email__mailbox__account__user=self.request.user
+        ).count()
+        context["correspondents_count"] = (
+            CorrespondentModel.objects.filter(
+                emails__mailbox__account__user=self.request.user
             )
+            .distinct()
+            .count()
+        )
 
-            return context
-        return {}
+        return context

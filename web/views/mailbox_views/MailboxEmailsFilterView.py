@@ -37,13 +37,11 @@ class MailboxEmailsFilterView(EMailFilterView, SingleObjectMixin):  # type: igno
 
     @override
     def get_queryset(self) -> QuerySet[EMailModel]:
-        if self.request.user.is_authenticated:
-            mailbox_queryset = MailboxModel.objects.filter(
-                account__user=self.request.user
-            )
-            self.object = self.get_object(queryset=mailbox_queryset)
-            return EMailModel.objects.filter(mailbox=self.object)
-        return EMailModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return EMailModel.objects.none()
+        mailbox_queryset = MailboxModel.objects.filter(account__user=self.request.user)
+        self.object = self.get_object(queryset=mailbox_queryset)
+        return EMailModel.objects.filter(mailbox=self.object)
 
     @override
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:

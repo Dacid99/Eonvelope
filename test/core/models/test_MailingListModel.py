@@ -28,6 +28,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.db import IntegrityError
+from django.urls import reverse
 from model_bakery import baker
 
 from core.models.MailingListModel import MailingListModel
@@ -154,3 +155,24 @@ def test_MailingListModel_fromEmailMessage_no_list_id(
     assert result is None
     mock_getHeader.assert_called_once_with(mock_message, "List-Id")
     mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
+def test_MailingListModel_get_absolute_url(mailingListModel):
+    """Tests :func:`core.models.MailingListModel.MailingListModel.get_absolute_url`."""
+    result = mailingListModel.get_absolute_url()
+
+    assert result == reverse(
+        f"web:{mailingListModel.BASENAME}-detail",
+        kwargs={"pk": mailingListModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_MailingListModel_get_absolute_list_url(mailingListModel):
+    """Tests :func:`core.models.MailingListModel.MailingListModel.get_absolute_list_url`."""
+    result = mailingListModel.get_absolute_list_url()
+
+    assert result == reverse(
+        f"web:{mailingListModel.BASENAME}-filter-list",
+    )

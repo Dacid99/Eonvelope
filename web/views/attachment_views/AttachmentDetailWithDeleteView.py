@@ -42,8 +42,8 @@ class AttachmentDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMix
     @override
     def get_queryset(self) -> QuerySet[AttachmentModel]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if self.request.user.is_authenticated:
-            return AttachmentModel.objects.filter(
-                email__mailbox__account__user=self.request.user
-            )
-        return AttachmentModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return AttachmentModel.objects.none()
+        return AttachmentModel.objects.filter(
+            email__mailbox__account__user=self.request.user
+        )

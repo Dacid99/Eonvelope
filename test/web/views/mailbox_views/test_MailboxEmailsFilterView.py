@@ -58,5 +58,8 @@ def test_get_auth_owner(mailboxModel, owner_client, detail_url):
     assert "web/mailbox/mailbox_email_filter_list.html" in [
         t.name for t in response.templates
     ]
+    assert "page_obj" in response.context
+    assert "query" in response.context
+    assert "mailbox" in response.context
     with open("detaillist.html", "w") as f:
         f.write(response.content.decode())

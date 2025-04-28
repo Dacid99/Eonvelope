@@ -82,8 +82,6 @@ class CorrespondentFilter(django_filters.FilterSet):
         Returns:
             The filtered queryset.
         """
-        if value:
-            return queryset.filter(
-                Q(email_address__icontains=value) | Q(email_name__icontains=value)
-            ).distinct()
-        return queryset
+        return queryset.filter(
+            Q(email_address__icontains=value) | Q(email_name__icontains=value)
+        ).distinct()

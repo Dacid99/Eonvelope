@@ -59,6 +59,8 @@ def test_get_auth_owner(daemonModel, owner_client, detail_url):
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
     assert "web/daemon/daemon_edit.html" in [t.name for t in response.templates]
+    assert "daemon" in response.context
+    assert "form" in response.context
     assert str(daemonModel.uuid) in response.content.decode()
 
 

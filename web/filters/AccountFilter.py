@@ -94,9 +94,7 @@ class AccountFilter(django_filters.FilterSet):
         Returns:
             The filtered queryset.
         """
-        if value:
-            return queryset.filter(
-                models.Q(mail_address__icontains=value)
-                | models.Q(mail_host__icontains=value)
-            ).distinct()
-        return queryset
+        return queryset.filter(
+            models.Q(mail_address__icontains=value)
+            | models.Q(mail_host__icontains=value)
+        ).distinct()

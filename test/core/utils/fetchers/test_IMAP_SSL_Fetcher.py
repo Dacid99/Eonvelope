@@ -54,15 +54,27 @@ def mock_IMAP4_SSL(mocker, faker):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "mail_host_port, timeout",
+    [
+        (123, 300),
+        (123, None),
+        (None, 300),
+        (None, None),
+    ],
+)
 def test_IMAPFetcher_connectToHost_success(
-    imap_ssl_mailboxModel, mock_logger, mock_IMAP4_SSL
+    imap_ssl_mailboxModel, mock_logger, mock_IMAP4_SSL, mail_host_port, timeout
 ):
+    imap_ssl_mailboxModel.account.mail_host_port = mail_host_port
+    imap_ssl_mailboxModel.account.timeout = timeout
+
     IMAP_SSL_Fetcher(imap_ssl_mailboxModel.account)
 
     kwargs = {"host": imap_ssl_mailboxModel.account.mail_host, "ssl_context": None}
-    if port := imap_ssl_mailboxModel.account.mail_host_port:
-        kwargs["port"] = port
-    if timeout := imap_ssl_mailboxModel.account.timeout:
+    if mail_host_port:
+        kwargs["port"] = mail_host_port
+    if timeout:
         kwargs["timeout"] = timeout
     mock_IMAP4_SSL.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()

@@ -54,6 +54,10 @@ class POP3_SSL_Fetcher(POP3Fetcher):
                 self._mailClient = poplib.POP3_SSL(
                     host=mail_host, port=mail_host_port, context=None
                 )
+            elif timeout:
+                self._mailClient = poplib.POP3_SSL(
+                    host=mail_host, timeout=timeout, context=None
+                )
             else:
                 self._mailClient = poplib.POP3_SSL(host=mail_host, context=None)
         except Exception as error:

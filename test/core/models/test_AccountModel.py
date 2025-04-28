@@ -29,6 +29,7 @@ from typing import TYPE_CHECKING
 import pytest
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
+from django.urls import reverse
 from model_bakery import baker
 
 import core.models.AccountModel
@@ -482,3 +483,35 @@ def test_AccountModel_update_mailboxes_get_fetcher_error(
     mock_fetcher.fetchMailboxes.assert_not_called()
     spy_MailboxModel_fromData.assert_not_called()
     mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+def test_AccountModel_get_absolute_url(accountModel):
+    """Tests :func:`core.models.AccountModel.AccountModel.get_absolute_url`."""
+    result = accountModel.get_absolute_url()
+
+    assert result == reverse(
+        f"web:{accountModel.BASENAME}-detail",
+        kwargs={"pk": accountModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_AccountModel_get_absolute_edit_url(accountModel):
+    """Tests :func:`core.models.AccountModel.AccountModel.get_absolute_edit_url`."""
+    result = accountModel.get_absolute_edit_url()
+
+    assert result == reverse(
+        f"web:{accountModel.BASENAME}-edit",
+        kwargs={"pk": accountModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_AccountModel_get_absolute_list_url(accountModel):
+    """Tests :func:`core.models.AccountModel.AccountModel.get_absolute_list_url`."""
+    result = accountModel.get_absolute_list_url()
+
+    assert result == reverse(
+        f"web:{accountModel.BASENAME}-filter-list",
+    )

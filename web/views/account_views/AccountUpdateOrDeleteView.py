@@ -44,6 +44,6 @@ class AccountUpdateOrDeleteView(LoginRequiredMixin, UpdateOrDeleteView):
     @override
     def get_queryset(self) -> QuerySet[AccountModel]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if self.request.user.is_authenticated:
-            return super().get_queryset().filter(user=self.request.user)
-        return super().get_queryset().none()
+        if not self.request.user.is_authenticated:
+            return super().get_queryset().none()
+        return super().get_queryset().filter(user=self.request.user)

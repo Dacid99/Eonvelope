@@ -26,6 +26,7 @@ import datetime
 
 import pytest
 from django.db import IntegrityError
+from django.urls import reverse
 from model_bakery import baker
 
 import core.models.AttachmentModel
@@ -265,3 +266,55 @@ def test_AttachmentModel_has_download(
     result = attachmentModel.has_download
 
     assert result == expected_has_download
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_type, expected_has_thumbnail",
+    [
+        ("", False),
+        ("oo4vuy0s9yn/qwytrhrfvb9", False),
+        ("image/something", True),
+        ("video/whatever", False),
+        ("application/pdf", False),
+    ],
+)
+def test_AttachmentModel_has_thumbnail(
+    attachmentModel, content_type, expected_has_thumbnail
+):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.has_thumbnail` in the two relevant cases."""
+    attachmentModel.content_type = content_type
+
+    result = attachmentModel.has_thumbnail
+
+    assert result == expected_has_thumbnail
+
+
+@pytest.mark.django_db
+def test_AttachmentModel_get_absolute_thumbnail_url(attachmentModel):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.get_absolute_thumbnail_url`."""
+    result = attachmentModel.get_absolute_thumbnail_url()
+
+    assert result == reverse(
+        f"api:v1:{attachmentModel.BASENAME}-download",
+        kwargs={"pk": attachmentModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_AttachmentModel_get_absolute_url(attachmentModel):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.get_absolute_url`."""
+    result = attachmentModel.get_absolute_url()
+
+    assert result == reverse(
+        f"web:{attachmentModel.BASENAME}-detail",
+        kwargs={"pk": attachmentModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_AttachmentModel_get_absolute_list_url(attachmentModel):
+    """Tests :func:`core.models.AttachmentModel.AttachmentModel.get_absolute_list_url`."""
+    result = attachmentModel.get_absolute_list_url()
+
+    assert result == reverse(f"web:{attachmentModel.BASENAME}-filter-list")

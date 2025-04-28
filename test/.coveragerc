@@ -16,9 +16,11 @@ format=total
 exclude_also =
     if TYPE_CHECKING
     if getattr\(self, "swagger_fake_view", False\):
+    @overload
 include_namespace_packages=True
 precision=2
 show_missing=True
+sort=Cover
 [html]
 directory = ../docs/build/html/pytest/cov
 show_contexts=True

@@ -18,9 +18,12 @@
 
 """Test file for the :mod:`Emailkasten.utils` module."""
 
-import pytest
+import os
 
-from Emailkasten.utils import get_config
+import pytest
+from django.http import HttpRequest
+
+from Emailkasten.utils import ToggleSignupAccountAdapter, get_config
 
 
 @pytest.fixture(autouse=True)
@@ -37,7 +40,7 @@ def mock_getattr(mocker):
     )
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def mock_constance_settings(monkeypatch):
     """Fixture replacing the constance settings."""
     monkeypatch.setattr(
@@ -46,7 +49,53 @@ def mock_constance_settings(monkeypatch):
     )
 
 
-def test_get_config_success(mock_logger, mock_getattr):
+@pytest.mark.parametrize(
+    "REGISTRATION_ENABLED, DEFAULT_REGISTRATION_ENABLED, expected_result",
+    [
+        ("1", "1", True),
+        ("0", "0", False),
+        ("1", "0", True),
+        ("0", "1", False),
+    ],
+)
+def test_ToggleSignUpAdapter_is_open_for_signup(
+    monkeypatch,
+    REGISTRATION_ENABLED,
+    DEFAULT_REGISTRATION_ENABLED,
+    expected_result,
+):
+    """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
+    os.environ["REGISTRATION_ENABLED"] = REGISTRATION_ENABLED
+    monkeypatch.setattr(
+        "Emailkasten.utils.DEFAULT_REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED
+    )
+
+    result = ToggleSignupAccountAdapter().is_open_for_signup(HttpRequest())
+
+    assert result is expected_result
+
+    os.environ.pop("REGISTRATION_ENABLED", None)
+
+
+@pytest.mark.parametrize(
+    "DEFAULT_REGISTRATION_ENABLED, expected_result",
+    [("1", True), ("0", False)],
+)
+def test_ToggleSignUpAdapter_is_open_for_signup_fallback(
+    monkeypatch, DEFAULT_REGISTRATION_ENABLED, expected_result
+):
+    """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is not set."""
+    os.environ.pop("REGISTRATION_ENABLED", None)
+    monkeypatch.setattr(
+        "Emailkasten.utils.DEFAULT_REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED
+    )
+
+    result = ToggleSignupAccountAdapter().is_open_for_signup(HttpRequest())
+
+    assert result is expected_result
+
+
+def test_get_config_success(mock_logger, mock_getattr, mock_constance_settings):
     """Tests getting a constance value in case of success."""
     config_value = get_config("TEST_CONFIG")
 
@@ -58,7 +107,9 @@ def test_get_config_success(mock_logger, mock_getattr):
     mock_logger.critical.assert_not_called()
 
 
-def test_get_config_workaround_success(mock_logger, mock_getattr):
+def test_get_config_workaround_success(
+    mock_logger, mock_getattr, mock_constance_settings
+):
     """Tests getting a constance value in case of success via the workaround."""
     mock_getattr.side_effect = Exception
 
@@ -72,7 +123,9 @@ def test_get_config_workaround_success(mock_logger, mock_getattr):
     mock_logger.error.assert_not_called()
 
 
-def test_get_config_workaround_failure(mock_logger, mock_getattr):
+def test_get_config_workaround_failure(
+    mock_logger, mock_getattr, mock_constance_settings
+):
     """Tests getting a constance value in case of failure."""
     mock_getattr.side_effect = ValueError("Constance value not found")
 

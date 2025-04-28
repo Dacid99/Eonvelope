@@ -28,6 +28,7 @@ import datetime
 
 import pytest
 from django.db import IntegrityError
+from django.urls import reverse
 from model_bakery import baker
 
 import core.models.EMailModel
@@ -264,7 +265,15 @@ def test_EMailModel_delete_emailModel_delete_error(
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("save_to_eml, expectedCall", [(True, 1), (False, 0)])
+@pytest.mark.parametrize(
+    "save_to_eml, save_to_html, expected_save_eml_to_storage_call, expected_save_html_to_storage_call",
+    [
+        (True, True, True, True),
+        (False, False, False, False),
+        (True, False, True, False),
+        (False, True, False, True),
+    ],
+)
 def test_EMailModel_save_with_data_success(
     emailModel,
     mock_message,
@@ -272,22 +281,29 @@ def test_EMailModel_save_with_data_success(
     mock_EMailModel_save_eml_to_storage,
     mock_EMailModel_save_html_to_storage,
     save_to_eml,
-    expectedCall,
+    save_to_html,
+    expected_save_eml_to_storage_call,
+    expected_save_html_to_storage_call,
 ):
     """Tests :func:`core.models.EMailModel.EMailModel.save`
     in case of success with data to be saved.
     """
     emailModel.mailbox.save_toEML = save_to_eml
+    emailModel.mailbox.save_toHTML = save_to_html
 
     emailModel.save(emailData=mock_message)
 
     spy_Model_save.assert_called_once_with(emailModel)
-    assert mock_EMailModel_save_eml_to_storage.call_count == expectedCall
-    if expectedCall:
+    if expected_save_eml_to_storage_call:
         mock_EMailModel_save_eml_to_storage.assert_called_with(emailModel, mock_message)
-    mock_EMailModel_save_html_to_storage.assert_called_once_with(
-        emailModel, mock_message
-    )
+    else:
+        mock_EMailModel_save_eml_to_storage.assert_not_called()
+    if expected_save_html_to_storage_call:
+        mock_EMailModel_save_html_to_storage.assert_called_with(
+            emailModel, mock_message
+        )
+    else:
+        mock_EMailModel_save_html_to_storage.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -535,7 +551,7 @@ def test_EMailModel_createFromEmailBytes_dberror(
     ],
 )
 def test_EMailModel_has_download(emailModel, eml_filepath, expected_has_download):
-    """Tests :func:`core.models.AttachmentModel.AttachmentModel.has_download` in the two relevant cases."""
+    """Tests :func:`core.models.EMailModel.EMailModel.has_download` in the two relevant cases."""
     emailModel.eml_filepath = eml_filepath
 
     result = emailModel.has_download
@@ -552,9 +568,40 @@ def test_EMailModel_has_download(emailModel, eml_filepath, expected_has_download
     ],
 )
 def test_EMailModel_has_thumbnail(emailModel, html_filepath, expected_has_thumbnail):
-    """Tests :func:`core.models.AttachmentModel.AttachmentModel.has_download` in the two relevant cases."""
+    """Tests :func:`core.models.EMailModel.EMailModel.has_download` in the two relevant cases."""
     emailModel.html_filepath = html_filepath
 
     result = emailModel.has_thumbnail
 
     assert result is expected_has_thumbnail
+
+
+@pytest.mark.django_db
+def test_EMailModel_get_absolute_thumbnail_url(emailModel):
+    """Tests :func:`core.models.EMailModel.EMailModel.get_absolute_thumbnail_url`."""
+    result = emailModel.get_absolute_thumbnail_url()
+
+    assert result == reverse(
+        f"api:v1:{emailModel.BASENAME}-download-html",
+        kwargs={"pk": emailModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_EMailModel_get_absolute_url(emailModel):
+    """Tests :func:`core.models.EMailModel.EMailModel.get_absolute_url`."""
+    result = emailModel.get_absolute_url()
+
+    assert result == reverse(
+        f"web:{emailModel.BASENAME}-detail", kwargs={"pk": emailModel.pk}
+    )
+
+
+@pytest.mark.django_db
+def test_EMailModel_get_absolute_list_url(emailModel):
+    """Tests :func:`core.models.EMailModel.EMailModel.get_absolute_list_url`."""
+    result = emailModel.get_absolute_list_url()
+
+    assert result == reverse(
+        f"web:{emailModel.BASENAME}-filter-list",
+    )

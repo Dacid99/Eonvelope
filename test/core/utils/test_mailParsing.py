@@ -34,8 +34,8 @@ from email.utils import format_datetime
 
 import pytest
 
-import core.constants
-from core.utils.mailParsing import is_X_Spam
+from core.utils import mailParsing
+from test.core.conftest import TEST_EMAIL_PARAMETERS
 
 
 @pytest.fixture(autouse=True)
@@ -117,25 +117,25 @@ def no_emailMessage():
     ],
 )
 def test_decodeHeader_success(header, expectedResult):
-    result = core.utils.mailParsing.decodeHeader(header)
+    result = mailParsing.decodeHeader(header)
 
     assert result == expectedResult
 
 
 def test_getHeader_single_success(emailMessage, fake_single_header):
-    result = core.utils.mailParsing.getHeader(emailMessage, fake_single_header[0])
+    result = mailParsing.getHeader(emailMessage, fake_single_header[0])
 
     assert result == fake_single_header[1]
 
 
 def test_getHeader_multi_success(emailMessage, fake_multi_header):
-    result = core.utils.mailParsing.getHeader(emailMessage, fake_multi_header[0])
+    result = mailParsing.getHeader(emailMessage, fake_multi_header[0])
 
     assert result == ", ".join(fake_multi_header[1])
 
 
 def test_getHeader_multi_joinparam_success(emailMessage, fake_multi_header):
-    result = core.utils.mailParsing.getHeader(
+    result = mailParsing.getHeader(
         emailMessage, fake_multi_header[0], joiningString="test"
     )
 
@@ -143,14 +143,14 @@ def test_getHeader_multi_joinparam_success(emailMessage, fake_multi_header):
 
 
 def test_getHeader_fallback(empty_emailMessage, fake_single_header):
-    result = core.utils.mailParsing.getHeader(empty_emailMessage, fake_single_header[0])
+    result = mailParsing.getHeader(empty_emailMessage, fake_single_header[0])
 
     assert result == ""
 
 
 def test_getHeader_failure(no_emailMessage, fake_single_header):
     with pytest.raises(AttributeError):
-        core.utils.mailParsing.getHeader(no_emailMessage, fake_single_header[0])
+        mailParsing.getHeader(no_emailMessage, fake_single_header[0])
 
 
 def test_parseDatetimeHeader_success(faker, mock_logger):
@@ -158,7 +158,7 @@ def test_parseDatetimeHeader_success(faker, mock_logger):
         faker.date_time(tzinfo=zoneinfo.ZoneInfo(faker.timezone()))
     )
 
-    result = core.utils.mailParsing.parseDatetimeHeader(fake_date_headervalue)
+    result = mailParsing.parseDatetimeHeader(fake_date_headervalue)
 
     mock_logger.warning.assert_not_called()
     assert isinstance(result, datetime)
@@ -170,7 +170,7 @@ def test_parseDatetimeHeader_fallback(mocker, faker, mock_logger):
         "django.utils.timezone.now", autospec=True, return_value=faker.date_time()
     )
 
-    result = core.utils.mailParsing.parseDatetimeHeader("no datetime header")
+    result = mailParsing.parseDatetimeHeader("no datetime header")
 
     mock_logger.warning.assert_called()
     mock_timezone_now.assert_called()
@@ -183,7 +183,7 @@ def test_parseDatetimeHeader_no_header(mocker, faker, mock_logger):
         "django.utils.timezone.now", autospec=True, return_value=faker.date_time()
     )
 
-    result = core.utils.mailParsing.parseDatetimeHeader(None)
+    result = mailParsing.parseDatetimeHeader(None)
 
     mock_logger.warning.assert_called()
     mock_timezone_now.assert_called()
@@ -202,11 +202,9 @@ def test_parseDatetimeHeader_no_header(mocker, faker, mock_logger):
     ],
 )
 def test_parseCorrespondentHeader_success(mocker, mock_logger, header, expectedResult):
-    spy_validate_email = mocker.spy(
-        core.utils.mailParsing.email_validator, "validate_email"
-    )
+    spy_validate_email = mocker.spy(mailParsing.email_validator, "validate_email")
 
-    result = core.utils.mailParsing.parseCorrespondentHeader(header)
+    result = mailParsing.parseCorrespondentHeader(header)
 
     assert result == expectedResult
     mock_logger.warning.assert_not_called()
@@ -214,11 +212,9 @@ def test_parseCorrespondentHeader_success(mocker, mock_logger, header, expectedR
 
 
 def test_parseCorrespondentHeader_no_address(mocker, mock_logger):
-    spy_validate_email = mocker.spy(
-        core.utils.mailParsing.email_validator, "validate_email"
-    )
+    spy_validate_email = mocker.spy(mailParsing.email_validator, "validate_email")
 
-    result = core.utils.mailParsing.parseCorrespondentHeader("no address <>")
+    result = mailParsing.parseCorrespondentHeader("no address <>")
 
     assert result == ("no address", "no address <>")
     mock_logger.warning.assert_called()
@@ -235,11 +231,9 @@ def test_parseCorrespondentHeader_no_address(mocker, mock_logger):
 def test_parseCorrespondentHeader_invalid_address(
     mocker, mock_logger, invalidHeader, expectedResult
 ):
-    spy_validate_email = mocker.spy(
-        core.utils.mailParsing.email_validator, "validate_email"
-    )
+    spy_validate_email = mocker.spy(mailParsing.email_validator, "validate_email")
 
-    result = core.utils.mailParsing.parseCorrespondentHeader(invalidHeader)
+    result = mailParsing.parseCorrespondentHeader(invalidHeader)
 
     assert result == expectedResult
     mock_logger.warning.assert_called()
@@ -247,11 +241,9 @@ def test_parseCorrespondentHeader_invalid_address(
 
 
 def test_parseCorrespondentHeader_no_header(mocker, mock_logger):
-    spy_validate_email = mocker.spy(
-        core.utils.mailParsing.email_validator, "validate_email"
-    )
+    spy_validate_email = mocker.spy(mailParsing.email_validator, "validate_email")
 
-    result = core.utils.mailParsing.parseCorrespondentHeader(None)
+    result = mailParsing.parseCorrespondentHeader(None)
 
     assert result == ("", None)
     mock_logger.warning.assert_called()
@@ -285,9 +277,31 @@ def test_parseCorrespondentHeader_no_header(mocker, mock_logger):
     ],
 )
 def test_parseMailboxName_success(nameBytes, expectedName):
-    result = core.utils.mailParsing.parseMailboxName(nameBytes)
+    result = mailParsing.parseMailboxName(nameBytes)
 
     assert result == expectedName
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "test_email, message_id, subject, attachments_count, correspondents_count, emailcorrespondents_count, x_spam, plain_bodytext, html_bodytext, header_count",
+    TEST_EMAIL_PARAMETERS,
+)
+def test_eml2html(
+    test_email,
+    message_id,
+    subject,
+    attachments_count,
+    correspondents_count,
+    emailcorrespondents_count,
+    x_spam,
+    plain_bodytext,
+    html_bodytext,
+    header_count,
+):
+    result = mailParsing.eml2html(test_email)
+
+    assert result
 
 
 @pytest.mark.parametrize(
@@ -305,6 +319,6 @@ def test_parseMailboxName_success(nameBytes, expectedName):
 )
 def test_is_X_Spam(x_spam, expectedResult):
     """Tests :func:`core.models.EMailModel.EMailModel.isSpam`."""
-    result = is_X_Spam(x_spam)
+    result = mailParsing.is_X_Spam(x_spam)
 
     assert result is expectedResult

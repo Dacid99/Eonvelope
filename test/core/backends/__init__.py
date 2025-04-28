@@ -16,20 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`DatabaseStatsView` apiview."""
-
-from rest_framework import serializers
-
-
-class DatabaseStatsSerializer(serializers.Serializer[dict[str, int]]):
-    """The serializer for stats about the database.
-
-    Includes count values for emails, correspondents, attachments and accounts.
-    """
-
-    email_count = serializers.IntegerField()
-    correspondent_count = serializers.IntegerField()
-    attachment_count = serializers.IntegerField()
-    account_count = serializers.IntegerField()
-    mailbox_count = serializers.IntegerField()
-    mailinglist_count = serializers.IntegerField()
+"""Test package for the :mod:`core.backends` package of Emailkasten project."""

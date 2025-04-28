@@ -84,9 +84,9 @@ class MailboxViewSet(
         """
         if getattr(self, "swagger_fake_view", False):
             return MailboxModel.objects.none()
-        if self.request.user.is_authenticated:
-            return MailboxModel.objects.filter(account__user=self.request.user)
-        return MailboxModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return MailboxModel.objects.none()
+        return MailboxModel.objects.filter(account__user=self.request.user)
 
     URL_PATH_ADD_DAEMON = "add-daemon"
     URL_NAME_ADD_DAEMON = "add-daemon"

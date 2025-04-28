@@ -189,7 +189,7 @@ def eml2html(emailBytes: bytes) -> str:
     Args:
         emailBytes: The data of the mail to be converted.
     """
-    emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)  # type: ignore[arg-type]  # email stubs are not up-to-date for EmailMessage, will be fixed by mypy 1.16.0
+    emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)  # type: ignore[arg-type]  # email stubs are not up-to-date for EmailMessage, will be fixed by mypy 1.16.0: https://github.com/python/typeshed/issues/13593
     ignorePlainText = False  # ignores too broadly!
 
     htmlWrapper = get_config("HTML_WRAPPER")

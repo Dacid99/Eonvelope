@@ -46,6 +46,8 @@ def test_get_auth_other(other_client, list_url):
     assert "web/account/account_filter_list.html" in [
         t.name for t in response.templates
     ]
+    assert "page_obj" in response.context
+    assert "query" in response.context
 
 
 @pytest.mark.django_db
@@ -58,3 +60,5 @@ def test_get_auth_owner(owner_client, list_url):
     assert "web/account/account_filter_list.html" in [
         t.name for t in response.templates
     ]
+    assert "page_obj" in response.context
+    assert "query" in response.context

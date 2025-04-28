@@ -89,13 +89,11 @@ class EMailFilter(django_filters.FilterSet):
         Returns:
             The filtered queryset.
         """
-        if value:
-            return queryset.filter(
-                Q(message_id__icontains=value)
-                | Q(email_subject__icontains=value)
-                | Q(plain_bodytext__icontains=value)
-                | Q(html_bodytext__icontains=value)
-                | Q(headers__has_key=value)
-                | Q(correspondents__email_address=value)
-            ).distinct()
-        return queryset
+        return queryset.filter(
+            Q(message_id__icontains=value)
+            | Q(email_subject__icontains=value)
+            | Q(plain_bodytext__icontains=value)
+            | Q(html_bodytext__icontains=value)
+            | Q(headers__has_key=value)
+            | Q(correspondents__email_address=value)
+        ).distinct()

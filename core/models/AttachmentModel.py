@@ -147,14 +147,8 @@ class AttachmentModel(
                     "Successfully removed the attachment file from storage.",
                     exc_info=True,
                 )
-            except FileNotFoundError:
-                logger.exception("%s was not found!", self.file_path)
-            except OSError:
-                logger.exception("An OS error occured removing %s!", self.file_path)
             except Exception:
-                logger.exception(
-                    "An unexpected error occured removing %s!", self.file_path
-                )
+                logger.exception("An exception occured removing %s!", self.file_path)
 
         return delete_return
 
@@ -180,19 +174,18 @@ class AttachmentModel(
 
         logger.debug("Storing %s ...", self)
 
-        dirPath = StorageModel.getSubdirectory(self.email.message_id)
-        preliminary_file_path = os.path.join(dirPath, self.file_name)
-
         payload = attachmentData.get_payload(decode=True)
-        if isinstance(payload, bytes):
-            file_path = writeAttachment(preliminary_file_path, attachmentData)
-        else:
+        if not isinstance(payload, bytes):
             logger.error(
                 "UNEXPECTED: attachment payload was of type %s.", type(payload)
             )
             logger.error("Failed to store %s!", self)
             return
-        if file_path := writeAttachment(preliminary_file_path, attachmentData):
+
+        dirPath = StorageModel.getSubdirectory(self.email.message_id)
+        preliminary_file_path = os.path.join(dirPath, self.file_name)
+        file_path = writeAttachment(preliminary_file_path, attachmentData)
+        if file_path:
             self.file_path = file_path
             self.save(update_fields=["file_path"])
             logger.debug("Successfully stored attachment.")

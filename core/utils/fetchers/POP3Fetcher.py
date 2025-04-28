@@ -89,6 +89,8 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
                 )
             elif mail_host_port:
                 self._mailClient = poplib.POP3(host=mail_host, port=mail_host_port)
+            elif timeout:
+                self._mailClient = poplib.POP3(host=mail_host, timeout=timeout)
             else:
                 self._mailClient = poplib.POP3(host=mail_host)
         except Exception as error:

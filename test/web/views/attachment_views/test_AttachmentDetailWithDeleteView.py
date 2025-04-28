@@ -68,6 +68,7 @@ def test_get_auth_owner(attachmentModel, owner_client, detail_url):
     assert "web/attachment/attachment_detail.html" in [
         t.name for t in response.templates
     ]
+    assert "attachment" in response.context
     assert attachmentModel.file_name in response.content.decode()
 
 

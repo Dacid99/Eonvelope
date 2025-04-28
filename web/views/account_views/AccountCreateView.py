@@ -21,7 +21,6 @@
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.query import QuerySet
 from django.http import Http404
 from django.views.generic import CreateView
 
@@ -36,7 +35,6 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
     model = AccountModel
     form_class = BaseAccountForm
     template_name = "web/account/account_create.html"
-    context_object_name = "account"
     URL_NAME = AccountModel.BASENAME + "-create"
 
     @override
@@ -44,15 +42,8 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
         self, form_class: type[BaseAccountForm] | None = None
     ) -> BaseAccountForm:
         """Extended method to add the requesting user to the created account."""
-        if self.request.user.is_authenticated:
-            form = super().get_form(form_class)
-            form.instance.user = self.request.user
-            return form  # type: ignore[no-any-return]  # super().get_form returns the form_class arg or classvar, which are both BaseAccountForm
-        raise Http404
-
-    @override
-    def get_queryset(self) -> QuerySet[AccountModel]:
-        """Restricts the queryset to objects owned by the requesting user."""
-        if self.request.user.is_authenticated:
-            return super().get_queryset().filter(user=self.request.user)
-        return super().get_queryset().none()
+        if not self.request.user.is_authenticated:
+            raise Http404
+        form = super().get_form(form_class)
+        form.instance.user = self.request.user
+        return form  # type: ignore[no-any-return]  # super().get_form returns the form_class arg or classvar, which are both BaseAccountForm

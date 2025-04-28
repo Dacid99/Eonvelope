@@ -76,6 +76,19 @@ def mock_filesystem() -> Generator[FakeFilesystem, None, None]:
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
+    "is_current, expected_status_str", [(True, "Current"), (False, "Archived")]
+)
+def test___str__(faker, is_current, expected_status_str):
+    fake_filepath = faker.file_path()
+
+    result = str(StorageModel(current=is_current, path=fake_filepath))
+
+    assert expected_status_str in result
+    assert fake_filepath in result
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
     "STORAGE_PATH",
     [
         ("empty-storage"),

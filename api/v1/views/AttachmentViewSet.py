@@ -75,11 +75,11 @@ class AttachmentViewSet(
         """
         if getattr(self, "swagger_fake_view", False):
             return AttachmentModel.objects.none()
-        if self.request.user.is_authenticated:
-            return AttachmentModel.objects.filter(
-                email__mailbox__account__user=self.request.user
-            )
-        return AttachmentModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return AttachmentModel.objects.none()
+        return AttachmentModel.objects.filter(
+            email__mailbox__account__user=self.request.user
+        )
 
     URL_PATH_DOWNLOAD = "download"
     URL_NAME_DOWNLOAD = "download"

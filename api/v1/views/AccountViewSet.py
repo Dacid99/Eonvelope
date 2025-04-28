@@ -75,9 +75,9 @@ class AccountViewSet(viewsets.ModelViewSet[AccountModel], ToggleFavoriteMixin):
         """
         if getattr(self, "swagger_fake_view", False):
             return AccountModel.objects.none()
-        if self.request.user.is_authenticated:
-            return AccountModel.objects.filter(user=self.request.user)
-        return AccountModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return AccountModel.objects.none()
+        return AccountModel.objects.filter(user=self.request.user)
 
     @override
     def perform_create(self, serializer: BaseSerializer[AccountModel]) -> None:

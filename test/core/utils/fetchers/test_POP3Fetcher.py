@@ -171,13 +171,27 @@ def test_POP3Fetcher___init___badResponse(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_connectToHost_success(pop3_mailboxModel, mock_logger, mock_POP3):
+@pytest.mark.parametrize(
+    "mail_host_port, timeout",
+    [
+        (123, 300),
+        (123, None),
+        (None, 300),
+        (None, None),
+    ],
+)
+def test_POP3Fetcher_connectToHost_success(
+    pop3_mailboxModel, mock_logger, mock_POP3, mail_host_port, timeout
+):
+    pop3_mailboxModel.account.mail_host_port = mail_host_port
+    pop3_mailboxModel.account.timeout = timeout
+
     POP3Fetcher(pop3_mailboxModel.account)
 
     kwargs = {"host": pop3_mailboxModel.account.mail_host}
-    if port := pop3_mailboxModel.account.mail_host_port:
-        kwargs["port"] = port
-    if timeout := pop3_mailboxModel.account.timeout:
+    if mail_host_port:
+        kwargs["port"] = mail_host_port
+    if timeout:
         kwargs["timeout"] = timeout
     mock_POP3.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()
@@ -465,6 +479,16 @@ def test_POP3Fetcher___str__(pop3_mailboxModel):
 
 @pytest.mark.django_db
 def test_POP3Fetcher_context_manager(pop3_mailboxModel, mock_logger, mock_POP3):
+    with POP3Fetcher(pop3_mailboxModel.account):
+        pass
+    mock_POP3.return_value.quit.assert_called_once()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_POP3Fetcher_context_manager_exception(
+    pop3_mailboxModel, mock_logger, mock_POP3
+):
     with pytest.raises(AssertionError), POP3Fetcher(pop3_mailboxModel.account):
         raise AssertionError
 

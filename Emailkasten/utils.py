@@ -37,7 +37,9 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
-class ToggleSignupAccountAdapter(DefaultAccountAdapter):
+class ToggleSignupAccountAdapter(
+    DefaultAccountAdapter
+):  # pylint: disable=abstract-method  # phone methods are (currently) not used
     """AccountAdapter class to allow toggling of signups for django-allauth."""
 
     @override

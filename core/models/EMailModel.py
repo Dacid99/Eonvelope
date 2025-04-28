@@ -216,14 +216,8 @@ class EMailModel(
                 logger.debug(
                     "Successfully removed the eml file from storage.", exc_info=True
                 )
-            except FileNotFoundError:
-                logger.exception("%s was not found!", self.eml_filepath)
-            except OSError:
-                logger.exception("An OS error occured removing %s!", self.eml_filepath)
             except Exception:
-                logger.exception(
-                    "An unexpected error occured removing %s!", self.eml_filepath
-                )
+                logger.exception("An exception occured removing %s!", self.eml_filepath)
 
         if self.html_filepath:
             logger.debug("Removing %s from storage ...", self)
@@ -233,13 +227,9 @@ class EMailModel(
                     "Successfully removed the html file from storage.",
                     exc_info=True,
                 )
-            except FileNotFoundError:
-                logger.exception("%s was not found!", self.html_filepath)
-            except OSError:
-                logger.exception("An OS error occured removing %s!", self.html_filepath)
             except Exception:
                 logger.exception(
-                    "An unexpected error occured removing %s!", self.html_filepath
+                    "An exception occured removing %s!", self.html_filepath
                 )
 
         return delete_return
@@ -269,7 +259,8 @@ class EMailModel(
         dirPath = StorageModel.getSubdirectory(self.message_id)
         clean_message_id = clean_filename(self.message_id)
         preliminary_file_path = os.path.join(dirPath, clean_message_id + ".eml")
-        if file_path := writeMessageToEML(preliminary_file_path, emailData):
+        file_path = writeMessageToEML(preliminary_file_path, emailData)
+        if file_path:
             self.eml_filepath = file_path
             self.save(update_fields=["eml_filepath"])
             logger.debug("Successfully stored email as eml.")
@@ -304,7 +295,8 @@ class EMailModel(
         dirPath = StorageModel.getSubdirectory(self.message_id)
         clean_message_id = clean_filename(self.message_id)
         preliminary_file_path = os.path.join(dirPath, clean_message_id + ".html")
-        if file_path := convertAndStoreHtmlMessage(preliminary_file_path, emailData):
+        file_path = convertAndStoreHtmlMessage(preliminary_file_path, emailData)
+        if file_path:
             self.html_filepath = file_path
             self.save(update_fields=["html_filepath"])
             logger.debug("Successfully converted and stored email.")
@@ -360,7 +352,7 @@ class EMailModel(
                 if the mail already exists in the db or
                 if the mail is spam and is supposed to be thrown out.
         """
-        emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)  # type: ignore[arg-type]  # email stubs are not up-to-date for EmailMessage, will be fixed by mypy 1.16.0
+        emailMessage = email.message_from_bytes(emailBytes, policy=policy.default)  # type: ignore[arg-type]  # email stubs are not up-to-date for EmailMessage, will be fixed by mypy 1.16.0: https://github.com/python/typeshed/issues/13593
 
         message_id = (
             getHeader(

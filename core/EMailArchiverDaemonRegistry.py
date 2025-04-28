@@ -21,13 +21,10 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, ClassVar
+from typing import ClassVar
 
 from .EMailArchiverDaemon import EMailArchiverDaemon
-
-
-if TYPE_CHECKING:
-    from .models.DaemonModel import DaemonModel
+from .models.DaemonModel import DaemonModel
 
 
 class EMailArchiverDaemonRegistry:

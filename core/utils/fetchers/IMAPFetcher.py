@@ -128,6 +128,8 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
                 )
             elif mail_host_port:
                 self._mailClient = imaplib.IMAP4(host=mail_host, port=mail_host_port)
+            elif timeout:
+                self._mailClient = imaplib.IMAP4(host=mail_host, timeout=timeout)
             else:
                 self._mailClient = imaplib.IMAP4(host=mail_host)
         except Exception as error:

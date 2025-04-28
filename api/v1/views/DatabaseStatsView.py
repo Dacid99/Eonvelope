@@ -51,39 +51,36 @@ class DatabaseStatsView(APIView):
         Returns:
             A dictionary with the count of the table entries.
         """
-        if request.user.is_authenticated:
-            email_count = EMailModel.objects.filter(
-                mailbox__account__user=request.user
-            ).count()
-            correspondent_count = (
-                CorrespondentModel.objects.filter(
-                    emails__mailbox__account__user=request.user
-                )
-                .distinct()
-                .count()
+        if not request.user.is_authenticated:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        email_count = EMailModel.objects.filter(
+            mailbox__account__user=request.user
+        ).count()
+        correspondent_count = (
+            CorrespondentModel.objects.filter(
+                emails__mailbox__account__user=request.user
             )
-            attachment_count = AttachmentModel.objects.filter(
-                email__mailbox__account__user=request.user
-            ).count()
-            account_count = AccountModel.objects.filter(user=request.user).count()
-            mailbox_count = MailboxModel.objects.filter(
-                account__user=request.user
-            ).count()
-            mailinglist_count = (
-                MailingListModel.objects.filter(
-                    emails__mailbox__account__user=request.user
-                )
-                .distinct()
-                .count()
-            )
-            return Response(
-                {
-                    "email_count": email_count,
-                    "correspondent_count": correspondent_count,
-                    "attachment_count": attachment_count,
-                    "account_count": account_count,
-                    "mailbox_count": mailbox_count,
-                    "mailinglist_count": mailinglist_count,
-                }
-            )
-        return Response(status=status.HTTP_404_NOT_FOUND)
+            .distinct()
+            .count()
+        )
+        attachment_count = AttachmentModel.objects.filter(
+            email__mailbox__account__user=request.user
+        ).count()
+        account_count = AccountModel.objects.filter(user=request.user).count()
+        mailbox_count = MailboxModel.objects.filter(account__user=request.user).count()
+        mailinglist_count = (
+            MailingListModel.objects.filter(emails__mailbox__account__user=request.user)
+            .distinct()
+            .count()
+        )
+        return Response(
+            {
+                "email_count": email_count,
+                "correspondent_count": correspondent_count,
+                "attachment_count": attachment_count,
+                "account_count": account_count,
+                "mailbox_count": mailbox_count,
+                "mailinglist_count": mailinglist_count,
+            }
+        )

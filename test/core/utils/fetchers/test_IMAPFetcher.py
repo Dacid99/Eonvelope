@@ -206,13 +206,27 @@ def test_IMAPFetcher___init___loginBadResponse(
 
 
 @pytest.mark.django_db
-def test_IMAPFetcher_connectToHost_success(imap_mailboxModel, mock_logger, mock_IMAP4):
+@pytest.mark.parametrize(
+    "mail_host_port, timeout",
+    [
+        (123, 300),
+        (123, None),
+        (None, 300),
+        (None, None),
+    ],
+)
+def test_IMAPFetcher_connectToHost_success(
+    imap_mailboxModel, mock_logger, mock_IMAP4, mail_host_port, timeout
+):
+    imap_mailboxModel.account.mail_host_port = mail_host_port
+    imap_mailboxModel.account.timeout = timeout
+
     IMAPFetcher(imap_mailboxModel.account)
 
     kwargs = {"host": imap_mailboxModel.account.mail_host}
-    if port := imap_mailboxModel.account.mail_host_port:
-        kwargs["port"] = port
-    if timeout := imap_mailboxModel.account.timeout:
+    if mail_host_port:
+        kwargs["port"] = mail_host_port
+    if timeout:
         kwargs["timeout"] = timeout
     mock_IMAP4.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()
@@ -639,6 +653,17 @@ def test_IMAPFetcher___str__(imap_mailboxModel):
 
 @pytest.mark.django_db
 def test_IMAPFetcher_context_manager(imap_mailboxModel, mock_logger, mock_IMAP4):
+    with IMAPFetcher(imap_mailboxModel.account):
+        pass
+
+    mock_IMAP4.return_value.logout.assert_called_once()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_IMAPFetcher_context_manager_exception(
+    imap_mailboxModel, mock_logger, mock_IMAP4
+):
     with pytest.raises(AssertionError), IMAPFetcher(imap_mailboxModel.account):
         raise AssertionError
 

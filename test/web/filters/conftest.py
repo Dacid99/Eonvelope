@@ -75,6 +75,7 @@ TEXT_TEST_ITEMS = ["A1bCD", "ZyX9D", "ZbC8W"]
 TEXT_TEST_PARAMETERS = [
     ("__icontains", TEXT_TEST_ITEMS[0][2:4].lower(), [0, 2]),
     ("__icontains", "op", []),
+    ("__icontains", None, [0, 1, 2]),
 ]
 
 DATETIME_TEST_ITEMS = [

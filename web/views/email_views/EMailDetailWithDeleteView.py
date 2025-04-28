@@ -42,6 +42,6 @@ class EMailDetailWithDeleteView(LoginRequiredMixin, DetailView, DeletionMixin):
     @override
     def get_queryset(self) -> QuerySet[EMailModel]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if self.request.user.is_authenticated:
-            return EMailModel.objects.filter(mailbox__account__user=self.request.user)
-        return EMailModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return EMailModel.objects.none()
+        return EMailModel.objects.filter(mailbox__account__user=self.request.user)

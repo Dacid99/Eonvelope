@@ -68,6 +68,7 @@ def test_get_auth_owner(mailingListModel, owner_client, detail_url):
     assert "web/mailinglist/mailinglist_detail.html" in [
         t.name for t in response.templates
     ]
+    assert "mailinglist" in response.context
     assert mailingListModel.list_id in response.content.decode()
 
 

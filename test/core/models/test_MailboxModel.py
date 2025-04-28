@@ -31,6 +31,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.db import IntegrityError
+from django.urls import reverse
 from model_bakery import baker
 
 from core.models.AccountModel import AccountModel
@@ -415,3 +416,35 @@ def test_MailboxModel_fromData(mocker):
 
     mock_parseMailboxName.assert_called_once_with("mailboxData")
     assert new_mailboxModel.name == "testname"
+
+
+@pytest.mark.django_db
+def test_MailboxModel_get_absolute_url(mailboxModel):
+    """Tests :func:`core.models.MailboxModel.MailboxModel.get_absolute_url`."""
+    result = mailboxModel.get_absolute_url()
+
+    assert result == reverse(
+        f"web:{mailboxModel.BASENAME}-detail",
+        kwargs={"pk": mailboxModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_MailboxModel_get_absolute_edit_url(mailboxModel):
+    """Tests :func:`core.models.MailboxModel.MailboxModel.get_absolute_edit_url`."""
+    result = mailboxModel.get_absolute_edit_url()
+
+    assert result == reverse(
+        f"web:{mailboxModel.BASENAME}-edit",
+        kwargs={"pk": mailboxModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_MailboxModel_get_absolute_list_url(mailboxModel):
+    """Tests :func:`core.models.MailboxModel.MailboxModel.get_absolute_list_url`."""
+    result = mailboxModel.get_absolute_list_url()
+
+    assert result == reverse(
+        f"web:{mailboxModel.BASENAME}-filter-list",
+    )

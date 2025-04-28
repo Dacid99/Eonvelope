@@ -34,6 +34,9 @@ def test_(Classname_methodname)|(functionname)_case(args in order from furthest 
     block with
     post-test assertions
     confirming the behaviour of the tested function
+
+    block with
+    cleanup
 """
 
 from __future__ import annotations

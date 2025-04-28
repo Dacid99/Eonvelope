@@ -19,6 +19,7 @@
 """Test for :mod:`core.EMailArchiverDaemon`."""
 
 import logging
+import time
 
 import pytest
 from django.db.models.signals import post_save

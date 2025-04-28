@@ -28,6 +28,7 @@ from uuid import UUID
 
 import pytest
 from django.db import IntegrityError
+from django.urls import reverse
 from model_bakery import baker
 
 import Emailkasten.constants
@@ -106,4 +107,53 @@ def test_DaemonModel_save_logfileCreation(daemonModel):
     assert daemonModel.log_filepath == os.path.join(
         Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
         f"daemon_{daemonModel.uuid}.log",
+    )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "log_filepath, expected_has_download",
+    [
+        (None, False),
+        ("some/log/file/path", True),
+    ],
+)
+def test_DaemonModel_has_download(daemonModel, log_filepath, expected_has_download):
+    """Tests :func:`core.models.DaemonModel.DaemonModel.has_download` in the two relevant cases."""
+    daemonModel.log_filepath = log_filepath
+
+    result = daemonModel.has_download
+
+    assert result == expected_has_download
+
+
+@pytest.mark.django_db
+def test_DaemonModel_get_absolute_url(daemonModel):
+    """Tests :func:`core.models.DaemonModel.DaemonModel.get_absolute_url`."""
+    result = daemonModel.get_absolute_url()
+
+    assert result == reverse(
+        f"web:{daemonModel.BASENAME}-detail",
+        kwargs={"pk": daemonModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_DaemonModel_get_absolute_edit_url(daemonModel):
+    """Tests :func:`core.models.DaemonModel.DaemonModel.get_absolute_edit_url`."""
+    result = daemonModel.get_absolute_edit_url()
+
+    assert result == reverse(
+        f"web:{daemonModel.BASENAME}-edit",
+        kwargs={"pk": daemonModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_DaemonModel_get_absolute_list_url(daemonModel):
+    """Tests :func:`core.models.DaemonModel.DaemonModel.get_absolute_list_url`."""
+    result = daemonModel.get_absolute_list_url()
+
+    assert result == reverse(
+        f"web:{daemonModel.BASENAME}-filter-list",
     )

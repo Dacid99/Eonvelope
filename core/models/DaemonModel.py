@@ -23,7 +23,7 @@ from __future__ import annotations
 import logging
 import os
 import uuid
-from typing import TYPE_CHECKING, Any, Final, Literal, override
+from typing import TYPE_CHECKING, Any, Final, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.core.exceptions import ValidationError
@@ -178,9 +178,9 @@ class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
 
     @override
     @property
-    def has_download(self) -> Literal[True]:
+    def has_download(self) -> bool:
         """Daemon always has a logfile."""
-        return True
+        return self.log_filepath is not None
 
     @override
     def get_absolute_download_url(self) -> str:

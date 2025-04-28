@@ -72,6 +72,7 @@ def test_get_auth_owner(correspondentModel, owner_client, detail_url):
     assert "web/correspondent/correspondent_detail.html" in [
         t.name for t in response.templates
     ]
+    assert "correspondent" in response.context
     assert correspondentModel.email_address in response.content.decode()
 
 

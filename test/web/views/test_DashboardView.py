@@ -42,6 +42,12 @@ def test_get_auth_other(other_client, list_url):
     response = other_client.get(list_url(DashboardView))
 
     assert response.status_code == status.HTTP_200_OK
+    assert "web/dashboard.html" in [t.name for t in response.templates]
+    assert "latest_emails" in response.context
+    assert "emails_count" in response.context
+    assert "mailinglists_count" in response.context
+    assert "attachments_count" in response.context
+    assert "correspondents_count" in response.context
 
 
 @pytest.mark.django_db
@@ -50,3 +56,9 @@ def test_get_auth_owner(owner_client, list_url):
     response = owner_client.get(list_url(DashboardView))
 
     assert response.status_code == status.HTTP_200_OK
+    assert "web/dashboard.html" in [t.name for t in response.templates]
+    assert "latest_emails" in response.context
+    assert "emails_count" in response.context
+    assert "mailinglists_count" in response.context
+    assert "attachments_count" in response.context
+    assert "correspondents_count" in response.context

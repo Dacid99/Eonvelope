@@ -97,13 +97,11 @@ class CorrespondentEMailFilter(django_filters.FilterSet):
         Returns:
             The filtered queryset.
         """
-        if value:
-            return queryset.filter(
-                Q(email__message_id__icontains=value)
-                | Q(email__email_subject__icontains=value)
-                | Q(email__plain_bodytext__icontains=value)
-                | Q(email__html_bodytext__icontains=value)
-                | Q(email__headers__has_key=value)
-                | Q(email__correspondents__email_address=value)
-            ).distinct()
-        return queryset
+        return queryset.filter(
+            Q(email__message_id__icontains=value)
+            | Q(email__email_subject__icontains=value)
+            | Q(email__plain_bodytext__icontains=value)
+            | Q(email__html_bodytext__icontains=value)
+            | Q(email__headers__has_key=value)
+            | Q(email__correspondents__email_address__icontains=value)
+        ).distinct()

@@ -51,15 +51,27 @@ def mock_POP3_SSL(mocker, faker):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "mail_host_port, timeout",
+    [
+        (123, 300),
+        (123, None),
+        (None, 300),
+        (None, None),
+    ],
+)
 def test_POP3Fetcher_connectToHost_success(
-    pop3_ssl_mailboxModel, mock_logger, mock_POP3_SSL
+    pop3_ssl_mailboxModel, mock_logger, mock_POP3_SSL, mail_host_port, timeout
 ):
+    pop3_ssl_mailboxModel.account.mail_host_port = mail_host_port
+    pop3_ssl_mailboxModel.account.timeout = timeout
+
     POP3_SSL_Fetcher(pop3_ssl_mailboxModel.account)
 
     kwargs = {"host": pop3_ssl_mailboxModel.account.mail_host, "context": None}
-    if port := pop3_ssl_mailboxModel.account.mail_host_port:
-        kwargs["port"] = port
-    if timeout := pop3_ssl_mailboxModel.account.timeout:
+    if mail_host_port:
+        kwargs["port"] = mail_host_port
+    if timeout:
         kwargs["timeout"] = timeout
     mock_POP3_SSL.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()

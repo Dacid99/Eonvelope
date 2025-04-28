@@ -42,8 +42,8 @@ class CorrespondentFilterView(LoginRequiredMixin, FilterPageView):
     @override
     def get_queryset(self) -> QuerySet[CorrespondentModel]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if self.request.user.is_authenticated:
-            return CorrespondentModel.objects.filter(
-                emails__mailbox__account__user=self.request.user
-            ).distinct()
-        return CorrespondentModel.objects.none()
+        if not self.request.user.is_authenticated:
+            return CorrespondentModel.objects.none()
+        return CorrespondentModel.objects.filter(
+            emails__mailbox__account__user=self.request.user
+        ).distinct()

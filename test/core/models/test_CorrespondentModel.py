@@ -29,6 +29,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.db import IntegrityError
+from django.urls import reverse
 from model_bakery import baker
 
 from core.models.CorrespondentModel import CorrespondentModel
@@ -139,3 +140,35 @@ def test_CorrespondentModel_fromHeader_no_address(
     assert result is None
     mock_parseCorrespondentHeader.assert_called_once_with("correspondentModel header")
     mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
+def test_CorrespondentModel_get_absolute_url(correspondentModel):
+    """Tests :func:`core.models.CorrespondentModel.CorrespondentModel.get_absolute_url`."""
+    result = correspondentModel.get_absolute_url()
+
+    assert result == reverse(
+        f"web:{correspondentModel.BASENAME}-detail",
+        kwargs={"pk": correspondentModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_CorrespondentModel_get_absolute_edit_url(correspondentModel):
+    """Tests :func:`core.models.CorrespondentModel.CorrespondentModel.get_absolute_edit_url`."""
+    result = correspondentModel.get_absolute_edit_url()
+
+    assert result == reverse(
+        f"web:{correspondentModel.BASENAME}-edit",
+        kwargs={"pk": correspondentModel.pk},
+    )
+
+
+@pytest.mark.django_db
+def test_CorrespondentModel_get_absolute_list_url(correspondentModel):
+    """Tests :func:`core.models.CorrespondentModel.CorrespondentModel.get_absolute_list_url`."""
+    result = correspondentModel.get_absolute_list_url()
+
+    assert result == reverse(
+        f"web:{correspondentModel.BASENAME}-filter-list",
+    )

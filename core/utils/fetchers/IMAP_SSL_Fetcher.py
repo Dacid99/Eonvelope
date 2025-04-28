@@ -56,6 +56,10 @@ class IMAP_SSL_Fetcher(IMAPFetcher):
                 self._mailClient = imaplib.IMAP4_SSL(
                     host=mail_host, port=mail_host_port, ssl_context=None
                 )
+            elif timeout:
+                self._mailClient = imaplib.IMAP4_SSL(
+                    host=mail_host, timeout=timeout, ssl_context=None
+                )
             else:
                 self._mailClient = imaplib.IMAP4_SSL(host=mail_host, ssl_context=None)
         except Exception as error:

@@ -1817,21 +1817,6 @@ files = [
 ]
 
 [[package]]
-name = "pbr"
-version = "6.1.1"
-description = "Python Build Reasonableness"
-optional = false
-python-versions = ">=2.6"
-groups = ["docs"]
-files = [
-    {file = "pbr-6.1.1-py2.py3-none-any.whl", hash = "sha256:38d4daea5d9fa63b3f626131b9d34947fd0c8be9b05a29276870580050a25a76"},
-    {file = "pbr-6.1.1.tar.gz", hash = "sha256:93ea72ce6989eb2eed99d0f75721474f69ad88128afdef5ac377eb797c4bf76b"},
-]
-
-[package.dependencies]
-setuptools = "*"
-
-[[package]]
 name = "platformdirs"
 version = "4.3.7"
 description = "A small Python package for determining appropriate platform-specific dirs, e.g. a `user data dir`."
@@ -2652,27 +2637,6 @@ files = [
 ]
 
 [[package]]
-name = "setuptools"
-version = "80.0.0"
-description = "Easily download, build, install, upgrade, and uninstall Python packages"
-optional = false
-python-versions = ">=3.9"
-groups = ["docs"]
-files = [
-    {file = "setuptools-80.0.0-py3-none-any.whl", hash = "sha256:a38f898dcd6e5380f4da4381a87ec90bd0a7eec23d204a5552e80ee3cab6bd27"},
-    {file = "setuptools-80.0.0.tar.gz", hash = "sha256:c40a5b3729d58dd749c0f08f1a07d134fb8a0a3d7f87dc33e7c5e1f762138650"},
-]
-
-[package.extras]
-check = ["pytest-checkdocs (>=2.4)", "pytest-ruff (>=0.2.1) ; sys_platform != \"cygwin\"", "ruff (>=0.8.0) ; sys_platform != \"cygwin\""]
-core = ["importlib_metadata (>=6) ; python_version < \"3.10\"", "jaraco.functools (>=4)", "jaraco.text (>=3.7)", "more_itertools", "more_itertools (>=8.8)", "packaging (>=24.2)", "platformdirs (>=4.2.2)", "tomli (>=2.0.1) ; python_version < \"3.11\"", "wheel (>=0.43.0)"]
-cover = ["pytest-cov"]
-doc = ["furo", "jaraco.packaging (>=9.3)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "pyproject-hooks (!=1.1)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (>=1,<2)", "sphinx-reredirects", "sphinxcontrib-towncrier", "towncrier (<24.7)"]
-enabler = ["pytest-enabler (>=2.2)"]
-test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=0.14)", "jaraco.develop (>=7.21) ; python_version >= \"3.9\" and sys_platform != \"cygwin\"", "jaraco.envs (>=2.2)", "jaraco.path (>=3.7.2)", "jaraco.test (>=5.5)", "packaging (>=24.2)", "pip (>=19.1)", "pyproject-hooks (!=1.1)", "pytest (>=6,!=8.1.*)", "pytest-home (>=0.5)", "pytest-perf ; sys_platform != \"cygwin\"", "pytest-subprocess", "pytest-timeout", "pytest-xdist (>=3)", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel (>=0.44.0)"]
-type = ["importlib_metadata (>=7.0.2) ; python_version < \"3.10\"", "jaraco.develop (>=7.21) ; sys_platform != \"cygwin\"", "mypy (==1.14.*)", "pytest-mypy"]
-
-[[package]]
 name = "six"
 version = "1.17.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -2782,22 +2746,6 @@ sphinxcontrib-jquery = ">=4,<5"
 
 [package.extras]
 dev = ["bump2version", "transifex-client", "twine", "wheel"]
-
-[[package]]
-name = "sphinxcontrib-apidoc"
-version = "0.5.0"
-description = "A Sphinx extension for running 'sphinx-apidoc' on each build"
-optional = false
-python-versions = ">=3.8"
-groups = ["docs"]
-files = [
-    {file = "sphinxcontrib-apidoc-0.5.0.tar.gz", hash = "sha256:65efcd92212a5f823715fb95ee098b458a6bb09a5ee617d9ed3dead97177cd55"},
-    {file = "sphinxcontrib_apidoc-0.5.0-py3-none-any.whl", hash = "sha256:c671d644d6dc468be91b813dcddf74d87893bff74fe8f1b8b01b69408f0fb776"},
-]
-
-[package.dependencies]
-pbr = "*"
-Sphinx = ">=5.0.0"
 
 [[package]]
 name = "sphinxcontrib-applehelp"
@@ -3167,4 +3115,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "db80a64de476389b9d12d8f9654692cbdd4928e75d8d247b95eaca7866df8154"
+content-hash = "65bca0753dd59890dab509e661bfe754e534ee92e4e285dac6e0fcbb04adcbfd"

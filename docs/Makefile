@@ -15,16 +15,14 @@ help:
 .PHONY: help Makefile
 
 source: Makefile
-	sphinx-apidoc -o $(SOURCEDIR)/rst/ ../
 	python3 ../manage.py graph_models -a -g -o $(SOURCEDIR)/images/db_graph.svg
-	python3 ../manage.py spectacular --validate --file $(BUILDDIR)/api-schema.yml
-	yes | npx @redocly/cli build-docs $(BUILDDIR)/api-schema.yml --output $(BUILDDIR)/html/api-redoc.html
-	pydeps ../ --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show -o $(SOURCEDIR)/images/import_graph.svg
+	python3 ../manage.py spectacular --validate --file $(SOURCEDIR)/api-schema.yml
+	pydeps ../Emailkasten --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/images/Emailkasten_import_graph.svg
+	pydeps ../core --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/images/core_import_graph.svg
+	pydeps ../api --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/images/api_import_graph.svg
+	pydeps ../web --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/images/web_import_graph.svg
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-
-webview:
-	python3 -m http.server --directory build/html

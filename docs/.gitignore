@@ -1,15 +1,7 @@
 build/*
-source/rst/*
+*/apidoc-rst/*
 source/images/*
-*.rst
-!index.rst
-!import-graph.rst
-!development.rst
-!db-graph.rst
-!todo.rst
-!api-schema.rst
 api-schema.yml
-apidoc/
 *.log
 *.svg
-_static/*
+*.ansi

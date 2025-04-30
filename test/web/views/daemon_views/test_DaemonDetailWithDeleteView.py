@@ -163,8 +163,8 @@ def test_post_start_success_auth_owner(
     assert isinstance(response, HttpResponse)
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "daemon" in response.context
+    assert "start_result" in response.context
     mock_EMailArchiverDaemonRegistry_startDaemon.assert_called_once_with(daemonModel)
-    assert "Daemon started successfully" in response.content.decode()
 
 
 @pytest.mark.django_db
@@ -183,8 +183,8 @@ def test_post_start_failure_auth_owner(
     assert isinstance(response, HttpResponse)
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "daemon" in response.context
+    assert "start_result" in response.context
     mock_EMailArchiverDaemonRegistry_startDaemon.assert_called_once_with(daemonModel)
-    assert "Daemon was already running" in response.content.decode()
 
 
 @pytest.mark.django_db
@@ -253,8 +253,8 @@ def test_post_stop_success_auth_owner(
     assert isinstance(response, HttpResponse)
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "daemon" in response.context
+    assert "stop_result" in response.context
     mock_EMailArchiverDaemonRegistry_stopDaemon.assert_called_once_with(daemonModel)
-    assert "Daemon stopped successfully" in response.content.decode()
 
 
 @pytest.mark.django_db
@@ -273,8 +273,8 @@ def test_post_stop_failure_auth_owner(
     assert isinstance(response, HttpResponse)
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "daemon" in response.context
+    assert "stop_result" in response.context
     mock_EMailArchiverDaemonRegistry_stopDaemon.assert_called_once_with(daemonModel)
-    assert "Daemon was not running" in response.content.decode()
 
 
 @pytest.mark.django_db

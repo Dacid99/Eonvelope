@@ -166,6 +166,13 @@ def test_post_test_success_auth_owner(
     assert "web/mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     assert "mailbox" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is True
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert not response.context["action_result"]["error"]
     mock_MailboxModel_test_connection.assert_called_once()
 
 
@@ -187,6 +194,13 @@ def test_post_test_failure_auth_owner(
     assert "web/mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     assert "mailbox" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is False
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["error"], str)
     mock_MailboxModel_test_connection.assert_called_once()
     assert fake_error_message in response.content.decode()
 
@@ -252,21 +266,16 @@ def test_post_fetch_all_success_auth_owner(
     assert "web/mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     assert "mailbox" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is True
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert not response.context["action_result"]["error"]
     mock_MailboxModel_fetch.assert_called_once_with(
         mailboxModel, EmailFetchingCriterionChoices.ALL
     )
-
-
-@pytest.mark.django_db
-def test_post_fetch_all_missing_action_auth_owner(
-    mailboxModel, owner_client, detail_url, mock_MailboxModel_fetch
-):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
-    response = owner_client.post(detail_url(MailboxDetailWithDeleteView, mailboxModel))
-
-    assert response.status_code == status.HTTP_204_NO_CONTENT
-    assert isinstance(response, HttpResponse)
-    mock_MailboxModel_fetch.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -287,10 +296,29 @@ def test_post_fetch_all_failure_auth_owner(
     assert "web/mailbox/mailbox_detail.html" in [t.name for t in response.templates]
     assert "mailbox" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is False
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["error"], str)
     mock_MailboxModel_fetch.assert_called_once_with(
         mailboxModel, EmailFetchingCriterionChoices.ALL
     )
     assert fake_error_message in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_post_fetch_all_missing_action_auth_owner(
+    mailboxModel, owner_client, detail_url, mock_MailboxModel_fetch
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    response = owner_client.post(detail_url(MailboxDetailWithDeleteView, mailboxModel))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_MailboxModel_fetch.assert_not_called()
 
 
 @pytest.mark.django_db

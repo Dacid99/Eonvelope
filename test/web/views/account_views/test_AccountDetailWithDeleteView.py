@@ -164,6 +164,13 @@ def test_post_test_success_auth_owner(
     assert "web/account/account_detail.html" in [t.name for t in response.templates]
     assert "account" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is True
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert not response.context["action_result"]["error"]
     mock_AccountModel_test_connection.assert_called_once()
 
 
@@ -185,13 +192,20 @@ def test_post_test_failure_auth_owner(
     assert "web/account/account_detail.html" in [t.name for t in response.templates]
     assert "account" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is False
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["error"], str)
     mock_AccountModel_test_connection.assert_called_once()
     assert fake_error_message in response.content.decode()
 
 
 @pytest.mark.django_db
 def test_post_test_missing_action_auth_owner(
-    faker, accountModel, owner_client, detail_url, mock_AccountModel_test_connection
+    accountModel, owner_client, detail_url, mock_AccountModel_test_connection
 ):
     """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(detail_url(AccountDetailWithDeleteView, accountModel))
@@ -250,6 +264,13 @@ def test_post_update_mailboxes_success_auth_owner(
     assert "web/account/account_detail.html" in [t.name for t in response.templates]
     assert "account" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is True
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert not response.context["action_result"]["error"]
     mock_AccountModel_update_mailboxes.assert_called_once()
 
 
@@ -273,6 +294,13 @@ def test_post_update_mailboxes_failure_auth_owner(
     assert "web/account/account_detail.html" in [t.name for t in response.templates]
     assert "account" in response.context
     assert "latest_emails" in response.context
+    assert "action_result" in response.context
+    assert "status" in response.context["action_result"]
+    assert response.context["action_result"]["status"] is False
+    assert "message" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["message"], str)
+    assert "error" in response.context["action_result"]
+    assert isinstance(response.context["action_result"]["error"], str)
     mock_AccountModel_update_mailboxes.assert_called_once()
     assert fake_error_message in response.content.decode()
 

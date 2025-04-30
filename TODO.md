@@ -34,11 +34,8 @@
 - base detail/edit template
 - rework test:
   - consistent naming
-  - consistent mock_open
-  - replace bad return_value constructions with actual mock
-  - extract often used fixtures
   - disable all signals in tests
-  - serializer tests should use views model fixtures
+  - remove duplicate model fixtures in test/core
 
 ## To test
 
@@ -59,6 +56,7 @@
 - shortcut urls (api/auth -> api/auth/login, etc)
 - toggle registration switch in constance
 - more settings via env (django-environ maybe)
+- tests for use of cleanFilename
 
 ### Work in progress
 

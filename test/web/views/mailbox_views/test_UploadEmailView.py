@@ -119,7 +119,7 @@ def test_post_upload_eml_auth_owner(
     emailUploadPayload,
 ):
     """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated owner user client."""
-    emailUploadPayload.update({"file_format": "eml"})
+    emailUploadPayload["file_format"] = "eml"
 
     response = owner_client.post(
         detail_url(UploadEmailView, mailboxModel), emailUploadPayload
@@ -148,7 +148,7 @@ def test_post_upload_mailbox_auth_owner(
     mailbox_file_format,
 ):
     """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated owner user client."""
-    emailUploadPayload.update({"file_format": mailbox_file_format})
+    emailUploadPayload["file_format"] = mailbox_file_format
 
     response = owner_client.post(
         detail_url(UploadEmailView, mailboxModel), emailUploadPayload
@@ -173,7 +173,7 @@ def test_post_upload_auth_owner_bad_format(
     emailUploadPayload,
 ):
     """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated other user client."""
-    emailUploadPayload.update({"file_format": "something"})
+    emailUploadPayload["file_format"] = "something"
 
     response = owner_client.post(
         detail_url(UploadEmailView, mailboxModel), emailUploadPayload
@@ -198,7 +198,7 @@ def test_post_upload_auth_owner_bad_file(
     emailUploadPayload,
 ):
     """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated other user client."""
-    emailUploadPayload.update({"file": faker.sentence().encode()})
+    emailUploadPayload["file"] = faker.sentence().encode()
 
     response = owner_client.post(
         detail_url(UploadEmailView, mailboxModel), emailUploadPayload

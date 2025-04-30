@@ -1,5 +1,5 @@
-EMailkasten database structure
-==============================
+Database Structure
+==================
 
 A quick overview over the entire database structure.
 

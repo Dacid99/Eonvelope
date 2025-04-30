@@ -1,4 +1,4 @@
-# Guidelines
+# Contributing Guidelines
 
 If you have an idea for the project you are very welcome to implement it yourself!
 

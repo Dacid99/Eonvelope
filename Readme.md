@@ -38,6 +38,10 @@ In order to keep the code maintainable and in a consistant style please make sur
 
 ## Docs
 
+The documentation is available on ReadTheDocs.
+
+Check it out for details on configuration and instructions on how to use the running server.
+
 ## License
 
 This software is proudly released under [the AGPLv3 open-source license](LICENSE).

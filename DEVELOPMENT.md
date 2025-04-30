@@ -1,4 +1,6 @@
-# Setup
+# Development Quickstart
+
+## Setup
 
 Your global python version should be at least *3.12*.
 

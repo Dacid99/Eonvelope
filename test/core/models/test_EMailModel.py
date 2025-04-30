@@ -25,6 +25,7 @@ Fixtures:
 from __future__ import annotations
 
 import datetime
+import os
 
 import pytest
 from django.db import IntegrityError
@@ -50,6 +51,31 @@ def mock_logger(mocker):
 def mock_os_remove(mocker):
     """Fixture patching :func`os.remove` to avoid errors."""
     return mocker.patch("core.models.EMailModel.os.remove", autospec=True)
+
+
+@pytest.fixture
+def mock_open(mocker, fake_file_bytes):
+    """Fixture to mock the builtin :func:`open`."""
+    mock_open = mocker.mock_open(read_data=fake_file_bytes)
+    mocker.patch("core.utils.fileManagment.open", mock_open)
+    return mock_open
+
+
+@pytest.fixture
+def mock_StorageModel_getSubdirectory(mocker, faker):
+    fake_directory_path = os.path.dirname(faker.file_path())
+    mock_StorageModel_getSubdirectory = mocker.patch(
+        "core.models.StorageModel.StorageModel.getSubdirectory", autospec=True
+    )
+    mock_StorageModel_getSubdirectory.return_value = fake_directory_path
+    return mock_StorageModel_getSubdirectory
+
+
+@pytest.fixture
+def mock_eml2html(mocker, faker):
+    mock_eml2html = mocker.patch("core.models.EMailModel.eml2html", autospec=True)
+    mock_eml2html.return_value = faker.text()
+    return mock_eml2html
 
 
 @pytest.fixture
@@ -345,6 +371,224 @@ def test_EMailModel_save_with_data_failure(
     spy_Model_save.assert_called()
     mock_EMailModel_save_eml_to_storage.assert_called()
     mock_EMailModel_save_html_to_storage.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_eml_to_storage_success(
+    fake_file_bytes,
+    emailModel,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    emailModel.eml_filepath = None
+
+    emailModel.save_eml_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(emailModel.message_id)
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value,
+            emailModel.message_id + ".eml",
+        ),
+        "wb",
+    )
+    mock_open.return_value.write.assert_called_once_with(fake_file_bytes)
+    emailModel.refresh_from_db()
+    assert emailModel.eml_filepath == os.path.join(
+        mock_StorageModel_getSubdirectory.return_value, emailModel.message_id + ".eml"
+    )
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_eml_to_storage_file_path_set(
+    fake_file_bytes,
+    emailModel_with_filepaths,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    previous_file_path = emailModel_with_filepaths.eml_filepath
+
+    emailModel_with_filepaths.save_eml_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_not_called()
+    mock_open.assert_not_called()
+    emailModel_with_filepaths.refresh_from_db()
+    assert emailModel_with_filepaths.eml_filepath == previous_file_path
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_eml_to_storage_open_osError(
+    fake_file_bytes,
+    emailModel,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    emailModel.eml_filepath = None
+    mock_open.side_effect = OSError
+
+    emailModel.save_eml_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(emailModel.message_id)
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value,
+            emailModel.message_id + ".eml",
+        ),
+        "wb",
+    )
+    mock_open.return_value.write.assert_not_called()
+    assert emailModel.eml_filepath is None
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_called()
+
+
+@pytest.mark.django_db
+def test_save_eml_to_storage_write_osError(
+    fake_file_bytes,
+    emailModel,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    emailModel.eml_filepath = None
+    mock_open.return_value.write.side_effect = OSError
+
+    emailModel.save_eml_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(emailModel.message_id)
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value,
+            emailModel.message_id + ".eml",
+        ),
+        "wb",
+    )
+    mock_open.return_value.write.assert_called_once_with(fake_file_bytes)
+    assert emailModel.eml_filepath is None
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_called()
+
+
+@pytest.mark.django_db
+def test_save_html_to_storage_success(
+    fake_file_bytes,
+    emailModel,
+    mock_logger,
+    mock_open,
+    mock_eml2html,
+    mock_StorageModel_getSubdirectory,
+):
+    emailModel.html_filepath = None
+
+    emailModel.save_html_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(emailModel.message_id)
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value,
+            emailModel.message_id + ".html",
+        ),
+        "wb",
+    )
+    mock_eml2html.assert_called_once_with(fake_file_bytes)
+    mock_open.return_value.write.assert_called_once_with(
+        mock_eml2html.return_value.encode()
+    )
+    emailModel.refresh_from_db()
+    assert emailModel.html_filepath == os.path.join(
+        mock_StorageModel_getSubdirectory.return_value, emailModel.message_id + ".html"
+    )
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_html_to_storage_file_path_set(
+    fake_file_bytes,
+    emailModel_with_filepaths,
+    mock_logger,
+    mock_open,
+    mock_eml2html,
+    mock_StorageModel_getSubdirectory,
+):
+    previous_file_path = emailModel_with_filepaths.html_filepath
+
+    emailModel_with_filepaths.save_html_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_not_called()
+    mock_eml2html.assert_not_called()
+    mock_open.assert_not_called()
+    emailModel_with_filepaths.refresh_from_db()
+    assert emailModel_with_filepaths.html_filepath == previous_file_path
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_html_to_storage_open_osError(
+    fake_file_bytes,
+    emailModel,
+    mock_logger,
+    mock_open,
+    mock_eml2html,
+    mock_StorageModel_getSubdirectory,
+):
+    emailModel.html_filepath = None
+    mock_open.side_effect = OSError
+
+    emailModel.save_html_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(emailModel.message_id)
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value,
+            emailModel.message_id + ".html",
+        ),
+        "wb",
+    )
+    mock_eml2html.assert_not_called()
+    mock_open.return_value.write.assert_not_called()
+    assert emailModel.html_filepath is None
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_called()
+
+
+@pytest.mark.django_db
+def test_save_html_to_storage_write_osError(
+    fake_file_bytes,
+    emailModel,
+    mock_logger,
+    mock_open,
+    mock_eml2html,
+    mock_StorageModel_getSubdirectory,
+):
+    emailModel.html_filepath = None
+    mock_open.return_value.write.side_effect = OSError
+
+    emailModel.save_html_to_storage(fake_file_bytes)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(emailModel.message_id)
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value,
+            emailModel.message_id + ".html",
+        ),
+        "wb",
+    )
+    mock_eml2html.assert_called_once_with(fake_file_bytes)
+    mock_open.return_value.write.assert_called_once_with(
+        mock_eml2html.return_value.encode()
+    )
+    assert emailModel.html_filepath is None
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_called()
 
 
 @pytest.mark.django_db

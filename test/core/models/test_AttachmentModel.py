@@ -23,6 +23,7 @@ Fixtures:
 """
 
 import datetime
+import os
 
 import pytest
 from django.db import IntegrityError
@@ -40,10 +41,28 @@ def mock_logger(mocker):
     return mocker.patch("core.models.AttachmentModel.logger", autospec=True)
 
 
+@pytest.fixture
+def mock_open(mocker, fake_file_bytes):
+    """Fixture to mock the builtin :func:`open`."""
+    mock_open = mocker.mock_open(read_data=fake_file_bytes)
+    mocker.patch("core.utils.fileManagment.open", mock_open)
+    return mock_open
+
+
 @pytest.fixture(autouse=True)
 def mock_os_remove(mocker):
     """Fixture mocking :func:`os.remove`."""
     return mocker.patch("core.models.AttachmentModel.os.remove", autospec=True)
+
+
+@pytest.fixture
+def mock_StorageModel_getSubdirectory(mocker, faker):
+    fake_directory_path = os.path.dirname(faker.file_path())
+    mock_StorageModel_getSubdirectory = mocker.patch(
+        "core.models.StorageModel.StorageModel.getSubdirectory", autospec=True
+    )
+    mock_StorageModel_getSubdirectory.return_value = fake_directory_path
+    return mock_StorageModel_getSubdirectory
 
 
 @pytest.fixture
@@ -179,6 +198,124 @@ def test_AttachmentModel_delete_attachmentfile_delete_error(
     mock_delete.assert_called_once()
     mock_os_remove.assert_not_called()
     mock_logger.debug.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_to_storage_success(
+    faker,
+    mock_message,
+    attachmentModel,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    fake_message_payload = faker.text().encode()
+    mock_message.get_payload.return_value = fake_message_payload
+    attachmentModel.file_path = None
+
+    attachmentModel.save_to_storage(mock_message)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(
+        attachmentModel.email.message_id
+    )
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value, attachmentModel.file_name
+        ),
+        "wb",
+    )
+    mock_open.return_value.write.assert_called_once_with(fake_message_payload)
+    attachmentModel.refresh_from_db()
+    assert attachmentModel.file_path == os.path.join(
+        mock_StorageModel_getSubdirectory.return_value, attachmentModel.file_name
+    )
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_to_storage_file_path_set(
+    faker,
+    mock_message,
+    attachmentModel,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    fake_message_payload = faker.text().encode()
+    mock_message.get_payload.return_value = fake_message_payload
+    previous_file_path = attachmentModel.file_path
+
+    attachmentModel.save_to_storage(mock_message)
+
+    mock_StorageModel_getSubdirectory.assert_not_called()
+    mock_open.assert_not_called()
+    attachmentModel.refresh_from_db()
+    assert attachmentModel.file_path == previous_file_path
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save_to_storage_open_osError(
+    faker,
+    mock_message,
+    attachmentModel,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    fake_message_payload = faker.text().encode()
+    mock_message.get_payload.return_value = fake_message_payload
+    attachmentModel.file_path = None
+    mock_open.side_effect = OSError
+
+    attachmentModel.save_to_storage(mock_message)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(
+        attachmentModel.email.message_id
+    )
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value, attachmentModel.file_name
+        ),
+        "wb",
+    )
+    mock_open.return_value.write.assert_not_called()
+    assert attachmentModel.file_path is None
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_called()
+
+
+@pytest.mark.django_db
+def test_save_to_storage_write_osError(
+    faker,
+    mock_message,
+    attachmentModel,
+    mock_logger,
+    mock_open,
+    mock_StorageModel_getSubdirectory,
+):
+    fake_message_payload = faker.text().encode()
+    mock_message.get_payload.return_value = fake_message_payload
+    attachmentModel.file_path = None
+    mock_open.return_value.write.side_effect = OSError
+
+    attachmentModel.save_to_storage(mock_message)
+
+    mock_StorageModel_getSubdirectory.assert_called_once_with(
+        attachmentModel.email.message_id
+    )
+    mock_open.assert_called_once_with(
+        os.path.join(
+            mock_StorageModel_getSubdirectory.return_value, attachmentModel.file_name
+        ),
+        "wb",
+    )
+    mock_open.return_value.write.assert_called_once_with(fake_message_payload)
+    assert attachmentModel.file_path is None
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_called()
 
 
 @pytest.mark.django_db

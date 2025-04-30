@@ -184,7 +184,7 @@ class AttachmentModel(
 
         dirPath = StorageModel.getSubdirectory(self.email.message_id)
         preliminary_file_path = os.path.join(dirPath, self.file_name)
-        file_path = writeAttachment(preliminary_file_path, attachmentData)
+        file_path = writeAttachment(preliminary_file_path, payload)
         if file_path:
             self.file_path = file_path
             self.save(update_fields=["file_path"])

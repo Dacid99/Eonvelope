@@ -53,7 +53,6 @@
 - default ssl cert and safest settings
 - memory save upload (chunks instead of read)
 - shortcut urls (api/auth -> api/auth/login, etc)
-- toggle registration switch in constance
 - more settings via env (django-environ maybe)
 - tests for use of cleanFilename
 

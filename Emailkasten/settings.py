@@ -455,9 +455,17 @@ CONSTANCE_CONFIG = {
         _("The default mailbox setting whether to store attachments."),
         bool,
     ),
+    "REGISTRATION_ENABLED": (
+        True,
+        _(
+            "Set this to True to allow new users to sign up themselves. This setting only takes effect if the REGISTRATION_ENABLED environment setting is not 0."
+        ),
+        bool,
+    ),
 }
 
 CONSTANCE_FIELDSETS = (
+    (_("Server Configurations"), ("REGISTRATION_ENABLED")),
     (
         _("Default Values"),
         (

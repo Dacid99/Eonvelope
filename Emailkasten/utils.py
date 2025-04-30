@@ -52,9 +52,10 @@ class ToggleSignupAccountAdapter(
         Returns:
             Whether signups are allowed.
         """
-        return bool(
-            int(os.getenv("REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED))
-        )
+        if int(os.getenv("REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED)):
+            print(get_config("REGISTRATION_ENABLED"))
+            return bool(get_config("REGISTRATION_ENABLED"))
+        return False
 
 
 def get_config(setting: str) -> Any:

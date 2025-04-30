@@ -190,6 +190,18 @@ def test_post_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_post_test_missing_action_auth_owner(
+    faker, accountModel, owner_client, detail_url, mock_AccountModel_test_connection
+):
+    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    response = owner_client.post(detail_url(AccountDetailWithDeleteView, accountModel))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_AccountModel_test_connection.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_post_update_mailboxes_noauth(
     accountModel, client, detail_url, login_url, mock_AccountModel_update_mailboxes
 ):
@@ -263,3 +275,17 @@ def test_post_update_mailboxes_failure_auth_owner(
     assert "latest_emails" in response.context
     mock_AccountModel_update_mailboxes.assert_called_once()
     assert fake_error_message in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_post_update_mailboxes_missing_action_auth_owner(
+    faker, accountModel, owner_client, detail_url, mock_AccountModel_update_mailboxes
+):
+    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    response = owner_client.post(
+        detail_url(AccountDetailWithDeleteView, accountModel),
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_AccountModel_update_mailboxes.assert_not_called()

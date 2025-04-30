@@ -188,6 +188,20 @@ def test_post_start_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_post_start_missing_action_auth_owner(
+    daemonModel, owner_client, detail_url, mock_EMailArchiverDaemonRegistry_startDaemon
+):
+    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    mock_EMailArchiverDaemonRegistry_startDaemon.return_value = False
+
+    response = owner_client.post(detail_url(DaemonDetailWithDeleteView, daemonModel))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_EMailArchiverDaemonRegistry_startDaemon.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_post_stop_noauth(
     daemonModel,
     client,
@@ -261,3 +275,17 @@ def test_post_stop_failure_auth_owner(
     assert "daemon" in response.context
     mock_EMailArchiverDaemonRegistry_stopDaemon.assert_called_once_with(daemonModel)
     assert "Daemon was not running" in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_post_stop_missing_action_auth_owner(
+    daemonModel, owner_client, detail_url, mock_EMailArchiverDaemonRegistry_stopDaemon
+):
+    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    mock_EMailArchiverDaemonRegistry_stopDaemon.return_value = False
+
+    response = owner_client.post(detail_url(DaemonDetailWithDeleteView, daemonModel))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_EMailArchiverDaemonRegistry_stopDaemon.assert_not_called()

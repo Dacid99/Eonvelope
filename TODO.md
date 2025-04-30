@@ -44,7 +44,6 @@
 
 ## To implement
 
-- complete test coverage
 - autostart daemons on restart
 - user divided storage to make file_paths unique again
 - replace daemons with celery, ensure threadsafe db operations in daemons

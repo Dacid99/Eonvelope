@@ -192,6 +192,18 @@ def test_post_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_post_test_missing_action_auth_owner(
+    mailboxModel, owner_client, detail_url, mock_MailboxModel_test_connection
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    response = owner_client.post(detail_url(MailboxDetailWithDeleteView, mailboxModel))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_MailboxModel_test_connection.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_post_fetch_all_noauth(
     mailboxModel, client, detail_url, login_url, mock_MailboxModel_fetch
 ):
@@ -243,6 +255,18 @@ def test_post_fetch_all_success_auth_owner(
     mock_MailboxModel_fetch.assert_called_once_with(
         mailboxModel, EmailFetchingCriterionChoices.ALL
     )
+
+
+@pytest.mark.django_db
+def test_post_fetch_all_missing_action_auth_owner(
+    mailboxModel, owner_client, detail_url, mock_MailboxModel_fetch
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    response = owner_client.post(detail_url(MailboxDetailWithDeleteView, mailboxModel))
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_MailboxModel_fetch.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -318,3 +342,19 @@ def test_post_add_daemon_auth_owner(mailboxModel, owner_client, detail_url):
     assert DaemonModel.objects.count() == 2
     added_daemon = DaemonModel.objects.get(pk=2)
     assert response.url == added_daemon.get_absolute_edit_url()
+
+
+@pytest.mark.django_db
+def test_post_add_daemon_missing_action_auth_owner(
+    mailboxModel, owner_client, detail_url
+):
+    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    assert DaemonModel.objects.count() == 1
+
+    response = owner_client.post(
+        detail_url(MailboxDetailWithDeleteView, mailboxModel),
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    assert DaemonModel.objects.count() == 1

@@ -76,7 +76,6 @@
 - separation of multi correspondentheader not working!
 - cascase doesnt trigger delete!
 - browser is occasionally in quirks mode
-- test for makeFetchingCriterion fails depending on timezone
 
 # Remember
 

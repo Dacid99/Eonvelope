@@ -85,7 +85,7 @@ def mock_IMAP4(mocker, faker):
 def test_IMAPFetcher_makeFetchingCriterion_dateCriterion(
     faker, criterionName, expectedTimeDelta
 ):
-    fake_datetime = faker.date_time_this_decade(tzinfo=faker.pytimezone())
+    fake_datetime = faker.date_time_this_decade(tzinfo=datetime.UTC)
     expectedCriterion = f"SENTSINCE {Time2Internaldate(fake_datetime - expectedTimeDelta).split(" ")[
         0
     ].strip('" ')}"

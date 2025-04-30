@@ -160,7 +160,8 @@ class AccountViewSet(viewsets.ModelViewSet[AccountModel], ToggleFavoriteMixin):
         try:
             account.test_connection()
         except MailAccountError as error:
-            response.data.update({"result": False, "error": str(error)})
+            response.data["result"] = False
+            response.data["error"] = str(error)
         else:
-            response.data.update({"result": True})
+            response.data["result"] = True
         return response

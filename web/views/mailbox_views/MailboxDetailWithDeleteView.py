@@ -88,7 +88,7 @@ class MailboxDetailWithDeleteView(
         result = self.perform_fetch_all()
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
-        context.update({"action_result": result})
+        context["action_result"] = result
         return render(request, self.template_name, context)
 
     def perform_fetch_all(self) -> dict[str, bool | str | None]:
@@ -105,15 +105,12 @@ class MailboxDetailWithDeleteView(
         try:
             self.object.fetch(EmailFetchingCriterionChoices.ALL)
         except FetcherError as error:
-            result.update(
-                {
-                    "status": False,
-                    "message": "Fetching failed",
-                    "error": str(error),
-                }
-            )
+            result["status"] = False
+            result["message"] = "Fetching failed"
+            result["error"] = str(error)
         else:
-            result.update({"status": True, "message": "Fetching successful"})
+            result["status"] = True
+            result["message"] = "Fetching successful"
         return result
 
     def handle_add_daemon(self, request: HttpRequest) -> HttpResponseRedirect:

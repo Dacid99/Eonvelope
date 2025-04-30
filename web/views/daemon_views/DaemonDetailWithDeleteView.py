@@ -72,10 +72,9 @@ class DaemonDetailWithDeleteView(
         """
         self.object = self.get_object()
         result = EMailArchiverDaemonRegistry.startDaemon(self.object)
-        result_context = {"start_result": {"status": result}}
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
-        context.update(result_context)
+        context["start_result"] = {"status": result}
         return render(request, self.template_name, context)
 
     def handle_stop_daemon(self, request: HttpRequest) -> HttpResponse:
@@ -89,8 +88,7 @@ class DaemonDetailWithDeleteView(
         """
         self.object = self.get_object()
         result = EMailArchiverDaemonRegistry.stopDaemon(self.object)
-        result_context = {"stop_result": {"status": result}}
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
-        context.update(result_context)
+        context["stop_result"] = {"status": result}
         return render(request, self.template_name, context)

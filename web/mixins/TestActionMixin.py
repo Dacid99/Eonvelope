@@ -59,9 +59,10 @@ class TestActionMixin:
         try:
             self.object.test_connection()
         except FetcherError as error:
-            result.update(
-                {"status": False, "message": _("Test failed"), "error": str(error)}
-            )
+            result["status"] = False
+            result["message"] = _("Test failed")
+            result["error"] = str(error)
         else:
-            result.update({"status": True, "message": _("Test successful")})
+            result["status"] = True
+            result["message"] = _("Test successful")
         return result

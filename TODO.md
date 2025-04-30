@@ -26,7 +26,6 @@
 - headerdict accumulation can be easier, message supports dict() or at least .items()
 - check for existance is better with filter().exists()
 - improve db performance with SubQuery, select_related, etc
-- dict.update is slower, use dict[key] = val
 - explore emailmessage methods
 - content_type main and sub as fields and rename settings
 - consistent naming_style

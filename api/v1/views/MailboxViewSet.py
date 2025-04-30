@@ -142,9 +142,10 @@ class MailboxViewSet(
         try:
             mailbox.test_connection()
         except FetcherError as error:
-            response.data.update({"result": False, "error": str(error)})
+            response.data["result"] = False
+            response.data["error"] = str(error)
         else:
-            response.data.update({"result": True})
+            response.data["result"] = True
         return response
 
     URL_PATH_FETCH_ALL = "fetch-all"

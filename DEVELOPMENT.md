@@ -19,10 +19,8 @@ Then to install the python dependencies start a new virtual environment and acti
 
 [Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies of this project.
 
-First install [pipx](https://pipx.pypa.io/stable/installation/) and use it to install poetry:
-
 ```bash
-pipx install poetry
+pip install poetry
 ```
 
 You can then add the tab completions for it by:

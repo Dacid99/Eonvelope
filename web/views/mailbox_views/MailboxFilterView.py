@@ -18,7 +18,7 @@
 
 """Module with the :class:`MailboxFilterView` view."""
 
-from typing import override
+from typing import Final, override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
@@ -38,10 +38,11 @@ class MailboxFilterView(LoginRequiredMixin, FilterPageView):
     context_object_name = "mailboxes"
     filterset_class = MailboxFilter
     paginate_by = 25
+    ordering: Final[list[str]] = ["name"]
 
     @override
     def get_queryset(self) -> QuerySet[MailboxModel]:
         """Restricts the queryset to objects owned by the requesting user."""
         if not self.request.user.is_authenticated:
-            return MailboxModel.objects.none()
-        return MailboxModel.objects.filter(account__user=self.request.user)
+            return super().get_queryset().none()
+        return super().get_queryset().filter(account__user=self.request.user)

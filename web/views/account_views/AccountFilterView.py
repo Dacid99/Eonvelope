@@ -18,7 +18,7 @@
 
 """Module with the :class:`AccountFilterView` view."""
 
-from typing import override
+from typing import Final, override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models.query import QuerySet
@@ -37,6 +37,7 @@ class AccountFilterView(LoginRequiredMixin, FilterPageView):
     template_name = "web/account/account_filter_list.html"
     filterset_class = AccountFilter
     paginate_by = 25
+    ordering: Final[list[str]] = ["mail_address"]
 
     @override
     def get_queryset(self) -> QuerySet[AccountModel]:

@@ -51,7 +51,6 @@
 - is_healthy null on creation
 - only show allowed fetching criteria
 - indicator for required form fields
-- default ordering -id
 - favicon.ico for the icon
 - default ssl cert and safest settings
 - memory save upload (chunks instead of read)

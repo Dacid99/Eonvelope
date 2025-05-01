@@ -66,6 +66,7 @@
 
 - complete app
 - mailinglist
+- rest-auth signup
 
 ## To fix
 

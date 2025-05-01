@@ -26,11 +26,13 @@ from typing import TYPE_CHECKING, Any, override
 
 from allauth.account.adapter import DefaultAccountAdapter
 from constance import config
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from Emailkasten.settings import CONSTANCE_CONFIG, DEFAULT_REGISTRATION_ENABLED
 
 
 if TYPE_CHECKING:
+    from django.views import View
     from rest_framework.request import Request
 
 
@@ -52,10 +54,31 @@ class ToggleSignupAccountAdapter(
         Returns:
             Whether signups are allowed.
         """
-        if int(os.getenv("REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED)):
-            print(get_config("REGISTRATION_ENABLED"))
-            return bool(get_config("REGISTRATION_ENABLED"))
-        return False
+        return bool(
+            int(os.getenv("REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED))
+        ) and bool(get_config("REGISTRATION_ENABLED"))
+
+
+class ToggleSignUpPermissionClass(AllowAny, IsAuthenticated, IsAdminUser):
+    """Permission class to allow toggling of signups for dj-rest-auth."""
+
+    @override
+    def has_permission(self, request: Request, view: View) -> bool:
+        """Checks a signup request is permitted.
+
+        If registration is disabled only staff members can make signup requests.
+
+        Args:
+            request: The signup request.
+
+        Returns:
+            If the signup request is permitted.
+        """
+        if bool(
+            int(os.getenv("REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED))
+        ) and bool(get_config("REGISTRATION_ENABLED")):
+            return AllowAny.has_permission(self, request, view)
+        return IsAdminUser.has_permission(self, request, view)
 
 
 def get_config(setting: str) -> Any:

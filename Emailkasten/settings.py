@@ -48,8 +48,7 @@ SECRET_KEY = "django-insecure-854!q(ej3aqf0agllzt^#u$=aqe33xd1zj*vz^$xi1tmw^bxn5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
-# ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split()
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split()
 
 
 # Application definition
@@ -192,14 +191,16 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "web:dashboard"
+LOGOUT_REDIRECT_URL = "account_login"
 
 LOGIN_URL = "account_login"
 SESSION_COOKIE_AGE = 1209600
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = False
 SESSION_COOKIE_SECURE = False
+LANGUAGE_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
 
 # Registration
 DEFAULT_REGISTRATION_ENABLED = "0"
@@ -213,24 +214,22 @@ ACCOUNT_ADAPTER = "Emailkasten.utils.ToggleSignupAccountAdapter"
 # dj-rest-auth
 REST_AUTH = {
     "USE_JWT": False,
-    "REGISTER_PERMISSION_CLASSES": (
-        ("rest_framework.permissions.AllowAny",)
-        if bool(int(os.getenv("REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED)))
-        else (
-            "rest_framework.permissions.IsAdminUser",
-            "rest_framework.permissions.IsAuthenticated",
-        )
-    ),
+    "REGISTER_PERMISSION_CLASSES": (("Emailkasten.utils.ToggleSignUpPermissionClass",)),
 }
 
 
 # Logging
+LOG_DIRECTORY_PATH = "/var/log" if not DEBUG else ""
+LOGFILE_MAXSIZE = int(os.environ.get("LOGFILE_MAXSIZE", "10485760"))
+LOGFILE_BACKUP_NUMBER = int(os.environ.get("LOGFILE_BACKUP_NUMBER", "5"))
+LOGLEVEL_DEFAULT = "INFO"
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
-            "format": Emailkasten.constants.LoggerConfiguration.LOG_FORMAT,
+            "format": "{asctime} {levelname} - {name}.{funcName}: {message}",
             "style": "{",
         },
     },
@@ -244,38 +243,38 @@ LOGGING = {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
             "filename": os.path.join(
-                Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
-                Emailkasten.constants.LoggerConfiguration.DJANGO_LOGFILE_NAME,
+                LOG_DIRECTORY_PATH,
+                "django.log",
             ),
-            "maxBytes": Emailkasten.constants.LoggerConfiguration.LOGFILE_MAXSIZE,
-            "backupCount": Emailkasten.constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
+            "maxBytes": LOGFILE_MAXSIZE,
+            "backupCount": LOGFILE_BACKUP_NUMBER,
             "formatter": "default",
         },
         "app_logfile": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
             "filename": os.path.join(
-                Emailkasten.constants.LoggerConfiguration.LOG_DIRECTORY_PATH,
-                Emailkasten.constants.LoggerConfiguration.APP_LOGFILE_NAME,
+                LOG_DIRECTORY_PATH,
+                "Emailkasten.log",
             ),
-            "maxBytes": Emailkasten.constants.LoggerConfiguration.LOGFILE_MAXSIZE,
-            "backupCount": Emailkasten.constants.LoggerConfiguration.LOGFILE_BACKUP_NUMBER,
+            "maxBytes": LOGFILE_MAXSIZE,
+            "backupCount": LOGFILE_BACKUP_NUMBER,
             "formatter": "default",
         },
     },
     "root": {
         "handlers": ["console"],
-        "level": Emailkasten.constants.LoggerConfiguration.ROOT_LOG_LEVEL,
+        "level": os.environ.get("ROOT_LOG_LEVEL", LOGLEVEL_DEFAULT),
     },
     "loggers": {
         "django": {
             "handlers": ["django_logfile"],
-            "level": Emailkasten.constants.LoggerConfiguration.DJANGO_LOG_LEVEL,
+            "level": os.environ.get("DJANGO_LOG_LEVEL", LOGLEVEL_DEFAULT),
             "propagate": True,
         },
         "Emailkasten": {
             "handlers": ["app_logfile"],
-            "level": Emailkasten.constants.LoggerConfiguration.APP_LOG_LEVEL,
+            "level": os.environ.get("APP_LOG_LEVEL", LOGLEVEL_DEFAULT),
             "propagate": True,
         },
     },

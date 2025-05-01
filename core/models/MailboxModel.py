@@ -33,7 +33,7 @@ from core.mixins.FavoriteMixin import FavoriteMixin
 from core.mixins.UploadMixin import UploadMixin
 from core.mixins.URLMixin import URLMixin
 from core.models.EMailModel import EMailModel
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 from ..utils.fetchers.exceptions import MailAccountError, MailboxError
 from ..utils.mailParsing import parseMailboxName

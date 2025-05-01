@@ -27,7 +27,7 @@ from typing import Any, override
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 from ..utils.fileManagment import clean_filename
 

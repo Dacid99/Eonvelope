@@ -21,7 +21,7 @@ from model_bakery import baker
 
 from api.v1.views.EMailViewSet import EMailViewSet
 from core.models.EMailModel import EMailModel
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 
 @pytest.fixture(autouse=True)

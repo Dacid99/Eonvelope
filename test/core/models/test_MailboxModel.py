@@ -41,7 +41,7 @@ from core.utils.fetchers.IMAP_SSL_Fetcher import IMAP_SSL_Fetcher
 from core.utils.fetchers.IMAPFetcher import IMAPFetcher
 from core.utils.fetchers.POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from core.utils.fetchers.POP3Fetcher import POP3Fetcher
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 from .test_AccountModel import mock_AccountModel_get_fetcher, mock_fetcher
 

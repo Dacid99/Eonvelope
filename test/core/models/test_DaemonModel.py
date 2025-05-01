@@ -35,7 +35,7 @@ import Emailkasten.constants
 from core import constants
 from core.models.DaemonModel import DaemonModel
 from core.models.MailboxModel import MailboxModel
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 
 @pytest.fixture(autouse=True)

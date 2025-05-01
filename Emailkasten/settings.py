@@ -209,12 +209,14 @@ DEFAULT_REGISTRATION_ENABLED = "0"
 ACCOUNT_SIGNUP_FIELDS = ["username*", "password1*", "password2*"]
 ACCOUNT_LOGIN_METHODS = {"username"}
 ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_ADAPTER = "Emailkasten.utils.ToggleSignupAccountAdapter"
+ACCOUNT_ADAPTER = "Emailkasten.utils.toggle_signup.ToggleSignupAccountAdapter"
 
 # dj-rest-auth
 REST_AUTH = {
     "USE_JWT": False,
-    "REGISTER_PERMISSION_CLASSES": (("Emailkasten.utils.ToggleSignUpPermissionClass",)),
+    "REGISTER_PERMISSION_CLASSES": (
+        ("Emailkasten.utils.toggle_signup.ToggleSignUpPermissionClass",)
+    ),
 }
 
 

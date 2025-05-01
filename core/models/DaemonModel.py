@@ -34,7 +34,7 @@ from django.utils.translation import gettext_lazy as _
 import Emailkasten.constants
 from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.mixins.URLMixin import URLMixin
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 from ..constants import EmailFetchingCriterionChoices
 

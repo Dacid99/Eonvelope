@@ -33,7 +33,7 @@ from core.mixins.FavoriteMixin import FavoriteMixin
 from core.mixins.HasDownloadMixin import HasDownloadMixin
 from core.mixins.HasThumbnailMixin import HasThumbnailMixin
 from core.mixins.URLMixin import URLMixin
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 from ..utils.fileManagment import clean_filename, saveStore
 from .StorageModel import StorageModel

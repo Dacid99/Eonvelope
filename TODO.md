@@ -53,6 +53,7 @@
 - default ssl cert and safest settings
 - memory save upload (chunks instead of read)
 - shortcut urls (api/auth -> api/auth/login, etc)
+- variable page size pagination
 - more settings via env (django-environ maybe)
 - tests for use of cleanFilename
 
@@ -74,6 +75,7 @@
 - cascase doesnt trigger delete!
 - browser is occasionally in quirks mode
 - healthcheck throws error module not callable
+- UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list QuerySet.
 
 # Remember
 

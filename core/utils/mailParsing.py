@@ -38,7 +38,7 @@ import imap_tools.imap_utf7
 from django.utils import timezone
 from html_sanitizer.django import get_sanitizer
 
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 
 if TYPE_CHECKING:

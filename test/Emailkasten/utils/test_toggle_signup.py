@@ -23,28 +23,10 @@ import os
 import pytest
 from django.views import View
 
-from Emailkasten.utils import (
+from Emailkasten.utils.toggle_signup import (
     ToggleSignupAccountAdapter,
     ToggleSignUpPermissionClass,
-    get_config,
 )
-
-
-@pytest.fixture(autouse=True)
-def mock_logger(mocker):
-    """Fixture mocking the modules logger instance."""
-    return mocker.patch("Emailkasten.utils.logger", autospec=True)
-
-
-@pytest.fixture
-def mock_getattr(mocker):
-    """Fixture mocking `getattr` to mock accessing constance values."""
-    return mocker.patch("Emailkasten.utils.getattr")
-
-
-@pytest.fixture
-def mock_httpRequest(mocker):
-    return mocker.patch("django.http.HttpRequest", autospec=True)
 
 
 @pytest.fixture
@@ -52,6 +34,7 @@ def mock_request(mocker):
     return mocker.patch("rest_framework.request.Request", autospec=True)
 
 
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "ENV_REGISTRATION_ENABLED, DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
     [
@@ -67,7 +50,8 @@ def mock_request(mocker):
 )
 def test_ToggleSignUpAdapter_is_open_for_signup(
     monkeypatch,
-    mock_httpRequest,
+    override_config,
+    mock_request,
     ENV_REGISTRATION_ENABLED,
     DEFAULT_REGISTRATION_ENABLED,
     CONSTANCE_REGISTRATION_ENABLED,
@@ -76,26 +60,19 @@ def test_ToggleSignUpAdapter_is_open_for_signup(
     """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
     os.environ["REGISTRATION_ENABLED"] = ENV_REGISTRATION_ENABLED
     monkeypatch.setattr(
-        "Emailkasten.utils.DEFAULT_REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED
-    )
-    monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {
-            "REGISTRATION_ENABLED": (
-                CONSTANCE_REGISTRATION_ENABLED,
-                "The patched REGISTRATION_ENABLED setting",
-                bool,
-            )
-        },
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
 
-    result = ToggleSignupAccountAdapter().is_open_for_signup(mock_httpRequest)
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignupAccountAdapter().is_open_for_signup(mock_request)
 
     assert result is expected_result
 
     os.environ.pop("REGISTRATION_ENABLED", None)
 
 
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
     [
@@ -107,6 +84,7 @@ def test_ToggleSignUpAdapter_is_open_for_signup(
 )
 def test_ToggleSignUpAdapter_is_open_for_signup_fallback(
     monkeypatch,
+    override_config,
     mock_request,
     DEFAULT_REGISTRATION_ENABLED,
     CONSTANCE_REGISTRATION_ENABLED,
@@ -115,24 +93,17 @@ def test_ToggleSignUpAdapter_is_open_for_signup_fallback(
     """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is not set."""
     os.environ.pop("REGISTRATION_ENABLED", None)
     monkeypatch.setattr(
-        "Emailkasten.utils.DEFAULT_REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED
-    )
-    monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {
-            "REGISTRATION_ENABLED": (
-                CONSTANCE_REGISTRATION_ENABLED,
-                "The patched REGISTRATION_ENABLED setting",
-                bool,
-            )
-        },
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
 
-    result = ToggleSignupAccountAdapter().is_open_for_signup(mock_request)
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignupAccountAdapter().is_open_for_signup(mock_request)
 
     assert result is expected_result
 
 
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "ENV_REGISTRATION_ENABLED, DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
     [
@@ -148,6 +119,8 @@ def test_ToggleSignUpAdapter_is_open_for_signup_fallback(
 )
 def test_ToggleSignUpPermissionClass_has_permission_noauth(
     monkeypatch,
+    override_config,
+    django_user_model,
     mock_request,
     ENV_REGISTRATION_ENABLED,
     DEFAULT_REGISTRATION_ENABLED,
@@ -157,28 +130,20 @@ def test_ToggleSignUpPermissionClass_has_permission_noauth(
     """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
     os.environ["REGISTRATION_ENABLED"] = ENV_REGISTRATION_ENABLED
     monkeypatch.setattr(
-        "Emailkasten.utils.DEFAULT_REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
-    monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {
-            "REGISTRATION_ENABLED": (
-                CONSTANCE_REGISTRATION_ENABLED,
-                "The patched REGISTRATION_ENABLED setting",
-                bool,
-            )
-        },
-    )
-    mock_request.user.is_authenticated = False
-    mock_request.user.is_staff = False
+    mock_request.user = django_user_model()
 
-    result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
 
     assert result is expected_result
 
     os.environ.pop("REGISTRATION_ENABLED", None)
 
 
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "ENV_REGISTRATION_ENABLED, DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
     [
@@ -194,6 +159,8 @@ def test_ToggleSignUpPermissionClass_has_permission_noauth(
 )
 def test_ToggleSignUpPermissionClass_has_permission_auth_user(
     monkeypatch,
+    override_config,
+    owner_user,
     mock_request,
     ENV_REGISTRATION_ENABLED,
     DEFAULT_REGISTRATION_ENABLED,
@@ -203,28 +170,19 @@ def test_ToggleSignUpPermissionClass_has_permission_auth_user(
     """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
     os.environ["REGISTRATION_ENABLED"] = ENV_REGISTRATION_ENABLED
     monkeypatch.setattr(
-        "Emailkasten.utils.DEFAULT_REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
-    monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {
-            "REGISTRATION_ENABLED": (
-                CONSTANCE_REGISTRATION_ENABLED,
-                "The patched REGISTRATION_ENABLED setting",
-                bool,
-            )
-        },
-    )
-    mock_request.user.is_authenticated = True
-    mock_request.user.is_staff = False
-
-    result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
+    mock_request.user = owner_user
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
 
     assert result is expected_result
 
     os.environ.pop("REGISTRATION_ENABLED", None)
 
 
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "ENV_REGISTRATION_ENABLED, DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
     [
@@ -240,6 +198,8 @@ def test_ToggleSignUpPermissionClass_has_permission_auth_user(
 )
 def test_ToggleSignUpPermissionClass_has_permission_auth_admin(
     monkeypatch,
+    override_config,
+    admin_user,
     mock_request,
     ENV_REGISTRATION_ENABLED,
     DEFAULT_REGISTRATION_ENABLED,
@@ -249,81 +209,112 @@ def test_ToggleSignUpPermissionClass_has_permission_auth_admin(
     """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
     os.environ["REGISTRATION_ENABLED"] = ENV_REGISTRATION_ENABLED
     monkeypatch.setattr(
-        "Emailkasten.utils.DEFAULT_REGISTRATION_ENABLED", DEFAULT_REGISTRATION_ENABLED
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
-    monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {
-            "REGISTRATION_ENABLED": (
-                CONSTANCE_REGISTRATION_ENABLED,
-                "The patched REGISTRATION_ENABLED setting",
-                bool,
-            )
-        },
-    )
-    mock_request.user.is_authenticated = True
-    mock_request.user.is_staff = True
+    mock_request.user = admin_user
 
-    result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
 
     assert result is expected_result
 
     os.environ.pop("REGISTRATION_ENABLED", None)
 
 
-def test_get_config_success(monkeypatch, faker, mock_logger, mock_getattr):
-    """Tests getting a constance value in case of success."""
-    fake_config = faker.word()
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    [
+        ("1", True, True),
+        ("0", True, False),
+        ("1", False, False),
+        ("0", False, False),
+    ],
+)
+def test_ToggleSignUpPermissionClass_has_permission_fallback_noauth(
+    monkeypatch,
+    override_config,
+    django_user_model,
+    mock_request,
+    DEFAULT_REGISTRATION_ENABLED,
+    CONSTANCE_REGISTRATION_ENABLED,
+    expected_result,
+):
+    """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
+    os.environ.pop("REGISTRATION_ENABLED", None)
     monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {"TEST_CONFIG": (fake_config, "A test value", str)},
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
-    mock_getattr.return_value = fake_config
+    mock_request.user = django_user_model()
 
-    config_value = get_config("TEST_CONFIG")
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
 
-    mock_getattr.assert_called_once()
-    assert config_value == fake_config
-    mock_logger.debug.assert_not_called()
-    mock_logger.info.assert_not_called()
-    mock_logger.error.assert_not_called()
-    mock_logger.critical.assert_not_called()
+    assert result is expected_result
 
 
-def test_get_config_workaround_success(monkeypatch, faker, mock_logger, mock_getattr):
-    """Tests getting a constance value in case of success via the workaround."""
-    fake_config = faker.word()
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    [
+        ("1", True, True),
+        ("0", True, False),
+        ("1", False, False),
+        ("0", False, False),
+    ],
+)
+def test_ToggleSignUpPermissionClass_has_permission_fallback_auth_user(
+    monkeypatch,
+    override_config,
+    owner_user,
+    mock_request,
+    DEFAULT_REGISTRATION_ENABLED,
+    CONSTANCE_REGISTRATION_ENABLED,
+    expected_result,
+):
+    """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
+    os.environ.pop("REGISTRATION_ENABLED", None)
     monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {"TEST_CONFIG": (fake_config, "A test value", str)},
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
-    mock_getattr.side_effect = Exception
+    mock_request.user = owner_user
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
 
-    config_value = get_config("TEST_CONFIG")
-
-    mock_getattr.assert_called_once()
-    assert config_value == fake_config
-
-    mock_logger.info.assert_called()
-    mock_logger.critical.assert_not_called()
-    mock_logger.debug.assert_not_called()
-    mock_logger.error.assert_not_called()
+    assert result is expected_result
 
 
-def test_get_config_workaround_failure(monkeypatch, faker, mock_logger, mock_getattr):
-    """Tests getting a constance value in case of failure."""
-    fake_config = faker.word()
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "DEFAULT_REGISTRATION_ENABLED, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    [
+        ("1", True, True),
+        ("0", True, True),
+        ("1", False, True),
+        ("0", False, True),
+    ],
+)
+def test_ToggleSignUpPermissionClass_has_permission_fallback_auth_admin(
+    monkeypatch,
+    override_config,
+    admin_user,
+    mock_request,
+    DEFAULT_REGISTRATION_ENABLED,
+    CONSTANCE_REGISTRATION_ENABLED,
+    expected_result,
+):
+    """Tests the ToggleSignUpAdapter in case "REGISTRATION_ENABLED" environment is set."""
+    os.environ.pop("REGISTRATION_ENABLED", None)
     monkeypatch.setattr(
-        "Emailkasten.utils.CONSTANCE_CONFIG",
-        {"TEST_CONFIG": (fake_config, "A test value", str)},
+        "Emailkasten.utils.toggle_signup.DEFAULT_REGISTRATION_ENABLED",
+        DEFAULT_REGISTRATION_ENABLED,
     )
-    mock_getattr.side_effect = ValueError("Constance value not found")
+    mock_request.user = admin_user
 
-    with pytest.raises(KeyError):
-        get_config("NO_CONFIG")
+    with override_config(REGISTRATION_ENABLED=CONSTANCE_REGISTRATION_ENABLED):
+        result = ToggleSignUpPermissionClass().has_permission(mock_request, View())
 
-    mock_getattr.assert_called_once()
-    mock_logger.info.assert_called()
-    mock_logger.critical.assert_called()
-    mock_logger.debug.assert_not_called()
-    mock_logger.error.assert_not_called()
+    assert result is expected_result

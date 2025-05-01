@@ -20,23 +20,19 @@
 
 from __future__ import annotations
 
-import logging
 import os
-from typing import TYPE_CHECKING, Any, override
+from typing import TYPE_CHECKING, override
 
 from allauth.account.adapter import DefaultAccountAdapter
-from constance import config
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
-from Emailkasten.settings import CONSTANCE_CONFIG, DEFAULT_REGISTRATION_ENABLED
+from Emailkasten.settings import DEFAULT_REGISTRATION_ENABLED
+from Emailkasten.utils.workarounds import get_config
 
 
 if TYPE_CHECKING:
     from django.views import View
     from rest_framework.request import Request
-
-
-logger = logging.getLogger(__name__)
 
 
 class ToggleSignupAccountAdapter(
@@ -79,33 +75,3 @@ class ToggleSignUpPermissionClass(AllowAny, IsAuthenticated, IsAdminUser):
         ) and bool(get_config("REGISTRATION_ENABLED")):
             return AllowAny.has_permission(self, request, view)
         return IsAdminUser.has_permission(self, request, view)
-
-
-def get_config(setting: str) -> Any:
-    """A dirty workaround to enable constance to do the inital migration.
-
-    Initial migrations fail otherwise because the models depend on constance that is not initialized yet.
-    See https://github.com/jazzband/django-constance/issues/229
-
-    Args:
-        setting: The config value to retrieve
-
-    Returns:
-        The requested setting value.
-
-    Raises:
-        KeyError (:class:`KeyError`): Reraise of any exception
-        that is related to a settings value not existing.
-    """
-    try:
-        return getattr(config, setting)
-    except Exception as exc:
-        logger.info("Failed to retrieve a constance config value, using workaround ...")
-        try:
-            return CONSTANCE_CONFIG[setting][0]
-        except KeyError as keyexc:
-            logger.critical(
-                "A config value was not found, reraising from original exception!",
-                exc_info=True,
-            )
-            raise keyexc from exc

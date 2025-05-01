@@ -39,7 +39,7 @@ from core.mixins.URLMixin import URLMixin
 from core.models.EMailCorrespondentsModel import EMailCorrespondentsModel
 from core.utils.fileManagment import clean_filename, saveStore
 from core.utils.mailParsing import eml2html, is_X_Spam
-from Emailkasten.utils import get_config
+from Emailkasten.utils.workarounds import get_config
 
 from ..utils.mailParsing import getHeader, parseDatetimeHeader
 from .AttachmentModel import AttachmentModel

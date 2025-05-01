@@ -38,6 +38,9 @@
 
 ## To test
 
+- StorageModel for more cases of conflicting storage
+- use of cleanFilename
+
 ## To implement
 
 - autostart daemons on restart
@@ -55,7 +58,6 @@
 - shortcut urls (api/auth -> api/auth/login, etc)
 - variable page size pagination
 - more settings via env (django-environ maybe)
-- tests for use of cleanFilename
 
 ### Work in progress
 
@@ -73,7 +75,6 @@
 - separation of multi correspondentheader not working!
 - cascase doesnt trigger delete!
 - browser is occasionally in quirks mode
-- UnorderedObjectListWarning: Pagination may yield inconsistent results with an unordered object_list QuerySet.
 
 # Remember
 

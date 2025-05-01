@@ -160,15 +160,18 @@ class StorageModel(models.Model):
 
         clean_subdirectoryPath = clean_filename(subdirectoryName)
         subdirectoryPath = os.path.join(storageEntry.path, clean_subdirectoryPath)
-        while os.path.isfile(subdirectoryPath):
-            subdirectoryPath += ".a"
-        logger.debug("Creating new subdirectory in the current storage directory ...")
-        os.makedirs(subdirectoryPath)
+        if not os.path.isdir(subdirectoryPath):
+            while os.path.isfile(subdirectoryPath):
+                subdirectoryPath += ".a"
+            logger.debug(
+                "Creating new subdirectory in the current storage directory ..."
+            )
+            os.makedirs(subdirectoryPath)
 
-        storageEntry.incrementSubdirectoryCount()
-        logger.debug(
-            "Successfully created new subdirectory in the current storage directory."
-        )
+            storageEntry.incrementSubdirectoryCount()
+            logger.debug(
+                "Successfully created new subdirectory in the current storage directory."
+            )
 
         return subdirectoryPath
 

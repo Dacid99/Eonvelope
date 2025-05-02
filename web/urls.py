@@ -73,14 +73,19 @@ app_name = "web"
 
 urlpatterns = [
     path("dashboard/", DashboardView.as_view(), name=DashboardView.URL_NAME),
-    path("", RedirectView.as_view(url="dashboard/", permanent=True)),
+    path(
+        "",
+        RedirectView.as_view(
+            pattern_name=app_name + ":" + DashboardView.URL_NAME, permanent=True
+        ),
+    ),
     path(
         "accounts/",
         AccountFilterView.AccountFilterView.as_view(),
         name=AccountFilterView.AccountFilterView.URL_NAME,
     ),
     path(
-        "accounts/<int:pk>/details/",
+        "accounts/<int:pk>/",
         AccountDetailWithDeleteView.AccountDetailWithDeleteView.as_view(),
         name=AccountDetailWithDeleteView.AccountDetailWithDeleteView.URL_NAME,
     ),
@@ -105,7 +110,7 @@ urlpatterns = [
         name=AttachmentFilterView.AttachmentFilterView.URL_NAME,
     ),
     path(
-        "attachments/<int:pk>/details/",
+        "attachments/<int:pk>/",
         AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView.as_view(),
         name=AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView.URL_NAME,
     ),
@@ -115,7 +120,7 @@ urlpatterns = [
         name=CorrespondentFilterView.CorrespondentFilterView.URL_NAME,
     ),
     path(
-        "correspondents/<int:pk>/details/",
+        "correspondents/<int:pk>/",
         CorrespondentDetailWithDeleteView.CorrespondentDetailWithDeleteView.as_view(),
         name=CorrespondentDetailWithDeleteView.CorrespondentDetailWithDeleteView.URL_NAME,
     ),
@@ -130,7 +135,7 @@ urlpatterns = [
         name=DaemonFilterView.DaemonFilterView.URL_NAME,
     ),
     path(
-        "daemons/<int:pk>/details/",
+        "daemons/<int:pk>/",
         DaemonDetailWithDeleteView.DaemonDetailWithDeleteView.as_view(),
         name=DaemonDetailWithDeleteView.DaemonDetailWithDeleteView.URL_NAME,
     ),
@@ -145,7 +150,7 @@ urlpatterns = [
         name=EMailFilterView.EMailFilterView.URL_NAME,
     ),
     path(
-        "emails/<int:pk>/details/",
+        "emails/<int:pk>/",
         EMailDetailWithDeleteView.EMailDetailWithDeleteView.as_view(),
         name=EMailDetailWithDeleteView.EMailDetailWithDeleteView.URL_NAME,
     ),
@@ -155,7 +160,7 @@ urlpatterns = [
         name=MailboxFilterView.MailboxFilterView.URL_NAME,
     ),
     path(
-        "mailboxes/<int:pk>/details/",
+        "mailboxes/<int:pk>/",
         MailboxDetailWithDeleteView.MailboxDetailWithDeleteView.as_view(),
         name=MailboxDetailWithDeleteView.MailboxDetailWithDeleteView.URL_NAME,
     ),
@@ -180,7 +185,7 @@ urlpatterns = [
         name=MailingListFilterView.MailingListFilterView.URL_NAME,
     ),
     path(
-        "mailinglists/<int:pk>/details/",
+        "mailinglists/<int:pk>/",
         MailingListDetailWithDeleteView.MailingListDetailWithDeleteView.as_view(),
         name=MailingListDetailWithDeleteView.MailingListDetailWithDeleteView.URL_NAME,
     ),

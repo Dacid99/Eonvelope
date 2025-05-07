@@ -1,7 +1,8 @@
 {% load static i18n django_bootstrap5 %}
 
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="auto">
+<html lang="{{ LANGUAGE_CODE }}" data-bs-theme="auto">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -61,6 +61,7 @@ def test_get_auth_owner(emailModel, owner_client, detail_url):
     assert isinstance(response, HttpResponse)
     assert "web/email/email_detail.html" in [t.name for t in response.templates]
     assert "object" in response.context
+    assert isinstance(response.context["object"], EMailModel)
     assert emailModel.message_id in response.content.decode()
 
 

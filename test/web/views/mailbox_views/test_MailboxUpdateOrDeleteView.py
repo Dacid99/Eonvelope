@@ -60,6 +60,7 @@ def test_get_auth_owner(mailboxModel, owner_client, detail_url):
     assert isinstance(response, HttpResponse)
     assert "web/mailbox/mailbox_edit.html" in [t.name for t in response.templates]
     assert "object" in response.context
+    assert isinstance(response.context["object"], MailboxModel)
     assert "form" in response.context
     assert mailboxModel.name in response.content.decode()
 

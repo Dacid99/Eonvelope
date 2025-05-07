@@ -69,6 +69,7 @@ def test_get_auth_owner(attachmentModel, owner_client, detail_url):
         t.name for t in response.templates
     ]
     assert "object" in response.context
+    assert isinstance(response.context["object"], AttachmentModel)
     assert attachmentModel.file_name in response.content.decode()
 
 

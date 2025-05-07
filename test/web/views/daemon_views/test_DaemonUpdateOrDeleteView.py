@@ -60,6 +60,7 @@ def test_get_auth_owner(daemonModel, owner_client, detail_url):
     assert isinstance(response, HttpResponse)
     assert "web/daemon/daemon_edit.html" in [t.name for t in response.templates]
     assert "object" in response.context
+    assert isinstance(response.context["object"], DaemonModel)
     assert "form" in response.context
     assert str(daemonModel.uuid) in response.content.decode()
 

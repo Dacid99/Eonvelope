@@ -69,6 +69,7 @@ def test_get_auth_owner(mailingListModel, owner_client, detail_url):
         t.name for t in response.templates
     ]
     assert "object" in response.context
+    assert isinstance(response.context["object"], MailingListModel)
     assert mailingListModel.list_id in response.content.decode()
 
 

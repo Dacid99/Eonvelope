@@ -60,6 +60,7 @@ def test_get_auth_owner(accountModel, owner_client, detail_url):
     assert isinstance(response, HttpResponse)
     assert "web/account/account_edit.html" in [t.name for t in response.templates]
     assert "object" in response.context
+    assert isinstance(response.context["object"], AccountModel)
     assert "form" in response.context
     assert accountModel.mail_address in response.content.decode()
     with open("edit.html", "w") as f:

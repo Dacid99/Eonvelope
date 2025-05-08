@@ -82,11 +82,17 @@
         {% block card_extras %}
         {% endblock card_extras %}
 
-
     </div>
 
     {% block overlay_elements %}
     {% endblock overlay_elements %}
 
+
+    {% block scripts %}
+        <script src="{% static 'web/js/toggle-favorite.js' %}"></script>
+
+        {% block other_scripts %}
+        {% endblock other_scripts %}
+    {% endblock scripts %}
 
 {% endblock content %}

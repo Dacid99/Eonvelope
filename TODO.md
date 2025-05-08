@@ -23,8 +23,6 @@
 
 ## To refactor
 
-- headerdict accumulation can be easier, message supports dict() or at least .items()
-- lookup instead of save with IntegrityError where faster
 - explore emailmessage methods
 - content_type main and sub as fields and rename settings
 - consistent naming_style

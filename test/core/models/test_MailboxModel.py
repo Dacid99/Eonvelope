@@ -69,6 +69,16 @@ def mock_open(mocker):
 
 
 @pytest.fixture
+def mock_parseMailboxName(mocker, faker):
+    fake_name = faker.name()
+    return mocker.patch(
+        "core.models.MailboxModel.parseMailboxName",
+        autospec=True,
+        return_value=fake_name,
+    )
+
+
+@pytest.fixture
 def mock_EMailModel_createFromEmailBytes(mocker):
     return mocker.patch(
         "core.models.MailboxModel.EMailModel.createFromEmailBytes", autospec=True
@@ -402,20 +412,64 @@ def test_MailboxModel_addFromMailboxFile_bad_format(
     mock_logger.info.assert_called()
 
 
-def test_MailboxModel_fromData(mocker):
-    """Tests :func:`core.models.AccountModel.AccountModel.fromData`
+@pytest.mark.django_db
+def test_MailboxModel_createFromData_success(
+    faker, accountModel, mock_logger, mock_parseMailboxName
+):
+    """Tests :func:`core.models.AccountModel.AccountModel.createFromData`
     in case of success.
     """
-    mock_parseMailboxName = mocker.patch(
-        "core.models.MailboxModel.parseMailboxName",
-        autospec=True,
-        return_value="testname",
+    fake_name_bytes = faker.name().encode()
+
+    assert MailboxModel.objects.count() == 0
+
+    new_mailboxModel = MailboxModel.createFromData(fake_name_bytes, accountModel)
+
+    assert MailboxModel.objects.count() == 1
+    assert new_mailboxModel.pk is not None
+    mock_parseMailboxName.assert_called_once_with(fake_name_bytes)
+    assert new_mailboxModel.name == mock_parseMailboxName.return_value
+    mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
+def test_MailboxModel_createFromData_duplicate(
+    faker, mailboxModel, mock_logger, mock_parseMailboxName
+):
+    """Tests :func:`core.models.AccountModel.AccountModel.createFromData`
+    in case of data that is already in the db.
+    """
+    fake_name_bytes = faker.name().encode()
+
+    assert MailboxModel.objects.count() == 1
+
+    mock_parseMailboxName.return_value = mailboxModel.name
+
+    new_mailboxModel = MailboxModel.createFromData(
+        fake_name_bytes, mailboxModel.account
     )
 
-    new_mailboxModel = MailboxModel.fromData("mailboxData", None)
+    assert MailboxModel.objects.count() == 1
+    assert new_mailboxModel.pk is not None
+    mock_parseMailboxName.assert_called_once_with(fake_name_bytes)
+    assert new_mailboxModel == mailboxModel
+    mock_logger.debug.assert_called()
 
-    mock_parseMailboxName.assert_called_once_with("mailboxData")
-    assert new_mailboxModel.name == "testname"
+
+@pytest.mark.django_db
+def test_MailboxModel_createFromData_no_account(faker, mock_parseMailboxName):
+    """Tests :func:`core.models.AccountModel.AccountModel.createFromData`
+    in case of data that is already in the db.
+    """
+    fake_name_bytes = faker.name().encode()
+
+    assert MailboxModel.objects.count() == 0
+
+    with pytest.raises(ValueError):
+        MailboxModel.createFromData(fake_name_bytes, AccountModel())
+
+    assert MailboxModel.objects.count() == 0
+    mock_parseMailboxName.assert_not_called()
 
 
 @pytest.mark.django_db

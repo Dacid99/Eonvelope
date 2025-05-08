@@ -23,7 +23,6 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Final, override
 
-import django.db
 from dirtyfields import DirtyFieldsMixin
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -268,13 +267,6 @@ class AccountModel(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
         self.save(update_fields=["is_healthy"])
 
         for mailboxData in mailboxList:
-            mailbox = MailboxModel.fromData(mailboxData, self)
-
-            logger.debug("Saving mailbox %s from %s to db ...", mailbox, self)
-            try:
-                mailbox.save()
-                logger.debug("Successfully saved mailbox to db!")
-            except django.db.IntegrityError:
-                logger.debug("%s already exists in db, it is skipped!", mailbox)
+            MailboxModel.createFromData(mailboxData, self)
 
         logger.info("Successfully updated mailboxes.")

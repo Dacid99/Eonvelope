@@ -87,13 +87,13 @@ def mock_AccountModel_get_fetcher(mocker, mock_fetcher) -> MagicMock:
 
 
 @pytest.fixture
-def spy_MailboxModel_fromData(mocker):
-    """Fixture spying on :func:`core.models.AccountModel.MailboxModel.fromData` instance.
+def spy_MailboxModel_createFromData(mocker):
+    """Fixture spying on :func:`core.models.AccountModel.MailboxModel.createFromData` instance.
 
     Returns:
         The spied on function.
     """
-    return mocker.spy(core.models.AccountModel.MailboxModel, "fromData")
+    return mocker.spy(core.models.AccountModel.MailboxModel, "createFromData")
 
 
 @pytest.mark.django_db
@@ -375,7 +375,7 @@ def test_AccountModel_update_mailboxes_success(
     mock_logger,
     mock_fetcher,
     mock_AccountModel_get_fetcher,
-    spy_MailboxModel_fromData,
+    spy_MailboxModel_createFromData,
 ):
     """Tests :func:`core.models.AccountModel.AccountModel.update_mailboxes`
     in case of success.
@@ -392,10 +392,9 @@ def test_AccountModel_update_mailboxes_success(
     )
     mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_called_once_with()
-    assert spy_MailboxModel_fromData.call_count == len(
+    assert spy_MailboxModel_createFromData.call_count == len(
         mock_fetcher.fetchMailboxes.return_value
     )
-    mock_logger.debug.assert_called()
     mock_logger.info.assert_called()
 
 
@@ -405,7 +404,7 @@ def test_AccountModel_update_mailboxes_duplicate(
     mock_logger,
     mock_fetcher,
     mock_AccountModel_get_fetcher,
-    spy_MailboxModel_fromData,
+    spy_MailboxModel_createFromData,
 ):
     """Tests :func:`core.models.AccountModel.AccountModel.update_mailboxes`
     in case of a fetched mailbox already being in the db.
@@ -423,10 +422,9 @@ def test_AccountModel_update_mailboxes_duplicate(
     )
     mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_called_once_with()
-    assert spy_MailboxModel_fromData.call_count == len(
+    assert spy_MailboxModel_createFromData.call_count == len(
         mock_fetcher.fetchMailboxes.return_value
     )
-    mock_logger.debug.assert_called()
     mock_logger.info.assert_called()
 
 
@@ -436,7 +434,7 @@ def test_AccountModel_update_mailboxes_failure(
     mock_logger,
     mock_fetcher,
     mock_AccountModel_get_fetcher,
-    spy_MailboxModel_fromData,
+    spy_MailboxModel_createFromData,
 ):
     """Tests :func:`core.models.AccountModel.AccountModel.update_mailboxes`
     in case fetching mailboxes fails with a :class:`core.utils.fetchers.exceptions.MailAccountError`.
@@ -453,7 +451,7 @@ def test_AccountModel_update_mailboxes_failure(
     assert accountModel.mailboxes.count() == 0
     mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_called_once_with()
-    spy_MailboxModel_fromData.assert_not_called()
+    spy_MailboxModel_createFromData.assert_not_called()
     mock_logger.info.assert_called()
 
 
@@ -463,7 +461,7 @@ def test_AccountModel_update_mailboxes_get_fetcher_error(
     mock_logger,
     mock_fetcher,
     mock_AccountModel_get_fetcher,
-    spy_MailboxModel_fromData,
+    spy_MailboxModel_createFromData,
 ):
     """Tests :func:`core.models.AccountModel.AccountModel.update_mailboxes`
     in case :func:`core.models.AccountModel.AccountModel.get_fetcher`
@@ -481,7 +479,7 @@ def test_AccountModel_update_mailboxes_get_fetcher_error(
     assert accountModel.mailboxes.count() == 0
     mock_AccountModel_get_fetcher.assert_called_once_with(accountModel)
     mock_fetcher.fetchMailboxes.assert_not_called()
-    spy_MailboxModel_fromData.assert_not_called()
+    spy_MailboxModel_createFromData.assert_not_called()
     mock_logger.info.assert_called()
 
 

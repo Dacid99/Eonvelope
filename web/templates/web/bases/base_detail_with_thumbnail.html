@@ -1,5 +1,7 @@
 {% extends "web/bases/base.html" %}
 
+{% load static %}
+
 {% block content %}
 
     {% block alerts %}
@@ -89,6 +91,7 @@
 
 
     {% block scripts %}
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
         <script src="{% static 'web/js/toggle-favorite.js' %}"></script>
 
         {% block other_scripts %}

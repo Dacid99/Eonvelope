@@ -26,7 +26,7 @@
 
     {% include "web/partials/_test-button.html" %}
 
-    {% include "web/account/partials/_update_mailboxes-button.html" %}
+    {% include "web/account/partials/_update_mailboxes-button.html" with account=object %}
 
 {% endblock action_buttons %}
 
@@ -60,13 +60,11 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h4 class="card-title">{% translate "Latest Emails" %}</h4>
-                    <a role="button"
-                       class="btn btn-outline-primary"
-                       href="{% url 'web:account-emails' object.pk %}">{% translate "View all" %}</a>
-                </div>
+            <div class="d-flex justify-content-between m-1">
+                <h4 class="card-title">{% translate "Latest Emails" %}</h4>
+                <a role="button"
+                   class="btn btn-outline-primary"
+                   href="{% url 'web:account-emails' object.pk %}">{% translate "View all" %}</a>
             </div>
 
             {% include "web/email/partials/_email_list.html" with emails=latest_emails %}

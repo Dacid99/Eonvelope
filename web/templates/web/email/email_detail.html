@@ -113,8 +113,7 @@ object.mailbox.account.mail_address }}</a>
         <div class="card-body">
             <h4 class="card-title">{% translate "Correspondents" %}</h4>
 
-            {% include "web/emailcorrespondents/partials/_emailcorrespondents_list.html" with
-            emailcorrespondents=object.emailcorrespondents.all %}
+            {% include "web/emailcorrespondents/partials/_emailcorrespondents_list.html" with emailcorrespondents=object.emailcorrespondents.all %}
 
         </div>
     </div>

@@ -1,3 +1,4 @@
+// requires <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script> in the same template
 const TOGGLE_CLASSES = {
     on: {
         class: 'bg-warning',
@@ -16,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 {
                     method: 'POST',
                     headers: {
-                        'X-CSRFToken': '{{ csrf_token }}'
+                        'X-CSRFToken': Cookies.get('csrftoken')
                     },
                     credentials: 'include',
                     mode: 'same-origin'

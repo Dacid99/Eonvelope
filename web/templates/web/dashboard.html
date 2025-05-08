@@ -11,7 +11,12 @@
     <div class="row justify-content-evenly">
         <div class="col-9">
             <div class="card">
-                <h4 class="card-header">{% translate "Latest Emails" %}</h4>
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4>{% translate "Latest Emails" %}</h4>
+                    <a role="button"
+                       class="btn btn-outline-primary"
+                       href="{% url 'web:email-filter-list' %}">{% translate "View all" %}</a>
+                </div>
                 <div class="card-body">
 
                     {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
@@ -61,9 +66,11 @@
                     </table>
                 </div>
             </div>
+            <div class="m-3">
 
-            {% include "web/account/partials/_add_button.html" %}
+                {% include "web/account/partials/_add_button.html" %}
 
+            </div>
         </div>
     </div>
 {% endblock content %}

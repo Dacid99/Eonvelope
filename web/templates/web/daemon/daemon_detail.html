@@ -16,7 +16,7 @@
 
 {% block badges %}
 
-    {% include "web/daemon/partials/_is_running-badge.html" %}
+    {% include "web/daemon/partials/_is_running-badge.html" with daemon=object %}
 
     {% include "web/partials/_health_badge.html" %}
 
@@ -24,9 +24,9 @@
 
 {% block action_buttons %}
 
-    {% include "web/daemon/partials/_start-button.html" %}
+    {% include "web/daemon/partials/_start-button.html" with daemon=object %}
 
-    {% include "web/daemon/partials/_stop-button.html" %}
+    {% include "web/daemon/partials/_stop-button.html" with daemon=object %}
 
     {% include "web/daemon/partials/_download_logs-button.html" %}
 

@@ -26,10 +26,11 @@
 
     {% include "web/partials/_test-button.html" %}
 
-    {% include "web/mailbox/partials/_fetch_all-button.html" %}
+    {% include "web/mailbox/partials/_fetch_all-button.html" with mailbox=object %}
 
     {% include "web/mailbox/partials/_add_daemon-button.html" %}
-    {% include "web/mailbox/partials/_upload_email-button.html" %}
+
+    {% include "web/mailbox/partials/_upload_email-button.html" with mailbox=object %}
 
 {% endblock action_buttons %}
 
@@ -58,14 +59,16 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">{% translate "Daemons" %}</h4>
+            <div class="m-1">
 
-            {% include "web/daemon/partials/_daemon_list.html" with daemons=object.daemons.all %}
+                {% include "web/daemon/partials/_daemon_list.html" with daemons=object.daemons.all %}
 
+            </div>
         </div>
     </div>
     <div class="card">
         <div class="card-body">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between m-1">
                 <h4 class="card-title">{% translate "Latest Emails" %}</h4>
                 <a role="button"
                    class="btn btn-outline-primary"

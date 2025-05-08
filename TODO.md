@@ -74,7 +74,5 @@
 - cascase doesnt trigger delete!
 - browser is occasionally in quirks mode
 - reverse lookup filters search doesnt work as implemented
-- api responses after custom actions contain outdated modeldata
 - optics:
   - stats table out of bounds for slim viewport
-  - view all button for dashboard mails

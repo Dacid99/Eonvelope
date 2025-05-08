@@ -1,12 +1,12 @@
 <div class="card">
-    {% if attachment.has_thumbnail %}
+    {% if card_object.has_thumbnail %}
         <div class="row g-0">
             <div class="col-md-10">
             {% endif %}
             <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="d-inline-flex align-items-center">
-                        <h5 class="card-title me-1">
+                <div class="d-flex justify-content-between">
+                    <div class="d-inline-flex">
+                        <h5 class="card-title me-2">
                             <a href="{{ card_object.get_absolute_url }}"
                                class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
 
@@ -15,7 +15,7 @@
 
                             </a>
                         </h5>
-                        <div class="align-items-center">
+                        <div>
 
                             {% block start_badges %}
                             {% endblock start_badges %}
@@ -49,12 +49,12 @@
                 </div>
 
             </div>
-            {% if attachment.has_thumbnail %}
+            {% if card_object.has_thumbnail %}
             </div>
             <div class="col-md-2">
-                <img src="{{ attachment.get_absolute_thumbnail_url }}"
+                <img src="{{ card_object.get_absolute_thumbnail_url }}"
                      class="img-fluid rounded"
-                     alt="Image attachment" />
+                     alt="Thumbnail image" />
             </div>
         </div>
     {% endif %}

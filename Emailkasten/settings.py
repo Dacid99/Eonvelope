@@ -328,7 +328,7 @@ LOCALE_PATHS = [
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = "/home/david/Desktop/static"
+STATIC_ROOT = "/static"
 
 
 # Default primary key field type

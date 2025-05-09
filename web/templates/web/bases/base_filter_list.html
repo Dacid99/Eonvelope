@@ -33,17 +33,17 @@
                 aria-controls="offcanvasFilter">{% translate "Show filter options" %}</button>
     </div>
 
-    {% include "web/partials/_filter_pagination.html" %}
-
     <hr>
 
     {% block list %}
     {% endblock list %}
 
-    <hr>
+    <div class="bg-white sticky-bottom pb-3">
+        <hr>
 
-    {% include "web/partials/_filter_pagination.html" %}
+        {% include "web/partials/_filter_pagination.html" %}
 
+    </div>
     <div class="offcanvas offcanvas-start"
          data-bs-scroll="true"
          tabindex="-1"

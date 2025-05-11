@@ -1,0 +1,126 @@
+image: python:3.13-rc-bookworm
+
+stages:
+  - check
+  - test
+  - docs
+  - build
+
+variables:
+  CI: "true"
+  GITLAB_API_URL: "https://gitlab.com/-/project/$CI_PROJECT_ID"
+  APT_DEPENDENCIES: "gettext build-essential default-mysql-client krb5-user krb5-multidev"
+  CHECK_PATH: "validation/"
+  CHECK_CONFIG_PATH: "validation/"
+  CHECK_REPORT_PATH: "validation/reports/"
+  TEST_PATH: "test/"
+  TEST_CONFIG_PATH: "test/"
+  TEST_REPORT_PATH: "test/reports/"
+  DOCS_PATH: "docs/"
+  DOCKER_PATH: "docker/"
+  DOCKER_IMAGE_PATH: "/var/lib/docker/image/overlay2/"
+
+before_script:
+  - apt update -y && apt install -y $APT_DEPENDENCIES
+  - pip install poetry
+  - set -o pipefail
+  - export SECRET_KEY='HELPER_KEY'
+
+check_codebase:
+  stage: check
+  only:
+    - tags
+  script:
+    - echo "Checking codebase ..."
+    - poetry install --with=dev
+    - mkdir -p $CHECK_REPORT_PATH
+    - eval $(poetry env activate)
+    - ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' > $CHECK_REPORT_PATH'ruff_prebuild.ansi'
+    - pylint --rcfile=$CHECK_CONFIG_PATH'pylintrc_code' > $CHECK_REPORT_PATH'pylint_code_prebuild.ansi'
+    - |
+      if [ $? -ne 0 ]; then
+        echo "Pylint for code failed, please check "$CHECK_REPORT_PATH"pylint_code_prebuild.ansi ."
+        exit 1
+      fi
+    - pylint --rcfile=$CHECK_CONFIG_PATH'pylintrc_docs' > $CHECK_REPORT_PATH'pylint_docs_prebuild.ansi'
+    - |
+      if [ $? -ne 0 ]; then
+        echo "Pylint for docs failed, please check "$CHECK_REPORT_PATH"pylint_docs_prebuild.ansi ."
+        exit 1
+      fi
+    - mypy --config-file $CHECK_CONFIG_PATH'mypy.ini' > $CHECK_REPORT_PATH'mypy/mypy_prebuild.ansi'
+    - djlint --reformat --configuration $CHECK_CONFIG_PATH'djlintrc' > $CHECK_REPORT_PATH'djlint_prebuild.ansi'
+    - djlint --lint --configuration $CHECK_CONFIG_PATH'djlintrc' >> $CHECK_REPORT_PATH'djlint_prebuild.ansi'
+    - |
+      if [ $? -ne 0 ]; then
+        echo "Djlint failed, please check "$CHECK_REPORT_PATH"djlint_prebuild.ansi ."
+        exit 1
+      fi
+    - echo "Successfully checked codebase."
+  artifacts:
+    paths:
+      - "$CHECK_REPORT_PATH"
+    expire_in: 30 days
+
+test_codebase:
+  stage: test
+  only:
+    - tags
+  script:
+    - echo "Testing codebase ..."
+    - poetry install --with=dev
+    - mkdir -p $TEST_REPORT_PATH
+    - eval $(poetry env activate)
+    - cd $TEST_PATH
+    - pytest . --config-file pytest.ini > $TEST_REPORT_PATH"pytest_prebuild.ansi"
+    - echo "Successfully tested codebase."
+  artifacts:
+    paths:
+      - "$TEST_REPORT_PATH"
+    expire_in: 30 days
+
+build_docs:
+  stage: docs
+  dependencies:
+    - check
+    - test
+  only:
+    - tags
+  script:
+    - echo "Building docs ..."
+    - poetry install --with=docs
+    - eval $(poetry env activate)
+    - cd $DOCS_PATH
+    - make source
+    - make html
+    - make epub
+    - echo "Successfully built docs."
+    - echo "Releasing docs ..."
+    - echo "Nowhere to release at the moment."
+    - echo "Successfully released docs."
+  artifacts:
+    paths:
+      - "$DOCS_PATH'build'"
+    expire_in: 30 days
+
+build_docker:
+  stage: build
+  dependencies:
+    - check
+    - test
+  only:
+    - tags
+  script:
+    - echo "Building docker image ..."
+    - poetry install
+    - eval $(poetry env activate)
+    - cd docker
+    - docker compose -f docker-compose.build.yml build
+    - echo "Successfully built docker image."
+    - echo "Releasing docker image ..."
+    - echo "Nowhere to release at the moment."
+    - echo "Successfully released docker image."
+  artifacts:
+    paths:
+      - "$DOCKER_IMAGE_PATH"
+    expire_in: 30 days

@@ -86,12 +86,15 @@ def test_POP3Fetcher___init___success(
 
 @pytest.mark.django_db
 def test_POP3Fetcher___init___connectionError(
-    mocker, pop3_mailboxModel, mock_logger, mock_POP3
+    mocker, faker, pop3_mailboxModel, mock_logger, mock_POP3
 ):
     spy_POP3Fetcher_connectToHost = mocker.spy(POP3Fetcher, "connectToHost")
-    mock_POP3.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_POP3.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         POP3Fetcher(pop3_mailboxModel.account)
 
     spy_POP3Fetcher_connectToHost.assert_called_once()
@@ -121,12 +124,23 @@ def test_POP3Fetcher___init___badProtocol(
     "raisingFunction, expectedCalls", [("user", (1, 0)), ("pass_", (1, 1))]
 )
 def test_POP3Fetcher___init___exception(
-    mocker, pop3_mailboxModel, mock_logger, mock_POP3, raisingFunction, expectedCalls
+    mocker,
+    faker,
+    pop3_mailboxModel,
+    mock_logger,
+    mock_POP3,
+    raisingFunction,
+    expectedCalls,
 ):
     spy_POP3Fetcher_connectToHost = mocker.spy(POP3Fetcher, "connectToHost")
-    getattr(mock_POP3.return_value, raisingFunction).side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    getattr(mock_POP3.return_value, raisingFunction).side_effect = AssertionError(
+        fake_error_message
+    )
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         POP3Fetcher(pop3_mailboxModel.account)
 
     spy_POP3Fetcher_connectToHost.assert_called_once()
@@ -200,10 +214,15 @@ def test_POP3Fetcher_connectToHost_success(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_connectToHost_exception(pop3_mailboxModel, mock_logger, mock_POP3):
-    mock_POP3.side_effect = AssertionError
+def test_POP3Fetcher_connectToHost_exception(
+    faker, pop3_mailboxModel, mock_logger, mock_POP3
+):
+    fake_error_message = faker.sentence()
+    mock_POP3.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         POP3Fetcher(pop3_mailboxModel.account)
 
     kwargs = {"host": pop3_mailboxModel.account.mail_host}
@@ -242,10 +261,15 @@ def test_POP3Fetcher_test_account_badResponse(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_test_account_exception(pop3_mailboxModel, mock_logger, mock_POP3):
-    mock_POP3.return_value.noop.side_effect = AssertionError
+def test_POP3Fetcher_test_account_exception(
+    faker, pop3_mailboxModel, mock_logger, mock_POP3
+):
+    fake_error_message = faker.sentence()
+    mock_POP3.return_value.noop.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         POP3Fetcher(pop3_mailboxModel.account).test()
 
     mock_POP3.return_value.noop.assert_called_once_with()
@@ -294,10 +318,15 @@ def test_POP3Fetcher_test_mailbox_badResponse(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_test_mailbox_exception(pop3_mailboxModel, mock_logger, mock_POP3):
-    mock_POP3.return_value.list.side_effect = AssertionError
+def test_POP3Fetcher_test_mailbox_exception(
+    faker, pop3_mailboxModel, mock_logger, mock_POP3
+):
+    fake_error_message = faker.sentence()
+    mock_POP3.return_value.list.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         POP3Fetcher(pop3_mailboxModel.account).test(pop3_mailboxModel)
 
     mock_POP3.return_value.noop.assert_called_once_with()
@@ -361,10 +390,15 @@ def test_POP3Fetcher_fetchEmails_badResponse(pop3_mailboxModel, mock_logger, moc
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetchEmails_exception(pop3_mailboxModel, mock_logger, mock_POP3):
-    mock_POP3.return_value.list.side_effect = AssertionError
+def test_POP3Fetcher_fetchEmails_exception(
+    faker, pop3_mailboxModel, mock_logger, mock_POP3
+):
+    fake_error_message = faker.sentence()
+    mock_POP3.return_value.list.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         POP3Fetcher(pop3_mailboxModel.account).fetchEmails(pop3_mailboxModel)
 
     mock_POP3.return_value.list.assert_called_once_with()

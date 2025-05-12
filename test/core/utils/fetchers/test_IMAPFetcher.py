@@ -143,12 +143,15 @@ def test_IMAPFetcher___init___success(
 
 @pytest.mark.django_db
 def test_IMAPFetcher___init___connectionError(
-    mocker, imap_mailboxModel, mock_logger, mock_IMAP4
+    mocker, faker, imap_mailboxModel, mock_logger, mock_IMAP4
 ):
     spy_IMAPFetcher_connectToHost = mocker.spy(IMAPFetcher, "connectToHost")
-    mock_IMAP4.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_IMAP4.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         IMAPFetcher(imap_mailboxModel.account)
 
     spy_IMAPFetcher_connectToHost.assert_called_once()
@@ -173,12 +176,15 @@ def test_IMAPFetcher___init___badProtocol(
 
 @pytest.mark.django_db
 def test_IMAPFetcher___init___loginError(
-    mocker, imap_mailboxModel, mock_logger, mock_IMAP4
+    mocker, faker, imap_mailboxModel, mock_logger, mock_IMAP4
 ):
     spy_IMAPFetcher_connectToHost = mocker.spy(IMAPFetcher, "connectToHost")
-    mock_IMAP4.return_value.login.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_IMAP4.return_value.login.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         IMAPFetcher(imap_mailboxModel.account)
 
     spy_IMAPFetcher_connectToHost.assert_called_once()
@@ -236,11 +242,14 @@ def test_IMAPFetcher_connectToHost_success(
 
 @pytest.mark.django_db
 def test_IMAPFetcher_connectToHost_exception(
-    imap_mailboxModel, mock_logger, mock_IMAP4
+    faker, imap_mailboxModel, mock_logger, mock_IMAP4
 ):
-    mock_IMAP4.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_IMAP4.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         IMAPFetcher(imap_mailboxModel.account)
 
     kwargs = {"host": imap_mailboxModel.account.mail_host}
@@ -279,10 +288,15 @@ def test_IMAPFetcher_test_account_badResponse(
 
 
 @pytest.mark.django_db
-def test_IMAPFetcher_test_account_exception(imap_mailboxModel, mock_logger, mock_IMAP4):
-    mock_IMAP4.return_value.noop.side_effect = AssertionError
+def test_IMAPFetcher_test_account_exception(
+    faker, imap_mailboxModel, mock_logger, mock_IMAP4
+):
+    fake_error_message = faker.sentence()
+    mock_IMAP4.return_value.noop.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         IMAPFetcher(imap_mailboxModel.account).test()
 
     mock_IMAP4.return_value.noop.assert_called_once_with()
@@ -350,11 +364,14 @@ def test_IMAPFetcher_test_mailbox_badResponse(
     "raisingFunction, expectedCalls", [("select", (1, 0)), ("check", (1, 1))]
 )
 def test_IMAPFetcher_test_mailbox_exception(
-    imap_mailboxModel, mock_logger, mock_IMAP4, raisingFunction, expectedCalls
+    faker, imap_mailboxModel, mock_logger, mock_IMAP4, raisingFunction, expectedCalls
 ):
-    getattr(mock_IMAP4.return_value, raisingFunction).side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    getattr(mock_IMAP4.return_value, raisingFunction).side_effect = AssertionError(
+        fake_error_message
+    )
 
-    with pytest.raises(MailboxError, match="AssertionError occured"):
+    with pytest.raises(MailboxError, match=f"AssertionError.*?{fake_error_message}"):
         IMAPFetcher(imap_mailboxModel.account).test(imap_mailboxModel)
 
     mock_IMAP4.return_value.noop.assert_called_once_with()
@@ -482,11 +499,14 @@ def test_IMAPFetcher_fetchEmails_badResponse(
     "raisingFunction, expectedCalls", [("select", (1, 0)), ("uid", (1, 1))]
 )
 def test_IMAPFetcher_fetchEmails_exception(
-    imap_mailboxModel, mock_logger, mock_IMAP4, raisingFunction, expectedCalls
+    faker, imap_mailboxModel, mock_logger, mock_IMAP4, raisingFunction, expectedCalls
 ):
-    getattr(mock_IMAP4.return_value, raisingFunction).side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    getattr(mock_IMAP4.return_value, raisingFunction).side_effect = AssertionError(
+        fake_error_message
+    )
 
-    with pytest.raises(MailboxError, match="AssertionError occured"):
+    with pytest.raises(MailboxError, match=f"AssertionError.*?{fake_error_message}"):
         IMAPFetcher(imap_mailboxModel.account).fetchEmails(imap_mailboxModel)
 
     assert mock_IMAP4.return_value.select.call_count == expectedCalls[0]
@@ -586,11 +606,14 @@ def test_IMAPFetcher_fetchMailboxes_badResponse(
 
 @pytest.mark.django_db
 def test_IMAPFetcher_fetchMailboxes_exception(
-    imap_mailboxModel, mock_logger, mock_IMAP4
+    faker, imap_mailboxModel, mock_logger, mock_IMAP4
 ):
-    mock_IMAP4.return_value.list.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_IMAP4.return_value.list.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         IMAPFetcher(imap_mailboxModel.account).fetchMailboxes()
 
     mock_IMAP4.return_value.list.assert_called_once()

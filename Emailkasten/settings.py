@@ -39,7 +39,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Get environ either from environment and file defined via _FILE env-variable
 # See https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
 env = FileAwareEnv()
-env.read_env()
+env.read_env(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/

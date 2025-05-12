@@ -5,9 +5,9 @@ services:
     volumes:
       - /main/Emailkasten/test/mysql:/var/lib/mysql
     environment:
-      - MARIADB_DATABASE=email_archive_django  # must match DATABASE_NAME
-      - MARIADB_USER=user  # must match DATABASE_USER
-      - MARIADB_PASSWORD=passwd  # must match DATABASE_PASSWORD
+      - MARIADB_DATABASE=email_archive_django # must match DATABASE_NAME
+      - MARIADB_USER=user # must match DATABASE_USER
+      - MARIADB_PASSWORD=passwd # must match DATABASE_PASSWORD
       - MARIADB_ROOT_PASSWORD=example
     restart: unless-stopped
     healthcheck:
@@ -25,9 +25,6 @@ services:
       - 9999:8080
 
   web:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile
     image: emailkasten
     container_name: emailkasten-web
     volumes:
@@ -36,17 +33,19 @@ services:
     ports:
       - 1122:8000
     environment:
-      - DATABASE=email_archive_django  # must match MARIADB_DATABASE
-      - DATABASE_USER=user  # must match MARIADB_USER
-      - DATABASE_PASSWORD=passwd  # must match MARIADB_PASSWORD
+      - DATABASE=email_archive_django # must match MARIADB_DATABASE
+      - DATABASE_USER=user # must match MARIADB_USER
+      - DATABASE_PASSWORD=passwd # must match MARIADB_PASSWORD
       - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
       - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
-      - ALLOWED_HOSTS=*,localhost:1122,emailkasten.mydomain.tld  # all allowed host URLs separated by ,
+      - ALLOWED_HOSTS=*,localhost:1122,emailkasten.mydomain.tld # all allowed host URLs separated by ,
       - APP_LOG_LEVEL=DEBUG
       - DJANGO_LOG_LEVEL=INFO
       - ROOT_LOG_LEVEL=DEBUG
       - LOGFILE_MAXSIZE=10485760
       - LOGFILE_BACKUP_NUMBER=5
+      - RECONNECT_RETRIES=10
+      - RECONNECT_DELAY=10
       - REGISTRATION_ENABLED=True
       - DEBUG=True
     restart: unless-stopped

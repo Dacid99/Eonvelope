@@ -1,5 +1,5 @@
 EMailkasten source code documentation
-=========================
+=====================================
 
 
 .. toctree::

@@ -4,7 +4,7 @@ FAQ
 This is a list of frequently asked questions with their answers and quick solutions to common problems.
 
 
-I am new to self-hosting, how can i set an instance up the easiest?
+I am new to self-hosting, how can I set an instance up the easiest?
 -------------------------------------------------------------------
 
 Setting up an EMailkasten server is quick and straightforward.
@@ -31,9 +31,9 @@ Translation is done via weblate. To get a quickstart look at :doc:`the translati
 If your language is also missing on weblate, please file an issue.
 
 
-How can i contribute to this project?
+How can I contribute to this project?
 -------------------------------------
 
 Everyone is welcome to help with the development of Emailkasten!
-To get you of to a good start please check out the quickstart and codestyle guidelines.
+To get you off to a good start please check out the quickstart and codestyle guidelines.
 You can find them and the source code documentation in the :doc:`developers section <developers>`.

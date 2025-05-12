@@ -9,7 +9,7 @@ Next take this docker-compose file and adapt the environment settings that need 
    :language: yaml
    :caption: docker-compose.yaml
 
-For security reasons please change all passwords.
+For security reasons please change all passwords and the SECRET_KEY.
 
 Now you can start the docker stack with ``docker compose up -d``.
 

@@ -4,7 +4,8 @@ Installation
 Recommended
 -----------
 
-The project is intended to be run with *docker compose* using the compose fil docker/docker-compose.yml or an equivalent *docker run* command.
+The project is intended to be run with *docker compose* using the compose file docker/docker-compose.yml or an equivalent *docker run* command.
+Take the docker compose file from the docker directory of the project, adapt it to your needs and run ``docker compose up -d``. Done!
 
 Advanced
 --------

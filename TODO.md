@@ -50,6 +50,8 @@
 - more attachment thumbnails
 - docs:
   - integratons page, searxng section in docs
+- fallback for list-id if other list entries are present
+- identification of mailinglists via from
 
 ### Work in progress
 
@@ -65,6 +67,5 @@
 ## To fix
 
 - cascase doesnt trigger delete!
-- browser is occasionally in quirks mode
 - optics:
   - stats table out of bounds for slim viewport

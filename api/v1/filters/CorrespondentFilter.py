@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Final
 
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from api.constants import FilterSetups
@@ -29,12 +30,15 @@ from core.models.CorrespondentModel import CorrespondentModel
 
 
 if TYPE_CHECKING:
-    from django.db.models import Model
+    from django.db.models import Model, QuerySet
 
 
 class CorrespondentFilter(filters.FilterSet):
     """The filter class for :class:`core.models.CorrespondentModel.CorrespondentModel`."""
 
+    search = filters.CharFilter(
+        method="filter_text_fields",
+    )
     mention__iexact = filters.CharFilter(
         field_name="correspondentemails__mention", lookup_expr="iexact"
     )
@@ -139,3 +143,20 @@ class CorrespondentFilter(filters.FilterSet):
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
         }
+
+    def filter_text_fields(
+        self, queryset: QuerySet[CorrespondentModel], name: str, value: str
+    ) -> QuerySet[CorrespondentModel]:
+        """Filters textfields in the model.
+
+        Args:
+            queryset: The basic queryset to filter.
+            name: The name of the filterfield.
+            value: The value to filter by.
+
+        Returns:
+            The filtered queryset.
+        """
+        return queryset.filter(
+            Q(email_address__icontains=value) | Q(email_name__icontains=value)
+        ).distinct()

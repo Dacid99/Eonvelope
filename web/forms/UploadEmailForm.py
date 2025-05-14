@@ -23,10 +23,10 @@ from django.utils.translation import gettext_lazy as _
 
 from core.constants import SupportedEmailUploadFormats
 
-from ..utils.RequiredMarkerModelForm import RequiredMarkerModelForm
+from ..utils.RequiredMarkerForms import RequiredMarkerForm
 
 
-class UploadEmailForm(RequiredMarkerModelForm):
+class UploadEmailForm(RequiredMarkerForm):
     """Form for email file upload."""
 
     file_format = forms.ChoiceField(

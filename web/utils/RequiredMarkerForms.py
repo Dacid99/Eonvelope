@@ -20,12 +20,25 @@
 
 from typing import Any
 
-from django.forms import ModelForm
+from django.forms import Form, ModelForm
 from django.utils.translation import gettext_lazy as _
 
 
 class RequiredMarkerModelForm(ModelForm):
     """A slightly extended version of :class:`django.forms.ModelForm` that adds a marker to required fields."""
+
+    required_marker = _(" *")
+
+    def __init__(self, *args: Any, **kwargs: Any):
+        """Extended constructor adding :attr:`required_marker` to the required field labels."""
+        super().__init__(*args, **kwargs)
+        for field_name in self.fields:
+            if self.fields[field_name].required:
+                self.fields[field_name].label += self.required_marker
+
+
+class RequiredMarkerForm(Form):
+    """A slightly extended version of :class:`django.forms.Form` that adds a marker to required fields."""
 
     required_marker = _(" *")
 

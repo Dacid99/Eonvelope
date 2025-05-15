@@ -237,7 +237,7 @@ def mailingListModel() -> MailingListModel:
 
 
 @pytest.fixture
-def emailModel(faker, correspondentModel, mailboxModel, mailingListModel) -> EMailModel:
+def emailModel(faker, mailboxModel, mailingListModel) -> EMailModel:
     """Creates an :class:`core.models.EMailModel.EMailModel` owned by :attr:`owner_user`.
 
     Args:
@@ -248,20 +248,28 @@ def emailModel(faker, correspondentModel, mailboxModel, mailingListModel) -> EMa
     Returns:
         The email instance for testing.
     """
-    emailModel = baker.make(
+    return baker.make(
         EMailModel,
         mailbox=mailboxModel,
         mailinglist=mailingListModel,
         eml_filepath=faker.file_path(extension="eml"),
         html_filepath=faker.file_path(extension="png"),
     )
-    baker.make(
+
+
+@pytest.fixture
+def emailCorrespondentModel(faker, correspondentModel, emailModel) -> EMailModel:
+    """Fixture creating an :class:`core.models.EMailModel.EMailModel`.
+
+    Returns:
+        The emailModel instance for testing.
+    """
+    return baker.make(
         EMailCorrespondentsModel,
         email=emailModel,
         correspondent=correspondentModel,
-        mention=HeaderFields.Correspondents.FROM,
+        mention=faker.random_element(HeaderFields.Correspondents),
     )
-    return emailModel
 
 
 @pytest.fixture

@@ -135,11 +135,14 @@ def test_EMailModel_fields(emailModel):
     assert emailModel.inReplyTo is None
     assert emailModel.datasize is not None
     assert isinstance(emailModel.datasize, int)
-    assert emailModel.eml_filepath is None
-    assert emailModel.html_filepath is None
+    assert emailModel.eml_filepath is not None
+    assert isinstance(emailModel.eml_filepath, str)
+    assert emailModel.html_filepath is not None
+    assert isinstance(emailModel.html_filepath, str)
     assert emailModel.is_favorite is False
 
-    assert emailModel.mailinglist is None
+    assert emailModel.mailinglist is not None
+    assert isinstance(emailModel.mailinglist, MailingListModel)
     assert emailModel.mailbox is not None
     assert isinstance(emailModel.mailbox, MailboxModel)
     assert emailModel.headers is None

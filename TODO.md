@@ -29,7 +29,6 @@
 - rework test:
   - consistent naming
   - disable all signals in tests
-  - remove duplicate model fixtures in test/core
 
 ## To test
 
@@ -64,6 +63,7 @@
 
 ## To fix
 
+- mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>
 - cascase doesnt trigger delete!
 - optics:
   - stats table out of bounds for slim viewport

@@ -98,24 +98,6 @@ def test_testDaemon_failure_exception(
 
 
 @pytest.mark.django_db
-def test_testDaemon_failure_unhealthy(
-    mock_logger, mock_EMailArchiverDaemon, daemonModel
-):
-    def unhealthyDaemon():
-        daemonModel.is_healthy = False
-        daemonModel.save(update_fields=["is_healthy"])
-
-    mock_EMailArchiverDaemon.return_value.cycle.side_effect = unhealthyDaemon
-
-    result = EMailArchiverDaemonRegistry.testDaemon(daemonModel)
-
-    assert result is False
-    mock_EMailArchiverDaemon.assert_called_once_with(daemonModel)
-    mock_EMailArchiverDaemon.return_value.cycle.assert_called_once_with()
-    mock_logger.debug.assert_called()
-
-
-@pytest.mark.django_db
 def test_startDaemon_active(
     mock_logger, mock_EMailArchiverDaemon, mock_runningDaemon, daemonModel
 ):

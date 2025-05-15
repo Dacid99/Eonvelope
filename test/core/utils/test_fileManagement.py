@@ -16,16 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`core.utils.fileManagment`.
-
-Fixtures:
-    :func:`fixture_mock_logger`: Mocks :attr:`logger` of the module.
-    :func:`fixture_mock_good_parsedMailDict`: Mocks a valid parsedMail dictionary used to transport the mail data.
-    :func:`fixture_mock_empty_parsedMailDict`: Mocks a valid parsedMail dictionary without attachments.
-    :func:`fixture_mock_empty_parsedMailDict`: Mocks an invalid parsedMail dictionary.
-    :func:`fixture_mock_getSubdirectory`: Mocks the :func:`core.models.StorageModel.getSubdirectory` function call.
-    :func:`fixture_mock_filesystem`: Mocks a Linux filesystem for realistic testing.
-"""
+"""Test module for :mod:`core.utils.fileManagment`."""
 from __future__ import annotations
 
 import os

@@ -17,11 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
-"""Test module for :mod:`core.models.MailboxModel`.
-
-Fixtures:
-    :func:`fixture_mailboxModelModel`: Creates an :class:`core.models.MailboxModel.MailboxModel` instance for testing.
-"""
+"""Test module for :mod:`core.models.MailboxModel`."""
 from __future__ import annotations
 
 import datetime

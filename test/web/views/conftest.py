@@ -19,15 +19,6 @@
 """File with fixtures required for all viewset tests. Automatically imported to test_ files.
 
 The viewset tests are made against a mocked consistent database with an instance of every model in every testcase.
-
-Fixtures:
-    :func:`fixture_noauth_client`: Fixture creating an unauthenticated :class:`rest_framework.test.Client` instance.
-    :func:`fixture_auth_other_client`: Fixture creating a :class:`rest_framework.test.Client` instance that is authenticated as `other_user`.
-    :func:`fixture_auth_owner_client`: Fixture creating a :class:`rest_framework.test.Client` instance that is authenticated as `owner_user`.
-    :func:`fixture_list_url`: Fixture getting the viewsets url for list actions.
-    :func:`fixture_detail_url`: Fixture getting the viewsets url for detail actions.
-    :func:`fixture_custom_detail_list_url`: Fixture getting the viewsets url for custom list actions.
-    :func:`fixture_custom_detail_action_url`: Fixture getting the viewsets url for custom detail actions.
 """
 
 from __future__ import annotations

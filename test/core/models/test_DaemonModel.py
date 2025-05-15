@@ -16,11 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`core.models.DaemonModel`.
-
-Fixtures:
-    :func:`fixture_daemonModel`: Creates an :class:`core.models.DaemonModel.DaemonModel` instance for testing.
-"""
+"""Test module for :mod:`core.models.DaemonModel`."""
 
 import datetime
 import os

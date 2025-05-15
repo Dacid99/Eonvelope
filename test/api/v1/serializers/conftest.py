@@ -18,10 +18,7 @@
 
 """File with fixtures required for all viewset tests. Automatically imported to test_ files.
 
-The serilalizer tests are made against a mocked consistent database with an instance of every model in every testcase.
-
-Fixtures:
-    :func:`complete_database`: Autouse all models for the tests.
+The serializer tests are made against a mocked consistent database with an instance of every model in every testcase.
 """
 
 from __future__ import annotations

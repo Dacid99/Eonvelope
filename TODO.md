@@ -27,7 +27,6 @@
 - consistent naming_style
 - move all signals into models
 - rework test:
-  - consistent naming
   - disable all signals in tests
 
 ## To test

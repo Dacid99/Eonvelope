@@ -16,16 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`core.utils.mailParsing`.
-
-Fixtures:
-    :func:`fixture_mock_logger`: Mocks :attr:`logger` of the module.
-    :func:`fixture_mock_good_mailMessage`: Mocks a valid :class:`email.message.Message`.
-    :func:`fixture_mock_special_mailMessage`: Mocks a valid :class:`email.message.Message` with special contents.
-    :func:`fixture_mock_bad_mailMessage`: Mocks an invalid :class:`email.message.Message`.
-    :func:`fixture_mock_no_mailMessage`: Mocks a none message.
-    :func:`fixture_mock_empty_parsedMailDict`: Mocks an empty parsedMail :class:`dict` that the mail is parsed into.
-"""
+"""Test module for :mod:`core.utils.mailParsing`."""
 
 from datetime import datetime
 from email.message import EmailMessage

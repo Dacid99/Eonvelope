@@ -16,11 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`core.models.AttachmentModel`.
-
-Fixtures:
-    :func:`fixture_attachmentModel`: Creates an :class:`core.models.AttachmentModel.AttachmentModel` instance for testing.
-"""
+"""Test module for :mod:`core.models.AttachmentModel`."""
 
 import datetime
 import email

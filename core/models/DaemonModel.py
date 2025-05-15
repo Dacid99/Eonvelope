@@ -61,7 +61,7 @@ class DaemonModel(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
     fetching_criterion = models.CharField(
         choices=EmailFetchingCriterionChoices.choices,
         default=EmailFetchingCriterionChoices.ALL,
-        max_length=10,
+        max_length=127,
         verbose_name=_("Fetching Criterion"),
         help_text=_("The selection criterion for emails to archive."),
     )

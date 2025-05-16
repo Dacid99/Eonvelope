@@ -24,19 +24,19 @@ from django.db.models.query import QuerySet
 from django.views.generic.detail import SingleObjectMixin
 
 from core.models.Account import Account
-from core.models.EMail import EMail
+from core.models.Email import Email
 
-from ..email_views.EMailFilterView import EMailFilterView
+from ..email_views.EmailFilterView import EmailFilterView
 
 
-class AccountEmailsFilterView(EMailFilterView, SingleObjectMixin):  # type: ignore[misc]  # SingleObjectMixin attributes are shadowed purposefully
-    """View for filtering listed :class:`core.models.EMail.EMail` instances belonging to a certain account."""
+class AccountEmailsFilterView(EmailFilterView, SingleObjectMixin):  # type: ignore[misc]  # SingleObjectMixin attributes are shadowed purposefully
+    """View for filtering listed :class:`core.models.Email.Email` instances belonging to a certain account."""
 
     URL_NAME = "account-emails"
     template_name = "web/account/account_email_filter_list.html"
 
     @override
-    def get_queryset(self) -> QuerySet[EMail]:
+    def get_queryset(self) -> QuerySet[Email]:
         if not self.request.user.is_authenticated:
             return super().get_queryset().none()
         account_queryset = Account.objects.filter(user=self.request.user)

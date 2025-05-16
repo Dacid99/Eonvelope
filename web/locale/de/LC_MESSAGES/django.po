@@ -382,7 +382,7 @@ msgid "Delete"
 msgstr ""
 
 #: web/templates/partials/_filter-form.html:5
-msgid "Filter"
+msgid FilterSet"
 msgstr ""
 
 #: web/templates/partials/_filter_list.html:8
@@ -390,11 +390,11 @@ msgid "Show filter options"
 msgstr ""
 
 #: web/templates/partials/_filter_list.html:21
-msgid "Filter options"
+msgid FilterSet options"
 msgstr ""
 
 #: web/templates/partials/_footer.html:6
-msgid "2025 EMailkasten. Licensed under AGPLv3. All rights reserved."
+msgid "2025 Emailkasten. Licensed under AGPLv3. All rights reserved."
 msgstr ""
 
 #: web/templates/partials/_navbar.html:6

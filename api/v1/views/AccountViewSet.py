@@ -35,7 +35,7 @@ from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.Account import Account
 from core.utils.fetchers.exceptions import MailAccountError
 
-from ..filters.AccountFilter import AccountFilter
+from ..filters.AccountFilterSet import AccountFilterSet
 from ..serializers.account_serializers.AccountSerializer import AccountSerializer
 
 
@@ -51,7 +51,7 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
     BASENAME = Account.BASENAME
     serializer_class = AccountSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_class = AccountFilter
+    filterset_class = AccountFilterSet
     permission_classes = [IsAuthenticated]
     ordering_fields: Final[list[str]] = [
         "mail_address",

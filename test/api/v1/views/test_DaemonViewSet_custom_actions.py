@@ -55,27 +55,27 @@ def mock_Mailbox_getAvailableFetchingCriteria(mocker, faker):
 
 
 @pytest.fixture
-def mock_EMailArchiverDaemonRegistry_testDaemon(mocker):
+def mock_EmailArchiverDaemonRegistry_testDaemon(mocker):
     return mocker.patch(
-        "api.v1.views.DaemonViewSet.EMailArchiverDaemonRegistry.testDaemon",
+        "api.v1.views.DaemonViewSet.EmailArchiverDaemonRegistry.testDaemon",
         autospec=True,
         return_value=True,
     )
 
 
 @pytest.fixture
-def mock_EMailArchiverDaemonRegistry_startDaemon(mocker):
+def mock_EmailArchiverDaemonRegistry_startDaemon(mocker):
     return mocker.patch(
-        "api.v1.views.DaemonViewSet.EMailArchiverDaemonRegistry.startDaemon",
+        "api.v1.views.DaemonViewSet.EmailArchiverDaemonRegistry.startDaemon",
         autospec=True,
         return_value=True,
     )
 
 
 @pytest.fixture
-def mock_EMailArchiverDaemonRegistry_stopDaemon(mocker):
+def mock_EmailArchiverDaemonRegistry_stopDaemon(mocker):
     return mocker.patch(
-        "api.v1.views.DaemonViewSet.EMailArchiverDaemonRegistry.stopDaemon",
+        "api.v1.views.DaemonViewSet.EmailArchiverDaemonRegistry.stopDaemon",
         autospec=True,
         return_value=True,
     )
@@ -146,7 +146,7 @@ def test_test_noauth(
     fake_daemon,
     noauth_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_testDaemon,
+    mock_EmailArchiverDaemonRegistry_testDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.test` action with an unauthenticated user client."""
     response = noauth_apiClient.post(
@@ -158,7 +158,7 @@ def test_test_noauth(
     assert response.status_code == status.HTTP_403_FORBIDDEN
     with pytest.raises(KeyError):
         response.data["daemon"]
-    mock_EMailArchiverDaemonRegistry_testDaemon.assert_not_called()
+    mock_EmailArchiverDaemonRegistry_testDaemon.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -166,7 +166,7 @@ def test_test_auth_other(
     fake_daemon,
     other_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_testDaemon,
+    mock_EmailArchiverDaemonRegistry_testDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.test` action with the authenticated other user client."""
     response = other_apiClient.post(
@@ -178,7 +178,7 @@ def test_test_auth_other(
     assert response.status_code == status.HTTP_404_NOT_FOUND
     with pytest.raises(KeyError):
         response.data["daemon"]
-    mock_EMailArchiverDaemonRegistry_testDaemon.assert_not_called()
+    mock_EmailArchiverDaemonRegistry_testDaemon.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -186,7 +186,7 @@ def test_test_success_auth_owner(
     fake_daemon,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_testDaemon,
+    mock_EmailArchiverDaemonRegistry_testDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
 
@@ -199,7 +199,7 @@ def test_test_success_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     assert response.data["daemon"] == DaemonViewSet.serializer_class(fake_daemon).data
     assert response.data["result"] is True
-    mock_EMailArchiverDaemonRegistry_testDaemon.assert_called_once_with(fake_daemon)
+    mock_EmailArchiverDaemonRegistry_testDaemon.assert_called_once_with(fake_daemon)
 
 
 @pytest.mark.django_db
@@ -207,10 +207,10 @@ def test_test_failure_auth_owner(
     fake_daemon,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_testDaemon,
+    mock_EmailArchiverDaemonRegistry_testDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.test` action with the authenticated owner user client."""
-    mock_EMailArchiverDaemonRegistry_testDaemon.return_value = False
+    mock_EmailArchiverDaemonRegistry_testDaemon.return_value = False
 
     response = owner_apiClient.post(
         custom_detail_action_url(
@@ -221,7 +221,7 @@ def test_test_failure_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     assert response.data["daemon"] == DaemonViewSet.serializer_class(fake_daemon).data
     assert response.data["result"] is False
-    mock_EMailArchiverDaemonRegistry_testDaemon.assert_called_once_with(fake_daemon)
+    mock_EmailArchiverDaemonRegistry_testDaemon.assert_called_once_with(fake_daemon)
 
 
 @pytest.mark.django_db
@@ -229,7 +229,7 @@ def test_start_noauth(
     fake_daemon,
     noauth_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_startDaemon,
+    mock_EmailArchiverDaemonRegistry_startDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.start` action with an unauthenticated user client."""
 
@@ -240,7 +240,7 @@ def test_start_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_EMailArchiverDaemonRegistry_startDaemon.assert_not_called()
+    mock_EmailArchiverDaemonRegistry_startDaemon.assert_not_called()
     with pytest.raises(KeyError):
         response.data["daemon"]
 
@@ -250,7 +250,7 @@ def test_start_auth_other(
     fake_daemon,
     other_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_startDaemon,
+    mock_EmailArchiverDaemonRegistry_startDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.start` action with the authenticated other user client."""
     response = other_apiClient.post(
@@ -260,7 +260,7 @@ def test_start_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_EMailArchiverDaemonRegistry_startDaemon.assert_not_called()
+    mock_EmailArchiverDaemonRegistry_startDaemon.assert_not_called()
     with pytest.raises(KeyError):
         response.data["daemon"]
 
@@ -270,7 +270,7 @@ def test_start_success_auth_owner(
     fake_daemon,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_startDaemon,
+    mock_EmailArchiverDaemonRegistry_startDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
 
@@ -282,7 +282,7 @@ def test_start_success_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["daemon"] == DaemonViewSet.serializer_class(fake_daemon).data
-    mock_EMailArchiverDaemonRegistry_startDaemon.assert_called_once_with(fake_daemon)
+    mock_EmailArchiverDaemonRegistry_startDaemon.assert_called_once_with(fake_daemon)
 
 
 @pytest.mark.django_db
@@ -290,10 +290,10 @@ def test_start_failure_auth_owner(
     fake_daemon,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_startDaemon,
+    mock_EmailArchiverDaemonRegistry_startDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.start` action with the authenticated owner user client."""
-    mock_EMailArchiverDaemonRegistry_startDaemon.return_value = False
+    mock_EmailArchiverDaemonRegistry_startDaemon.return_value = False
 
     response = owner_apiClient.post(
         custom_detail_action_url(
@@ -303,7 +303,7 @@ def test_start_failure_auth_owner(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["daemon"] == DaemonViewSet.serializer_class(fake_daemon).data
-    mock_EMailArchiverDaemonRegistry_startDaemon.assert_called_once_with(fake_daemon)
+    mock_EmailArchiverDaemonRegistry_startDaemon.assert_called_once_with(fake_daemon)
 
 
 @pytest.mark.django_db
@@ -311,7 +311,7 @@ def test_stop_noauth(
     fake_daemon,
     noauth_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_stopDaemon,
+    mock_EmailArchiverDaemonRegistry_stopDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.stop` action with an unauthenticated user client."""
     response = noauth_apiClient.post(
@@ -321,7 +321,7 @@ def test_stop_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_EMailArchiverDaemonRegistry_stopDaemon.assert_not_called()
+    mock_EmailArchiverDaemonRegistry_stopDaemon.assert_not_called()
     with pytest.raises(KeyError):
         response.data["daemon"]
 
@@ -331,7 +331,7 @@ def test_stop_auth_other(
     fake_daemon,
     other_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_stopDaemon,
+    mock_EmailArchiverDaemonRegistry_stopDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated other user client."""
     response = other_apiClient.post(
@@ -341,7 +341,7 @@ def test_stop_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_EMailArchiverDaemonRegistry_stopDaemon.assert_not_called()
+    mock_EmailArchiverDaemonRegistry_stopDaemon.assert_not_called()
     with pytest.raises(KeyError):
         response.data["daemon"]
 
@@ -351,7 +351,7 @@ def test_stop_success_auth_owner(
     fake_daemon,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_stopDaemon,
+    mock_EmailArchiverDaemonRegistry_stopDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
     response = owner_apiClient.post(
@@ -362,7 +362,7 @@ def test_stop_success_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["daemon"] == DaemonViewSet.serializer_class(fake_daemon).data
-    mock_EMailArchiverDaemonRegistry_stopDaemon.assert_called_once_with(fake_daemon)
+    mock_EmailArchiverDaemonRegistry_stopDaemon.assert_called_once_with(fake_daemon)
 
 
 @pytest.mark.django_db
@@ -370,10 +370,10 @@ def test_stop_failure_auth_owner(
     fake_daemon,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMailArchiverDaemonRegistry_stopDaemon,
+    mock_EmailArchiverDaemonRegistry_stopDaemon,
 ):
     """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated owner user client."""
-    mock_EMailArchiverDaemonRegistry_stopDaemon.return_value = False
+    mock_EmailArchiverDaemonRegistry_stopDaemon.return_value = False
 
     response = owner_apiClient.post(
         custom_detail_action_url(
@@ -383,7 +383,7 @@ def test_stop_failure_auth_owner(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["daemon"] == DaemonViewSet.serializer_class(fake_daemon).data
-    mock_EMailArchiverDaemonRegistry_stopDaemon.assert_called_once_with(fake_daemon)
+    mock_EmailArchiverDaemonRegistry_stopDaemon.assert_called_once_with(fake_daemon)
 
 
 @pytest.mark.django_db

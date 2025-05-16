@@ -28,7 +28,7 @@ from rest_framework import status
 from api.v1.views.MailboxViewSet import MailboxViewSet
 from core.constants import EmailFetchingCriterionChoices
 from core.models.Daemon import Daemon
-from core.models.EMail import EMail
+from core.models.Email import Email
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
@@ -45,9 +45,9 @@ def mock_Mailbox_fetch(mocker):
 
 
 @pytest.fixture
-def mock_EMail_createFromEmailBytes(mocker):
+def mock_Email_createFromEmailBytes(mocker):
     return mocker.patch(
-        "api.v1.views.MailboxViewSet.EMail.createFromEmailBytes", autospec=True
+        "api.v1.views.MailboxViewSet.Email.createFromEmailBytes", autospec=True
     )
 
 
@@ -323,7 +323,7 @@ def test_upload_eml_noauth(
     fake_mailbox,
     noauth_apiClient,
     custom_detail_action_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with an unauthenticated user client."""
     assert fake_mailbox.emails.all().count() == 1
@@ -337,7 +337,7 @@ def test_upload_eml_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
@@ -349,7 +349,7 @@ def test_upload_eml_auth_other(
     fake_mailbox,
     other_apiClient,
     custom_detail_action_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated other user client."""
     assert fake_mailbox.emails.all().count() == 1
@@ -363,7 +363,7 @@ def test_upload_eml_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]
@@ -375,7 +375,7 @@ def test_upload_eml_auth_owner(
     fake_mailbox,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
 
@@ -391,7 +391,7 @@ def test_upload_eml_auth_owner(
     assert (
         response.data["mailbox"] == MailboxViewSet.serializer_class(fake_mailbox).data
     )
-    mock_EMail_createFromEmailBytes.assert_called_once_with(
+    mock_Email_createFromEmailBytes.assert_called_once_with(
         fake_file.getvalue(), fake_mailbox
     )
 
@@ -401,7 +401,7 @@ def test_upload_eml_no_file_auth_owner(
     fake_mailbox,
     owner_apiClient,
     custom_detail_action_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
     assert fake_mailbox.emails.all().count() == 1
@@ -413,7 +413,7 @@ def test_upload_eml_no_file_auth_owner(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     with pytest.raises(KeyError):
         response.data["name"]

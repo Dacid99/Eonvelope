@@ -30,9 +30,9 @@ from rest_framework.permissions import IsAuthenticated
 
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.Correspondent import Correspondent
-from core.models.EMailCorrespondents import EMailCorrespondents
+from core.models.EmailCorrespondent import EmailCorrespondent
 
-from ..filters.CorrespondentFilter import CorrespondentFilter
+from ..filters.CorrespondentFilterSet import CorrespondentFilterSet
 from ..serializers.correspondent_serializers.BaseCorrespondentSerializer import (
     BaseCorrespondentSerializer,
 )
@@ -59,7 +59,7 @@ class CorrespondentViewSet(
     BASENAME = Correspondent.BASENAME
     serializer_class = CorrespondentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_class = CorrespondentFilter
+    filterset_class = CorrespondentFilterSet
     permission_classes = [IsAuthenticated]
     ordering_fields: Final[list[str]] = [
         "email_name",
@@ -89,7 +89,7 @@ class CorrespondentViewSet(
             .prefetch_related(
                 Prefetch(
                     "correspondentemails",
-                    queryset=EMailCorrespondents.objects.filter(
+                    queryset=EmailCorrespondent.objects.filter(
                         email__mailbox__account__user=self.request.user
                     ).select_related("email"),
                 )

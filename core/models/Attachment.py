@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from email.message import Message
     from io import BufferedWriter
 
-    from .EMail import EMail
+    from .Email import Email
 
 
 logger = logging.getLogger(__name__)
@@ -85,8 +85,8 @@ class Attachment(
     is_favorite = models.BooleanField(default=False)
     """Flags favorite attachments. False by default."""
 
-    email: models.ForeignKey[EMail] = models.ForeignKey(
-        "EMail", related_name="attachments", on_delete=models.CASCADE
+    email: models.ForeignKey[Email] = models.ForeignKey(
+        "Email", related_name="attachments", on_delete=models.CASCADE
     )
     """The mail that the attachment was found in.  Deletion of that `email` deletes this attachment."""
 
@@ -194,7 +194,7 @@ class Attachment(
 
     @classmethod
     def createFromEmailMessage(
-        cls, email_message: Message[str, str], email: EMail
+        cls, email_message: Message[str, str], email: Email
     ) -> list[Attachment]:
         """Creates :class:`core.models.Attachment.Attachment`s from an email message.
 

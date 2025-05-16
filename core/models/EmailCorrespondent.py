@@ -1,0 +1,132 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Emailkasten - a open-source self-hostable email archiving server
+# Copyright (C) 2024  David & Philipp Aderbauer
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+"""Module with the :class:`EmailCorrespondent` model class."""
+
+from __future__ import annotations
+
+from email.utils import getaddresses
+from typing import TYPE_CHECKING, Final, override
+
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from core.constants import HeaderFields
+
+from .Correspondent import Correspondent
+
+
+if TYPE_CHECKING:
+    from .Email import Email
+
+
+class EmailCorrespondent(models.Model):
+    """Database model for connecting emails and their correspondents."""
+
+    email = models.ForeignKey(
+        "Email", related_name="emailcorrespondents", on_delete=models.CASCADE
+    )
+    """The email :attr:`correspondent` was mentioned in. Unique together with :attr:`correspondent` and :attr:`mention`."""
+
+    correspondent = models.ForeignKey(
+        "Correspondent",
+        related_name="correspondentemails",
+        on_delete=models.CASCADE,
+    )
+    """The correspondent mentioned in :attr:`email`. Unique together with :attr:`email` and :attr:`mention`."""
+
+    mention = models.CharField(
+        choices=HeaderFields.Correspondents.choices, max_length=30
+    )
+    """The mention of :attr:`correspondent` in :attr:`email`. Unique together with :attr:`email` and :attr:`correspondent`."""
+
+    created = models.DateTimeField(auto_now_add=True)
+    """The datetime this entry was created. Is set automatically."""
+
+    updated = models.DateTimeField(auto_now=True)
+    """The datetime this entry was last updated. Is set automatically."""
+
+    class Meta:
+        """Metadata class for the model."""
+
+        db_table = "email_correspondents"
+        """The name of the database bridge table for emails and correspondents."""
+
+        constraints: Final[list[models.BaseConstraint]] = [
+            models.UniqueConstraint(
+                fields=["email", "correspondent", "mention"],
+                name="emailcorrespondents_unique_together_email_correspondent_mention",
+            ),
+            models.CheckConstraint(
+                condition=models.Q(mention__in=HeaderFields.Correspondents.values),
+                name="mention_criterion_valid_choice",
+            ),
+        ]
+        """:attr:`email`, :attr:`correspondent` and :attr:`mention` in combination are unique.
+        Choices for :attr:`mention` are enforced on db level.
+        """
+
+    @override
+    def __str__(self) -> str:
+        """Returns a string representation of the model data.
+
+        Returns:
+            The string representation of the emailcorrespondent, using :attr:`email`, :attr:`correspondent` and :attr:`mention`.
+        """
+        return _(
+            "Email-Correspondent connection from email %(email)s to correspondent %(correspondent)s with mention %(mention)s"
+        ) % {
+            "email": self.email,
+            "correspondent": self.correspondent,
+            "mention": self.mention,
+        }
+
+    @classmethod
+    def createFromHeader(
+        cls, header: str, headerName: str, email: Email
+    ) -> list[EmailCorrespondent] | None:
+        """Prepares a list :class:`core.models.EmailCorrespondent.EmailCorrespondent` from an email header.
+
+        Args:
+            header: The header to parse the malinglistdata from.
+            headerName: The name of the header, the mention type of the correspondent.
+            email: The email for the new emailcorrespondent.
+
+        Returns:
+            The list of :class:`core.models.EmailCorrespondent.EmailCorrespondent` instances with data from the header.
+            If the correspondent already exists in the db.
+            `None` if the correspondent could not be parsed.
+
+        Raises:
+            ValueError: If the `email` argument is not in the db.
+        """
+        if email.pk is None:
+            raise ValueError("Email is not in the db!")
+        new_emailCorrespondentModels = []
+        for correspondentTuple in getaddresses([header]):
+            new_correspondent = Correspondent.createFromCorrespondentTuple(
+                correspondentTuple
+            )
+            if new_correspondent is None:
+                continue
+            new_emailCorrespondent = cls(
+                correspondent=new_correspondent, email=email, mention=headerName
+            )
+            new_emailCorrespondent.save()
+            new_emailCorrespondentModels.append(new_emailCorrespondent)
+        return new_emailCorrespondentModels

@@ -32,8 +32,8 @@ def mock_logger(mocker):
 @pytest.mark.django_db
 def test_pre_delete_stop_daemon(mocker, mock_logger, fake_daemon):
     """Tests :func:`core.signals.deleteDaemon.pre_delete_stop_daemon`."""
-    mock_EMailArchiverDaemon_stopDaemon = mocker.patch(
-        "core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.stopDaemon",
+    mock_EmailArchiverDaemon_stopDaemon = mocker.patch(
+        "core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.stopDaemon",
         autospec=True,
     )
 
@@ -41,5 +41,5 @@ def test_pre_delete_stop_daemon(mocker, mock_logger, fake_daemon):
 
     with pytest.raises(Daemon.DoesNotExist):
         fake_daemon.refresh_from_db()
-    mock_EMailArchiverDaemon_stopDaemon.assert_called_once()
+    mock_EmailArchiverDaemon_stopDaemon.assert_called_once()
     mock_logger.debug.assert_called()

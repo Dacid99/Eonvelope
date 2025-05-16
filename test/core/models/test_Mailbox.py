@@ -75,8 +75,8 @@ def mock_parseMailboxName(mocker, faker):
 
 
 @pytest.fixture
-def mock_EMail_createFromEmailBytes(mocker):
-    return mocker.patch("core.models.Mailbox.EMail.createFromEmailBytes", autospec=True)
+def mock_Email_createFromEmailBytes(mocker):
+    return mocker.patch("core.models.Mailbox.Email.createFromEmailBytes", autospec=True)
 
 
 @pytest.mark.django_db
@@ -253,7 +253,7 @@ def test_Mailbox_fetch_success(
     mock_logger,
     mock_Account_get_fetcher,
     mock_fetcher,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.fetch`
     in case of success.
@@ -268,7 +268,7 @@ def test_Mailbox_fetch_success(
     assert fake_mailbox.is_healthy is True
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.fetchEmails.assert_called_once_with(fake_mailbox, fake_criterion)
-    assert mock_EMail_createFromEmailBytes.call_count == len(
+    assert mock_Email_createFromEmailBytes.call_count == len(
         mock_fetcher.fetchEmails.return_value
     )
     mock_logger.info.assert_called()
@@ -282,7 +282,7 @@ def test_Mailbox_fetch_failure(
     mock_logger,
     mock_fetcher,
     mock_Account_get_fetcher,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.fetch`
     in case fetching fails with a :class:`core.utils.fetchers.exceptions.MailboxError`.
@@ -299,7 +299,7 @@ def test_Mailbox_fetch_failure(
     assert fake_mailbox.is_healthy is False
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.fetchEmails.assert_called_once_with(fake_mailbox, fake_criterion)
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_logger.info.assert_called()
     mock_logger.error.assert_not_called()
 
@@ -310,7 +310,7 @@ def test_Mailbox_fetch_get_fetcher_error(
     mock_logger,
     mock_Account_get_fetcher,
     mock_fetcher,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.fetch`
     in case :func:`core.models.Account.Account.get_fetcher`
@@ -327,7 +327,7 @@ def test_Mailbox_fetch_get_fetcher_error(
     assert fake_mailbox.is_healthy is True
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.fetchEmails.assert_not_called()
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_logger.info.assert_called()
     mock_logger.error.assert_not_called()
 
@@ -351,7 +351,7 @@ def test_Mailbox_addFromMailboxFile_success(
     fake_mailbox,
     mock_logger,
     mock_open,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     file_format,
     expectedClass,
 ):
@@ -377,8 +377,8 @@ def test_Mailbox_addFromMailboxFile_success(
     mock_parser_class.assert_called_once_with(
         os.path.join("/tmp/", str(hash(fake_file_bytes)))
     )
-    assert mock_EMail_createFromEmailBytes.call_count == len(fake_keys)
-    mock_EMail_createFromEmailBytes.assert_has_calls(
+    assert mock_Email_createFromEmailBytes.call_count == len(fake_keys)
+    mock_Email_createFromEmailBytes.assert_has_calls(
         [mocker.call(mock_parser.get_bytes(key), fake_mailbox) for key in fake_keys]
     )
     mock_logger.info.assert_called()
@@ -391,7 +391,7 @@ def test_Mailbox_addFromMailboxFile_bad_format(
     fake_mailbox,
     mock_open,
     mock_logger,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
 ):
     """Tests :func:`core.models.Account.Account.addFromMailboxFile`
     in case of the mailbox file format is an unsupported format.
@@ -402,7 +402,7 @@ def test_Mailbox_addFromMailboxFile_bad_format(
         fake_mailbox.addFromMailboxFile(fake_file_bytes, "unimplemented")
 
     mock_open.assert_not_called()
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_logger.info.assert_called()
 
 

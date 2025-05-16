@@ -25,7 +25,7 @@ from django.db.models.query import QuerySet
 
 from core.models.Daemon import Daemon
 
-from ...filters.DaemonFilter import DaemonFilter
+from ...filters.DaemonFilterSet import DaemonFilterSet
 from ..FilterPageView import FilterPageView
 
 
@@ -36,7 +36,7 @@ class DaemonFilterView(LoginRequiredMixin, FilterPageView):
     model = Daemon
     template_name = "web/daemon/daemon_filter_list.html"
     context_object_name = "daemons"
-    filterset_class = DaemonFilter
+    filterset_class = DaemonFilterSet
     ordering = ["mailbox__name"]
 
     @override

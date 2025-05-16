@@ -23,11 +23,11 @@ import pytest
 
 @pytest.fixture
 def mock_updateDaemon(mocker):
-    """Patches the :func:`core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon`
+    """Patches the :func:`core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.updateDaemon`
     function called in the signal.
     """
     return mocker.patch(
-        "core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.updateDaemon",
+        "core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.updateDaemon",
         autospec=True,
     )
 

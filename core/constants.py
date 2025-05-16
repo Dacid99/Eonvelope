@@ -129,7 +129,7 @@ class HeaderFields:
     class Correspondents(TextChoices):
         """Headers that are treated as correspondents.
 
-        This class holds the choices for `core.models.EMailCorrespondents.mention`.
+        This class holds the choices for `core.models.EmailCorrespondents.mention`.
         """
 
         FROM = "From", _("From")

@@ -19,14 +19,14 @@
 import pytest
 from model_bakery import baker
 
-from api.v1.views.EMailViewSet import EMailViewSet
-from core.models.EMail import EMail
+from api.v1.views.EmailViewSet import EmailViewSet
+from core.models.Email import Email
 from Emailkasten.utils.workarounds import get_config
 
 
 @pytest.fixture(autouse=True)
 def emailBunchCount(fake_mailbox):
-    """Create a bunch of :class:`core.models.EMail.EMail`s owned by :attr:`owner_user`.
+    """Create a bunch of :class:`core.models.Email.Email`s owned by :attr:`owner_user`.
 
     Args:
         mailbox: Depends on :func:`fixture_mailbox`.
@@ -34,8 +34,8 @@ def emailBunchCount(fake_mailbox):
     Returns:
         All emails in the db belonging to `owner_user`.
     """
-    baker.make(EMail, mailbox=fake_mailbox, _quantity=24)
-    return EMail.objects.filter(
+    baker.make(Email, mailbox=fake_mailbox, _quantity=24)
+    return Email.objects.filter(
         mailbox__account__user=fake_mailbox.account.user
     ).count()
 
@@ -47,7 +47,7 @@ def test_Pagination(
 ):
     query = {"page": page_query, "page_size": page_size_query}
 
-    response = owner_apiClient.get(list_url(EMailViewSet), query)
+    response = owner_apiClient.get(list_url(EmailViewSet), query)
 
     assert response.data["count"] == emailBunchCount
     assert len(response.data["results"]) == min(
@@ -69,7 +69,7 @@ def test_Pagination_max(monkeypatch, list_url, owner_apiClient, emailBunchCount)
     )
     query = {"page": 1, "page_size": emailBunchCount}
 
-    response = owner_apiClient.get(list_url(EMailViewSet), query)
+    response = owner_apiClient.get(list_url(EmailViewSet), query)
 
     assert response.data["count"] == emailBunchCount
     assert len(response.data["results"]) == emailBunchCount // 2
@@ -80,7 +80,7 @@ def test_Pagination_max(monkeypatch, list_url, owner_apiClient, emailBunchCount)
 @pytest.mark.django_db
 def test_Pagination_default(list_url, owner_apiClient, emailBunchCount):
 
-    response = owner_apiClient.get(list_url(EMailViewSet))
+    response = owner_apiClient.get(list_url(EmailViewSet))
 
     assert response.data["count"] == emailBunchCount
     assert len(response.data["results"]) == get_config("API_DEFAULT_PAGE_SIZE")

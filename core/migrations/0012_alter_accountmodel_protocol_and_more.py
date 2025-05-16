@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AlterField(
-            model_name="emailcorrespondents",
+            model_name="emailcorrespondent",
             name="mention",
             field=models.CharField(
                 choices=[

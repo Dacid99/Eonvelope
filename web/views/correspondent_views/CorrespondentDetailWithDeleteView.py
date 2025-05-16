@@ -27,7 +27,7 @@ from django.views.generic import DetailView
 from django.views.generic.edit import DeletionMixin
 
 from core.models.Correspondent import Correspondent
-from core.models.EMailCorrespondents import EMailCorrespondents
+from core.models.EmailCorrespondent import EmailCorrespondent
 from web.views.correspondent_views.CorrespondentFilterView import (
     CorrespondentFilterView,
 )
@@ -58,7 +58,7 @@ class CorrespondentDetailWithDeleteView(
             .prefetch_related(
                 Prefetch(
                     "correspondentemails",
-                    queryset=EMailCorrespondents.objects.filter(
+                    queryset=EmailCorrespondent.objects.filter(
                         email__mailbox__account__user=self.request.user
                     ).select_related("email"),
                 )

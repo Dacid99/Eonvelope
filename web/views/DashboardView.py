@@ -27,7 +27,7 @@ from django.views.generic import TemplateView
 
 from core.models.Attachment import Attachment
 from core.models.Correspondent import Correspondent
-from core.models.EMail import EMail
+from core.models.Email import Email
 from core.models.MailingList import MailingList
 
 
@@ -43,11 +43,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             return {}
         context = super().get_context_data(**kwargs)
 
-        context["latest_emails"] = EMail.objects.filter(
+        context["latest_emails"] = Email.objects.filter(
             mailbox__account__user=self.request.user,
             created__gte=timezone.now() - timedelta(days=1),
         ).order_by("-created")
-        context["emails_count"] = EMail.objects.filter(
+        context["emails_count"] = Email.objects.filter(
             mailbox__account__user=self.request.user
         ).count()
         context["mailinglists_count"] = (

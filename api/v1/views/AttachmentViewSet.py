@@ -33,7 +33,7 @@ from rest_framework.permissions import IsAuthenticated
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.Attachment import Attachment
 
-from ..filters.AttachmentFilter import AttachmentFilter
+from ..filters.AttachmentFilterSet import AttachmentFilterSet
 from ..serializers.attachment_serializers.BaseAttachmentSerializer import (
     BaseAttachmentSerializer,
 )
@@ -54,7 +54,7 @@ class AttachmentViewSet(
     BASENAME = Attachment.BASENAME
     serializer_class = BaseAttachmentSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_class = AttachmentFilter
+    filterset_class = AttachmentFilterSet
     permission_classes = [IsAuthenticated]
     ordering_fields: Final[list[str]] = [
         "file_name",

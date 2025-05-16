@@ -1,4 +1,4 @@
-EMailkasten source code documentation
+Emailkasten source code documentation
 =====================================
 
 

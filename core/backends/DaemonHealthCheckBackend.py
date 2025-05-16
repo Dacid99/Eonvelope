@@ -20,11 +20,11 @@
 
 from health_check.backends import BaseHealthCheckBackend, HealthCheckException
 
-from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.EmailArchiverDaemonRegistry import EmailArchiverDaemonRegistry
 
 
 class DaemonHealthCheckBackend(BaseHealthCheckBackend):
-    """Health check backend for :func:`core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.healthcheck`."""
+    """Health check backend for :func:`core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.healthcheck`."""
 
     critical_service = False
 
@@ -32,7 +32,7 @@ class DaemonHealthCheckBackend(BaseHealthCheckBackend):
         """Implements the healthcheck.
 
         Raises:
-            HealthCheckException: If :func:`core.EMailArchiverDaemonRegistry.EMailArchiverDaemonRegistry.healthcheck` fails.
+            HealthCheckException: If :func:`core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.healthcheck` fails.
         """
-        if not EMailArchiverDaemonRegistry.healthcheck():
+        if not EmailArchiverDaemonRegistry.healthcheck():
             raise HealthCheckException("Daemons are unhealthy!")

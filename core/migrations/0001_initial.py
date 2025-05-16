@@ -153,7 +153,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="EMailCorrespondents",
+            name="EmailCorrespondent",
             fields=[
                 (
                     "id",
@@ -208,7 +208,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name="EMail",
+            name="Email",
             fields=[
                 (
                     "id",
@@ -273,7 +273,7 @@ class Migration(migrations.Migration):
                     "correspondents",
                     models.ManyToManyField(
                         related_name="emails",
-                        through="core.EMailCorrespondents",
+                        through="core.EmailCorrespondent",
                         to="core.correspondent",
                     ),
                 ),
@@ -292,7 +292,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AddField(
-            model_name="emailcorrespondents",
+            model_name="emailcorrespondent",
             name="email",
             field=models.ForeignKey(
                 on_delete=django.db.models.deletion.CASCADE,
@@ -514,7 +514,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AddConstraint(
-            model_name="emailcorrespondents",
+            model_name="emailcorrespondent",
             constraint=models.UniqueConstraint(
                 fields=("email", "correspondent", "mention"),
                 name="emailcorrespondents_unique_together_email_correspondent_mention",

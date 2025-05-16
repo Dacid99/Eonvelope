@@ -25,7 +25,7 @@ from typing import Any
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.EmailArchiverDaemonRegistry import EmailArchiverDaemonRegistry
 from core.models.Daemon import Daemon
 
 
@@ -47,7 +47,7 @@ def post_save_daemon(
     if created or instance.is_healthy is None:
         return
 
-    EMailArchiverDaemonRegistry.updateDaemon(instance)
+    EmailArchiverDaemonRegistry.updateDaemon(instance)
 
     if instance.is_healthy and "is_healthy" in instance.get_dirty_fields():
         logger.debug(

@@ -30,7 +30,7 @@ from rest_framework.views import APIView
 from core.models.Account import Account
 from core.models.Attachment import Attachment
 from core.models.Correspondent import Correspondent
-from core.models.EMail import EMail
+from core.models.Email import Email
 from core.models.Mailbox import Mailbox
 from core.models.MailingList import MailingList
 
@@ -57,7 +57,7 @@ class DatabaseStatsView(APIView):
         if not request.user.is_authenticated:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        email_count = EMail.objects.filter(mailbox__account__user=request.user).count()
+        email_count = Email.objects.filter(mailbox__account__user=request.user).count()
         correspondent_count = (
             Correspondent.objects.filter(emails__mailbox__account__user=request.user)
             .distinct()

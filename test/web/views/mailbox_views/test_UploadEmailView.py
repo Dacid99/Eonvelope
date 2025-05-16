@@ -23,7 +23,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
 from test.api.v1.views.test_MailboxViewSet_custom_actions import (
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     mock_Mailbox_addFromMailboxFile,
 )
 from web.views.mailbox_views.UploadEmailView import UploadEmailView
@@ -72,7 +72,7 @@ def test_post_upload_noauth(
     client,
     detail_url,
     login_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     mock_Mailbox_addFromMailboxFile,
     emailUploadPayload,
 ):
@@ -85,7 +85,7 @@ def test_post_upload_noauth(
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(login_url)
     assert response.url.endswith(f"?next={detail_url(UploadEmailView, fake_mailbox)}")
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_Mailbox_addFromMailboxFile.assert_not_called()
 
 
@@ -94,7 +94,7 @@ def test_post_upload_auth_other(
     fake_mailbox,
     other_client,
     detail_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     mock_Mailbox_addFromMailboxFile,
     emailUploadPayload,
 ):
@@ -105,7 +105,7 @@ def test_post_upload_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [t.name for t in response.templates]
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_Mailbox_addFromMailboxFile.assert_not_called()
 
 
@@ -114,7 +114,7 @@ def test_post_upload_eml_auth_owner(
     fake_mailbox,
     owner_client,
     detail_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     mock_Mailbox_addFromMailboxFile,
     emailUploadPayload,
 ):
@@ -128,7 +128,7 @@ def test_post_upload_eml_auth_owner(
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(fake_mailbox.get_absolute_url())
-    mock_EMail_createFromEmailBytes.assert_called_once_with(
+    mock_Email_createFromEmailBytes.assert_called_once_with(
         emailUploadPayload["file"].getvalue(), mailbox=fake_mailbox
     )
     mock_Mailbox_addFromMailboxFile.assert_not_called()
@@ -142,7 +142,7 @@ def test_post_upload_mailbox_auth_owner(
     fake_mailbox,
     owner_client,
     detail_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     mock_Mailbox_addFromMailboxFile,
     emailUploadPayload,
     mailbox_file_format,
@@ -157,7 +157,7 @@ def test_post_upload_mailbox_auth_owner(
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(fake_mailbox.get_absolute_url())
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_Mailbox_addFromMailboxFile.assert_called_once_with(
         fake_mailbox, emailUploadPayload["file"].getvalue(), mailbox_file_format
     )
@@ -168,7 +168,7 @@ def test_post_upload_auth_owner_bad_format(
     fake_mailbox,
     owner_client,
     detail_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     mock_Mailbox_addFromMailboxFile,
     emailUploadPayload,
 ):
@@ -183,7 +183,7 @@ def test_post_upload_auth_owner_bad_format(
     assert "web/mailbox/upload_email.html" in [t.name for t in response.templates]
     assert "form" in response.context
     assert "mailbox" in response.context
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_Mailbox_addFromMailboxFile.assert_not_called()
 
 
@@ -193,7 +193,7 @@ def test_post_upload_auth_owner_bad_file(
     fake_mailbox,
     owner_client,
     detail_url,
-    mock_EMail_createFromEmailBytes,
+    mock_Email_createFromEmailBytes,
     mock_Mailbox_addFromMailboxFile,
     emailUploadPayload,
 ):
@@ -208,5 +208,5 @@ def test_post_upload_auth_owner_bad_file(
     assert "web/mailbox/upload_email.html" in [t.name for t in response.templates]
     assert "form" in response.context
     assert "mailbox" in response.context
-    mock_EMail_createFromEmailBytes.assert_not_called()
+    mock_Email_createFromEmailBytes.assert_not_called()
     mock_Mailbox_addFromMailboxFile.assert_not_called()

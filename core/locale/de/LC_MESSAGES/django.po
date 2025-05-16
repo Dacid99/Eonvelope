@@ -292,20 +292,20 @@ msgstr ""
 msgid "Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s"
 msgstr ""
 
-#: core/models/EMailCorrespondents.py:90
+#: core/models/EmailCorrespondent.py:90
 #, python-format
 msgid ""
-"EMail-Correspondent connection from email %(email)s to correspondent "
+"Email-Correspondent connection from email %(email)s to correspondent "
 "%(correspondent)s with mention %(mention)s"
 msgstr ""
 
-#: core/models/EMail.py:143
+#: core/models/Email.py:143
 msgid ""
 "This will delete this email and all its attachments but not its "
 "correspondents or mailinglists."
 msgstr ""
 
-#: core/models/EMail.py:167
+#: core/models/Email.py:167
 #, python-format
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""

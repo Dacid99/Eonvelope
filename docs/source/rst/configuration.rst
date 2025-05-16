@@ -110,7 +110,7 @@ These settings can be found and managed in the Django admin interface at ``/admi
 Security-relevant Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Emails can contain malicious content. Therefore security when setting up EMailkasten is of the essence.
+Emails can contain malicious content. Therefore security when setting up Emailkasten is of the essence.
 
 For a secure setup:
 - THROW_OUT_SPAM: Keep this setting at the default True to keep emails that have been flagged by spam-filters out of the system.

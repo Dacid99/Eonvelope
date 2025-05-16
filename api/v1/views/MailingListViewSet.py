@@ -30,7 +30,7 @@ from rest_framework.permissions import IsAuthenticated
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models.MailingList import MailingList
 
-from ..filters.MailingListFilter import MailingListFilter
+from ..filters.MailingListFilterSet import MailingListFilterSet
 from ..serializers.mailinglist_serializers.MailingListSerializer import (
     MailingListSerializer,
 )
@@ -53,7 +53,7 @@ class MailingListViewSet(
     BASENAME = MailingList.BASENAME
     serializer_class = MailingListSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_class = MailingListFilter
+    filterset_class = MailingListFilterSet
     permission_classes = [IsAuthenticated]
     ordering_fields: Final[list[str]] = [
         "list_id",

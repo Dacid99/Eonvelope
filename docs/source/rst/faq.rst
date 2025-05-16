@@ -7,7 +7,7 @@ This is a list of frequently asked questions with their answers and quick soluti
 I am new to self-hosting, how can I set an instance up the easiest?
 -------------------------------------------------------------------
 
-Setting up an EMailkasten server is quick and straightforward.
+Setting up an Emailkasten server is quick and straightforward.
 The simplest path is described on :doc:`the quickstart page <quickstart>`.
 
 

@@ -1,11 +1,11 @@
-EMailkasten documentation
+Emailkasten documentation
 =========================
 
 
-Welcome to the documentation of EMailkasten project!
+Welcome to the documentation of Emailkasten project!
 ----------------------------------------------------
 
-EMailkasten is a open-source self-hosted mail archive built using the django framework.
+Emailkasten is a open-source self-hosted mail archive built using the django framework.
 
 
 We need your opinion

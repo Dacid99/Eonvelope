@@ -32,8 +32,8 @@ from core.models.Account import Account
 from core.models.Attachment import Attachment
 from core.models.Correspondent import Correspondent
 from core.models.Daemon import Daemon
-from core.models.EMail import EMail
-from core.models.EMailCorrespondents import EMailCorrespondents
+from core.models.Email import Email
+from core.models.EmailCorrespondent import EmailCorrespondent
 from core.models.Mailbox import Mailbox
 from core.models.MailingList import MailingList
 
@@ -447,12 +447,12 @@ def email_queryset(
     mailbox_queryset,
     correspondent_queryset,
     mailinglist_queryset,
-) -> QuerySet[EMail, EMail]:
+) -> QuerySet[Email, Email]:
     """Fixture adding emails with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             new_email = baker.make(
-                EMail,
+                Email,
                 message_id=text_test_item,
                 datetime=datetime.datetime.now(tz=datetime.UTC),
                 email_subject=text_test_item,
@@ -465,12 +465,12 @@ def email_queryset(
                 x_spam=text_test_item,
             )
             baker.make(
-                EMailCorrespondents,
+                EmailCorrespondent,
                 email=new_email,
                 correspondent=correspondent_queryset.get(id=number + 1),
             )
 
-    return EMail.objects.all()
+    return Email.objects.all()
 
 
 @pytest.fixture(scope="package")

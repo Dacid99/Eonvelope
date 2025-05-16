@@ -28,7 +28,7 @@ from django.views.generic import DetailView
 from django.views.generic.edit import FormView
 
 from core.constants import SupportedEmailUploadFormats
-from core.models.EMail import EMail
+from core.models.Email import Email
 from core.models.Mailbox import Mailbox
 
 from ...forms.UploadEmailForm import UploadEmailForm
@@ -102,6 +102,6 @@ class UploadEmailView(LoginRequiredMixin, DetailView, FormView):
         """
         self.object = self.get_object()
         if file_format == SupportedEmailUploadFormats.EML:
-            EMail.createFromEmailBytes(file.read(), mailbox=self.object)
+            Email.createFromEmailBytes(file.read(), mailbox=self.object)
         else:
             self.object.addFromMailboxFile(file.read(), file_format)

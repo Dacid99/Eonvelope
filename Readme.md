@@ -1,4 +1,4 @@
-# EMailkasten
+# Emailkasten
 
 A open-source self-hosted mail archive using the django framework.
 

@@ -41,7 +41,7 @@ from api.v1.views.AttachmentViewSet import AttachmentViewSet
 from api.v1.views.CorrespondentViewSet import CorrespondentViewSet
 from api.v1.views.DaemonViewSet import DaemonViewSet
 from api.v1.views.DatabaseStatsView import DatabaseStatsView
-from api.v1.views.EMailViewSet import EMailViewSet
+from api.v1.views.EmailViewSet import EmailViewSet
 from api.v1.views.MailboxViewSet import MailboxViewSet
 from api.v1.views.MailingListViewSet import MailingListViewSet
 
@@ -67,7 +67,7 @@ router.register(
     MailingListViewSet,
     basename=MailingListViewSet.BASENAME,
 )
-router.register("emails", EMailViewSet, basename=EMailViewSet.BASENAME)
+router.register("emails", EmailViewSet, basename=EmailViewSet.BASENAME)
 
 urlpatterns = [
     path("", include(router.urls)),

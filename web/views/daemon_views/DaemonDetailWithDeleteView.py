@@ -28,7 +28,7 @@ from django.urls import reverse_lazy
 from django.views.generic import DetailView
 from django.views.generic.edit import DeletionMixin
 
-from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.EmailArchiverDaemonRegistry import EmailArchiverDaemonRegistry
 from core.models.Daemon import Daemon
 from web.mixins.CustomActionMixin import CustomActionMixin
 from web.views.daemon_views.DaemonFilterView import DaemonFilterView
@@ -72,7 +72,7 @@ class DaemonDetailWithDeleteView(
             A template response with the updated view after the action.
         """
         self.object = self.get_object()
-        result = EMailArchiverDaemonRegistry.startDaemon(self.object)
+        result = EmailArchiverDaemonRegistry.startDaemon(self.object)
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
         context["start_result"] = {"status": result}
@@ -88,7 +88,7 @@ class DaemonDetailWithDeleteView(
             A template response with the updated view after the action.
         """
         self.object = self.get_object()
-        result = EMailArchiverDaemonRegistry.stopDaemon(self.object)
+        result = EmailArchiverDaemonRegistry.stopDaemon(self.object)
         self.object.refresh_from_db()
         context = self.get_context_data(object=self.object)
         context["stop_result"] = {"status": result}

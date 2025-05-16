@@ -32,8 +32,8 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 from core.models.Correspondent import Correspondent
 from core.models.MailingList import MailingList
 
-from ..emailcorrespondents_serializers.CorrespondentEMailSerializer import (
-    CorrespondentEMailSerializer,
+from ..emailcorrespondent_serializers.CorrespondentEmailSerializer import (
+    CorrespondentEmailSerializer,
 )
 from ..mailinglist_serializers.SimpleMailingListSerializer import (
     SimpleMailingListSerializer,
@@ -51,7 +51,7 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
 
     emails = serializers.SerializerMethodField(read_only=True)
     """The emails are set from the
-    :class:`core.models.EMailCorrespondents.EMailCorrespondents`
+    :class:`core.models.EmailCorrespondent.EmailCorrespondent`
     via :func:`get_emails`.
     """
 
@@ -78,7 +78,7 @@ class CorrespondentSerializer(BaseCorrespondentSerializer):
             ).distinct()
         else:
             correspondentemails = instance.correspondentemails.none()
-        return CorrespondentEMailSerializer(
+        return CorrespondentEmailSerializer(
             correspondentemails, many=True, read_only=True
         ).data
 

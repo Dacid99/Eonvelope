@@ -25,7 +25,7 @@ from django.db.models.query import QuerySet
 
 from core.models.Account import Account
 
-from ...filters.AccountFilter import AccountFilter
+from ...filters.AccountFilterSet import AccountFilterSet
 from ..FilterPageView import FilterPageView
 
 
@@ -35,7 +35,7 @@ class AccountFilterView(LoginRequiredMixin, FilterPageView):
     URL_NAME = Account.get_list_web_url_name()
     model = Account
     template_name = "web/account/account_filter_list.html"
-    filterset_class = AccountFilter
+    filterset_class = AccountFilterSet
     ordering = ["mail_address"]
 
     @override

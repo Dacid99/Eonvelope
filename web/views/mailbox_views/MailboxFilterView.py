@@ -25,7 +25,7 @@ from django.db.models.query import QuerySet
 
 from core.models.Mailbox import Mailbox
 
-from ...filters.MailboxFilter import MailboxFilter
+from ...filters.MailboxFilterSet import MailboxFilterSet
 from ..FilterPageView import FilterPageView
 
 
@@ -36,7 +36,7 @@ class MailboxFilterView(LoginRequiredMixin, FilterPageView):
     model = Mailbox
     template_name = "web/mailbox/mailbox_filter_list.html"
     context_object_name = "mailboxes"
-    filterset_class = MailboxFilter
+    filterset_class = MailboxFilterSet
     ordering = ["name"]
 
     @override

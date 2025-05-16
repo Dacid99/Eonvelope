@@ -26,7 +26,7 @@ from django.forms import PasswordInput, Widget
 
 from core.models.Account import Account
 
-from ...utils.RequiredMarkerForms import RequiredMarkerModelForm
+from ...utils.forms import RequiredMarkerModelForm
 
 
 if TYPE_CHECKING:

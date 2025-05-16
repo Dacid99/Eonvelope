@@ -25,7 +25,7 @@ from django.db.models.query import QuerySet
 
 from core.models.Attachment import Attachment
 
-from ...filters.AttachmentFilter import AttachmentFilter
+from ...filters.AttachmentFilterSet import AttachmentFilterSet
 from ..FilterPageView import FilterPageView
 
 
@@ -36,7 +36,7 @@ class AttachmentFilterView(LoginRequiredMixin, FilterPageView):
     model = Attachment
     template_name = "web/attachment/attachment_filter_list.html"
     context_object_name = "attachments"
-    filterset_class = AttachmentFilter
+    filterset_class = AttachmentFilterSet
     ordering = ["file_name"]
 
     @override

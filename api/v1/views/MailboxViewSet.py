@@ -32,11 +32,11 @@ from rest_framework.response import Response
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core import constants
 from core.models.Daemon import Daemon
-from core.models.EMail import EMail
+from core.models.Email import Email
 from core.models.Mailbox import Mailbox
 from core.utils.fetchers.exceptions import FetcherError
 
-from ..filters.MailboxFilter import MailboxFilter
+from ..filters.MailboxFilterSet import MailboxFilterSet
 from ..mixins.NoCreateMixin import NoCreateMixin
 from ..serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
     MailboxWithDaemonSerializer,
@@ -59,7 +59,7 @@ class MailboxViewSet(
     BASENAME = Mailbox.BASENAME
     serializer_class = MailboxWithDaemonSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_class = MailboxFilter
+    filterset_class = MailboxFilterSet
     permission_classes = [IsAuthenticated]
     ordering_fields: Final[list[str]] = [
         "name",
@@ -214,7 +214,7 @@ class MailboxViewSet(
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
-        EMail.createFromEmailBytes(uploaded_mailbox_file.read(), mailbox)
+        Email.createFromEmailBytes(uploaded_mailbox_file.read(), mailbox)
         mailboxSerializer = self.get_serializer(mailbox)
         return Response(
             {

@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`."""
+"""Test module for :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`."""
 
 import pytest
 
-from api.v1.filters.AttachmentFilter import AttachmentFilter
+from api.v1.filters.AttachmentFilterSet import AttachmentFilterSet
 
 from .conftest import (
     BOOL_TEST_PARAMETERS,
@@ -37,12 +37,12 @@ from .conftest import (
 def test_file_name_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.file_name` field.
     """
     query = {"file_name" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -57,12 +57,12 @@ def test_file_name_filter(
 def test_content_disposition_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.content_disposition` field.
     """
     query = {"content_disposition" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -77,12 +77,12 @@ def test_content_disposition_filter(
 def test_content_maintype_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.content_maintype` field.
     """
     query = {"content_maintype" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -97,12 +97,12 @@ def test_content_maintype_filter(
 def test_content_subtype_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.content_subtype` field.
     """
     query = {"content_subtype" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -117,12 +117,12 @@ def test_content_subtype_filter(
 def test_content_id_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.content_id` field.
     """
     query = {"content_id" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -137,12 +137,12 @@ def test_content_id_filter(
 def test_datasize_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.datasize` field.
     """
     query = {"datasize" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -157,12 +157,12 @@ def test_datasize_filter(
 def test_is_favorite_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.is_favorite` field.
     """
     query = {"is_favorite" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -177,12 +177,12 @@ def test_is_favorite_filter(
 def test_created_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.created` field.
     """
     query = {"created" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -197,12 +197,12 @@ def test_created_filter(
 def test_updated_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
     for the :attr:`core.models.Attachment.Attachment.updated` field.
     """
     query = {"updated" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -217,12 +217,12 @@ def test_updated_filter(
 def test_email__datetime_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`api.v1.filters.AttachmentFilter.AttachmentFilter`'s filtering
-    for the related :attr:`core.models.EMail.EMail.datetime` field.
+    """Tests :class:`api.v1.filters.AttachmentFilterSet.AttachmentFilterSet`'s filtering
+    for the related :attr:`core.models.Email.Email.datetime` field.
     """
     query = {"email__datetime" + lookup_expr: filterquery}
 
-    filtered_data = AttachmentFilter(query, queryset=attachment_queryset).qs
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)

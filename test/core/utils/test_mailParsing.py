@@ -271,7 +271,7 @@ def test_get_bodytexts(
     ],
 )
 def test_is_X_Spam(x_spam, expectedResult):
-    """Tests :func:`core.models.EMail.EMail.isSpam`."""
+    """Tests :func:`core.models.Email.Email.isSpam`."""
     result = mailParsing.is_X_Spam(x_spam)
 
     assert result is expectedResult

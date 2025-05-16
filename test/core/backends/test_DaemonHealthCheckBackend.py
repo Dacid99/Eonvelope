@@ -25,26 +25,26 @@ from core.backends.DaemonHealthCheckBackend import DaemonHealthCheckBackend
 
 
 @pytest.fixture
-def mock_EMailArchiverDaemonRegistry_healthcheck(mocker):
+def mock_EmailArchiverDaemonRegistry_healthcheck(mocker):
     return mocker.patch(
-        "core.backends.DaemonHealthCheckBackend.EMailArchiverDaemonRegistry.healthcheck"
+        "core.backends.DaemonHealthCheckBackend.EmailArchiverDaemonRegistry.healthcheck"
     )
 
 
 def test_DaemonHealthCheckBackend_check_status_success(
-    mock_EMailArchiverDaemonRegistry_healthcheck,
+    mock_EmailArchiverDaemonRegistry_healthcheck,
 ):
-    """Test the healthcheck for the EMailArchiverDaemons if they are healthy."""
-    mock_EMailArchiverDaemonRegistry_healthcheck.return_value = True
+    """Test the healthcheck for the EmailArchiverDaemons if they are healthy."""
+    mock_EmailArchiverDaemonRegistry_healthcheck.return_value = True
 
     DaemonHealthCheckBackend().check_status()
 
 
 def test_DaemonHealthCheckBackend_check_status_failure(
-    mock_EMailArchiverDaemonRegistry_healthcheck,
+    mock_EmailArchiverDaemonRegistry_healthcheck,
 ):
-    """Test the healthcheck for the EMailArchiverDaemons if they are not healthy."""
-    mock_EMailArchiverDaemonRegistry_healthcheck.return_value = False
+    """Test the healthcheck for the EmailArchiverDaemons if they are not healthy."""
+    mock_EmailArchiverDaemonRegistry_healthcheck.return_value = False
 
     with pytest.raises(HealthCheckException):
         DaemonHealthCheckBackend().check_status()

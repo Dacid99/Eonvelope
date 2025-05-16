@@ -30,7 +30,7 @@ from django.views.generic.edit import DeletionMixin
 
 from core.constants import EmailFetchingCriterionChoices
 from core.models.Daemon import Daemon
-from core.models.EMail import EMail
+from core.models.Email import Email
 from core.models.Mailbox import Mailbox
 from core.utils.fetchers.exceptions import FetcherError
 from web.mixins.CustomActionMixin import CustomActionMixin
@@ -68,7 +68,7 @@ class MailboxDetailWithDeleteView(
         """Extended to add the mailboxes latest emails to the context."""
         context = super().get_context_data(**kwargs)
         context["latest_emails"] = (
-            EMail.objects.filter(mailbox=self.object)
+            Email.objects.filter(mailbox=self.object)
             .select_related("mailbox", "mailbox__account")
             .order_by("-created")[:25]
         )

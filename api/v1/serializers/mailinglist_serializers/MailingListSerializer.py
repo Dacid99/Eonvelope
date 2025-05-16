@@ -35,7 +35,7 @@ from core.models.MailingList import MailingList
 from ..correspondent_serializers.BaseCorrespondentSerializer import (
     BaseCorrespondentSerializer,
 )
-from ..email_serializers.BaseEMailSerializer import BaseEMailSerializer
+from ..email_serializers.BaseEmailSerializer import BaseEmailSerializer
 from .BaseMailingListSerializer import BaseMailingListSerializer
 
 
@@ -49,7 +49,7 @@ class MailingListSerializer(BaseMailingListSerializer):
 
     emails = serializers.SerializerMethodField(read_only=True)
     """The emails from the mailinglist are serialized
-    by :class:`api.v1.serializers.EMailSerializers.BaseEMailSerializer.BaseEMailSerializer`.
+    by :class:`api.v1.serializers.EmailSerializers.BaseEmailSerializer.BaseEmailSerializer`.
     """
 
     from_correspondents = serializers.SerializerMethodField(read_only=True)
@@ -73,7 +73,7 @@ class MailingListSerializer(BaseMailingListSerializer):
             emails = instance.emails.filter(mailbox__account__user=user)
         else:
             emails = instance.emails.none()
-        return BaseEMailSerializer(emails, many=True, read_only=True).data
+        return BaseEmailSerializer(emails, many=True, read_only=True).data
 
     def get_from_correspondents(self, instance: MailingList) -> ReturnDict[str, Any]:
         """Serializes the correspondents connected to the instance to be serialized.

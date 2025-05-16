@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _
 from core.mixins.FavoriteMixin import FavoriteMixin
 from core.mixins.UploadMixin import UploadMixin
 from core.mixins.URLMixin import URLMixin
-from core.models.EMail import EMail
+from core.models.Email import Email
 from Emailkasten.utils.workarounds import get_config
 
 from ..utils.fetchers.exceptions import MailAccountError, MailboxError
@@ -196,7 +196,7 @@ class Mailbox(DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Mod
 
         logger.info("Saving fetched emails ...")
         for fetchedMail in fetchedMails:
-            EMail.createFromEmailBytes(fetchedMail, self)
+            Email.createFromEmailBytes(fetchedMail, self)
 
         logger.info("Successfully saved fetched emails.")
 
@@ -238,7 +238,7 @@ class Mailbox(DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Mod
             file.write(file_data)
         mailboxFile = formatClass(dump_filepath)  # type: ignore[abstract]  # Mailbox class is never implemented, it's just used for typing
         for key in mailboxFile.iterkeys():
-            EMail.createFromEmailBytes(mailboxFile.get_bytes(key), self)
+            Email.createFromEmailBytes(mailboxFile.get_bytes(key), self)
         logger.info("Successfully added emails from mailbox file.")
 
     @classmethod

@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.AddConstraint(
-            model_name="emailcorrespondents",
+            model_name="emailcorrespondent",
             constraint=models.CheckConstraint(
                 condition=models.Q(
                     (

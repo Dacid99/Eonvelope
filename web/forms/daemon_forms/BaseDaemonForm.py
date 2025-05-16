@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, ClassVar, Final
 
 from core.models.Daemon import Daemon
 
-from ...utils.RequiredMarkerForms import RequiredMarkerModelForm
+from ...utils.forms import RequiredMarkerModelForm
 
 
 if TYPE_CHECKING:

@@ -31,10 +31,10 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from core.EMailArchiverDaemonRegistry import EMailArchiverDaemonRegistry
+from core.EmailArchiverDaemonRegistry import EmailArchiverDaemonRegistry
 from core.models.Daemon import Daemon
 
-from ..filters.DaemonFilter import DaemonFilter
+from ..filters.DaemonFilterSet import DaemonFilterSet
 from ..mixins.NoCreateMixin import NoCreateMixin
 from ..serializers.daemon_serializers.BaseDaemonSerializer import BaseDaemonSerializer
 
@@ -53,7 +53,7 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
     BASENAME = Daemon.BASENAME
     serializer_class = BaseDaemonSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
-    filterset_class = DaemonFilter
+    filterset_class = DaemonFilterSet
     permission_classes = [IsAuthenticated]
     ordering_fields: Final[list[str]] = [
         "fetching_criterion",
@@ -125,7 +125,7 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
             A response detailing the test result for the daemon.
         """
         daemon = self.get_object()
-        result = EMailArchiverDaemonRegistry.testDaemon(daemon)
+        result = EmailArchiverDaemonRegistry.testDaemon(daemon)
         daemon.refresh_from_db()
         daemonData = self.get_serializer(daemon).data
         return Response(
@@ -157,7 +157,7 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
             A response detailing the start result of the daemon.
         """
         daemon = self.get_object()
-        result = EMailArchiverDaemonRegistry.startDaemon(daemon)
+        result = EmailArchiverDaemonRegistry.startDaemon(daemon)
         if result:
             response = Response({"detail": "Daemon started"})
         else:
@@ -187,7 +187,7 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
             A response detailing the stop result for the daemon.
         """
         daemon = self.get_object()
-        result = EMailArchiverDaemonRegistry.stopDaemon(daemon)
+        result = EmailArchiverDaemonRegistry.stopDaemon(daemon)
         if result:
             response = Response({"status": "Daemon stopped"})
         else:

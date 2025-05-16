@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :class:`web.filters.MailingListFilter.MailingListFilter`."""
+"""Test module for :class:`web.filters.MailingListFilterSet.MailingListFilterSet`."""
 
 import pytest
 
-from web.filters.MailingListFilter import MailingListFilter
+from web.filters.MailingListFilterSet import MailingListFilterSet
 
 from .conftest import (
     BOOL_TEST_PARAMETERS,
@@ -36,12 +36,12 @@ from .conftest import (
 def test_text_search_filter(
     mailinglist_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`web.filters.MailingListFilter.MailingListFilter`'s filtering
+    """Tests :class:`web.filters.MailingListFilterSet.MailingListFilterSet`'s filtering
     for the :attr:`core.models.MailingList.MailingList.text_search` field.
     """
     query = {"text_search": filterquery}
 
-    filtered_data = MailingListFilter(query, queryset=mailinglist_queryset).qs
+    filtered_data = MailingListFilterSet(query, queryset=mailinglist_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -56,12 +56,12 @@ def test_text_search_filter(
 def test_is_favorite_filter(
     mailinglist_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`web.filters.MailingListFilter.MailingListFilter`'s filtering
+    """Tests :class:`web.filters.MailingListFilterSet.MailingListFilterSet`'s filtering
     for the :attr:`core.models.MailingList.MailingList.is_favorite` field.
     """
     query = {"is_favorite" + lookup_expr: filterquery}
 
-    filtered_data = MailingListFilter(query, queryset=mailinglist_queryset).qs
+    filtered_data = MailingListFilterSet(query, queryset=mailinglist_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)
@@ -76,12 +76,12 @@ def test_is_favorite_filter(
 def test_created_filter(
     mailinglist_queryset, lookup_expr, filterquery, expected_indices
 ):
-    """Tests :class:`web.filters.MailingListFilter.MailingListFilter`'s filtering
+    """Tests :class:`web.filters.MailingListFilterSet.MailingListFilterSet`'s filtering
     for the :attr:`core.models.MailingList.MailingList.created` field.
     """
     query = {"created" + lookup_expr: filterquery}
 
-    filtered_data = MailingListFilter(query, queryset=mailinglist_queryset).qs
+    filtered_data = MailingListFilterSet(query, queryset=mailinglist_queryset).qs
 
     assert filtered_data.distinct().count() == filtered_data.count()
     assert filtered_data.count() == len(expected_indices)

@@ -25,7 +25,7 @@ from django.db.models.query import QuerySet
 
 from core.models.Correspondent import Correspondent
 
-from ...filters.CorrespondentFilter import CorrespondentFilter
+from ...filters.CorrespondentFilterSet import CorrespondentFilterSet
 from ..FilterPageView import FilterPageView
 
 
@@ -36,7 +36,7 @@ class CorrespondentFilterView(LoginRequiredMixin, FilterPageView):
     model = Correspondent
     template_name = "web/correspondent/correspondent_filter_list.html"
     context_object_name = "correspondents"
-    filterset_class = CorrespondentFilter
+    filterset_class = CorrespondentFilterSet
     ordering = ["email_address"]
 
     @override

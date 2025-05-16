@@ -31,8 +31,8 @@ from core.constants import HeaderFields
 from core.models.Account import Account
 from core.models.Attachment import Attachment
 from core.models.Daemon import Daemon
-from core.models.EMail import EMail
-from core.models.EMailCorrespondents import EMailCorrespondents
+from core.models.Email import Email
+from core.models.EmailCorrespondent import EmailCorrespondent
 from core.models.Mailbox import Mailbox
 
 
@@ -67,14 +67,14 @@ def complete_database(
         mailbox=other_mailbox,
     )
     other_email = baker.make(
-        EMail,
+        Email,
         mailbox=other_mailbox,
         mailinglist=fake_mailingList,
         eml_filepath=faker.file_path(extension="eml"),
         html_filepath=faker.file_path(extension="png"),
     )
     baker.make(
-        EMailCorrespondents,
+        EmailCorrespondent,
         email=other_email,
         correspondent=fake_correspondent,
         mention=HeaderFields.Correspondents.FROM,

@@ -25,7 +25,7 @@ from django.db.models.query import QuerySet
 
 from core.models.MailingList import MailingList
 
-from ...filters.MailingListFilter import MailingListFilter
+from ...filters.MailingListFilterSet import MailingListFilterSet
 from ..FilterPageView import FilterPageView
 
 
@@ -36,7 +36,7 @@ class MailingListFilterView(LoginRequiredMixin, FilterPageView):
     model = MailingList
     template_name = "web/mailinglist/mailinglist_filter_list.html"
     context_object_name = "mailinglists"
-    filterset_class = MailingListFilter
+    filterset_class = MailingListFilterSet
     ordering = ["-created"]
 
     @override

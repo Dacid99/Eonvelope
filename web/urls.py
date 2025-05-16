@@ -55,7 +55,7 @@ from .views.daemon_views import (
     DaemonUpdateOrDeleteView,
 )
 from .views.DashboardView import DashboardView
-from .views.email_views import EMailDetailWithDeleteView, EMailFilterView
+from .views.email_views import EmailDetailWithDeleteView, EmailFilterView
 from .views.mailbox_views import (
     MailboxDetailWithDeleteView,
     MailboxEmailsFilterView,
@@ -146,13 +146,13 @@ urlpatterns = [
     ),
     path(
         "emails/",
-        EMailFilterView.EMailFilterView.as_view(),
-        name=EMailFilterView.EMailFilterView.URL_NAME,
+        EmailFilterView.EmailFilterView.as_view(),
+        name=EmailFilterView.EmailFilterView.URL_NAME,
     ),
     path(
         "emails/<int:pk>/",
-        EMailDetailWithDeleteView.EMailDetailWithDeleteView.as_view(),
-        name=EMailDetailWithDeleteView.EMailDetailWithDeleteView.URL_NAME,
+        EmailDetailWithDeleteView.EmailDetailWithDeleteView.as_view(),
+        name=EmailDetailWithDeleteView.EmailDetailWithDeleteView.URL_NAME,
     ),
     path(
         "mailboxes/",

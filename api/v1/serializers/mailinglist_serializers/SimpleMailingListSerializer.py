@@ -30,7 +30,7 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 from core.models.MailingList import MailingList
 
-from ..email_serializers.BaseEMailSerializer import BaseEMailSerializer
+from ..email_serializers.BaseEmailSerializer import BaseEmailSerializer
 from .BaseMailingListSerializer import BaseMailingListSerializer
 
 
@@ -58,4 +58,4 @@ class SimpleMailingListSerializer(BaseMailingListSerializer):
             emails = instance.emails.filter(mailbox__account__user=user)
         else:
             emails = instance.emails.none()
-        return BaseEMailSerializer(emails, many=True, read_only=True).data
+        return BaseEmailSerializer(emails, many=True, read_only=True).data

@@ -29,7 +29,7 @@ from model_bakery import baker
 
 import core.models.Attachment
 from core.models.Attachment import Attachment
-from core.models.EMail import EMail
+from core.models.Email import Email
 
 from ...conftest import TEST_EMAIL_PARAMETERS
 
@@ -88,7 +88,7 @@ def test_Attachment_fields(fake_attachment):
     assert isinstance(fake_attachment.datasize, int)
     assert fake_attachment.is_favorite is False
     assert fake_attachment.email is not None
-    assert isinstance(fake_attachment.email, EMail)
+    assert isinstance(fake_attachment.email, Email)
     assert fake_attachment.updated is not None
     assert isinstance(fake_attachment.updated, datetime.datetime)
     assert fake_attachment.created is not None
@@ -121,7 +121,7 @@ def test_Attachment_unique_constraints():
     assert attachment_1.file_path == attachment_2.file_path
     assert attachment_1.email != attachment_2.email
 
-    email = baker.make(EMail, x_spam="NO")
+    email = baker.make(Email, x_spam="NO")
 
     attachment_1 = baker.make(Attachment, file_path="path_1", email=email)
     attachment_2 = baker.make(Attachment, file_path="path_2", email=email)

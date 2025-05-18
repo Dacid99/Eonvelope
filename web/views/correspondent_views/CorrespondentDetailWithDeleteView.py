@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`CorrespondentDetailWithDeleteView` view."""
+"""Module with the :class:`web.views.CorrespondentDetailWithDeleteView` view."""
 
 from typing import override
 
@@ -34,7 +34,7 @@ class CorrespondentDetailWithDeleteView(
     LoginRequiredMixin,
     DetailWithDeleteView,
 ):
-    """View for a single :class:`core.models.Correspondent.Correspondent` instance."""
+    """View for a single :class:`core.models.Correspondent` instance."""
 
     URL_NAME = Correspondent.get_detail_web_url_name()
     model = Correspondent

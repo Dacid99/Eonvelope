@@ -193,13 +193,13 @@ class Attachment(
     def create_from_email_message(
         cls, email_message: Message[str, str], email: Email
     ) -> list[Attachment]:
-        """Creates :class:`core.models.Attachment.Attachment`s from an email message.
+        """Creates :class:`core.models.Attachment`s from an email message.
 
         Args:
             email_message: The email_message to get and create all attachments from.
 
         Returns:
-            A list of :class:`core.models.Attachment.Attachment` in the email message.
+            A list of :class:`core.models.Attachment` in the email message.
         """
         if email.pk is None:
             raise ValueError("Email is not in db!")

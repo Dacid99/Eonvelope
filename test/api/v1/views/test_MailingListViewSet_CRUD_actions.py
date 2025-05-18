@@ -29,7 +29,7 @@ from core.models import MailingList
 
 @pytest.mark.django_db
 def test_list_noauth(fake_mailing_list, fake_email, noauth_api_client, list_url):
-    """Tests the list method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with an unauthenticated user client."""
+    """Tests the list method on :class:`api.v1.views.MailingListViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(list_url(MailingListViewSet))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -38,7 +38,7 @@ def test_list_noauth(fake_mailing_list, fake_email, noauth_api_client, list_url)
 
 @pytest.mark.django_db
 def test_list_auth_other(fake_mailing_list, fake_email, other_api_client, list_url):
-    """Tests the list method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated other user client."""
+    """Tests the list method on :class:`api.v1.views.MailingListViewSet` with the authenticated other user client."""
     response = other_api_client.get(list_url(MailingListViewSet))
 
     assert response.status_code == status.HTTP_200_OK
@@ -48,7 +48,7 @@ def test_list_auth_other(fake_mailing_list, fake_email, other_api_client, list_u
 
 @pytest.mark.django_db
 def test_list_auth_owner(fake_mailing_list, fake_email, owner_api_client, list_url):
-    """Tests the list method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated owner user client."""
+    """Tests the list method on :class:`api.v1.views.MailingListViewSet` with the authenticated owner user client."""
     response = owner_api_client.get(list_url(MailingListViewSet))
 
     assert response.status_code == status.HTTP_200_OK
@@ -58,7 +58,7 @@ def test_list_auth_owner(fake_mailing_list, fake_email, owner_api_client, list_u
 
 @pytest.mark.django_db
 def test_get_noauth(fake_mailing_list, fake_email, noauth_api_client, detail_url):
-    """Tests the get method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with an unauthenticated user client."""
+    """Tests the get method on :class:`api.v1.views.MailingListViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(detail_url(MailingListViewSet, fake_mailing_list))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -67,7 +67,7 @@ def test_get_noauth(fake_mailing_list, fake_email, noauth_api_client, detail_url
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_mailing_list, fake_email, other_api_client, detail_url):
-    """Tests the get method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated other user client."""
+    """Tests the get method on :class:`api.v1.views.MailingListViewSet` with the authenticated other user client."""
     response = other_api_client.get(detail_url(MailingListViewSet, fake_mailing_list))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -76,7 +76,7 @@ def test_get_auth_other(fake_mailing_list, fake_email, other_api_client, detail_
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_mailing_list, fake_email, owner_api_client, detail_url):
-    """Tests the list method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated owner user client."""
+    """Tests the list method on :class:`api.v1.views.MailingListViewSet` with the authenticated owner user client."""
     response = owner_api_client.get(detail_url(MailingListViewSet, fake_mailing_list))
 
     assert response.status_code == status.HTTP_200_OK
@@ -87,7 +87,7 @@ def test_get_auth_owner(fake_mailing_list, fake_email, owner_api_client, detail_
 def test_patch_noauth(
     fake_mailing_list, fake_email, noauth_api_client, mailing_list_payload, detail_url
 ):
-    """Tests the patch method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with an unauthenticated user client."""
+    """Tests the patch method on :class:`api.v1.views.MailingListViewSet` with an unauthenticated user client."""
     response = noauth_api_client.patch(
         detail_url(MailingListViewSet, fake_mailing_list), data=mailing_list_payload
     )
@@ -102,7 +102,7 @@ def test_patch_noauth(
 def test_patch_auth_other(
     fake_mailing_list, fake_email, other_api_client, mailing_list_payload, detail_url
 ):
-    """Tests the patch method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated other user client."""
+    """Tests the patch method on :class:`api.v1.views.MailingListViewSet` with the authenticated other user client."""
     response = other_api_client.patch(
         detail_url(MailingListViewSet, fake_mailing_list), data=mailing_list_payload
     )
@@ -117,7 +117,7 @@ def test_patch_auth_other(
 def test_patch_auth_owner(
     fake_mailing_list, fake_email, owner_api_client, mailing_list_payload, detail_url
 ):
-    """Tests the patch method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated owner user client."""
+    """Tests the patch method on :class:`api.v1.views.MailingListViewSet` with the authenticated owner user client."""
     response = owner_api_client.patch(
         detail_url(MailingListViewSet, fake_mailing_list), data=mailing_list_payload
     )
@@ -132,7 +132,7 @@ def test_patch_auth_owner(
 def test_put_noauth(
     fake_mailing_list, fake_email, noauth_api_client, mailing_list_payload, detail_url
 ):
-    """Tests the put method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with an unauthenticated user client."""
+    """Tests the put method on :class:`api.v1.views.MailingListViewSet` with an unauthenticated user client."""
     response = noauth_api_client.put(
         detail_url(MailingListViewSet, fake_mailing_list), data=mailing_list_payload
     )
@@ -147,7 +147,7 @@ def test_put_noauth(
 def test_put_auth_other(
     fake_mailing_list, fake_email, other_api_client, mailing_list_payload, detail_url
 ):
-    """Tests the put method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated other user client."""
+    """Tests the put method on :class:`api.v1.views.MailingListViewSet` with the authenticated other user client."""
     response = other_api_client.put(
         detail_url(MailingListViewSet, fake_mailing_list), data=mailing_list_payload
     )
@@ -162,7 +162,7 @@ def test_put_auth_other(
 def test_put_auth_owner(
     fake_mailing_list, fake_email, owner_api_client, mailing_list_payload, detail_url
 ):
-    """Tests the put method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated owner user client."""
+    """Tests the put method on :class:`api.v1.views.MailingListViewSet` with the authenticated owner user client."""
     response = owner_api_client.put(
         detail_url(MailingListViewSet, fake_mailing_list), data=mailing_list_payload
     )
@@ -175,7 +175,7 @@ def test_put_auth_owner(
 
 @pytest.mark.django_db
 def test_post_noauth(noauth_api_client, mailing_list_payload, list_url):
-    """Tests the post method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with an unauthenticated user client."""
+    """Tests the post method on :class:`api.v1.views.MailingListViewSet` with an unauthenticated user client."""
     response = noauth_api_client.post(
         list_url(MailingListViewSet), data=mailing_list_payload
     )
@@ -188,7 +188,7 @@ def test_post_noauth(noauth_api_client, mailing_list_payload, list_url):
 
 @pytest.mark.django_db
 def test_post_auth_other(other_api_client, mailing_list_payload, list_url):
-    """Tests the post method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated other user client."""
+    """Tests the post method on :class:`api.v1.views.MailingListViewSet` with the authenticated other user client."""
     response = other_api_client.post(
         list_url(MailingListViewSet), data=mailing_list_payload
     )
@@ -201,7 +201,7 @@ def test_post_auth_other(other_api_client, mailing_list_payload, list_url):
 
 @pytest.mark.django_db
 def test_post_auth_owner(owner_api_client, mailing_list_payload, list_url):
-    """Tests the post method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated owner user client."""
+    """Tests the post method on :class:`api.v1.views.MailingListViewSet` with the authenticated owner user client."""
     response = owner_api_client.post(
         list_url(MailingListViewSet), data=mailing_list_payload
     )
@@ -214,7 +214,7 @@ def test_post_auth_owner(owner_api_client, mailing_list_payload, list_url):
 
 @pytest.mark.django_db
 def test_delete_noauth(fake_mailing_list, fake_email, noauth_api_client, detail_url):
-    """Tests the delete method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with an unauthenticated user client."""
+    """Tests the delete method on :class:`api.v1.views.MailingListViewSet` with an unauthenticated user client."""
     response = noauth_api_client.delete(
         detail_url(MailingListViewSet, fake_mailing_list)
     )
@@ -226,7 +226,7 @@ def test_delete_noauth(fake_mailing_list, fake_email, noauth_api_client, detail_
 
 @pytest.mark.django_db
 def test_delete_auth_other(fake_mailing_list, fake_email, other_api_client, detail_url):
-    """Tests the delete method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated other user client."""
+    """Tests the delete method on :class:`api.v1.views.MailingListViewSet` with the authenticated other user client."""
     response = other_api_client.delete(
         detail_url(MailingListViewSet, fake_mailing_list)
     )
@@ -238,7 +238,7 @@ def test_delete_auth_other(fake_mailing_list, fake_email, other_api_client, deta
 
 @pytest.mark.django_db
 def test_delete_auth_owner(fake_mailing_list, fake_email, owner_api_client, detail_url):
-    """Tests the delete method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated owner user client."""
+    """Tests the delete method on :class:`api.v1.views.MailingListViewSet` with the authenticated owner user client."""
     response = owner_api_client.delete(
         detail_url(MailingListViewSet, fake_mailing_list)
     )
@@ -252,7 +252,7 @@ def test_delete_auth_owner(fake_mailing_list, fake_email, owner_api_client, deta
 def test_delete_nonexistant_auth_owner(
     fake_mailing_list, fake_email, owner_api_client, detail_url
 ):
-    """Tests the delete method on :class:`api.v1.views.MailingListViewSet.MailingListViewSet` with the authenticated owner user client."""
+    """Tests the delete method on :class:`api.v1.views.MailingListViewSet` with the authenticated owner user client."""
     old_id = fake_mailing_list.id
     fake_mailing_list.id = 10
     response = owner_api_client.delete(

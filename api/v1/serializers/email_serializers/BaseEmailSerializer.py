@@ -32,11 +32,11 @@ if TYPE_CHECKING:
 
 
 class BaseEmailSerializer(serializers.ModelSerializer[Email]):
-    """The base serializer for :class:`core.models.Email.Email`.
+    """The base serializer for :class:`core.models.Email`.
 
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
-    Other serializers for :class:`core.models.Email.Email` should inherit from this.
+    Other serializers for :class:`core.models.Email` should inherit from this.
     """
 
     class Meta:

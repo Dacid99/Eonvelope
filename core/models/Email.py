@@ -123,7 +123,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             related_name="emails",
         )
     )
-    """The correspondents that are mentioned in this mail. Bridges through :class:`core.models.EmailCorrespondent.EmailCorrespondent`."""
+    """The correspondents that are mentioned in this mail. Bridges through :class:`core.models.EmailCorrespondent`."""
 
     mailinglist: models.ForeignKey[MailingList | None, MailingList | None] = (
         models.ForeignKey(
@@ -338,13 +338,13 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
 
     @classmethod
     def fill_from_email_bytes(cls, email_bytes: bytes) -> Email:
-        """Constructs an :class:`core.models.Email.Email` from an email in bytes form.
+        """Constructs an :class:`core.models.Email` from an email in bytes form.
 
         Args:
             email_bytes: The email bytes to parse the emaildata from.
 
         Returns:
-            The :class:`core.models.Email.Email` instance with data from the bytes.
+            The :class:`core.models.Email` instance with data from the bytes.
         """
         email_message = email.message_from_bytes(email_bytes, policy=policy.default)  # type: ignore[arg-type]  # email stubs are not up-to-date for EmailMessage, will be fixed by mypy 1.16.0: https://github.com/python/typeshed/issues/13593
         header_dict = {}
@@ -373,14 +373,14 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     def create_from_email_bytes(
         cls, email_bytes: bytes, mailbox: Mailbox
     ) -> Email | None:
-        """Creates an :class:`core.models.Email.Email` from an email in bytes form.
+        """Creates an :class:`core.models.Email` from an email in bytes form.
 
         Args:
             email_bytes: The email bytes to parse the emaildata from.
             mailbox: The mailbox the email is in.
 
         Returns:
-            The :class:`core.models.Email.Email` instance with data from the bytes.
+            The :class:`core.models.Email` instance with data from the bytes.
             None if there is no Message-ID header in :attr:`email_message`,
             if the mail already exists in the db or
             if the mail is spam and is supposed to be thrown out.

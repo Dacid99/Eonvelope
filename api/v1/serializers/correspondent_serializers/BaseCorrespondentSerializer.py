@@ -32,11 +32,11 @@ if TYPE_CHECKING:
 
 
 class BaseCorrespondentSerializer(serializers.ModelSerializer[Correspondent]):
-    """The base serializer for :class:`core.models.Correspondent.Correspondent`.
+    """The base serializer for :class:`core.models.Correspondent`.
 
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
-    Other serializers for :class:`core.models.Correspondent.Correspondent` should inherit from this.
+    Other serializers for :class:`core.models.Correspondent` should inherit from this.
     """
 
     class Meta:

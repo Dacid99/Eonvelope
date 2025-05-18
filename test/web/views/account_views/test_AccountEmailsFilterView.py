@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.account_views.AccountEmailsFilterView`."""
+"""Test module for :mod:`web.views.AccountEmailsFilterView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -27,7 +27,7 @@ from web.views import AccountEmailsFilterView
 
 @pytest.mark.django_db
 def test_get_noauth(fake_account, client, detail_url, login_url):
-    """Tests :class:`web.views.account_views.AccountEmailsFilterView.AccountEmailsFilterView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountEmailsFilterView` with an unauthenticated user client."""
     response = client.get(detail_url(AccountEmailsFilterView, fake_account))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -40,7 +40,7 @@ def test_get_noauth(fake_account, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_account, other_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountEmailsFilterView.AccountEmailsFilterView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountEmailsFilterView` with the authenticated other user client."""
     response = other_client.get(detail_url(AccountEmailsFilterView, fake_account))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -50,7 +50,7 @@ def test_get_auth_other(fake_account, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_account, owner_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountEmailsFilterView.AccountEmailsFilterView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountEmailsFilterView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(AccountEmailsFilterView, fake_account))
 
     assert response.status_code == status.HTTP_200_OK

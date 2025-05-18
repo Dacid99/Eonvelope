@@ -32,11 +32,11 @@ if TYPE_CHECKING:
 
 
 class BaseAccountSerializer(serializers.ModelSerializer[Account]):
-    """The base serializer for :class:`core.models.Account.Account`.
+    """The base serializer for :class:`core.models.Account`.
 
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
-    Other serializers for :class:`core.models.Account.Account` should inherit from this.
+    Other serializers for :class:`core.models.Account` should inherit from this.
     """
 
     password = serializers.CharField(max_length=255, write_only=True)

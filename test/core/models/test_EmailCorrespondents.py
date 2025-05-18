@@ -34,61 +34,61 @@ def fake_header_name(faker):
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent_fields(fake_email_correspondent):
+def test_EmailCorrespondent_fields(fake_emailcorrespondent):
     """Tests the fields of :class:`core.models.Correspondent.Correspondent`."""
 
-    assert fake_email_correspondent.email is not None
-    assert isinstance(fake_email_correspondent.email, Email)
-    assert fake_email_correspondent.correspondent is not None
-    assert isinstance(fake_email_correspondent.correspondent, Correspondent)
-    assert fake_email_correspondent.mention is not None
+    assert fake_emailcorrespondent.email is not None
+    assert isinstance(fake_emailcorrespondent.email, Email)
+    assert fake_emailcorrespondent.correspondent is not None
+    assert isinstance(fake_emailcorrespondent.correspondent, Correspondent)
+    assert fake_emailcorrespondent.mention is not None
     assert any(
-        fake_email_correspondent.mention == mention
+        fake_emailcorrespondent.mention == mention
         for mention in HeaderFields.Correspondents.values
     )
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent___str__(fake_email_correspondent):
+def test_EmailCorrespondent___str__(fake_emailcorrespondent):
     """Tests the string representation of :class:`core.models.EmailCorrespondent.EmailCorrespondent`."""
-    assert str(fake_email_correspondent.email) in str(fake_email_correspondent)
-    assert str(fake_email_correspondent.correspondent) in str(fake_email_correspondent)
-    assert str(fake_email_correspondent.mention) in str(fake_email_correspondent)
+    assert str(fake_emailcorrespondent.email) in str(fake_emailcorrespondent)
+    assert str(fake_emailcorrespondent.correspondent) in str(fake_emailcorrespondent)
+    assert str(fake_emailcorrespondent.mention) in str(fake_emailcorrespondent)
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent_foreign_key_email_deletion(fake_email_correspondent):
+def test_EmailCorrespondent_foreign_key_email_deletion(fake_emailcorrespondent):
     """Tests the on_delete foreign key constraint on email in :class:`core.models.EmailCorrespondent.EmailCorrespondent`."""
-    fake_email_correspondent.email.delete()
+    fake_emailcorrespondent.email.delete()
 
     with pytest.raises(EmailCorrespondent.DoesNotExist):
-        fake_email_correspondent.refresh_from_db()
-    fake_email_correspondent.correspondent.refresh_from_db()
-    assert fake_email_correspondent.correspondent is not None
+        fake_emailcorrespondent.refresh_from_db()
+    fake_emailcorrespondent.correspondent.refresh_from_db()
+    assert fake_emailcorrespondent.correspondent is not None
 
 
 @pytest.mark.django_db
 def test_EmailCorrespondent_foreign_key_correspondent_deletion(
-    fake_email_correspondent,
+    fake_emailcorrespondent,
 ):
     """Tests the on_delete foreign key constraint on correspondent in :class:`core.models.EmailCorrespondent.EmailCorrespondent`."""
-    fake_email_correspondent.correspondent.delete()
+    fake_emailcorrespondent.correspondent.delete()
 
     with pytest.raises(EmailCorrespondent.DoesNotExist):
-        fake_email_correspondent.refresh_from_db()
-    fake_email_correspondent.email.refresh_from_db()
-    assert fake_email_correspondent.email is not None
+        fake_emailcorrespondent.refresh_from_db()
+    fake_emailcorrespondent.email.refresh_from_db()
+    assert fake_emailcorrespondent.email is not None
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent_unique_constraints(fake_email_correspondent):
+def test_EmailCorrespondent_unique_constraints(fake_emailcorrespondent):
     """Tests the unique constraint in :class:`core.models.Correspondent.Correspondent`."""
     with pytest.raises(IntegrityError):
         baker.make(
             EmailCorrespondent,
-            email=fake_email_correspondent.email,
-            correspondent=fake_email_correspondent.correspondent,
-            mention=fake_email_correspondent.mention,
+            email=fake_emailcorrespondent.email,
+            correspondent=fake_emailcorrespondent.correspondent,
+            mention=fake_emailcorrespondent.mention,
         )
 
 

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.account_views.AccountUpdateOrDeleteView`."""
+"""Test module for :mod:`web.views.AccountUpdateOrDeleteView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -29,7 +29,7 @@ from web.views import AccountUpdateOrDeleteView
 
 @pytest.mark.django_db
 def test_get_noauth(fake_account, client, detail_url, login_url):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(AccountUpdateOrDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -43,7 +43,7 @@ def test_get_noauth(fake_account, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_account, other_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated other user client."""
     response = other_client.get(detail_url(AccountUpdateOrDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -53,7 +53,7 @@ def test_get_auth_other(fake_account, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_account, owner_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(AccountUpdateOrDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_200_OK
@@ -71,7 +71,7 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
 def test_post_update_noauth(
     fake_account, account_payload, client, detail_url, login_url
 ):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountUpdateOrDeleteView, fake_account), account_payload
     )
@@ -92,7 +92,7 @@ def test_post_update_noauth(
 def test_post_update_auth_other(
     fake_account, account_payload, other_client, detail_url
 ):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountUpdateOrDeleteView, fake_account), account_payload
     )
@@ -109,7 +109,7 @@ def test_post_update_auth_other(
 def test_post_update_auth_owner(
     fake_account, account_payload, owner_client, detail_url
 ):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountUpdateOrDeleteView, fake_account), account_payload
     )
@@ -125,7 +125,7 @@ def test_post_update_auth_owner(
 
 @pytest.mark.django_db
 def test_post_delete_noauth(fake_account, client, detail_url, login_url):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountUpdateOrDeleteView, fake_account),
         {"delete": "Delete"},
@@ -143,7 +143,7 @@ def test_post_delete_noauth(fake_account, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_other(fake_account, other_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountUpdateOrDeleteView, fake_account),
         {"delete": "Delete"},
@@ -157,7 +157,7 @@ def test_post_delete_auth_other(fake_account, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_owner(fake_account, owner_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountUpdateOrDeleteView.AccountUpdateOrDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountUpdateOrDeleteView, fake_account),
         {"delete": "Delete"},

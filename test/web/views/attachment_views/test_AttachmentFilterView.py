@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.attachment_views.AttachmentFilterView`."""
+"""Test module for :mod:`web.views.AttachmentFilterView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -27,7 +27,7 @@ from web.views import AttachmentFilterView
 
 @pytest.mark.django_db
 def test_get_noauth(client, list_url, login_url):
-    """Tests :class:`web.views.attachment_views.AttachmentFilterView.AttachmentFilterView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AttachmentFilterView` with an unauthenticated user client."""
     response = client.get(list_url(AttachmentFilterView))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -38,7 +38,7 @@ def test_get_noauth(client, list_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(other_client, list_url):
-    """Tests :class:`web.views.attachment_views.AttachmentFilterView.AttachmentFilterView` with the authenticated other user client."""
+    """Tests :class:`web.views.AttachmentFilterView` with the authenticated other user client."""
     response = other_client.get(list_url(AttachmentFilterView))
 
     assert response.status_code == status.HTTP_200_OK
@@ -53,7 +53,7 @@ def test_get_auth_other(other_client, list_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(owner_client, list_url):
-    """Tests :class:`web.views.attachment_views.AttachmentFilterView.AttachmentFilterView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AttachmentFilterView` with the authenticated owner user client."""
     response = owner_client.get(list_url(AttachmentFilterView))
 
     assert response.status_code == status.HTTP_200_OK

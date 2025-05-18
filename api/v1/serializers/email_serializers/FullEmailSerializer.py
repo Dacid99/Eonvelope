@@ -39,7 +39,7 @@ from .BaseEmailSerializer import BaseEmailSerializer
 
 
 class FullEmailSerializer(BaseEmailSerializer):
-    """A complete serializer for a :class:`core.models.Email.Email`.
+    """A complete serializer for a :class:`core.models.Email`.
 
     Includes nested serializers for the :attr:`core.models.Email.Email.replies`,
     :attr:`core.models.Email.Email.attachments`,
@@ -64,7 +64,7 @@ class FullEmailSerializer(BaseEmailSerializer):
 
     correspondents = serializers.SerializerMethodField(read_only=True)
     """The emails are set from the
-    :class:`core.models.EmailCorrespondent.EmailCorrespondent`
+    :class:`core.models.EmailCorrespondent`
     via :func:`get_correspondents`.
     """
 

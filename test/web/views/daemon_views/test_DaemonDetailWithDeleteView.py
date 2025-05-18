@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.daemon_views.DaemonDetailWithDeleteView`."""
+"""Test module for :mod:`web.views.DaemonDetailWithDeleteView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -29,7 +29,7 @@ from web.views import DaemonDetailWithDeleteView, DaemonFilterView
 
 @pytest.mark.django_db
 def test_get_noauth(fake_daemon, client, detail_url, login_url):
-    """Tests :class:`web.views.daemon_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -43,7 +43,7 @@ def test_get_noauth(fake_daemon, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_daemon, other_client, detail_url):
-    """Tests :class:`web.views.daemon_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -53,7 +53,7 @@ def test_get_auth_other(fake_daemon, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_daemon, owner_client, detail_url):
-    """Tests :class:`web.views.daemon_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
     assert response.status_code == status.HTTP_200_OK
@@ -66,7 +66,7 @@ def test_get_auth_owner(fake_daemon, owner_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_noauth(fake_daemon, client, detail_url, login_url):
-    """Tests :class:`web.views.daemon_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"delete": "Delete"},
@@ -84,7 +84,7 @@ def test_post_delete_noauth(fake_daemon, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_other(fake_daemon, other_client, detail_url):
-    """Tests :class:`web.views.daemon_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"delete": "Delete"},
@@ -98,7 +98,7 @@ def test_post_delete_auth_other(fake_daemon, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_owner(fake_daemon, owner_client, detail_url):
-    """Tests :class:`web.views.daemon_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"delete": "Delete"},
@@ -119,7 +119,7 @@ def test_post_start_noauth(
     login_url,
     mock_EmailArchiverDaemonRegistry_start_daemon,
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"start_daemon": "Start"},
@@ -138,7 +138,7 @@ def test_post_start_noauth(
 def test_post_start_auth_other(
     fake_daemon, other_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"start_daemon": "Start"},
@@ -153,7 +153,7 @@ def test_post_start_auth_other(
 def test_post_start_success_auth_owner(
     fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"start_daemon": "Start"},
@@ -172,7 +172,7 @@ def test_post_start_success_auth_owner(
 def test_post_start_failure_auth_owner(
     fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     mock_EmailArchiverDaemonRegistry_start_daemon.return_value = False
 
     response = owner_client.post(
@@ -193,7 +193,7 @@ def test_post_start_failure_auth_owner(
 def test_post_start_missing_action_auth_owner(
     fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     mock_EmailArchiverDaemonRegistry_start_daemon.return_value = False
 
     response = owner_client.post(detail_url(DaemonDetailWithDeleteView, fake_daemon))
@@ -211,7 +211,7 @@ def test_post_stop_noauth(
     login_url,
     mock_EmailArchiverDaemonRegistry_stop_daemon,
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"stop_daemon": "Stop"},
@@ -230,7 +230,7 @@ def test_post_stop_noauth(
 def test_post_stop_auth_other(
     fake_daemon, other_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"stop_daemon": "Stop"},
@@ -245,7 +245,7 @@ def test_post_stop_auth_other(
 def test_post_stop_success_auth_owner(
     fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"stop_daemon": "Stop"},
@@ -264,7 +264,7 @@ def test_post_stop_success_auth_owner(
 def test_post_stop_failure_auth_owner(
     fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     mock_EmailArchiverDaemonRegistry_stop_daemon.return_value = False
 
     response = owner_client.post(
@@ -285,7 +285,7 @@ def test_post_stop_failure_auth_owner(
 def test_post_stop_missing_action_auth_owner(
     fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
 ):
-    """Tests :class:`web.views.account_views.DaemonDetailWithDeleteView.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     mock_EmailArchiverDaemonRegistry_stop_daemon.return_value = False
 
     response = owner_client.post(detail_url(DaemonDetailWithDeleteView, fake_daemon))

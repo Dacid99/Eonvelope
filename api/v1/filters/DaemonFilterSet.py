@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 
 
 class DaemonFilterSet(filters.FilterSet):
-    """The filter class for :class:`core.models.Mailbox.Mailbox`."""
+    """The filter class for :class:`core.models.Mailbox`."""
 
     mail_address__icontains = filters.CharFilter(
         field_name="mailbox__account__mail_address", lookup_expr="icontains"

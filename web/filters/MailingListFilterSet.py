@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
 
 class MailingListFilterSet(django_filters.FilterSet):
-    """The filter class for :class:`core.models.MailingList.MailingList`."""
+    """The filter class for :class:`core.models.MailingList`."""
 
     order = django_filters.OrderingFilter(
         fields=[

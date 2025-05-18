@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.Mailbox_views.MailboxDetailWithDeleteView`."""
+"""Test module for :mod:`web.views.MailboxDetailWithDeleteView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -34,7 +34,7 @@ from web.views.mailbox_views.MailboxDetailWithDeleteView import (
 
 @pytest.mark.django_db
 def test_get_noauth(fake_mailbox, client, detail_url, login_url):
-    """Tests :class:`web.views.mailbox_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -48,7 +48,7 @@ def test_get_noauth(fake_mailbox, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_mailbox, other_client, detail_url):
-    """Tests :class:`web.views.mailbox_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -58,7 +58,7 @@ def test_get_auth_other(fake_mailbox, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
-    """Tests :class:`web.views.mailbox_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
     assert response.status_code == status.HTTP_200_OK
@@ -72,7 +72,7 @@ def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_noauth(fake_mailbox, client, detail_url, login_url):
-    """Tests :class:`web.views.mailbox_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"delete": "Delete"},
@@ -90,7 +90,7 @@ def test_post_delete_noauth(fake_mailbox, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_other(fake_mailbox, other_client, detail_url):
-    """Tests :class:`web.views.mailbox_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"delete": "Delete"},
@@ -104,7 +104,7 @@ def test_post_delete_auth_other(fake_mailbox, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_owner(fake_mailbox, owner_client, detail_url):
-    """Tests :class:`web.views.mailbox_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"delete": "Delete"},
@@ -121,7 +121,7 @@ def test_post_delete_auth_owner(fake_mailbox, owner_client, detail_url):
 def test_post_test_noauth(
     fake_mailbox, client, detail_url, login_url, mock_Mailbox_test_connection
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"test": "Test"},
@@ -140,7 +140,7 @@ def test_post_test_noauth(
 def test_post_test_auth_other(
     fake_mailbox, other_client, detail_url, mock_Mailbox_test_connection
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"test": "Test"},
@@ -155,7 +155,7 @@ def test_post_test_auth_other(
 def test_post_test_success_auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_test_connection
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"test": "Test"},
@@ -181,7 +181,7 @@ def test_post_test_success_auth_owner(
 def test_post_test_failure_auth_owner(
     faker, fake_mailbox, owner_client, detail_url, mock_Mailbox_test_connection
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     fake_error_message = faker.sentence()
     mock_Mailbox_test_connection.side_effect = FetcherError(fake_error_message)
 
@@ -211,7 +211,7 @@ def test_post_test_failure_auth_owner(
 def test_post_test_missing_action_auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_test_connection
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -223,7 +223,7 @@ def test_post_test_missing_action_auth_owner(
 def test_post_fetch_all_noauth(
     fake_mailbox, client, detail_url, login_url, mock_Mailbox_fetch
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"fetch_all": "Fetch contents"},
@@ -242,7 +242,7 @@ def test_post_fetch_all_noauth(
 def test_post_fetch_all_auth_other(
     fake_mailbox, other_client, detail_url, mock_Mailbox_fetch
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"fetch_all": "Fetch contents"},
@@ -257,7 +257,7 @@ def test_post_fetch_all_auth_other(
 def test_post_fetch_all_success_auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
         {"fetch_all": "Fetch contents"},
@@ -285,7 +285,7 @@ def test_post_fetch_all_success_auth_owner(
 def test_post_fetch_all_failure_auth_owner(
     faker, fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     fake_error_message = faker.sentence()
     mock_Mailbox_fetch.side_effect = FetcherError(fake_error_message)
 
@@ -317,7 +317,7 @@ def test_post_fetch_all_failure_auth_owner(
 def test_post_fetch_all_missing_action_auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -327,7 +327,7 @@ def test_post_fetch_all_missing_action_auth_owner(
 
 @pytest.mark.django_db
 def test_post_add_daemon_noauth(fake_mailbox, client, detail_url, login_url):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     assert Daemon.objects.count() == 1
 
     response = client.post(
@@ -346,7 +346,7 @@ def test_post_add_daemon_noauth(fake_mailbox, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_post_add_daemon_auth_other(fake_mailbox, other_client, detail_url):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     assert Daemon.objects.count() == 1
 
     response = other_client.post(
@@ -361,7 +361,7 @@ def test_post_add_daemon_auth_other(fake_mailbox, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_add_daemon_auth_owner(fake_mailbox, owner_client, detail_url):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     assert Daemon.objects.count() == 1
 
     response = owner_client.post(
@@ -380,7 +380,7 @@ def test_post_add_daemon_auth_owner(fake_mailbox, owner_client, detail_url):
 def test_post_add_daemon_missing_action_auth_owner(
     fake_mailbox, owner_client, detail_url
 ):
-    """Tests :class:`web.views.account_views.MailboxDetailWithDeleteView.MailboxDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     assert Daemon.objects.count() == 1
 
     response = owner_client.post(

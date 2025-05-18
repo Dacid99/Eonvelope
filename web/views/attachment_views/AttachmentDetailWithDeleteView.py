@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AttachmentDetailWithDeleteView` view."""
+"""Module with the :class:`web.views.AttachmentDetailWithDeleteView` view."""
 
 from typing import override
 
@@ -31,7 +31,7 @@ from .AttachmentFilterView import AttachmentFilterView
 
 
 class AttachmentDetailWithDeleteView(LoginRequiredMixin, DetailWithDeleteView):
-    """View for a single :class:`core.models.Attachment.Attachment` instance."""
+    """View for a single :class:`core.models.Attachment` instance."""
 
     URL_NAME = Attachment.get_detail_web_url_name()
     model = Attachment

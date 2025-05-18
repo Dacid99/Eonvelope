@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 
 
 class CorrespondentFilterSet(filters.FilterSet):
-    """The filter class for :class:`core.models.Correspondent.Correspondent`."""
+    """The filter class for :class:`core.models.Correspondent`."""
 
     search = filters.CharFilter(
         method="filter_text_fields",

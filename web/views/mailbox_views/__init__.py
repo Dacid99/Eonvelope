@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.mailbox_views package containing views for the :class:`core.models.Mailbox.Mailbox` data."""
+"""web.views.mailbox_views package containing views for the :class:`core.models.Mailbox` data."""
 
 from .MailboxDetailWithDeleteView import MailboxDetailWithDeleteView
 from .MailboxEmailsFilterView import MailboxEmailsFilterView

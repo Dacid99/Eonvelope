@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`DaemonDetailWithDeleteView` view."""
+"""Module with the :class:`web.views.DaemonDetailWithDeleteView` view."""
 
 from typing import Any, override
 
@@ -40,7 +40,7 @@ class DaemonDetailWithDeleteView(
     DetailWithDeleteView,
     CustomActionMixin,
 ):
-    """View for a single :class:`core.models.Daemon.Daemon` instance."""
+    """View for a single :class:`core.models.Daemon` instance."""
 
     URL_NAME = Daemon.get_detail_web_url_name()
     model = Daemon

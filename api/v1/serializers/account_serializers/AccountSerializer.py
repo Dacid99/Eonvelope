@@ -25,7 +25,7 @@ from .BaseAccountSerializer import BaseAccountSerializer
 
 
 class AccountSerializer(BaseAccountSerializer):
-    """The standard serializer for a :class:`core.models.Account.Account`.
+    """The standard serializer for a :class:`core.models.Account`.
 
     Includes a nested serializer for the related field `mailboxes`.
     """

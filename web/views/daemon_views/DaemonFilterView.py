@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`DaemonFilterView` view."""
+"""Module with the :class:`web.views.DaemonFilterView` view."""
 
 from typing import override
 
@@ -30,7 +30,7 @@ from ..FilterPageView import FilterPageView
 
 
 class DaemonFilterView(LoginRequiredMixin, FilterPageView):
-    """View for filtering listed :class:`core.models.Daemon.Daemon` instances."""
+    """View for filtering listed :class:`core.models.Daemon` instances."""
 
     URL_NAME = Daemon.get_list_web_url_name()
     model = Daemon

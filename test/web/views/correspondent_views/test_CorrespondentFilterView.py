@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.correspondent_views.CorrespondentFilterView`."""
+"""Test module for :mod:`web.views.CorrespondentFilterView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect

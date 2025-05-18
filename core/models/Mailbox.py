@@ -243,14 +243,14 @@ class Mailbox(DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Mod
 
     @classmethod
     def create_from_data(cls, mailbox_data: bytes, account: Account) -> Mailbox:
-        """Creates a :class:`core.models.Mailbox.Mailbox` from the mailboxname in bytes.
+        """Creates a :class:`core.models.Mailbox` from the mailboxname in bytes.
 
         Args:
             mailbox_data: The bytes with the mailboxname.
             account: The account the mailbox is in.
 
         Returns:
-            The :class:`core.models.Mailbox.Mailbox` instance with data from the bytes.
+            The :class:`core.models.Mailbox` instance with data from the bytes.
             `None` if the mailbox already exists in the db.
         """
         if account.pk is None:

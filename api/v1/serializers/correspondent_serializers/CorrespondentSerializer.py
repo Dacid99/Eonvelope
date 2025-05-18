@@ -42,16 +42,16 @@ from .BaseCorrespondentSerializer import BaseCorrespondentSerializer
 
 class CorrespondentSerializer(BaseCorrespondentSerializer):
     """The standard serializer for a :class:`core.models.Correspondent.Correspondent`.
-
-    Includes a nested serializer for
-    the :attr:`core.models.Correspondent.Correspondent.emails`
-    and :attr:`core.models.Correspondent.Correspondent.mailinglist` fields.
+    `core.models.Correspondent`
+        Includes a nested serializer for
+        the :attr:`core.models.Correspondent.Correspondent.emails`
+        and :attr:`core.models.Correspondent.Correspondent.mailinglist` fields.
     """
 
     emails = serializers.SerializerMethodField(read_only=True)
     """The emails are set from the
     :class:`core.models.EmailCorrespondent.EmailCorrespondent`
-    via :func:`get_emails`.
+    via :fu`core.models.EmailCorrespondent`
     """
 
     mailinglists = serializers.SerializerMethodField(read_only=True)

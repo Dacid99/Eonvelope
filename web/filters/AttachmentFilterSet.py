@@ -27,7 +27,7 @@ from ..utils.widgets import AdaptedSelectDateWidget
 
 
 class AttachmentFilterSet(django_filters.FilterSet):
-    """The filter class for :class:`core.models.Attachment.Attachment`."""
+    """The filter class for :class:`core.models.Attachment`."""
 
     order = django_filters.OrderingFilter(
         fields=[

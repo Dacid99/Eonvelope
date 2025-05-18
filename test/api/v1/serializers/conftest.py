@@ -49,7 +49,7 @@ def complete_database(
     fake_correspondent,
     fake_daemon,
     fake_email,
-    fake_email_correspondent,
+    fake_emailcorrespondent,
     fake_mailbox,
     fake_mailing_list,
 ):

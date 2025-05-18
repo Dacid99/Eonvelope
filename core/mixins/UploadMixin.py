@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`UploadMixin` mixin."""
+"""Module with the :class:`core.mixins.UploadMixin` mixin."""
 
 from typing import Any, ClassVar, Protocol
 

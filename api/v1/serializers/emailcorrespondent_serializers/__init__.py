@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""api.v1.serializers.email_correspondent_serializers package containing serializers for the :mod:`core.models.EmailCorrespondent` bridge table data."""
+"""api.v1.serializers.emailcorrespondent_serializers package containing serializers for the :mod:`core.models.EmailCorrespondent` bridge table data."""
 
 from .BaseEmailCorrespondentSerializer import BaseEmailCorrespondentSerializer
 from .CorrespondentEmailSerializer import CorrespondentEmailSerializer

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`DetailWithDeleteView` baseview."""
+"""Module with the :class:`web.views.DetailWithDeleteView.DetailWithDeleteView` baseview."""
 
 
 from django.views.generic import DetailView

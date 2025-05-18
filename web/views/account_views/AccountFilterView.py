@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AccountFilterView` view."""
+"""Module with the :class:`web.views.AccountFilterView` view."""
 
 from typing import override
 
@@ -30,7 +30,7 @@ from ..FilterPageView import FilterPageView
 
 
 class AccountFilterView(LoginRequiredMixin, FilterPageView):
-    """View for filtering listed :class:`core.models.Account.Account` instances."""
+    """View for filtering listed :class:`core.models.Account` instances."""
 
     URL_NAME = Account.get_list_web_url_name()
     model = Account

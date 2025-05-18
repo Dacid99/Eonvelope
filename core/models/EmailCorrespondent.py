@@ -99,7 +99,7 @@ class EmailCorrespondent(models.Model):
     def create_from_header(
         cls, header: str, header_name: str, email: Email
     ) -> list[EmailCorrespondent] | None:
-        """Prepares a list :class:`core.models.EmailCorrespondent.EmailCorrespondent` from an email header.
+        """Prepares a list :class:`core.models.EmailCorrespondent` from an email header.
 
         Args:
             header: The header to parse the malinglistdata from.
@@ -107,7 +107,7 @@ class EmailCorrespondent(models.Model):
             email: The email for the new emailcorrespondent.
 
         Returns:
-            The list of :class:`core.models.EmailCorrespondent.EmailCorrespondent` instances with data from the header.
+            The list of :class:`core.models.EmailCorrespondent` instances with data from the header.
             If the correspondent already exists in the db.
             `None` if the correspondent could not be parsed.
 

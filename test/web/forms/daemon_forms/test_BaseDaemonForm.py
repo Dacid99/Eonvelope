@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for the :class:`web.forms.daemon_forms.BaseDaemonForm.BaseDaemonForm` form class."""
+"""Test module for the :class:`web.forms.BaseDaemonForm` form class."""
 
 import pytest
 from django.forms.models import model_to_dict
@@ -26,7 +26,7 @@ from web.forms import BaseDaemonForm
 
 @pytest.mark.django_db
 def test_post_update(fake_daemon):
-    """Tests post direction of :class:`web.forms.daemon_forms.BaseDaemonForm.BaseDaemonForm`."""
+    """Tests post direction of :class:`web.forms.BaseDaemonForm`."""
     form = BaseDaemonForm(instance=fake_daemon, data=model_to_dict(fake_daemon))
 
     assert form.is_valid()
@@ -52,7 +52,7 @@ def test_post_update(fake_daemon):
 
 @pytest.mark.django_db
 def test_get(fake_daemon):
-    """Tests get direction of :class:`web.forms.daemon_forms.BaseDaemonForm.BaseDaemonForm`."""
+    """Tests get direction of :class:`web.forms.BaseDaemonForm`."""
     form = BaseDaemonForm(instance=fake_daemon)
     form_initial_data = form.initial
     form_fields = form.fields

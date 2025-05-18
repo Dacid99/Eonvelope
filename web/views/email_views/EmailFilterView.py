@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`EmailFilterView` view."""
+"""Module with the :class:`web.views.EmailFilterView` view."""
 
 from typing import override
 
@@ -30,7 +30,7 @@ from ..FilterPageView import FilterPageView
 
 
 class EmailFilterView(LoginRequiredMixin, FilterPageView):
-    """View for filtering listed :class:`core.models.Email.Email` instances."""
+    """View for filtering listed :class:`core.models.Email` instances."""
 
     URL_NAME = Email.get_list_web_url_name()
     model = Email

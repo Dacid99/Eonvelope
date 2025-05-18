@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 
 
 class AccountFilterSet(filters.FilterSet):
-    """The filter class for :class:`core.models.Account.Account`."""
+    """The filter class for :class:`core.models.Account`."""
 
     search = filters.CharFilter(
         method="filter_text_fields",

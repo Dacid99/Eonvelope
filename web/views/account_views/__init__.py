@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.account_views package containing views for the :class:`core.models.Account.Account` data."""
+"""web.views.account_views package containing views for the :class:`core.models.Account` data."""
 
 from .AccountCreateView import AccountCreateView
 from .AccountDetailWithDeleteView import AccountDetailWithDeleteView

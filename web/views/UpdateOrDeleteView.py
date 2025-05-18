@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`UpdateOrDeleteView` baseview."""
+"""Module with the :class:`web.views.UpdateOrDeleteView.UpdateOrDeleteView` baseview."""
 
 from typing import Any, override
 

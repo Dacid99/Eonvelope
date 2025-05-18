@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.forms.mailbox_forms package containing forms for the :class:`core.models.Mailbox.Mailbox` data."""
+"""web.forms.mailbox_forms package containing forms for the :class:`core.models.Mailbox` data."""
 
 from .BaseMailboxForm import BaseMailboxForm
 

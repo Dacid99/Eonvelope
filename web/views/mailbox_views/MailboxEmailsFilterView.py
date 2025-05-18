@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailboxEmailsFilterView` view."""
+"""Module with the :class:`web.views.MailboxEmailsFilterView` view."""
 
 from typing import Any, override
 
@@ -29,7 +29,7 @@ from ..email_views import EmailFilterView
 
 
 class MailboxEmailsFilterView(EmailFilterView, SingleObjectMixin):  # type: ignore[misc]  # SingleObjectMixin attributes are shadowed purposefully
-    """View for filtering listed :class:`core.models.Email.Email` instances belonging to a certain mailbox."""
+    """View for filtering listed :class:`core.models.Email` instances belonging to a certain mailbox."""
 
     URL_NAME = "mailbox-emails"
     template_name = "web/mailbox/mailbox_email_filter_list.html"

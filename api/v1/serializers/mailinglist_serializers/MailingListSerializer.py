@@ -46,12 +46,12 @@ class MailingListSerializer(BaseMailingListSerializer):
 
     emails = serializers.SerializerMethodField(read_only=True)
     """The emails from the mailinglist are serialized
-    by :class:`api.v1.serializers.EmailSerializers.BaseEmailSerializer.BaseEmailSerializer`.
+    by :class:`api.v1.serializers.BaseEmailSerializer`.
     """
 
     from_correspondents = serializers.SerializerMethodField(read_only=True)
     """The correspondent sending the mailinglist are serialized
-    by :class:`api.v1.serializers.CorrespondentSerializers.BaseCorrespondentSerializer.BaseCorrespondentSerializer`.
+    by :class:`api.v1.serializers.BaseCorrespondentSerializer`.
     """
 
     def get_emails(self, instance: MailingList) -> ReturnDict[str, Any]:

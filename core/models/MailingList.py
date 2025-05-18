@@ -97,13 +97,13 @@ class MailingList(URLMixin, FavoriteMixin, models.Model):
     def create_from_email_message(
         cls, email_message: Message[str, str]
     ) -> MailingList | None:
-        """Prepares a :class:`core.models.MailingList.MailingList` from an email message.
+        """Prepares a :class:`core.models.MailingList` from an email message.
 
         Args:
             email_message: The email message to parse the malinglistdata from.
 
         Returns:
-            The :class:`core.models.MailingList.MailingList` instance with data from the message.
+            The :class:`core.models.MailingList` instance with data from the message.
             If the correspondent already exists in the db returns that version.
             None if there is no List-ID header in :attr:`email_message`.
         """

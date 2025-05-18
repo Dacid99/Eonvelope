@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
 
 class CorrespondentFilterSet(django_filters.FilterSet):
-    """The filter class for :class:`core.models.Correspondent.Correspondent`."""
+    """The filter class for :class:`core.models.Correspondent`."""
 
     order = django_filters.OrderingFilter(
         fields=[

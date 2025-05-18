@@ -29,7 +29,7 @@ from core.models import Attachment
 
 @pytest.mark.django_db
 def test_list_noauth(fake_attachment, noauth_api_client, list_url):
-    """Tests the list method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with an unauthenticated user client."""
+    """Tests the list method on :class:`api.v1.views.AttachmentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(list_url(AttachmentViewSet))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -38,7 +38,7 @@ def test_list_noauth(fake_attachment, noauth_api_client, list_url):
 
 @pytest.mark.django_db
 def test_list_auth_other(fake_attachment, other_api_client, list_url):
-    """Tests the list method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated other user client."""
+    """Tests the list method on :class:`api.v1.views.AttachmentViewSet` with the authenticated other user client."""
     response = other_api_client.get(list_url(AttachmentViewSet))
 
     assert response.status_code == status.HTTP_200_OK
@@ -48,7 +48,7 @@ def test_list_auth_other(fake_attachment, other_api_client, list_url):
 
 @pytest.mark.django_db
 def test_list_auth_owner(fake_attachment, owner_api_client, list_url):
-    """Tests the list method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated owner user client."""
+    """Tests the list method on :class:`api.v1.views.AttachmentViewSet` with the authenticated owner user client."""
     response = owner_api_client.get(list_url(AttachmentViewSet))
 
     assert response.status_code == status.HTTP_200_OK
@@ -58,7 +58,7 @@ def test_list_auth_owner(fake_attachment, owner_api_client, list_url):
 
 @pytest.mark.django_db
 def test_get_noauth(fake_attachment, noauth_api_client, detail_url):
-    """Tests the get method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with an unauthenticated user client."""
+    """Tests the get method on :class:`api.v1.views.AttachmentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(detail_url(AttachmentViewSet, fake_attachment))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -67,7 +67,7 @@ def test_get_noauth(fake_attachment, noauth_api_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_attachment, other_api_client, detail_url):
-    """Tests the get method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated other user client."""
+    """Tests the get method on :class:`api.v1.views.AttachmentViewSet` with the authenticated other user client."""
     response = other_api_client.get(detail_url(AttachmentViewSet, fake_attachment))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -76,7 +76,7 @@ def test_get_auth_other(fake_attachment, other_api_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_attachment, owner_api_client, detail_url):
-    """Tests the list method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated owner user client."""
+    """Tests the list method on :class:`api.v1.views.AttachmentViewSet` with the authenticated owner user client."""
     response = owner_api_client.get(detail_url(AttachmentViewSet, fake_attachment))
 
     assert response.status_code == status.HTTP_200_OK
@@ -87,7 +87,7 @@ def test_get_auth_owner(fake_attachment, owner_api_client, detail_url):
 def test_patch_noauth(
     fake_attachment, noauth_api_client, attachment_payload, detail_url
 ):
-    """Tests the patch method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with an unauthenticated user client."""
+    """Tests the patch method on :class:`api.v1.views.AttachmentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.patch(
         detail_url(AttachmentViewSet, fake_attachment), data=attachment_payload
     )
@@ -102,7 +102,7 @@ def test_patch_noauth(
 def test_patch_auth_other(
     fake_attachment, other_api_client, attachment_payload, detail_url
 ):
-    """Tests the patch method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated other user client."""
+    """Tests the patch method on :class:`api.v1.views.AttachmentViewSet` with the authenticated other user client."""
     response = other_api_client.patch(
         detail_url(AttachmentViewSet, fake_attachment), data=attachment_payload
     )
@@ -117,7 +117,7 @@ def test_patch_auth_other(
 def test_patch_auth_owner(
     fake_attachment, owner_api_client, attachment_payload, detail_url
 ):
-    """Tests the patch method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated owner user client."""
+    """Tests the patch method on :class:`api.v1.views.AttachmentViewSet` with the authenticated owner user client."""
     response = owner_api_client.patch(
         detail_url(AttachmentViewSet, fake_attachment), data=attachment_payload
     )
@@ -130,7 +130,7 @@ def test_patch_auth_owner(
 
 @pytest.mark.django_db
 def test_put_noauth(fake_attachment, noauth_api_client, attachment_payload, detail_url):
-    """Tests the put method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with an unauthenticated user client."""
+    """Tests the put method on :class:`api.v1.views.AttachmentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.put(
         detail_url(AttachmentViewSet, fake_attachment), data=attachment_payload
     )
@@ -145,7 +145,7 @@ def test_put_noauth(fake_attachment, noauth_api_client, attachment_payload, deta
 def test_put_auth_other(
     fake_attachment, other_api_client, attachment_payload, detail_url
 ):
-    """Tests the put method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated other user client."""
+    """Tests the put method on :class:`api.v1.views.AttachmentViewSet` with the authenticated other user client."""
     response = other_api_client.put(
         detail_url(AttachmentViewSet, fake_attachment), data=attachment_payload
     )
@@ -160,7 +160,7 @@ def test_put_auth_other(
 def test_put_auth_owner(
     fake_attachment, owner_api_client, attachment_payload, detail_url
 ):
-    """Tests the put method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated owner user client."""
+    """Tests the put method on :class:`api.v1.views.AttachmentViewSet` with the authenticated owner user client."""
     response = owner_api_client.put(
         detail_url(AttachmentViewSet, fake_attachment), data=attachment_payload
     )
@@ -173,7 +173,7 @@ def test_put_auth_owner(
 
 @pytest.mark.django_db
 def test_post_noauth(noauth_api_client, attachment_payload, list_url):
-    """Tests the post method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with an unauthenticated user client."""
+    """Tests the post method on :class:`api.v1.views.AttachmentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.post(
         list_url(AttachmentViewSet), data=attachment_payload
     )
@@ -186,7 +186,7 @@ def test_post_noauth(noauth_api_client, attachment_payload, list_url):
 
 @pytest.mark.django_db
 def test_post_auth_other(other_api_client, attachment_payload, list_url):
-    """Tests the post method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated other user client."""
+    """Tests the post method on :class:`api.v1.views.AttachmentViewSet` with the authenticated other user client."""
     response = other_api_client.post(
         list_url(AttachmentViewSet), data=attachment_payload
     )
@@ -199,7 +199,7 @@ def test_post_auth_other(other_api_client, attachment_payload, list_url):
 
 @pytest.mark.django_db
 def test_post_auth_owner(owner_api_client, attachment_payload, list_url):
-    """Tests the post method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated owner user client."""
+    """Tests the post method on :class:`api.v1.views.AttachmentViewSet` with the authenticated owner user client."""
     response = owner_api_client.post(
         list_url(AttachmentViewSet), data=attachment_payload
     )
@@ -212,7 +212,7 @@ def test_post_auth_owner(owner_api_client, attachment_payload, list_url):
 
 @pytest.mark.django_db
 def test_delete_noauth(fake_attachment, noauth_api_client, detail_url):
-    """Tests the delete method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with an unauthenticated user client."""
+    """Tests the delete method on :class:`api.v1.views.AttachmentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.delete(detail_url(AttachmentViewSet, fake_attachment))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -222,7 +222,7 @@ def test_delete_noauth(fake_attachment, noauth_api_client, detail_url):
 
 @pytest.mark.django_db
 def test_delete_auth_other(fake_attachment, other_api_client, detail_url):
-    """Tests the delete method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated other user client."""
+    """Tests the delete method on :class:`api.v1.views.AttachmentViewSet` with the authenticated other user client."""
     response = other_api_client.delete(detail_url(AttachmentViewSet, fake_attachment))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -232,7 +232,7 @@ def test_delete_auth_other(fake_attachment, other_api_client, detail_url):
 
 @pytest.mark.django_db
 def test_delete_auth_owner(fake_attachment, owner_api_client, detail_url):
-    """Tests the delete method on :class:`api.v1.views.AttachmentViewSet.AttachmentViewSet` with the authenticated owner user client."""
+    """Tests the delete method on :class:`api.v1.views.AttachmentViewSet` with the authenticated owner user client."""
     response = owner_api_client.delete(detail_url(AttachmentViewSet, fake_attachment))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT

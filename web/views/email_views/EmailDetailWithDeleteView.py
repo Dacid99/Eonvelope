@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`EmailDetailWithDeleteView` view."""
+"""Module with the :class:`web.views.EmailDetailWithDeleteView` view."""
 
 from typing import override
 
@@ -31,7 +31,7 @@ from .EmailFilterView import EmailFilterView
 
 
 class EmailDetailWithDeleteView(LoginRequiredMixin, DetailWithDeleteView):
-    """View for a single :class:`core.models.Email.Email` instance."""
+    """View for a single :class:`core.models.Email` instance."""
 
     URL_NAME = Email.get_detail_web_url_name()
     model = Email

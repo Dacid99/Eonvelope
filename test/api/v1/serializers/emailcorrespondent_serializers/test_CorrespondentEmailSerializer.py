@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.v1.serializers.EmailCorrespondentSerializers.CorrespondentEmailSerializer`."""
+"""Test module for :mod:`api.v1.serializers.CorrespondentEmailSerializer`."""
 
 import pytest
 from django.forms.models import model_to_dict
@@ -27,10 +27,10 @@ from api.v1.serializers.emailcorrespondent_serializers.CorrespondentEmailSeriali
 
 
 @pytest.mark.django_db
-def test_output(fake_email_correspondent, request_context):
+def test_output(fake_emailcorrespondent, request_context):
     """Tests for the expected output of the serializer."""
     serializer_data = CorrespondentEmailSerializer(
-        instance=fake_email_correspondent, context=request_context
+        instance=fake_emailcorrespondent, context=request_context
     ).data
 
     assert "id" not in serializer_data
@@ -38,17 +38,17 @@ def test_output(fake_email_correspondent, request_context):
     assert isinstance(serializer_data["email"], dict)
     assert "correspondent" not in serializer_data
     assert "mention" in serializer_data
-    assert serializer_data["mention"] == fake_email_correspondent.mention
+    assert serializer_data["mention"] == fake_emailcorrespondent.mention
     assert "created" not in serializer_data
     assert "updated" not in serializer_data
     assert len(serializer_data) == 2
 
 
 @pytest.mark.django_db
-def test_input(fake_email_correspondent, request_context):
+def test_input(fake_emailcorrespondent, request_context):
     """Tests for the expected input of the serializer."""
     serializer = CorrespondentEmailSerializer(
-        data=model_to_dict(fake_email_correspondent), context=request_context
+        data=model_to_dict(fake_emailcorrespondent), context=request_context
     )
     assert serializer.is_valid()
     serializer_data = serializer.validated_data

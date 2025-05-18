@@ -29,7 +29,7 @@ from ..utils.widgets import AdaptedSelectDateWidget
 
 
 class DaemonFilterSet(django_filters.FilterSet):
-    """The filter class for :class:`core.models.Mailbox.Mailbox`."""
+    """The filter class for :class:`core.models.Mailbox`."""
 
     order = django_filters.OrderingFilter(
         fields=[

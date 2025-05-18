@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for the :class:`web.forms.account_forms.BaseAccountForm.BaseAccountForm` form class."""
+"""Test module for the :class:`web.forms.BaseAccountForm` form class."""
 
 import pytest
 from django.forms.models import model_to_dict
@@ -26,7 +26,7 @@ from web.forms import BaseAccountForm
 
 @pytest.mark.django_db
 def test_post_create(fake_account, other_user):
-    """Tests post direction of :class:`web.forms.account_forms.BaseAccountForm.BaseAccountForm`."""
+    """Tests post direction of :class:`web.forms.BaseAccountForm`."""
     form = BaseAccountForm(data=model_to_dict(fake_account))
     form.instance.user = other_user
 
@@ -55,7 +55,7 @@ def test_post_create(fake_account, other_user):
 
 @pytest.mark.django_db
 def test_post_update(fake_account):
-    """Tests post direction of :class:`web.forms.account_forms.BaseAccountForm.BaseAccountForm`."""
+    """Tests post direction of :class:`web.forms.BaseAccountForm`."""
     form = BaseAccountForm(instance=fake_account, data=model_to_dict(fake_account))
 
     assert form.is_valid()
@@ -83,7 +83,7 @@ def test_post_update(fake_account):
 
 @pytest.mark.django_db
 def test_get(fake_account):
-    """Tests get direction of :class:`web.forms.account_forms.BaseAccountForm.BaseAccountForm`."""
+    """Tests get direction of :class:`web.forms.BaseAccountForm`."""
     form = BaseAccountForm(instance=fake_account)
     form_initial_data = form.initial
     form_fields = form.fields

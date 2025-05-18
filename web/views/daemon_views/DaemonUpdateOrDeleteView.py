@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`DaemonUpdateView` view."""
+"""Module with the :class:`web.views.DaemonUpdateView` view."""
 
 from typing import override
 
@@ -32,7 +32,7 @@ from .DaemonFilterView import DaemonFilterView
 
 
 class DaemonUpdateOrDeleteView(LoginRequiredMixin, UpdateOrDeleteView):
-    """View for updating or deleting a single :class:`core.models.Daemon.Daemon` instance."""
+    """View for updating or deleting a single :class:`core.models.Daemon` instance."""
 
     model = Daemon
     form_class = BaseDaemonForm

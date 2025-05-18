@@ -30,7 +30,7 @@ from ..FilterPageView import FilterPageView
 
 
 class MailingListFilterView(LoginRequiredMixin, FilterPageView):
-    """View for filtering listed :class:`core.models.MailingList.MailingList` instances."""
+    """View for filtering listed :class:`core.models.MailingList` instances."""
 
     URL_NAME = MailingList.get_list_web_url_name()
     model = MailingList

@@ -32,10 +32,10 @@ if TYPE_CHECKING:
 
 
 class BaseDaemonForm(RequiredMarkerModelForm):
-    """The base form for :class:`core.models.Daemon.Daemon`.
+    """The base form for :class:`core.models.Daemon`.
 
     Exposes all fields from the model that may be changed by the user.
-    Other forms for :class:`core.models.Daemon.Daemon` should inherit from this.
+    Other forms for :class:`core.models.Daemon` should inherit from this.
     """
 
     class Meta:

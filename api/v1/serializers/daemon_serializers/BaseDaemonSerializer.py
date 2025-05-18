@@ -32,11 +32,11 @@ if TYPE_CHECKING:
 
 
 class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
-    """The base serializer for :class:`core.models.Daemon.Daemon`.
+    """The base serializer for :class:`core.models.Daemon`.
 
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
-    Other serializers for :class:`core.models.Daemon.Daemon` should inherit from this.
+    Other serializers for :class:`core.models.Daemon` should inherit from this.
     """
 
     class Meta:
@@ -51,7 +51,7 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         """The model to serialize."""
 
         exclude: ClassVar[list[str]] = ["log_filepath"]
-        """Exclude the :attr:`core.models.Daemon.log_filepath` field."""
+        """Exclude the :attr:`core.models.Daemon` field."""
 
         read_only_fields: Final[list[str]] = [
             "uuid",

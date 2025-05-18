@@ -399,8 +399,9 @@ def test_Mailbox_add_from_mailbox_file_bad_format(
     """Tests :func:`core.models.Account.Account.add_from_mailbox_file`
     in case of the mailbox file format is an unsupported format.
     """
-    with override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"), pytest.raises(
-        ValueError
+    with (
+        override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"),
+        pytest.raises(ValueError),
     ):
         fake_mailbox.add_from_mailbox_file(fake_file_bytes, "unimplemented")
 

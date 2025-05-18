@@ -32,10 +32,10 @@ if TYPE_CHECKING:
 
 
 class BaseCorrespondentForm(RequiredMarkerModelForm):
-    """The form for :class:`core.models.Correspondent.Correspondent`.
+    """The form for :class:`core.models.Correspondent`.
 
     Exposes all fields from the model that may be changed by the user.
-    Other forms for :class:`core.models.Correspondent.Correspondent` should inherit from this.
+    Other forms for :class:`core.models.Correspondent` should inherit from this.
     """
 
     class Meta:

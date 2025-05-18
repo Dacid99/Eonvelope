@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`MailboxDetailWithDeleteView` view."""
+"""Module with the :class:`web.views.MailboxDetailWithDeleteView` view."""
 
 from typing import Any, override
 
@@ -43,7 +43,7 @@ class MailboxDetailWithDeleteView(
     CustomActionMixin,
     TestActionMixin,
 ):
-    """View for a single :class:`core.models.Mailbox.Mailbox` instance."""
+    """View for a single :class:`core.models.Mailbox` instance."""
 
     URL_NAME = Mailbox.get_detail_web_url_name()
     model = Mailbox

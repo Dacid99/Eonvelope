@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.v1.serializers.MailingListSerializers.BaseMailingListSerializer`."""
+"""Test module for :mod:`api.v1.serializers.BaseMailingListSerializer`."""
 
 from datetime import datetime
 

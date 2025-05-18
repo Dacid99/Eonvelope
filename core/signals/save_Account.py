@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Save signal receivers for the :class:`core.models.Accout.Account` model."""
+"""Save signal receivers for the :class:`core.models.Accout` model."""
 from __future__ import annotations
 
 import logging

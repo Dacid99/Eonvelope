@@ -49,7 +49,7 @@ class MailboxViewSet(
 ):
     """Viewset for the :class:`core.models.Mailbox.Mailbox`.
 
-    Provides all but the create method.
+    Provides all but the creat`core.models.Mailbox`
     """
 
     BASENAME = Mailbox.BASENAME

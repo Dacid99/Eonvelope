@@ -45,7 +45,7 @@ if TYPE_CHECKING:
 
 
 class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
-    """Viewset for the :class:`core.models.Daemon.Daemon`.
+    """Viewset for the :class:`core.models.Daemon`.
 
     Provides all but the create method.
     """

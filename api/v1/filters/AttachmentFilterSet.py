@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 
 
 class AttachmentFilterSet(filters.FilterSet):
-    """The filter class for :class:`core.models.Attachment.Attachment`."""
+    """The filter class for :class:`core.models.Attachment`."""
 
     class Meta:
         """Metadata class for the filter."""

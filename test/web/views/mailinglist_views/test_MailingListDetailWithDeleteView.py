@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.mailinglist_views.MailingListDetailWithDeleteView`."""
+"""Test module for :mod:`web.views.MailingListDetailWithDeleteView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -32,7 +32,7 @@ from web.views.mailinglist_views.MailingListDetailWithDeleteView import (
 
 @pytest.mark.django_db
 def test_get_noauth(fake_mailing_list, client, detail_url, login_url):
-    """Tests :class:`web.views.mailinglist_views.MailingListDetailWithDeleteView.MailingListDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.MailingListDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(
         detail_url(MailingListDetailWithDeleteView, fake_mailing_list)
     )
@@ -48,7 +48,7 @@ def test_get_noauth(fake_mailing_list, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_mailing_list, other_client, detail_url):
-    """Tests :class:`web.views.mailinglist_views.MailingListDetailWithDeleteView.MailingListDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.MailingListDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(
         detail_url(MailingListDetailWithDeleteView, fake_mailing_list)
     )
@@ -60,7 +60,7 @@ def test_get_auth_other(fake_mailing_list, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_mailing_list, owner_client, detail_url):
-    """Tests :class:`web.views.mailinglist_views.MailingListDetailWithDeleteView.MailingListDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailingListDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(
         detail_url(MailingListDetailWithDeleteView, fake_mailing_list)
     )
@@ -77,7 +77,7 @@ def test_get_auth_owner(fake_mailing_list, owner_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_noauth(fake_mailing_list, client, detail_url, login_url):
-    """Tests :class:`web.views.mailinglist_views.MailingListDetailWithDeleteView.MailingListDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.MailingListDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(MailingListDetailWithDeleteView, fake_mailing_list)
     )
@@ -94,7 +94,7 @@ def test_post_delete_noauth(fake_mailing_list, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_other(fake_mailing_list, other_client, detail_url):
-    """Tests :class:`web.views.mailinglist_views.MailingListDetailWithDeleteView.MailingListDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.MailingListDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(MailingListDetailWithDeleteView, fake_mailing_list)
     )
@@ -107,7 +107,7 @@ def test_post_delete_auth_other(fake_mailing_list, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_owner(fake_mailing_list, owner_client, detail_url):
-    """Tests :class:`web.views.mailinglist_views.MailingListDetailWithDeleteView.MailingListDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.MailingListDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(MailingListDetailWithDeleteView, fake_mailing_list)
     )

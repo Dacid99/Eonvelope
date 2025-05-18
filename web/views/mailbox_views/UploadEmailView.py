@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`UploadEmailView` view class."""
+"""Module with the :class:`web.views.UploadEmailView` view class."""
 
 from io import BufferedReader
 from typing import override

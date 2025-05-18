@@ -34,10 +34,10 @@ if TYPE_CHECKING:
 
 
 class BaseAccountForm(RequiredMarkerModelForm):
-    """The base form for :class:`core.models.Account.Account`.
+    """The base form for :class:`core.models.Account`.
 
     Exposes all fields from the model that may be changed by the user.
-    Other forms for :class:`core.models.Account.Account` should inherit from this.
+    Other forms for :class:`core.models.Account` should inherit from this.
     """
 
     class Meta:

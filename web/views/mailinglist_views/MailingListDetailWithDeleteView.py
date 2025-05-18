@@ -31,7 +31,7 @@ from .MailingListFilterView import MailingListFilterView
 
 
 class MailingListDetailWithDeleteView(LoginRequiredMixin, DetailWithDeleteView):
-    """View for a single :class:`core.models.MailingList.MailingList` instance."""
+    """View for a single :class:`core.models.MailingList` instance."""
 
     URL_NAME = MailingList.get_detail_web_url_name()
     model = MailingList

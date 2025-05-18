@@ -36,7 +36,7 @@ def email_upload_payload(faker, fake_file) -> dict:
 
 @pytest.mark.django_db
 def test_get_noauth(fake_mailbox, client, detail_url, login_url):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with an unauthenticated user client."""
+    """Tests :class:`web.views.UploadEmailView` with an unauthenticated user client."""
     response = client.get(detail_url(UploadEmailView, fake_mailbox))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -47,7 +47,7 @@ def test_get_noauth(fake_mailbox, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_mailbox, other_client, detail_url):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated other user client."""
+    """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
     response = other_client.get(detail_url(UploadEmailView, fake_mailbox))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -56,7 +56,7 @@ def test_get_auth_other(fake_mailbox, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated owner user client."""
+    """Tests :class:`web.views.UploadEmailView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(UploadEmailView, fake_mailbox))
 
     assert response.status_code == status.HTTP_200_OK
@@ -76,7 +76,7 @@ def test_post_upload_noauth(
     mock_Mailbox_add_from_mailbox_file,
     email_upload_payload,
 ):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with an unauthenticated user client."""
+    """Tests :class:`web.views.UploadEmailView` with an unauthenticated user client."""
     response = client.post(
         detail_url(UploadEmailView, fake_mailbox), email_upload_payload
     )
@@ -98,7 +98,7 @@ def test_post_upload_auth_other(
     mock_Mailbox_add_from_mailbox_file,
     email_upload_payload,
 ):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated other user client."""
+    """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(UploadEmailView, fake_mailbox), email_upload_payload
     )
@@ -118,7 +118,7 @@ def test_post_upload_eml_auth_owner(
     mock_Mailbox_add_from_mailbox_file,
     email_upload_payload,
 ):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated owner user client."""
+    """Tests :class:`web.views.UploadEmailView` with the authenticated owner user client."""
     email_upload_payload["file_format"] = "eml"
 
     response = owner_client.post(
@@ -147,7 +147,7 @@ def test_post_upload_mailbox_auth_owner(
     email_upload_payload,
     mailbox_file_format,
 ):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated owner user client."""
+    """Tests :class:`web.views.UploadEmailView` with the authenticated owner user client."""
     email_upload_payload["file_format"] = mailbox_file_format
 
     response = owner_client.post(
@@ -172,7 +172,7 @@ def test_post_upload_auth_owner_bad_format(
     mock_Mailbox_add_from_mailbox_file,
     email_upload_payload,
 ):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated other user client."""
+    """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
     email_upload_payload["file_format"] = "something"
 
     response = owner_client.post(
@@ -197,7 +197,7 @@ def test_post_upload_auth_owner_bad_file(
     mock_Mailbox_add_from_mailbox_file,
     email_upload_payload,
 ):
-    """Tests :class:`web.views.mailbox_views.UploadEmailView.UploadEmailView` with the authenticated other user client."""
+    """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
     email_upload_payload["file"] = faker.sentence().encode()
 
     response = owner_client.post(

@@ -50,8 +50,8 @@ class EmailViewSet(
     ToggleFavoriteMixin,
 ):
     """Viewset for the :class:`core.models.Email.Email`.
-
-    Provides every read-only and a destroy action.
+    `core.models.Email`
+        Provides every read-only and a destroy action.
     """
 
     BASENAME = Email.BASENAME

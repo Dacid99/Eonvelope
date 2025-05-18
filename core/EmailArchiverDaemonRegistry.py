@@ -125,7 +125,7 @@ class EmailArchiverDaemonRegistry:
 
     @staticmethod
     def healthcheck() -> bool:
-        """Checks whether the :attr:`is_running` flag on every :class:`core.models.Daemon.Daemon` is correct."""
+        """Checks whether the :attr:`is_running` flag on every :class:`core.models.Daemon` is correct."""
         return all(
             daemon.is_running is EmailArchiverDaemonRegistry.is_running(daemon)
             for daemon in Daemon.objects.all()

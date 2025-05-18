@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 
 
 class MailingListFilterSet(filters.FilterSet):
-    """The filter class for :class:`core.models.MailingList.MailingList`."""
+    """The filter class for :class:`core.models.MailingList`."""
 
     search = filters.CharFilter(
         method="filter_text_fields",

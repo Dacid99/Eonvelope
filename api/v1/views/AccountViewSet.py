@@ -46,7 +46,7 @@ if TYPE_CHECKING:
 
 
 class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
-    """Viewset for the :class:`core.models.Account.Account`."""
+    """Viewset for the :class:`core.models.Account`."""
 
     BASENAME = Account.BASENAME
     serializer_class = AccountSerializer

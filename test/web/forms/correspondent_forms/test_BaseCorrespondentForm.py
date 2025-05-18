@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for the :class:`web.forms.correspondent_forms.BaseCorrespondentForm.BaseCorrespondentForm` form class."""
+"""Test module for the :class:`web.forms.BaseCorrespondentForm` form class."""
 
 import pytest
 from django.forms.models import model_to_dict
@@ -26,7 +26,7 @@ from web.forms import BaseCorrespondentForm
 
 @pytest.mark.django_db
 def test_post(fake_correspondent):
-    """Tests post direction of :class:`web.forms.correspondent_forms.BaseCorrespondentForm.BaseCorrespondentForm`."""
+    """Tests post direction of :class:`web.forms.BaseCorrespondentForm`."""
     form = BaseCorrespondentForm(data=model_to_dict(fake_correspondent))
 
     assert form.is_valid()
@@ -43,7 +43,7 @@ def test_post(fake_correspondent):
 
 @pytest.mark.django_db
 def test_get(fake_correspondent):
-    """Tests get direction of :class:`web.forms.correspondent_forms.BaseCorrespondentForm.BaseCorrespondentForm`."""
+    """Tests get direction of :class:`web.forms.BaseCorrespondentForm`."""
     form = BaseCorrespondentForm(instance=fake_correspondent)
     form_initial_data = form.initial
     form_fields = form.fields

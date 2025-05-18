@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.account_views.AccountCreateView`."""
+"""Test module for :mod:`web.views.AccountCreateView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -30,7 +30,7 @@ from web.views import AccountCreateView
 
 @pytest.mark.django_db
 def test_get_noauth(client, list_url, login_url):
-    """Tests :class:`web.views.account_views.AccountCreateView.AccountCreateView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountCreateView` with an unauthenticated user client."""
     response = client.get(list_url(AccountCreateView))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -41,7 +41,7 @@ def test_get_noauth(client, list_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(other_client, list_url):
-    """Tests :class:`web.views.account_views.AccountCreateView.AccountCreateView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountCreateView` with the authenticated other user client."""
     response = other_client.get(list_url(AccountCreateView))
 
     assert response.status_code == status.HTTP_200_OK
@@ -52,7 +52,7 @@ def test_get_auth_other(other_client, list_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(owner_client, list_url):
-    """Tests :class:`web.views.account_views.AccountCreateView.AccountCreateView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
     response = owner_client.get(list_url(AccountCreateView))
 
     assert response.status_code == status.HTTP_200_OK
@@ -65,7 +65,7 @@ def test_get_auth_owner(owner_client, list_url):
 
 @pytest.mark.django_db
 def test_post_noauth(account_payload, client, list_url, login_url):
-    """Tests :class:`web.views.account_views.AccountCreateView.AccountCreateView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountCreateView` with an unauthenticated user client."""
     assert Account.objects.all().count() == 1
 
     response = client.post(list_url(AccountCreateView), account_payload)
@@ -79,7 +79,7 @@ def test_post_noauth(account_payload, client, list_url, login_url):
 
 @pytest.mark.django_db
 def test_post_auth_other(account_payload, other_user, other_client, list_url):
-    """Tests :class:`web.views.account_views.AccountCreateView.AccountCreateView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountCreateView` with the authenticated other user client."""
     assert Account.objects.all().count() == 1
 
     response = other_client.post(list_url(AccountCreateView), account_payload)
@@ -98,7 +98,7 @@ def test_post_auth_other(account_payload, other_user, other_client, list_url):
 
 @pytest.mark.django_db
 def test_post_auth_owner(account_payload, owner_user, owner_client, list_url):
-    """Tests :class:`web.views.account_views.AccountCreateView.AccountCreateView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
     assert Account.objects.all().count() == 1
 
     response = owner_client.post(list_url(AccountCreateView), account_payload)
@@ -119,7 +119,7 @@ def test_post_auth_owner(account_payload, owner_user, owner_client, list_url):
 def test_post_duplicate_auth_owner(
     fake_account, account_payload, owner_client, list_url
 ):
-    """Tests :class:`web.views.account_views.AccountCreateView.AccountCreateView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
     assert Account.objects.all().count() == 1
 
     account_payload["mail_address"] = fake_account.mail_address

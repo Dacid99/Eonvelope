@@ -43,7 +43,7 @@ class MailingListViewSet(
     mixins.DestroyModelMixin,
     ToggleFavoriteMixin,
 ):
-    """Viewset for the :class:`core.models.MailingList.MailingList`.
+    """Viewset for the :class:`core.models.MailingList`.
 
     Provides every read-only and a destroy action.
     """

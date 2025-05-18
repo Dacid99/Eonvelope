@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.account_views.AccountDetailWithDeleteView`."""
+"""Test module for :mod:`web.views.AccountDetailWithDeleteView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -33,7 +33,7 @@ from web.views.account_views.AccountDetailWithDeleteView import (
 
 @pytest.mark.django_db
 def test_get_noauth(fake_account, client, detail_url, login_url):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(AccountDetailWithDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -47,7 +47,7 @@ def test_get_noauth(fake_account, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_account, other_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(detail_url(AccountDetailWithDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -57,7 +57,7 @@ def test_get_auth_other(fake_account, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_account, owner_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(AccountDetailWithDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_200_OK
@@ -71,7 +71,7 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_noauth(fake_account, client, detail_url, login_url):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"delete": "Delete"},
@@ -89,7 +89,7 @@ def test_post_delete_noauth(fake_account, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_other(fake_account, other_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"delete": "Delete"},
@@ -103,7 +103,7 @@ def test_post_delete_auth_other(fake_account, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_owner(fake_account, owner_client, detail_url):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"delete": "Delete"},
@@ -120,7 +120,7 @@ def test_post_delete_auth_owner(fake_account, owner_client, detail_url):
 def test_post_test_noauth(
     fake_account, client, detail_url, login_url, mock_Account_test_connection
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"test": "Test"},
@@ -139,7 +139,7 @@ def test_post_test_noauth(
 def test_post_test_auth_other(
     fake_account, other_client, detail_url, mock_Account_test_connection
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"test": "Test"},
@@ -154,7 +154,7 @@ def test_post_test_auth_other(
 def test_post_test_success_auth_owner(
     fake_account, owner_client, detail_url, mock_Account_test_connection
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"test": "Test"},
@@ -180,7 +180,7 @@ def test_post_test_success_auth_owner(
 def test_post_test_failure_auth_owner(
     faker, fake_account, owner_client, detail_url, mock_Account_test_connection
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     fake_error_message = faker.sentence()
     mock_Account_test_connection.side_effect = MailAccountError(fake_error_message)
 
@@ -210,7 +210,7 @@ def test_post_test_failure_auth_owner(
 def test_post_test_missing_action_auth_owner(
     fake_account, owner_client, detail_url, mock_Account_test_connection
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(detail_url(AccountDetailWithDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
@@ -222,7 +222,7 @@ def test_post_test_missing_action_auth_owner(
 def test_post_update_mailboxes_noauth(
     fake_account, client, detail_url, login_url, mock_Account_update_mailboxes
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"update_mailboxes": "Update Mailboxes"},
@@ -241,7 +241,7 @@ def test_post_update_mailboxes_noauth(
 def test_post_update_mailboxes_auth_other(
     fake_account, other_client, detail_url, mock_Account_update_mailboxes
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"update_mailboxes": "Update Mailboxes"},
@@ -256,7 +256,7 @@ def test_post_update_mailboxes_auth_other(
 def test_post_update_mailboxes_success_auth_owner(
     fake_account, owner_client, detail_url, mock_Account_update_mailboxes
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
         {"update_mailboxes": "Update Mailboxes"},
@@ -282,7 +282,7 @@ def test_post_update_mailboxes_success_auth_owner(
 def test_post_update_mailboxes_failure_auth_owner(
     faker, fake_account, owner_client, detail_url, mock_Account_update_mailboxes
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     fake_error_message = faker.sentence()
     mock_Account_update_mailboxes.side_effect = MailAccountError(fake_error_message)
 
@@ -312,7 +312,7 @@ def test_post_update_mailboxes_failure_auth_owner(
 def test_post_update_mailboxes_missing_action_auth_owner(
     faker, fake_account, owner_client, detail_url, mock_Account_update_mailboxes
 ):
-    """Tests :class:`web.views.account_views.AccountDetailWithDeleteView.AccountDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
     )

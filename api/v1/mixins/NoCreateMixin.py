@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`NoCreateMixin` viewset mixin."""
+"""Module with the :class:`api.v1.mixins.NoCreateMixin` viewset mixin."""
 
 from typing import Any
 

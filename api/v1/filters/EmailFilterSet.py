@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 
 
 class EmailFilterSet(filters.FilterSet):
-    """The filter class for :class:`core.models.Email.Email`."""
+    """The filter class for :class:`core.models.Email`."""
 
     search = filters.CharFilter(
         method="filter_text_fields",

@@ -286,7 +286,7 @@ def other_user(django_user_model) -> AbstractUser:
 
 @pytest.fixture
 def fake_account(owner_user) -> Account:
-    """Creates an :class:`core.models.Account.Account` owned by :attr:`owner_user`.
+    """Creates an :class:`core.models.Account` owned by :attr:`owner_user`.
 
     Args:
         owner_user: Depends on :func:`owner_user`.
@@ -299,7 +299,7 @@ def fake_account(owner_user) -> Account:
 
 @pytest.fixture
 def fake_mailbox(fake_account) -> Mailbox:
-    """Creates an :class:`core.models.Mailbox.Mailbox` owned by :attr:`owner_user`.
+    """Creates an :class:`core.models.Mailbox` owned by :attr:`owner_user`.
 
     Args:
         account: Depends on :func:`account`.
@@ -312,7 +312,7 @@ def fake_mailbox(fake_account) -> Mailbox:
 
 @pytest.fixture
 def fake_daemon(faker, fake_mailbox) -> Daemon:
-    """Creates an :class:`core.models.Daemon.Daemon` owned by :attr:`owner_user`.
+    """Creates an :class:`core.models.Daemon` owned by :attr:`owner_user`.
 
     Args:
         mailbox: Depends on :func:`mailbox`.
@@ -329,7 +329,7 @@ def fake_daemon(faker, fake_mailbox) -> Daemon:
 
 @pytest.fixture
 def fake_correspondent() -> Correspondent:
-    """Creates an :class:`core.models.Correspondent.Correspondent` owned by :attr:`owner_user`.
+    """Creates an :class:`core.models.Correspondent` owned by :attr:`owner_user`.
 
     Returns:
         The correspondent instance for testing.
@@ -339,7 +339,7 @@ def fake_correspondent() -> Correspondent:
 
 @pytest.fixture
 def fake_mailing_list() -> MailingList:
-    """Creates an :class:`core.models.MailingList.MailingList` owned by :attr:`owner_user`.
+    """Creates an :class:`core.models.MailingList` owned by :attr:`owner_user`.
 
     Returns:
         The mailinglist instance for testing.
@@ -349,7 +349,7 @@ def fake_mailing_list() -> MailingList:
 
 @pytest.fixture
 def fake_email(faker, fake_mailbox, fake_mailing_list) -> Email:
-    """Creates an :class:`core.models.Email.Email` owned by :attr:`owner_user`.
+    """Creates an :class:`core.models.Email` owned by :attr:`owner_user`.
 
     Args:
         correspondent: Depends on :func:`correspondent`.
@@ -369,10 +369,8 @@ def fake_email(faker, fake_mailbox, fake_mailing_list) -> Email:
 
 
 @pytest.fixture
-def fake_email_correspondent(
-    faker, fake_correspondent, fake_email
-) -> EmailCorrespondent:
-    """Fixture creating an :class:`core.models.EmailCorrespondent.EmailCorrespondent`.
+def fake_emailcorrespondent(fake_correspondent, fake_email) -> EmailCorrespondent:
+    """Fixture creating an :class:`core.models.EmailCorrespondent`.
 
     Returns:
         The email instance for testing.
@@ -387,7 +385,7 @@ def fake_email_correspondent(
 
 @pytest.fixture
 def fake_attachment(faker, fake_email) -> Attachment:
-    """Creates an :class:`core.models.Attachment.Attachment` owned by :attr:`owner_user`.
+    """Creates an :class:`core.models.Attachment` owned by :attr:`owner_user`.
 
     Args:
         email: Depends on :func:`email`.
@@ -402,7 +400,7 @@ def fake_attachment(faker, fake_email) -> Attachment:
 
 @pytest.fixture
 def account_payload(owner_user) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.Account.Account` payload with data deviating from the defaults.
+    """Fixture creating clean :class:`core.models.Account` payload with data deviating from the defaults.
 
     Args:
         owner_user: Depends on :func:`owner_user`.
@@ -425,7 +423,7 @@ def account_payload(owner_user) -> dict[str, Any]:
 
 @pytest.fixture
 def attachment_payload(faker, fake_email) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.Attachment.Attachment` payload with data deviating from the defaults.
+    """Fixture creating clean :class:`core.models.Attachment` payload with data deviating from the defaults.
 
     Args:
         email: Depends on :func:`email`.
@@ -449,7 +447,7 @@ def attachment_payload(faker, fake_email) -> dict[str, Any]:
 
 @pytest.fixture
 def correspondent_payload(faker, fake_email) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.Correspondent.Correspondent` payload with data deviating from the defaults.
+    """Fixture creating clean :class:`core.models.Correspondent` payload with data deviating from the defaults.
 
     Args:
         email: Depends on :func:`email`.
@@ -470,7 +468,7 @@ def correspondent_payload(faker, fake_email) -> dict[str, Any]:
 
 @pytest.fixture
 def daemon_payload(faker, fake_mailbox) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.Daemon.Daemon` payload with data deviating from the defaults.
+    """Fixture creating clean :class:`core.models.Daemon` payload with data deviating from the defaults.
 
     Args:
         mailbox: Depends on :func:`mailbox`.
@@ -509,7 +507,7 @@ def daemon_payload(faker, fake_mailbox) -> dict[str, Any]:
 
 @pytest.fixture
 def email_payload(faker, fake_mailbox) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.Email.Email` payload with data deviating from the defaults.
+    """Fixture creating clean :class:`core.models.Email` payload with data deviating from the defaults.
 
     Args:
         mailbox: Depends on :func:`mailbox`.
@@ -533,7 +531,7 @@ def email_payload(faker, fake_mailbox) -> dict[str, Any]:
 
 @pytest.fixture
 def mailbox_payload(fake_account) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.Mailbox.Mailbox` payload with data deviating from the defaults.
+    """Fixture creating clean :class:`core.models.Mailbox` payload with data deviating from the defaults.
 
     Args:
         account: Depends on :func:`account`.
@@ -555,7 +553,7 @@ def mailbox_payload(fake_account) -> dict[str, Any]:
 
 @pytest.fixture
 def mailing_list_payload(faker, fake_email) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.MailingList.MailingList` payload with data deviating from the defaults.
+    """Fixture creating clean :class:`core.models.MailingList` payload with data deviating from the defaults.
 
     Args:
         email: Depends on :func:`email`.

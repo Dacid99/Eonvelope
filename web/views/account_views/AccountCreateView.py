@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AccountCreateView` view."""
+"""Module with the :class:`web.views.AccountCreateView` view."""
 
 from typing import override
 
@@ -30,7 +30,7 @@ from ...forms import BaseAccountForm
 
 
 class AccountCreateView(LoginRequiredMixin, CreateView):
-    """View for creating a single :class:`core.models.Account.Account` instance."""
+    """View for creating a single :class:`core.models.Account` instance."""
 
     model = Account
     form_class = BaseAccountForm

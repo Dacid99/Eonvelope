@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AccountUpdateView` view."""
+"""Module with the :class:`web.views.AccountUpdateView` view."""
 
 from typing import override
 
@@ -32,7 +32,7 @@ from .AccountFilterView import AccountFilterView
 
 
 class AccountUpdateOrDeleteView(LoginRequiredMixin, UpdateOrDeleteView):
-    """View for updating or deleting a single :class:`core.models.Account.Account` instance."""
+    """View for updating or deleting a single :class:`core.models.Account` instance."""
 
     model = Account
     form_class = BaseAccountForm

@@ -32,11 +32,11 @@ if TYPE_CHECKING:
 
 
 class BaseAttachmentSerializer(serializers.ModelSerializer[Attachment]):
-    """The base serializer for :class:`core.models.Attachment.Attachment`.
+    """The base serializer for :class:`core.models.Attachment`.
 
     Includes all viable fields from the model.
     Sets all constraints that must be implemented in all serializers.
-    Other serializers for :class:`core.models.Attachment.Attachment` should inherit from this.
+    Other serializers for :class:`core.models.Attachment` should inherit from this.
     """
 
     class Meta:

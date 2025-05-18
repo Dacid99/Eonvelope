@@ -47,7 +47,7 @@ class AttachmentViewSet(
     mixins.DestroyModelMixin,
     ToggleFavoriteMixin,
 ):
-    """Viewset for the :class:`core.models.Attachment.Attachment`."""
+    """Viewset for the :class:`core.models.Attachment`."""
 
     BASENAME = Attachment.BASENAME
     serializer_class = BaseAttachmentSerializer

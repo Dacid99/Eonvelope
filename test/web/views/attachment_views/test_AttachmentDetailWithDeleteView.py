@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.attachment_views.AttachmentDetailWithDeleteView`."""
+"""Test module for :mod:`web.views.AttachmentDetailWithDeleteView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -32,7 +32,7 @@ from web.views.attachment_views.AttachmentDetailWithDeleteView import (
 
 @pytest.mark.django_db
 def test_get_noauth(fake_attachment, client, detail_url, login_url):
-    """Tests :class:`web.views.attachment_views.AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(AttachmentDetailWithDeleteView, fake_attachment))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -46,7 +46,7 @@ def test_get_noauth(fake_attachment, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(fake_attachment, other_client, detail_url):
-    """Tests :class:`web.views.attachment_views.AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment)
     )
@@ -58,7 +58,7 @@ def test_get_auth_other(fake_attachment, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_get_auth_owner(fake_attachment, owner_client, detail_url):
-    """Tests :class:`web.views.attachment_views.AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment)
     )
@@ -75,7 +75,7 @@ def test_get_auth_owner(fake_attachment, owner_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
-    """Tests :class:`web.views.attachment_views.AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(detail_url(AttachmentDetailWithDeleteView, fake_attachment))
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -90,7 +90,7 @@ def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_other(fake_attachment, other_client, detail_url):
-    """Tests :class:`web.views.attachment_views.AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView` with the authenticated other user client."""
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment)
     )
@@ -103,7 +103,7 @@ def test_post_delete_auth_other(fake_attachment, other_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_delete_auth_owner(fake_attachment, owner_client, detail_url):
-    """Tests :class:`web.views.attachment_views.AttachmentDetailWithDeleteView.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment)
     )

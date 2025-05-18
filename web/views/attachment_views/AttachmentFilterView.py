@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AttachmentFilterView` view."""
+"""Module with the :class:`web.views.AttachmentFilterView` view."""
 
 from typing import override
 
@@ -30,7 +30,7 @@ from ..FilterPageView import FilterPageView
 
 
 class AttachmentFilterView(LoginRequiredMixin, FilterPageView):
-    """View for filtering listed :class:`core.models.Attachment.Attachment` instances."""
+    """View for filtering listed :class:`core.models.Attachment` instances."""
 
     URL_NAME = Attachment.get_list_web_url_name()
     model = Attachment

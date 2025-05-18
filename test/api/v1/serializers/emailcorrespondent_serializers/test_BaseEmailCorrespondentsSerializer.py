@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`api.v1.serializers.EmailCorrespondentSerializers.BaseEmailCorrespondentSerializer`."""
+"""Test module for :mod:`api.v1.serializers.BaseEmailCorrespondentSerializer`."""
 
 from datetime import datetime
 
@@ -29,38 +29,38 @@ from api.v1.serializers.emailcorrespondent_serializers.BaseEmailCorrespondentSer
 
 
 @pytest.mark.django_db
-def test_output(fake_email_correspondent, request_context):
+def test_output(fake_emailcorrespondent, request_context):
     """Tests for the expected output of the serializer."""
     serializer_data = BaseEmailCorrespondentSerializer(
-        instance=fake_email_correspondent, context=request_context
+        instance=fake_emailcorrespondent, context=request_context
     ).data
 
     assert "id" in serializer_data
-    assert serializer_data["id"] == fake_email_correspondent.id
+    assert serializer_data["id"] == fake_emailcorrespondent.id
     assert "email" in serializer_data
-    assert serializer_data["email"] == fake_email_correspondent.email.id
+    assert serializer_data["email"] == fake_emailcorrespondent.email.id
     assert "correspondent" in serializer_data
-    assert serializer_data["correspondent"] == fake_email_correspondent.correspondent.id
+    assert serializer_data["correspondent"] == fake_emailcorrespondent.correspondent.id
     assert "mention" in serializer_data
-    assert serializer_data["mention"] == fake_email_correspondent.mention
+    assert serializer_data["mention"] == fake_emailcorrespondent.mention
     assert "created" in serializer_data
     assert (
         datetime.fromisoformat(serializer_data["created"])
-        == fake_email_correspondent.created
+        == fake_emailcorrespondent.created
     )
     assert "updated" in serializer_data
     assert (
         datetime.fromisoformat(serializer_data["updated"])
-        == fake_email_correspondent.updated
+        == fake_emailcorrespondent.updated
     )
     assert len(serializer_data) == 6
 
 
 @pytest.mark.django_db
-def test_input(fake_email_correspondent, request_context):
+def test_input(fake_emailcorrespondent, request_context):
     """Tests for the expected input of the serializer."""
     serializer = BaseEmailCorrespondentSerializer(
-        data=model_to_dict(fake_email_correspondent), context=request_context
+        data=model_to_dict(fake_emailcorrespondent), context=request_context
     )
     assert serializer.is_valid()
     serializer_data = serializer.validated_data

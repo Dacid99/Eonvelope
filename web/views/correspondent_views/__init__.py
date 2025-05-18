@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.correspondent_views package containing views for the :class:`core.models.Correspondent.Correspondent` data."""
+"""web.views.correspondent_views package containing views for the :class:`core.models.Correspondent` data."""
 
 from .CorrespondentDetailWithDeleteView import CorrespondentDetailWithDeleteView
 from .CorrespondentFilterView import CorrespondentFilterView

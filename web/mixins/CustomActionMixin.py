@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with :class:`web.mixins.CustomActionMixin.CustomActionMixin`."""
+"""Module with :class:`web.mixins.CustomActionMixin`."""
 
 from typing import Final
 

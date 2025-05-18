@@ -32,10 +32,10 @@ if TYPE_CHECKING:
 
 
 class BaseMailboxForm(RequiredMarkerModelForm):
-    """The base form for :class:`core.models.Mailbox.Mailbox`.
+    """The base form for :class:`core.models.Mailbox`.
 
     Exposes all fields from the model that may be changed by the user.
-    Other forms for :class:`core.models.Mailbox.Mailbox` should inherit from this.
+    Other forms for :class:`core.models.Mailbox` should inherit from this.
     """
 
     class Meta:

@@ -39,7 +39,7 @@ from .BaseEmailSerializer import BaseEmailSerializer
 
 
 class EmailSerializer(BaseEmailSerializer):
-    """The standard serializer for a :class:`core.models.Email.Email`.
+    """The standard serializer for a :class:`core.models.Email`.
 
     Includes only the most relevant model fields.
     Includes nested serializers for the :attr:`core.models.Email.Email.replies`,
@@ -65,7 +65,7 @@ class EmailSerializer(BaseEmailSerializer):
 
     correspondents = serializers.SerializerMethodField(read_only=True)
     """The emails are set from the
-    :class:`core.models.EmailCorrespondent.EmailCorrespondent`
+    :class:`core.models.EmailCorrespondent`
     via :func:`get_correspondents`.
     """
 

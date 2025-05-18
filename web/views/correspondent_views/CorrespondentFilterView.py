@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`CorrespondentFilterView` view."""
+"""Module with the :class:`web.views.CorrespondentFilterView` view."""
 
 from typing import override
 
@@ -30,7 +30,7 @@ from ..FilterPageView import FilterPageView
 
 
 class CorrespondentFilterView(LoginRequiredMixin, FilterPageView):
-    """View for filtering listed :class:`core.models.Correspondent.Correspondent` instances."""
+    """View for filtering listed :class:`core.models.Correspondent` instances."""
 
     URL_NAME = Correspondent.get_list_web_url_name()
     model = Correspondent

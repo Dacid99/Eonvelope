@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`AccountDetailWithDeleteView` view."""
+"""Module with the :class:`web.views.AccountDetailWithDeleteView` view."""
 
 from typing import Any, override
 
@@ -42,7 +42,7 @@ class AccountDetailWithDeleteView(
     CustomActionMixin,
     TestActionMixin,
 ):
-    """View for a single :class:`core.models.Account.Account` instance."""
+    """View for a single :class:`core.models.Account` instance."""
 
     URL_NAME = Account.get_detail_web_url_name()
     model = Account

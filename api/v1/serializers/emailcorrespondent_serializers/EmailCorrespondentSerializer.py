@@ -25,14 +25,14 @@ from .BaseEmailCorrespondentSerializer import BaseEmailCorrespondentSerializer
 
 
 class EmailCorrespondentSerializer(BaseEmailCorrespondentSerializer):
-    """The serializer for correspondents from :class:`core.models.EmailCorrespondent.EmailCorrespondent`.
+    """The serializer for correspondents from :class:`core.models.EmailCorrespondent`.
 
     Used to serialize the correspondent belonging to an email. Does not include that email.
     """
 
     correspondent = BaseCorrespondentSerializer(read_only=True)
     """The correspondent is serialized
-    by :class:`api.v1.serializers.CorrespondentSerializers.SimpleCorrespondentSerializer.SimpleCorrespondentSerializer`.
+    by :class:`api.v1.serializers.SimpleCorrespondentSerializer`.
     """
 
     class Meta(BaseEmailCorrespondentSerializer.Meta):

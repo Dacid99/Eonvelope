@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for the :class:`web.forms.mailbox_forms.BaseMailboxForm.BaseMailboxForm` form class."""
+"""Test module for the :class:`web.forms.BaseMailboxForm` form class."""
 
 import pytest
 from django.forms.models import model_to_dict
@@ -26,7 +26,7 @@ from web.forms import BaseMailboxForm
 
 @pytest.mark.django_db
 def test_post(fake_mailbox):
-    """Tests post direction of :class:`web.forms.mailbox_forms.BaseMailboxForm.BaseMailboxForm`."""
+    """Tests post direction of :class:`web.forms.BaseMailboxForm`."""
     form = BaseMailboxForm(data=model_to_dict(fake_mailbox))
 
     assert form.is_valid()
@@ -49,7 +49,7 @@ def test_post(fake_mailbox):
 
 @pytest.mark.django_db
 def test_get(fake_mailbox):
-    """Tests get direction of :class:`web.forms.mailbox_forms.BaseMailboxForm.BaseMailboxForm`."""
+    """Tests get direction of :class:`web.forms.BaseMailboxForm`."""
     form = BaseMailboxForm(instance=fake_mailbox)
     form_initial_data = form.initial
     form_fields = form.fields

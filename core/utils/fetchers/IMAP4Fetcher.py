@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`IMAPFetcher` class."""
+"""Module with the :class:`IMAP4Fetcher` class."""
 
 from __future__ import annotations
 
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     from ...models import Account, Mailbox
 
 
-class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
+class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     """Maintains a connection to the IMAP server and fetches data using :mod:`imaplib`.
 
     Opens a connection to the IMAP server on construction and is preferably used in a 'with' environment.
@@ -184,7 +184,7 @@ class IMAPFetcher(BaseFetcher, SafeIMAPMixin):
 
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
-                If :attr:`criterion` is not in :attr:`IMAPFetcher.AVAILABLE_FETCHING_CRITERIA`.
+                If :attr:`criterion` is not in :attr:`IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA`.
             MailboxError: If an error occurs or a bad response is returned.
         """
         super().fetch_emails(mailbox, criterion)

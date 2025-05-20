@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`IMAP_SSL_Fetcher` class."""
+"""Module with the :class:`IMAP4_SSL_Fetcher` class."""
 from __future__ import annotations
 
 import imaplib
@@ -24,21 +24,21 @@ from typing import override
 
 from ... import constants
 from .exceptions import MailAccountError
-from .IMAPFetcher import IMAPFetcher
+from .IMAP4Fetcher import IMAP4Fetcher
 
 
-class IMAP_SSL_Fetcher(IMAPFetcher):
-    """Subclass of :class:`core.utils.fetchers.IMAPFetcher`.
+class IMAP4_SSL_Fetcher(IMAP4Fetcher):
+    """Subclass of :class:`core.utils.fetchers.IMAP4Fetcher`.
 
-    Does the same things, just using IMAP_SSL protocol.
+    Does the same things, just using IMAP4_SSL protocol.
     """
 
-    PROTOCOL = constants.EmailProtocolChoices.IMAP_SSL
-    """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.IMAP_SSL`."""
+    PROTOCOL = constants.EmailProtocolChoices.IMAP4_SSL
+    """Name of the used protocol, refers to :attr:`constants.MailFetchingProtocols.IMAP4_SSL`."""
 
     @override
     def connect_to_host(self) -> None:
-        """Overrides :func:`core.utils.fetchers.IMAPFetcher.connect_to_host` to use :class:`imaplib.IMAP4_SSL`."""
+        """Overrides :func:`core.utils.fetchers.IMAP4Fetcher.connect_to_host` to use :class:`imaplib.IMAP4_SSL`."""
         self.logger.debug("Connecting to %s ...", self.account)
 
         mail_host = self.account.mail_host

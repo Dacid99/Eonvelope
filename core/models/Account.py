@@ -34,8 +34,8 @@ from core.mixins.FavoriteMixin import FavoriteMixin
 from ..constants import EmailProtocolChoices
 from ..mixins.URLMixin import URLMixin
 from ..utils.fetchers import (
-    IMAP_SSL_Fetcher,
-    IMAPFetcher,
+    IMAP4_SSL_Fetcher,
+    IMAP4Fetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -181,10 +181,10 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
             ValueError: If the protocol doesnt match any fetcher class.
                 Marks the account as unhealthy in this case.
         """
-        if self.protocol == IMAPFetcher.PROTOCOL:
-            return IMAPFetcher
-        if self.protocol == IMAP_SSL_Fetcher.PROTOCOL:
-            return IMAP_SSL_Fetcher
+        if self.protocol == IMAP4Fetcher.PROTOCOL:
+            return IMAP4Fetcher
+        if self.protocol == IMAP4_SSL_Fetcher.PROTOCOL:
+            return IMAP4_SSL_Fetcher
         if self.protocol == POP3Fetcher.PROTOCOL:
             return POP3Fetcher
         if self.protocol == POP3_SSL_Fetcher.PROTOCOL:

@@ -16,21 +16,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test file for the :class:`core.utils.fetchers.IMAP_SSL_Fetcher`."""
+"""Test file for the :class:`core.utils.fetchers.IMAP4_SSL_Fetcher`."""
 
 
 import pytest
 
 from core.constants import EmailProtocolChoices
-from core.utils.fetchers import IMAP_SSL_Fetcher
+from core.utils.fetchers import IMAP4_SSL_Fetcher
 from core.utils.fetchers.exceptions import MailAccountError
 
-from .test_IMAPFetcher import FakeIMAP4error, mock_logger
+from .test_IMAP4Fetcher import FakeIMAP4error, mock_logger
 
 
 @pytest.fixture
 def imap_ssl_mailbox(fake_mailbox):
-    fake_mailbox.account.protocol = EmailProtocolChoices.IMAP_SSL
+    fake_mailbox.account.protocol = EmailProtocolChoices.IMAP4_SSL
     fake_mailbox.account.save(update_fields=["protocol"])
     return fake_mailbox
 
@@ -38,7 +38,7 @@ def imap_ssl_mailbox(fake_mailbox):
 @pytest.fixture(autouse=True)
 def mock_IMAP4_SSL(mocker, faker):
     mock_IMAP4_SSL = mocker.patch(
-        "core.utils.fetchers.IMAP_SSL_Fetcher.imaplib.IMAP4_SSL", autospec=True
+        "core.utils.fetchers.IMAP4_SSL_Fetcher.imaplib.IMAP4_SSL", autospec=True
     )
     mock_IMAP4_SSL.error = FakeIMAP4error
     fake_response = faker.sentence().encode("utf-8")
@@ -63,13 +63,13 @@ def mock_IMAP4_SSL(mocker, faker):
         (None, None),
     ],
 )
-def test_IMAPFetcher_connect_to_host_success(
+def test_IMAP4Fetcher_connect_to_host_success(
     imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL, mail_host_port, timeout
 ):
     imap_ssl_mailbox.account.mail_host_port = mail_host_port
     imap_ssl_mailbox.account.timeout = timeout
 
-    IMAP_SSL_Fetcher(imap_ssl_mailbox.account)
+    IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
     kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
     if mail_host_port:
@@ -83,13 +83,13 @@ def test_IMAPFetcher_connect_to_host_success(
 
 
 @pytest.mark.django_db
-def test_IMAPFetcher_connect_to_host_exception(
+def test_IMAP4Fetcher_connect_to_host_exception(
     imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL
 ):
     mock_IMAP4_SSL.side_effect = AssertionError
 
     with pytest.raises(MailAccountError, match="AssertionError occured"):
-        IMAP_SSL_Fetcher(imap_ssl_mailbox.account)
+        IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
     kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
     if port := imap_ssl_mailbox.account.mail_host_port:

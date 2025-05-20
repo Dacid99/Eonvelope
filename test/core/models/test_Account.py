@@ -33,8 +33,8 @@ from core.constants import EmailProtocolChoices
 from core.models import Account, Mailbox
 from core.utils.fetchers import (
     BaseFetcher,
-    IMAP_SSL_Fetcher,
-    IMAPFetcher,
+    IMAP4_SSL_Fetcher,
+    IMAP4Fetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -174,8 +174,8 @@ def test_Account_clean(fake_account):
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAPFetcher),
-        (EmailProtocolChoices.IMAP_SSL, IMAP_SSL_Fetcher),
+        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
     ],
@@ -219,8 +219,8 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAPFetcher),
-        (EmailProtocolChoices.IMAP_SSL, IMAP_SSL_Fetcher),
+        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
     ],
@@ -251,8 +251,8 @@ def test_Account_get_fetcher_init_failure(
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAPFetcher),
-        (EmailProtocolChoices.IMAP_SSL, IMAP_SSL_Fetcher),
+        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
     ],

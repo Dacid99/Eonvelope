@@ -89,7 +89,7 @@ class EmailProtocolChoices(TextChoices):
     IMAP = "IMAP", _("IMAP4")
     """The IMAP4 protocol"""
 
-    IMAP_SSL = "IMAP_SSL", _("IMAP4 over SSL")
+    IMAP4_SSL = "IMAP4_SSL", _("IMAP4 over SSL")
     """The IMAP4 protocol over SSL"""
 
     POP3 = "POP3", _("POP3")

@@ -32,8 +32,8 @@ from model_bakery import baker
 
 from core.models import Account, Mailbox
 from core.utils.fetchers import (
-    IMAP_SSL_Fetcher,
-    IMAPFetcher,
+    IMAP4_SSL_Fetcher,
+    IMAP4Fetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -141,9 +141,9 @@ def test_Mailbox_unique_constraints():
 @pytest.mark.parametrize(
     "protocol, expected_fetching_criteria",
     [
-        (IMAPFetcher.PROTOCOL, IMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
-        (IMAP_SSL_Fetcher.PROTOCOL, IMAP_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )

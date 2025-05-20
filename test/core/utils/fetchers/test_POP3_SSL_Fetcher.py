@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test file for the :class:`core.utils.fetchers.IMAP_SSL_Fetcher`."""
+"""Test file for the :class:`core.utils.fetchers.IMAP4_SSL_Fetcher`."""
 
 import pytest
 

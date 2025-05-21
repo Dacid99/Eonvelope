@@ -23,9 +23,10 @@ from typing import override
 from django.db.models import QuerySet
 
 from core.models import Email
+from web.mixins import PageSizeMixin
 
 
-class EmailArchiveMixin:
+class EmailArchiveMixin(PageSizeMixin):
     """Mixin defining common attributes of the ArchiveViews for emails."""
 
     BASE_URL_NAME = "email-archive"

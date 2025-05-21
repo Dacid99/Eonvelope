@@ -44,8 +44,9 @@ def test_get_auth_other(other_client, date_url):
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
     assert "web/email/archive/index.html" in [t.name for t in response.templates]
-    assert "object_list" in response.context
     assert "today" in response.context
+    assert "page_obj" in response.context
+    assert "page_size" in response.context
     assert "date_list" in response.context
 
 
@@ -57,6 +58,7 @@ def test_get_auth_owner(owner_client, date_url):
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
     assert "web/email/archive/index.html" in [t.name for t in response.templates]
-    assert "object_list" in response.context
     assert "today" in response.context
+    assert "page_obj" in response.context
+    assert "page_size" in response.context
     assert "date_list" in response.context

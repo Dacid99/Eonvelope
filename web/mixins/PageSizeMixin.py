@@ -18,7 +18,7 @@
 
 """Module with the :class:`web.views.FilterPageView.FilterPageView`."""
 
-from typing import Any, override
+from typing import Any
 
 from django.db.models import QuerySet
 
@@ -31,7 +31,6 @@ class PageSizeMixin:
     page_size_kwarg = "page_size"
     paginate_by = get_config("WEB_DEFAULT_PAGE_SIZE")
 
-    @override
     def get_paginate_by(self, queryset: QuerySet) -> int:
         """Extended method to allow variable page sizes.
 
@@ -44,8 +43,12 @@ class PageSizeMixin:
             or super().get_paginate_by(queryset)
         )
 
-    @override
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        """Extended method to allow variable page sizes.
+
+        Returns:
+            The context with a page_size added to it.
+        """
         return super().get_context_data(
             page_size=self.get_paginate_by(self.object_list), **kwargs
         )

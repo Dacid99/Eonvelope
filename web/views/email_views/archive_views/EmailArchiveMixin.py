@@ -18,8 +18,6 @@
 
 """:mod:`web.views.email_views.archive_views.EmailArchiveMixin` module with the EmailArchiveMixin mixin."""
 
-from typing import override
-
 from django.db.models import QuerySet
 
 from core.models import Email
@@ -33,11 +31,11 @@ class EmailArchiveMixin(PageSizeMixin):
     BASE_TEMPLATE_NAME = "web/email/archive/"
     model = Email
     date_field = "datetime"
+    ordering = "datetime"
     make_object_list = True
     allow_empty = True
     allow_future = True
 
-    @override
     def get_queryset(self) -> QuerySet[Email]:
         """Restricts the queryset to objects owned by the requesting user."""
         if not self.request.user.is_authenticated:

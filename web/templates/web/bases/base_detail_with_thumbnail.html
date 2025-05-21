@@ -74,16 +74,21 @@
             </div>
         {% endif %}
         <div class="card-footer">
+            <div class="card-text text-end">
 
-            {% include "web/partials/_date_created-small.html" %}
+                {% include "web/partials/_date_created-small.html" %}
+
+            </div>
 
             {% block card_footer_timestamps %}
             {% endblock card_footer_timestamps %}
+
 
         </div>
 
         {% block card_extras %}
         {% endblock card_extras %}
+
 
     </div>
 
@@ -98,5 +103,6 @@
         {% block other_scripts %}
         {% endblock other_scripts %}
     {% endblock scripts %}
+
 
 {% endblock content %}

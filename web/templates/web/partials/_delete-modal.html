@@ -9,9 +9,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title" id="delete-modal-label">
-                    {% blocktranslate %}
-                    Delete {{ object }}
-                    {% endblocktranslate %}
+                    {% blocktranslate %}Delete {{ object }}{% endblocktranslate %}
                 </h2>
                 <button type="button"
                         class="btn-close"
@@ -20,23 +18,21 @@
             </div>
             <div class="modal-body">
                 <p>
-                    <strong>{% blocktranslate %}
-                        Are you sure you want to delete {{ object }}?
-                        {% endblocktranslate %}
-                </strong>
-            </p>
-            <p>{{ object.DELETE_NOTICE }}</p>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                {% translate "Close" %}
-            </button>
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" class="btn btn-danger" name="delete">{% translate "Delete" %}</button>
-            </form>
+                    <strong>{% blocktranslate %}Are you sure you want to delete {{ object }}?{% endblocktranslate %}
+                    </strong>
+                </p>
+                <p>{{ object.DELETE_NOTICE }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {% translate "Close" %}
+                </button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" name="delete">{% translate "Delete" %}</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 </div>
 <!-- _delete_button must be in the same template -->

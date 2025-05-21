@@ -20,55 +20,59 @@ msgstr ""
 
 #: Emailkasten/settings.py:354
 msgid "Emailkasten API"
-msgstr ""
+msgstr "Emailkasten API"
 
 #: Emailkasten/settings.py:355
 msgid "The API schema for the Emailkasten server."
-msgstr ""
+msgstr "Das API Schema des Emailkasten Servers."
 
 #: Emailkasten/settings.py:374
 msgid "The default page size for paginated API response data"
-msgstr ""
+msgstr "Die Standard Seitengröße für API Anwortdaten"
 
 #: Emailkasten/settings.py:379
 msgid "The maximum page size for paginated API response data"
-msgstr ""
+msgstr "Die maximale Seitengröße für API Antwortdaten"
 
 #: Emailkasten/settings.py:384
 msgid "The default page size for pagination in the webapp."
-msgstr ""
+msgstr "Die Standard Seitengröße für die Webapp."
 
 #: Emailkasten/settings.py:390
 msgid ""
 "The page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
+"Die Seitengrößen Optionen in der Webapp. Sollte den Wert von "
+"WEB_DEFAULT_PAGE_SIZE enthalten."
 
 #: Emailkasten/settings.py:396
 msgid "The default cycle period setting of a daemon in seconds"
-msgstr ""
+msgstr "Die Standard Periodendauer für Daemons in Sekunden."
 
 #: Emailkasten/settings.py:401
 msgid "The default restart time setting of a daemon in seconds"
-msgstr ""
+msgstr "Die Standard Neustart Wartezeit für Daemons in Sekunden"
 
 #: Emailkasten/settings.py:406
 msgid "The default number of daemon logfiles to keep"
-msgstr ""
+msgstr "Die Standardanzahl an gespeicherten Daemon Logdateien"
 
 #: Emailkasten/settings.py:411
 msgid "The default maximum size of a daemon logfile in bytes"
-msgstr ""
+msgstr "Die Standard Daemon Logdateimaximalgröße in Bytes"
 
 #: Emailkasten/settings.py:417
 msgid ""
 "The maximum numbers of subdirectories in one storage unit. Must not exceed "
 "64000 for ext4 filesystem!"
 msgstr ""
+"Die maximale Anzahl von Unterordnern in einem Speicherordner. Darf für ein "
+"ext4 Dateisystem nicht größer als 64000 sein!"
 
 #: Emailkasten/settings.py:423
 msgid "Whether or not to ignore emails that have a spam flag"
-msgstr ""
+msgstr "Ob als Spam markierte Emails ignoriert werden."
 
 #: Emailkasten/settings.py:429
 msgid ""
@@ -76,101 +80,108 @@ msgid ""
 "marked as such. For an exhaustive list of all available types see https://"
 "www.iana.org/assignments/media-types/media-types.xhtml#text"
 msgstr ""
+"Liste von Content-Typ-Präfixen die als Anhang verarbeitet werden obwohl sie "
+"nicht als solcher markiert sind."
 
 #: Emailkasten/settings.py:436
 msgid ""
 "A list of content types prefixes to not parse as files if they are not "
 "marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
 msgstr ""
+"List von Content-Typ-Suffixen die nicht als Datei gespeichert werden."
+"Überschreibt Elemente in 'SAVE_CONTENT_TYPE_PREFIXES'."
 
 #: Emailkasten/settings.py:442
 msgid "The path where intermediate files will be placed"
-msgstr ""
+msgstr "Der Dateipfad an dem Zwischendateien abgelegt werden"
 
 #: Emailkasten/settings.py:462
 msgid "The html template to wrap around plain text for html conversion."
-msgstr ""
+msgstr "Html Template das um Email Klartext für die Konvertierung zu html."
 
 #: Emailkasten/settings.py:467
 msgid "The default mailbox setting whether to store mails as eml."
-msgstr ""
+msgstr "Die Standard Mailboxeinstellung ob Emails als eml gespeichert werden."
 
 #: Emailkasten/settings.py:472
 msgid "The default mailbox setting whether to convert and store mails as html."
-msgstr ""
+msgstr "Die Standard Mailboxeinstellung ob Emails als html gespeichert werden."
 
 #: Emailkasten/settings.py:477
 msgid "The default mailbox setting whether to store attachments."
-msgstr ""
+msgstr "Die Standard Mailboxeinstellung ob Anhänge gespeichert werden."
 
 #: Emailkasten/settings.py:483
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
 msgstr ""
+"Schalte dies an um die Selbstregistrierung für neuen Benutzern zu erlauben. "
+"Diese Einstellung ist nur relevant wenn die REGISTRATION_ENABLED Umgebungsvariable "
+"True ist."
 
 #: Emailkasten/settings.py:490
 msgid "Server Configurations"
-msgstr ""
+msgstr "Server Konfiguration"
 
 #: Emailkasten/settings.py:492
 msgid "Default Values"
-msgstr ""
+msgstr "Standardwerte"
 
 #: Emailkasten/settings.py:505
 msgid "Processing Settings"
-msgstr ""
+msgstr "Verarbeitungseinstellungen"
 
 #: Emailkasten/settings.py:514
 msgid "Storage Settings"
-msgstr ""
+msgstr "Speichereinstellungen"
 
 #: Emailkasten/settings.py:518
 msgid "API Settings"
-msgstr ""
+msgstr "API Einstellungen"
 
 #: Emailkasten/settings.py:522
 msgid "Web Settings"
-msgstr ""
+msgstr "Webapp Einstellungen"
 
 #: Emailkasten/templates/allauth/layouts/base.html:26
 #: Emailkasten/templates/allauth/layouts/base.html:34
 msgid "Emailkasten"
-msgstr ""
+msgstr "Emailkasten"
 
 #: Emailkasten/templates/allauth/layouts/base.html:30
 msgid "Go to Emailkasten"
-msgstr ""
+msgstr "Zu Emailkasten"
 
 #: Emailkasten/templates/allauth/layouts/base.html:51
 #: Emailkasten/templates/allauth/layouts/base.html:55
 msgid "Select Language"
-msgstr ""
+msgstr "Sprache wählen"
 
 #: Emailkasten/templates/allauth/layouts/base.html:73
 msgid "Sign Out"
-msgstr ""
+msgstr "Ausloggen"
 
 #: Emailkasten/templates/allauth/layouts/base.html:77
 msgid "Sign In"
-msgstr ""
+msgstr "Einloggen"
 
 #: Emailkasten/templates/allauth/layouts/base.html:80
 msgid "Sign Up"
-msgstr ""
+msgstr "Registrieren"
 
 #: Emailkasten/templates/allauth/layouts/manage.html:14
 msgid "Change Email"
-msgstr ""
+msgstr "Email ändern"
 
 #: Emailkasten/templates/allauth/layouts/manage.html:22
 msgid "Change Password"
-msgstr ""
+msgstr "Passwort ändern"
 
 #: Emailkasten/templates/allauth/layouts/manage.html:30
 msgid "Sessions"
-msgstr ""
+msgstr "Sitzungen"
 
 #: Emailkasten/templates/allauth/layouts/manage.html:37
 msgid "Admin panel"
-msgstr ""
+msgstr "Admin Seite"

@@ -449,11 +449,6 @@ CONSTANCE_CONFIG = {
         ),
         "array",
     ),
-    "TEMPORARY_STORAGE_DIRECTORY": (
-        "/tmp/",
-        _("The path where intermediate files will be placed"),
-        str,
-    ),
     "HTML_WRAPPER": (
         """<!DOCTYPE html>
         <html>
@@ -524,7 +519,7 @@ CONSTANCE_FIELDSETS = (
     ),
     (
         _("Storage Settings"),
-        ("STORAGE_MAX_FILES_PER_DIR", "TEMPORARY_STORAGE_DIRECTORY"),
+        ("STORAGE_MAX_FILES_PER_DIR"),
     ),
     (
         _("API Settings"),

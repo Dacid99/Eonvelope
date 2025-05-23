@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import logging
 import mailbox
-import os
+from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, Final, override
 
 from dirtyfields import DirtyFieldsMixin
@@ -231,14 +231,12 @@ class Mailbox(DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Mod
                 self,
             )
             raise ValueError(f"Mailbox fileformat {file_format} is not implemented!")
-        dump_filepath = os.path.join(
-            get_config("TEMPORARY_STORAGE_DIRECTORY"), str(hash(file_data))
-        )
-        with open(dump_filepath, "bw") as file:
-            file.write(file_data)
-        mailbox_file = format_class(dump_filepath)  # type: ignore[abstract]  # Mailbox class is never implemented, it's just used for typing
-        for key in mailbox_file.iterkeys():
-            Email.create_from_email_bytes(mailbox_file.get_bytes(key), self)
+        with NamedTemporaryFile(delete_on_close=False) as tempfile:
+            tempfile.write(file_data)
+            tempfile.close()
+            mailbox_file = format_class(tempfile.name)  # type: ignore[abstract]  # Mailbox class is never instantiated, it's just used for typing
+            for key in mailbox_file.iterkeys():
+                Email.create_from_email_bytes(mailbox_file.get_bytes(key), self)
         logger.info("Successfully added emails from mailbox file.")
 
     @classmethod

@@ -16,13 +16,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-
 """Test module for :mod:`core.models.Mailbox`."""
+
 from __future__ import annotations
 
 import datetime
 import mailbox
-import os
 from typing import TYPE_CHECKING
 
 import pytest
@@ -58,11 +57,8 @@ def mock_logger(mocker) -> MagicMock:
 
 
 @pytest.fixture
-def mock_open(mocker):
-    """Fixture to mock the builtin :func:`open`."""
-    mock_open = mocker.mock_open()
-    mocker.patch("core.models.Mailbox.open", mock_open)
-    return mock_open
+def mock_tempfile_NamedTemporaryFile(mocker):
+    return mocker.patch("core.models.Mailbox.NamedTemporaryFile", autospec=True)
 
 
 @pytest.fixture
@@ -349,11 +345,10 @@ def test_Mailbox_fetch_get_fetcher_error(
 def test_Mailbox_add_from_mailbox_file_success(
     mocker,
     faker,
-    override_config,
     fake_file_bytes,
     fake_mailbox,
     mock_logger,
-    mock_open,
+    mock_tempfile_NamedTemporaryFile,
     mock_Email_create_from_email_bytes,
     file_format,
     expected_class,
@@ -370,15 +365,15 @@ def test_Mailbox_add_from_mailbox_file_success(
         return_value=mock_parser,
     )
 
-    with override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"):
-        fake_mailbox.add_from_mailbox_file(fake_file_bytes, file_format)
+    fake_mailbox.add_from_mailbox_file(fake_file_bytes, file_format)
 
-    mock_open.assert_called_once_with(
-        os.path.join("/tmp/", str(hash(fake_file_bytes))), "bw"
+    mock_tempfile_NamedTemporaryFile.assert_called_once()
+    mock_tempfile_NamedTemporaryFile.return_value.__enter__.return_value.write.assert_called_once_with(
+        fake_file_bytes
     )
-    mock_open.return_value.write.assert_called_once_with(fake_file_bytes)
+    mock_tempfile_NamedTemporaryFile.return_value.__enter__.return_value.close.assert_called()
     mock_parser_class.assert_called_once_with(
-        os.path.join("/tmp/", str(hash(fake_file_bytes)))
+        mock_tempfile_NamedTemporaryFile.return_value.__enter__.return_value.name
     )
     assert mock_Email_create_from_email_bytes.call_count == len(fake_keys)
     mock_Email_create_from_email_bytes.assert_has_calls(
@@ -389,23 +384,19 @@ def test_Mailbox_add_from_mailbox_file_success(
 
 @pytest.mark.django_db
 def test_Mailbox_add_from_mailbox_file_bad_format(
-    override_config,
     fake_file_bytes,
     fake_mailbox,
-    mock_open,
+    mock_tempfile_NamedTemporaryFile,
     mock_logger,
     mock_Email_create_from_email_bytes,
 ):
     """Tests :func:`core.models.Account.Account.add_from_mailbox_file`
     in case of the mailbox file format is an unsupported format.
     """
-    with (
-        override_config(TEMPORARY_STORAGE_DIRECTORY="/tmp/"),
-        pytest.raises(ValueError),
-    ):
+    with pytest.raises(ValueError):
         fake_mailbox.add_from_mailbox_file(fake_file_bytes, "unimplemented")
 
-    mock_open.assert_not_called()
+    mock_tempfile_NamedTemporaryFile.assert_not_called()
     mock_Email_create_from_email_bytes.assert_not_called()
     mock_logger.info.assert_called()
 

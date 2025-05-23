@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
                 ("updated", models.DateTimeField(auto_now=True)),
             ],
             options={
-                "db_table": "storage",
+                "db_table": "storage_shards",
             },
         ),
         migrations.DeleteModel(

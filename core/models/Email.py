@@ -60,7 +60,7 @@ logger = logging.getLogger(__name__)
 class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models.Model):
     """Database model for an email."""
 
-    message_id = models.CharField(max_length=255, blank=True, default="")
+    message_id = models.CharField(max_length=255)
     """The messageID header of the mail. Unique together with :attr:`mailbox`."""
 
     datetime = models.DateTimeField()
@@ -221,7 +221,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         logger.debug("Storing %s as eml ...", self)
 
         self.eml_filepath = default_storage.save(
-            self.pk + "_" + self.message_id + ".eml",
+            str(self.pk) + "_" + self.message_id + ".eml",
             email_data,
         )
         self.save(update_fields=["eml_filepath"])
@@ -244,7 +244,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         html_message = eml2html(email_data)
 
         self.html_filepath = default_storage.save(
-            self.pk + "_" + self.message_id + ".html",
+            str(self.pk) + "_" + self.message_id + ".html",
             html_message.encode(),
         )
         self.save(update_fields=["html_filepath"])

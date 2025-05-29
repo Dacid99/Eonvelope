@@ -94,10 +94,7 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         try:
             serializer.save(user=self.request.user)
         except IntegrityError:
-            # pylint: disable-next=raise-missing-from  # raising with from is unnecessary here
-            raise ValidationError(  # noqa: B904
-                {"detail": "This account already exists!"}
-            )
+            raise ValidationError({"detail": "This account already exists!"}) from None
 
     URL_PATH_UPDATE_MAILBOXES = "update-mailboxes"
     URL_NAME_UPDATE_MAILBOXES = "update-mailboxes"

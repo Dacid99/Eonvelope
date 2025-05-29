@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, override
 
+from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -184,43 +185,41 @@ class MailboxViewSet(
         response.data["mailbox"] = self.get_serializer(mailbox).data
         return response
 
-    URL_PATH_UPLOAD_EML = "upload-eml"
-    URL_NAME_UPLOAD_EML = "upload-eml"
+    URL_PATH_DOWNLOAD = "download"
+    URL_NAME_DOWNLOAD = "download"
 
     @action(
         detail=True,
-        methods=["post"],
-        url_path=URL_PATH_UPLOAD_EML,
-        url_name=URL_NAME_UPLOAD_EML,
+        methods=["get"],
+        url_path=URL_PATH_DOWNLOAD,
+        url_name=URL_NAME_DOWNLOAD,
     )
-    def upload_eml(self, request: Request, pk: int | None = None) -> Response:
-        """Action method allowing upload of an .eml file to the server and adding it to a mailbox.
-
-        Args:
-            request: The request triggering the action.
-            pk: int: The private key of the mailbox to upload to. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        uploaded_mailbox_file = request.FILES.get("eml", None)
-        if uploaded_mailbox_file is None:
+    def download(self, request: Request, pk: int | None = None) -> Response:
+        file_format = request.query_params.get("file_format", None)
+        if not file_format:
             return Response(
-                {"detail": "EML file missing in request!"},
+                {"detail": "File format missing in request!"},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
-        Email.create_from_email_bytes(uploaded_mailbox_file.read(), mailbox)
-        mailbox_serializer = self.get_serializer(mailbox)
-        return Response(
-            {
-                "detail": "Successfully uploaded EML file",
-                "mailbox": mailbox_serializer.data,
-            }
-        )
+        try:
+            file = Email.queryset_as_file(mailbox.emails.all(), file_format)
+        except ValueError:
+            return Response(
+                {"detail": f"File format {file_format} is not supported!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Email.DoesNotExist:
+            raise Http404("No emails found.") from None
+        else:
+            return FileResponse(
+                file,
+                as_attachment=True,
+                filename=mailbox.name + "." + file_format.split("[", maxsplit=1)[0],
+            )
 
-    URL_PATH_UPLOAD_MAILBOX = "upload-mailbox"
-    URL_NAME_UPLOAD_MAILBOX = "upload-mailbox"
+    URL_PATH_UPLOAD_MAILBOX = "upload"
+    URL_NAME_UPLOAD_MAILBOX = "upload"
 
     @action(
         detail=True,
@@ -228,7 +227,7 @@ class MailboxViewSet(
         url_path=URL_PATH_UPLOAD_MAILBOX,
         url_name=URL_NAME_UPLOAD_MAILBOX,
     )
-    def upload_mailbox(self, request: Request, pk: int | None = None) -> Response:
+    def upload_emails(self, request: Request, pk: int | None = None) -> Response:
         """Action method allowing upload of a mailbox file and adding the contained mails to a mailbox.
 
         Args:
@@ -252,11 +251,11 @@ class MailboxViewSet(
             )
         mailbox = self.get_object()
         try:
-            mailbox.add_from_mailbox_file(uploaded_file.read(), file_format)
-        except ValueError:
+            mailbox.add_emails_from_file(uploaded_file, file_format)
+        except ValueError as error:
             return Response(
-                {"detail": "File format is not supported!"},
-                status=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                {"detail": str(error)},
+                status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox_serializer = self.get_serializer(mailbox)
         return Response(

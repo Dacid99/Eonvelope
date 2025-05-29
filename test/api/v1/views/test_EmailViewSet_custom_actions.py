@@ -23,9 +23,12 @@ from __future__ import annotations
 import os
 
 import pytest
+from django.http import FileResponse
 from rest_framework import status
+from rest_framework.response import Response
 
 from api.v1.views import EmailViewSet
+from core.models import Email
 
 
 @pytest.fixture
@@ -42,6 +45,14 @@ def mock_os_path_exists(mocker):
         "api.v1.views.EmailViewSet.os.path.exists",
         autospec=True,
         return_value=True,
+    )
+
+
+@pytest.fixture
+def mock_Email_queryset_as_file(mocker, fake_file):
+    return mocker.patch(
+        "api.v1.views.EmailViewSet.Email.queryset_as_file",
+        return_value=fake_file,
     )
 
 
@@ -249,6 +260,114 @@ def test_download_html_auth_owner(
     assert "Content-Security-Policy" in response.headers
     assert response.headers["Content-Security-Policy"] == "frame-ancestors 'self'"
     assert b"".join(response.streaming_content) == mock_open().read()
+
+
+@pytest.mark.django_db
+def test_batch_download_noauth(faker, noauth_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
+    with an unauthenticated user client.
+    """
+    response = noauth_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"id": [1, 2], "file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_batch_download_auth_other(faker, other_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
+    with the authenticated other user client.
+    """
+    response = other_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": faker.word(), "id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_batch_download_no_ids_auth_owner(
+    faker, owner_api_client, custom_list_action_url
+):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_batch_download_no_format_auth_owner(owner_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_batch_download_bad_format_auth_owner(owner_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": "unimplemented", "id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("ids", [[1], [1, 5], [1, 2, 100]])
+def test_batch_download_auth_owner(
+    faker,
+    fake_file_bytes,
+    owner_user,
+    owner_api_client,
+    custom_list_action_url,
+    mock_Email_queryset_as_file,
+    ids,
+):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
+    with the authenticated owner user client.
+    """
+    fake_format = faker.word()
+
+    response = owner_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": fake_format, "id": ids},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, FileResponse)
+    assert "Content-Disposition" in response.headers
+    assert (
+        f'filename="emails.{fake_format.split("[")[0]}"'
+        in response["Content-Disposition"]
+    )
+    assert b"".join(response.streaming_content) == fake_file_bytes
+    mock_Email_queryset_as_file.assert_called_once()
+    assert list(mock_Email_queryset_as_file.call_args.args[0]) == list(
+        Email.objects.filter(pk__in=ids, mailbox__account__user=owner_user)
+    )
+    assert mock_Email_queryset_as_file.call_args.args[1] == fake_format
 
 
 @pytest.mark.django_db

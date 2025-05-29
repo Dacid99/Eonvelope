@@ -21,9 +21,12 @@
 from __future__ import annotations
 
 import pytest
+from django.http import FileResponse
 from rest_framework import status
+from rest_framework.response import Response
 
 from api.v1.views import AttachmentViewSet
+from core.models import Attachment
 
 
 @pytest.fixture
@@ -40,6 +43,14 @@ def mock_os_path_exists(mocker):
         "api.v1.views.AttachmentViewSet.os.path.exists",
         autospec=True,
         return_value=True,
+    )
+
+
+@pytest.fixture
+def mock_Attachment_queryset_as_file(mocker, fake_file):
+    return mocker.patch(
+        "api.v1.views.AttachmentViewSet.Attachment.queryset_as_file",
+        return_value=fake_file,
     )
 
 
@@ -135,6 +146,87 @@ def test_download_auth_owner(
     assert "Content-Disposition" in response.headers
     assert f'filename="{fake_attachment.file_name}"' in response["Content-Disposition"]
     assert b"".join(response.streaming_content) == mock_open().read()
+
+
+@pytest.mark.django_db
+def test_batch_download_noauth(noauth_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with an unauthenticated user client.
+    """
+    response = noauth_api_client.get(
+        custom_list_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD_BATCH
+        ),
+        {"id": [1]},
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_batch_download_auth_other(other_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated other user client.
+    """
+    response = other_api_client.get(
+        custom_list_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD_BATCH
+        ),
+        {"id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_batch_download_no_ids_auth_owner(
+    owner_api_client, custom_list_action_url, mock_Attachment_queryset_as_file
+):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD_BATCH
+        ),
+        {},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert isinstance(response, Response)
+    mock_Attachment_queryset_as_file.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("ids", [[1], [1, 5], [1, 2, 100]])
+def test_batch_download_auth_owner(
+    fake_file_bytes,
+    owner_user,
+    owner_api_client,
+    custom_list_action_url,
+    mock_Attachment_queryset_as_file,
+    ids,
+):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD_BATCH
+        ),
+        {"id": ids},
+    )
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, FileResponse)
+    assert "Content-Disposition" in response.headers
+    assert 'filename="attachments.zip"' in response["Content-Disposition"]
+    assert b"".join(response.streaming_content) == fake_file_bytes
+    mock_Attachment_queryset_as_file.assert_called_once()
+    assert list(mock_Attachment_queryset_as_file.call_args.args[0]) == list(
+        Attachment.objects.filter(pk__in=ids, email__mailbox__account__user=owner_user)
+    )
 
 
 @pytest.mark.django_db

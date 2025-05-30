@@ -313,7 +313,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             raise Email.DoesNotExist("The queryset is empty!")
         tempfile = NamedTemporaryFile(
             suffix=".zip"
-        )  # suffix allows zipping to this file with shutil
+        )  # he suffix allows zipping to this file with shutil
         file_format = file_format.lower()
         if file_format == SupportedEmailDownloadFormats.ZIP_EML:
             with ZipFile(tempfile.name, "w") as zipfile:
@@ -331,7 +331,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             SupportedEmailDownloadFormats.MMDF,
         ]:
             parser_class = file_format_parsers[file_format]
-            parser = parser_class(tempfile.name)
+            parser = parser_class(tempfile.name, create=True)
             parser.lock()
             for email_item in queryset:
                 if email_item.has_download:
@@ -343,13 +343,19 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             SupportedEmailDownloadFormats.MH,
         ]:
             with TemporaryDirectory() as tempdirpath:
+                mailbox_path = os.path.join(tempdirpath, file_format)
                 parser_class = file_format_parsers[file_format]
-                parser = parser_class(tempdirpath)
+                parser = parser_class(mailbox_path, create=True)
                 parser.lock()
                 for email_item in queryset:
                     if email_item.has_download:
-                        with contextlib.suppress(FileNotFoundError):
-                            parser.add(default_storage.open(email_item.eml_filepath))
+                        # this construction is necessary as Maildir.add can also raise FileNotFound
+                        # if the directory is incorrectly structured, that warning must not be blocked
+                        try:
+                            eml_file = default_storage.open(email_item.eml_filepath)
+                        except FileNotFoundError:
+                            continue
+                        parser.add(eml_file)
                 parser.close()
                 shutil.make_archive(
                     os.path.splitext(tempfile.name)[0], "zip", tempdirpath

@@ -22,8 +22,8 @@ from __future__ import annotations
 
 import logging
 import os
-import uuid
 from typing import Any, override
+from uuid import uuid4
 
 from django.core.files.storage import default_storage
 from django.db import models
@@ -43,9 +43,7 @@ class StorageShard(models.Model):
         Use the custom methods to create new instances, never use :func:`create`!
     """
 
-    shard_directory_name = models.UUIDField(
-        default=uuid.uuid4, editable=False, unique=True
-    )
+    shard_directory_name = models.UUIDField(default=uuid4, editable=False, unique=True)
     """The name of the directory tracked by this entry. Unique."""
 
     file_count = models.PositiveSmallIntegerField(default=0)
@@ -76,7 +74,7 @@ class StorageShard(models.Model):
             The string representation of the storage directory, using :attr:`path` and the state of the directory.
         """
         state = "Current" if self.current else "Archived"
-        return _("%(state)s storage directory %(path)s of %(user)s") % {
+        return _("%(state)s storage directory %(name)s") % {
             "state": state,
             "name": str(self.shard_directory_name),
         }
@@ -93,7 +91,7 @@ class StorageShard(models.Model):
                 try:
                     os.makedirs(path, exist_ok=True)
                 except FileExistsError:
-                    self.shard_directory_name = uuid.uuid4()
+                    self.shard_directory_name = uuid4()
                 else:
                     break
         super().save(*args, **kwargs)
@@ -139,7 +137,6 @@ class StorageShard(models.Model):
         if storage_entry is None:
             logger.info("Creating first storage directory...")
             storage_entry = cls._add_shard()
-            storage_entry.save()
             logger.info("Successfully created first storage directory.")
         return storage_entry
 
@@ -154,7 +151,7 @@ class StorageShard(models.Model):
         """
         unique_current = cls.objects.filter(current=True).count() < 2
         if not unique_current:
-            logger.critical("More than one currently used storage direcory!!!")
+            logger.critical("More than one currently used storage directory!!!")
             return False
 
         root_listdir = default_storage.listdir("")
@@ -168,18 +165,6 @@ class StorageShard(models.Model):
         no_files_in_root = len(root_listdir[1]) == 0
         if not no_files_in_root:
             logger.critical("There are files in the storage root!!!")
-            return False
-
-        correct_file_count = all(
-            storage.file_count
-            == len(default_storage.listdir(str(storage.shard_directory_name))[1])
-            for storage in cls.objects.all()
-        )
-
-        if not correct_file_count:
-            logger.critical(
-                "Number of files in a storage directory doesnt match the index in the database!!!"
-            )
             return False
 
         return True

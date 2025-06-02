@@ -25,26 +25,26 @@ from core.backends import StorageIntegrityCheckBackend
 
 
 @pytest.fixture
-def mock_Storage_healthcheck(mocker):
+def mock_StorageShard_healthcheck(mocker):
     return mocker.patch(
-        "core.backends.StorageIntegrityCheckBackend.Storage.healthcheck"
+        "core.backends.StorageIntegrityCheckBackend.StorageShard.healthcheck"
     )
 
 
 def test_StorageIntegrityCheckBackend_check_status_success(
-    mock_Storage_healthcheck,
+    mock_StorageShard_healthcheck,
 ):
     """Test the healthcheck for the storage if it is healthy."""
-    mock_Storage_healthcheck.return_value = True
+    mock_StorageShard_healthcheck.return_value = True
 
     StorageIntegrityCheckBackend().check_status()
 
 
 def test_StorageIntegrityCheckBackend_check_status_failure(
-    mock_Storage_healthcheck,
+    mock_StorageShard_healthcheck,
 ):
     """Test the healthcheck for the storage if it is not healthy."""
-    mock_Storage_healthcheck.return_value = False
+    mock_StorageShard_healthcheck.return_value = False
 
     with pytest.raises(HealthCheckException):
         StorageIntegrityCheckBackend().check_status()

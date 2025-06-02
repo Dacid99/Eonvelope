@@ -24,16 +24,14 @@
 
 - safeimap and pop classes
 - move all signals into models
-- use tempfile for intermediate files
 - rework test:
   - disable all signals in tests
   - tests more implementation agnostic
 
 ## To test
 
-- Storage for more cases of conflicting storage
 - views customactions for response with updated modeldata
-- use of get_valid_filename
+- storagebackend for colliding file/dir
 
 ## To implement
 

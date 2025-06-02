@@ -50,6 +50,7 @@ from typing import TYPE_CHECKING
 import pytest
 from django.forms import model_to_dict
 from model_bakery import baker
+from pyfakefs.fake_filesystem_unittest import Patcher
 
 from core.constants import (
     EmailProtocolChoices,
@@ -68,9 +69,11 @@ from core.models import (
 
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
     from typing import Any
 
     from django.contrib.auth.models import AbstractUser
+    from pyfakefs.fake_filesystem import FakeFilesystem
 
 
 def pytest_configure(config) -> None:
@@ -270,6 +273,23 @@ def fake_file(fake_file_bytes) -> BytesIO:
 
 
 @pytest.fixture
+def mock_filesystem(settings) -> Generator[FakeFilesystem, None, None]:
+    """Mocks a Linux filesystem for realistic testing.
+
+    Contains a directory at the STORAGE_PATH setting to allow for testing without patching the storage backend.
+
+    Yields:
+        FakeFilesystem: The mock filesystem.
+    """
+    with Patcher() as patcher:
+        if not patcher.fs:
+            raise OSError("Generator could not create a fakefs!")
+
+        patcher.fs.create_dir(settings.STORAGE_PATH)
+        yield patcher.fs
+
+
+@pytest.fixture
 def owner_user(django_user_model) -> AbstractUser:
     """Creates a user that owns the data.
 
@@ -368,8 +388,8 @@ def fake_email(faker, fake_mailbox, fake_mailing_list) -> Email:
         Email,
         mailbox=fake_mailbox,
         mailinglist=fake_mailing_list,
-        eml_filepath=faker.file_path(extension="eml"),
-        html_filepath=faker.file_path(extension="png"),
+        eml_filepath=faker.file_name(extension="eml"),
+        html_filepath=faker.file_name(extension="png"),
     )
 
 
@@ -399,7 +419,7 @@ def fake_attachment(faker, fake_email) -> Attachment:
         The attachment instance for testing.
     """
     return baker.make(
-        Attachment, email=fake_email, file_path=faker.file_path(extension="pdf")
+        Attachment, email=fake_email, file_path=faker.file_name(extension="pdf")
     )
 
 

@@ -29,7 +29,7 @@
 
 
 {% block thumbnail %}
-    <img src="{{ card_object.get_absolute_thumbnail_url }}"
-         class="img-fluid rounded"
-         alt="Attachment image" />
+
+    {% include "web/attachment/partials/_thumbnail.html" with attachment=card_object %}
+
 {% endblock thumbnail %}

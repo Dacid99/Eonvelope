@@ -50,7 +50,7 @@
 {% endblock card_content %}
 
 {% block thumbnail %}
-    <img src="{{ object.get_absolute_thumbnail_url }}"
-         class="mh-100 w-auto p-1"
-         alt="Attachment image" />
+
+    {% include "web/attachment/partials/_thumbnail.html" with attachment=object %}
+
 {% endblock thumbnail %}

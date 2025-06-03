@@ -249,7 +249,17 @@ class Attachment(
     @override
     @property
     def has_thumbnail(self) -> bool:
-        return self.content_maintype == "image"
+        return (
+            self.content_maintype in {"image", "text"}
+            or (
+                self.content_maintype == "audio"
+                and self.content_subtype in ["ogg", "wav", "mpeg", "aac"]
+            )
+            or (
+                self.content_maintype == "video"
+                and self.content_subtype in ["ogg", "mp4", "mpeg", "webm", "avi"]
+            )
+        )
 
     @override
     def get_absolute_thumbnail_url(self) -> str:

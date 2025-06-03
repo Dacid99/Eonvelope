@@ -45,6 +45,7 @@
 - fallback for list-id if other list entries are present
 - identification of mailinglists via from
 - time benchmarks in debug log
+- batch download in web
 
 ### Work in progress
 
@@ -61,8 +62,7 @@
 
 ## To fix
 
-- replace os.exists with defaultstorage.exists
-- email lookups in creation methods dont check user!
+- correspondent is not user specific!
 - mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>
 - cascase doesnt trigger delete!
 - optics:

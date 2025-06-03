@@ -84,10 +84,11 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     html_bodytext = models.TextField(blank=True, default="")
     """The html bodytext of the mail. Can be blank."""
 
-    in_reply_to: models.ForeignKey[Email | None, Email | None] = models.ForeignKey(
-        "self", null=True, related_name="replies", on_delete=models.SET_NULL
+    in_reply_to: models.ManyToManyField[Email, Email] = models.ManyToManyField(
+        "self", symmetrical=False, related_name="replies"
     )
-    """The mail that this mail is a response to. Can be null. Deletion of that replied-to mail sets this field to NULL."""
+    """The mails that this mail is a response to.
+    Technically just a single mail, but as a mail can exist in multiple mailboxes, this needs to be able to reference multiples."""
 
     references: models.ManyToManyField[Email, Email] = models.ManyToManyField(
         "self", symmetrical=False, related_name="referenced_by"
@@ -260,7 +261,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         logger.debug("Successfully converted and stored email.")
 
     def sub_conversation(self) -> list[Email]:
-        """Gets all emails that are follow this email in the conversation.
+        """Gets all emails that follow this email in the conversation.
 
         Returns:
             The list of all mails in the subconversation.
@@ -276,12 +277,15 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         Based on :func:`core.models.Email.Email.sub_conversation`
         to recurse through the entire conversation.
 
+        Todo:
+            This needs to be properly adapted to in_reply_to being many-to-many.
+
         Returns:
             The list of all mails in the conversation.
         """
         root_email = self
-        while root_email.in_reply_to is not None:
-            root_email = root_email.in_reply_to
+        while root_email.in_reply_to.first() is not None:
+            root_email = root_email.in_reply_to.first()
         return root_email.sub_conversation()
 
     def is_spam(self) -> bool:
@@ -381,11 +385,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         header_dict: dict[str, str | None] = {}
         for header_name in email_message:
             header_dict[header_name] = get_header(email_message, header_name)
-        in_reply_to_message_id = header_dict.get(HeaderFields.IN_REPLY_TO)
-        in_reply_to = None
-        if in_reply_to_message_id:
-            with contextlib.suppress(Email.DoesNotExist):
-                in_reply_to = Email.objects.get(message_id=in_reply_to_message_id)
         bodytexts = get_bodytexts(email_message)
         return cls(
             headers=header_dict,
@@ -393,7 +392,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             or md5(email_bytes).hexdigest(),
             datetime=parse_datetime_header(header_dict.get(HeaderFields.DATE)),
             email_subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
-            in_reply_to=in_reply_to,
             x_spam=header_dict.get(HeaderFields.X_SPAM) or "",
             datasize=len(email_bytes),
             plain_bodytext=bodytexts.get("plain", ""),
@@ -410,19 +408,28 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                         correspondent_header, mention, self
                     )
 
+    def add_in_reply_to(self) -> None:
+        """Adds the in-reply-to emails from the headerfields to the model."""
+        if self.headers:
+            in_reply_to_message_id = self.headers.get(HeaderFields.IN_REPLY_TO)
+            if in_reply_to_message_id:
+                for in_reply_to_email in Email.objects.filter(
+                    message_id=in_reply_to_message_id.strip(),
+                    mailbox__account__user=self.mailbox.account.user,
+                ):
+                    self.in_reply_to.add(in_reply_to_email)
+
     def add_references(self) -> None:
         """Adds the references from the headerfields to the model."""
         if self.headers:
             referenced_message_ids = self.headers.get(HeaderFields.REFERENCES)
             if referenced_message_ids:
                 for referenced_message_id in referenced_message_ids.split(","):
-                    with contextlib.suppress(Email.DoesNotExist):
-                        self.references.add(
-                            Email.objects.get(
-                                message_id=referenced_message_id.strip(),
-                                mailbox__account__user=self.mailbox.account.user,
-                            )
-                        )
+                    for referenced_email in Email.objects.filter(
+                        message_id=referenced_message_id.strip(),
+                        mailbox__account__user=self.mailbox.account.user,
+                    ):
+                        self.references.add(referenced_email)
 
     @classmethod
     def create_from_email_bytes(
@@ -477,6 +484,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                 )
                 new_email.save(email_data=email_bytes)
                 new_email.add_correspondents()
+                new_email.add_in_reply_to()
                 new_email.add_references()
                 attachments = Attachment.create_from_email_message(
                     email_message, new_email

@@ -86,6 +86,7 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
 
         Args:
             correspondent_tuple: The tuple of correspondent data to create a model from.
+            user: The user the correspondent shall belong to.
 
         Returns:
             The :class:`core.models.Correspondent` with the data from the header.

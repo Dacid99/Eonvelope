@@ -42,7 +42,7 @@ from ..mixins import FavoriteMixin, HasDownloadMixin, HasThumbnailMixin, URLMixi
 
 
 if TYPE_CHECKING:
-    from email.message import Message
+    from email.message import EmailMessage
     from tempfile import _TemporaryFileWrapper
 
     from django.db.models import QuerySet
@@ -194,7 +194,7 @@ class Attachment(
 
     @classmethod
     def create_from_email_message(
-        cls, email_message: Message[str, str], email: Email
+        cls, email_message: EmailMessage, email: Email
     ) -> list[Attachment]:
         """Creates :class:`core.models.Attachment`s from an email message.
 

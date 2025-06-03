@@ -20,16 +20,16 @@
 
 from __future__ import annotations
 
-from email.message import Message
+from email.message import EmailMessage
 
 import pytest
 
 
 @pytest.fixture
 def mock_message(mocker):
-    """Fixture providing a mock :class:`email.message.Message` instance.
+    """Fixture providing a mock :class:`email.message.EmailMessage` instance.
 
     Returns:
-        :class:`unittest.mock.MagicMock`: The mock :class:`email.message.Message`.
+        :class:`unittest.mock.MagicMock`: The mock :class:`email.message.EmailMessage`.
     """
-    return mocker.MagicMock(spec=Message)
+    return mocker.MagicMock(spec=EmailMessage)

@@ -32,7 +32,7 @@ from ..utils.mail_parsing import get_header
 
 
 if TYPE_CHECKING:
-    from email.message import Message
+    from email.message import EmailMessage
 
 
 logger = logging.getLogger(__name__)
@@ -95,7 +95,7 @@ class MailingList(URLMixin, FavoriteMixin, models.Model):
 
     @classmethod
     def create_from_email_message(
-        cls, email_message: Message[str, str]
+        cls, email_message: EmailMessage
     ) -> MailingList | None:
         """Prepares a :class:`core.models.MailingList` from an email message.
 

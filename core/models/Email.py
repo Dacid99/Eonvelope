@@ -349,7 +349,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         Returns:
             The :class:`core.models.Email` instance with data from the bytes.
         """
-        email_message = email.message_from_bytes(email_bytes, policy=policy.default)  # type: ignore[arg-type]  # email stubs are not up-to-date for EmailMessage, will be fixed by mypy 1.16.0: https://github.com/python/typeshed/issues/13593
+        email_message = email.message_from_bytes(email_bytes, policy=policy.default)
         header_dict: dict[str, str | None] = {}
         for header_name in email_message:
             header_dict[header_name] = get_header(email_message, header_name)
@@ -416,7 +416,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             if the mail already exists in the db or
             if the mail is spam and is supposed to be thrown out.
         """
-        email_message = email.message_from_bytes(email_bytes, policy=policy.default)  # type: ignore[arg-type]  # email stubs are not up-to-date for EmailMessage, will be fixed by mypy 1.16.0: https://github.com/python/typeshed/issues/13593
+        email_message = email.message_from_bytes(email_bytes, policy=policy.default)
 
         message_id = (
             get_header(

@@ -41,7 +41,7 @@ from Emailkasten.utils.workarounds import get_config
 if TYPE_CHECKING:
     import datetime
     from email.header import Header
-    from email.message import Message
+    from email.message import EmailMessage
 
 logger = logging.getLogger(__name__)
 
@@ -71,14 +71,12 @@ def decode_header(header: Header | str) -> str:
 
 
 def get_header(
-    email_message: Message[str, str],
+    email_message: EmailMessage,
     header_name: str,
     joining_string: str = ", ",
 ) -> str | None:
     """Shorthand to safely get a header from a :class:`email.message.EmailMessage`.
 
-    Todo:
-        email_message arg should become EmailMessage type after mypy 1.16.0
     Args:
         email_message: The message to get the header from.
         header_name: The name of the header field.
@@ -126,8 +124,8 @@ def parse_datetime_header(date_header: str | None) -> datetime.datetime:
     return parsed_datetime
 
 
-def get_bodytexts(email_message: Message[str, str]) -> dict[str, str]:
-    """Parses the various bodytexts from a :class:`email.message.Message`.
+def get_bodytexts(email_message: EmailMessage) -> dict[str, str]:
+    """Parses the various bodytexts from a :class:`email.message.EmailMessage`.
 
     Args:
         email_message: The message to parse the bodytexts from.
@@ -163,7 +161,7 @@ def parse_mailbox_name(mailbox_bytes: bytes) -> str:
     )
 
 
-def message2html(email_message: Message[str, str]) -> str:
+def message2html(email_message: EmailMessage) -> str:
     """Creates a html presentation of an email.
 
     Args:
@@ -179,7 +177,7 @@ def message2html(email_message: Message[str, str]) -> str:
 
     html_wrapper = get_config("HTML_WRAPPER")
     html = ""
-    cid_content: dict[str, Message[str, str]] = {}
+    cid_content: dict[str, EmailMessage] = {}
     attachments_footer = ""
     for part in email_message.walk():
         if part.get_content_subtype() == "alternative":

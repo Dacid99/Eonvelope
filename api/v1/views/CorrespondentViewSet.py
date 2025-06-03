@@ -73,8 +73,6 @@ class CorrespondentViewSet(
         """
         if getattr(self, "swagger_fake_view", False):
             return Correspondent.objects.none()
-        if not self.request.user.is_authenticated:
-            return Correspondent.objects.none()
         return (
             Correspondent.objects.filter(
                 emails__mailbox__account__user=self.request.user

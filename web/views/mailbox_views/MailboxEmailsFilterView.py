@@ -36,8 +36,6 @@ class MailboxEmailsFilterView(EmailFilterView, SingleObjectMixin):  # type: igno
 
     @override
     def get_queryset(self) -> QuerySet[Email]:
-        if not self.request.user.is_authenticated:
-            return super().get_queryset().none()
         mailbox_queryset = Mailbox.objects.filter(account__user=self.request.user)
         self.object = self.get_object(queryset=mailbox_queryset)
         return super().get_queryset().filter(mailbox=self.object)

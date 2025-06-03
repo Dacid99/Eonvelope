@@ -53,8 +53,6 @@ class UploadEmailView(LoginRequiredMixin, DetailView, FormView):
     @override
     def get_queryset(self) -> QuerySet[Mailbox]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if not self.request.user.is_authenticated:
-            return Mailbox.objects.none()
         return Mailbox.objects.filter(account__user=self.request.user)
 
     @override

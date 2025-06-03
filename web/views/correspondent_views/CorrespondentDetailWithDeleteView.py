@@ -44,8 +44,6 @@ class CorrespondentDetailWithDeleteView(
     @override
     def get_queryset(self) -> QuerySet[Correspondent]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if not self.request.user.is_authenticated:
-            return Correspondent.objects.none()
         return (
             Correspondent.objects.filter(
                 emails__mailbox__account__user=self.request.user

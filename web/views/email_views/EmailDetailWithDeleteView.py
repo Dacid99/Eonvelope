@@ -41,8 +41,6 @@ class EmailDetailWithDeleteView(LoginRequiredMixin, DetailWithDeleteView):
     @override
     def get_queryset(self) -> QuerySet[Email]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if not self.request.user.is_authenticated:
-            return Email.objects.none()
         return (
             Email.objects.filter(mailbox__account__user=self.request.user)
             .select_related("mailinglist", "mailbox", "mailbox__account")

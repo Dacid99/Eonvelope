@@ -87,8 +87,6 @@ class EmailViewSet(
         """
         if getattr(self, "swagger_fake_view", False):
             return Email.objects.none()
-        if not self.request.user.is_authenticated:
-            return Email.objects.none()
         return (
             Email.objects.filter(mailbox__account__user=self.request.user)
             .select_related(

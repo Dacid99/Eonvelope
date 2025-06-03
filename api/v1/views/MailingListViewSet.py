@@ -76,8 +76,6 @@ class MailingListViewSet(
         """
         if getattr(self, "swagger_fake_view", False):
             return MailingList.objects.none()
-        if not self.request.user.is_authenticated:
-            return MailingList.objects.none()
         return (
             MailingList.objects.filter(emails__mailbox__account__user=self.request.user)
             .distinct()

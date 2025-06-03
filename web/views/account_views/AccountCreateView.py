@@ -21,7 +21,6 @@
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404
 from django.views.generic import CreateView
 
 from core.models import Account
@@ -42,8 +41,6 @@ class AccountCreateView(LoginRequiredMixin, CreateView):
         self, form_class: type[BaseAccountForm] | None = None
     ) -> BaseAccountForm:
         """Extended method to add the requesting user to the created account."""
-        if not self.request.user.is_authenticated:
-            raise Http404
         form = super().get_form(form_class)
         form.instance.user = self.request.user
         return form  # type: ignore[no-any-return]  # super().get_form returns the form_class arg or classvar, which are both BaseAccountForm

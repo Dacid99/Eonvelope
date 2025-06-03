@@ -80,8 +80,6 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
         """
         if getattr(self, "swagger_fake_view", False):
             return Daemon.objects.none()
-        if not self.request.user.is_authenticated:
-            return Daemon.objects.none()
         return Daemon.objects.filter(mailbox__account__user=self.request.user)
 
     URL_PATH_FETCHING_OPTIONS = "fetching-options"

@@ -38,8 +38,6 @@ class EmailArchiveMixin(PageSizeMixin):
 
     def get_queryset(self) -> QuerySet[Email]:
         """Restricts the queryset to objects owned by the requesting user."""
-        if not self.request.user.is_authenticated:
-            return super().get_queryset().none()
         return (
             super()
             .get_queryset()

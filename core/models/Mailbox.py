@@ -20,6 +20,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
 import os
 from tempfile import NamedTemporaryFile, TemporaryDirectory
@@ -236,11 +237,16 @@ class Mailbox(
         ]:
             parser_class = file_format_parsers[file_format]
             with NamedTemporaryFile() as tempfile:
-                tempfile.write(file)
+                tempfile.write(file.read())
                 parser = parser_class(tempfile.name, create=False)
                 parser.lock()
                 for key in parser.iterkeys():
-                    Email.create_from_email_bytes(parser.get_bytes(key), mailbox=self)
+                    with contextlib.suppress(
+                        AssertionError
+                    ):  # Babyl.get_bytes can raise AssertionError for a bad message
+                        Email.create_from_email_bytes(
+                            parser.get_bytes(key), mailbox=self
+                        )
                 parser.close()
         elif file_format in [
             SupportedEmailUploadFormats.MAILDIR,
@@ -248,8 +254,13 @@ class Mailbox(
         ]:
             parser_class = file_format_parsers[file_format]
             with TemporaryDirectory() as tempdirpath:
-                with ZipFile(file) as zipfile:
-                    zipfile.extractall(tempdirpath)
+                try:
+                    with ZipFile(file) as zipfile:
+                        zipfile.extractall(tempdirpath)
+                except BadZipFile as error:
+                    raise ValueError(
+                        "The given file could not be processed!"
+                    ) from error
                 for name in os.listdir(tempdirpath):
                     path = os.path.join(tempdirpath, name)
                     if os.path.isdir(path):
@@ -262,7 +273,7 @@ class Mailbox(
                                 )
                         except (
                             FileNotFoundError
-                        ) as error:  # raised if the given dir doesnt have the expected structure
+                        ) as error:  # raised if the given maildir doesnt have the expected structure
                             raise ValueError(
                                 "The given file could not be processed!"
                             ) from error

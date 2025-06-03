@@ -185,10 +185,10 @@ class Attachment(
             for attachment_item in queryset:
                 if attachment_item.has_download:
                     with zipfile.open(
-                        os.path.basename(attachment_item.file_path), "wb"
+                        os.path.basename(attachment_item.file_path), "w"
                     ) as zipped_file, contextlib.suppress(FileNotFoundError):
                         zipped_file.write(
-                            default_storage.open(attachment_item.file_path)
+                            default_storage.open(attachment_item.file_path).read()
                         )
         return tempfile
 

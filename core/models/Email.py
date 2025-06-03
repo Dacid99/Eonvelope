@@ -313,18 +313,21 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             raise Email.DoesNotExist("The queryset is empty!")
         tempfile = NamedTemporaryFile(
             suffix=".zip"
-        )  # he suffix allows zipping to this file with shutil
+        )  # the suffix allows zipping to this file with shutil
         file_format = file_format.lower()
         if file_format == SupportedEmailDownloadFormats.ZIP_EML:
             with ZipFile(tempfile.name, "w") as zipfile:
                 for email_item in queryset:
                     if email_item.has_download:
-                        with zipfile.open(
-                            os.path.basename(email_item.eml_filepath), "wb"
-                        ) as zipped_file, contextlib.suppress(FileNotFoundError):
-                            zipped_file.write(
-                                default_storage.open(email_item.eml_filepath)
-                            )
+                        try:
+                            eml_file = default_storage.open(email_item.eml_filepath)
+                        except FileNotFoundError:
+                            continue
+                        else:
+                            with zipfile.open(
+                                os.path.basename(email_item.eml_filepath), "w"
+                            ) as zipped_file:
+                                zipped_file.write(eml_file.read())
         elif file_format in [
             SupportedEmailDownloadFormats.MBOX,
             SupportedEmailDownloadFormats.BABYL,

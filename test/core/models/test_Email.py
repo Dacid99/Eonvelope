@@ -206,25 +206,17 @@ def test_Email_unique_constraints():
 
 
 @pytest.mark.django_db
-def test_Email_delete_emailfiles_success(
-    faker, fake_fs, fake_file_bytes, fake_email, mock_logger
-):
+def test_Email_delete_emailfiles_success(fake_email_with_file, mock_logger):
     """Tests :func:`core.models.Email.Email.delete`
     if the file removal is successful.
     """
-    fake_email.eml_filepath = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
-    fake_email.html_filepath = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
-    previous_eml_filepath = fake_email.eml_filepath
-    previous_html_filepath = fake_email.html_filepath
+    previous_eml_filepath = fake_email_with_file.eml_filepath
+    previous_html_filepath = fake_email_with_file.html_filepath
 
-    fake_email.delete()
+    fake_email_with_file.delete()
 
     with pytest.raises(Email.DoesNotExist):
-        fake_email.refresh_from_db()
+        fake_email_with_file.refresh_from_db()
     assert not default_storage.exists(previous_eml_filepath)
     assert not default_storage.exists(previous_html_filepath)
     mock_logger.debug.assert_called()
@@ -234,9 +226,7 @@ def test_Email_delete_emailfiles_success(
 
 
 @pytest.mark.django_db
-def test_Email_delete_email_delete_error(
-    mocker, faker, fake_fs, fake_file_bytes, fake_email, mock_logger
-):
+def test_Email_delete_email_delete_error(mocker, fake_email_with_file, mock_logger):
     """Tests :func:`core.models.Email.Email.delete`
     if delete raises an exception.
     """
@@ -245,18 +235,12 @@ def test_Email_delete_email_delete_error(
         autospec=True,
         side_effect=AssertionError,
     )
-    fake_email.eml_filepath = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
-    fake_email.html_filepath = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
 
     with pytest.raises(AssertionError):
-        fake_email.delete()
+        fake_email_with_file.delete()
 
-    assert default_storage.exists(fake_email.eml_filepath)
-    assert default_storage.exists(fake_email.html_filepath)
+    assert default_storage.exists(fake_email_with_file.eml_filepath)
+    assert default_storage.exists(fake_email_with_file.html_filepath)
     mock_delete.assert_called_once()
     mock_logger.debug.assert_not_called()
 

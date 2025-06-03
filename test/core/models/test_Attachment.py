@@ -101,24 +101,18 @@ def test_Attachment_unique_constraints():
 
 @pytest.mark.django_db
 def test_Attachment_delete_attachmentfile_success(
-    faker,
-    fake_fs,
-    fake_file_bytes,
-    fake_attachment,
+    fake_attachment_with_file,
     mock_logger,
 ):
     """Tests :func:`core.models.Attachment.Attachment.delete`
     in case the file removal is successful.
     """
-    fake_attachment.file_path = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
-    previous_file_path = fake_attachment.file_path
+    previous_file_path = fake_attachment_with_file.file_path
 
-    fake_attachment.delete()
+    fake_attachment_with_file.delete()
 
     with pytest.raises(Attachment.DoesNotExist):
-        fake_attachment.refresh_from_db()
+        fake_attachment_with_file.refresh_from_db()
     assert not default_storage.exists(previous_file_path)
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
@@ -129,10 +123,7 @@ def test_Attachment_delete_attachmentfile_success(
 @pytest.mark.django_db
 def test_Attachment_delete_attachmentfile_delete_error(
     mocker,
-    faker,
-    fake_fs,
-    fake_file_bytes,
-    fake_attachment,
+    fake_attachment_with_file,
     mock_logger,
 ):
     """Tests :func:`core.models.Attachment.Attachment.delete`
@@ -143,14 +134,11 @@ def test_Attachment_delete_attachmentfile_delete_error(
         autospec=True,
         side_effect=AssertionError,
     )
-    fake_attachment.file_path = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
 
     with pytest.raises(AssertionError):
-        fake_attachment.delete()
+        fake_attachment_with_file.delete()
 
-    assert default_storage.exists(fake_attachment.file_path)
+    assert default_storage.exists(fake_attachment_with_file.file_path)
     mock_delete.assert_called_once()
     mock_logger.debug.assert_not_called()
 

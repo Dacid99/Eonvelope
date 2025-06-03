@@ -20,10 +20,14 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
+import os
 from hashlib import md5
 from io import BytesIO
+from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, Any, override
+from zipfile import ZipFile
 
 from django.core.files.storage import default_storage
 from django.db import models
@@ -39,6 +43,9 @@ from ..mixins import FavoriteMixin, HasDownloadMixin, HasThumbnailMixin, URLMixi
 
 if TYPE_CHECKING:
     from email.message import Message
+    from tempfile import _TemporaryFileWrapper
+
+    from django.db.models import QuerySet
 
     from .Email import Email
 
@@ -157,6 +164,33 @@ class Attachment(
         )
         self.save(update_fields=["file_path"])
         logger.debug("Successfully stored attachment.")
+
+    @staticmethod
+    def queryset_as_file(queryset: QuerySet[Attachment]) -> _TemporaryFileWrapper:
+        """Processes the files of the emails in the queryset into a temporary file.
+
+        Args:
+            queryset: The email queryset to compile into a file.
+
+        Returns:
+            The temporary file wrapper.
+
+        Raises:
+            Attachment.DoesNotExist: If the :attr:`queryset` is empty.
+        """
+        if not queryset.exists():
+            raise Attachment.DoesNotExist("The queryset is empty!")
+        tempfile = NamedTemporaryFile()
+        with ZipFile(tempfile.name, "w") as zipfile:
+            for attachment_item in queryset:
+                if attachment_item.has_download:
+                    with zipfile.open(
+                        os.path.basename(attachment_item.file_path), "w"
+                    ) as zipped_file, contextlib.suppress(FileNotFoundError):
+                        zipped_file.write(
+                            default_storage.open(attachment_item.file_path).read()
+                        )
+        return tempfile
 
     @classmethod
     def create_from_email_message(

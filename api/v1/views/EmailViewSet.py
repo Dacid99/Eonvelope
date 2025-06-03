@@ -27,7 +27,7 @@ from django.core.files.storage import default_storage
 from django.db.models import Prefetch
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
@@ -136,6 +136,56 @@ class EmailViewSet(
             filename=file_name,
         )
 
+    URL_PATH_DOWNLOAD_BATCH = "download"
+    URL_NAME_DOWNLOAD_BATCH = "download-batch"
+
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path=URL_PATH_DOWNLOAD_BATCH,
+        url_name=URL_NAME_DOWNLOAD_BATCH,
+    )
+    def download_batch(self, request: Request) -> FileResponse:
+        """Action method downloading a batch of emails.
+
+        Args:
+            request: The request triggering the action.
+
+        Returns:
+            A fileresponse containing the emails in the requested format.
+            A 400 response if file_format or id param are missing in the request.
+            A 404 response if the queryset is empty.
+        """
+        file_format = request.query_params.get("file_format", None)
+        if not file_format:
+            return Response(
+                {"detail": "File format missing in request!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        requested_ids = request.query_params.getlist("id", [])
+        if not requested_ids:
+            return Response(
+                {"detail": "Email ids missing in request!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            file = Email.queryset_as_file(
+                self.get_queryset().filter(pk__in=requested_ids), file_format
+            )
+        except ValueError:
+            return Response(
+                {"detail": f"File format {file_format} is not supported!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except Email.DoesNotExist:
+            raise Http404("No emails found") from None
+        else:
+            return FileResponse(
+                file,
+                as_attachment=True,
+                filename=f"emails.{file_format.split("[", maxsplit=1)[0]}",
+            )
+
     URL_PATH_DOWNLOAD_HTML = "download-html"
     URL_NAME_DOWNLOAD_HTML = "download-html"
 
@@ -166,7 +216,6 @@ class EmailViewSet(
 
         html_file_name = os.path.basename(html_file_path)
         response = FileResponse(
-            # pylint: disable-next=consider-using-with
             default_storage.open(html_file_path, "rb"),
             as_attachment=False,
             filename=html_file_name,

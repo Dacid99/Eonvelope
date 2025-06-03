@@ -26,10 +26,11 @@ from typing import TYPE_CHECKING, Final, override
 from django.core.files.storage import default_storage
 from django.http import FileResponse, Http404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models import Attachment
@@ -114,3 +115,42 @@ class AttachmentViewSet(
             as_attachment=True,
             filename=attachment_file_name,
         )
+
+    URL_PATH_DOWNLOAD_BATCH = "download"
+    URL_NAME_DOWNLOAD_BATCH = "download-batch"
+
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path=URL_PATH_DOWNLOAD_BATCH,
+        url_name=URL_NAME_DOWNLOAD_BATCH,
+    )
+    def download_batch(self, request: Request) -> FileResponse:
+        """Action method downloading a batch of attachments.
+
+        Args:
+            request: The request triggering the action.
+
+        Returns:
+            A fileresponse containing the requested file.
+            A 400 response if the id param is missing in the request.
+            A 404 response if the queryset is empty.
+        """
+        requested_ids = request.query_params.getlist("id", [])
+        if not requested_ids:
+            return Response(
+                {"detail": "Attachment ids missing in request!"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            file = Attachment.queryset_as_file(
+                self.get_queryset().filter(pk__in=requested_ids)
+            )
+        except Attachment.DoesNotExist:
+            raise Http404("No attachments found") from None
+        else:
+            return FileResponse(
+                file,
+                as_attachment=True,
+                filename="attachments.zip",
+            )

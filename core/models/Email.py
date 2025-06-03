@@ -23,10 +23,14 @@ from __future__ import annotations
 import contextlib
 import email
 import logging
+import os
+import shutil
 from email import policy
 from hashlib import md5
 from io import BytesIO
+from tempfile import NamedTemporaryFile, TemporaryDirectory
 from typing import TYPE_CHECKING, Any, Final, override
+from zipfile import ZipFile
 
 from django.core.files.storage import default_storage
 from django.db import models, transaction
@@ -35,7 +39,7 @@ from django.utils.translation import gettext_lazy as _
 
 from Emailkasten.utils.workarounds import get_config
 
-from ..constants import HeaderFields
+from ..constants import HeaderFields, SupportedEmailDownloadFormats, file_format_parsers
 from ..mixins import FavoriteMixin, HasDownloadMixin, HasThumbnailMixin, URLMixin
 from ..utils.mail_parsing import (
     eml2html,
@@ -50,6 +54,10 @@ from .MailingList import MailingList
 
 
 if TYPE_CHECKING:
+    from tempfile import _TemporaryFileWrapper
+
+    from django.db.models import QuerySet
+
     from .Correspondent import Correspondent
     from .Mailbox import Mailbox
 
@@ -283,6 +291,81 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             Whether the mail is considered spam.
         """
         return is_x_spam(self.x_spam)
+
+    @staticmethod
+    def queryset_as_file(
+        queryset: QuerySet[Email], file_format: str
+    ) -> _TemporaryFileWrapper:
+        """Processes the files of the emails in the queryset into a temporary file.
+
+        Args:
+            queryset: The email queryset to compile into a file.
+            file_format: The desired format of the file. Must be one of :class:`core.constants.SupportedEmailDownloadFormats`. Case-insensitive.
+
+        Returns:
+            The temporary file wrapper.
+
+        Raises:
+            ValueError: If the given :attr:`file_format` is not supported.
+            Email.DoesNotExist: If the :attr:`queryset` is empty.
+        """
+        if not queryset.exists():
+            raise Email.DoesNotExist("The queryset is empty!")
+        tempfile = NamedTemporaryFile(
+            suffix=".zip"
+        )  # the suffix allows zipping to this file with shutil
+        file_format = file_format.lower()
+        if file_format == SupportedEmailDownloadFormats.ZIP_EML:
+            with ZipFile(tempfile.name, "w") as zipfile:
+                for email_item in queryset:
+                    if email_item.has_download:
+                        try:
+                            eml_file = default_storage.open(email_item.eml_filepath)
+                        except FileNotFoundError:
+                            continue
+                        else:
+                            with zipfile.open(
+                                os.path.basename(email_item.eml_filepath), "w"
+                            ) as zipped_file:
+                                zipped_file.write(eml_file.read())
+        elif file_format in [
+            SupportedEmailDownloadFormats.MBOX,
+            SupportedEmailDownloadFormats.BABYL,
+            SupportedEmailDownloadFormats.MMDF,
+        ]:
+            parser_class = file_format_parsers[file_format]
+            parser = parser_class(tempfile.name, create=True)
+            parser.lock()
+            for email_item in queryset:
+                if email_item.has_download:
+                    with contextlib.suppress(FileNotFoundError):
+                        parser.add(default_storage.open(email_item.eml_filepath))
+            parser.close()
+        elif file_format in [
+            SupportedEmailDownloadFormats.MAILDIR,
+            SupportedEmailDownloadFormats.MH,
+        ]:
+            with TemporaryDirectory() as tempdirpath:
+                mailbox_path = os.path.join(tempdirpath, file_format)
+                parser_class = file_format_parsers[file_format]
+                parser = parser_class(mailbox_path, create=True)
+                parser.lock()
+                for email_item in queryset:
+                    if email_item.has_download:
+                        # this construction is necessary as Maildir.add can also raise FileNotFound
+                        # if the directory is incorrectly structured, that warning must not be blocked
+                        try:
+                            eml_file = default_storage.open(email_item.eml_filepath)
+                        except FileNotFoundError:
+                            continue
+                        parser.add(eml_file)
+                parser.close()
+                shutil.make_archive(
+                    os.path.splitext(tempfile.name)[0], "zip", tempdirpath
+                )
+        else:
+            raise ValueError("The given file format is not supported!")
+        return tempfile
 
     @classmethod
     def fill_from_email_bytes(cls, email_bytes: bytes) -> Email:

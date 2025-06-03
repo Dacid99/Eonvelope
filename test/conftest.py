@@ -48,9 +48,10 @@ from io import BytesIO
 from typing import TYPE_CHECKING
 
 import pytest
+from django.core.files.storage import default_storage
 from django.forms import model_to_dict
 from model_bakery import baker
-from pyfakefs.fake_filesystem_unittest import Patcher
+from pyfakefs.fake_filesystem_unittest import Patcher, Pause
 
 from core.constants import (
     EmailProtocolChoices,
@@ -377,7 +378,6 @@ def fake_email(faker, fake_mailbox, fake_mailing_list) -> Email:
     """Creates an :class:`core.models.Email` owned by :attr:`owner_user`.
 
     Args:
-        correspondent: Depends on :func:`correspondent`.
         mailbox: Depends on :func:`mailbox`.
         mailinglist: Depends on :func:`mailinglist`.
 
@@ -390,6 +390,27 @@ def fake_email(faker, fake_mailbox, fake_mailing_list) -> Email:
         mailinglist=fake_mailing_list,
         eml_filepath=faker.file_name(extension="eml"),
         html_filepath=faker.file_name(extension="png"),
+    )
+
+
+@pytest.fixture
+def fake_email_with_file(faker, fake_fs, fake_mailbox, fake_mailing_list) -> Email:
+    """Creates an :class:`core.models.Email` owned by :attr:`owner_user`.
+
+    Args:
+        mailbox: Depends on :func:`mailbox`.
+        mailinglist: Depends on :func:`mailinglist`.
+
+    Returns:
+        The email instance for testing.
+    """
+    with Pause(fake_fs), open(TEST_EMAIL_PARAMETERS[0][0], "rb") as test_email:
+        test_eml_bytes = test_email.read()
+    return baker.make(
+        Email,
+        mailbox=fake_mailbox,
+        mailinglist=fake_mailing_list,
+        eml_filepath=default_storage.save(faker.file_name(), BytesIO(test_eml_bytes)),
     )
 
 
@@ -418,8 +439,23 @@ def fake_attachment(faker, fake_email) -> Attachment:
     Returns:
         The attachment instance for testing.
     """
+    return baker.make(Attachment, email=fake_email)
+
+
+@pytest.fixture
+def fake_attachment_with_file(faker, fake_file, fake_fs, fake_email) -> Attachment:
+    """Creates an :class:`core.models.Attachment` owned by :attr:`owner_user`.
+
+    Args:
+        email: Depends on :func:`email`.
+
+    Returns:
+        The attachment instance for testing.
+    """
     return baker.make(
-        Attachment, email=fake_email, file_path=faker.file_name(extension="pdf")
+        Attachment,
+        email=fake_email,
+        file_path=default_storage.save(faker.file_name(), fake_file),
     )
 
 

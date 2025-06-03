@@ -22,13 +22,23 @@ from __future__ import annotations
 
 import datetime
 import mailbox
+import os
+import shutil
+from io import BytesIO
+from multiprocessing import Value
+from pickle import bytes_types
+from tempfile import NamedTemporaryFile, TemporaryDirectory, TemporaryFile
 from typing import TYPE_CHECKING
+from zipfile import BadZipFile, ZipFile
 
 import pytest
 from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
+from pyfakefs.fake_filesystem_unittest import Pause
 
+import test
+from core.constants import SupportedEmailUploadFormats, file_format_parsers
 from core.models import Account, Mailbox
 from core.utils.fetchers import (
     IMAP4_SSL_Fetcher,
@@ -38,6 +48,7 @@ from core.utils.fetchers import (
 )
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from Emailkasten.utils.workarounds import get_config
+from test.conftest import TEST_EMAIL_PARAMETERS
 
 from .test_Account import mock_Account_get_fetcher, mock_fetcher
 
@@ -54,11 +65,6 @@ def mock_logger(mocker) -> MagicMock:
         The mocked logger instance.
     """
     return mocker.patch("core.models.Mailbox.logger", autospec=True)
-
-
-@pytest.fixture
-def mock_tempfile_NamedTemporaryFile(mocker):
-    return mocker.patch("core.models.Mailbox.NamedTemporaryFile", autospec=True)
 
 
 @pytest.fixture
@@ -333,72 +339,282 @@ def test_Mailbox_fetch_get_fetcher_error(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "file_format, expected_class",
-    [
-        ("mmdf", mailbox.MMDF),
-        ("babyl", mailbox.Babyl),
-        ("mbox", mailbox.mbox),
-        ("mh", mailbox.MH),
-        ("maildir", mailbox.Maildir),
-    ],
+    "file_format",
+    [SupportedEmailUploadFormats.EML, SupportedEmailUploadFormats.EML.title()],
 )
-def test_Mailbox_add_from_mailbox_file_success(
-    mocker,
-    faker,
-    fake_file_bytes,
-    fake_mailbox,
-    mock_logger,
-    mock_tempfile_NamedTemporaryFile,
-    mock_Email_create_from_email_bytes,
-    file_format,
-    expected_class,
+def test_Mailbox_add_emails_from_file_eml_success(
+    fake_fs, fake_mailbox, mock_logger, file_format
 ):
-    """Tests :func:`core.models.Account.Account.add_from_mailbox_file`
-    in case of success.
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of .
     """
-    mock_parser = mocker.Mock(spec=expected_class)
-    fake_keys = faker.words()
-    mock_parser.iterkeys.return_value = fake_keys
-    mock_parser_class = mocker.patch(
-        f"core.models.Mailbox.mailbox.{expected_class.__name__}",
-        autospec=True,
-        return_value=mock_parser,
-    )
+    with Pause(fake_fs), open(TEST_EMAIL_PARAMETERS[0][0], "rb") as test_email:
+        eml_data = test_email.read()
 
-    fake_mailbox.add_from_mailbox_file(fake_file_bytes, file_format)
+    assert fake_mailbox.emails.count() == 0
 
-    mock_tempfile_NamedTemporaryFile.assert_called_once()
-    mock_tempfile_NamedTemporaryFile.return_value.__enter__.return_value.write.assert_called_once_with(
-        fake_file_bytes
-    )
-    mock_tempfile_NamedTemporaryFile.return_value.__enter__.return_value.close.assert_called()
-    mock_parser_class.assert_called_once_with(
-        mock_tempfile_NamedTemporaryFile.return_value.__enter__.return_value.name
-    )
-    assert mock_Email_create_from_email_bytes.call_count == len(fake_keys)
-    mock_Email_create_from_email_bytes.assert_has_calls(
-        [mocker.call(mock_parser.get_bytes(key), fake_mailbox) for key in fake_keys]
-    )
-    mock_logger.info.assert_called()
+    fake_mailbox.add_emails_from_file(BytesIO(eml_data), file_format)
+
+    assert fake_mailbox.emails.count() == 1
 
 
 @pytest.mark.django_db
-def test_Mailbox_add_from_mailbox_file_bad_format(
-    fake_file_bytes,
-    fake_mailbox,
-    mock_tempfile_NamedTemporaryFile,
-    mock_logger,
-    mock_Email_create_from_email_bytes,
+@pytest.mark.parametrize(
+    "file_format",
+    [SupportedEmailUploadFormats.ZIP_EML, SupportedEmailUploadFormats.ZIP_EML.title()],
+)
+def test_Mailbox_add_emails_from_file_zip_eml_success(
+    fake_fs, fake_mailbox, mock_logger, file_format
 ):
-    """Tests :func:`core.models.Account.Account.add_from_mailbox_file`
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of .
+    """
+    with NamedTemporaryFile() as tempfile:
+        with ZipFile(tempfile, "w") as zipfile:
+            for index in (0, 1, 2):
+                with zipfile.open(f"{index}.eml", "w") as zipped_file:
+                    with Pause(fake_fs), open(
+                        TEST_EMAIL_PARAMETERS[index][0], "rb"
+                    ) as test_email:
+                        test_email_bytes = test_email.read()
+                    zipped_file.write(test_email_bytes)
+            assert len(zipfile.namelist()) == 3
+        assert fake_mailbox.emails.count() == 0
+
+        fake_mailbox.add_emails_from_file(tempfile, file_format)
+
+    assert fake_mailbox.emails.count() == 3
+    for index in (0, 1, 2):
+        assert fake_mailbox.emails.filter(
+            message_id=TEST_EMAIL_PARAMETERS[index][1]["message_id"]
+        ).exists()
+
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [SupportedEmailUploadFormats.ZIP_EML, SupportedEmailUploadFormats.ZIP_EML.title()],
+)
+def test_Mailbox_add_emails_from_file_zip_eml_bad_file(
+    faker,
+    fake_fs,
+    fake_mailbox,
+    mock_logger,
+    file_format,
+):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of .
+    """
+    assert fake_mailbox.emails.count() == 0
+
+    with pytest.raises(ValueError):
+        fake_mailbox.add_emails_from_file(BytesIO(faker.text().encode()), file_format)
+
+    assert fake_mailbox.emails.count() == 0
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailUploadFormats.MBOX,
+        SupportedEmailUploadFormats.MMDF,
+        SupportedEmailUploadFormats.BABYL,
+        SupportedEmailUploadFormats.MBOX.title(),
+        SupportedEmailUploadFormats.MMDF.title(),
+        SupportedEmailUploadFormats.BABYL.title(),
+    ],
+)
+def test_Mailbox_add_emails_from_file_mailbox_file_success(
+    fake_fs, fake_mailbox, mock_logger, file_format
+):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of success.
+    """
+    parser_class = file_format_parsers[file_format.lower()]
+    with NamedTemporaryFile() as tempfile:
+        parser = parser_class(tempfile.name, create=True)
+        parser.lock()
+        for index in (0, 1, 2):
+            with Pause(fake_fs), open(
+                TEST_EMAIL_PARAMETERS[index][0], "rb"
+            ) as test_email:
+                parser.add(test_email.read())
+        assert len(list(parser.iterkeys())) == 3
+        parser.close()
+
+        assert fake_mailbox.emails.count() == 0
+
+        fake_mailbox.add_emails_from_file(tempfile, file_format)
+
+    assert fake_mailbox.emails.count() == 3
+    for index in (0, 1, 2):
+        assert fake_mailbox.emails.filter(
+            message_id=TEST_EMAIL_PARAMETERS[index][1]["message_id"]
+        ).exists()
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailUploadFormats.MBOX,
+        SupportedEmailUploadFormats.MMDF,
+        SupportedEmailUploadFormats.BABYL,
+    ],
+)
+def test_Mailbox_add_emails_from_file_mailbox_file_bad_file(
+    faker,
+    fake_fs,
+    fake_mailbox,
+    mock_logger,
+    file_format,
+):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of success.
+    """
+    assert fake_mailbox.emails.count() == 0
+
+    fake_mailbox.add_emails_from_file(BytesIO(faker.text().encode()), file_format)
+
+    assert fake_mailbox.emails.count() == 0
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailUploadFormats.MAILDIR,
+        SupportedEmailUploadFormats.MH,
+        SupportedEmailUploadFormats.MAILDIR.title(),
+        SupportedEmailUploadFormats.MH.title(),
+    ],
+)
+def test_Mailbox_add_emails_from_file_mailbox_dir_success(
+    fake_fs, fake_mailbox, mock_logger, file_format
+):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of success.
+    """
+    parser_class = file_format_parsers[file_format.lower()]
+    with TemporaryDirectory() as tempdirpath:
+        parser = parser_class(os.path.join(tempdirpath, "test"), create=True)
+        parser.lock()
+        for index in (0, 1, 2):
+            with Pause(fake_fs), open(
+                TEST_EMAIL_PARAMETERS[index][0], "rb"
+            ) as test_email:
+                test_email_bytes = test_email.read()
+            parser.add(test_email_bytes)
+        assert len(list(parser.iterkeys())) == 3
+        parser.close()
+        with NamedTemporaryFile(suffix=".zip") as tempfile:
+            shutil.make_archive(os.path.splitext(tempfile.name)[0], "zip", tempdirpath)
+
+            assert fake_mailbox.emails.count() == 0
+
+            fake_mailbox.add_emails_from_file(tempfile, file_format)
+
+    assert fake_mailbox.emails.count() == 3
+    for index in (0, 1, 2):
+        assert fake_mailbox.emails.filter(
+            message_id=TEST_EMAIL_PARAMETERS[index][1]["message_id"]
+        ).exists()
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailUploadFormats.MAILDIR,
+        SupportedEmailUploadFormats.MH,
+    ],
+)
+def test_Mailbox_add_emails_from_file_mailbox_dir_bad_zip(
+    faker, fake_fs, fake_mailbox, mock_logger, file_format
+):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of success.
+    """
+    assert fake_mailbox.emails.count() == 0
+
+    with pytest.raises(ValueError):
+        fake_mailbox.add_emails_from_file(BytesIO(faker.text().encode()), file_format)
+
+    assert fake_mailbox.emails.count() == 0
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+def test_Mailbox_add_emails_from_file_mailbox_dir_bad_maildir(
+    fake_fs, fake_mailbox, mock_logger
+):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of success.
+    """
+    with TemporaryDirectory() as tempdirpath:
+        parser = mailbox.Maildir(tempdirpath, create=True)
+        os.makedirs(os.path.join(tempdirpath, "new"))
+        os.makedirs(os.path.join(tempdirpath, "tmp"))
+        parser.lock()
+        with Pause(fake_fs), open(TEST_EMAIL_PARAMETERS[0][0], "rb") as test_email:
+            test_email_bytes = test_email.read()
+        parser.add(test_email_bytes)
+        parser.close()
+        with NamedTemporaryFile(suffix=".zip") as tempfile:
+            shutil.make_archive(os.path.splitext(tempfile.name)[0], "zip", tempdirpath)
+
+            assert fake_mailbox.emails.count() == 0
+
+            with pytest.raises(ValueError):
+                fake_mailbox.add_emails_from_file(
+                    tempfile, SupportedEmailUploadFormats.MAILDIR
+                )
+
+    assert fake_mailbox.emails.count() == 0
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+def test_Mailbox_add_emails_from_file_mailbox_dir_bad_mh(
+    fake_fs, fake_mailbox, mock_logger
+):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
+    in case of success.
+    """
+    with TemporaryDirectory() as tempdirpath:
+        parser = mailbox.MH(tempdirpath, create=True)
+        parser.lock()
+        with Pause(fake_fs), open(TEST_EMAIL_PARAMETERS[0][0], "rb") as test_email:
+            test_email_bytes = test_email.read()
+        parser.add(test_email_bytes)
+        parser.close()
+        with NamedTemporaryFile(suffix=".zip") as tempfile:
+            shutil.make_archive(os.path.splitext(tempfile.name)[0], "zip", tempdirpath)
+
+            assert fake_mailbox.emails.count() == 0
+
+            fake_mailbox.add_emails_from_file(tempfile, SupportedEmailUploadFormats.MH)
+
+    assert fake_mailbox.emails.count() == 0
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+def test_Mailbox_add_emails_from_file_bad_format(fake_file, fake_mailbox, mock_logger):
+    """Tests :func:`core.models.Account.Account.add_emails_from_file`
     in case of the mailbox file format is an unsupported format.
     """
     with pytest.raises(ValueError):
-        fake_mailbox.add_from_mailbox_file(fake_file_bytes, "unimplemented")
+        fake_mailbox.add_emails_from_file(fake_file, "unimplemented")
 
-    mock_tempfile_NamedTemporaryFile.assert_not_called()
-    mock_Email_create_from_email_bytes.assert_not_called()
-    mock_logger.info.assert_called()
+    assert os.listdir("/tmp") == []
 
 
 @pytest.mark.django_db

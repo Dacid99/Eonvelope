@@ -30,6 +30,8 @@
 
     {% include "web/mailbox/partials/_add_daemon-button.html" %}
 
+    {% include "web/mailbox/partials/_download_dropdown.html" with mailbox=object %}
+
     {% include "web/mailbox/partials/_upload_email-button.html" with mailbox=object %}
 
 {% endblock action_buttons %}

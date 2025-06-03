@@ -18,17 +18,16 @@
 
 """Module with the :class:`web.views.UploadEmailView` view class."""
 
-from io import BufferedReader
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpResponse
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic.edit import FormView
 
-from core.constants import SupportedEmailUploadFormats
-from core.models import Email, Mailbox
+from core.models import Mailbox
 
 from ...forms.UploadEmailForm import UploadEmailForm
 
@@ -70,8 +69,14 @@ class UploadEmailView(LoginRequiredMixin, DetailView, FormView):
         """
         file = form.cleaned_data["file"]
         file_format = form.cleaned_data["file_format"]
-        self.process_email_file(file_format, file)
-        return super().form_valid(form)
+        self.object = self.get_object()  # required to reconcile FormView and DetailView
+        try:
+            self.object.add_emails_from_file(file, file_format)
+        except ValueError:
+            form.add_error("file", _("The file could not be processed!"))
+            return self.form_invalid(form)
+        else:
+            return super().form_valid(form)
 
     @override
     def form_invalid(self, form: UploadEmailForm) -> HttpResponse:
@@ -88,19 +93,3 @@ class UploadEmailView(LoginRequiredMixin, DetailView, FormView):
         """
         self.object = self.get_object()
         return super().form_invalid(form)
-
-    def process_email_file(self, file_format: str, file: BufferedReader) -> None:
-        """Processes the uploaded file.
-
-        Todo:
-            Reading the file in chunks to improve memory load.
-
-        Args:
-            file_format: The format of the uploaded file.
-            file: The uploaded file.
-        """
-        self.object = self.get_object()
-        if file_format == SupportedEmailUploadFormats.EML:
-            Email.create_from_email_bytes(file.read(), mailbox=self.object)
-        else:
-            self.object.add_from_mailbox_file(file.read(), file_format)

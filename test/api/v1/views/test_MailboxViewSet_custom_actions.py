@@ -20,14 +20,13 @@
 
 from __future__ import annotations
 
-from io import BytesIO
-
 import pytest
+from django.http import FileResponse
 from rest_framework import status
+from rest_framework.response import Response
 
 from api.v1.views import MailboxViewSet
 from core.constants import EmailFetchingCriterionChoices
-from core.models import Daemon, Email
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
@@ -44,16 +43,30 @@ def mock_Mailbox_fetch(mocker):
 
 
 @pytest.fixture
-def mock_Email_create_from_email_bytes(mocker):
-    return mocker.patch(
-        "api.v1.views.MailboxViewSet.Email.create_from_email_bytes", autospec=True
+def mock_Mailbox_add_emails_from_file(mocker):
+    captured_streams = []
+
+    def capture_stream(*args, **kwargs):
+        captured_streams.extend(arg.read() for arg in args if hasattr(arg, "read"))
+        captured_streams.extend(
+            kwarg.read() for kwarg in kwargs.values() if hasattr(kwarg, "read")
+        )
+
+    mock_Mailbox_add_emails_from_file = mocker.patch(
+        "api.v1.views.MailboxViewSet.Mailbox.add_emails_from_file",
+        autospec=True,
+        side_effect=capture_stream,
     )
+
+    mock_Mailbox_add_emails_from_file.captured_streams = captured_streams
+    return mock_Mailbox_add_emails_from_file
 
 
 @pytest.fixture
-def mock_Mailbox_add_from_mailbox_file(mocker):
+def mock_Email_queryset_as_file(mocker, fake_file):
     return mocker.patch(
-        "api.v1.views.MailboxViewSet.Mailbox.add_from_mailbox_file", autospec=True
+        "api.v1.views.MailboxViewSet.Email.queryset_as_file",
+        return_value=fake_file,
     )
 
 
@@ -315,102 +328,124 @@ def test_fetch_all_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_upload_eml_noauth(
-    fake_file,
+def test_download_noauth(
+    faker,
     fake_mailbox,
     noauth_api_client,
     custom_detail_action_url,
-    mock_Email_create_from_email_bytes,
 ):
-    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with an unauthenticated user client."""
-    assert fake_mailbox.emails.all().count() == 1
-
-    response = noauth_api_client.post(
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with an unauthenticated user client.
+    """
+    response = noauth_api_client.get(
         custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, fake_mailbox
+            MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD, fake_mailbox
         ),
-        {"eml": fake_file},
-        format="multipart",
+        {"file_format": faker.word()},
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_Email_create_from_email_bytes.assert_not_called()
-    assert fake_mailbox.emails.all().count() == 1
-    assert "name" not in response.data
+    assert isinstance(response, Response)
 
 
 @pytest.mark.django_db
-def test_upload_eml_auth_other(
-    fake_file,
+def test_download_auth_other(
+    faker,
     fake_mailbox,
     other_api_client,
     custom_detail_action_url,
-    mock_Email_create_from_email_bytes,
 ):
-    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated other user client."""
-    assert fake_mailbox.emails.all().count() == 1
-
-    response = other_api_client.post(
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated other user client.
+    """
+    response = other_api_client.get(
         custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, fake_mailbox
+            MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD, fake_mailbox
         ),
-        {"eml": fake_file},
-        format="multipart",
+        {"file_format": faker.word()},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_Email_create_from_email_bytes.assert_not_called()
-    assert fake_mailbox.emails.all().count() == 1
-    assert "name" not in response.data
+    assert isinstance(response, Response)
 
 
 @pytest.mark.django_db
-def test_upload_eml_auth_owner(
-    fake_file,
+def test_download_no_format_auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
-    mock_Email_create_from_email_bytes,
 ):
-    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated owner user client.
+    """
 
-    response = owner_api_client.post(
+    response = owner_api_client.get(
         custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, fake_mailbox
-        ),
-        {"eml": fake_file},
-        format="multipart",
-    )
-
-    assert response.status_code == status.HTTP_200_OK
-    assert (
-        response.data["mailbox"] == MailboxViewSet.serializer_class(fake_mailbox).data
-    )
-    mock_Email_create_from_email_bytes.assert_called_once_with(
-        fake_file.getvalue(), fake_mailbox
-    )
-
-
-@pytest.mark.django_db
-def test_upload_eml_no_file_auth_owner(
-    fake_mailbox,
-    owner_api_client,
-    custom_detail_action_url,
-    mock_Email_create_from_email_bytes,
-):
-    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_eml` action with the authenticated owner user client."""
-    assert fake_mailbox.emails.all().count() == 1
-
-    response = owner_api_client.post(
-        custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_EML, fake_mailbox
+            MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD, fake_mailbox
         )
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    mock_Email_create_from_email_bytes.assert_not_called()
-    assert fake_mailbox.emails.all().count() == 1
-    assert "name" not in response.data
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_download_no_emails_auth_owner(
+    faker,
+    fake_mailbox,
+    owner_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated owner user client.
+    """
+    fake_mailbox.emails.all().delete()
+
+    response = owner_api_client.get(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD, fake_mailbox
+        ),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert isinstance(response, Response)
+
+
+@pytest.mark.django_db
+def test_download_auth_owner(
+    faker,
+    fake_file_bytes,
+    fake_mailbox,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Email_queryset_as_file,
+):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated owner user client.
+    """
+    fake_format = faker.word()
+
+    response = owner_api_client.get(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD, fake_mailbox
+        ),
+        {"file_format": fake_format},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, FileResponse)
+    assert "Content-Disposition" in response.headers
+    assert (
+        f'filename="{fake_mailbox.name}.{fake_format.split("[")[0]}"'
+        in response["Content-Disposition"]
+    )
+    assert b"".join(response.streaming_content) == fake_file_bytes
+    mock_Email_queryset_as_file.assert_called_once()
+    assert list(mock_Email_queryset_as_file.call_args.args[0]) == list(
+        fake_mailbox.emails.all()
+    )
+    assert mock_Email_queryset_as_file.call_args.args[1] == fake_format
 
 
 @pytest.mark.django_db
@@ -419,7 +454,7 @@ def test_upload_mailbox_noauth(
     fake_mailbox,
     noauth_api_client,
     custom_detail_action_url,
-    mock_Mailbox_add_from_mailbox_file,
+    mock_Mailbox_add_emails_from_file,
     fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with an unauthenticated user client."""
@@ -436,7 +471,7 @@ def test_upload_mailbox_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_Mailbox_add_from_mailbox_file.assert_not_called()
+    mock_Mailbox_add_emails_from_file.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 
@@ -447,7 +482,7 @@ def test_upload_mailbox_auth_other(
     fake_mailbox,
     other_api_client,
     custom_detail_action_url,
-    mock_Mailbox_add_from_mailbox_file,
+    mock_Mailbox_add_emails_from_file,
     fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated other user client."""
@@ -464,7 +499,7 @@ def test_upload_mailbox_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_Mailbox_add_from_mailbox_file.assert_not_called()
+    mock_Mailbox_add_emails_from_file.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 
@@ -475,7 +510,7 @@ def test_upload_mailbox_auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
-    mock_Mailbox_add_from_mailbox_file,
+    mock_Mailbox_add_emails_from_file,
     fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
@@ -493,9 +528,11 @@ def test_upload_mailbox_auth_owner(
     assert (
         response.data["mailbox"] == MailboxViewSet.serializer_class(fake_mailbox).data
     )
-    mock_Mailbox_add_from_mailbox_file.assert_called_once_with(
-        fake_mailbox, fake_file.getvalue(), fake_format
-    )
+    mock_Mailbox_add_emails_from_file.assert_called_once()
+    assert mock_Mailbox_add_emails_from_file.call_args.args[0] == fake_mailbox
+    assert len(mock_Mailbox_add_emails_from_file.captured_streams) == 1
+    assert mock_Mailbox_add_emails_from_file.captured_streams[0] == fake_file.getvalue()
+    assert mock_Mailbox_add_emails_from_file.call_args.args[2] == fake_format
 
 
 @pytest.mark.django_db
@@ -504,7 +541,7 @@ def test_upload_mailbox_no_file_auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
-    mock_Mailbox_add_from_mailbox_file,
+    mock_Mailbox_add_emails_from_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
     fake_format = faker.word()
@@ -519,7 +556,7 @@ def test_upload_mailbox_no_file_auth_owner(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    mock_Mailbox_add_from_mailbox_file.assert_not_called()
+    mock_Mailbox_add_emails_from_file.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 
@@ -529,7 +566,7 @@ def test_upload_mailbox_no_format_auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
-    mock_Mailbox_add_from_mailbox_file,
+    mock_Mailbox_add_emails_from_file,
     fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
@@ -544,22 +581,22 @@ def test_upload_mailbox_no_format_auth_owner(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    mock_Mailbox_add_from_mailbox_file.assert_not_called()
+    mock_Mailbox_add_emails_from_file.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_bad_format_auth_owner(
+def test_upload_mailbox_bad_file_or_format_auth_owner(
     faker,
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
-    mock_Mailbox_add_from_mailbox_file,
+    mock_Mailbox_add_emails_from_file,
     fake_file,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated owner user client."""
-    mock_Mailbox_add_from_mailbox_file.side_effect = ValueError
+    mock_Mailbox_add_emails_from_file.side_effect = ValueError(faker.text())
     fake_format = faker.word()
 
     assert fake_mailbox.emails.all().count() == 1
@@ -572,10 +609,9 @@ def test_upload_mailbox_bad_format_auth_owner(
         format="multipart",
     )
 
-    assert response.status_code == status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
-    mock_Mailbox_add_from_mailbox_file.assert_called_once_with(
-        fake_mailbox, fake_file.getvalue(), fake_format
-    )
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data["detail"] == str(mock_Mailbox_add_emails_from_file.side_effect)
+    mock_Mailbox_add_emails_from_file.assert_called_once()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 

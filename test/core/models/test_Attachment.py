@@ -22,6 +22,7 @@ import datetime
 import email
 import os
 from io import BytesIO
+from zipfile import ZipFile
 
 import django.db.models
 import pytest
@@ -248,6 +249,39 @@ def test_Attachment_save_with_data_failure(
 
     spy_save.assert_called()
     mock_Attachment_save_to_storage.assert_called()
+
+
+@pytest.mark.django_db
+def test_Attachment_queryset_as_file(
+    fake_file, fake_attachment, fake_attachment_with_file
+):
+    assert Attachment.objects.count() == 2
+
+    result = Attachment.queryset_as_file(Attachment.objects.all())
+
+    assert Attachment.objects.count() == 2
+    assert hasattr(result, "read")
+    with ZipFile(result) as zipfile:
+        assert zipfile.namelist() == [
+            os.path.basename(fake_attachment_with_file.file_path)
+        ]
+        with zipfile.open(
+            os.path.basename(fake_attachment_with_file.file_path)
+        ) as zipped_file:
+            assert zipped_file.read().strip() == fake_file.getvalue().strip()
+    assert hasattr(result, "close")
+    result.close()
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+def test_Attachment_queryset_as_file_mailbox_empty_queryset():
+    assert Attachment.objects.count() == 0
+
+    with pytest.raises(Attachment.DoesNotExist):
+        Attachment.queryset_as_file(Attachment.objects.none())
+
+    assert Attachment.objects.count() == 0
 
 
 @pytest.mark.django_db

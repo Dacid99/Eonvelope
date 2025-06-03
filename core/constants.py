@@ -20,6 +20,7 @@
 
 from __future__ import annotations
 
+import mailbox
 from typing import Final
 
 from django.db.models import TextChoices
@@ -158,12 +159,37 @@ class HeaderFields:
         )
 
 
+class SupportedEmailDownloadFormats(TextChoices):
+    """All fileformats that are available for download of emaildata.
+
+    The file extension is taken from the value as value.split("[]").
+    """
+
+    ZIP_EML = "zip[eml]", _(".zip with .eml files inside")
+    MBOX = "mbox", _(".mbox")
+    BABYL = "babyl", _(".babyl")
+    MMDF = "mmdf", _(".mmdf")
+    MH = "zip[mh]", _(".zip with mh mailbox inside")
+    MAILDIR = "zip[maildir]", _(".zip with maildir mailbox inside")
+
+
 class SupportedEmailUploadFormats(TextChoices):
     """All fileformats that are supported for upload of emaildata."""
 
     EML = "eml", _(".eml")
+    ZIP_EML = "zip[eml]", _(".zip with .eml files inside")
     MBOX = "mbox", _(".mbox")
-    MH = "mh", _(".mh")
     BABYL = "babyl", _(".babyl")
     MMDF = "mmdf", _(".mmdf")
-    MAILDIR = "maildir", _(".maildir")
+    MH = "zip[mh]", _(".zip with mh mailbox inside")
+    MAILDIR = "zip[maildir]", _(".zip with maildir mailbox inside")
+
+
+file_format_parsers: Final[dict[str, type[mailbox.Mailbox]]] = {
+    SupportedEmailUploadFormats.MBOX.value: mailbox.mbox,
+    SupportedEmailUploadFormats.BABYL.value: mailbox.Babyl,
+    SupportedEmailUploadFormats.MMDF.value: mailbox.MMDF,
+    SupportedEmailUploadFormats.MAILDIR.value: mailbox.Maildir,
+    SupportedEmailUploadFormats.MH.value: mailbox.MH,
+}
+"""Mapping of supported file formats to their parser classes."""

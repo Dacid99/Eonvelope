@@ -20,10 +20,12 @@
 
 from __future__ import annotations
 
+import contextlib
 import logging
-import mailbox
-from tempfile import NamedTemporaryFile
-from typing import TYPE_CHECKING, Final, override
+import os
+from tempfile import NamedTemporaryFile, TemporaryDirectory
+from typing import TYPE_CHECKING, BinaryIO, Final, override
+from zipfile import BadZipFile, ZipFile
 
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
@@ -31,9 +33,12 @@ from django.utils.translation import gettext_lazy as _
 
 from Emailkasten.utils.workarounds import get_config
 
-from ..mixins.FavoriteMixin import FavoriteMixin
-from ..mixins.UploadMixin import UploadMixin
-from ..mixins.URLMixin import URLMixin
+from ..constants import (
+    SupportedEmailDownloadFormats,
+    SupportedEmailUploadFormats,
+    file_format_parsers,
+)
+from ..mixins import FavoriteMixin, HasDownloadMixin, UploadMixin, URLMixin
 from ..utils.fetchers.exceptions import MailAccountError, MailboxError
 from ..utils.mail_parsing import parse_mailbox_name
 from .Email import Email
@@ -42,12 +47,18 @@ from .Email import Email
 if TYPE_CHECKING:
     from .Account import Account
 
-
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class Mailbox(DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Model):
+class Mailbox(
+    DirtyFieldsMixin,
+    URLMixin,
+    UploadMixin,
+    HasDownloadMixin,
+    FavoriteMixin,
+    models.Model,
+):
     """Database model for a mailbox in a mail account."""
 
     name = models.CharField(max_length=255)
@@ -200,44 +211,80 @@ class Mailbox(DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Mod
 
         logger.info("Successfully saved fetched emails.")
 
-    def add_from_mailbox_file(self, file_data: bytes, file_format: str) -> None:
-        """Adds emails from a mailbox file to the db.
-
-        Supported formats are implemented via the :mod:`mailbox` package.
+    def add_emails_from_file(self, file: BinaryIO, file_format: str) -> None:
+        """Adds emails from a file to the db.
 
         Args:
             file_data: The bytes of the mailbox file.
             file_format: The format of the mailbox file. Case-insensitive.
 
         Raises:
-            ValueError: If the file format is not implemented.
+            ValueError: If the file format is not implemented or the file failed to open.
         """
         file_format = file_format.lower()
-        logger.info("Adding emails from %s mailbox file to %s ...", file_format, self)
-        if file_format == "mbox":
-            format_class: type[mailbox.Mailbox] = mailbox.mbox
-        elif file_format == "mh":
-            format_class = mailbox.MH
-        elif file_format == "babyl":
-            format_class = mailbox.Babyl
-        elif file_format == "mmdf":
-            format_class = mailbox.MMDF
-        elif file_format == "maildir":
-            format_class = mailbox.Maildir
+        logger.info("Adding emails from %s file to %s ...", file_format, self)
+        if file_format == SupportedEmailUploadFormats.EML:
+            Email.create_from_email_bytes(file.read(), mailbox=self)
+        elif file_format == SupportedEmailUploadFormats.ZIP_EML:
+            try:
+                with ZipFile(file) as zipfile:
+                    for zipped_file in zipfile.namelist():
+                        Email.create_from_email_bytes(
+                            zipfile.read(zipped_file), mailbox=self
+                        )
+            except BadZipFile as error:
+                raise ValueError("The given file could not be processed!") from error
+        elif file_format in [
+            SupportedEmailUploadFormats.MBOX,
+            SupportedEmailUploadFormats.MMDF,
+            SupportedEmailUploadFormats.BABYL,
+        ]:
+            parser_class = file_format_parsers[file_format]
+            with NamedTemporaryFile() as tempfile:
+                tempfile.write(file.read())
+                parser = parser_class(tempfile.name, create=False)
+                parser.lock()
+                for key in parser.iterkeys():
+                    with contextlib.suppress(
+                        AssertionError
+                    ):  # Babyl.get_bytes can raise AssertionError for a bad message
+                        Email.create_from_email_bytes(
+                            parser.get_bytes(key), mailbox=self
+                        )
+                parser.close()
+        elif file_format in [
+            SupportedEmailUploadFormats.MAILDIR,
+            SupportedEmailUploadFormats.MH,
+        ]:
+            parser_class = file_format_parsers[file_format]
+            with TemporaryDirectory() as tempdirpath:
+                try:
+                    with ZipFile(file) as zipfile:
+                        zipfile.extractall(tempdirpath)
+                except BadZipFile as error:
+                    raise ValueError(
+                        "The given file could not be processed!"
+                    ) from error
+                for name in os.listdir(tempdirpath):
+                    path = os.path.join(tempdirpath, name)
+                    if os.path.isdir(path):
+                        parser = parser_class(path, create=False)
+                        parser.lock()
+                        try:
+                            for key in parser.iterkeys():
+                                Email.create_from_email_bytes(
+                                    parser.get_bytes(key), mailbox=self
+                                )
+                        except (
+                            FileNotFoundError
+                        ) as error:  # raised if the given maildir doesnt have the expected structure
+                            raise ValueError(
+                                "The given file could not be processed!"
+                            ) from error
+                        parser.close()
         else:
-            logger.info(
-                "Failed adding emails from mailbox file to %s, format %s is not implemented.",
-                file_format,
-                self,
-            )
-            raise ValueError(f"Mailbox fileformat {file_format} is not implemented!")
-        with NamedTemporaryFile(delete_on_close=False) as tempfile:
-            tempfile.write(file_data)
-            tempfile.close()
-            mailbox_file = format_class(tempfile.name)  # type: ignore[abstract]  # Mailbox class is never instantiated, it's just used for typing
-            for key in mailbox_file.iterkeys():
-                Email.create_from_email_bytes(mailbox_file.get_bytes(key), self)
-        logger.info("Successfully added emails from mailbox file.")
+            raise ValueError("The given file format is not supported!")
+        logger.info("Successfully added emails from file.")
 
     @classmethod
     def create_from_data(cls, mailbox_data: bytes, account: Account) -> Mailbox:
@@ -262,3 +309,16 @@ class Mailbox(DirtyFieldsMixin, URLMixin, UploadMixin, FavoriteMixin, models.Mod
             new_mailbox.save()
             logger.debug("Successfully saved mailbox to db!")
         return new_mailbox
+
+    @override
+    @property
+    def has_download(self) -> bool:
+        return True
+
+    def available_download_formats(self) -> list[tuple[str, str]]:
+        """Get all formats that emails in this mailbox can be downloaded.
+
+        Returns:
+            A list of download formats and format names.
+        """
+        return SupportedEmailDownloadFormats.choices

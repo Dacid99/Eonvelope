@@ -23,6 +23,8 @@ from __future__ import annotations
 import datetime
 import os
 from io import BytesIO
+from tempfile import TemporaryDirectory
+from zipfile import ZipFile
 
 import django.db.models
 import pytest
@@ -31,7 +33,11 @@ from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
 
-from core.constants import HeaderFields
+from core.constants import (
+    HeaderFields,
+    SupportedEmailDownloadFormats,
+    file_format_parsers,
+)
 from core.models import Correspondent, Email, Mailbox, MailingList
 
 from ...conftest import TEST_EMAIL_PARAMETERS
@@ -473,6 +479,133 @@ def test_Email_is_spam(fake_email, x_spam, expected_result):
     result = fake_email.is_spam()
 
     assert result is expected_result
+
+
+@pytest.mark.django_db
+def test_Email_queryset_as_file_zip_eml(fake_file, fake_email, fake_email_with_file):
+    assert Email.objects.count() == 2
+
+    result = Email.queryset_as_file(
+        Email.objects.all(), SupportedEmailDownloadFormats.ZIP_EML
+    )
+
+    assert Email.objects.count() == 2
+    assert hasattr(result, "read")
+    with ZipFile(result) as zipfile:
+        assert zipfile.namelist() == [
+            os.path.basename(fake_email_with_file.eml_filepath)
+        ]
+        with zipfile.open(
+            os.path.basename(fake_email_with_file.eml_filepath)
+        ) as zipped_file:
+            assert (
+                zipped_file.read().replace(b"\r", b"").strip()
+                == default_storage.open(fake_email_with_file.eml_filepath)
+                .read()
+                .replace(b"\r", b"")
+                .strip()
+            )
+    assert hasattr(result, "close")
+    result.close()
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailDownloadFormats.MBOX,
+        SupportedEmailDownloadFormats.MMDF,
+        SupportedEmailDownloadFormats.BABYL,
+        SupportedEmailDownloadFormats.MBOX.title(),
+        SupportedEmailDownloadFormats.MMDF.title(),
+        SupportedEmailDownloadFormats.BABYL.title(),
+    ],
+)
+def test_Email_queryset_as_file_mailbox_file(
+    fake_file, fake_email, fake_email_with_file, file_format
+):
+    assert Email.objects.count() == 2
+
+    result = Email.queryset_as_file(Email.objects.all(), file_format)
+
+    assert Email.objects.count() == 2
+    assert hasattr(result, "read")
+    assert hasattr(result, "name")
+    parser_class = file_format_parsers[file_format.lower()]
+    parser = parser_class(result.name)
+    assert len(list(parser.iterkeys())) == 1
+    for key in parser.iterkeys():
+        assert (
+            parser.get_bytes(key).replace(b"\r", b"").strip()
+            == default_storage.open(fake_email_with_file.eml_filepath)
+            .read()
+            .replace(b"\r", b"")
+            .strip()
+        )
+    assert hasattr(result, "close")
+    result.close()
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailDownloadFormats.MAILDIR,
+        SupportedEmailDownloadFormats.MH,
+        SupportedEmailDownloadFormats.MAILDIR.title(),
+        SupportedEmailDownloadFormats.MH.title(),
+    ],
+)
+def test_Email_queryset_as_file_mailbox_zip(
+    fake_file, fake_email, fake_email_with_file, file_format
+):
+    assert Email.objects.count() == 2
+
+    result = Email.queryset_as_file(Email.objects.all(), file_format)
+
+    assert Email.objects.count() == 2
+    assert hasattr(result, "read")
+    with TemporaryDirectory() as tempdir:
+        with ZipFile(result) as zipfile:
+            zipfile.extractall(tempdir)
+        parser_class = file_format_parsers[file_format.lower()]
+        parser = parser_class(os.path.join(tempdir, os.listdir(tempdir)[0]))
+        assert len(list(parser.iterkeys())) == 1
+        for key in parser.iterkeys():
+            assert (
+                parser.get_bytes(key).replace(b"\r", b"").strip()
+                == default_storage.open(fake_email_with_file.eml_filepath)
+                .read()
+                .replace(b"\r", b"")
+                .strip()
+            )
+    assert hasattr(result, "close")
+    result.close()
+    assert os.listdir("/tmp") == []
+
+
+@pytest.mark.django_db
+def test_Email_queryset_as_file_mailbox_bad_format(fake_email):
+    assert Email.objects.count() == 1
+
+    with pytest.raises(ValueError):
+        Email.queryset_as_file(Email.objects.all(), "unSupPortEd")
+
+    assert Email.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_Email_queryset_as_file_mailbox_empty_queryset():
+    assert Email.objects.count() == 0
+
+    with pytest.raises(Email.DoesNotExist):
+        Email.queryset_as_file(
+            Email.objects.none(), SupportedEmailDownloadFormats.ZIP_EML
+        )
+
+    assert Email.objects.count() == 0
 
 
 @pytest.mark.django_db

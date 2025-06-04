@@ -85,7 +85,7 @@ def test_POP3Fetcher_connect_to_host_exception(
 ):
     mock_POP3_SSL.side_effect = AssertionError
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(MailAccountError, match="AssertionError occurred"):
         POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
 
     kwargs = {"host": pop3_ssl_mailbox.account.mail_host, "context": None}

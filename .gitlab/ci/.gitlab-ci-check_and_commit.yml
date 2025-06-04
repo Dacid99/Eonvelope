@@ -32,6 +32,7 @@ check_and_commit_codebase:
         echo "Djlint failed, please check "$CHECK_REPORT_PATH"djlint_prebuild.ansi ."
         exit 1
       fi
+    - poetry run codespell --config=$CHECK_CONFIG_PATH'.codespellrc' Emailkasten/ core/ api/ web/ test/ docs/ .gitea/ .github/ .gitlab/ *.md >> $CHECK_REPORT_PATH'codespell_prebuild.ansi'
     - echo "Successfully checked codebase."
     - echo "Commiting changes to codebase ..."
     - git add .

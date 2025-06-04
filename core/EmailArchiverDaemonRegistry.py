@@ -28,7 +28,7 @@ from .models import Daemon
 
 
 class EmailArchiverDaemonRegistry:
-    """Daemon registry for managment of the running :class:`core.EmailArchiverDaemon.EmailArchiverDaemon` instances."""
+    """Daemon registry for management of the running :class:`core.EmailArchiverDaemon.EmailArchiverDaemon` instances."""
 
     _running_daemons: ClassVar[dict[int, EmailArchiverDaemon]] = {}
     """A static dictionary of all active daemon instances with their database IDs as keys."""
@@ -111,7 +111,7 @@ class EmailArchiverDaemonRegistry:
             daemon: The data of the daemon.
 
         Returns:
-            `True` if the daemon was stopped, `False` if it wasnt running.
+            `True` if the daemon was stopped, `False` if it wasn't running.
         """
         if cls.is_running(daemon):
             cls.logger.debug("Stopping daemon %s ...", daemon)

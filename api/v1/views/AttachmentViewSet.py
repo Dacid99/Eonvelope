@@ -97,7 +97,7 @@ class AttachmentViewSet(
             pk: The private key of the attachment to download. Defaults to None.
 
         Raises:
-            Http404: If the filepath is not in the database or it doesnt exist.
+            Http404: If the filepath is not in the database or it doesn't exist.
 
         Returns:
             A fileresponse containing the requested file.

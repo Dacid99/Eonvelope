@@ -27,5 +27,8 @@ dmypy-check:
 types:
 	python3 -m autotyping --safe ../Emailkasten ../core/ ../api/ ../web/
 
+spelling: .codespellrc
+	codespell ../Emailkasten/ ../core/ ../api/ ../web/ ../test/ ../docs/ ../.gitea/ ../.github/ ../.gitlab/ ../*.md --config=$< | tee reports/codespell.ansi
+
 clean:
 	rm -f reports/* ../docs/build/html/mypy_report/*

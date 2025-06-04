@@ -91,12 +91,12 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/attachmentjson.eml",
         {
             "message_id": "<e047e14d-2397-435b-baf6-8e8b7423f860@bvncmx.com>",
-            "email_subject": "Whats up",
+            "email_subject": "What's up",
             "date": datetime(
                 2024, 8, 7, 11, 41, 29, tzinfo=timezone(timedelta(seconds=7200))
             ),
             "x_spam": "NO",
-            "plain_bodytext": "this a test to see how ur doin\r\n\r\n\r\n\r\n\r\n",
+            "plain_bodytext": "this a test to see how ur doing\r\n\r\n\r\n\r\n\r\n",
             "html_bodytext": "",
             "references": [],
             "header_count": 20,

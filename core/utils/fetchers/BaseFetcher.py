@@ -163,6 +163,6 @@ class BaseFetcher(ABC):
         """
         if exc_value or exc_type:
             self.logger.error(
-                "An error %s occured, exiting Fetcher!", exc_type, exc_info=exc_value
+                "An error %s occurred, exiting Fetcher!", exc_type, exc_info=exc_value
             )
         self.close()

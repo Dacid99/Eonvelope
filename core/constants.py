@@ -31,7 +31,7 @@ class EmailFetchingCriterionChoices(TextChoices):
     """Namespace class for all implemented mail fetching criteria constants.
 
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
-    Note that IMAP does not support time just dates. So we are always refering to full days.
+    Note that IMAP does not support time just dates. So we are always referring to full days.
     POP does not support queries at all, so everything will be fetched.
     """
 

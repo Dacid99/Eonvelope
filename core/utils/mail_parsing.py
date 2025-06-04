@@ -251,7 +251,7 @@ def message2html(email_message: EmailMessage) -> str:
             "</html>",
             f"<p><hr><p><b>Attached Files:</b><p><ul>{attachments_footer}</ul></html>",
         )
-    return get_sanitizer().sanitize(html)  # type: ignore[no-any-return]  # always returns a str, mypy cant read html_sanitizer
+    return get_sanitizer().sanitize(html)  # type: ignore[no-any-return]  # always returns a str, mypy can't read html_sanitizer
 
 
 def is_x_spam(x_spam_header: str | None) -> bool:

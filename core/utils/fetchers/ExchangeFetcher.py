@@ -113,6 +113,6 @@
 #         self.close()
 #         if exc_value or exc_type:
 #             self.logger.error(
-#                 "Unexpected error %s occured!", exc_type, exc_info=exc_value
+#                 "Unexpected error %s occurred!", exc_type, exc_info=exc_value
 #             )
 #         return True

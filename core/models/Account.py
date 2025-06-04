@@ -178,7 +178,7 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
             The fetcher class for the account.
 
         Raises:
-            ValueError: If the protocol doesnt match any fetcher class.
+            ValueError: If the protocol doesn't match any fetcher class.
                 Marks the account as unhealthy in this case.
         """
         if self.protocol == IMAP4Fetcher.PROTOCOL:
@@ -210,7 +210,7 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
             A fetcher instance for the account.
 
         Raises:
-            ValueError: If the protocol doesnt match any fetcher class.
+            ValueError: If the protocol doesn't match any fetcher class.
                 Marks the account as unhealthy in this case.
             MailAccountError: If the fetcher fails to initialize.
                 Marks the account as unhealthy in this case.

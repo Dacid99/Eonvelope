@@ -203,8 +203,8 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
             '"Gesendete Objekte"',
         ),
         (
-            b'(\\HasNoChildren) "/" Archiv/2024',
-            "Archiv/2024",
+            b'(\\HasNoChildren) "/" Archive/2024',
+            "Archive/2024",
         ),
     ],
 )

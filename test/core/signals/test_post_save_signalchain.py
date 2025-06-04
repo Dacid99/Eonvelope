@@ -40,7 +40,7 @@ def test_illegal_states(
     mailbox_is_healthy,
     daemons_is_healthy,
 ):
-    """Tests for existance of states that are impossible under the is_healthy signal chain."""
+    """Tests for existence of states that are impossible under the is_healthy signal chain."""
     mailbox_with_daemons.account.is_healthy = account_is_healthy
     mailbox_with_daemons.account.save(update_fields=["is_healthy"])
     mailbox_with_daemons.refresh_from_db()

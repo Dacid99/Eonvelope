@@ -17,7 +17,7 @@ I have found a problem with the application, what should I do?
 Please try to figure out whether the problem may be specific for your setup first.
 If it is not, please file an issue in one of the online repositories.
 
-In case the problem is not related to the source code itself, there is unfortunatly not much we can do about it.
+In case the problem is not related to the source code itself, there is unfortunately not much we can do about it.
 Please try to debug it with other users and admins over stack-overflow, reddit or other platforms.
 
 If the problem is security-related please contact one of the developers privately instead.

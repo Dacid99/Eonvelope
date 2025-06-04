@@ -89,11 +89,11 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
                 self._mail_client = poplib.POP3(host=mail_host)
         except Exception as error:
             self.logger.exception(
-                "A POP error occured connecting to %s!",
+                "A POP error occurred connecting to %s!",
                 self.account,
             )
             raise MailAccountError(
-                f"An {error.__class__.__name__}: {error} occured connecting to {self.account}!"
+                f"An {error.__class__.__name__}: {error} occurred connecting to {self.account}!"
             ) from error
         self.logger.info("Successfully connected to %s.", self.account)
 

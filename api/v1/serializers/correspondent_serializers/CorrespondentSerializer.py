@@ -19,7 +19,7 @@
 """Module with the :class:`CorrespondentSerializer` serializer class."""
 
 # ruff: noqa: TC001 TC002
-# TYPE_CHECKING guard doesnt work with drf-spectacular: https://github.com/tfranzel/drf-spectacular/issues/390
+# TYPE_CHECKING guard doesn't work with drf-spectacular: https://github.com/tfranzel/drf-spectacular/issues/390
 
 from __future__ import annotations
 

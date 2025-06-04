@@ -126,7 +126,7 @@ class EmailArchiverDaemon(threading.Thread):
         """The routine of this daemon.
 
         Fetches and saves mails. Logs the execution time.
-        A successul run sets the daemon to healthy.
+        A successful run sets the daemon to healthy.
 
         Raises:
             Exception: Any exception thrown during execution of the routine.

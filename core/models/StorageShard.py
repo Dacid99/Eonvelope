@@ -158,7 +158,7 @@ class StorageShard(models.Model):
         correct_dir_count = cls.objects.count() == len(root_listdir[0])
         if not correct_dir_count:
             logger.critical(
-                "Number of paths in storage doesnt match the index in the database!!!"
+                "Number of paths in storage doesn't match the index in the database!!!"
             )
             return False
 

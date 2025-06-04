@@ -398,5 +398,5 @@ msgstr ""
 #: core/utils/fetchers/SafeIMAPMixin.py:161
 #: core/utils/fetchers/SafePOPMixin.py:150
 #, python-format
-msgid "An %(error_class_name)s: %(error)s occured during %(action_name)s!"
+msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
 msgstr "Ein %(error_class_name)s: %(error)s trat während %(action_name)s auf!"

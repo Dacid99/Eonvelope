@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_config(setting: str) -> Any:
-    """A dirty workaround to enable constance to do the inital migration.
+    """A dirty workaround to enable constance to do the initial migration.
 
     Initial migrations fail otherwise because the models depend on constance that is not initialized yet.
     See https://github.com/jazzband/django-constance/issues/229

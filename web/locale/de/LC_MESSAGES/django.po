@@ -83,7 +83,7 @@ msgid "Internal Error"
 msgstr "Interner Fehler"
 
 #: web/templates/500.html:17
-msgid "An unexpected error occured while processing your request."
+msgid "An unexpected error occurred while processing your request."
 msgstr ""
 "Ein unerwarteter Fehler ist beim Verarbeiten deiner Anfrage aufgetreten."
 

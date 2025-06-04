@@ -23,7 +23,7 @@ The project is intended to be run with *docker compose* using the [compose file]
 Alternatively, you can run the application bare metal.
 
 1. Clone this repo.
-1. Install the dependencies for python and the system as described in [the developement guide](DEVELOPMENT.md).
+1. Install the dependencies for python and the system as described in [the development guide](DEVELOPMENT.md).
 1. Spin up a mysql db server matching the configurations in [the django application settings](Emailkasten/settings.py) on your machine.
 
 Finally the Emailkasten server is started via [the entrypoint script](docker/entrypoint.sh).
@@ -32,9 +32,9 @@ Finally the Emailkasten server is started via [the entrypoint script](docker/ent
 
 If you want to help us improving this projetc that is great! Please don't hesitate to approach us with ideas. And of course we are looking forward to your pull requests!
 
-To get you started smoothly just follow [the developement guide](DEVELOPMENT.md). This will help you set up a workspace for working with this project conveniently!
+To get you started smoothly just follow [the development guide](DEVELOPMENT.md). This will help you set up a workspace for working with this project conveniently!
 
-In order to keep the code maintainable and in a consistant style please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
+In order to keep the code maintainable and in a consistent style please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
 
 ## Docs
 

@@ -174,7 +174,7 @@ class MailboxViewSet(
         except FetcherError as error:
             response = Response(
                 {
-                    "detail": "Error with mailaccount or mailbox occured!",
+                    "detail": "Error with mailaccount or mailbox occurred!",
                     "error": str(error),
                 },
                 status=status.HTTP_400_BAD_REQUEST,

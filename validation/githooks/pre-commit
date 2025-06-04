@@ -54,6 +54,8 @@ else
   fi
 fi
 
+#spellcheck
+poetry run codespell --config=$CONFIG_PATH'.codespellrc' Emailkasten/ core/ api/ web/ test/ docs/ .gitea/ .github/ .gitlab/ *.md >> $REPORT_PATH'codespell_precommit.ansi'
 
 echo "All precommit actions passed successfully."
 exit 0

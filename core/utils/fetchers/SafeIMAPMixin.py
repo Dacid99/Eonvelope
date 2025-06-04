@@ -68,7 +68,7 @@ class SafeIMAPMixin:
     ) -> None:
         """Checks the status response of an IMAP action.
 
-        If it doesnt match the expectation raises an exception.
+        If it doesn't match the expectation raises an exception.
 
         Todo:
             Safely! extract error message from response for logging and exception.
@@ -76,11 +76,11 @@ class SafeIMAPMixin:
         Args:
             response: The complete response to the IMAP action.
             command_name: The name of the action.
-            exception: The expection to raise if the status doesnt match the expectation. Defaults to :class:`core.utils.fetchers.exceptions.FetcherError`.
+            exception: The exception to raise if the status doesn't match the expectation. Defaults to :class:`core.utils.fetchers.exceptions.FetcherError`.
             expected_status: The expected status response. Defaults to `"OK"`.
 
         Raises:
-            exception: If the response status doesnt match the expectation.
+            exception: If the response status doesn't match the expectation.
         """
         if response[0] != expected_status:
             self.logger.error(
@@ -127,7 +127,7 @@ class SafeIMAPMixin:
             Find a better way to disable the exception and getting rid of the typing mess.
 
         Args:
-            exception: The exception to raise if an error occurs or the status doesnt match the expectation.
+            exception: The exception to raise if an error occurs or the status doesn't match the expectation.
                 Defaults to :class:`core.utils.fetchers.exceptions.FetcherError`.
                 If `None` is passed, no exception is raised, all errors are logged nonetheless.
             expected_status: The expected status response. Defaults to `"OK"`.
@@ -137,7 +137,7 @@ class SafeIMAPMixin:
             None if an error occurs and `exception` is `None`.
 
         Raises:
-            exception: If an error occurs or the status doesnt match the expectation.
+            exception: If an error occurs or the status doesn't match the expectation.
         """
 
         def safe_wrapper(
@@ -151,14 +151,14 @@ class SafeIMAPMixin:
                     response = imap_action(self, *args, **kwargs)
                 except Exception as error:
                     self.logger.exception(
-                        "An %s occured during %s!",
+                        "An %s occurred during %s!",
                         error.__class__.__name__,
                         imap_action.__name__,
                     )
                     if exception is not None:
                         raise exception(
                             _(
-                                "An %(error_class_name)s: %(error)s occured during %(action_name)s!"
+                                "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
                             )
                             % {
                                 "error_class_name": error.__class__.__name__,

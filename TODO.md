@@ -45,6 +45,8 @@
 - identification of mailinglists via from
 - time benchmarks in debug log
 - batch download in web
+- dependency-upgrading tool for your project dependencies? (eg. dependabot, PyUp, Renovate, pip-tools, Snyx
+- vulnerability scanning tool for your dependencies? (eg. Safety, pip-audit, Bandit, Snyx, Trivy, GitLab Dependency Scanning, PyUp, OWASP, Jake, Mend
 
 ### For production
 
@@ -71,6 +73,6 @@
 - storage is incremented by healthcheck
 - correspondent is not user specific!
 - mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>
-- cascase doesnt trigger delete!
+- cascase doesn't trigger delete!
 - optics:
   - stats table out of bounds for slim viewport

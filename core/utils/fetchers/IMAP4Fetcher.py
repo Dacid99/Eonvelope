@@ -129,12 +129,12 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
                 self._mail_client = imaplib.IMAP4(host=mail_host)
         except Exception as error:
             self.logger.exception(
-                "An %s occured connecting to %s!",
+                "An %s occurred connecting to %s!",
                 error.__class__.__name__,
                 self.account,
             )
             raise MailAccountError(
-                f"An {error.__class__.__name__}: {error} occured connecting to {self.account}!"
+                f"An {error.__class__.__name__}: {error} occurred connecting to {self.account}!"
             ) from error
         self.logger.info("Successfully connected to %s.", self.account)
 

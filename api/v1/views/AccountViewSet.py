@@ -121,7 +121,7 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         except MailAccountError as error:
             response = Response(
                 data={
-                    "detail": "Error with mailaccount occured!",
+                    "detail": "Error with mailaccount occurred!",
                     "error": str(error),
                 },
                 status=status.HTTP_400_BAD_REQUEST,

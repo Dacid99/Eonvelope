@@ -29,7 +29,7 @@ dependencies = [
     "django-crispy-forms (>=2.4,<3.0)",
     "crispy-bootstrap5 (>=2025.4,<2026.0)",
     "django-environ (>=0.12.0,<0.13.0)",
-    "whitenoise (>=6.9.0,<7.0.0)"
+    "whitenoise (>=6.9.0,<7.0.0)",
 ]
 
 [tool.poetry]
@@ -64,6 +64,7 @@ model-bakery = "^1.20.4"
 pylintfileheader = "^1.0.0"
 freezegun = "^1.5.1"
 djlint = "^1.36.4"
+codespell = "^2.4.1"
 
 [tool.poetry.group.docs]
 optional=true

@@ -85,7 +85,7 @@ msgid "Internal Error"
 msgstr ""
 
 #: web/templates/500.html:17
-msgid "An unexpected error occured while processing your request."
+msgid "An unexpected error occurred while processing your request."
 msgstr ""
 
 #: web/templates/web/account/account_create.html:6

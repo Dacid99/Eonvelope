@@ -141,7 +141,7 @@ class Mailbox(
         Raises:
             ValueError: If the account has an unimplemented protocol.
         """
-        return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesnt get this
+        return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
 
     def test_connection(self) -> None:
         """Tests whether the data in the model is correct.
@@ -268,7 +268,7 @@ class Mailbox(
                                 )
                         except (
                             FileNotFoundError
-                        ) as error:  # raised if the given maildir doesnt have the expected structure
+                        ) as error:  # raised if the given maildir doesn't have the expected structure
                             raise ValueError(
                                 "The given file could not be processed!"
                             ) from error

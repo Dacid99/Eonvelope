@@ -88,7 +88,7 @@ def test_IMAP4Fetcher_connect_to_host_exception(
 ):
     mock_IMAP4_SSL.side_effect = AssertionError
 
-    with pytest.raises(MailAccountError, match="AssertionError occured"):
+    with pytest.raises(MailAccountError, match="AssertionError occurred"):
         IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
     kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}

@@ -33,7 +33,7 @@ from ...forms.UploadEmailForm import UploadEmailForm
 
 
 class UploadEmailView(LoginRequiredMixin, DetailView, FormView):
-    """View for uploading email and mailbox files to a maibox."""
+    """View for uploading email and mailbox files to a mailbox."""
 
     URL_NAME = Mailbox.get_upload_web_url_name()
     model = Mailbox

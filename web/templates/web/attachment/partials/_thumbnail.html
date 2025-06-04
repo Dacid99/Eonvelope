@@ -1,18 +1,18 @@
 {% if attachment.content_maintype == "audio" %}
-    <audio controls src="{{ object.get_absolute_thumbnail_url }}"></audio>
-    {% if attachment.content_maintype == "video" %}
-        <video controls
-               class="mh-100 w-auto p-1"
-               src="{{ object.get_absolute_thumbnail_url }}">
-        </video>
-    {% elif attachment.content_maintype == "image" %}
-        <img src="{{ object.get_absolute_thumbnail_url }}"
-             class="mh-100 w-auto p-1"
-             alt="Attachment image" />
-    {% elif attachment.content_maintype == "text" %}
-        <iframe src="{{ object.get_absolute_thumbnail_url }}"
-                class="w-100 h-100 p-1"
-                title="Attachment text"
-                alt="Attachment text"
-                sandbox></iframe>
-    {% endif %}
+    <audio controls src="{{ attachment.get_absolute_thumbnail_url }}"></audio>
+{% elif attachment.content_maintype == "video" %}
+    <video controls
+           class="mh-100 w-auto p-1"
+           src="{{ attachment.get_absolute_thumbnail_url }}">
+    </video>
+{% elif attachment.content_maintype == "image" %}
+    <img src="{{ attachment.get_absolute_thumbnail_url }}"
+         class="mh-100 w-auto p-1"
+         alt="Attachment image" />
+{% elif attachment.content_maintype == "text" %}
+    <iframe src="{{ attachment.get_absolute_thumbnail_url }}"
+            class="w-100 h-100 p-1"
+            title="Attachment text"
+            alt="Attachment text"
+            sandbox></iframe>
+{% endif %}

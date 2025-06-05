@@ -31,7 +31,7 @@ services:
       - /main/Emailkasten/test/archive:/mnt/archive
       - /main/Emailkasten/test/log:/var/log
     ports:
-      - 1122:8000
+      - 1122:443
     environment:
       - DATABASE=email_archive_django # must match db:MARIADB_DATABASE
       - DATABASE_USER=user # must match db:MARIADB_USER
@@ -46,8 +46,8 @@ services:
       - LOGFILE_BACKUP_NUMBER=5
       - RECONNECT_RETRIES=10
       - RECONNECT_DELAY=10
-      - REGISTRATION_ENABLED=True
-      - DEBUG=True
+      - REGISTRATION_ENABLED=False
+      - DEBUG=False
     restart: unless-stopped
     depends_on:
       db:

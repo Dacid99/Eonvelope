@@ -1,6 +1,16 @@
 Installation
 ============
 
+General
+-------
+
+Do not expose this application to the web without a reverse proxy like nginx.
+
+The docker image comes with a SSL certificate issued and signed by the emailkasten project.
+It ensures safe communication between your reverse proxy and within your local network.
+It is not safe for use on the general web.
+
+
 Recommended
 -----------
 

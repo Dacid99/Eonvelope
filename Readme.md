@@ -4,9 +4,9 @@ A open-source self-hosted mail archive using the django framework.
 
 ## We need your opinion
 
-This project is currently in **alpha** stage and does not yet feature a webapp.
+This project is currently in **alpha** stage.
 
-We are looking for people to test run the browsable API and give feedback!
+We are looking for people to test run it and give feedback!
 
 Interested? Just go ahead and run this application on your homelab.
 
@@ -28,6 +28,18 @@ Alternatively, you can run the application bare metal.
 
 Finally the Emailkasten server is started via [the entrypoint script](docker/entrypoint.sh).
 
+## Docs
+
+The documentation is available on ReadTheDocs.
+
+Check it out for details on configuration and instructions on how to use the running server.
+
+## Translation
+
+We are striving to support as many languages as possible to make the application accessible to everyone!
+
+Translation is done via weblate. If you want to add a language that is missing, go check it out! If the language is missing on weblate too, please file an issue using the missing-language template.
+
 ## Contributing
 
 If you want to help us improving this projetc that is great! Please don't hesitate to approach us with ideas. And of course we are looking forward to your pull requests!
@@ -35,12 +47,6 @@ If you want to help us improving this projetc that is great! Please don't hesita
 To get you started smoothly just follow [the development guide](DEVELOPMENT.md). This will help you set up a workspace for working with this project conveniently!
 
 In order to keep the code maintainable and in a consistent style please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
-
-## Docs
-
-The documentation is available on ReadTheDocs.
-
-Check it out for details on configuration and instructions on how to use the running server.
 
 ## License
 

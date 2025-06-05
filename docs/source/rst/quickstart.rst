@@ -13,7 +13,7 @@ For security reasons please change all passwords and the SECRET_KEY.
 
 Now you can start the docker stack with ``docker compose up -d``.
 
-After the container is up you can access the webapp at http://localhost:1122/.
+After the container is up you can access the webapp at https://localhost:1122/.
 
 
 For a detailed overview of the available settings see the :doc:`configurations documentation <configuration>`.

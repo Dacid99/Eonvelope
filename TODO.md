@@ -23,6 +23,7 @@
 
 - safeimap and pop classes
 - move all signals into models
+- navbar base template
 - rework test:
   - disable all signals in tests
   - tests more implementation agnostic
@@ -40,17 +41,15 @@
 - important headers in html repr
 - create daemon view
 - favicon.ico for the icon
-- default ssl cert and safest settings
 - fallback for list-id if other list entries are present
 - identification of mailinglists via from
 - time benchmarks in debug log
 - batch download in web
-- dependency-upgrading tool for your project dependencies? (eg. dependabot, PyUp, Renovate, pip-tools, Snyx
-- vulnerability scanning tool for your dependencies? (eg. Safety, pip-audit, Bandit, Snyx, Trivy, GitLab Dependency Scanning, PyUp, OWASP, Jake, Mend
+- dependency-upgrading tool for your project dependencies? (eg. dependabot, PyUp, Renovate, pip-tools, Snyx)
+- vulnerability scanning tool for your dependencies? (eg. Safety, pip-audit, Bandit, Snyx, Trivy, GitLab Dependency Scanning, PyUp, OWASP, Jake, Mend)
 
 ### For production
 
-- serve with wsgi
 - rtd
 - weblate
 
@@ -70,6 +69,7 @@
 
 ## To fix
 
+- error templates are missing margins
 - storage is incremented by healthcheck
 - correspondent is not user specific!
 - mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>

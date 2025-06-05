@@ -28,7 +28,7 @@ My language is missing in the translations, can I help to add it?
 
 Yes of course, we are always happy to include missing languages!
 Translation is done via weblate. To get a quickstart look at :doc:`the translations instruction <translations>`.
-If your language is also missing on weblate, please file an issue.
+If your language is also missing on weblate, please file an issue using the missing-language template.
 
 
 How can I contribute to this project?

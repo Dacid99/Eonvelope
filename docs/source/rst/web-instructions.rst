@@ -9,6 +9,7 @@ The username is set to ``admin`` and the password is set from the ``DJANGO_SUPER
 You should use this admin account for administrative purposes only.
 
 To log in, open the webapp by opening the IP address of your server with the port of the application, by default ``1122``.
+Emailkasten will force you to use HTTPS, so the url must start with https:// .
 
 After you have logged in, you can make add other user accounts in the django-admin panel.
 

@@ -473,7 +473,7 @@ CONSTANCE_CONFIG = {
         int,
     ),
     "STORAGE_MAX_FILES_PER_DIR": (
-        1000,
+        10000,
         _(
             "The maximum numbers of files in one storage unit. Must not exceed 64000 for ext4 filesystem!"
         ),
@@ -543,7 +543,6 @@ CONSTANCE_FIELDSETS = (
         _("Default Values"),
         (
             "DEFAULT_SAVE_TO_EML",
-            "DEFAULT_SAVE_TO_THUMBNAIL",
             "DEFAULT_SAVE_ATTACHMENTS",
             "DAEMON_CYCLE_PERIOD_DEFAULT",
             "DAEMON_RESTART_TIME_DEFAULT",

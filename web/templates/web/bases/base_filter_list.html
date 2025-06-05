@@ -19,33 +19,38 @@
             {% include "web/partials/_pagination.html" %}
 
         </div>
-        <div class="offcanvas offcanvas-start"
-             data-bs-scroll="true"
-             tabindex="-1"
-             id="offcanvasFilter"
-             aria-labelledby="offcanvasFilterLabel">
-            <div class="offcanvas-header d-flex justify-content-between">
-                <h5 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h5>
-                <div class="btn-group align-items-center">
-
-                    {% include "web/partials/_clear_filter-button.html" %}
-
-                    {% include "web/partials/_clear_and_submit_filter-button.html" %}
-
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="Close"></button>
-                </div>
-            </div>
-            <div class="offcanvas-body">
-
-                {% include "web/partials/_filter-form.html" %}
-
-            </div>
-        </div>
     {% endif %}
 {% endblock pagination %}
+
+
+{% block overlay_elements %}
+    <div class="offcanvas offcanvas-start"
+         data-bs-scroll="true"
+         tabindex="-1"
+         id="offcanvasFilter"
+         aria-labelledby="offcanvasFilterLabel">
+        <div class="offcanvas-header d-flex justify-content-between">
+            <h5 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h5>
+            <div class="btn-group align-items-center">
+
+                {% include "web/partials/_clear_filter-button.html" %}
+
+                {% include "web/partials/_clear_and_submit_filter-button.html" %}
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="offcanvas"
+                        aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="offcanvas-body">
+
+            {% include "web/partials/_filter-form.html" %}
+
+        </div>
+    </div>
+{% endblock overlay_elements %}
+
 
 {% block other_scripts %}
     <script src="{% static 'web/js/form-utils.js' %}"></script>

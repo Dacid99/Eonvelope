@@ -8,6 +8,7 @@ import os
 import sys
 
 import django
+import tomli
 
 
 sys.path.insert(0, os.path.abspath("../.."))
@@ -22,8 +23,12 @@ project = "Emailkasten"
 copyright = "2024-%Y, David Aderbauer"
 author = "David Aderbauer"
 year = datetime.date.today().year
-version = "0.0.0"
-release = "0.0.0"
+
+with open("../../pyproject.toml", "rb") as f:
+    config = tomli.load(f)
+
+version = config["project"]["version"]
+release = config["project"]["version"]
 
 django_version = ".".join(map(str, django.VERSION[0:2]))
 python_version = ".".join(map(str, sys.version_info[0:2]))

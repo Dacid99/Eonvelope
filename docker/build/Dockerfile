@@ -1,6 +1,6 @@
-FROM python:3.13-rc-bookworm
+FROM python:3.13-alpine3.22
 ENV SECRET_KEY='IM_JUST_HERE_AS_A_WORKAROUND'
-RUN apt-get -y update && apt-get -y install gettext build-essential default-mysql-client krb5-user krb5-multidev openssl
+RUN apk update && apk add --no-cache gettext python3-dev linux-headers musl-dev gcc build-base mariadb-connector-c-dev mariadb-dev mariadb-client krb5 openssl
 WORKDIR /mnt
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1

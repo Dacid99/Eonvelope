@@ -32,3 +32,4 @@ If you encounter an issue please let us know via an issue or direct message!
    rst/translations
    rst/developers
    rst/faq
+   rst/changelog

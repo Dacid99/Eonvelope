@@ -20,7 +20,9 @@
 
 from __future__ import annotations
 
+import json
 import logging
+import logging.handlers
 import os
 import uuid
 from typing import TYPE_CHECKING, Any, Final, override
@@ -31,6 +33,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
 from Emailkasten.utils.workarounds import get_config
 
@@ -66,28 +69,17 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
     )
     """The fetching criterion for this mailbox. :attr:`Emailkasten.constants.EmailFetchingCriterionChoices.ALL` by default."""
 
-    cycle_interval = models.PositiveIntegerField(
-        default=get_config("DAEMON_CYCLE_PERIOD_DEFAULT"),
-        verbose_name=_("Cycle Period"),
+    celery_task: models.OneToOneField[PeriodicTask] = models.OneToOneField(
+        PeriodicTask, on_delete=models.CASCADE, null=True
+    )
+
+    interval: models.ForeignKey[IntervalSchedule] = models.ForeignKey(
+        IntervalSchedule,
+        on_delete=models.PROTECT,
+        verbose_name=_("Fetching Interval"),
         help_text=_("The time between two daemon runs in seconds."),
     )
     """The period with which the daemon is running. :attr:`constance.config('DAEMON_CYCLE_PERIOD_DEFAULT')` by default."""
-
-    restart_time = models.PositiveIntegerField(
-        default=get_config("DAEMON_RESTART_TIME_DEFAULT"),
-        verbose_name=_("Restart time"),
-        help_text=_(
-            "The time to wait before restarting the daemon after a crash in seconds."
-        ),
-    )
-    """The time after which a crashed daemon restarts. :attr:`constance.config('DAEMON_RESTART_TIME_DEFAULT')` by default."""
-
-    is_running = models.BooleanField(default=False)
-    """Flags whether the daemon is active. `False` by default.
-
-    Important:
-        This must only be changed by internal mechanism, never by the user!
-    """
 
     is_healthy = models.BooleanField(null=True)
     """Flags whether the daemon is healthy. `None` by default.
@@ -139,8 +131,14 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
                 ),
                 name="fetching_criterion_valid_choice",
             ),
+            models.UniqueConstraint(
+                fields=["mailbox", "fetching_criterion"],
+                name="daemon_unique_together_mailbox_fetching_criterion",
+            ),
         ]
-        """Choices for :attr:`fetching_criterion` are enforced on db level."""
+        """Choices for :attr:`fetching_criterion` are enforced on db level.
+        :attr:`fetching_criterion` and :attr:`mailbox` are unique together.
+        """
 
     @override
     def __str__(self) -> str:
@@ -160,13 +158,33 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
 
         Create and sets :attr:`log_filepath` if it is null.
         """
-
+        if not self.pk:
+            self.celery_task = PeriodicTask.objects.create(
+                interval=self.interval,
+                name=str(self.uuid),
+                task="core.tasks.fetch_emails",
+                args=json.dumps([str(self.uuid)]),
+            )
         if not self.log_filepath:
+            daemon_logger = logging.getLogger(str(self.uuid))
             self.log_filepath = os.path.join(
                 settings.LOG_DIRECTORY_PATH,
-                f"daemon_{self.uuid}.log",
+                f"{daemon_logger.name}.log",
             )
+            file_handler = logging.handlers.RotatingFileHandler(
+                filename=self.log_filepath,
+                backupCount=self.log_backup_count,
+                maxBytes=self.logfile_size,
+            )
+            file_handler.setFormatter(logging.Formatter(settings.LOGFORMAT, style="{"))
+            daemon_logger.addHandler(file_handler)
         super().save(*args, **kwargs)
+
+    @override
+    def delete(self, *args: Any, **kwargs: Any) -> tuple[int, dict[str, int]]:
+        if self.celery_task is not None:
+            self.celery_task.delete()
+        return super().delete(*args, **kwargs)
 
     @override
     def clean(self) -> None:
@@ -180,6 +198,26 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
                     "fetching_criterion": "This fetching criterion is not available for this mailbox!"
                 }
             )
+
+    def start(self) -> bool:
+        logger.debug("Starting %s ...", self)
+        if not self.celery_task.enabled:
+            self.celery_task.enabled = True
+            self.celery_task.save(update_fields=["enabled"])
+            logger.debug("Successfully started daemon.")
+            return True
+        logger.debug("%s was already running.", self)
+        return False
+
+    def stop(self) -> bool:
+        logger.debug("Stopping %s ...", self)
+        if self.celery_task.enabled:
+            self.celery_task.enabled = False
+            self.celery_task.save(update_fields=["enabled"])
+            logger.debug("Successfully stopped daemon.")
+            return True
+        logger.debug("%s was not running.", self)
+        return False
 
     @override
     @property

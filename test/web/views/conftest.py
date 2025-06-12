@@ -168,23 +168,3 @@ def mock_Mailbox_fetch(mocker):
         "core.models.Mailbox.Mailbox.fetch",
         autospec=True,
     )
-
-
-@pytest.fixture
-def mock_EmailArchiverDaemonRegistry_start_daemon(mocker):
-    """Patches :func:`core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.start_daemon` for testing of the start action."""
-    return mocker.patch(
-        "core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.start_daemon",
-        autospec=True,
-        return_value=True,
-    )
-
-
-@pytest.fixture
-def mock_EmailArchiverDaemonRegistry_stop_daemon(mocker):
-    """Patches :func:`core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.stop_daemon` for testing of the stop action."""
-    return mocker.patch(
-        "core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.stop_daemon",
-        autospec=True,
-        return_value=True,
-    )

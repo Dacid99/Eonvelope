@@ -21,17 +21,6 @@
 import pytest
 
 
-@pytest.fixture
-def mock_update_daemon(mocker):
-    """Patches the :func:`core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.update_daemon`
-    function called in the signal.
-    """
-    return mocker.patch(
-        "core.EmailArchiverDaemonRegistry.EmailArchiverDaemonRegistry.update_daemon",
-        autospec=True,
-    )
-
-
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
     """Mocks :attr:`core.signals.save_Daemon.logger` of the module."""
@@ -39,7 +28,7 @@ def mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_Daemon_post_save_from_healthy(fake_daemon, mock_logger, mock_update_daemon):
+def test_Daemon_post_save_from_healthy(fake_daemon, mock_logger):
     """Tests :func:`core.signals.save_daemon.post_save_is_healthy`
     for an initially healthy daemon.
     """
@@ -64,7 +53,7 @@ def test_Daemon_post_save_from_healthy(fake_daemon, mock_logger, mock_update_dae
 
 
 @pytest.mark.django_db
-def test_Daemon_post_save_from_unhealthy(fake_daemon, mock_logger, mock_update_daemon):
+def test_Daemon_post_save_from_unhealthy(fake_daemon, mock_logger):
     """Tests :func:`core.signals.save_daemon.post_save_is_healthy`
     for an initially unhealthy daemon.
     """

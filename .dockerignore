@@ -17,12 +17,9 @@ __pycache__/
 .env
 htmlcov/
 reports/
-Readme.md
-CONTRIBUTING.md
-DEVELOPMENT.md
-CODE_OF_CONDUCT.md
+*.md
 LICENSE
-TODO.md
 .gitea/
 .gitlab/
 .github/
+*.patch

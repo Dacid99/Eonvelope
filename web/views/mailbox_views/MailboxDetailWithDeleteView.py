@@ -22,7 +22,7 @@ from typing import Any, override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic.edit import DeletionMixin
@@ -113,16 +113,3 @@ class MailboxDetailWithDeleteView(
             result["status"] = True
             result["message"] = "Fetching successful"
         return result
-
-    def handle_add_daemon(self, request: HttpRequest) -> HttpResponseRedirect:
-        """Handler function for the `add-daemon` action.
-
-        Args:
-            request: The action request to handle.
-
-        Returns:
-            A template response with the updated view after the action.
-        """
-        self.object = self.get_object()
-        new_daemon = self.object.add_daemon()
-        return HttpResponseRedirect(new_daemon.get_absolute_edit_url())

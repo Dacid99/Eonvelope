@@ -30,9 +30,7 @@ from zipfile import BadZipFile, ZipFile
 from dirtyfields import DirtyFieldsMixin
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_celery_beat.models import IntervalSchedule
 
-from core.models import Daemon
 from Emailkasten.utils.workarounds import get_config
 
 from ..constants import (
@@ -174,19 +172,6 @@ class Mailbox(
         self.is_healthy = True
         self.save(update_fields=["is_healthy"])
         logger.info("Successfully tested mailbox")
-
-    def add_daemon(self) -> Daemon:
-        """Creates a daemon for the mailbox.
-
-        Returns:
-            The created daemon instance.
-        """
-        interval = IntervalSchedule.objects.get_or_create(
-            every=1, period=IntervalSchedule.HOURS
-        )
-        new_daemon = Daemon(interval=interval, mailbox=self)
-        new_daemon.save()
-        return new_daemon
 
     def fetch(self, criterion: str) -> None:
         """Fetches emails from this mailbox based on :attr:`criterion` and adds them to the db.

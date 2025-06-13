@@ -87,35 +87,6 @@ class MailboxViewSet(
             "daemons"
         )
 
-    URL_PATH_ADD_DAEMON = "add-daemon"
-    URL_NAME_ADD_DAEMON = "add-daemon"
-
-    @action(
-        detail=True,
-        methods=["POST"],
-        url_path=URL_PATH_ADD_DAEMON,
-        url_name=URL_NAME_ADD_DAEMON,
-    )
-    def add_daemon(self, request: Request, pk: int | None = None) -> Response:
-        """Action method creating a new daemon for the mailbox.
-
-        Args:
-            request: The request triggering the action.
-            pk: The private key of the mailbox. Defaults to None.
-
-        Returns:
-            A response containing the updated mailbox data.
-        """
-        mailbox = self.get_object()
-        mailbox.add_daemon()
-        mailbox.refresh_from_db()
-        return Response(
-            {
-                "detail": "Added daemon for mailbox",
-                "mailbox": self.get_serializer(mailbox).data,
-            }
-        )
-
     URL_PATH_TEST = "test"
     URL_NAME_TEST = "test"
 

@@ -34,13 +34,13 @@ from .conftest import (
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
 )
-def test_cycle_interval_filter(
+def test_interval__every_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
 ):
     """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
-    for the :attr:`core.models.Daemon.Daemon.cycle_interval` field.
+    for the :attr:`core.models.Daemon.Daemon.interval` field.
     """
-    query = {"cycle_interval" + lookup_expr: filterquery}
+    query = {"interval__every" + lookup_expr: filterquery}
 
     filtered_data = DaemonFilterSet(query, queryset=daemon_queryset).qs
 
@@ -59,24 +59,6 @@ def test_is_healthy_filter(daemon_queryset, lookup_expr, filterquery, expected_i
     for the :attr:`core.models.Daemon.Daemon.is_healthy` field.
     """
     query = {"is_healthy" + lookup_expr: filterquery}
-
-    filtered_data = DaemonFilterSet(query, queryset=daemon_queryset).qs
-
-    assert filtered_data.distinct().count() == filtered_data.count()
-    assert filtered_data.count() == len(expected_indices)
-    for data in filtered_data:
-        assert data.id - 1 in expected_indices
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
-)
-def test_is_running_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
-    """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
-    for the :attr:`core.models.Daemon.Daemon.is_running` field.
-    """
-    query = {"is_running" + lookup_expr: filterquery}
 
     filtered_data = DaemonFilterSet(query, queryset=daemon_queryset).qs
 

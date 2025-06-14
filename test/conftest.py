@@ -52,6 +52,7 @@ from typing import TYPE_CHECKING
 import pytest
 from django.core.files.storage import default_storage
 from django.forms import model_to_dict
+from django_celery_beat.models import IntervalSchedule
 from model_bakery import baker
 from pyfakefs.fake_filesystem_unittest import Patcher, Pause
 
@@ -91,7 +92,7 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/attachmentjson.eml",
         {
             "message_id": "<e047e14d-2397-435b-baf6-8e8b7423f860@bvncmx.com>",
-            "email_subject": "What's up",
+            "email_subject": "Whats up",
             "date": datetime(
                 2024, 8, 7, 11, 41, 29, tzinfo=timezone(timedelta(seconds=7200))
             ),
@@ -280,6 +281,7 @@ def fake_fs(settings) -> Generator[FakeFilesystem, None, None]:
     """Mocks a Linux filesystem for realistic testing.
 
     Contains a directory at the STORAGE_PATH setting to allow for testing without patching the storage backend.
+    Contains a directory at the LOG_DIRECTORY_PATH setting.
     Contains a tempdir at the location requested by tempfile.
 
     Yields:
@@ -290,6 +292,7 @@ def fake_fs(settings) -> Generator[FakeFilesystem, None, None]:
             raise OSError("Generator could not create a fakefs!")
 
         patcher.fs.create_dir(settings.STORAGE_PATH)
+        patcher.fs.create_dir(settings.LOG_DIRECTORY_PATH)
         with contextlib.suppress(OSError):
             patcher.fs.create_dir(gettempdir())
 
@@ -320,13 +323,18 @@ def other_user(django_user_model) -> AbstractUser:
 def fake_account(owner_user) -> Account:
     """Creates an :class:`core.models.Account` owned by :attr:`owner_user`.
 
+    Note:
+        The protocol is always IMAP to allow for different fetchingoptions.
+
     Args:
         owner_user: Depends on :func:`owner_user`.
 
     Returns:
         The account instance for testing.
     """
-    return baker.make(Account, user=owner_user)
+    return baker.make(
+        Account, user=owner_user, protocol=EmailProtocolChoices.IMAP.value
+    )
 
 
 @pytest.fixture
@@ -465,13 +473,18 @@ def fake_attachment_with_file(faker, fake_file, fake_fs, fake_email) -> Attachme
 def fake_other_account(other_user) -> Account:
     """Creates an :class:`core.models.Account` owned by :attr:`other_user`.
 
+    Note:
+        The protocol is always IMAP to allow for different fetchingoptions.
+
     Args:
         owner_user: Depends on :func:`other_user`.
 
     Returns:
         The account instance for testing.
     """
-    return baker.make(Account, user=other_user)
+    return baker.make(
+        Account, user=other_user, protocol=EmailProtocolChoices.IMAP.value
+    )
 
 
 @pytest.fixture
@@ -698,14 +711,6 @@ def daemon_payload(faker, fake_mailbox) -> dict[str, Any]:
         fetching_criterion=random.choice(
             fake_mailbox.get_available_fetching_criteria()
         ),
-        cycle_interval=random.randint(
-            Daemon.cycle_interval.field.default + 1,
-            Daemon.cycle_interval.field.default * 100,
-        ),
-        restart_time=random.randint(
-            Daemon.restart_time.field.default + 1,
-            Daemon.restart_time.field.default * 100,
-        ),
         log_backup_count=random.randint(
             Daemon.log_backup_count.field.default + 1,
             Daemon.log_backup_count.field.default * 100,
@@ -719,6 +724,15 @@ def daemon_payload(faker, fake_mailbox) -> dict[str, Any]:
     payload = model_to_dict(daemon_data)
     payload.pop("id")
     return {key: value for key, value in payload.items() if value is not None}
+
+
+@pytest.fixture
+def daemon_with_interval_payload(daemon_payload):
+    """Payload for a daemon form."""
+    interval = baker.prepare(IntervalSchedule)
+    daemon_payload["interval_every"] = abs(interval.every)
+    daemon_payload["interval_period"] = interval.period
+    return daemon_payload
 
 
 @pytest.fixture

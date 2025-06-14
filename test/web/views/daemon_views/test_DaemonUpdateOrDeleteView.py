@@ -66,10 +66,12 @@ def test_get_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_update_noauth(fake_daemon, daemon_payload, client, detail_url, login_url):
+def test_post_update_noauth(
+    fake_daemon, daemon_with_interval_payload, client, detail_url, login_url
+):
     """Tests :class:`web.views.DaemonUpdateOrDeleteView` with an unauthenticated user client."""
     response = client.post(
-        detail_url(DaemonUpdateOrDeleteView, fake_daemon), daemon_payload
+        detail_url(DaemonUpdateOrDeleteView, fake_daemon), daemon_with_interval_payload
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -79,37 +81,49 @@ def test_post_update_noauth(fake_daemon, daemon_payload, client, detail_url, log
         f"?next={detail_url(DaemonUpdateOrDeleteView, fake_daemon)}"
     )
     fake_daemon.refresh_from_db()
-    assert fake_daemon.log_backup_count != daemon_payload["log_backup_count"]
-    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
+    assert (
+        fake_daemon.log_backup_count != daemon_with_interval_payload["log_backup_count"]
+    )
+    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_post_update_auth_other(fake_daemon, daemon_payload, other_client, detail_url):
+def test_post_update_auth_other(
+    fake_daemon, daemon_with_interval_payload, other_client, detail_url
+):
     """Tests :class:`web.views.DaemonUpdateOrDeleteView` with the authenticated other user client."""
     response = other_client.post(
-        detail_url(DaemonUpdateOrDeleteView, fake_daemon), daemon_payload
+        detail_url(DaemonUpdateOrDeleteView, fake_daemon), daemon_with_interval_payload
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [t.name for t in response.templates]
     fake_daemon.refresh_from_db()
-    assert fake_daemon.restart_time != daemon_payload["restart_time"]
-    assert fake_daemon.log_backup_count != daemon_payload["log_backup_count"]
+    assert (
+        fake_daemon.log_backup_count != daemon_with_interval_payload["log_backup_count"]
+    )
+    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_post_update_auth_owner(fake_daemon, daemon_payload, owner_client, detail_url):
+def test_post_update_auth_owner(
+    fake_daemon, daemon_with_interval_payload, owner_client, detail_url
+):
     """Tests :class:`web.views.DaemonUpdateOrDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
-        detail_url(DaemonUpdateOrDeleteView, fake_daemon), daemon_payload
+        detail_url(DaemonUpdateOrDeleteView, fake_daemon), daemon_with_interval_payload
     )
+    with open("daemon.html", "w") as f:
+        f.write(response.content.decode())
 
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(reverse("web:daemon-filter-list"))
     fake_daemon.refresh_from_db()
-    assert fake_daemon.restart_time == daemon_payload["restart_time"]
-    assert fake_daemon.log_backup_count == daemon_payload["log_backup_count"]
+    assert (
+        fake_daemon.log_backup_count == daemon_with_interval_payload["log_backup_count"]
+    )
+    assert fake_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db

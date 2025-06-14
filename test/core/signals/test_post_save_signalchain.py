@@ -20,8 +20,6 @@
 
 import pytest
 
-from .test_save_Daemon import mock_update_daemon
-
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
@@ -35,7 +33,6 @@ from .test_save_Daemon import mock_update_daemon
 )
 def test_illegal_states(
     mailbox_with_daemons,
-    mock_update_daemon,
     account_is_healthy,
     mailbox_is_healthy,
     daemons_is_healthy,
@@ -70,7 +67,6 @@ def test_illegal_states(
 )
 def test_toggle_Account_is_healthy(
     mailbox_with_daemons,
-    mock_update_daemon,
     account_is_healthy_start,
     mailbox_is_healthy_start,
     daemons_is_healthy_start,
@@ -120,7 +116,6 @@ def test_toggle_Account_is_healthy(
 )
 def test_toggle_Mailbox_is_healthy(
     mailbox_with_daemons,
-    mock_update_daemon,
     account_is_healthy_start,
     mailbox_is_healthy_start,
     daemons_is_healthy_start,
@@ -168,7 +163,6 @@ def test_toggle_Mailbox_is_healthy(
 )
 def test_toggle_Daemon_is_healthy(
     mailbox_with_daemons,
-    mock_update_daemon,
     account_is_healthy_start,
     mailbox_is_healthy_start,
     daemons_is_healthy_start,

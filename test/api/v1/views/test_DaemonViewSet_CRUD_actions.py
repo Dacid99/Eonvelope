@@ -62,7 +62,7 @@ def test_get_noauth(fake_daemon, noauth_api_client, detail_url):
     response = noauth_api_client.get(detail_url(DaemonViewSet, fake_daemon))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
 
 
 @pytest.mark.django_db
@@ -79,7 +79,7 @@ def test_get_auth_owner(fake_daemon, owner_api_client, detail_url):
     response = owner_api_client.get(detail_url(DaemonViewSet, fake_daemon))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["cycle_interval"] == fake_daemon.cycle_interval
+    assert response.data["logfile_size"] == fake_daemon.logfile_size
 
 
 @pytest.mark.django_db
@@ -90,9 +90,9 @@ def test_patch_noauth(fake_daemon, noauth_api_client, daemon_payload, detail_url
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval != daemon_payload["cycle_interval"]
+    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -103,9 +103,9 @@ def test_patch_auth_other(fake_daemon, other_api_client, daemon_payload, detail_
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval != daemon_payload["cycle_interval"]
+    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -120,9 +120,9 @@ def test_patch_auth_owner(fake_daemon, owner_api_client, daemon_payload, detail_
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["cycle_interval"] == daemon_payload["cycle_interval"]
+    assert response.data["logfile_size"] == daemon_payload["logfile_size"]
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval == daemon_payload["cycle_interval"]
+    assert fake_daemon.logfile_size == daemon_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -133,9 +133,9 @@ def test_put_noauth(fake_daemon, noauth_api_client, daemon_payload, detail_url):
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval != daemon_payload["cycle_interval"]
+    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -146,9 +146,9 @@ def test_put_auth_other(fake_daemon, other_api_client, daemon_payload, detail_ur
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval != daemon_payload["cycle_interval"]
+    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -162,9 +162,9 @@ def test_put_auth_owner(fake_daemon, owner_api_client, daemon_payload, detail_ur
         detail_url(DaemonViewSet, fake_daemon), data=daemon_payload
     )
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["cycle_interval"] == daemon_payload["cycle_interval"]
+    assert response.data["logfile_size"] == daemon_payload["logfile_size"]
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval == daemon_payload["cycle_interval"]
+    assert fake_daemon.logfile_size == daemon_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -173,9 +173,9 @@ def test_post_noauth(noauth_api_client, daemon_payload, list_url):
     response = noauth_api_client.post(list_url(DaemonViewSet), data=daemon_payload)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(cycle_interval=daemon_payload["cycle_interval"])
+        Daemon.objects.get(logfile_size=daemon_payload["logfile_size"])
 
 
 @pytest.mark.django_db
@@ -184,9 +184,9 @@ def test_post_auth_other(other_api_client, daemon_payload, list_url):
     response = other_api_client.post(list_url(DaemonViewSet), data=daemon_payload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(cycle_interval=daemon_payload["cycle_interval"])
+        Daemon.objects.get(logfile_size=daemon_payload["logfile_size"])
 
 
 @pytest.mark.django_db
@@ -195,9 +195,9 @@ def test_post_auth_owner(owner_api_client, daemon_payload, list_url):
     response = owner_api_client.post(list_url(DaemonViewSet), data=daemon_payload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-    assert "cycle_interval" not in response.data
+    assert "logfile_size" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(cycle_interval=daemon_payload["cycle_interval"])
+        Daemon.objects.get(logfile_size=daemon_payload["logfile_size"])
 
 
 @pytest.mark.django_db
@@ -207,7 +207,7 @@ def test_delete_noauth(fake_daemon, noauth_api_client, detail_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval is not None
+    assert fake_daemon.logfile_size is not None
 
 
 @pytest.mark.django_db
@@ -217,7 +217,7 @@ def test_delete_auth_other(fake_daemon, other_api_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     fake_daemon.refresh_from_db()
-    assert fake_daemon.cycle_interval is not None
+    assert fake_daemon.logfile_size is not None
 
 
 @pytest.mark.django_db

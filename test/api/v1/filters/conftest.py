@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.core.management import call_command
+from django_celery_beat.models import IntervalSchedule
 from freezegun import freeze_time
 from model_bakery import baker
 
@@ -392,13 +393,17 @@ def mailbox_queryset(unblocked_db, account_queryset) -> QuerySet[Mailbox, Mailbo
 @pytest.fixture(scope="package")
 def daemon_queryset(unblocked_db, mailbox_queryset) -> QuerySet[Daemon, Daemon]:
     """Fixture adding daemons with the test attributes to the database and returns them in a queryset."""
-    for number, int_test_item in enumerate(INT_TEST_ITEMS):
+    for number, bool_test_item in enumerate(BOOL_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
+            interval = baker.make(
+                IntervalSchedule,
+                every=INT_TEST_ITEMS[number],
+                period=IntervalSchedule.PERIOD_CHOICES[number],
+            )
             baker.make(
                 Daemon,
-                cycle_interval=int_test_item,
-                is_running=BOOL_TEST_ITEMS[number],
-                is_healthy=BOOL_TEST_ITEMS[number],
+                interval=interval,
+                is_healthy=bool_test_item,
                 mailbox=mailbox_queryset.get(id=number + 1),
                 log_filepath=TEXT_TEST_ITEMS[number],
             )

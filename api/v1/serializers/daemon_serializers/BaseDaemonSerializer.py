@@ -56,13 +56,14 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         read_only_fields: Final[list[str]] = [
             "uuid",
             "mailbox",
+            "interval",
             "is_healthy",
             "created",
             "updated",
         ]
         """The :attr:`core.models.Daemon.Daemon.uuid`,
         :attr:`core.models.Daemon.Daemon.mailbox`,
-        :attr:`core.models.Daemon.Daemon.is_running`,
+        :attr:`core.models.Daemon.Daemon.interval`,
         :attr:`core.models.Daemon.Daemon.is_healthy`,
         :attr:`core.models.Daemon.Daemon.created` and
         :attr:`core.models.Daemon.Daemon.updated` fields are read-only.

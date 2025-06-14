@@ -19,6 +19,8 @@
 """Test module for :mod:`core.models.Daemon`."""
 
 import datetime
+import logging
+import logging.handlers
 import os
 from uuid import UUID
 
@@ -50,9 +52,7 @@ def test_Daemon_fields(fake_daemon):
     assert fake_daemon.mailbox is not None
     assert isinstance(fake_daemon.mailbox, Mailbox)
     assert fake_daemon.fetching_criterion == constants.EmailFetchingCriterionChoices.ALL
-    assert fake_daemon.cycle_interval == get_config("DAEMON_CYCLE_PERIOD_DEFAULT")
-    assert fake_daemon.restart_time == get_config("DAEMON_RESTART_TIME_DEFAULT")
-    assert fake_daemon.is_running is False
+    assert fake_daemon.interval is not None
     assert fake_daemon.is_healthy is None
     assert fake_daemon.log_filepath is not None
     assert fake_daemon.log_backup_count == get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
@@ -82,28 +82,43 @@ def test_Daemon_foreign_key_deletion(fake_daemon):
 
 
 @pytest.mark.django_db
-def test_Daemon_unique_constraints(fake_daemon):
-    """Tests the unique constraints of :class:`core.models.Daemon.Daemon`."""
+def test_Daemon_unique_constraint_log_filepath(fake_daemon):
+    """Tests the unique constraints on :attr:`core.models.Daemon.Daemon.log_filepath` of :class:`core.models.Daemon.Daemon`."""
     with pytest.raises(IntegrityError):
         baker.make(Daemon, log_filepath=fake_daemon.log_filepath)
 
 
 @pytest.mark.django_db
-def test_Daemon_save_logfile_creation(faker, settings, fake_daemon):
+def test_Daemon_unique_together_constraint_mailbox_fetching_criterion(
+    faker, fake_daemon
+):
+    """Tests the unique together constraint on :attr:`core.models.Daemon.Daemon.mailbox` and :attr:`core.models.Daemon.Daemon.fetching_criterion` of :class:`core.models.Daemon.Daemon`."""
+    with pytest.raises(IntegrityError):
+        baker.make(
+            Daemon,
+            mailbox=fake_daemon.mailbox,
+            fetching_criterion=fake_daemon.fetching_criterion,
+            log_filepath=faker.file_path(extension="log"),
+        )
+
+
+@pytest.mark.django_db
+def test_Daemon_save_logfile_creation(settings, fake_fs, fake_daemon):
     """Tests :func:`core.models.Correspondent.Correspondent.save`
     in case there is no log_filepath.
     """
-    fake_log_directory_path = os.path.dirname(faker.file_path())
-    settings.LOG_DIRECTORY_PATH = fake_log_directory_path
     fake_daemon.log_filepath = None
 
     fake_daemon.save()
 
     fake_daemon.refresh_from_db()
-    assert fake_daemon.log_filepath == os.path.join(
-        fake_log_directory_path,
-        f"daemon_{fake_daemon.uuid}.log",
-    )
+    assert os.path.dirname(fake_daemon.log_filepath) == str(settings.LOG_DIRECTORY_PATH)
+    logger = logging.getLogger(str(fake_daemon.uuid))
+    assert len(logger.handlers) == 1
+    assert isinstance(logger.handlers[0], logging.handlers.RotatingFileHandler)
+    assert logger.handlers[0].baseFilename == fake_daemon.log_filepath
+    assert logger.handlers[0].backupCount == fake_daemon.log_backup_count
+    assert logger.handlers[0].maxBytes == fake_daemon.logfile_size
 
 
 @pytest.mark.django_db

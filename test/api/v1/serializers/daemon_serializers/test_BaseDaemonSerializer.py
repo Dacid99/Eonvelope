@@ -44,23 +44,20 @@ def test_output(fake_daemon, request_context):
     assert serializer_data["mailbox"] == fake_daemon.mailbox.id
     assert "fetching_criterion" in serializer_data
     assert serializer_data["fetching_criterion"] == fake_daemon.fetching_criterion
-    assert "cycle_interval" in serializer_data
-    assert serializer_data["cycle_interval"] == fake_daemon.cycle_interval
-    assert "restart_time" in serializer_data
-    assert serializer_data["restart_time"] == fake_daemon.restart_time
+    assert "interval" in serializer_data
+    assert serializer_data["interval"] == fake_daemon.interval.id
+    assert "celery_task" not in serializer_data
     assert "log_backup_count" in serializer_data
     assert serializer_data["log_backup_count"] == fake_daemon.log_backup_count
     assert "logfile_size" in serializer_data
     assert serializer_data["logfile_size"] == fake_daemon.logfile_size
-    assert "is_running" in serializer_data
-    assert serializer_data["is_running"] == fake_daemon.is_running
     assert "is_healthy" in serializer_data
     assert serializer_data["is_healthy"] == fake_daemon.is_healthy
     assert "created" in serializer_data
     assert datetime.fromisoformat(serializer_data["created"]) == fake_daemon.created
     assert "updated" in serializer_data
     assert datetime.fromisoformat(serializer_data["updated"]) == fake_daemon.updated
-    assert len(serializer_data) == 12
+    assert len(serializer_data) == 10
 
 
 @pytest.mark.django_db
@@ -78,19 +75,16 @@ def test_input(fake_daemon, request_context):
     assert "mailbox" not in serializer_data
     assert "fetching_criterion" in serializer_data
     assert serializer_data["fetching_criterion"] == fake_daemon.fetching_criterion
-    assert "cycle_interval" in serializer_data
-    assert serializer_data["cycle_interval"] == fake_daemon.cycle_interval
-    assert "restart_time" in serializer_data
-    assert serializer_data["restart_time"] == fake_daemon.restart_time
+    assert "interval" not in serializer_data
+    assert "celery_task" not in serializer_data
     assert "log_backup_count" in serializer_data
     assert serializer_data["log_backup_count"] == fake_daemon.log_backup_count
     assert "logfile_size" in serializer_data
     assert serializer_data["logfile_size"] == fake_daemon.logfile_size
-    assert "is_running" not in serializer_data
     assert "is_healthy" not in serializer_data
     assert "created" not in serializer_data
     assert "updated" not in serializer_data
-    assert len(serializer_data) == 5
+    assert len(serializer_data) == 3
 
 
 @pytest.mark.django_db

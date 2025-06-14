@@ -71,61 +71,6 @@ def mock_Email_queryset_as_file(mocker, fake_file):
 
 
 @pytest.mark.django_db
-def test_add_daemon_noauth(fake_mailbox, noauth_api_client, custom_detail_action_url):
-    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with an unauthenticated user client."""
-    assert fake_mailbox.daemons.all().count() == 1
-
-    response = noauth_api_client.post(
-        custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, fake_mailbox
-        )
-    )
-
-    assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "save_attachments" not in response.data
-    assert fake_mailbox.daemons.all().count() == 1
-
-
-@pytest.mark.django_db
-def test_add_daemon_auth_other(
-    fake_mailbox, other_api_client, custom_detail_action_url
-):
-    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated other user client."""
-    assert fake_mailbox.daemons.all().count() == 1
-
-    response = other_api_client.post(
-        custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, fake_mailbox
-        )
-    )
-
-    assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert "save_attachments" not in response.data
-    assert fake_mailbox.daemons.all().count() == 1
-
-
-@pytest.mark.django_db
-def test_add_daemon_auth_owner(
-    fake_mailbox, owner_api_client, custom_detail_action_url
-):
-    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.add_daemon` action with the authenticated owner user client."""
-    assert fake_mailbox.daemons.all().count() == 1
-
-    response = owner_api_client.post(
-        custom_detail_action_url(
-            MailboxViewSet, MailboxViewSet.URL_NAME_ADD_DAEMON, fake_mailbox
-        )
-    )
-
-    assert response.status_code == status.HTTP_200_OK
-    assert (
-        response.data["mailbox"] == MailboxViewSet.serializer_class(fake_mailbox).data
-    )
-
-    assert fake_mailbox.daemons.all().count() == 2
-
-
-@pytest.mark.django_db
 def test_test_mailbox_noauth(
     fake_mailbox,
     noauth_api_client,

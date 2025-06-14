@@ -24,7 +24,6 @@ from django.urls import reverse
 from rest_framework import status
 
 from core.models import Account
-from test.conftest import mailbox_payload
 from web.views import AccountCreateView
 
 
@@ -120,10 +119,10 @@ def test_post_duplicate_auth_owner(
     fake_account, account_payload, owner_client, list_url
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
-    assert Account.objects.all().count() == 1
-
     account_payload["mail_address"] = fake_account.mail_address
     response = owner_client.post(list_url(AccountCreateView), account_payload)
+
+    assert Account.objects.all().count() == 1
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)

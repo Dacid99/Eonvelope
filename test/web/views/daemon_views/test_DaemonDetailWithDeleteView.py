@@ -48,6 +48,7 @@ def test_get_auth_other(fake_daemon, other_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [t.name for t in response.templates]
+    assert isinstance(response, HttpResponse)
     assert fake_daemon.mailbox.name not in response.content.decode()
 
 
@@ -92,6 +93,7 @@ def test_post_delete_auth_other(fake_daemon, other_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [t.name for t in response.templates]
+    assert isinstance(response, HttpResponse)
     fake_daemon.refresh_from_db()
     assert fake_daemon is not None
 
@@ -112,14 +114,13 @@ def test_post_delete_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_start_noauth(
-    fake_daemon,
-    client,
-    detail_url,
-    login_url,
-    mock_EmailArchiverDaemonRegistry_start_daemon,
-):
+def test_post_start_noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
+    fake_daemon.celery_task.enabled = False
+    fake_daemon.celery_task.save(update_fields=["enabled"])
+
+    assert fake_daemon.celery_task.enabled is False
+
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"start_daemon": "Start"},
@@ -131,49 +132,37 @@ def test_post_start_noauth(
     assert response.url.endswith(
         f"?next={detail_url(DaemonDetailWithDeleteView, fake_daemon)}"
     )
-    mock_EmailArchiverDaemonRegistry_start_daemon.assert_not_called()
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is False
 
 
 @pytest.mark.django_db
-def test_post_start_auth_other(
-    fake_daemon, other_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
-):
+def test_post_start_auth_other(fake_daemon, other_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
+    fake_daemon.celery_task.enabled = False
+    fake_daemon.celery_task.save(update_fields=["enabled"])
+
+    assert fake_daemon.celery_task.enabled is False
+
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"start_daemon": "Start"},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert "404.html" in [t.name for t in response.templates]
-    mock_EmailArchiverDaemonRegistry_start_daemon.assert_not_called()
-
-
-@pytest.mark.django_db
-def test_post_start_success_auth_owner(
-    fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
-):
-    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
-    response = owner_client.post(
-        detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"start_daemon": "Start"},
-    )
-
-    assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
-    assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
-    assert "object" in response.context
-    assert isinstance(response.context["object"], Daemon)
-    assert "start_result" in response.context
-    mock_EmailArchiverDaemonRegistry_start_daemon.assert_called_once_with(fake_daemon)
+    assert "404.html" in [t.name for t in response.templates]
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is False
 
 
 @pytest.mark.django_db
-def test_post_start_failure_auth_owner(
-    fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
-):
+def test_post_start_success_auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
-    mock_EmailArchiverDaemonRegistry_start_daemon.return_value = False
+    fake_daemon.celery_task.enabled = False
+    fake_daemon.celery_task.save(update_fields=["enabled"])
+
+    assert fake_daemon.celery_task.enabled is False
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -186,32 +175,51 @@ def test_post_start_failure_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
     assert "start_result" in response.context
-    mock_EmailArchiverDaemonRegistry_start_daemon.assert_called_once_with(fake_daemon)
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is True
 
 
 @pytest.mark.django_db
-def test_post_start_missing_action_auth_owner(
-    fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_start_daemon
-):
+def test_post_start_failure_auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
-    mock_EmailArchiverDaemonRegistry_start_daemon.return_value = False
+    assert fake_daemon.celery_task.enabled is True
+
+    response = owner_client.post(
+        detail_url(DaemonDetailWithDeleteView, fake_daemon),
+        {"start_daemon": "Start"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Daemon)
+    assert "start_result" in response.context
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is True
+
+
+@pytest.mark.django_db
+def test_post_start_missing_action_auth_owner(fake_daemon, owner_client, detail_url):
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    fake_daemon.celery_task.enabled = False
+    fake_daemon.celery_task.save(update_fields=["enabled"])
+
+    assert fake_daemon.celery_task.enabled is False
 
     response = owner_client.post(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
-    mock_EmailArchiverDaemonRegistry_start_daemon.assert_not_called()
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is False
 
 
 @pytest.mark.django_db
-def test_post_stop_noauth(
-    fake_daemon,
-    client,
-    detail_url,
-    login_url,
-    mock_EmailArchiverDaemonRegistry_stop_daemon,
-):
+def test_post_stop_noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
+    assert fake_daemon.celery_task.enabled is True
+
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"stop_daemon": "Stop"},
@@ -223,14 +231,15 @@ def test_post_stop_noauth(
     assert response.url.endswith(
         f"?next={detail_url(DaemonDetailWithDeleteView, fake_daemon)}"
     )
-    mock_EmailArchiverDaemonRegistry_stop_daemon.assert_not_called()
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is True
 
 
 @pytest.mark.django_db
-def test_post_stop_auth_other(
-    fake_daemon, other_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
-):
+def test_post_stop_auth_other(fake_daemon, other_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
+    assert fake_daemon.celery_task.enabled is True
+
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
         {"stop_daemon": "Stop"},
@@ -238,34 +247,15 @@ def test_post_stop_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [t.name for t in response.templates]
-    mock_EmailArchiverDaemonRegistry_stop_daemon.assert_not_called()
-
-
-@pytest.mark.django_db
-def test_post_stop_success_auth_owner(
-    fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
-):
-    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
-    response = owner_client.post(
-        detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"stop_daemon": "Stop"},
-    )
-
-    assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
-    assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
-    assert "object" in response.context
-    assert isinstance(response.context["object"], Daemon)
-    assert "stop_result" in response.context
-    mock_EmailArchiverDaemonRegistry_stop_daemon.assert_called_once_with(fake_daemon)
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is True
 
 
 @pytest.mark.django_db
-def test_post_stop_failure_auth_owner(
-    fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
-):
+def test_post_stop_success_auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
-    mock_EmailArchiverDaemonRegistry_stop_daemon.return_value = False
+    assert fake_daemon.celery_task.enabled is True
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -278,18 +268,41 @@ def test_post_stop_failure_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
     assert "stop_result" in response.context
-    mock_EmailArchiverDaemonRegistry_stop_daemon.assert_called_once_with(fake_daemon)
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is False
 
 
 @pytest.mark.django_db
-def test_post_stop_missing_action_auth_owner(
-    fake_daemon, owner_client, detail_url, mock_EmailArchiverDaemonRegistry_stop_daemon
-):
+def test_post_stop_failure_auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
-    mock_EmailArchiverDaemonRegistry_stop_daemon.return_value = False
+    fake_daemon.celery_task.enabled = False
+    fake_daemon.celery_task.save(update_fields=["enabled"])
+
+    assert fake_daemon.celery_task.enabled is False
+
+    response = owner_client.post(
+        detail_url(DaemonDetailWithDeleteView, fake_daemon),
+        {"stop_daemon": "Stop"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Daemon)
+    assert "stop_result" in response.context
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is False
+
+
+@pytest.mark.django_db
+def test_post_stop_missing_action_auth_owner(fake_daemon, owner_client, detail_url):
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
+    assert fake_daemon.celery_task.enabled is True
 
     response = owner_client.post(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
-    mock_EmailArchiverDaemonRegistry_stop_daemon.assert_not_called()
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is True

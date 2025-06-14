@@ -166,18 +166,7 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
                 args=json.dumps([str(self.uuid)]),
             )
         if not self.log_filepath:
-            daemon_logger = logging.getLogger(str(self.uuid))
-            self.log_filepath = os.path.join(
-                settings.LOG_DIRECTORY_PATH,
-                f"{daemon_logger.name}.log",
-            )
-            file_handler = logging.handlers.RotatingFileHandler(
-                filename=self.log_filepath,
-                backupCount=self.log_backup_count,
-                maxBytes=self.logfile_size,
-            )
-            file_handler.setFormatter(logging.Formatter(settings.LOGFORMAT, style="{"))
-            daemon_logger.addHandler(file_handler)
+            self.setup_logger()
         super().save(*args, **kwargs)
 
     @override
@@ -189,15 +178,33 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
     @override
     def clean(self) -> None:
         """Validates that :attr:`fetching_criterion` is available for the :attr:`mailbox.account`."""
-        if (
-            self.fetching_criterion
-            not in self.mailbox.get_available_fetching_criteria()
-        ):
-            raise ValidationError(
-                {
-                    "fetching_criterion": "This fetching criterion is not available for this mailbox!"
-                }
-            )
+        try:
+            if (
+                self.fetching_criterion
+                not in self.mailbox.get_available_fetching_criteria()
+            ):
+                raise ValidationError(
+                    {
+                        "fetching_criterion": "This fetching criterion is not available for this mailbox!"
+                    }
+                )
+        except Daemon.mailbox.RelatedObjectDoesNotExist:
+            raise ValidationError({"mailbox": "No valid mailbox selected!"}) from None
+
+    def setup_logger(self) -> None:
+        """Sets up the logger for the daemon process."""
+        daemon_logger = logging.getLogger(str(self.uuid))
+        self.log_filepath = os.path.join(
+            settings.LOG_DIRECTORY_PATH,
+            f"{daemon_logger.name}.log",
+        )
+        file_handler = logging.handlers.RotatingFileHandler(
+            filename=self.log_filepath,
+            backupCount=self.log_backup_count,
+            maxBytes=self.logfile_size,
+        )
+        file_handler.setFormatter(logging.Formatter(settings.LOGFORMAT, style="{"))
+        daemon_logger.addHandler(file_handler)
 
     def start(self) -> bool:
         logger.debug("Starting %s ...", self)

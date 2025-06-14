@@ -20,7 +20,6 @@
 
 The viewset tests are made against a mocked consistent database with an instance of every model in every testcase.
 """
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING

@@ -32,11 +32,6 @@ from .emailcorrespondent_serializers import (
     EmailCorrespondentSerializer,
 )
 from .mailbox_serializers import BaseMailboxSerializer, MailboxWithDaemonSerializer
-from .mailinglist_serializers import (
-    BaseMailingListSerializer,
-    MailingListSerializer,
-    SimpleMailingListSerializer,
-)
 
 
 __all__ = [
@@ -48,13 +43,10 @@ __all__ = [
     "BaseEmailCorrespondentSerializer",
     "BaseEmailSerializer",
     "BaseMailboxSerializer",
-    "BaseMailingListSerializer",
     "CorrespondentEmailSerializer",
     "CorrespondentSerializer",
     "EmailCorrespondentSerializer",
     "EmailSerializer",
     "FullEmailSerializer",
     "MailboxWithDaemonSerializer",
-    "MailingListSerializer",
-    "SimpleMailingListSerializer",
 ]

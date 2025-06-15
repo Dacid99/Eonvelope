@@ -73,13 +73,11 @@ def test_output(fake_email, request_context):
     assert isinstance(serializer_data["attachments"], list)
     assert len(serializer_data["attachments"]) == 1
     assert isinstance(serializer_data["attachments"][0], dict)
-    assert "mailinglist" in serializer_data
-    assert isinstance(serializer_data["mailinglist"], dict)
     assert "correspondents" in serializer_data
     assert isinstance(serializer_data["correspondents"], list)
     assert len(serializer_data["correspondents"]) == 1
     assert isinstance(serializer_data["correspondents"][0], dict)
-    assert len(serializer_data) == 20
+    assert len(serializer_data) == 19
 
 
 @pytest.mark.django_db
@@ -112,6 +110,5 @@ def test_input(fake_email, request_context):
     assert "updated" not in serializer_data
     assert "replies" not in serializer_data
     assert "attachments" not in serializer_data
-    assert "mailinglist" not in serializer_data
     assert "correspondents" not in serializer_data
     assert len(serializer_data) == 1

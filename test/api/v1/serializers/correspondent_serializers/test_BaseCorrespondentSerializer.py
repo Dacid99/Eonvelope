@@ -38,11 +38,24 @@ def test_output(fake_correspondent, request_context):
     assert "id" in serializer_data
     assert serializer_data["id"] == fake_correspondent.id
     assert "emails" not in serializer_data
-    assert "mailinglist" not in serializer_data
     assert "email_name" in serializer_data
     assert serializer_data["email_name"] == fake_correspondent.email_name
     assert "email_address" in serializer_data
     assert serializer_data["email_address"] == fake_correspondent.email_address
+    assert "list_id" in serializer_data
+    assert serializer_data["list_id"] == fake_correspondent.list_id
+    assert "list_owner" in serializer_data
+    assert serializer_data["list_owner"] == fake_correspondent.list_owner
+    assert "list_subscribe" in serializer_data
+    assert serializer_data["list_subscribe"] == fake_correspondent.list_subscribe
+    assert "list_unsubscribe" in serializer_data
+    assert serializer_data["list_unsubscribe"] == fake_correspondent.list_unsubscribe
+    assert "list_post" in serializer_data
+    assert serializer_data["list_post"] == fake_correspondent.list_post
+    assert "list_help" in serializer_data
+    assert serializer_data["list_help"] == fake_correspondent.list_help
+    assert "list_archive" in serializer_data
+    assert serializer_data["list_archive"] == fake_correspondent.list_archive
     assert "is_favorite" in serializer_data
     assert serializer_data["is_favorite"] == fake_correspondent.is_favorite
     assert "created" in serializer_data
@@ -53,7 +66,7 @@ def test_output(fake_correspondent, request_context):
     assert (
         datetime.fromisoformat(serializer_data["updated"]) == fake_correspondent.updated
     )
-    assert len(serializer_data) == 6
+    assert len(serializer_data) == 13
 
 
 @pytest.mark.django_db
@@ -67,10 +80,16 @@ def test_input(fake_correspondent, request_context):
 
     assert "id" not in serializer_data
     assert "emails" not in serializer_data
-    assert "mailinglist" not in serializer_data
     assert "email_name" in serializer_data
     assert serializer_data["email_name"] == fake_correspondent.email_name
     assert "email_address" not in serializer_data
+    assert "list_id" not in serializer_data
+    assert "list_owner" not in serializer_data
+    assert "list_subscribe" not in serializer_data
+    assert "list_unsubscribe" not in serializer_data
+    assert "list_post" not in serializer_data
+    assert "list_help" not in serializer_data
+    assert "list_archive" not in serializer_data
     assert "is_favorite" in serializer_data
     assert serializer_data["is_favorite"] == fake_correspondent.is_favorite
     assert "created" not in serializer_data

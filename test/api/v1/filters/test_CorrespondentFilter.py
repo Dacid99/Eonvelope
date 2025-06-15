@@ -71,6 +71,146 @@ def test_email_address_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_id_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_id` field.
+    """
+    query = {"list_id" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_owner_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_owner` field.
+    """
+    query = {"list_owner" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_subscribe_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_subscribe` field.
+    """
+    query = {"list_subscribe" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_unsubscribe_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_unsubscribe` field.
+    """
+    query = {"list_unsubscribe" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_post_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_post` field.
+    """
+    query = {"list_post" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_help_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_help` field.
+    """
+    query = {"list_help" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_archive_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_archive` field.
+    """
+    query = {"list_archive" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
 )
 def test_is_favorite_filter(

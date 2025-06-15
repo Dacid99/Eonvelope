@@ -44,7 +44,6 @@ from api.v1.views import (
     DatabaseStatsView,
     EmailViewSet,
     MailboxViewSet,
-    MailingListViewSet,
 )
 
 
@@ -63,11 +62,6 @@ router.register(
     "attachments",
     AttachmentViewSet,
     basename=AttachmentViewSet.BASENAME,
-)
-router.register(
-    "mailinglists",
-    MailingListViewSet,
-    basename=MailingListViewSet.BASENAME,
 )
 router.register("emails", EmailViewSet, basename=EmailViewSet.BASENAME)
 

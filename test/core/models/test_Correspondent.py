@@ -58,6 +58,20 @@ def test_Correspondent_fields(fake_correspondent):
     assert isinstance(fake_correspondent.email_name, str)
     assert fake_correspondent.email_address is not None
     assert isinstance(fake_correspondent.email_address, str)
+    assert fake_correspondent.list_id is not None
+    assert isinstance(fake_correspondent.list_id, str)
+    assert fake_correspondent.list_owner is not None
+    assert isinstance(fake_correspondent.list_owner, str)
+    assert fake_correspondent.list_subscribe is not None
+    assert isinstance(fake_correspondent.list_subscribe, str)
+    assert fake_correspondent.list_unsubscribe is not None
+    assert isinstance(fake_correspondent.list_unsubscribe, str)
+    assert fake_correspondent.list_post is not None
+    assert isinstance(fake_correspondent.list_post, str)
+    assert fake_correspondent.list_help is not None
+    assert isinstance(fake_correspondent.list_help, str)
+    assert fake_correspondent.list_archive is not None
+    assert isinstance(fake_correspondent.list_archive, str)
     assert fake_correspondent.is_favorite is False
     assert fake_correspondent.updated is not None
     assert isinstance(fake_correspondent.updated, datetime.datetime)

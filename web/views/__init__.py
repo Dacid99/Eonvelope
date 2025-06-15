@@ -55,7 +55,6 @@ from .mailbox_views import (
     MailboxUpdateOrDeleteView,
     UploadEmailView,
 )
-from .mailinglist_views import MailingListDetailWithDeleteView, MailingListFilterView
 
 
 __all__ = [
@@ -86,7 +85,5 @@ __all__ = [
     "MailboxEmailsFilterView",
     "MailboxFilterView",
     "MailboxUpdateOrDeleteView",
-    "MailingListDetailWithDeleteView",
-    "MailingListFilterView",
     "UploadEmailView",
 ]

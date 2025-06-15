@@ -51,7 +51,6 @@ def complete_database(
     fake_email,
     fake_emailcorrespondent,
     fake_mailbox,
-    fake_mailing_list,
 ):
     """Autouse all models for the tests."""
     other_account = baker.make(Account, user=other_user)
@@ -64,7 +63,6 @@ def complete_database(
     other_email = baker.make(
         Email,
         mailbox=other_mailbox,
-        mailinglist=fake_mailing_list,
         eml_filepath=faker.file_name(extension="eml"),
     )
     baker.make(

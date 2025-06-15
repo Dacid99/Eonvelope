@@ -13,7 +13,7 @@
 - show pdf attachments in pdfjs
 - combo queries via connectors
 - reprocess mail action
-- mechanism to remove all correspondents and mailinglists without emails
+- mechanism to remove all correspondents without emails
 - more daemon logging configs via model
 - streaming daemon logs
 - download for main logfiles
@@ -24,6 +24,8 @@
 - notes field for models
 - more tags
 - autotagging
+- saving old correspondent info (via fk maybe)
+- async parsing, sync saving
 
 ## To refactor
 
@@ -36,6 +38,7 @@
   - use more of the unittest api
   - replace modeltodict in form and serializer tests with payloads
 - dockerfile dependencies
+- emailcorrespondent creation for better integration of mailinglist
 
 ## To test
 
@@ -49,8 +52,6 @@
 - ensure threadsafe db operations in daemons
 - important headers in html repr
 - favicon.ico for the icon
-- fallback for list-id if other list entries are present
-- identification of mailinglists via from
 - time benchmarks in debug log
 - batch download and delete in web
 - dependency-upgrading tool for your project dependencies? (eg. dependabot, PyUp, Renovate, pip-tools, Snyx)
@@ -63,7 +64,7 @@
 
 - rtd
 - weblate
-- stable docker run for makemigrations
+- stable docker run for makemigrations and makemessages
 
 ### Work in progress
 
@@ -74,7 +75,6 @@
 ## To test hands-on
 
 - complete app
-- mailinglist
 - uploads
 - batch-downloads
 - attachment-thumbnails
@@ -82,6 +82,7 @@
 
 ## To fix
 
+- running tests from test dir
 - app logger only logs the Emailkasten pkg
 - storage is incremented by healthcheck
 - correspondent is not user specific!

@@ -42,6 +42,8 @@ class CorrespondentFilterSet(django_filters.FilterSet):
         fields=[
             "email_name",
             "email_address",
+            "list_id",
+            "list_owner",
             "created",
             "updated",
         ]
@@ -83,5 +85,13 @@ class CorrespondentFilterSet(django_filters.FilterSet):
             The filtered queryset.
         """
         return queryset.filter(
-            Q(email_address__icontains=value) | Q(email_name__icontains=value)
+            Q(email_address__icontains=value)
+            | Q(email_name__icontains=value)
+            | Q(list_id__icontains=value)
+            | Q(list_owner__icontains=value)
+            | Q(list_subscribe__icontains=value)
+            | Q(list_unsubscribe__icontains=value)
+            | Q(list_post__icontains=value)
+            | Q(list_help__icontains=value)
+            | Q(list_archive__icontains=value)
         ).distinct()

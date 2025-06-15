@@ -89,9 +89,6 @@ class EmailViewSet(
             return Email.objects.none()
         return (
             Email.objects.filter(mailbox__account__user=self.request.user)  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
-            .select_related(
-                "mailinglist",
-            )
             .prefetch_related(
                 "attachments", "in_reply_to", "replies", "references", "referenced_by"
             )

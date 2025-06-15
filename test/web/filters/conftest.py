@@ -38,7 +38,6 @@ from core.models import (
     Email,
     EmailCorrespondent,
     Mailbox,
-    MailingList,
 )
 
 
@@ -182,6 +181,13 @@ def correspondent_queryset(
         with freeze_time(DATETIME_TEST_ITEMS[number]):
             baker.make(
                 Correspondent,
+                list_id=text_test_item,
+                list_owner=text_test_item,
+                list_subscribe=text_test_item,
+                list_unsubscribe=text_test_item,
+                list_post=text_test_item,
+                list_help=text_test_item,
+                list_archive=text_test_item,
                 email_name=text_test_item,
                 email_address=text_test_item,
                 is_favorite=BOOL_TEST_ITEMS[number],
@@ -191,30 +197,9 @@ def correspondent_queryset(
 
 
 @pytest.fixture(scope="package")
-def mailinglist_queryset(unblocked_db) -> QuerySet[MailingList, MailingList]:
-    """Fixture adding mailinglists with the test attributes to the database and returns them in a queryset."""
-    for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
-        with freeze_time(DATETIME_TEST_ITEMS[number]):
-            baker.make(
-                MailingList,
-                list_id=text_test_item,
-                list_owner=text_test_item,
-                list_subscribe=text_test_item,
-                list_unsubscribe=text_test_item,
-                list_post=text_test_item,
-                list_help=text_test_item,
-                list_archive=text_test_item,
-                is_favorite=BOOL_TEST_ITEMS[number],
-            )
-
-    return MailingList.objects.all()
-
-
-@pytest.fixture(scope="package")
 def email_queryset(
     unblocked_db,
     mailbox_queryset,
-    mailinglist_queryset,
 ) -> QuerySet[Email, Email]:
     """Fixture adding emails with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
@@ -229,7 +214,6 @@ def email_queryset(
                 datasize=INT_TEST_ITEMS[number],
                 is_favorite=BOOL_TEST_ITEMS[number],
                 mailbox=mailbox_queryset.get(id=number + 1),
-                mailinglist=mailinglist_queryset.get(id=number + 1),
                 x_spam=text_test_item,
             )
 

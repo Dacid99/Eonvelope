@@ -21,6 +21,27 @@
     {{ object.email_name }}
 {% endblock card_subtitle %}
 
+{% block card_content %}
+    {% if object.is_mailinglist %}
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+                {% translate "Subscribe" %}: <a href="mailto:{{ object.list_subscribe }}"
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_subscribe }}</a>
+            </li>
+            <li class="list-group-item">
+                {% translate "Unsubscribe" %}: <a href="mailto:{{ object.list_unsubscribe }}"
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_unsubscribe }}</a>
+            </li>
+            <li class="list-group-item">
+                {% translate "Post" %}: <a href="mailto:{{ object.list_post }}"
+    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_post }}</a>
+            </li>
+            <li class="list-group-item">{% translate "Archive" %}: {{ object.list_archive }}</li>
+            <li class="list-group-item">{% translate "Help" %}: {{ object.list_help }}</li>
+        </ul>
+    {% endif %}
+{% endblock card_content %}
+
 {% block card_extras %}
     <div class="card">
         <div class="card-body">

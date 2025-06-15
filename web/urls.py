@@ -64,8 +64,6 @@ from .views import (
     MailboxEmailsFilterView,
     MailboxFilterView,
     MailboxUpdateOrDeleteView,
-    MailingListDetailWithDeleteView,
-    MailingListFilterView,
     UploadEmailView,
 )
 
@@ -214,15 +212,5 @@ urlpatterns = [
         "mailboxes/<int:pk>/upload/",
         UploadEmailView.as_view(),
         name=UploadEmailView.URL_NAME,
-    ),
-    path(
-        "mailinglists/",
-        MailingListFilterView.as_view(),
-        name=MailingListFilterView.URL_NAME,
-    ),
-    path(
-        "mailinglists/<int:pk>/",
-        MailingListDetailWithDeleteView.as_view(),
-        name=MailingListDetailWithDeleteView.URL_NAME,
     ),
 ]

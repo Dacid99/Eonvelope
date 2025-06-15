@@ -38,7 +38,7 @@ from core.constants import (
     SupportedEmailDownloadFormats,
     file_format_parsers,
 )
-from core.models import Correspondent, Email, Mailbox, MailingList
+from core.models import Correspondent, Email, Mailbox
 
 from ...conftest import TEST_EMAIL_PARAMETERS
 from .test_Attachment import mock_Attachment_save_to_storage
@@ -103,8 +103,6 @@ def test_Email_fields(fake_email):
     assert isinstance(fake_email.html_version, str)
     assert fake_email.is_favorite is False
 
-    assert fake_email.mailinglist is not None
-    assert isinstance(fake_email.mailinglist, MailingList)
     assert fake_email.mailbox is not None
     assert isinstance(fake_email.mailbox, Mailbox)
     assert fake_email.headers is None
@@ -163,20 +161,6 @@ def test_Email_m2m_in_reply_to_deletion(fake_email):
     assert not fake_email.in_reply_to.exists()
     with pytest.raises(Email.DoesNotExist):
         in_reply_to_email.refresh_from_db()
-
-
-@pytest.mark.django_db
-def test_Email_foreign_key_mailing_list_deletion(fake_email):
-    """Tests the on_delete foreign key constraint on mailinglist in :class:`core.models.Email.Email`."""
-
-    mailing_list = baker.make(MailingList)
-    fake_email.mailinglist = mailing_list
-    fake_email.save()
-
-    mailing_list.delete()
-
-    with pytest.raises(Email.DoesNotExist):
-        fake_email.refresh_from_db()
 
 
 @pytest.mark.django_db

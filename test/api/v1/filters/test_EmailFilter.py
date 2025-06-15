@@ -295,46 +295,6 @@ def test_mailbox__account__mail_host_filter(
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_mailinglist__list_id_filter(
-    email_queryset, lookup_expr, filterquery, expected_indices
-):
-    """Tests :class:`api.v1.filters.EmailFilterSet`'s filtering
-    for the related :attr:`core.models.MailingList.MailingList.list_id` field.
-    """
-    query = {"mailinglist__list_id" + lookup_expr: filterquery}
-
-    filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
-
-    assert filtered_data.distinct().count() == filtered_data.count()
-    assert filtered_data.count() == len(expected_indices)
-    for data in filtered_data:
-        assert data.id - 1 in expected_indices
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
-)
-def test_mailinglist__list_owner_filter(
-    email_queryset, lookup_expr, filterquery, expected_indices
-):
-    """Tests :class:`api.v1.filters.EmailFilterSet`'s filtering
-    for the related :attr:`core.models.MailingList.MailingList.list_owner` field.
-    """
-    query = {"mailinglist__list_owner" + lookup_expr: filterquery}
-
-    filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
-
-    assert filtered_data.distinct().count() == filtered_data.count()
-    assert filtered_data.count() == len(expected_indices)
-    for data in filtered_data:
-        assert data.id - 1 in expected_indices
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
-)
 def test_correspondents__email_name_filter(
     email_queryset, lookup_expr, filterquery, expected_indices
 ):

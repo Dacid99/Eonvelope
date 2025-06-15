@@ -47,7 +47,6 @@ def complete_database(
     fake_email,
     fake_emailcorrespondent,
     fake_mailbox,
-    fake_mailing_list,
 ):
     """Fixture providing a complete database setup."""
 

@@ -48,6 +48,27 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
     email_address = models.CharField(max_length=255, unique=True)
     """The mail address of the correspondent. Unique."""
 
+    list_id = models.CharField(max_length=255, blank=True, default="")
+    """The List-ID header of the mailinglist. Unique together with :attr:`correspondent`."""
+
+    list_owner = models.CharField(max_length=255, blank=True, default="")
+    """The List-Owner header of the mailinglist. Can be blank."""
+
+    list_subscribe = models.EmailField(max_length=255, blank=True, default="")
+    """The List-Subscribe header of the mailinglist. Can be blank."""
+
+    list_unsubscribe = models.EmailField(max_length=255, blank=True, default="")
+    """The List-Unsubscribe header of the mailinglist. Can be blank."""
+
+    list_post = models.CharField(max_length=255, blank=True, default="")
+    """The List-Post header of the mailinglist. Can be blank."""
+
+    list_help = models.CharField(max_length=255, blank=True, default="")
+    """The List-Help header of the mailinglist. Can be blank."""
+
+    list_archive = models.CharField(max_length=255, blank=True, default="")
+    """The List-Archive header of the mailinglist. Can be blank."""
+
     is_favorite = models.BooleanField(default=False)
     """Flags favorite correspondents. False by default."""
 
@@ -77,6 +98,22 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
         return _("Correspondent with address %(email_address)s") % {
             "email_address": self.email_address
         }
+
+    def is_mailinglist(self) -> bool:
+        """Whether the correspondent is a mailinglist.
+
+        Returns:
+            Whether the correspondent has any list_ attributes.
+        """
+        return bool(
+            self.list_id
+            or self.list_archive
+            or self.list_help
+            or self.list_owner
+            or self.list_post
+            or self.list_subscribe
+            or self.list_unsubscribe
+        )
 
     @classmethod
     def create_from_correspondent_tuple(

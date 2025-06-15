@@ -34,7 +34,6 @@ from ..attachment_serializers import BaseAttachmentSerializer
 from ..emailcorrespondent_serializers.EmailCorrespondentSerializer import (
     EmailCorrespondentSerializer,
 )
-from ..mailinglist_serializers import SimpleMailingListSerializer
 from .BaseEmailSerializer import BaseEmailSerializer
 
 
@@ -43,8 +42,7 @@ class EmailSerializer(BaseEmailSerializer):
 
     Includes only the most relevant model fields.
     Includes nested serializers for the :attr:`core.models.Email.Email.replies`,
-    :attr:`core.models.Email.Email.attachments`,
-    :attr:`core.models.Email.Email.mailinglist` and
+    :attr:`core.models.Email.Email.attachments`and
     :attr:`core.models.Email.Email.correspondents` foreign key and related fields.
     """
 
@@ -61,11 +59,6 @@ class EmailSerializer(BaseEmailSerializer):
     attachments = BaseAttachmentSerializer(many=True, read_only=True)
     """The attachments are serialized
     by :class:`Emailkasten.AttachmentSerializers.BaseAttachmentSerializer.BaseAttachmentSerializer`.
-    """
-
-    mailinglist = SimpleMailingListSerializer(read_only=True)
-    """The attachments are serialized
-    by :class:`Emailkasten.MailingListSerializers.SimpleMailingListSerializer.SimpleMailingListSerializer`.
     """
 
     correspondents = serializers.SerializerMethodField(read_only=True)

@@ -139,6 +139,13 @@ class CorrespondentFilterSet(filters.FilterSet):
         fields: ClassVar[dict[str, list[str]]] = {
             "email_name": FilterSetups.TEXT,
             "email_address": FilterSetups.TEXT,
+            "list_id": FilterSetups.TEXT,
+            "list_owner": FilterSetups.TEXT,
+            "list_subscribe": FilterSetups.TEXT,
+            "list_unsubscribe": FilterSetups.TEXT,
+            "list_post": FilterSetups.TEXT,
+            "list_help": FilterSetups.TEXT,
+            "list_archive": FilterSetups.TEXT,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,
@@ -158,5 +165,13 @@ class CorrespondentFilterSet(filters.FilterSet):
             The filtered queryset.
         """
         return queryset.filter(
-            Q(email_address__icontains=value) | Q(email_name__icontains=value)
+            Q(email_address__icontains=value)
+            | Q(email_name__icontains=value)
+            | Q(list_id__icontains=value)
+            | Q(list_owner__icontains=value)
+            | Q(list_subscribe__icontains=value)
+            | Q(list_unsubscribe__icontains=value)
+            | Q(list_post__icontains=value)
+            | Q(list_help__icontains=value)
+            | Q(list_archive__icontains=value)
         ).distinct()

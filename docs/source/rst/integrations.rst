@@ -26,7 +26,7 @@ For instance, to search the attachments data, use:
 
     /api/v1/attachments/?search=
 
-Similar patterns apply for correspondents, mailinglists, accounts, mailboxes, etc.
+Similar patterns apply for correspondents, accounts, mailboxes, etc.
 Check the API schema or the browsable API for more details.
 
 To grant access, you can create an ``accesstoken`` in the admin panel or via the browsable API and provide it in the configuration of the ``JSONEngine``.

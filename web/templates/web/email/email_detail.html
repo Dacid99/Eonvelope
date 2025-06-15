@@ -39,12 +39,6 @@
         <li class="list-group-item">
             {% translate "Datasize" %}: {{ object.datasize }} {% translate "bytes" %}
         </li>
-        {% if object.mailinglist %}
-            <li class="list-group-item list-group-item-action">
-                {% translate "Mailinglist" %}: <a href="{{ object.mailinglist.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Mailinglist" %}: {{ object.mailinglist.list_id }}</a>
-            </li>
-        {% endif %}
         <li class="list-group-item list-group-item-action">
             {% translate "Mailbox" %}: <a href="{{ object.mailbox.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.name }}</a>

@@ -122,17 +122,17 @@ def test_Mailbox_foreign_key_deletion(fake_mailbox):
 def test_Mailbox_unique_constraints():
     """Tests the unique constraints of :class:`core.models.Mailbox.Mailbox`."""
 
-    mailing_list_1 = baker.make(Mailbox, name="abc123")
-    mailing_list_2 = baker.make(Mailbox, name="abc123")
-    assert mailing_list_1.name == mailing_list_2.name
-    assert mailing_list_1.account != mailing_list_2.account
+    mailbox_1 = baker.make(Mailbox, name="abc123")
+    mailbox_2 = baker.make(Mailbox, name="abc123")
+    assert mailbox_1.name == mailbox_2.name
+    assert mailbox_1.account != mailbox_2.account
 
     account = baker.make(Account)
 
-    mailing_list_1 = baker.make(Mailbox, account=account)
-    mailing_list_2 = baker.make(Mailbox, account=account)
-    assert mailing_list_1.name != mailing_list_2.name
-    assert mailing_list_1.account == mailing_list_2.account
+    mailbox_1 = baker.make(Mailbox, account=account)
+    mailbox_2 = baker.make(Mailbox, account=account)
+    assert mailbox_1.name != mailbox_2.name
+    assert mailbox_1.account == mailbox_2.account
 
     baker.make(Mailbox, name="abc123", account=account)
     with pytest.raises(IntegrityError):

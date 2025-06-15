@@ -24,7 +24,6 @@ from .CorrespondentFilterSet import CorrespondentFilterSet
 from .DaemonFilterSet import DaemonFilterSet
 from .EmailFilterSet import EmailFilterSet
 from .MailboxFilterSet import MailboxFilterSet
-from .MailingListFilterSet import MailingListFilterSet
 
 
 __all__ = [
@@ -34,5 +33,4 @@ __all__ = [
     "DaemonFilterSet",
     "EmailFilterSet",
     "MailboxFilterSet",
-    "MailingListFilterSet",
 ]

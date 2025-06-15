@@ -27,7 +27,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.models import Account, Attachment, Correspondent, Email, Mailbox, MailingList
+from core.models import Account, Attachment, Correspondent, Email, Mailbox
 
 
 if TYPE_CHECKING:
@@ -63,11 +63,7 @@ class DatabaseStatsView(APIView):
         ).count()
         account_count = Account.objects.filter(user=request.user).count()
         mailbox_count = Mailbox.objects.filter(account__user=request.user).count()
-        mailinglist_count = (
-            MailingList.objects.filter(emails__mailbox__account__user=request.user)
-            .distinct()
-            .count()
-        )
+
         return Response(
             {
                 "email_count": email_count,
@@ -75,6 +71,5 @@ class DatabaseStatsView(APIView):
                 "attachment_count": attachment_count,
                 "account_count": account_count,
                 "mailbox_count": mailbox_count,
-                "mailinglist_count": mailinglist_count,
             }
         )

@@ -64,7 +64,6 @@ class BaseEmailSerializer(serializers.ModelSerializer[Email]):
             "datasize",
             "html_version",
             "correspondents",
-            "mailinglist",
             "mailbox",
             "headers",
             "x_spam",

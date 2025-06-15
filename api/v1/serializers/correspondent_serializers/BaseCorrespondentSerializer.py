@@ -53,7 +53,18 @@ class BaseCorrespondentSerializer(serializers.ModelSerializer[Correspondent]):
         fields = "__all__"
         """Include all fields."""
 
-        read_only_fields: Final[list[str]] = ["email_address", "created", "updated"]
+        read_only_fields: Final[list[str]] = [
+            "email_address",
+            "list_id",
+            "list_owner",
+            "list_subscribe",
+            "list_unsubscribe",
+            "list_post",
+            "list_help",
+            "list_archive",
+            "created",
+            "updated",
+        ]
         """The :attr:`core.models.Correspondent.Correspondent.email_address`,
         :attr:`core.models.Correspondent.Correspondent.created` and
         :attr:`core.models.Correspondent.Correspondent.updated` fields are read-only.

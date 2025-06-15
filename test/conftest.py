@@ -68,7 +68,6 @@ from core.models import (
     Email,
     EmailCorrespondent,
     Mailbox,
-    MailingList,
 )
 
 
@@ -378,36 +377,24 @@ def fake_correspondent() -> Correspondent:
 
 
 @pytest.fixture
-def fake_mailing_list() -> MailingList:
-    """Creates an :class:`core.models.MailingList` owned by :attr:`owner_user`.
-
-    Returns:
-        The mailinglist instance for testing.
-    """
-    return baker.make(MailingList)
-
-
-@pytest.fixture
-def fake_email(faker, fake_mailbox, fake_mailing_list) -> Email:
+def fake_email(faker, fake_mailbox) -> Email:
     """Creates an :class:`core.models.Email` owned by :attr:`owner_user`.
 
     Args:
         mailbox: Depends on :func:`mailbox`.
-        mailinglist: Depends on :func:`mailinglist`.
 
     Returns:
         The email instance for testing.
     """
-    return baker.make(Email, mailbox=fake_mailbox, mailinglist=fake_mailing_list)
+    return baker.make(Email, mailbox=fake_mailbox)
 
 
 @pytest.fixture
-def fake_email_with_file(faker, fake_fs, fake_mailbox, fake_mailing_list) -> Email:
+def fake_email_with_file(faker, fake_fs, fake_mailbox) -> Email:
     """Creates an :class:`core.models.Email` owned by :attr:`owner_user`.
 
     Args:
         mailbox: Depends on :func:`mailbox`.
-        mailinglist: Depends on :func:`mailinglist`.
 
     Returns:
         The email instance for testing.
@@ -417,7 +404,6 @@ def fake_email_with_file(faker, fake_fs, fake_mailbox, fake_mailing_list) -> Ema
     return baker.make(
         Email,
         mailbox=fake_mailbox,
-        mailinglist=fake_mailing_list,
         eml_filepath=default_storage.save(
             faker.file_name(extension="eml"), BytesIO(test_eml_bytes)
         ),
@@ -528,40 +514,24 @@ def fake_other_correspondent() -> Correspondent:
 
 
 @pytest.fixture
-def fake_other_mailing_list() -> MailingList:
-    """Creates an :class:`core.models.MailingList` owned by :attr:`other_user`.
-
-    Returns:
-        The mailinglist instance for testing.
-    """
-    return baker.make(MailingList)
-
-
-@pytest.fixture
-def fake_other_email(faker, fake_other_mailbox, fake_other_mailing_list) -> Email:
+def fake_other_email(faker, fake_other_mailbox) -> Email:
     """Creates an :class:`core.models.Email` owned by :attr:`other_user`.
 
     Args:
         mailbox: Depends on :func:`mailbox`.
-        mailinglist: Depends on :func:`mailinglist`.
 
     Returns:
         The email instance for testing.
     """
-    return baker.make(
-        Email, mailbox=fake_other_mailbox, mailinglist=fake_other_mailing_list
-    )
+    return baker.make(Email, mailbox=fake_other_mailbox)
 
 
 @pytest.fixture
-def fake_other_email_with_file(
-    faker, fake_fs, fake_other_mailbox, fake_other_mailing_list
-) -> Email:
+def fake_other_email_with_file(faker, fake_fs, fake_other_mailbox) -> Email:
     """Creates an :class:`core.models.Email` owned by :attr:`other_user`.
 
     Args:
         mailbox: Depends on :func:`mailbox`.
-        mailinglist: Depends on :func:`mailinglist`.
 
     Returns:
         The email instance for testing.
@@ -571,7 +541,6 @@ def fake_other_email_with_file(
     return baker.make(
         Email,
         mailbox=fake_other_mailbox,
-        mailinglist=fake_other_mailing_list,
         eml_filepath=default_storage.save(
             faker.file_name(extension="eml"), BytesIO(test_eml_bytes)
         ),
@@ -688,6 +657,13 @@ def correspondent_payload(faker, fake_email) -> dict[str, Any]:
         Correspondent,
         emails=[fake_email],
         email_name=faker.name(),
+        list_id=faker.name(),
+        list_owner=faker.name(),
+        list_subscribe=faker.email(),
+        list_unsubscribe=faker.email(),
+        list_post=faker.email(),
+        list_archive=faker.url(),
+        list_help=faker.url(),
         is_favorite=not Correspondent.is_favorite.field.default,
     )
     payload = model_to_dict(correspondent_data)
@@ -777,31 +753,5 @@ def mailbox_payload(fake_account) -> dict[str, Any]:
         is_favorite=not Mailbox.is_favorite.field.default,
     )
     payload = model_to_dict(mailbox_data)
-    payload.pop("id")
-    return {key: value for key, value in payload.items() if value is not None}
-
-
-@pytest.fixture
-def mailing_list_payload(faker, fake_email) -> dict[str, Any]:
-    """Fixture creating clean :class:`core.models.MailingList` payload with data deviating from the defaults.
-
-    Args:
-        email: Depends on :func:`email`.
-
-    Returns:
-        The clean payload.
-    """
-    mailinglist_data = baker.prepare(
-        MailingList,
-        emails=[fake_email],
-        list_owner=faker.name(),
-        list_subscribe=faker.email(),
-        list_unsubscribe=faker.email(),
-        list_post=faker.email(),
-        list_archive=faker.url(),
-        list_help=faker.url(),
-        is_favorite=not MailingList.is_favorite.field.default,
-    )
-    payload = model_to_dict(mailinglist_data)
     payload.pop("id")
     return {key: value for key, value in payload.items() if value is not None}

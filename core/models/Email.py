@@ -50,7 +50,6 @@ from ..utils.mail_parsing import (
 )
 from .Attachment import Attachment
 from .EmailCorrespondent import EmailCorrespondent
-from .MailingList import MailingList
 
 
 if TYPE_CHECKING:
@@ -119,16 +118,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     )
     """The correspondents that are mentioned in this mail. Bridges through :class:`core.models.EmailCorrespondent`."""
 
-    mailinglist: models.ForeignKey[MailingList | None, MailingList | None] = (
-        models.ForeignKey(
-            "MailingList",
-            null=True,
-            related_name="emails",
-            on_delete=models.CASCADE,
-        )
-    )
-    """The mailinglist that this mail has been sent from. Can be null. Deletion of that `mailinglist` deletes this mail."""
-
     mailbox: models.ForeignKey[Mailbox] = models.ForeignKey(
         "Mailbox", related_name="emails", on_delete=models.CASCADE
     )
@@ -149,7 +138,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     BASENAME = "email"
 
     DELETE_NOTICE = _(
-        "This will delete this email and all its attachments but not its correspondents or mailinglists."
+        "This will delete this email and all its attachments but not its correspondents."
     )
 
     class Meta:
@@ -373,9 +362,35 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             for mention in HeaderFields.Correspondents.values:
                 correspondent_header = self.headers.get(mention)
                 if correspondent_header:
-                    EmailCorrespondent.create_from_header(
+                    new_emailcorrespondents = EmailCorrespondent.create_from_header(
                         correspondent_header, mention, self
                     )
+                    if mention == HeaderFields.Correspondents.FROM:
+                        for new_emailcorrespondent in new_emailcorrespondents:
+                            new_emailcorrespondent.correspondent.list_id = (
+                                self.headers.get(HeaderFields.MailingList.ID, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_help = (
+                                self.headers.get(HeaderFields.MailingList.HELP, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_archive = (
+                                self.headers.get(HeaderFields.MailingList.ARCHIVE, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_subscribe = (
+                                self.headers.get(HeaderFields.MailingList.SUBSCRIBE, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_unsubscribe = (
+                                self.headers.get(
+                                    HeaderFields.MailingList.UNSUBSCRIBE, ""
+                                )
+                            )
+                            new_emailcorrespondent.correspondent.list_post = (
+                                self.headers.get(HeaderFields.MailingList.POST, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_owner = (
+                                self.headers.get(HeaderFields.MailingList.OWNER, "")
+                            )
+                            new_emailcorrespondent.correspondent.save()
 
     def add_in_reply_to(self) -> None:
         """Adds the in-reply-to emails from the headerfields to the model."""
@@ -448,9 +463,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         logger.debug("Successfully parsed email.")
         try:
             with transaction.atomic():
-                new_email.mailinglist = MailingList.create_from_email_message(
-                    email_message
-                )
                 new_email.save(email_data=email_bytes)
                 new_email.add_correspondents()
                 new_email.add_in_reply_to()

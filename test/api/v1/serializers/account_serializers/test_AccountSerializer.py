@@ -92,3 +92,65 @@ def test_input(fake_account, request_context):
     assert "updated" not in serializer_data
     assert "user" not in serializer_data
     assert len(serializer_data) == 7
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_mail_address", ["nomail", "email@email@multi@.com"])
+def test_input_bad_mail_address(
+    fake_account, account_payload, request_context, bad_mail_address
+):
+    """Tests input direction of :class:`api.v1.serializers.AccountSerializer`."""
+    account_payload["mail_address"] = bad_mail_address
+
+    serializer = AccountSerializer(
+        instance=fake_account, data=account_payload, context=request_context
+    )
+
+    assert not serializer.is_valid()
+    assert serializer["mail_address"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_mail_host_port", [-10, 98765])
+def test_input_bad_mail_host_port(
+    fake_account, account_payload, request_context, bad_mail_host_port
+):
+    """Tests input direction of :class:`api.v1.serializers.AccountSerializer`."""
+    account_payload["mail_host_port"] = bad_mail_host_port
+
+    serializer = AccountSerializer(
+        instance=fake_account, data=account_payload, context=request_context
+    )
+
+    assert not serializer.is_valid()
+    assert serializer["mail_host_port"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_protocol", ["other"])
+def test_input_bad_protocol(
+    fake_account, account_payload, request_context, bad_protocol
+):
+    """Tests input direction of :class:`api.v1.serializers.AccountSerializer`."""
+    account_payload["protocol"] = bad_protocol
+
+    serializer = AccountSerializer(
+        instance=fake_account, data=account_payload, context=request_context
+    )
+
+    assert not serializer.is_valid()
+    assert serializer["protocol"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_timeout", [-1])
+def test_input_bad_timeout(fake_account, account_payload, request_context, bad_timeout):
+    """Tests input direction of :class:`api.v1.serializers.AccountSerializer`."""
+    account_payload["timeout"] = bad_timeout
+
+    serializer = AccountSerializer(
+        instance=fake_account, data=account_payload, context=request_context
+    )
+
+    assert not serializer.is_valid()
+    assert serializer["timeout"].errors

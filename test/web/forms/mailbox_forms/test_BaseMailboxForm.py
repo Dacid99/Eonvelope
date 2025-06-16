@@ -25,18 +25,18 @@ from web.forms import BaseMailboxForm
 
 
 @pytest.mark.django_db
-def test_post(fake_mailbox):
+def test_post(mailbox_payload):
     """Tests post direction of :class:`web.forms.BaseMailboxForm`."""
-    form = BaseMailboxForm(data=model_to_dict(fake_mailbox))
+    form = BaseMailboxForm(data=mailbox_payload)
 
     assert form.is_valid()
     form_data = form.cleaned_data
     assert "save_to_eml" in form_data
-    assert form_data["save_to_eml"] == fake_mailbox.save_to_eml
+    assert form_data["save_to_eml"] == mailbox_payload["save_to_eml"]
     assert "save_attachments" in form_data
-    assert form_data["save_attachments"] == fake_mailbox.save_attachments
+    assert form_data["save_attachments"] == mailbox_payload["save_attachments"]
     assert "is_favorite" in form_data
-    assert form_data["is_favorite"] == fake_mailbox.is_favorite
+    assert form_data["is_favorite"] == mailbox_payload["is_favorite"]
     assert "name" not in form_data
     assert "account" not in form_data
     assert "is_healthy" not in form_data

@@ -45,7 +45,6 @@
 - views customactions for response with updated modeldata
 - storagebackend for colliding file/dir
 - test celery daemons
-- serializer and form validation against bad values
 
 ## To implement
 

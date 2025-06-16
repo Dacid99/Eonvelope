@@ -63,6 +63,80 @@ def test_post_update(fake_daemon, daemon_with_interval_payload):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("bad_mailbox", [1000])
+def test_post_bad_mailbox(fake_daemon, daemon_payload, bad_mailbox):
+    """Tests post direction of :class:`web.forms.CreateDaemonForm`."""
+    daemon_payload["mailbox"] = bad_mailbox
+
+    form = CreateDaemonForm(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["mailbox"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_fetching_criterion", ["OTHER"])
+def test_post_bad_fetching_criterion(
+    fake_daemon, daemon_payload, bad_fetching_criterion
+):
+    """Tests post direction of :class:`web.forms.CreateDaemonForm`."""
+    daemon_payload["fetching_criterion"] = bad_fetching_criterion
+
+    form = CreateDaemonForm(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["fetching_criterion"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_interval_period", ["other"])
+def test_post_bad_interval_period(fake_daemon, daemon_payload, bad_interval_period):
+    """Tests post direction of :class:`web.forms.CreateDaemonForm`."""
+    daemon_payload["interval_period"] = bad_interval_period
+
+    form = CreateDaemonForm(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["interval_period"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_interval_every", [0, -1])
+def test_post_bad_interval_every(fake_daemon, daemon_payload, bad_interval_every):
+    """Tests post direction of :class:`web.forms.CreateDaemonForm`."""
+    daemon_payload["interval_every"] = bad_interval_every
+
+    form = CreateDaemonForm(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["interval_every"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_log_backup_count", [-1])
+def test_post_bad_log_backup_count(fake_daemon, daemon_payload, bad_log_backup_count):
+    """Tests post direction of :class:`web.forms.CreateDaemonForm`."""
+    daemon_payload["log_backup_count"] = bad_log_backup_count
+
+    form = CreateDaemonForm(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["log_backup_count"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_logfile_size", [-1])
+def test_post_bad_logfile_size(fake_daemon, daemon_payload, bad_logfile_size):
+    """Tests post direction of :class:`web.forms.CreateDaemonForm`."""
+    daemon_payload["logfile_size"] = bad_logfile_size
+
+    form = CreateDaemonForm(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["logfile_size"].errors
+
+
+@pytest.mark.django_db
 def test_get(fake_daemon):
     """Tests get direction of :class:`web.forms.CreateDaemonForm`."""
     form = CreateDaemonForm(instance=fake_daemon)

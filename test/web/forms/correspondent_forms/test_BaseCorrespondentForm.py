@@ -25,16 +25,16 @@ from web.forms import BaseCorrespondentForm
 
 
 @pytest.mark.django_db
-def test_post(fake_correspondent):
+def test_post(correspondent_payload):
     """Tests post direction of :class:`web.forms.BaseCorrespondentForm`."""
-    form = BaseCorrespondentForm(data=model_to_dict(fake_correspondent))
+    form = BaseCorrespondentForm(data=correspondent_payload)
 
     assert form.is_valid()
     form_data = form.cleaned_data
     assert "email_name" in form_data
-    assert form_data["email_name"] == fake_correspondent.email_name
+    assert form_data["email_name"] == correspondent_payload["email_name"]
     assert "is_favorite" in form_data
-    assert form_data["is_favorite"] == fake_correspondent.is_favorite
+    assert form_data["is_favorite"] == correspondent_payload["is_favorite"]
     assert "email_address" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data

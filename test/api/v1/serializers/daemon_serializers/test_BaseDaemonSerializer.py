@@ -88,6 +88,68 @@ def test_input(fake_daemon, request_context):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("bad_fetching_criterion", ["OTHER"])
+def test_post_bad_fetching_criterion(
+    fake_daemon, daemon_payload, bad_fetching_criterion
+):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_payload["fetching_criterion"] = bad_fetching_criterion
+
+    form = BaseDaemonSerializer(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["fetching_criterion"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_interval_period", ["other"])
+def test_post_bad_interval_period(fake_daemon, daemon_payload, bad_interval_period):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_payload["interval_period"] = bad_interval_period
+
+    form = BaseDaemonSerializer(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["interval_period"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_interval_every", [0, -1])
+def test_post_bad_interval_every(fake_daemon, daemon_payload, bad_interval_every):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_payload["interval_every"] = bad_interval_every
+
+    form = BaseDaemonSerializer(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["interval_every"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_log_backup_count", [-1])
+def test_post_bad_log_backup_count(fake_daemon, daemon_payload, bad_log_backup_count):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_payload["log_backup_count"] = bad_log_backup_count
+
+    form = BaseDaemonSerializer(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["log_backup_count"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("bad_logfile_size", [-1])
+def test_post_bad_logfile_size(fake_daemon, daemon_payload, bad_logfile_size):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_payload["logfile_size"] = bad_logfile_size
+
+    form = BaseDaemonSerializer(instance=fake_daemon, data=daemon_payload)
+
+    assert not form.is_valid()
+    assert form["logfile_size"].errors
+
+
+@pytest.mark.django_db
 def test_validation_failure(fake_daemon):
     """Tests validation of :attr:`core.models.Daemon.Daemon.fetching_criterion`."""
     fake_daemon.fetching_criterion = "OTHER"

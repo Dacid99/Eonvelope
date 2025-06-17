@@ -40,9 +40,13 @@ We are striving to support as many languages as possible to make the application
 
 Translation is done via weblate. If you want to add a language that is missing, go check it out! If the language is missing on weblate too, please file an issue using the missing-language template.
 
+## Accessibility
+
+Everybody should be able to use Emailkasten. Please don't hesitate to report any problem related to accessibility via an issue.
+
 ## Contributing
 
-If you want to help us improving this projetc that is great! Please don't hesitate to approach us with ideas. And of course we are looking forward to your pull requests!
+If you want to help us improving this project that is great! Please don't hesitate to approach us with ideas. And of course we are looking forward to your pull requests!
 
 To get you started smoothly just follow [the development guide](DEVELOPMENT.md). This will help you set up a workspace for working with this project conveniently!
 

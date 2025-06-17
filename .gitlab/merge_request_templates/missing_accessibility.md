@@ -6,7 +6,7 @@ To make sure that the projects code remains in a good and maintainable state, pl
 
 Please go through the following checklist to give us a quickstart when checking your pull request.
 
-For a documentation upgrade this should be very straightforward.
+For a accessibility improvement this should be very straightforward.
 
 If you need help to get to your code to check all boxes, please submit the pull request in the best state you can reach yourself and we will help you to get it completed.
 
@@ -14,7 +14,7 @@ If you need help to get to your code to check all boxes, please submit the pull 
 
 *If you can't check one of these please explain why the change was necessary in the  Explanations section.*
 
-[] I have exclusively changed or added .rst files.
+[] I have exclusively changed .html files.
 
 ### Explanations
 
@@ -22,17 +22,18 @@ If you need help to get to your code to check all boxes, please submit the pull 
 *Please put explanations as to why you were unable to comply to a certain guideline here as well.*
 
 
-## Documentation improved
+## Accessibility improved
 
-[] I have added or improved documentation about a subject discussed here: *Add URL to discussion*
+[] I have fixed or improved an inaccessibility discussed here: *Add URL to discussion*
 
 *OR*
 
-[] I have added or improved documentation for:
+[] I have fixed or improved the following inaccessibility:
 
 
 
-[] I have compiled the docs (make html) and checked that they are readable.
+[] I have tested the html I changed and checked that it renders properly.
+
 
 ### Further Explanations
 

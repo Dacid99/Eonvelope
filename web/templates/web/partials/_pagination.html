@@ -1,15 +1,17 @@
 {% load i18n %}
 
 <div class="d-flex align-items-center justify-content-end">
-    <ul class="nav pagination mx-auto" aria-label="Page navigation">
+    <ul class="nav pagination mx-auto"
+        aria-label="{% translate 'Page navigation' %}">
         {% if page_obj.has_previous %}
             <li class="page-item">
                 <a class="page-link"
+                   aria-label="{% translate 'Previous' %}"
                    href="?page={{ page_obj.previous_page_number }}&page_size={{ page_size }}{% for param, value in query.items %}&{{ param }}={{ value }}{% endfor %}"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></a>
             </li>
         {% else %}
             <li class="page-item disabled">
-                <a class="page-link"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></a>
+                <a class="page-link" aria-disabled="true"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></a>
             </li>
         {% endif %}
         {% for page_number in page_obj.paginator.page_range %}
@@ -21,11 +23,12 @@
         {% if page_obj.has_next %}
             <li class="page-item">
                 <a class="page-link"
+                   aria-label="{% translate 'Next' %}"
                    href="?page={{ page_obj.next_page_number }}&page_size={{ page_size }}{% for param, value in query.items %}&{{ param }}={{ value }}{% endfor %}"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
             </li>
         {% else %}
             <li class="page-item disabled">
-                <a class="page-link"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+                <a class="page-link" aria-disabled="true"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
             </li>
         {% endif %}
     </ul>

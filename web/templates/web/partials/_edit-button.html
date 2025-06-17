@@ -1,5 +1,8 @@
+{% load i18n %}
+
 <a class="btn btn-outline-primary"
    href="{{ object.get_absolute_edit_url }}"
-   role="button">
+   role="button"
+   aria-label="{% translate 'Edit' %}">
     <i class="fa fa-edit" aria-hidden="true"></i>
 </a>

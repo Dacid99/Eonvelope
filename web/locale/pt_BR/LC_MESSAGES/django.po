@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 13:22+0200\n"
+"POT-Creation-Date: 2025-06-17 19:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -86,12 +86,19 @@ msgstr ""
 msgid "An unexpected error occurred while processing your request."
 msgstr ""
 
+#: web/templates/500.html:19
+msgid ""
+"First aid: Try again. If the error persists please inform your admin or "
+"write an issue report."
+msgstr ""
+
 #: web/templates/web/account/account_create.html:6
 msgid "Add Account"
 msgstr ""
 
 #: web/templates/web/account/account_create.html:29
-#: web/templates/web/partials/_cancel_edit-button.html:6
+#: web/templates/web/daemon/daemon_create.html:29
+#: web/templates/web/partials/_cancel_edit-button.html:5
 msgid "Cancel"
 msgstr ""
 
@@ -119,17 +126,19 @@ msgstr ""
 #: web/templates/web/account/account_detail.html:55
 #: web/templates/web/mailbox/mailbox_filter_list.html:6
 #: web/templates/web/mailbox/mailbox_filter_list.html:10
-#: web/templates/web/partials/_navbar.html:28
+#: web/templates/web/partials/_navbar.html:26
 msgid "Mailboxes"
 msgstr ""
 
 #: web/templates/web/account/account_detail.html:64
+#: web/templates/web/correspondent/correspondent_detail.html:49
 #: web/templates/web/dashboard.html:15
 #: web/templates/web/mailbox/mailbox_detail.html:73
 msgid "Latest Emails"
 msgstr ""
 
 #: web/templates/web/account/account_detail.html:67
+#: web/templates/web/correspondent/correspondent_detail.html:52
 #: web/templates/web/dashboard.html:18
 #: web/templates/web/mailbox/mailbox_detail.html:76
 msgid "View all"
@@ -146,7 +155,7 @@ msgstr ""
 
 #: web/templates/web/account/account_filter_list.html:6
 #: web/templates/web/account/account_filter_list.html:10
-#: web/templates/web/partials/_navbar.html:27
+#: web/templates/web/partials/_navbar.html:25
 msgid "Accounts"
 msgstr ""
 
@@ -183,7 +192,7 @@ msgid "Size"
 msgstr ""
 
 #: web/templates/web/attachment/attachment_detail.html:46
-#: web/templates/web/daemon/daemon_detail.html:54
+#: web/templates/web/daemon/daemon_detail.html:53
 #: web/templates/web/email/email_detail.html:40
 msgid "bytes"
 msgstr ""
@@ -196,8 +205,8 @@ msgstr ""
 
 #: web/templates/web/attachment/attachment_filter_list.html:6
 #: web/templates/web/attachment/attachment_filter_list.html:10
-#: web/templates/web/dashboard.html:61
-#: web/templates/web/email/email_detail.html:116
+#: web/templates/web/dashboard.html:54
+#: web/templates/web/email/email_detail.html:110
 #: web/templates/web/partials/_navbar.html:20
 msgid "Attachments"
 msgstr ""
@@ -215,39 +224,91 @@ msgstr ""
 msgid "Emailkasten"
 msgstr ""
 
+#: web/templates/web/bases/base_create.html:16
+#: web/templates/web/bases/base_detail.html:22
+#: web/templates/web/bases/base_detail.html:23
+#: web/templates/web/bases/base_detail_with_thumbnail.html:22
+msgid "Toolbar with button groups"
+msgstr ""
+
+#: web/templates/web/bases/base_create.html:17
+#: web/templates/web/bases/base_detail.html:37
+#: web/templates/web/bases/base_detail_with_thumbnail.html:37
+msgid "Close button group"
+msgstr ""
+
+#: web/templates/web/bases/base_detail.html:29
+#: web/templates/web/bases/base_detail_with_thumbnail.html:29
+msgid "Edit button group"
+msgstr ""
+
+#: web/templates/web/bases/base_detail_with_thumbnail.html:23
+msgid "Action button group"
+msgstr ""
+
 #: web/templates/web/bases/base_filter_list.html:10
 msgid "Show filter options"
 msgstr ""
 
-#: web/templates/web/bases/base_filter_list.html:28
+#: web/templates/web/bases/base_filter_list.html:33
 #: web/templates/web/email/archive/base_archive.html:61
 msgid "Filter options"
+msgstr ""
+
+#: web/templates/web/bases/base_filter_list.html:43
+#: web/templates/web/daemon/partials/_start-alert.html:14
+#: web/templates/web/daemon/partials/_stop-alert.html:14
+#: web/templates/web/email/archive/base_archive.html:71
+#: web/templates/web/partials/_action_result-alert.html:8
+#: web/templates/web/partials/_delete-modal.html:17
+#: web/templates/web/partials/_delete-modal.html:28
+msgid "Close"
 msgstr ""
 
 #: web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
 msgstr ""
 
-#: web/templates/web/correspondent/correspondent_detail.html:27
-#: web/templates/web/dashboard.html:40
-#: web/templates/web/email/email_filter_list.html:6
-#: web/templates/web/email/email_filter_list.html:10
-#: web/templates/web/mailinglist/mailinglist_detail.html:46
-#: web/templates/web/partials/_navbar.html:18
-msgid "Emails"
+#: web/templates/web/correspondent/correspondent_detail.html:28
+msgid "Subscribe"
+msgstr ""
+
+#: web/templates/web/correspondent/correspondent_detail.html:32
+msgid "Unsubscribe"
+msgstr ""
+
+#: web/templates/web/correspondent/correspondent_detail.html:36
+msgid "Post"
+msgstr ""
+
+#: web/templates/web/correspondent/correspondent_detail.html:39
+#: web/templates/web/email/archive/base_archive.html:6
+#: web/templates/web/email/email_filter_list.html:16
+msgid "Archive"
+msgstr ""
+
+#: web/templates/web/correspondent/correspondent_detail.html:40
+msgid "Help"
 msgstr ""
 
 #: web/templates/web/correspondent/correspondent_edit.html:6
 msgid "Edit Correspondent"
 msgstr ""
 
+#: web/templates/web/correspondent/correspondent_email_filter_list.html:6
+msgid "with"
+msgstr ""
+
 #: web/templates/web/correspondent/correspondent_filter_list.html:6
 #: web/templates/web/correspondent/correspondent_filter_list.html:10
 #: web/templates/web/dashboard.html:47
-#: web/templates/web/email/email_detail.html:107
-#: web/templates/web/mailinglist/mailinglist_detail.html:54
+#: web/templates/web/email/email_detail.html:101
 #: web/templates/web/partials/_navbar.html:22
 msgid "Correspondents"
+msgstr ""
+
+#: web/templates/web/daemon/daemon_create.html:6
+msgid "Add Daemon"
 msgstr ""
 
 #: web/templates/web/daemon/daemon_detail.html:6
@@ -257,7 +318,7 @@ msgstr ""
 #: web/templates/web/daemon/daemon_detail.html:40
 #: web/templates/web/daemon/daemon_edit.html:14
 #: web/templates/web/daemon/partials/_daemon_card.html:19
-#: web/templates/web/email/email_detail.html:49
+#: web/templates/web/email/email_detail.html:43
 #: web/templates/web/email/partials/_email_card.html:17
 msgid "Mailbox"
 msgstr ""
@@ -265,7 +326,7 @@ msgstr ""
 #: web/templates/web/daemon/daemon_detail.html:43
 #: web/templates/web/daemon/daemon_edit.html:17
 #: web/templates/web/daemon/partials/_daemon_card.html:22
-#: web/templates/web/email/email_detail.html:53
+#: web/templates/web/email/email_detail.html:47
 #: web/templates/web/email/partials/_email_card.html:20
 #: web/templates/web/mailbox/mailbox_detail.html:46
 #: web/templates/web/mailbox/partials/_mailbox_card.html:24
@@ -278,18 +339,14 @@ msgid "Criterion"
 msgstr ""
 
 #: web/templates/web/daemon/daemon_detail.html:50
-msgid "Cycle period"
+msgid "Interval"
 msgstr ""
 
 #: web/templates/web/daemon/daemon_detail.html:51
-msgid "Restart time"
-msgstr ""
-
-#: web/templates/web/daemon/daemon_detail.html:52
 msgid "Logfile backups"
 msgstr ""
 
-#: web/templates/web/daemon/daemon_detail.html:54
+#: web/templates/web/daemon/daemon_detail.html:53
 msgid "Logfile max size"
 msgstr ""
 
@@ -300,8 +357,26 @@ msgstr ""
 #: web/templates/web/daemon/daemon_filter_list.html:6
 #: web/templates/web/daemon/daemon_filter_list.html:10
 #: web/templates/web/mailbox/mailbox_detail.html:62
-#: web/templates/web/partials/_navbar.html:29
+#: web/templates/web/partials/_navbar.html:27
 msgid "Daemons"
+msgstr ""
+
+#: web/templates/web/daemon/partials/_add_button.html:6
+msgid "Add daemon"
+msgstr ""
+
+#: web/templates/web/daemon/partials/_download_logs-button.html:3
+#: web/templates/web/mailbox/partials/_download_dropdown.html:9
+#: web/templates/web/partials/_download-button.html:5
+msgid "Download"
+msgstr ""
+
+#: web/templates/web/daemon/partials/_is_running-badge.html:1
+msgid "Running"
+msgstr ""
+
+#: web/templates/web/daemon/partials/_is_running-badge.html:1
+msgid "Paused"
 msgstr ""
 
 #: web/templates/web/daemon/partials/_start-alert.html:7
@@ -324,7 +399,7 @@ msgstr ""
 msgid "Daemon was not running"
 msgstr ""
 
-#: web/templates/web/daemon/partials/_stop-button.html:8
+#: web/templates/web/daemon/partials/_stop-button.html:9
 msgid "Stop"
 msgstr ""
 
@@ -340,17 +415,11 @@ msgstr ""
 msgid "Database stats"
 msgstr ""
 
-#: web/templates/web/dashboard.html:54
-#: web/templates/web/mailinglist/mailinglist_filter_list.html:6
-#: web/templates/web/mailinglist/mailinglist_filter_list.html:10
-#: web/templates/web/partials/_navbar.html:24
-msgid "Mailinglists"
-msgstr ""
-
-#: web/templates/web/email/archive/base_archive.html:6
-#: web/templates/web/email/email_filter_list.html:16
-#: web/templates/web/mailinglist/mailinglist_detail.html:37
-msgid "Archive"
+#: web/templates/web/dashboard.html:40
+#: web/templates/web/email/email_filter_list.html:6
+#: web/templates/web/email/email_filter_list.html:10
+#: web/templates/web/partials/_navbar.html:18
+msgid "Emails"
 msgstr ""
 
 #: web/templates/web/email/archive/base_archive.html:14
@@ -414,40 +483,35 @@ msgstr ""
 msgid "Datasize"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:44
-#: web/templates/web/email/email_detail.html:45
-msgid "Mailinglist"
-msgstr ""
-
-#: web/templates/web/email/email_detail.html:64
+#: web/templates/web/email/email_detail.html:58
 msgid "Plain bodytext"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:80
+#: web/templates/web/email/email_detail.html:74
 msgid "Html bodytext"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:131
+#: web/templates/web/email/email_detail.html:125
 msgid "Headers"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:149
+#: web/templates/web/email/email_detail.html:143
 msgid "Conversation"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:158
+#: web/templates/web/email/email_detail.html:152
 msgid "In Reply To"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:176
+#: web/templates/web/email/email_detail.html:170
 msgid "Replies"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:195
+#: web/templates/web/email/email_detail.html:189
 msgid "References"
 msgstr ""
 
-#: web/templates/web/email/email_detail.html:213
+#: web/templates/web/email/email_detail.html:207
 msgid "Referenced by"
 msgstr ""
 
@@ -475,10 +539,6 @@ msgstr ""
 msgid "of"
 msgstr ""
 
-#: web/templates/web/mailbox/partials/_add_daemon-button.html:6
-msgid "Add daemon"
-msgstr ""
-
 #: web/templates/web/mailbox/partials/_fetch_all-button.html:9
 msgid "Fetch content"
 msgstr ""
@@ -503,30 +563,6 @@ msgstr ""
 msgid "Upload emails to the mailbox"
 msgstr ""
 
-#: web/templates/web/mailinglist/mailinglist_detail.html:6
-msgid "Mailinglist Details"
-msgstr ""
-
-#: web/templates/web/mailinglist/mailinglist_detail.html:26
-msgid "Subscribe"
-msgstr ""
-
-#: web/templates/web/mailinglist/mailinglist_detail.html:30
-msgid "Unsubscribe"
-msgstr ""
-
-#: web/templates/web/mailinglist/mailinglist_detail.html:34
-msgid "Post"
-msgstr ""
-
-#: web/templates/web/mailinglist/mailinglist_detail.html:38
-msgid "Help"
-msgstr ""
-
-#: web/templates/web/mailinglist/partials/_mailinglist_card.html:17
-msgid "Owner"
-msgstr ""
-
 #: web/templates/web/partials/_clear_and_submit_filter-button.html:4
 msgid "& Submit"
 msgstr ""
@@ -543,6 +579,11 @@ msgstr ""
 msgid "Last changed"
 msgstr ""
 
+#: web/templates/web/partials/_delete-button.html:7
+#: web/templates/web/partials/_delete-modal.html:32
+msgid "Delete"
+msgstr ""
+
 #: web/templates/web/partials/_delete-modal.html:12
 #, python-format
 msgid "Delete %(object)s"
@@ -553,12 +594,16 @@ msgstr ""
 msgid "Are you sure you want to delete %(object)s?"
 msgstr ""
 
-#: web/templates/web/partials/_delete-modal.html:28
-msgid "Close"
+#: web/templates/web/partials/_edit-button.html:6
+msgid "Edit"
 msgstr ""
 
-#: web/templates/web/partials/_delete-modal.html:32
-msgid "Delete"
+#: web/templates/web/partials/_end_edit-button.html:6
+msgid "End edit"
+msgstr ""
+
+#: web/templates/web/partials/_favorite_badge.html:4
+msgid "Favorite"
 msgstr ""
 
 #: web/templates/web/partials/_filter-form.html:5
@@ -569,7 +614,43 @@ msgstr ""
 msgid "2025 Emailkasten. Licensed under AGPLv3. All rights reserved."
 msgstr ""
 
-#: web/templates/web/partials/_pagination.html:36
+#: web/templates/web/partials/_footer.html:9
+msgid "Github"
+msgstr ""
+
+#: web/templates/web/partials/_footer.html:10
+msgid "Gitlab"
+msgstr ""
+
+#: web/templates/web/partials/_health_badge.html:4
+msgid "Healthy"
+msgstr ""
+
+#: web/templates/web/partials/_health_badge.html:8
+msgid "Unhealthy"
+msgstr ""
+
+#: web/templates/web/partials/_health_badge.html:12
+msgid "Health unknown"
+msgstr ""
+
+#: web/templates/web/partials/_navbar.html:13
+msgid "Toggle navigation"
+msgstr ""
+
+#: web/templates/web/partials/_pagination.html:4
+msgid "Page navigation"
+msgstr ""
+
+#: web/templates/web/partials/_pagination.html:8
+msgid "Previous"
+msgstr ""
+
+#: web/templates/web/partials/_pagination.html:25
+msgid "Next"
+msgstr ""
+
+#: web/templates/web/partials/_pagination.html:38
 msgid "Page Size"
 msgstr ""
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 13:27+0200\n"
+"POT-Creation-Date: 2025-06-17 19:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: Emailkasten/settings.py:409
+#: Emailkasten/settings.py:460
 msgid "Emailkasten API"
 msgstr "Emailkasten API"
 
-#: Emailkasten/settings.py:410
+#: Emailkasten/settings.py:461
 msgid "The API schema for the Emailkasten server."
 msgstr "Das API Schema des Emailkasten Servers."
 
-#: Emailkasten/settings.py:429
+#: Emailkasten/settings.py:480
 msgid "The default page size for paginated API response data"
 msgstr "Die Standard Seitengröße für API Anwortdaten"
 
-#: Emailkasten/settings.py:434
+#: Emailkasten/settings.py:485
 msgid "The maximum page size for paginated API response data"
 msgstr "Die maximale Seitengröße für API Antwortdaten"
 
-#: Emailkasten/settings.py:439
+#: Emailkasten/settings.py:490
 msgid "The default page size for pagination in the webapp."
 msgstr "Die Standard Seitengröße für die Webapp."
 
-#: Emailkasten/settings.py:445
+#: Emailkasten/settings.py:496
 msgid ""
 "The page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
@@ -46,23 +46,23 @@ msgstr ""
 "Die Seitengrößen Optionen in der Webapp. Sollte den Wert von "
 "WEB_DEFAULT_PAGE_SIZE enthalten."
 
-#: Emailkasten/settings.py:451
+#: Emailkasten/settings.py:502
 msgid "The default cycle period setting of a daemon in seconds"
 msgstr "Die Standard Periodendauer für Daemons in Sekunden."
 
-#: Emailkasten/settings.py:456
+#: Emailkasten/settings.py:507
 msgid "The default restart time setting of a daemon in seconds"
 msgstr "Die Standard Neustart Wartezeit für Daemons in Sekunden"
 
-#: Emailkasten/settings.py:461
+#: Emailkasten/settings.py:512
 msgid "The default number of daemon logfiles to keep"
 msgstr "Die Standardanzahl an gespeicherten Daemon Logdateien"
 
-#: Emailkasten/settings.py:466
+#: Emailkasten/settings.py:517
 msgid "The default maximum size of a daemon logfile in bytes"
 msgstr "Die Standard Daemon Logdateimaximalgröße in Bytes"
 
-#: Emailkasten/settings.py:472
+#: Emailkasten/settings.py:523
 #, fuzzy
 #| msgid ""
 #| "The maximum numbers of subdirectories in one storage unit. Must not "
@@ -74,11 +74,11 @@ msgstr ""
 "Die maximale Anzahl von Unterordnern in einem Speicherordner. Darf für ein "
 "ext4 Dateisystem nicht größer als 64000 sein!"
 
-#: Emailkasten/settings.py:478
+#: Emailkasten/settings.py:529
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr "Ob als Spam markierte Emails ignoriert werden."
 
-#: Emailkasten/settings.py:484
+#: Emailkasten/settings.py:535
 msgid ""
 "A list of content types prefixes to parse as files even if they are not "
 "marked as such. For an exhaustive list of all available types see https://"
@@ -87,7 +87,7 @@ msgstr ""
 "Liste von Content-Typ-Präfixen die als Anhang verarbeitet werden obwohl sie "
 "nicht als solcher markiert sind."
 
-#: Emailkasten/settings.py:491
+#: Emailkasten/settings.py:542
 msgid ""
 "A list of content types prefixes to not parse as files if they are not "
 "marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
@@ -95,19 +95,19 @@ msgstr ""
 "List von Content-Typ-Suffixen die nicht als Datei gespeichert werden."
 "Überschreibt Elemente in 'SAVE_CONTENT_TYPE_PREFIXES'."
 
-#: Emailkasten/settings.py:512
+#: Emailkasten/settings.py:563
 msgid "The html template to wrap around plain text for html conversion."
 msgstr "Html Template das um Email Klartext für die Konvertierung zu html."
 
-#: Emailkasten/settings.py:517
+#: Emailkasten/settings.py:568
 msgid "The default mailbox setting whether to store mails as eml."
 msgstr "Die Standard Mailboxeinstellung ob Emails als eml gespeichert werden."
 
-#: Emailkasten/settings.py:522
+#: Emailkasten/settings.py:573
 msgid "The default mailbox setting whether to store attachments."
 msgstr "Die Standard Mailboxeinstellung ob Anhänge gespeichert werden."
 
-#: Emailkasten/settings.py:528
+#: Emailkasten/settings.py:579
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
@@ -116,27 +116,27 @@ msgstr ""
 "Diese Einstellung ist nur relevant wenn die REGISTRATION_ENABLED "
 "Umgebungsvariable True ist."
 
-#: Emailkasten/settings.py:535
+#: Emailkasten/settings.py:586
 msgid "Server Configurations"
 msgstr "Server Konfiguration"
 
-#: Emailkasten/settings.py:537
+#: Emailkasten/settings.py:588
 msgid "Default Values"
 msgstr "Standardwerte"
 
-#: Emailkasten/settings.py:549
+#: Emailkasten/settings.py:599
 msgid "Processing Settings"
 msgstr "Verarbeitungseinstellungen"
 
-#: Emailkasten/settings.py:558
+#: Emailkasten/settings.py:608
 msgid "Storage Settings"
 msgstr "Speichereinstellungen"
 
-#: Emailkasten/settings.py:562
+#: Emailkasten/settings.py:612
 msgid "API Settings"
 msgstr "API Einstellungen"
 
-#: Emailkasten/settings.py:566
+#: Emailkasten/settings.py:616
 msgid "Web Settings"
 msgstr "Webapp Einstellungen"
 
@@ -148,6 +148,10 @@ msgstr "Emailkasten"
 #: Emailkasten/templates/allauth/layouts/base.html:30
 msgid "Go to Emailkasten"
 msgstr "Zu Emailkasten"
+
+#: Emailkasten/templates/allauth/layouts/base.html:41
+msgid "Toggle navigation"
+msgstr ""
 
 #: Emailkasten/templates/allauth/layouts/base.html:51
 #: Emailkasten/templates/allauth/layouts/base.html:55

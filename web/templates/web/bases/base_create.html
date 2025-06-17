@@ -1,5 +1,7 @@
 {% extends "web/bases/base.html" %}
 
+{% load i18n %}
+
 {% block content %}
 
     {% block alerts %}
@@ -11,8 +13,10 @@
         <div class="card-header d-flex justify-content-end align-items-center">
             <div class="btn-toolbar align-items-center"
                  role="toolbar"
-                 aria-label="Toolbar with buttons">
-                <div class="btn-group ms-3" role="group" aria-label="Close button group">
+                 aria-label="{% translate 'Toolbar with button groups' %}">
+                <div class="btn-group ms-3"
+                     role="group"
+                     aria-label="{% translate 'Close button group' %}">
 
                     {% block close_to_list_button %}
                     {% endblock close_to_list_button %}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 13:27+0200\n"
+"POT-Creation-Date: 2025-06-17 19:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,110 +19,110 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n "
 ">= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
 
-#: Emailkasten/settings.py:409
+#: Emailkasten/settings.py:460
 msgid "Emailkasten API"
 msgstr ""
 
-#: Emailkasten/settings.py:410
+#: Emailkasten/settings.py:461
 msgid "The API schema for the Emailkasten server."
 msgstr ""
 
-#: Emailkasten/settings.py:429
+#: Emailkasten/settings.py:480
 msgid "The default page size for paginated API response data"
 msgstr ""
 
-#: Emailkasten/settings.py:434
+#: Emailkasten/settings.py:485
 msgid "The maximum page size for paginated API response data"
 msgstr ""
 
-#: Emailkasten/settings.py:439
+#: Emailkasten/settings.py:490
 msgid "The default page size for pagination in the webapp."
 msgstr ""
 
-#: Emailkasten/settings.py:445
+#: Emailkasten/settings.py:496
 msgid ""
 "The page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
 
-#: Emailkasten/settings.py:451
+#: Emailkasten/settings.py:502
 msgid "The default cycle period setting of a daemon in seconds"
 msgstr ""
 
-#: Emailkasten/settings.py:456
+#: Emailkasten/settings.py:507
 msgid "The default restart time setting of a daemon in seconds"
 msgstr ""
 
-#: Emailkasten/settings.py:461
+#: Emailkasten/settings.py:512
 msgid "The default number of daemon logfiles to keep"
 msgstr ""
 
-#: Emailkasten/settings.py:466
+#: Emailkasten/settings.py:517
 msgid "The default maximum size of a daemon logfile in bytes"
 msgstr ""
 
-#: Emailkasten/settings.py:472
+#: Emailkasten/settings.py:523
 msgid ""
 "The maximum numbers of files in one storage unit. Must not exceed 64000 for "
 "ext4 filesystem!"
 msgstr ""
 
-#: Emailkasten/settings.py:478
+#: Emailkasten/settings.py:529
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr ""
 
-#: Emailkasten/settings.py:484
+#: Emailkasten/settings.py:535
 msgid ""
 "A list of content types prefixes to parse as files even if they are not "
 "marked as such. For an exhaustive list of all available types see https://"
 "www.iana.org/assignments/media-types/media-types.xhtml#text"
 msgstr ""
 
-#: Emailkasten/settings.py:491
+#: Emailkasten/settings.py:542
 msgid ""
 "A list of content types prefixes to not parse as files if they are not "
 "marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
 msgstr ""
 
-#: Emailkasten/settings.py:512
+#: Emailkasten/settings.py:563
 msgid "The html template to wrap around plain text for html conversion."
 msgstr ""
 
-#: Emailkasten/settings.py:517
+#: Emailkasten/settings.py:568
 msgid "The default mailbox setting whether to store mails as eml."
 msgstr ""
 
-#: Emailkasten/settings.py:522
+#: Emailkasten/settings.py:573
 msgid "The default mailbox setting whether to store attachments."
 msgstr ""
 
-#: Emailkasten/settings.py:528
+#: Emailkasten/settings.py:579
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
 msgstr ""
 
-#: Emailkasten/settings.py:535
+#: Emailkasten/settings.py:586
 msgid "Server Configurations"
 msgstr ""
 
-#: Emailkasten/settings.py:537
+#: Emailkasten/settings.py:588
 msgid "Default Values"
 msgstr ""
 
-#: Emailkasten/settings.py:549
+#: Emailkasten/settings.py:599
 msgid "Processing Settings"
 msgstr ""
 
-#: Emailkasten/settings.py:558
+#: Emailkasten/settings.py:608
 msgid "Storage Settings"
 msgstr ""
 
-#: Emailkasten/settings.py:562
+#: Emailkasten/settings.py:612
 msgid "API Settings"
 msgstr ""
 
-#: Emailkasten/settings.py:566
+#: Emailkasten/settings.py:616
 msgid "Web Settings"
 msgstr ""
 
@@ -133,6 +133,10 @@ msgstr ""
 
 #: Emailkasten/templates/allauth/layouts/base.html:30
 msgid "Go to Emailkasten"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:41
+msgid "Toggle navigation"
 msgstr ""
 
 #: Emailkasten/templates/allauth/layouts/base.html:51

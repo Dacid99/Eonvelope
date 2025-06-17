@@ -1,7 +1,8 @@
-<span class="badge bg-secondary text-center">
+<span class="badge bg-secondary text-center"
+      aria-label="{% if daemon.celery_task.enabled %}{% translate 'Running' %}{% else %}{% translate 'Paused' %}{% endif %}">
     {% if daemon.celery_task.enabled %}
-        <i class="fa-regular fa-play"></i>
+        <i class="fa-regular fa-play" aria-hidden="true"></i>
     {% else %}
-        <i class="fa-regular fa-pause"></i>
+        <i class="fa-regular fa-pause" aria-hidden="true"></i>
     {% endif %}
 </span>

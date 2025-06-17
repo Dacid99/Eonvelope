@@ -1,9 +1,12 @@
+{% load i18n %}
+
 <div class="dropdown">
     <button class="btn btn-outline-primary dropdown-toggle {% if not object.has_download %}disabled{% endif %}"
             type="button"
             id="dropdownDownloadMenuButton"
             data-bs-toggle="dropdown"
-            aria-expanded="false">
+            aria-expanded="false"
+            aria-label="{% translate 'Download' %}">
         <i class="fa fa-download" aria-hidden="true"></i>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownDownloadMenuButton">

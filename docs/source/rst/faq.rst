@@ -31,6 +31,14 @@ Translation is done via weblate. To get a quickstart look at :doc:`the translati
 If your language is also missing on weblate, please file an issue using the missing-language template.
 
 
+Parts of the user interface are not accessible to my device, what can I do?
+---------------------------------------------------------------------------
+
+It is important to us that everyone can use Emailkasten with as few barriers as possible.
+If you find a part of the frontend that lacks accessiblity or is confusing or flawd in this regard
+please don't hesitate to let us know via an issue using the missing-accessibility template.
+
+
 How can I contribute to this project?
 -------------------------------------
 

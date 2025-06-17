@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-04 11:07+0000\n"
+"POT-Creation-Date: 2025-06-17 19:15+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,61 +186,61 @@ msgstr ""
 msgid ".eml"
 msgstr ".eml"
 
-#: core/models/Account.py:60
+#: core/models/Account.py:63
 msgid "Email address"
 msgstr "Email Addresse"
 
-#: core/models/Account.py:61
+#: core/models/Account.py:64
 msgid "The mail address to the account."
 msgstr "Die Emailaddresse des Accounts."
 
-#: core/models/Account.py:67
+#: core/models/Account.py:70
 msgid "Password"
 msgstr "Passwort"
 
-#: core/models/Account.py:68
+#: core/models/Account.py:71
 msgid "The password to the account."
 msgstr "Das Passwort für den Account."
 
-#: core/models/Account.py:74
+#: core/models/Account.py:77
 msgid "Mailserver-URL"
 msgstr "Emailserver-URL"
 
-#: core/models/Account.py:75
+#: core/models/Account.py:78
 msgid "The URL of the mailserver for the chosen protocol."
 msgstr "Die URL des Emailservers für das gewählte Protokol."
 
-#: core/models/Account.py:82
+#: core/models/Account.py:86
 msgid "Mailserver-Portnumber"
 msgstr "Emailserver-Portnummer"
 
-#: core/models/Account.py:83
+#: core/models/Account.py:87
 msgid "The port of the mailserver for the chosen protocol."
 msgstr "Die Portnummer des Emailservers für das gewählte Protokol."
 
-#: core/models/Account.py:90
+#: core/models/Account.py:94
 msgid "Email Protocol"
 msgstr "Email Protokol"
 
-#: core/models/Account.py:91
+#: core/models/Account.py:95
 msgid "The email protocol implemented by the server."
 msgstr "Das Emailprotokol des Emailservers."
 
-#: core/models/Account.py:98
+#: core/models/Account.py:102
 msgid "Connection Timeout"
 msgstr "Verbindungs Timeout"
 
-#: core/models/Account.py:99
+#: core/models/Account.py:103
 msgid "Timeout for the connection to the mailserver."
 msgstr "Timeout für die Verbindung zum Emailserver."
 
-#: core/models/Account.py:125
+#: core/models/Account.py:129
 msgid ""
 "This will delete this account and all mailboxes, emails and attachments "
 "found in it!"
 msgstr "Dies löscht diesen Account, alle Mailboxen, Emails und Anhänge darin!"
 
-#: core/models/Account.py:155
+#: core/models/Account.py:159
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr "Account %(mail_address)s mit Protokol %(protocol)s"
@@ -262,75 +262,71 @@ msgstr "Mail-Name"
 msgid "The mailer name of the correspondent."
 msgstr "Der Mail-Name des Korrespondenten."
 
-#: core/models/Correspondent.py:62
+#: core/models/Correspondent.py:83
 msgid "This will only delete this correspondent, not its emails."
 msgstr "Dies löscht nur diesen Korrespondenten, nicht seine Emails."
 
-#: core/models/Correspondent.py:77
+#: core/models/Correspondent.py:98
 #, python-format
 msgid "Correspondent with address %(email_address)s"
 msgstr "Korrespondent mit Mail-Addresse %(email_address)s"
 
-#: core/models/Daemon.py:64
+#: core/models/Daemon.py:67
 msgid "Fetching Criterion"
 msgstr "Abruf Kriterium"
 
-#: core/models/Daemon.py:65
+#: core/models/Daemon.py:68
 msgid "The selection criterion for emails to archive."
 msgstr "Das Kriterium nach dem Emails abgrufen werden."
 
-#: core/models/Daemon.py:71
-msgid "Cycle Period"
-msgstr "Periodendauer"
+#: core/models/Daemon.py:79
+#, fuzzy
+#| msgid "Fetching Criterion"
+msgid "Fetching Interval"
+msgstr "Abruf Kriterium"
 
-#: core/models/Daemon.py:72
+#: core/models/Daemon.py:80
 msgid "The time between two daemon runs in seconds."
 msgstr "Die Zeit zwischen zwei "
 
-#: core/models/Daemon.py:78
-msgid "Restart time"
-msgstr "Neustart Wartezeit"
-
-#: core/models/Daemon.py:80
-msgid "The time to wait before restarting the daemon after a crash in seconds."
-msgstr ""
-"Die Wartezeit vor einem Neustart nach dem der Daemon abgestürzt ist in "
-"Sekunden."
-
-#: core/models/Daemon.py:107
+#: core/models/Daemon.py:99
 msgid "Logfile Backup Count"
 msgstr "Zahl von Logdatei Backups"
 
-#: core/models/Daemon.py:108
+#: core/models/Daemon.py:100
 msgid "The number of historical logfiles to keep."
 msgstr "Die Zahl an gespeicherten alten Logdateien."
 
-#: core/models/Daemon.py:114
+#: core/models/Daemon.py:106
 msgid "Logfile Maximum Size"
 msgstr "Logdateien Maximalgröße"
 
-#: core/models/Daemon.py:115
+#: core/models/Daemon.py:107
 msgid "The maximum size of a logfile in bytes."
 msgstr "Die Maximalgröße einer Logdatei in Bytes."
 
-#: core/models/Daemon.py:127
+#: core/models/Daemon.py:119
 msgid "This will only delete this daemon, not its mailbox."
 msgstr "Dies löscht nur den Daemon, nicht seine Mailbox."
 
-#: core/models/Daemon.py:152
+#: core/models/Daemon.py:150
 #, python-format
 msgid "Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s"
 msgstr "Emailfetcherdaemon %(uuid)s für Mailbox %(mailbox)s"
 
-#: core/models/Email.py:152
+#: core/models/Email.py:141
+#, fuzzy
+#| msgid ""
+#| "This will delete this email and all its attachments but not its "
+#| "correspondents or mailinglists."
 msgid ""
 "This will delete this email and all its attachments but not its "
-"correspondents or mailinglists."
+"correspondents."
 msgstr ""
 "Dies löscht diese Email und alle ihre Anhänge aber nicht ihre "
 "Korrespondenten und Mailingliste."
 
-#: core/models/Email.py:177
+#: core/models/Email.py:166
 #, python-format
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr "Email mit ID %(message_id)s, erhalten am %(datetime)s von %(mailbox)s"
@@ -370,15 +366,6 @@ msgstr "Dies löscht diese Mailbox und alle Emails und Anhänge in ihr!"
 msgid "Mailbox %(name)s of %(account)s"
 msgstr "Mailbox %(name)s in %(account)s"
 
-#: core/models/MailingList.py:76
-msgid "This will delete this mailinglist and all its emails!"
-msgstr "Dies löscht diese Mailingliste und alle ihre Emails!"
-
-#: core/models/MailingList.py:91
-#, python-format
-msgid "Mailinglist %(list_id)s from %(list_owner)s"
-msgstr "Mailingliste %(list_id)s von %(list_owner)s"
-
 #: core/models/StorageShard.py:77
 #, fuzzy, python-format
 #| msgid "%(state)s storage directory %(path)s"
@@ -400,3 +387,22 @@ msgstr ""
 #, python-format
 msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
 msgstr "Ein %(error_class_name)s: %(error)s trat während %(action_name)s auf!"
+
+#~ msgid "Cycle Period"
+#~ msgstr "Periodendauer"
+
+#~ msgid "Restart time"
+#~ msgstr "Neustart Wartezeit"
+
+#~ msgid ""
+#~ "The time to wait before restarting the daemon after a crash in seconds."
+#~ msgstr ""
+#~ "Die Wartezeit vor einem Neustart nach dem der Daemon abgestürzt ist in "
+#~ "Sekunden."
+
+#~ msgid "This will delete this mailinglist and all its emails!"
+#~ msgstr "Dies löscht diese Mailingliste und alle ihre Emails!"
+
+#, python-format
+#~ msgid "Mailinglist %(list_id)s from %(list_owner)s"
+#~ msgstr "Mailingliste %(list_id)s von %(list_owner)s"

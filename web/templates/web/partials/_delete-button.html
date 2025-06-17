@@ -1,7 +1,10 @@
+{% load i18n %}
+
 <button type="button"
         class="btn btn-outline-primary"
         data-bs-toggle="modal"
-        data-bs-target="#delete-modal">
+        data-bs-target="#delete-modal"
+        aria-label="{% translate 'Delete' %}">
     <i class="fa fa-trash" aria-hidden="true"></i>
 </button>
 <!-- _delete_modal must be in the same template -->

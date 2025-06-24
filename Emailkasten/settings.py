@@ -300,6 +300,14 @@ LOGGING = {
             "backupCount": LOGFILE_BACKUP_NUMBER,
             "formatter": "default",
         },
+        "celery_logfile": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIRECTORY_PATH / "celery.log",
+            "maxBytes": LOGFILE_MAXSIZE,
+            "backupCount": LOGFILE_BACKUP_NUMBER,
+            "formatter": "default",
+        },
         "emailkasten_logfile": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
@@ -341,6 +349,11 @@ LOGGING = {
         "django": {
             "handlers": ["console", "django_logfile"],
             "level": env("DJANGO_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
+            "propagate": False,
+        },
+        "celery": {
+            "handlers": ["console", "celery_logfile"],
+            "level": env("CELERY_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
             "propagate": False,
         },
         "core": {

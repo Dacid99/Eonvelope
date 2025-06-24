@@ -8,14 +8,14 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     DJANGO_SETTINGS_MODULE='Emailkasten.settings' \
     PYTHONPATH='/mnt/'
 COPY ../ /mnt/
-RUN openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/C=DE/ST=Bavaria/L=Munich/O=SBV/OU=Emailkasten/CN=emailkasten.org"
+RUN openssl req -x509 -newkey rsa:4096 -keyout /mnt/key.pem -out /mnt/cert.pem -days 365 -nodes -subj "/C=DE/ST=Bavaria/L=Munich/O=SBV/OU=Emailkasten/CN=emailkasten.org"
 RUN pip install -U --no-cache-dir poetry && poetry install
 ENV SECRET_KEY='IM_JUST_HERE_AS_A_WORKAROUND'
 RUN poetry run django-admin collectstatic --noinput && \
     poetry run django-admin compilemessages
 ENV SECRET_KEY=
 RUN chmod +x docker/entrypoint.sh
+RUN chmod 777 /var/log
 EXPOSE 443
 ENTRYPOINT [ "./docker/entrypoint.sh" ]
-CMD [ "poetry" "run" "gunicorn" "Emailkasten.wsgi" "--bind" "0.0.0.0:443" "--keyfile" "key.pem" "--certfile" "cert.pem" ]
 HEALTHCHECK --interval=60s --timeout=10s --start-period=5s --retries=3 CMD curl -kf https://localhost:443/health/ || exit 1

@@ -58,12 +58,14 @@
 - daemonize celery worker
 - default interval setting
 - interval exposure via api
+- logfile for gunicorn
 
 ### For production
 
 - rtd
 - weblate
 - stable docker run for makemigrations and makemessages
+- test pipelines
 
 ### Work in progress
 

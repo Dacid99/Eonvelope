@@ -58,6 +58,7 @@
 - default interval setting
 - interval exposure via api
 - logfile for gunicorn
+- integration with uptime checkers
 
 ### For production
 
@@ -82,6 +83,7 @@
 
 ## To fix
 
+- correspondentemails are broken
 - running tests from test dir
 - storage is incremented by healthcheck
 - correspondent is not user specific!

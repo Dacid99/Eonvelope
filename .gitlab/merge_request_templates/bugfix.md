@@ -36,6 +36,8 @@ If you need help to get to your code to check all boxes, please submit the pull 
 
 [] I have not changed the main configuration file (Emailkasten/settings.py) of the project.
 
+[] I have not changed the docker related files in docker/*.
+
 [] I have not changed the configuration of linting tools.
 
 [] I have not changed the tests for existing features.

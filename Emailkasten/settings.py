@@ -51,6 +51,8 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = env("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = env("ALLOWED_HOSTS", cast=list, default=["localhost"])
+if "localhost" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append("localhost")
 
 
 # Application definition

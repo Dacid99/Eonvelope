@@ -37,6 +37,8 @@ class DaemonFilterSet(django_filters.FilterSet):
             "uuid",
             "interval__every",
             "interval__period",
+            "celery_task__last_run_at",
+            "celery_task__total_run_count",
             "created",
             "updated",
         ]
@@ -54,6 +56,10 @@ class DaemonFilterSet(django_filters.FilterSet):
         field_name="interval__period",
         choices=IntervalSchedule.PERIOD_CHOICES,
         widget=widgets.CheckboxSelectMultiple,
+    )
+    celery_task__enabled = django_filters.BooleanFilter(
+        field_name="celery_task__enabled",
+        widget=widgets.NullBooleanSelect,
     )
     created__date__lte = django_filters.DateTimeFilter(
         field_name="created",

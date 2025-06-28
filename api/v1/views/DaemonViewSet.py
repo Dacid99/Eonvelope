@@ -58,6 +58,8 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
         "fetching_criterion",
         "interval__every",
         "interval__period",
+        "celery_task__last_run_at",
+        "celery_task__total_run_count",
         "is_healthy",
         "mailbox__name",
         "mailbox__account__mail_address",
@@ -77,7 +79,7 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
         """
         if getattr(self, "swagger_fake_view", False):
             return Daemon.objects.none()
-        return Daemon.objects.filter(mailbox__account__user=self.request.user)  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+        return Daemon.objects.filter(mailbox__account__user=self.request.user).select_related("interval", "celery_task")  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
 
     URL_PATH_FETCHING_OPTIONS = "fetching-options"
     URL_NAME_FETCHING_OPTIONS = "fetching-options"

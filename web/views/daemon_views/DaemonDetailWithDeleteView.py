@@ -52,7 +52,7 @@ class DaemonDetailWithDeleteView(
         return Daemon.objects.filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
             mailbox__account__user=self.request.user
         ).select_related(
-            "mailbox", "mailbox__account"
+            "mailbox", "mailbox__account", "interval", "celery_task"
         )
 
     @override

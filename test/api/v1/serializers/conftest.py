@@ -24,6 +24,8 @@ The serializer tests are made against a mocked consistent database with an insta
 from __future__ import annotations
 
 import pytest
+from django.forms.models import model_to_dict
+from django_celery_beat.models import IntervalSchedule
 from model_bakery import baker
 from rest_framework.request import Request
 
@@ -76,3 +78,12 @@ def complete_database(
         email=other_email,
         file_path=faker.file_name(extension="pdf"),
     )
+
+
+@pytest.fixture
+def daemon_with_interval_payload(daemon_payload):
+    """Payload for a daemon form."""
+    interval = baker.prepare(IntervalSchedule)
+    daemon_payload["interval"] = model_to_dict(interval)
+    daemon_payload["interval"]["every"] = abs(daemon_payload["interval"]["every"])
+    return daemon_payload

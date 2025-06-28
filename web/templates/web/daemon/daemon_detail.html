@@ -48,7 +48,13 @@
     <ul class="list-group list-group-flush">
         <li class="list-group-item">{% translate "Criterion" %}: {{ object.fetching_criterion }}</li>
         <li class="list-group-item">{% translate "Interval" %}: {{ object.interval }}</li>
-        <li class="list-group-item">{% translate "Logfile backups" %}: {{ object.log_backup_count }}</li>
+        <li class="list-group-item">
+            {% translate "Last Run Datetime" %}: {{ object.celery_task.last_run_at }}
+        </li>
+        <li class="list-group-item">
+            {% translate "Total Run Count" %}: {{ object.celery_task.total_run_count }}
+        </li>
+        <li class="list-group-item">{% translate "Logfile Backups" %}: {{ object.log_backup_count }}</li>
         <li class="list-group-item">
             {% translate "Logfile max size" %}: {{ object.logfile_size }} {% translate "bytes" %}
         </li>

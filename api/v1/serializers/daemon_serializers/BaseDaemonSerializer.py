@@ -26,6 +26,11 @@ from rest_framework import serializers
 
 from core.models import Daemon
 
+from ..django_celery_beat_serializers import (
+    IntervalScheduleSerializer,
+    PeriodicTaskSerializer,
+)
+
 
 if TYPE_CHECKING:
     from django.db.models import Model
@@ -39,6 +44,16 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
     Other serializers for :class:`core.models.Daemon` should inherit from this.
     """
 
+    interval = IntervalScheduleSerializer()
+    """The interval is serialized
+    by :class:`api.v1.serializers.django_celery_beat_serializers.IntervalScheduleSerializer`.
+    It can be altered.
+    """
+    celery_task = PeriodicTaskSerializer(read_only=True)
+    """The celery_task is serialized
+    by :class:`api.v1.serializers.django_celery_beat_serializers.PeriodicTaskSerializer`.
+    """
+
     class Meta:
         """Metadata class for the base serializer.
 
@@ -50,20 +65,18 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         model: Final[type[Model]] = Daemon
         """The model to serialize."""
 
-        exclude: ClassVar[list[str]] = ["log_filepath", "celery_task"]
-        """Exclude the :attr:`core.models.Daemon` field."""
+        exclude: ClassVar[list[str]] = ["log_filepath"]
+        """Exclude the :attr:`core.models.Daemon.log_filepath` field."""
 
         read_only_fields: Final[list[str]] = [
             "uuid",
             "mailbox",
-            "interval",
             "is_healthy",
             "created",
             "updated",
         ]
         """The :attr:`core.models.Daemon.Daemon.uuid`,
         :attr:`core.models.Daemon.Daemon.mailbox`,
-        :attr:`core.models.Daemon.Daemon.interval`,
         :attr:`core.models.Daemon.Daemon.is_healthy`,
         :attr:`core.models.Daemon.Daemon.created` and
         :attr:`core.models.Daemon.Daemon.updated` fields are read-only.

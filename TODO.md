@@ -18,7 +18,6 @@
 - streaming daemon logs
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
-- add task stats to serializer/detailview data
 - autotest account before form submission, fetch mailboxes on submission
 - [spinner](https://getbootstrap.com/docs/5.3/components/spinners/) and [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models

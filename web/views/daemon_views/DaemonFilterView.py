@@ -46,5 +46,5 @@ class DaemonFilterView(LoginRequiredMixin, FilterPageView):
             super()
             .get_queryset()
             .filter(mailbox__account__user=self.request.user)  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
-            .select_related("mailbox", "mailbox__account")
+            .select_related("mailbox", "mailbox__account", "interval")
         )

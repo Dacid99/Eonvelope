@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 from django.core.management import call_command
-from django_celery_beat.models import IntervalSchedule
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from freezegun import freeze_time
 from model_bakery import baker
 
@@ -160,7 +160,13 @@ def daemon_queryset(unblocked_db, mailbox_queryset) -> QuerySet[Daemon, Daemon]:
                 every=INT_TEST_ITEMS[number],
                 period=IntervalSchedule.PERIOD_CHOICES[number][0],
             )
-            baker.make(
+            celery_task = baker.make(
+                PeriodicTask,
+                interval=interval,
+                enabled=BOOL_TEST_ITEMS[number],
+                total_run_count=INT_TEST_ITEMS[number],
+            )
+            daemon = baker.make(
                 Daemon,
                 fetching_criterion=EmailFetchingCriterionChoices.values[number],
                 interval=interval,
@@ -168,6 +174,8 @@ def daemon_queryset(unblocked_db, mailbox_queryset) -> QuerySet[Daemon, Daemon]:
                 mailbox=mailbox_queryset.get(id=number + 1),
                 log_filepath=text_test_item,
             )
+            daemon.celery_task = celery_task
+            daemon.save(update_fields=["celery_task"])
 
     return Daemon.objects.all()
 

@@ -117,6 +117,10 @@ class DaemonFilterSet(filters.FilterSet):
         field_name="mailbox__account__is_healthy", lookup_expr="exact"
     )
 
+    enabled = filters.BooleanFilter(
+        field_name="celery_task__enabled", lookup_expr="exact"
+    )
+
     class Meta:
         """Metadata class for the filter."""
 
@@ -127,6 +131,8 @@ class DaemonFilterSet(filters.FilterSet):
             "fetching_criterion": FilterSetups.CHOICE,
             "interval__every": FilterSetups.INT,
             "interval__period": FilterSetups.TEXT,
+            "celery_task__last_run_at": FilterSetups.DATETIME,
+            "celery_task__total_run_count": FilterSetups.INT,
             "is_healthy": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,

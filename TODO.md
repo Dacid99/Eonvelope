@@ -55,7 +55,6 @@
 - dependency-upgrading tool for your project dependencies? (eg. dependabot, PyUp, Renovate, pip-tools, Snyx)
 - vulnerability scanning tool for your dependencies? (eg. Safety, pip-audit, Bandit, Snyx, Trivy, GitLab Dependency Scanning, PyUp, OWASP, Jake, Mend)
 - daemonize celery worker
-- default interval setting
 - api creation of daemons
 - logfile for gunicorn
 - integration with uptime checkers
@@ -94,3 +93,4 @@
 - optics:
   - error templates are missing margins
   - stats table out of bounds for slim viewport
+  - iframes are poorly scaled

@@ -1,16 +1,18 @@
 {% load i18n %}
 
 {% if attachment.content_maintype == "audio" %}
-    <audio controls src="{{ attachment.get_absolute_thumbnail_url }}"></audio>
+    <div class="d-flex justify-content-center m-5">
+        <audio controls src="{{ attachment.get_absolute_thumbnail_url }}"></audio>
+    </div>
 {% elif attachment.content_maintype == "video" %}
     <video controls
            preload="metadata"
-           class="mh-100 w-auto p-1"
-           src="{{ attachment.get_absolute_thumbnail_url }}">
+           class="img-thumbnail"
+           src="https://6d630285-4485-434d-a3d0-7a45a76e51b4.mdnplay.dev/shared-assets/videos/flower.webm">
     </video>
 {% elif attachment.content_maintype == "image" %}
     <img src="{{ attachment.get_absolute_thumbnail_url }}"
-         class="mh-100 w-auto p-1"
+         class="img-thumbnail"
          alt="{% translate 'Attachment image' %}" />
 {% elif attachment.content_maintype == "text" %}
     <iframe src="{{ attachment.get_absolute_thumbnail_url }}"

@@ -83,121 +83,157 @@ def test_get_auth_owner(fake_daemon, owner_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(fake_daemon, noauth_api_client, daemon_payload, detail_url):
+def test_patch_noauth(
+    fake_daemon, noauth_api_client, daemon_with_interval_payload, detail_url
+):
     """Tests the patch method on :class:`api.v1.views.DaemonViewSet` with an unauthenticated user client."""
     response = noauth_api_client.patch(
-        detail_url(DaemonViewSet, fake_daemon), data=daemon_payload
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
+    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(fake_daemon, other_api_client, daemon_payload, detail_url):
+def test_patch_auth_other(
+    fake_daemon, other_api_client, daemon_with_interval_payload, detail_url
+):
     """Tests the patch method on :class:`api.v1.views.DaemonViewSet` with the authenticated other user client."""
     response = other_api_client.patch(
-        detail_url(DaemonViewSet, fake_daemon), data=daemon_payload
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
+    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(fake_daemon, owner_api_client, daemon_payload, detail_url):
+def test_patch_auth_owner(
+    fake_daemon, owner_api_client, daemon_with_interval_payload, detail_url
+):
     """Tests the patch method on :class:`api.v1.views.DaemonViewSet` with the authenticated owner user client.
 
     Note:
         Has a tendency to fail when not executed individually.
     """
     response = owner_api_client.patch(
-        detail_url(DaemonViewSet, fake_daemon), data=daemon_payload
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["logfile_size"] == daemon_payload["logfile_size"]
+    assert response.data["logfile_size"] == daemon_with_interval_payload["logfile_size"]
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size == daemon_payload["logfile_size"]
+    assert fake_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_put_noauth(fake_daemon, noauth_api_client, daemon_payload, detail_url):
+def test_put_noauth(
+    fake_daemon, noauth_api_client, daemon_with_interval_payload, detail_url
+):
     """Tests the put method on :class:`api.v1.views.DaemonViewSet` with an unauthenticated user client."""
     response = noauth_api_client.put(
-        detail_url(DaemonViewSet, fake_daemon), data=daemon_payload
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
+    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_put_auth_other(fake_daemon, other_api_client, daemon_payload, detail_url):
+def test_put_auth_other(
+    fake_daemon, other_api_client, daemon_with_interval_payload, detail_url
+):
     """Tests the put method on :class:`api.v1.views.DaemonViewSet` with the authenticated other user client."""
     response = other_api_client.put(
-        detail_url(DaemonViewSet, fake_daemon), data=daemon_payload
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "logfile_size" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_payload["logfile_size"]
+    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(fake_daemon, owner_api_client, daemon_payload, detail_url):
+def test_put_auth_owner(
+    fake_daemon, owner_api_client, daemon_with_interval_payload, detail_url
+):
     """Tests the put method on :class:`api.v1.views.DaemonViewSet` with the authenticated owner user client.
 
     Note:
         Has a tendency to fail when not executed individually.
     """
     response = owner_api_client.put(
-        detail_url(DaemonViewSet, fake_daemon), data=daemon_payload
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
     )
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["logfile_size"] == daemon_payload["logfile_size"]
+    assert response.data["logfile_size"] == daemon_with_interval_payload["logfile_size"]
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size == daemon_payload["logfile_size"]
+    assert fake_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
-def test_post_noauth(noauth_api_client, daemon_payload, list_url):
+def test_post_noauth(noauth_api_client, daemon_with_interval_payload, list_url):
     """Tests the post method on :class:`api.v1.views.DaemonViewSet` with an unauthenticated user client."""
-    response = noauth_api_client.post(list_url(DaemonViewSet), data=daemon_payload)
+    response = noauth_api_client.post(
+        list_url(DaemonViewSet),
+        data=daemon_with_interval_payload,
+        format="json",
+    )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert "logfile_size" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(logfile_size=daemon_payload["logfile_size"])
+        Daemon.objects.get(logfile_size=daemon_with_interval_payload["logfile_size"])
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_api_client, daemon_payload, list_url):
+def test_post_auth_other(other_api_client, daemon_with_interval_payload, list_url):
     """Tests the post method on :class:`api.v1.views.DaemonViewSet` with the authenticated other user client."""
-    response = other_api_client.post(list_url(DaemonViewSet), data=daemon_payload)
+    response = other_api_client.post(
+        list_url(DaemonViewSet),
+        data=daemon_with_interval_payload,
+        format="json",
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     assert "logfile_size" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(logfile_size=daemon_payload["logfile_size"])
+        Daemon.objects.get(logfile_size=daemon_with_interval_payload["logfile_size"])
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_api_client, daemon_payload, list_url):
+def test_post_auth_owner(owner_api_client, daemon_with_interval_payload, list_url):
     """Tests the post method on :class:`api.v1.views.DaemonViewSet` with the authenticated owner user client."""
-    response = owner_api_client.post(list_url(DaemonViewSet), data=daemon_payload)
+    response = owner_api_client.post(
+        list_url(DaemonViewSet),
+        data=daemon_with_interval_payload,
+        format="json",
+    )
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     assert "logfile_size" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(logfile_size=daemon_payload["logfile_size"])
+        Daemon.objects.get(logfile_size=daemon_with_interval_payload["logfile_size"])
 
 
 @pytest.mark.django_db

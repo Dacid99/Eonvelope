@@ -20,8 +20,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Final
+from typing import TYPE_CHECKING, ClassVar, Final, override
 
+from django_celery_beat.models import IntervalSchedule
 from rest_framework import serializers
 
 from core.models import Daemon
@@ -81,3 +82,19 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         :attr:`core.models.Daemon.Daemon.created` and
         :attr:`core.models.Daemon.Daemon.updated` fields are read-only.
         """
+
+    @override
+    def update(self, instance: Daemon, validated_data: dict) -> Daemon:
+        """Extended to add the intervaldata to the instance.
+
+        Important:
+            The nested intervaldata must be poped as update does not support nested dicts!
+            There should not be duplicate IntervalSchedules.
+            https://django-celery-beat.readthedocs.io/en/latest/index.html#example-creating-interval-based-periodic-task
+        """
+        interval_data = validated_data.pop("interval")
+        instance.interval, _ = IntervalSchedule.objects.get_or_create(
+            every=interval_data["every"],
+            period=interval_data["period"],
+        )
+        return super().update(instance, validated_data)

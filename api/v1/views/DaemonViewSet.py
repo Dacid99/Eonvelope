@@ -47,6 +47,9 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
     """Viewset for the :class:`core.models.Daemon`.
 
     Provides all but the create method.
+
+    Note:
+        To update instances the user must specify format "json" with the request.
     """
 
     BASENAME = Daemon.BASENAME

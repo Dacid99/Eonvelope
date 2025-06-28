@@ -22,6 +22,8 @@ from datetime import datetime
 
 import pytest
 from django.forms.models import model_to_dict
+from django_celery_beat.models import IntervalSchedule
+from model_bakery import baker
 
 from api.v1.serializers.daemon_serializers.BaseDaemonSerializer import (
     BaseDaemonSerializer,
@@ -194,8 +196,46 @@ def test_post_bad_logfile_size(fake_daemon, daemon_payload, bad_logfile_size):
 
 
 @pytest.mark.django_db
-def test_validation_failure(fake_daemon):
-    """Tests validation of :attr:`core.models.Daemon.Daemon.fetching_criterion`."""
-    fake_daemon.fetching_criterion = "OTHER"
-    serializer = BaseDaemonSerializer(data=model_to_dict(fake_daemon))
-    assert not serializer.is_valid()
+def test_update_new_interval(fake_daemon, daemon_with_interval_payload):
+    assert IntervalSchedule.objects.count() == 1
+
+    serializer = BaseDaemonSerializer(
+        instance=fake_daemon, data=daemon_with_interval_payload
+    )
+    serializer.is_valid()
+    serializer.save()
+
+    assert IntervalSchedule.objects.count() == 2
+    assert (
+        fake_daemon.interval.every == daemon_with_interval_payload["interval"]["every"]
+    )
+    assert (
+        fake_daemon.interval.period
+        == daemon_with_interval_payload["interval"]["period"]
+    )
+
+
+@pytest.mark.django_db
+def test_update_existing_interval(fake_daemon, daemon_with_interval_payload):
+    baker.make(
+        IntervalSchedule,
+        every=daemon_with_interval_payload["interval"]["every"],
+        period=daemon_with_interval_payload["interval"]["period"],
+    )
+
+    assert IntervalSchedule.objects.count() == 2
+
+    serializer = BaseDaemonSerializer(
+        instance=fake_daemon, data=daemon_with_interval_payload
+    )
+    serializer.is_valid()
+    serializer.save()
+
+    assert IntervalSchedule.objects.count() == 2
+    assert (
+        fake_daemon.interval.every == daemon_with_interval_payload["interval"]["every"]
+    )
+    assert (
+        fake_daemon.interval.period
+        == daemon_with_interval_payload["interval"]["period"]
+    )

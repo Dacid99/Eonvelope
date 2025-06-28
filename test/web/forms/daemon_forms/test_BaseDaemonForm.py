@@ -161,6 +161,10 @@ def test_save_new_interval(fake_daemon, daemon_with_interval_payload):
     form.save()
 
     assert IntervalSchedule.objects.count() == 2
+    assert fake_daemon.interval.every == daemon_with_interval_payload["interval_every"]
+    assert (
+        fake_daemon.interval.period == daemon_with_interval_payload["interval_period"]
+    )
 
 
 @pytest.mark.django_db
@@ -178,3 +182,7 @@ def test_save_existing_interval(fake_daemon, daemon_with_interval_payload):
     form.save()
 
     assert IntervalSchedule.objects.count() == 2
+    assert fake_daemon.interval.every == daemon_with_interval_payload["interval_every"]
+    assert (
+        fake_daemon.interval.period == daemon_with_interval_payload["interval_period"]
+    )

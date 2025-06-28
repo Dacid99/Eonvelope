@@ -24,6 +24,7 @@
 - more tags
 - autotagging
 - saving old correspondent info (via fk maybe)
+- email_name uneditable, add real_name field
 - async parsing, sync saving
 
 ## To refactor
@@ -55,7 +56,7 @@
 - vulnerability scanning tool for your dependencies? (eg. Safety, pip-audit, Bandit, Snyx, Trivy, GitLab Dependency Scanning, PyUp, OWASP, Jake, Mend)
 - daemonize celery worker
 - default interval setting
-- interval exposure via api
+- api creation of daemons
 - logfile for gunicorn
 - integration with uptime checkers
 
@@ -82,10 +83,12 @@
 
 ## To fix
 
-- correspondentemails are broken
+- daemon logger setup doesnt persist
 - running tests from test dir
 - storage is incremented by healthcheck
 - correspondent is not user specific!
+- correspondentemails are broken
+- datetimes in webui dont use timezone
 - mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>
 - cascase doesn't trigger delete!
 - optics:

@@ -24,28 +24,15 @@ The serializer tests are made against a mocked consistent database with an insta
 from __future__ import annotations
 
 import pytest
-from rest_framework.request import Request
+from django.forms.models import model_to_dict
+from django_celery_beat.models import IntervalSchedule
+from model_bakery import baker
 
 
-@pytest.fixture(autouse=True)
-def request_context(mocker, owner_user):
-    """Provides a mocked request context the tests."""
-    mock_request = mocker.MagicMock(spec=Request)
-    mock_request.user = owner_user
-    return {"request": mock_request}
-
-
-@pytest.fixture(autouse=True)
-def complete_database(
-    faker,
-    owner_user,
-    other_user,
-    fake_account,
-    fake_attachment,
-    fake_correspondent,
-    fake_daemon,
-    fake_email,
-    fake_emailcorrespondent,
-    fake_mailbox,
-):
-    """Autouse all models for the tests."""
+@pytest.fixture
+def daemon_with_interval_payload(daemon_payload):
+    """Payload for a daemon form."""
+    interval = baker.prepare(IntervalSchedule)
+    daemon_payload["interval"] = model_to_dict(interval)
+    daemon_payload["interval"]["every"] = abs(daemon_payload["interval"]["every"])
+    return daemon_payload

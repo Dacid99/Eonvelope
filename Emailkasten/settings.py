@@ -132,6 +132,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "Emailkasten.middleware.TimezoneMiddleware.TimezoneMiddleware",
 ]
 
 ROOT_URLCONF = "Emailkasten.urls"
@@ -441,12 +442,12 @@ LANGUAGES = [
 # although not all choices may be available on all operating systems.
 # On Unix systems, a value of None will cause Django to use the same
 # timezone as the operating system.
+
+USE_TZ = True
 TIME_ZONE = "UTC"  # changing this doesn't change the celery schedule https://django-celery-beat.readthedocs.io/en/latest/#important-warning-about-time-zones
 
 USE_I18N = True
 USE_L10N = True
-
-USE_TZ = True
 
 LOCALE_PATHS = [
     BASE_DIR / "Emailkasten" / "locale",

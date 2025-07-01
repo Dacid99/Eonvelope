@@ -30,8 +30,8 @@ from django.db import OperationalError, connection
 if TYPE_CHECKING:
     from collections.abc import Callable
 
-    from rest_framework.request import Request
-    from rest_framework.response import Response
+    from django.http.request import HttpRequest
+    from django.http.response import HttpResponse
 
 
 class DBReconnectMiddleware:
@@ -48,11 +48,11 @@ class DBReconnectMiddleware:
     """The time delay between reconnect attempt.
     Set from :attr:`django.conf.settings.RECONNECT_DELAY`."""
 
-    def __init__(self, get_response: Callable[[Request], Response]):
+    def __init__(self, get_response: Callable[[HttpRequest], HttpResponse]):
         """Sets up the middleware."""
         self.get_response = get_response
 
-    def __call__(self, request: Request) -> Response:
+    def __call__(self, request: HttpRequest) -> HttpResponse:
         """Attempts to connect to the database :attr:`max_retries` times.
 
         Args:

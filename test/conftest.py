@@ -69,6 +69,7 @@ from core.models import (
     EmailCorrespondent,
     Mailbox,
 )
+from Emailkasten.middleware.TimezoneMiddleware import TimezoneMiddleware
 
 
 if TYPE_CHECKING:
@@ -273,6 +274,26 @@ def fake_file_bytes(faker) -> bytes:
 def fake_file(fake_file_bytes) -> BytesIO:
     """Fixture providing a filestream with random content."""
     return BytesIO(fake_file_bytes)
+
+
+@pytest.fixture
+def fake_timezone(faker):
+    return faker.timezone()
+
+
+@pytest.fixture
+def fake_timezone_client(client, fake_timezone):
+    session = client.session
+    session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = fake_timezone
+    session.save()
+    return client
+
+
+@pytest.fixture
+def fake_bad_timezone_client(client):
+    session = client.session
+    session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = "NO/TZONE"
+    session.save()
 
 
 @pytest.fixture

@@ -87,7 +87,6 @@
 - storage is incremented by healthcheck
 - correspondent is not user specific!
 - correspondentemails are broken
-- datetimes in webui dont use timezone
 - mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>
 - cascase doesn't trigger delete!
 - optics:

@@ -1,6 +1,5 @@
-{% load static i18n django_bootstrap5 %}
+{% load static i18n tz timezones django_bootstrap5 %}
 
-{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}" data-bs-theme="auto">
     <head>
@@ -43,6 +42,28 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarText">
                         <div class="d-flex flex-column flex-sm-row gap-2 col-lg-3 text-nowrap">
+                            <form class="d-flex" action="{% url 'set_timezone' %}" method="post">
+                                {% csrf_token %}
+                                {% get_available_timezones as TIMEZONES %}
+                                {% get_current_timezone as TIMEZONE_CODE %}
+                                <label for="timezone-dropdown" class="form-label visually-hidden">
+                                    {% translate 'Select timezone' %}
+                                </label>
+                                <select id="timezone-dropdown"
+                                        class="form-select"
+                                        aria-label="{% translate 'Select Timezone' %}"
+                                        name="timezone"
+                                        onchange="this.form.submit()">
+
+                                    {% for tz in TIMEZONES %}
+                                        <option {% if tz == TIMEZONE_CODE %}selected{% endif %}
+                                                value="{{ tz }}">
+                                            {{ tz }}
+                                        </option>
+                                    {% endfor %}
+
+                                </select>
+                            </form>
                             <form class="d-flex" method="post" action="{% url 'set_language' %}">
                                 {% csrf_token %}
                                 {% get_available_languages as LANGUAGES %}

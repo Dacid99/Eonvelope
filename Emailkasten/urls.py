@@ -41,6 +41,8 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from Emailkasten.views.timezone import SET_TIMEZONE_URL_NAME, set_timezone
+
 
 SCHEMA_NAME = "schema"
 
@@ -48,6 +50,8 @@ urlpatterns = [
     # root
     path("admin/", admin.site.urls),
     path("health/", include("health_check.urls")),
+    path("", include("django.conf.urls.i18n")),
+    path("settz/", set_timezone, name=SET_TIMEZONE_URL_NAME),
     # api
     path("api/", include("api.urls")),
     path("api/auth/", include("dj_rest_auth.urls")),
@@ -67,5 +71,4 @@ urlpatterns = [
     # web
     path("", include("web.urls")),
     path("users/", include("allauth.urls")),
-    path("users/", include("django.conf.urls.i18n")),
 ]

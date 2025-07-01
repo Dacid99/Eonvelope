@@ -54,3 +54,6 @@ class BaseMailboxForm(RequiredMarkerModelForm):
             "is_favorite",
         ]
         """Exposes all fields that the user should be able to change."""
+
+        localized_fields = "__all__"
+        """Localize all fields."""

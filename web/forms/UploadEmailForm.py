@@ -34,9 +34,11 @@ class UploadEmailForm(RequiredMarkerForm):
         required=True,
         label=_("File format"),
         help_text=_("Select the format of the email file you want to upload."),
+        localize=True,
     )
     file = forms.FileField(
         required=True,
         label=_("Email or Mailbox file"),
         help_text=_("Pick a file for upload."),
+        localize=True,
     )

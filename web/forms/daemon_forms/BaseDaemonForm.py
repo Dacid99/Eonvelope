@@ -80,6 +80,9 @@ class BaseDaemonForm(RequiredMarkerModelForm):
         ]
         """Exposes all fields that the user should be able to change."""
 
+        localized_fields = "__all__"
+        """Localize all fields."""
+
     @override
     def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)

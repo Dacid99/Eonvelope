@@ -50,3 +50,6 @@ class BaseCorrespondentForm(RequiredMarkerModelForm):
 
         fields: ClassVar[list[str]] = ["email_name", "is_favorite"]
         """Exposes only the :attr:`core.models.Correspondent.Correspondent.email_name` field."""
+
+        localized_fields = "__all__"
+        """Localize all fields."""

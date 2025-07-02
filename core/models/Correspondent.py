@@ -36,8 +36,7 @@ logger = logging.getLogger(__name__)
 class Correspondent(URLMixin, FavoriteMixin, models.Model):
     """Database model for the correspondent data found in a mail."""
 
-    email_name = models.CharField(
-        max_length=255,
+    email_name = models.TextField(
         default="",
         blank=True,
         verbose_name=_("mailer name"),
@@ -52,56 +51,49 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
     )
     """The mail address of the correspondent. Unique."""
 
-    list_id = models.CharField(
-        max_length=255,
+    list_id = models.TextField(
         blank=True,
         default="",
         verbose_name=_("list ID"),
     )
     """The List-ID header of the mailinglist. Unique together with :attr:`correspondent`."""
 
-    list_owner = models.CharField(
-        max_length=255,
+    list_owner = models.TextField(
         blank=True,
         default="",
         verbose_name=_("list owner"),
     )
     """The List-Owner header of the mailinglist. Can be blank."""
 
-    list_subscribe = models.EmailField(
-        max_length=255,
+    list_subscribe = models.TextField(
         blank=True,
         default="",
         verbose_name=_("list subscribe"),
     )
     """The List-Subscribe header of the mailinglist. Can be blank."""
 
-    list_unsubscribe = models.EmailField(
-        max_length=255,
+    list_unsubscribe = models.TextField(
         blank=True,
         default="",
         verbose_name=_("list unsubscribe"),
     )
     """The List-Unsubscribe header of the mailinglist. Can be blank."""
 
-    list_post = models.CharField(
-        max_length=255,
+    list_post = models.TextField(
         blank=True,
         default="",
         verbose_name=_("list post"),
     )
     """The List-Post header of the mailinglist. Can be blank."""
 
-    list_help = models.CharField(
-        max_length=255,
+    list_help = models.TextField(
         blank=True,
         default="",
         verbose_name=_("list help"),
     )
     """The List-Help header of the mailinglist. Can be blank."""
 
-    list_archive = models.CharField(
-        max_length=255,
+    list_archive = models.TextField(
         blank=True,
         default="",
         verbose_name=_("list archive"),

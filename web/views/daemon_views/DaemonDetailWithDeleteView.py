@@ -20,11 +20,12 @@
 
 from typing import Any, override
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import DeletionMixin
 
 from core.models import Daemon
@@ -72,10 +73,12 @@ class DaemonDetailWithDeleteView(
         """
         self.object = self.get_object()
         result = self.object.start()
+        if result:
+            messages.success(request, _("Daemon started successfully"))
+        else:
+            messages.warning(request, _("Daemon was already running"))
         self.object.refresh_from_db()
-        context = self.get_context_data(object=self.object)
-        context["start_result"] = {"status": result}
-        return render(request, self.template_name, context)
+        return self.get(request)
 
     def handle_stop_daemon(self, request: HttpRequest) -> HttpResponse:
         """Handler function for the `stop-daemon` action.
@@ -88,7 +91,9 @@ class DaemonDetailWithDeleteView(
         """
         self.object = self.get_object()
         result = self.object.stop()
+        if result:
+            messages.success(request, _("Daemon stopped successfully"))
+        else:
+            messages.warning(request, _("Daemon was not running"))
         self.object.refresh_from_db()
-        context = self.get_context_data(object=self.object)
-        context["stop_result"] = {"status": result}
-        return render(request, self.template_name, context)
+        return self.get(request)

@@ -19,8 +19,8 @@
 """Module with :class:`web.mixins.TestActionMixin`."""
 
 
+from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
 from django.utils.translation import gettext as _
 
 from core.utils.fetchers.exceptions import FetcherError
@@ -39,30 +39,11 @@ class TestActionMixin:
             A template response with the updated view after the action.
         """
         self.object = self.get_object()
-        result = self.perform_test()
-        self.object.refresh_from_db()
-        context = self.get_context_data(object=self.object)
-        context["action_result"] = result
-        return render(request, self.template_name, context)
-
-    def perform_test(self) -> dict[str, bool | str | None]:
-        """Performs the object test.
-
-        Returns:
-            Data containing the status and, if provided, the error message of the test.
-        """
-        result: dict[str, bool | str | None] = {
-            "status": None,
-            "message": None,
-            "error": None,
-        }
         try:
             self.object.test_connection()
         except FetcherError as error:
-            result["status"] = False
-            result["message"] = _("Test failed")
-            result["error"] = str(error)
+            messages.error(request, _("Test failed\n%(error)s") % {"error": str(error)})
         else:
-            result["status"] = True
-            result["message"] = _("Test successful")
-        return result
+            messages.success(request, _("Test was successful"))
+        self.object.refresh_from_db()
+        return self.get(request)

@@ -19,6 +19,7 @@
 """Test module for :mod:`web.views.AccountDetailWithDeleteView`."""
 
 import pytest
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import status
@@ -166,13 +167,10 @@ def test_post_test_success_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Account)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is True
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert not response.context["action_result"]["error"]
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
     mock_Account_test_connection.assert_called_once()
 
 
@@ -195,13 +193,10 @@ def test_post_test_failure_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Account)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is False
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["error"], str)
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.ERROR
     mock_Account_test_connection.assert_called_once()
     assert fake_error_message in response.content.decode()
 
@@ -268,13 +263,10 @@ def test_post_update_mailboxes_success_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Account)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is True
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert not response.context["action_result"]["error"]
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
     mock_Account_update_mailboxes.assert_called_once()
 
 
@@ -297,13 +289,10 @@ def test_post_update_mailboxes_failure_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Account)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is False
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["error"], str)
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.ERROR
     mock_Account_update_mailboxes.assert_called_once()
     assert fake_error_message in response.content.decode()
 

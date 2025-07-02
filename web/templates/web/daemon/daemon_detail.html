@@ -6,14 +6,6 @@
     {% translate "Daemon Details" %} -
 {% endblock title %}
 
-{% block alerts %}
-
-    {% include "web/daemon/partials/_start-alert.html" %}
-
-    {% include "web/daemon/partials/_stop-alert.html" %}
-
-{% endblock alerts %}
-
 {% block badges %}
 
     {% include "web/daemon/partials/_is_running-badge.html" with daemon=object %}

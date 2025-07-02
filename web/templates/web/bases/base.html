@@ -13,7 +13,6 @@
 
             {% translate "Emailkasten" %}
         </title>
-        {% bootstrap_messages %}
         {% bootstrap_css %}
         <link href="{% static 'fontawesomefree/css/fontawesome.css' %}"
               rel="stylesheet"
@@ -28,6 +27,8 @@
     <body>
 
         {% include "web/partials/_navbar.html" %}
+
+        {% bootstrap_messages %}
 
         <main class="container my-3">
 

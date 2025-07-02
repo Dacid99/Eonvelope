@@ -19,6 +19,7 @@
 """Test module for :mod:`web.views.DaemonDetailWithDeleteView`."""
 
 import pytest
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import status
@@ -174,7 +175,10 @@ def test_post_start_success_auth_owner(fake_daemon, owner_client, detail_url):
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
-    assert "start_result" in response.context
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
     fake_daemon.refresh_from_db()
     assert fake_daemon.celery_task.enabled is True
 
@@ -194,7 +198,10 @@ def test_post_start_failure_auth_owner(fake_daemon, owner_client, detail_url):
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
-    assert "start_result" in response.context
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.WARNING
     fake_daemon.refresh_from_db()
     assert fake_daemon.celery_task.enabled is True
 
@@ -267,7 +274,10 @@ def test_post_stop_success_auth_owner(fake_daemon, owner_client, detail_url):
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
-    assert "stop_result" in response.context
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
     fake_daemon.refresh_from_db()
     assert fake_daemon.celery_task.enabled is False
 
@@ -290,7 +300,10 @@ def test_post_stop_failure_auth_owner(fake_daemon, owner_client, detail_url):
     assert "web/daemon/daemon_detail.html" in [t.name for t in response.templates]
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
-    assert "stop_result" in response.context
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.WARNING
     fake_daemon.refresh_from_db()
     assert fake_daemon.celery_task.enabled is False
 

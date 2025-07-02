@@ -1,4 +1,4 @@
-{% load static i18n tz timezones django_bootstrap5 %}
+{% load static i18n django_bootstrap5 %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}" data-bs-theme="auto">
@@ -6,8 +6,6 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         {% bootstrap_css %}
-        {% bootstrap_javascript %}
-        {% bootstrap_messages %}
         <link href="{% static 'fontawesomefree/css/fontawesome.css' %}"
               rel="stylesheet"
               type="text/css">
@@ -42,81 +40,45 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-end" id="navbarText">
                         <div class="d-flex flex-column flex-sm-row gap-2 col-lg-3 text-nowrap">
-                            <form class="d-flex" action="{% url 'set_timezone' %}" method="post">
-                                {% csrf_token %}
-                                {% get_available_timezones as TIMEZONES %}
-                                {% get_current_timezone as TIMEZONE_CODE %}
-                                <label for="timezone-dropdown" class="form-label visually-hidden">
-                                    {% translate 'Select timezone' %}
-                                </label>
-                                <select id="timezone-dropdown"
-                                        class="form-select"
-                                        aria-label="{% translate 'Select Timezone' %}"
-                                        name="timezone"
-                                        onchange="this.form.submit()">
 
-                                    {% for tz in TIMEZONES %}
-                                        <option {% if tz == TIMEZONE_CODE %}selected{% endif %}
-                                                value="{{ tz }}">
-                                            {{ tz }}
-                                        </option>
-                                    {% endfor %}
 
-                                </select>
-                            </form>
-                            <form class="d-flex" method="post" action="{% url 'set_language' %}">
-                                {% csrf_token %}
-                                {% get_available_languages as LANGUAGES %}
-                                {% get_current_language as LANGUAGE_CODE %}
-                                <label for="language-dropdown" class="form-label visually-hidden">
-                                    {% translate "Select Language" %}
-                                </label>
-                                <select id="language-dropdown"
-                                        class="form-select"
-                                        aria-label="{% translate 'Select Language' %}"
-                                        name="language"
-                                        onchange="this.form.submit()">
-                                    {% get_language_info_list for LANGUAGES as languages %}
+                            {% element timezone_dropdown %}
+                        {% endelement %}
 
-                                    {% for lang in languages %}
-                                        <option lang="{{ lang.code }}"
-                                                {% if lang.code == LANGUAGE_CODE %}selected{% endif %}
-                                                value="{{ lang.code }}">
-                                            {{ lang.name_local }}
-                                        </option>
-                                    {% endfor %}
+                        {% element language_dropdown %}
+                    {% endelement %}
 
-                                </select>
-                            </form>
-                            {% if user.is_authenticated %}
-                                <a href="{% url 'account_logout' %}"
-                                   class="btn btn-danger"
-                                   role="button">{% translate "Sign Out" %}</a>
-                            {% else %}
-                                <a href="{% url 'account_login' %}"
-                                   class="btn btn-primary"
-                                   role="button">{% translate "Sign In" %}</a>
-                                {% url 'account_signup' as signup_url_ %}
-                                {% if signup_url_ %}
-                                    <a href="{{ signup_url_ }}" class="btn btn-secondary" role="button">{% translate "Sign Up" %}</a>
-                                {% endif %}
-                            {% endif %}
-                        </div>
-                    </div>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'account_logout' %}"
+                           class="btn btn-danger"
+                           role="button">{% translate "Sign Out" %}</a>
+                    {% else %}
+                        <a href="{% url 'account_login' %}"
+                           class="btn btn-primary"
+                           role="button">{% translate "Sign In" %}</a>
+                        {% url 'account_signup' as signup_url_ %}
+                        {% if signup_url_ %}
+                            <a href="{{ signup_url_ }}" class="btn btn-secondary" role="button">{% translate "Sign Up" %}</a>
+                        {% endif %}
+                    {% endif %}
                 </div>
-            </nav>
-        </header>
+            </div>
+        </div>
+    </nav>
+</header>
 
-        {% block body %}
+{% block body %}
 
-            {% block content %}
-            {% endblock content %}
-        {% endblock body %}
+    {% block content %}
+    {% endblock content %}
+{% endblock body %}
 
-        {% block extra_body %}
-        {% endblock extra_body %}
+{% block extra_body %}
+{% endblock extra_body %}
 
-        {% include "web/partials/_footer.html" %}
+{% include "web/partials/_footer.html" %}
 
-    </body>
+{% bootstrap_javascript %}
+
+</body>
 </html>

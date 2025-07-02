@@ -19,12 +19,13 @@
 """Test module for :mod:`web.views.MailboxDetailWithDeleteView`."""
 
 import pytest
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import status
 
 from core.constants import EmailFetchingCriterionChoices
-from core.models import Daemon, Mailbox
+from core.models import Mailbox
 from core.utils.fetchers.exceptions import FetcherError
 from web.views import MailboxFilterView
 from web.views.mailbox_views.MailboxDetailWithDeleteView import (
@@ -167,13 +168,10 @@ def test_post_test_success_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Mailbox)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is True
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert not response.context["action_result"]["error"]
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
     mock_Mailbox_test_connection.assert_called_once()
 
 
@@ -196,13 +194,10 @@ def test_post_test_failure_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Mailbox)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is False
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["error"], str)
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.ERROR
     mock_Mailbox_test_connection.assert_called_once()
     assert fake_error_message in response.content.decode()
 
@@ -269,13 +264,10 @@ def test_post_fetch_all_success_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Mailbox)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is True
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert not response.context["action_result"]["error"]
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
     mock_Mailbox_fetch.assert_called_once_with(
         fake_mailbox, EmailFetchingCriterionChoices.ALL
     )
@@ -300,13 +292,10 @@ def test_post_fetch_all_failure_auth_owner(
     assert "object" in response.context
     assert isinstance(response.context["object"], Mailbox)
     assert "latest_emails" in response.context
-    assert "action_result" in response.context
-    assert "status" in response.context["action_result"]
-    assert response.context["action_result"]["status"] is False
-    assert "message" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["message"], str)
-    assert "error" in response.context["action_result"]
-    assert isinstance(response.context["action_result"]["error"], str)
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.ERROR
     mock_Mailbox_fetch.assert_called_once_with(
         fake_mailbox, EmailFetchingCriterionChoices.ALL
     )

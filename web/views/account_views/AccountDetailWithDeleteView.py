@@ -20,11 +20,12 @@
 
 from typing import Any, override
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import DeletionMixin
 
 from core.models import Account, Email
@@ -86,30 +87,15 @@ class AccountDetailWithDeleteView(
             A template response with the updated view after the action.
         """
         self.object = self.get_object()
-        result = self.perform_update_mailboxes()
-        self.object.refresh_from_db()
-        context = self.get_context_data(object=self.object)
-        context["action_result"] = result
-        return render(request, self.template_name, context)
-
-    def perform_update_mailboxes(self) -> dict[str, bool | str | None]:
-        """Performs updating of the accounts mailboxes.
-
-        Returns:
-            Data containing the status, message and, if provided, the error message of the action.
-        """
-        result: dict[str, bool | str | None] = {
-            "status": None,
-            "message": None,
-            "error": None,
-        }
         try:
             self.object.update_mailboxes()
         except MailAccountError as error:
-            result["status"] = False
-            result["message"] = "Updating mailboxes failed"
-            result["error"] = str(error)
+            messages.error(
+                request,
+                _("Updating mailboxes failed\n%(error)s") % {"error": str(error)},
+            )
         else:
-            result["status"] = True
-            result["message"] = "Updating mailboxes successful"
-        return result
+            messages.success(request, _("Updating mailboxes successful"))
+        self.object.refresh_from_db()
+
+        return self.get(request)

@@ -134,7 +134,7 @@
                 <div class="accordion-body">
                     <ul class="list-group list-group-flush">
                         {% for headername, headervalue in object.headers.items %}
-                            <li class="list-group-item">{{ headername }}: {{ headervalue }}</li>
+                            <li class="list-group-item">{{ headername|title }}: {{ headervalue }}</li>
                         {% endfor %}
                     </ul>
                 </div>

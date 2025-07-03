@@ -107,26 +107,29 @@ class HeaderFields:
     """Namespace class with all header fields that have their own column in the emails table.
 
     For existing header fields see https://www.iana.org/assignments/message-headers/message-headers.xhtml.
+
+    All header field names are lowercase and the lookups case-insensitive to avoid issues with different spellings.
     """
 
-    MESSAGE_ID: Final[str] = "Message-ID"
-    IN_REPLY_TO: Final[str] = "In-Reply-To"
-    REFERENCES: Final[str] = "References"
-    DATE: Final[str] = "Date"
-    SUBJECT: Final[str] = "Subject"
-    X_SPAM: Final[str] = "X-Spam-Flag"
-    CONTENT_ID: Final[str] = "Content-Id"
+    MESSAGE_ID: Final[str] = "message-id"
+    IN_REPLY_TO: Final[str] = "in-reply-to"
+    REFERENCES: Final[str] = "references"
+    DATE: Final[str] = "date"
+    SUBJECT: Final[str] = "subject"
+    X_SPAM: Final[str] = "x-spam-flag"
+    CONTENT_ID: Final[str] = "content-id"
 
     class MailingList:
         """Headers that are included in the mailinglists table."""
 
-        ID: Final[str] = "List-Id"
-        OWNER: Final[str] = "List-Owner"
-        SUBSCRIBE: Final[str] = "List-Subscribe"
-        UNSUBSCRIBE: Final[str] = "List-Unsubscribe"
-        POST: Final[str] = "List-Post"
-        HELP: Final[str] = "List-Help"
-        ARCHIVE: Final[str] = "List-Archive"
+        ID: Final[str] = "list-id"
+        OWNER: Final[str] = "list-owner"
+        SUBSCRIBE: Final[str] = "list-subscribe"
+        UNSUBSCRIBE: Final[str] = "list-unsubscribe"
+        UNSUBSCRIBE_POST: Final[str] = "list-unsubscribe-post"
+        POST: Final[str] = "list-post"
+        HELP: Final[str] = "list-help"
+        ARCHIVE: Final[str] = "list-archive"
 
     class Correspondents(TextChoices):
         """Headers that are treated as correspondents.
@@ -134,28 +137,28 @@ class HeaderFields:
         This class holds the choices for `core.models.EmailCorrespondents`.
         """
 
-        FROM = "From", _("From")
-        TO = "To", _("To")
-        CC = "Cc", _("CC")
-        BCC = "Bcc", _("BCC")
-        SENDER = "Sender", _("Sender")
-        REPLY_TO = "Reply-To", _("Reply-To")
-        RESENT_FROM = "Resent-From", _("Resent-From")
-        RESENT_TO = "Resent-To", _("Resent-To")
-        RESENT_CC = "Resent-Cc", _("Resent-Cc")
-        RESENT_BCC = "Resent-Bcc", _("Resent-Bcc")
-        RESENT_SENDER = "Resent-Sender", _("Resent-Sender")
-        RESENT_REPLY_TO = "Resent-Reply-To", _("Resent-Reply-To")
+        FROM = "from", _("From")
+        TO = "to", _("To")
+        CC = "cc", _("CC")
+        BCC = "bcc", _("BCC")
+        SENDER = "sender", _("Sender")
+        REPLY_TO = "reply-To", _("Reply-To")
+        RESENT_FROM = "resent-from", _("Resent-From")
+        RESENT_TO = "resent-to", _("Resent-To")
+        RESENT_CC = "resent-cc", _("Resent-Cc")
+        RESENT_BCC = "resent-bcc", _("Resent-Bcc")
+        RESENT_SENDER = "resent-sender", _("Resent-Sender")
+        RESENT_REPLY_TO = "resent-reply-to", _("Resent-Reply-To")
         ENVELOPE_TO = (
-            "Envelope-To",
-            "Envelope-To",
+            "envelope-to",
+            _("Envelope-To"),
         )
-        DELIVERED_TO = "Delivered-To", _("Delivered-To")
-        RETURN_PATH = "Return-Path", _("Return-Path")
-        RETURN_RECEIPT_TO = "Return-Receipt-To", _("Return-Receipt-To")
+        DELIVERED_TO = "delivered-to", _("Delivered-To")
+        RETURN_PATH = "return-path", _("Return-Path")
+        RETURN_RECEIPT_TO = "return-receipt-to", _("Return-Receipt-To")
         DISPOSITION_NOTIFICATION_TO = (
-            "Disposition-Notification-To",
-            "Disposition-Notification-To",
+            "disposition-notification-to",
+            _("Disposition-Notification-To"),
         )
 
 

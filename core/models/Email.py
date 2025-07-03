@@ -399,7 +399,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         email_message = email.message_from_bytes(email_bytes, policy=policy.default)
         header_dict: dict[str, str | None] = {}
         for header_name in email_message:
-            header_dict[header_name] = get_header(email_message, header_name)
+            header_dict[header_name.lower()] = get_header(email_message, header_name)
         bodytexts = get_bodytexts(email_message)
         return cls(
             headers=header_dict,
@@ -407,7 +407,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             or md5(email_bytes).hexdigest(),
             datetime=parse_datetime_header(header_dict.get(HeaderFields.DATE)),
             email_subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
-            x_spam=header_dict.get(HeaderFields.X_SPAM) or "",
+            x_spam=header_dict.get(HeaderFields.X_SPAM, ""),
             datasize=len(email_bytes),
             plain_bodytext=bodytexts.get("plain", ""),
             html_bodytext=bodytexts.get("html", ""),

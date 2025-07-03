@@ -103,21 +103,21 @@ TEST_EMAIL_PARAMETERS = [
             "header_count": 20,
         },
         {
-            "Return-Path": {
+            "return-path": {
                 "mnbvcfg.48ij343regrh8ge5jp02b@bvncmx.com": {"name": ""},
             },
-            "From": {
+            "from": {
                 "mnbvcfg.48ij343regrh8ge5jp02b@bvncmx.com": {
                     "name": "xsejino mnkfsdfuio"
                 },
             },
-            "Envelope-To": {
+            "envelope-to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
-            "To": {
+            "to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
-            "Cc": {
+            "cc": {
                 "sndfbkl48ij343regrh8ge5jp02b@bvncmx.com": {"name": ""},
             },
         },
@@ -145,16 +145,16 @@ TEST_EMAIL_PARAMETERS = [
             "header_count": 21,
         },
         {
-            "Return-Path": {
+            "return-path": {
                 "sndfbkl48ij343regrh8ge5jp02b@bvncmx.com": {"name": ""},
             },
-            "From": {
+            "from": {
                 "sndfbkl48ij343regrh8ge5jp02b@bvncmx.com": {"name": "QNfjq"},
             },
-            "Envelope-To": {
+            "envelope-to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
-            "To": {
+            "to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
         },
@@ -182,16 +182,16 @@ TEST_EMAIL_PARAMETERS = [
             "header_count": 22,
         },
         {
-            "Return-Path": {
+            "return-path": {
                 "sndfbkl48ij343regrh8ge5jp02b@bvncmx.com": {"name": ""},
             },
-            "From": {
+            "from": {
                 "sndfbkl48ij343regrh8ge5jp02b@bvncmx.com": {"name": "QNfjq"},
             },
-            "Envelope-To": {
+            "envelope-to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
-            "To": {
+            "to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
         },
@@ -210,16 +210,16 @@ TEST_EMAIL_PARAMETERS = [
             "header_count": 21,
         },
         {
-            "Return-Path": {
+            "return-path": {
                 "prvs=1951f1b812=48ij343regrh8ge5jp02b@uttgjub8.de": {"name": ""},
             },
-            "From": {
+            "from": {
                 "48ij343regrh8ge5jp02b@uttgjub8.de": {"name": "mnkfsdfuio, QNfjq"},
             },
-            "Envelope-To": {
+            "envelope-to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
-            "To": {
+            "to": {
                 "test@48ij343regrh8ge5jp02b.org": {
                     "name": "test@48ij343regrh8ge5jp02b.org"
                 },
@@ -242,21 +242,54 @@ TEST_EMAIL_PARAMETERS = [
             "header_count": 19,
         },
         {
-            "Return-Path": {
+            "return-path": {
                 "sndfbkl48ij343regrh8ge5jp02b@bvncmx.com": {"name": ""},
             },
-            "From": {
+            "from": {
                 "sndfbkl48ij343regrh8ge5jp02b@bvncmx.com": {"name": "Hungry Burger"},
             },
-            "Envelope-To": {
+            "envelope-to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
-            "To": {
+            "to": {
                 "test@48ij343regrh8ge5jp02b.org": {"name": ""},
             },
-            "Cc": {
+            "cc": {
                 "wehrnfg@48ij343regrh8ge5jp02b.org": {"name": "QNfjq"},
                 "wehrnfg.48ij343regrh8ge5jp02b@picge1.de": {"name": ""},
+            },
+        },
+        {},
+    ),
+    (
+        "test_emails/message_id_spelling.eml",
+        {
+            "message_id": "<20250701174450.26ae316c8d2af4a9@notify.docker.com>",
+            "email_subject": "[Docker] A personal access token was created",
+            "date": datetime(
+                2025, 7, 1, 17, 44, 50, tzinfo=timezone(timedelta(seconds=0))
+            ),
+            "x_spam": "NO",
+            "plain_bodytext": "Hello user!\r\n\r\n\r\nA personal access token was just created now for the Docker account user.\r\nAccess token description: test\r\n\r\nThis access token will now function as a password for the Docker CLI. If you created this personal access token, no more action is required. If you did not create this access token, please go to Personal Access Tokens Settings at <no value>. Delete the token, then change your password.\r\n\r\nThank you,\r\nThe Docker Team\r\n\r\nThis email was sent to your mail to notify you of an update that was made to your Docker Account.\r\n\r\n© 2025 Docker Inc.\r\n3790 El Camino Real #1052, Palo Alto, CA 94306\r\n",
+            "html_bodytext": "",
+            "references": [],
+            "header_count": 17,
+        },
+        {
+            "return-path": {
+                "bounce+670d3d.5e6ef-your=mail.org@notify.docker.com": {"name": ""},
+            },
+            "sender": {
+                "no-reply@notify.docker.com": {"name": ""},
+            },
+            "from": {
+                "no-reply@notify.docker.com": {"name": "Docker"},
+            },
+            "envelope-to": {
+                "your@mail.org": {"name": ""},
+            },
+            "to": {
+                "your@mail.org": {"name": ""},
             },
         },
         {},

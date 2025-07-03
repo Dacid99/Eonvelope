@@ -520,7 +520,7 @@ def test_Email_add_in_reply_to_no_header(fake_email):
 @pytest.mark.django_db
 def test_Email_add_in_reply_to_no_match(faker, fake_email):
     fake_message_id = faker.name()
-    fake_email.headers = {"In-Reply-To": fake_message_id}
+    fake_email.headers = {"in-reply-to": fake_message_id}
 
     assert fake_email.in_reply_to.count() == 0
 
@@ -535,7 +535,7 @@ def test_Email_add_in_reply_to_single(faker, fake_email):
     fake_in_reply_to_email = baker.make(
         Email, message_id=fake_message_id, mailbox=fake_email.mailbox
     )
-    fake_email.headers = {"In-Reply-To": fake_message_id}
+    fake_email.headers = {"in-reply-to": fake_message_id}
 
     assert fake_email.in_reply_to.count() == 0
 
@@ -547,7 +547,7 @@ def test_Email_add_in_reply_to_single(faker, fake_email):
 
 @pytest.mark.django_db
 def test_Email_add_in_reply_to_other_email(fake_email, fake_other_email):
-    fake_email.headers = {"In-Reply-To": fake_other_email.message_id}
+    fake_email.headers = {"in-reply-to": fake_other_email.message_id}
 
     assert fake_email.in_reply_to.count() == 0
 
@@ -566,7 +566,7 @@ def test_Email_add_in_reply_to_multi(faker, fake_email):
     fake_referenced_email_2 = baker.make(
         Email, message_id=fake_message_id, mailbox=fake_mailbox_2
     )
-    fake_email.headers = {"In-Reply-To": fake_message_id}
+    fake_email.headers = {"in-reply-to": fake_message_id}
 
     assert fake_email.in_reply_to.count() == 0
 
@@ -591,7 +591,7 @@ def test_Email_add_references_no_header(fake_email):
 @pytest.mark.django_db
 def test_Email_add_references_no_match(faker, fake_email):
     fake_message_id = faker.name()
-    fake_email.headers = {"References": fake_message_id}
+    fake_email.headers = {"references": fake_message_id}
 
     assert fake_email.references.count() == 0
 
@@ -606,7 +606,7 @@ def test_Email_add_references_single(faker, fake_email):
     fake_referenced_email = baker.make(
         Email, message_id=fake_message_id, mailbox=fake_email.mailbox
     )
-    fake_email.headers = {"References": fake_message_id}
+    fake_email.headers = {"references": fake_message_id}
 
     assert fake_email.references.count() == 0
 
@@ -618,7 +618,7 @@ def test_Email_add_references_single(faker, fake_email):
 
 @pytest.mark.django_db
 def test_Email_add_references_other_email(fake_email, fake_other_email):
-    fake_email.headers = {"References": fake_other_email.message_id}
+    fake_email.headers = {"references": fake_other_email.message_id}
 
     assert fake_email.references.count() == 0
 
@@ -637,7 +637,7 @@ def test_Email_add_references_multi(faker, fake_email):
     fake_referenced_email_2 = baker.make(
         Email, message_id=fake_message_id_2, mailbox=fake_email.mailbox
     )
-    fake_email.headers = {"References": fake_message_id_1 + ", " + fake_message_id_2}
+    fake_email.headers = {"references": fake_message_id_1 + ", " + fake_message_id_2}
 
     assert fake_email.references.count() == 0
 
@@ -649,7 +649,7 @@ def test_Email_add_references_multi(faker, fake_email):
 
 
 @pytest.mark.django_db
-def test_Email_add_correspondents_none(faker, fake_email):
+def test_Email_add_correspondents_none(fake_email):
     fake_email.headers = {}
 
     assert fake_email.correspondents.count() == 0

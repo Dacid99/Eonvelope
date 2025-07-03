@@ -36,6 +36,11 @@
                 {% translate "Unsubscribe" %}: <a href="mailto:{{ object.list_unsubscribe }}"
     class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_unsubscribe }}</a>
             </li>
+            {% if object.list_unsubscribe_post %}
+                <li class="list-group-item">
+                    {% translate "Unsubscribe Method" %}: {{ object.list_unsubscribe_post }}
+                </li>
+            {% endif %}
             <li class="list-group-item">
                 {% translate "Post" %}: <a href="mailto:{{ object.list_post }}"
     class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_post }}</a>

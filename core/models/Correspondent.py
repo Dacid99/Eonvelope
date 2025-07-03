@@ -79,6 +79,14 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
     )
     """The List-Unsubscribe header of the mailinglist. Can be blank."""
 
+    list_unsubscribe_post = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        verbose_name=_("list unsubscribe post"),
+    )
+    """The List-Unsubscribe-Post header of the mailinglist. Can be blank."""
+
     list_post = models.TextField(
         blank=True,
         default="",

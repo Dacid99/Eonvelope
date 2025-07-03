@@ -442,6 +442,9 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                                     HeaderFields.MailingList.UNSUBSCRIBE, ""
                                 )
                             )
+                            new_emailcorrespondent.correspondent.list_unsubscribe_post = self.headers.get(
+                                HeaderFields.MailingList.UNSUBSCRIBE_POST, ""
+                            )
                             new_emailcorrespondent.correspondent.list_post = (
                                 self.headers.get(HeaderFields.MailingList.POST, "")
                             )

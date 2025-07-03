@@ -70,7 +70,9 @@ trim_footnote_reference_space = True
 
 nitpicky = True
 nitpick_ignore = ()
-nitpick_ignore_regex = ()
+nitpick_ignore_regex = [
+    (r"py:.*", r"rest_framework\..*"),  # restframework has no sphinx inventory
+]
 
 # Options for object signatures
 
@@ -178,6 +180,58 @@ apidoc_implicit_namespaces = True
 intersphinx_mapping = {
     "python": (f"https://docs.python.org/{python_version}", None),
     "django": (f"https://docs.djangoproject.com/en/{django_version}/", None),
+    "django_filters": (
+        "https://django-filter.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_dirtyfields": (
+        "https://django-dirtyfields.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_constance": (
+        "https://django-constance.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_allauth": (
+        "https://django-allauth.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_environ": (
+        "https://django-environ.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_health_check": (
+        "https://django-health-check.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_celery_beat": (
+        "https://django-celery-beat.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_celery_results": (
+        "https://django-celery-results.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_crispy_forms": (
+        "https://django-crispy-forms.readthedocs.io/en/stable/",
+        None,
+    ),
+    "dj_rest_auth": (
+        "https://dj-rest-auth.readthedocs.io/en/stable/",
+        None,
+    ),
+    "drf_spectacular": (
+        "https://drf-spectacular.readthedocs.io/en/stable/",
+        None,
+    ),
+    "django_extensions": (
+        "https://django-extensions.readthedocs.io/en/stable/",
+        None,
+    ),
+    "celery": (
+        "https://docs.celeryq.dev/en/stable/",
+        None,
+    ),
 }
 
 

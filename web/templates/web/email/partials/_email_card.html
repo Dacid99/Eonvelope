@@ -31,9 +31,9 @@
 
 {% block thumbnail %}
 
-    <iframe srcdoc="{{ card_object.html_version|safe }}"
+    <iframe srcdoc="{{ card_object.html_version }}"
             class="h-100 w-100 rounded"
             title="{% translate 'Email content' %}"
-            sandbox="allow-same-origin"></iframe>
+            sandbox></iframe>
 
 {% endblock thumbnail %}

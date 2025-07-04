@@ -91,7 +91,7 @@
 {% endblock card_content %}
 
 {% block thumbnail %}
-    <iframe srcdoc="{{ object.html_version|safe }}"
+    <iframe srcdoc="{{ object.html_version }}"
             class="w-100 h-100 p-1"
             title="{% translate 'Email content' %}"
             sandbox></iframe>

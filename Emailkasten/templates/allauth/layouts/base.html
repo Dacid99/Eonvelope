@@ -41,12 +41,9 @@
                     <div class="collapse navbar-collapse justify-content-end" id="navbarText">
                         <div class="d-flex flex-column flex-sm-row gap-2 col-lg-3 text-nowrap">
 
+                            {% include "allauth/elements/timezone_dropdown.html" %}
 
-                            {% element timezone_dropdown %}
-                        {% endelement %}
-
-                        {% element language_dropdown %}
-                    {% endelement %}
+                            {% include "allauth/elements/language_dropdown.html" %}
 
                     {% if user.is_authenticated %}
                         <a href="{% url 'account_logout' %}"

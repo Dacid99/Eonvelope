@@ -1,0 +1,38 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: emailkasten-db
+    volumes:
+      - /main/Emailkasten/test/mysql:/var/lib/mysql
+    environment:
+      - MARIADB_DATABASE=email_archive_django # must match web:DATABASE_NAME
+      - MARIADB_USER=user # must match web:DATABASE_USER
+      - MARIADB_PASSWORD=passwd # must match web:DATABASE_PASSWORD
+      - MARIADB_ROOT_PASSWORD=example
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  web:
+    image: emailkasten
+    container_name: emailkasten-web
+    volumes:
+      - /main/Emailkasten/test/archive:/mnt/archive
+      - /main/Emailkasten/test/log:/var/log/emailkasten
+    ports:
+      - 1122:443
+    environment:
+      - DATABASE=email_archive_django # must match db:MARIADB_DATABASE
+      - DATABASE_USER=user # must match db:MARIADB_USER
+      - DATABASE_PASSWORD=passwd # must match db:MARIADB_PASSWORD
+      - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
+      - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
+      - ALLOWED_HOSTS=localhost,emailkasten.mydomain.tld # all allowed host URLs separated by ,
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy

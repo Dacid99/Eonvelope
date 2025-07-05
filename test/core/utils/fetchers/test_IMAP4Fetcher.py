@@ -63,6 +63,7 @@ def mock_IMAP4(mocker, faker):
     mock_IMAP4.error = FakeIMAP4error
     fake_response = faker.sentence().encode("utf-8")
     mock_IMAP4.return_value.login.return_value = ("OK", [fake_response])
+    mock_IMAP4.return_value.authenticate.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.noop.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.check.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.list.return_value = ("OK", fake_response.split())
@@ -86,9 +87,9 @@ def test_IMAP4Fetcher_make_fetching_criterion_date_criterion(
     faker, criterion_name, expected_time_delta
 ):
     fake_datetime = faker.date_time_this_decade(tzinfo=datetime.UTC)
-    expected_criterion = f"SENTSINCE {Time2Internaldate(fake_datetime - expected_time_delta).split(" ")[
-        0
-    ].strip('" ')}"
+    expected_criterion = f"SENTSINCE {
+        Time2Internaldate(fake_datetime - expected_time_delta).split(' ')[0].strip('" ')
+    }"
 
     with freeze_time(fake_datetime):
         result = IMAP4Fetcher.make_fetching_criterion(criterion_name)
@@ -207,6 +208,34 @@ def test_IMAP4Fetcher___init___login_bad_response(
         imap_mailbox.account.mail_address, imap_mailbox.account.password
     )
     mock_logger.error.assert_called()
+
+
+@pytest.mark.django_db
+def test_IMAP4Fetcher___init___utf_8_credentials(
+    mocker, imap_mailbox, mock_logger, mock_IMAP4
+):
+    spy_IMAP4Fetcher_connect_to_host = mocker.spy(IMAP4Fetcher, "connect_to_host")
+    mock_IMAP4.return_value.login.side_effect = UnicodeEncodeError(
+        "ascii", "pwd", 0, 1, "utf-8"
+    )
+
+    IMAP4Fetcher(imap_mailbox.account)
+
+    spy_IMAP4Fetcher_connect_to_host.assert_called_once()
+    mock_IMAP4.return_value.login.assert_called_once_with(
+        imap_mailbox.account.mail_address, imap_mailbox.account.password
+    )
+    mock_IMAP4.return_value.authenticate.assert_called_once()
+    assert mock_IMAP4.return_value.authenticate.call_args[0][0] == "PLAIN"
+    assert mock_IMAP4.return_value.authenticate.call_args[0][1](
+        "request"
+    ) == b"\0" + imap_mailbox.account.mail_address.encode(
+        "utf-8"
+    ) + b"\0" + imap_mailbox.account.password.encode(
+        "utf-8"
+    )
+
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db

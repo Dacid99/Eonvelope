@@ -90,7 +90,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
             start_time = timezone.now() - datetime.timedelta(weeks=52)
         else:
             return criterion_name
-        return f"SENTSINCE {imaplib.Time2Internaldate(start_time).split(" ")[0].strip('" ')}"
+        return f"SENTSINCE {imaplib.Time2Internaldate(start_time).split(' ')[0].strip('" ')}"
 
     @override
     def __init__(self, account: Account) -> None:
@@ -102,7 +102,9 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         super().__init__(account)
 
         self.connect_to_host()
-        self.safe_login(self.account.mail_address, self.account.password)
+        self.safe_login(  # dont use kwargs here, this would kill the utf-8 fallback!
+            self.account.mail_address, self.account.password
+        )
 
     @override
     def connect_to_host(self) -> None:

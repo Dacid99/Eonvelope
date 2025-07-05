@@ -143,7 +143,6 @@ class SafeIMAPMixin:
         def safe_wrapper(
             imap_action: Callable[..., IMAP4ActionResponse],
         ) -> Callable[..., IMAP4ActionResponse | None]:
-
             def safe_action(
                 self: Self, *args: Any, **kwargs: Any
             ) -> IMAP4ActionResponse | None:
@@ -181,8 +180,21 @@ class SafeIMAPMixin:
     def safe_login(
         self: IMAP4FetcherClass, *args: Any, **kwargs: Any
     ) -> tuple[Literal["OK"], list[bytes]]:
-        """The :func:`safe` wrapped version of :func:`imaplib.IMAP4.login`."""
-        return self._mail_client.login(*args, **kwargs)
+        """The :func:`safe` wrapped version of :func:`imaplib.IMAP4.login`.
+
+        In case the passwords contains utf-8 chars, use authenticate instead.
+
+        References:
+            https://github.com/ikvk/imap_tools/pull/186/commits/0ce6b47a0019538e22a977516e28df16ea0a7961
+        """
+        try:
+            response = self._mail_client.login(*args, **kwargs)
+        except UnicodeEncodeError:
+            credentials = (
+                b"\0" + args[0].encode("utf-8") + b"\0" + args[1].encode("utf-8")
+            )
+            response = self._mail_client.authenticate("PLAIN", lambda x: credentials)
+        return response
 
     @safe(exception=MailboxError)
     def safe_select(

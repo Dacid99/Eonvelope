@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.usersessions",
     "dj_rest_auth",
+    "robots",
     "constance",
     "constance.backends.database",
     "health_check",
@@ -161,6 +162,7 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 WSGI_APPLICATION = "Emailkasten.wsgi.application"
 
 SITE_ID = 1
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
@@ -273,6 +275,9 @@ REST_AUTH = {
     ),
 }
 
+# django-robots  https://django-robots.readthedocs.io/en/latest/
+ROBOTS_USE_SITEMAP = False
+ROBOTS_USE_HOST = False
 
 # Logging   https://docs.djangoproject.com/en/5.2/topics/logging/
 LOG_DIRECTORY_PATH = Path("/var/log/emailkasten")

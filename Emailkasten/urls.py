@@ -27,7 +27,7 @@ References:
 from __future__ import annotations
 
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -45,6 +45,7 @@ urlpatterns = [
     path("health/", include("health_check.urls")),
     path("", include("django.conf.urls.i18n")),
     path("settz/", set_timezone, name=SET_TIMEZONE_URL_NAME),
+    re_path(r"^robots\.txt", include("robots.urls")),
     # api
     path("api/", include("api.urls")),
     path("api/auth/", include("dj_rest_auth.urls")),

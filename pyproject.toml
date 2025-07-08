@@ -34,6 +34,7 @@ dependencies = [
     "celery (>=5.5.3,<6.0.0)",
     "django-celery-results (>=2.6.0,<3.0.0)",
     "django-celery-beat (>=2.8.1,<3.0.0)",
+    "django-robots (>=6.1,<7.0)",
 ]
 
 [tool.poetry]

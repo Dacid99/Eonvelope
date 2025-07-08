@@ -104,6 +104,17 @@ These settings can be found and managed in the Django admin interface at ``/admi
 | WEB_PAGE_SIZES_OPTIONS ([10, 25, 50, 75, 100])      |  The page size options for pagination in the webapp. Should contain the WEB_DEFAULT_PAGE_SIZE value.                                                                                                                                                                                                     |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Robots.txt
+^^^^^^^^^^
+
+Since the rise of AI, uncounted numbers of webcrawlers are out and about online.
+The robots.txt file served by many web services (including your Emailkasten instance) is intended to tell them what parts of a page they may access (if they care).
+
+You can set up rules on what parts of Emailkasten crawlers are actively invited to access and which not in the admin panel under ``Robots - Rules``.
+
+By default all pages are allowed.
+To reverse this and disallow all pages, add a rule with robot: * , website: your-domain.tld and disallowed url pattern: / .
+
 Security-relevant Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

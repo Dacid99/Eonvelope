@@ -5,7 +5,7 @@ Emailkasten documentation
 Welcome to the documentation of Emailkasten project!
 ----------------------------------------------------
 
-Emailkasten is a open-source self-hosted mail archive built using the django framework.
+Emailkasten is an open-source self-hosted email archive built using the django framework.
 
 
 We need your opinion
@@ -25,11 +25,12 @@ If you encounter an issue please let us know via an issue or direct message!
    :caption: Contents:
 
    rst/quickstart
+   rst/faq
    rst/installation
    rst/configuration
    rst/instructions
    rst/integrations
    rst/translations
    rst/developers
-   rst/faq
    rst/changelog
+   rst/license

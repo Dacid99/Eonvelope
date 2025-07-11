@@ -26,6 +26,8 @@
 - saving old correspondent info (via fk maybe)
 - email_name uneditable, add real_name field
 - async parsing, sync saving
+- podman
+- kubernetes
 
 ## To refactor
 
@@ -57,6 +59,7 @@
 - api creation of daemons
 - logfile for gunicorn
 - integration with uptime checkers
+- helptexts for orientation instead of empty lists
 
 ### For production
 
@@ -89,3 +92,4 @@
 - cascase doesn't trigger delete!
 - optics:
   - iframes are poorly scaled
+  - checkboxes for boolean data instead of True and False

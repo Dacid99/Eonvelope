@@ -1,2 +1,0 @@
-drafts have different messageIDs than the sent email, both can be fetched individually
-IMAP doesn't allow time based lookups, only date based

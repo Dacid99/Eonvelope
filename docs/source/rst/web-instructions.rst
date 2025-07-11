@@ -5,14 +5,15 @@ Getting started
 ---------------
 
 When you start Emailkasten for the first time, an admin account is created.
-The username is set to ``admin`` and the password is set from the ``DJANGO_SUPERUSER_PASSWORD`` environment variable.
+The username is set to ``admin`` and the password
+is set from the ``DJANGO_SUPERUSER_PASSWORD`` environment variable.
 You should use this admin account for administrative purposes only.
 
-To log in, open the webapp by opening the IP address of your server with the port of the application, by default ``1122``.
-Emailkasten will force you to use HTTPS, so the url must start with https:// .
+To log in, open the webapp by opening the IP address of your server
+with the port of the application, by default ``1122``.
+Emailkasten will force you to use HTTPS, so the url must start with *https://`*.
 
 After you have logged in, you can make add other user accounts in the django-admin panel.
-
 
 User registration
 -----------------
@@ -20,10 +21,9 @@ User registration
 User
 ^^^^
 
-If your administrator has activated the self registration, you can register yourself via the login page
-
-.. code::
-    /users/login/
+If your administrator has activated the self registration,
+you can register yourself via the login page
+*/users/login/*.
 
 Administrator
 ^^^^^^^^^^^^^
@@ -32,11 +32,10 @@ You can create new users with the admin user.
 
 To do so go to the
 
-.. code::
-    /admin
+*/admin*
 
 page of Emailkasten and log in if necessary.
-In the ``users`` menu you can add new users to the database.
+In the *users* menu you can add new users to the database.
 
 
 Setting up a new account
@@ -45,24 +44,29 @@ Setting up a new account
 Adding a new account
 ^^^^^^^^^^^^^^^^^^^^
 
-You can add a new account at :code: /accounts/create/
+You can add a new account at */accounts/create/*
 
 which you can also reach via the button on the dashboard or the accounts page.
 
 Fill out the form with the credentials of the account, the fields marked with a * are mandatory.
-You can find the information about mailserver-URL, protocol, port in the documentation of your email provider.
+You can find the information about mailserver-URL, protocol, port in the documentation
+of your email provider.
 The following protocols are supported:
+
 - IMAP4
 - IMAP4 over SSL
 - POP3
 - POP3 over SSL
 
 .. note::
-    If possible, use IMAP4 via SSL. This enables you to use the most features with the most security.
+    If possible, use IMAP4 via SSL.
+    This enables you to use the most features with the most security.
 
 If you don't set the port, the default port of the protocol is used.
 
-If you set a timeout value, the connection to the mailserver doesn't time out. As the fetching operations on the mailserver are quick and the connection is closed afterwards anyway, this setting is mostly irrelevant.
+If you set a timeout value, the connection to the mailserver doesn't time out.
+As the fetching operations on the mailserver are quick
+and the connection is closed afterwards anyway, this setting is mostly irrelevant.
 
 After you have added the account, you can test the configuration via the test button.
 If the service is unknown, check the email server URL.
@@ -73,27 +77,33 @@ Mailbox setup
 ^^^^^^^^^^^^^
 
 When the account is set up successfully, you can collect the names of all mailboxes in the account.
-You can use the fetch mailboxes button in the overview of the account or the equivalent API endpoint.
+You can use the fetch mailboxes button in the overview of the account
+or the equivalent API endpoint.
 
 .. note::
     For POP mailaccounts, there is only a single mailbox, the 'INBOX'.
 
 In case of success, these mailboxes will be listed in the account.
-If you change a mailbox name or delete a mailbox, you can also use this method to update the mailboxes in the account. The mailbox with
+If you change a mailbox name or delete a mailbox, you can also use this method
+to update the mailboxes in the account.
 You can further configure a mailbox in its detail overview.
 
 The available settings are define how the content from the mailbox is saved.
 An email can be saved in the following formats:
 
-- .eml: This is the standard format to save email messages. If you disable this, the full original message is not archived.
-- .html: The email can be processed into a html page. If you disable this, there will be no thumbnail for the emails of the mailbox.
+- .eml: This is the standard format to save email messages.
+  If you disable this, the full original message is not archived.
+- .html: The email can be processed into a html page.
+  If you disable this, there will be no thumbnail for the emails of the mailbox.
 
 Additionally, you can configure whether files attached to the emails are stored.
 
-When you have decided on these settings, go ahead and test the mailbox, just like you did with the account earlier.
+When you have decided on these settings, go ahead and test the mailbox,
+just like you did with the account earlier.
 
 .. note::
-    As the information about the mailbox is collected from the account itself, this should only fail if the mailbox has been deleted or renamed.
+    As the information about the mailbox is collected from the account itself,
+    this should only fail if the mailbox has been deleted or renamed.
 
 After a successful test, the option to fetch all emails in the mailbox becomes available.
 Depending on the number of mailboxes this may take a while.
@@ -103,14 +113,16 @@ Daemon setup
 ^^^^^^^^^^^^
 
 For every mailbox you can set up daemons that continuously query and fetch the mailboxes.
-The add-daemon button on the mailbox detail page creates a new daemon configuration and lets you modify it.
+The add-daemon button on the mailbox detail page creates a new daemon configuration
+and lets you modify it.
 Most important is the criterion setting and the period time of the daemon.
 
 The following criteria are available:
-+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| RECENT      | Emails that have the RECENT flag set. This flag is set to newly received emails and is removed after the first session to the mailaccount after the email has been received. Suitable if the mailbox is fetched at a high frequency.                     |
-+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| UNSEEN      | Emails that have the UNSEEN flag set. This flag is set to newly received emails and is removed after the email has been requested by a mailclient. Suitable if the mailbox is fetched at a high frequency.                                               |
+
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RECENT      | Emails that have the RECENT flag set. This flag is set to newly received emails and is removed after the first session to the mailaccount after the email has been received. Suitable if the mailbox is fetched at a high frequency.                                     |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| UNSEEN      | Emails that have the UNSEEN flag set. This flag is set to newly received emails and is removed after the email has been requested by a mailclient. Suitable if the mailbox is fetched at a high frequency.                                                               |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ALL         | Emails in the mailbox. Use with care.                                                                                                                                                                                                                                    |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -145,19 +157,39 @@ The following criteria are available:
     For POP accounts, only the ALL criterion is available.
 
 .. note::
-    For mailboxes with a sizeable number of emails, avoid using the ALL criterion as it will fetch all emails every time the daemon runs, causing a large workload for the server.
+    The most precise time-based lookup is DAILY as IMAP does only support lookup by date, not by timestamp.
+
+.. note::
+    For a complete coverage of all emails that enter and exit a mailaccount,
+    set up a daemon for both the INBOX and the Sent mailbox.
+    That way you can make use of emailkasten's feature to capture and archive complete conversations.
+    Additionally you can archive your drafts by fetching that mailbox repeatedly.
+
+.. note::
+    For mailboxes with a sizeable number of emails (e.g. because you rarely clean out your INBOX),
+    avoid using the ALL criterion as it will fetch all emails every time the daemon runs,
+    causing a large workload for the server.
 
 .. note::
     For INBOX mailboxes, the recommended setup is filtering by UNSEEN flag multiple times every minute.
     For other mailboxes, use DAILY or WEEKLY depending on the activity in the mailbox.
 
-The cycle-period parameter defines how much time passes between two runs of the daemon.
+.. note::
+    If you use a different emailarchive server as backup, you may not be able to use filtering by RECENT or UNSEEN,
+    since that may lead to race conditions between the two servers.
+    Emailkasten with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
+
+The *interval-period* setting defines the time unit that lies between two daemon runs.
+The *interval-every* parameter defines
+how much many *interval-period*'s pass between two runs of the daemon.
 This should be set depending on the criterion.
 
 There are other parameters that can be changed.
+
 - restart-time: defines how long the daemon waits before restarting after being crashed.
 
 The logging behaviour of the daemon can be altered as well.
+
 - log_backup_count: how many historical logfiles to store.
 - logfile_size: the maximum size of a logfile.
 
@@ -165,4 +197,28 @@ The logging behaviour of the daemon can be altered as well.
     The smaller the cycle-period, the larger the number of logfiles and/or the maximum size should be.
 
 Then you can start the daemon and stop it later when required.
-To troubleshoot and get information about what the daemon is doing, you can download the daemons logfile.
+
+To troubleshoot and get information about what the daemon is doing,
+you can download the daemons logfile.
+
+
+Favorites
+^^^^^^^^^
+
+You can mark individual emails, accounts, mailboxes, etc. as favorites.
+This makes it easier to find them when filtering.
+Just click the star icon in the card of the item to toggle the favorite status.
+
+
+Lists and filtering
+^^^^^^^^^^^^^^^^^^^
+
+For every category of data there is a list of all items in the database.
+These can be filtered and ordered by various attributes to get only the items you are looking for.
+
+For emails there is a seperate overview in form of a timeline
+that can be reached via the *archive* button in the email list.
+The url is */emails/archive*.
+
+You can see the emails received within a specific timeframe
+that can be chosen from specific days to entire year.

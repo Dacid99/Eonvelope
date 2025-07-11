@@ -2,7 +2,8 @@ Integrations
 ============
 
 You can intertwine this application with other self-hosted services.
-The following list contains instructions on how to go about this for the integrations we are aware of.
+The following list contains instructions on how to go about this for the integrations we are
+aware of.
 If we are missing something, feel free to contribute an extension of this page.
 
 Searxng
@@ -10,7 +11,8 @@ Searxng
 
 The `Searxng <https://docs.searxng.org/>`_ meta search engine can query data from the Emailkasten database.
 
-To get this to work you need to configure a ``json_engine`` in the engines section of ``settings.yml``.
+To get this to work you need to configure a ``json_engine``
+in the engines section of ``settings.yml``.
 The API endpoint for the email search is:
 
 .. code-block:: text
@@ -29,7 +31,8 @@ For instance, to search the attachments data, use:
 Similar patterns apply for correspondents, accounts, mailboxes, etc.
 Check the API schema or the browsable API for more details.
 
-To grant access, you can create an ``accesstoken`` in the admin panel or via the browsable API and provide it in the configuration of the ``JSONEngine``.
+To grant access, you can create an ``accesstoken`` in the admin panel
+or via the browsable API and provide it in the configuration of the ``JSONEngine``.
 
 Here is an exemplary configuration:
 
@@ -51,9 +54,9 @@ Here is an exemplary configuration:
       headers:
         Authorization: your_accesstoken
       about:
-          website: https://emailkasten.mydomain.tld/
-          use_official_api: true
-          require_api_key: true
-          results: JSON
+        website: https://emailkasten.mydomain.tld/
+        use_official_api: true
+        require_api_key: true
+        results: JSON
 
-See the `Searxng docs <https://docs.searxng.org/dev/engines/json_engine.html>`_ on this subject for more details.
+See the `Searxng docs on this subject <https://docs.searxng.org/dev/engines/json_engine.html>`_ for more details.

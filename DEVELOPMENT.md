@@ -61,7 +61,7 @@ Set them for your local repository via
 git config core.hooksPath validation/githooks/
 ```
 
-### VSCode
+### VSCodium / VSCode
 
 #### Settings
 

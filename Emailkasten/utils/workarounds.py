@@ -35,7 +35,9 @@ def get_config(setting: str) -> Any:
     """A dirty workaround to enable constance to do the initial migration.
 
     Initial migrations fail otherwise because the models depend on constance that is not initialized yet.
-    See https://github.com/jazzband/django-constance/issues/229
+
+    References:
+        https://github.com/jazzband/django-constance/issues/229
 
     Args:
         setting: The config value to retrieve
@@ -44,8 +46,7 @@ def get_config(setting: str) -> Any:
         The requested setting value.
 
     Raises:
-        KeyError (:class:`KeyError`): Reraise of any exception
-        that is related to a settings value not existing.
+        :class:`KeyError`: Raised from any exception that is related to a settings value not existing.
     """
     try:
         return getattr(config, setting)

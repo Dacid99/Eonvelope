@@ -1,12 +1,37 @@
 # Emailkasten
 
-A open-source self-hosted mail archive using the django framework.
+A open-source self-hosted email archive using the [django framework](https://www.djangoproject.com/).
+
+## Features
+
+- Automated continuous email fetching
+- Support for IMAP and POP (and planned support for Exchange)
+- Import and export of emails
+- Indexing of attachments and correspondents
+- Filter and search your emails, attachments, correspondents
+- Identification of related emails
+- Bootstrap5 webapp
+- Full-fledged API
+- Multi-language and timezone support
+- Easy docker setup and configuration
+- SSL certificate out of the box
+
+Your emails are serious business, so this projects codebase has > 95% test-coverage!
+
+### Roadmap
+
+- Consolidate existing features
+- Exchange support
+- Support for more containerization engines (podman, kubernetes, etc.)
+- ...
+
+*Tell us what you'd like to see in a feature request issue!*
 
 ## We need your opinion
 
-This project is currently in **alpha** stage.
+This project is currently in **beta** stage.
 
-We are looking for people to test run it and give feedback!
+We are looking for people to run it and give feedback!
 
 Interested? Just go ahead and run this application on your homelab.
 
@@ -16,7 +41,7 @@ If you encounter an issue please let us know via an issue or direct message!
 
 ### Recommended
 
-The project is intended to be run with *docker compose* using the [compose file](docker/docker-compose.yml) or an equivalent *docker run* command.
+The project is intended to be run with *docker compose* using [the compose file](docker/docker-compose.yml) or an equivalent *docker run* command.
 
 ### Advanced
 

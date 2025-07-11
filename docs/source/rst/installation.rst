@@ -4,18 +4,41 @@ Installation
 General
 -------
 
-Do not expose this application to the web without a reverse proxy like nginx.
+**This project is currently still in active development.**
+
+While the general functionalities are stable, there may be breaking changes nonetheless.
+If you need to archive your emails for a critical purpose, it is not recommended to solely
+rely on this application.
 
 The docker image comes with a SSL certificate issued and signed by the emailkasten project.
 It ensures safe communication between your reverse proxy and within your local network.
 It is not safe for use on the general web.
 
+Therefore, do not expose this application to the web without a reverse proxy like nginx.
+
 
 Recommended
 -----------
 
-The project is intended to be run with *docker compose* using the compose file docker/docker-compose.yml or an equivalent *docker run* command.
-Take the docker compose file from the docker directory of the project, adapt it to your needs and run ``docker compose up -d``. Done!
+The project is intended to be run with
+*docker compose* using the compose file *docker/docker-compose.yml*
+or an equivalent *docker run* command.
+
+There are two example compose-files in the docker directory of the repository,
+a minimal version and one with all settings for full customization.
+
+Take one of these examples,
+adapt it to your needs and start the stack with ``docker compose up -d``
+or via your container orchestrator.
+Done!
+
+The container has 2 volumes,
+one for the logfiles of emailkasten and one for the files that emailkasten archives.
+
+.. Note::
+    You can also mount all logfiles of the container by changing the path in the docker-compose.yml to /var/log.
+    In that case you will have to give the directory 777 permissions, otherwise services will fail to start and log properly.
+
 
 Advanced
 --------
@@ -23,6 +46,9 @@ Advanced
 Alternatively, you can run the application bare metal.
 
 1. Clone the repository.
-2. Install the dependencies for python and the system as described in :doc:`development <development>`.
-3. Spin up a mysql db server matching the configurations in the django application settings ``Emailkasten/settings.py`` on your machine.
-4. Finally the Emailkasten server is started via the docker entrypoint script ``docker/docker-compose.yml``.
+2. Install the dependencies for python and the system
+   as described in :doc:`development <development>`.
+3. Spin up a mysql db server matching the configurations
+   in the django application settings ``Emailkasten/settings.py`` on your machine.
+4. Finally the Emailkasten server is started via the docker entrypoint script
+   ``docker/docker-compose.yml``.

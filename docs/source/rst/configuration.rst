@@ -3,60 +3,63 @@ Configuration
 
 The configuration for Emailkasten is divided into 3 levels:
 
-- **Server admin**: Can only be changed by the administrator of the server hosting the Emailkasten instance
+- **Server admin**: Can only be changed by the server admin hosting the Emailkasten instance
 - **Admin user**: Can only be changed by an admin or staff user in the Emailkasten instance
 - **Any user**: Can be changed by and for any individual user
 
-The more people have access to the settings, the less security-relevant they are. All settings have reasonable and safe defaults.
+The more people have access to the settings, the less security-relevant they are.
+All settings have reasonable and safe defaults.
 
 Server Admin Settings
 ---------------------
 
-These settings are stored in environmental variables that can be adapted via the **docker-compose.yml** file.
+These settings are stored in environmental variables
+that can be adapted via the ``docker-compose.yml`` file.
 
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Setting (Default)              | Description                                                                                                                                                                                                                                                |
-+================================+============================================================================================================================================================================================================================================================+
-| **Mandatory**                  |                                                                                                                                                                                                                                                            |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| SECRET_KEY                     | A random string, the longer the better. This is the essential unit of Django's cryptography functionalities and must not be disclosed ever!                                                                                                                |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DATABASE                       | The name of the database in the MariaDB. Must match the MARIADB_DATABASE value of the MariaDB config.                                                                                                                                                      |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DATABASE_USER                  | The username for the MariaDB. Must match the MARIADB_USER value of the MariaDB config.                                                                                                                                                                     |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DATABASE_PASSWORD              | The user's password for the MariaDB. Must match the MARIADB_PASSWORD value of the MariaDB config.                                                                                                                                                          |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DJANGO_SUPERUSER_PASSWORD      | The password of the Emailkasten admin user that is created by default. Pick a secure password and keep it safe. Access to the admin allows access to the database so if an attacker gets a hold of this it's game over.                                    |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ALLOWED_HOSTS                  | The hostnames that the application is served from, as a comma seperated list. Select this restrictively, it guards against man-in-the-middle type attacks. Examples: 111.222.333.444 if you're hosting in your local network only. emailkasten.yourdomain.tld if you reverse proxy.|
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| **Optional**                   |                                                                                                                                                                                                                                                            |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| APP_LOG_LEVEL (DEBUG)          | The log level of the Emailkasten logger. It logs to django.log in the logs docker volume and contains information about events in the Emailkasten application components.                                                                                  |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DJANGO_LOG_LEVEL (INFO)        | The log level of the Django logger. It logs to Emailkasten.log in the logs docker volume and contains information about events in the Django library components.                                                                                           |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| LOGFILE_MAXSIZE (10485760)     | The maximum size for a single log file in bytes. This should not be too large so the log files can be read with a standard editor.                                                                                                                         |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| LOGFILE_BACKUP_NUMBER (5)      | The number of log files to keep in the backstack. This number should be higher the lower your log level.                                                                                                                                                   |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| RECONNECT_DELAY (10)           | The time between two reconnection attempts to the database.                                                                                                                                                                                                |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| RECONNECT_RETRIES (10)         | The number of reconnect attempts before raising an error.                                                                                                                                                                                                  |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REGISTRATION_ENABLED (False)   | Whether a self-sign-on should be allowed at all. Set this to False, if you never want to allow users to sign on themselves, so only staff members can create new user accounts. Otherwise, an admin user level setting that toggles sign-on on and off becomes available so you can manage registration flexibly.|
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| STRICT_PASSWORDS (True)        | Whether the user passwords are strictly validated for length, commonness and simplicity.                                                                                                                                                                   |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DEBUG (False)                  | Whether the application is running in debug mode. Do not activate this unless you're trying to debug an issue and are not exposing the debug instance.                                                                                                     |
-+--------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Setting (Default)              | Description                                                                                                                                                                                                                                                                                                    |
++================================+================================================================================================================================================================================================================================================================================================================+
+| **Mandatory**                  |                                                                                                                                                                                                                                                                                                                |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| SECRET_KEY                     | A random string, the longer the better. This is the essential unit of Django's cryptography functionalities and must not be disclosed ever!                                                                                                                                                                    |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DATABASE                       | The name of the database in the MariaDB. Must match the MARIADB_DATABASE value of the MariaDB config.                                                                                                                                                                                                          |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DATABASE_USER                  | The username for the MariaDB. Must match the MARIADB_USER value of the MariaDB config.                                                                                                                                                                                                                         |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DATABASE_PASSWORD              | The user's password for the MariaDB. Must match the MARIADB_PASSWORD value of the MariaDB config.                                                                                                                                                                                                              |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DJANGO_SUPERUSER_PASSWORD      | The password of the Emailkasten admin user that is created by default. Pick a secure password and keep it safe. Access to the admin allows access to the database so if an attacker gets a hold of this it's game over.                                                                                        |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ALLOWED_HOSTS                  | The hostnames that the application is served from, as a comma separated list. Select this restrictively, it guards against man-in-the-middle type attacks. *localhost* is always included. Examples: your servers local ip if you're hosting in your local network only. The (sub-)domain if you reverse proxy.|
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Optional**                   |                                                                                                                                                                                                                                                                                                                |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| APP_LOG_LEVEL (DEBUG)          | The log level of the Emailkasten logger. It logs to django.log in the logs docker volume and contains information about events in the Emailkasten application components.                                                                                                                                      |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DJANGO_LOG_LEVEL (INFO)        | The log level of the Django logger. It logs to Emailkasten.log in the logs docker volume and contains information about events in the Django library components.                                                                                                                                               |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| LOGFILE_MAXSIZE (10485760)     | The maximum size for a single log file in bytes. This should not be too large so the log files can be read with a standard editor.                                                                                                                                                                             |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| LOGFILE_BACKUP_NUMBER (5)      | The number of log files to keep in the backstack. This number should be higher the lower your log level.                                                                                                                                                                                                       |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RECONNECT_DELAY (10)           | The time between two reconnection attempts to the database.                                                                                                                                                                                                                                                    |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| RECONNECT_RETRIES (10)         | The number of reconnect attempts before raising an error.                                                                                                                                                                                                                                                      |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| REGISTRATION_ENABLED (False)   | Whether a self-sign-on should be allowed at all. Set this to False, if you never want users to sign on themselves, so only staff members can create new user accounts. If True, the REGISTRATION_ENABLED becomes active.                                                                                       |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| STRICT_PASSWORDS (True)        | Whether the user passwords are strictly validated for length, commonness and simplicity.                                                                                                                                                                                                                       |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| DEBUG (False)                  | Whether the application is running in debug mode. Do not activate this unless you're trying to debug an issue and are not exposing the debug instance.                                                                                                                                                         |
++--------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
 Admin User Settings
 -------------------
 
-These settings can be found and managed in the Django admin interface at ``/admin``. They are sorted into categories:
+These settings can be found and managed in the Django admin interface at */admin*.
+They are sorted into categories:
 
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Setting                                   | Description                                                                                                                                                                                                                                                |
@@ -87,11 +90,11 @@ These settings can be found and managed in the Django admin interface at ``/admi
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | SAVE_CONTENT_TYPE_PREFIXES                | A list of content types prefixes to parse as files even if they are not marked as such. For an exhaustive list of all available types see `IANA Media Types <https://www.iana.org/assignments/media-types/media-types.xhtml#text>`_.                       |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DONT_SAVE_CONTENT_TYPE_SUFFIXES           | A list of content types prefixes to not parse as files if they are not marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'.                                                                                                                 |
+| DONT_SAVE_CONTENT_TYPE_SUFFIXES           | A list of content types prefixes to not parse as files if they are not marked as such. Takes precedence over 'SAVE_CONTENT_TYPE_PREFIXES'.                                                                                                                 |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Storage Settings**                      |                                                                                                                                                                                                                                                            |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| STORAGE_MAX_FILES_PER_DIR (10000)          | The maximum number of files in one storage unit.                                                                                                                                                     |
+| STORAGE_MAX_FILES_PER_DIR (10000)         | The maximum number of files in one storage unit.                                                                                                                                                                                                          |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **API Settings**                          |                                                                                                                                                                                                                                                            |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -103,33 +106,40 @@ These settings can be found and managed in the Django admin interface at ``/admi
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | WEB_DEFAULT_PAGE_SIZE (20)                | The default page size for paginated API response data.                                                                                                                                                                                                     |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| WEB_PAGE_SIZES_OPTIONS ([10, 25, 50, 75, 100])      |  The page size options for pagination in the webapp. Should contain the WEB_DEFAULT_PAGE_SIZE value.                                                                                                                                                                                                     |
+| WEB_PAGE_SIZES_OPTIONS ([10, 25, 50, 75, 100])      |  The page size options for pagination in the webapp. Should contain the WEB_DEFAULT_PAGE_SIZE value.                                                                                                                                             |
 +-------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 Robots.txt
-^^^^^^^^^^
+""""""""""
 
 Since the rise of AI, uncounted numbers of webcrawlers are out and about online.
-The robots.txt file served by many web services (including your Emailkasten instance) is intended to tell them what parts of a page they may access (if they care).
+The robots.txt file served by many web services (including your Emailkasten instance)
+is intended to tell them which pages they may access (if they care).
 
-You can set up rules on what parts of Emailkasten crawlers are actively invited to access and which not in the admin panel under ``Robots - Rules``.
+You can set up rules on what parts of Emailkasten crawlers are actively invited to access
+and which not in the admin panel under ``Robots - Rules``.
 
 By default all pages are allowed.
-To reverse this and disallow all pages, add a rule with robot: * , website: your-domain.tld and disallowed url pattern: / .
+To reverse this and disallow all pages, add a rule with
+robot: * , website: your-domain.tld and disallowed url pattern: / .
 
 Security-relevant Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Emails can contain malicious content. Therefore security when setting up Emailkasten is of the essence.
+Emails can contain malicious content.
+Therefore security when setting up Emailkasten is of the essence.
 
 For a secure setup:
-- DEBUG: Do not set this to True in production ever!
-- THROW_OUT_SPAM: Keep this setting at the default True to keep emails that have been flagged by spam-filters out of the system.
+
+- ``DEBUG``: Do not set this to True in production ever!
+- ``THROW_OUT_SPAM``: Keep this setting at the default True
+  to keep emails that have been flagged by spam-filters out of the system.
 
 
 User Settings
 -------------
 
-The settings for individual users concern only the configuration of the daemons they run and the mailboxes they fetch from.
-They can be configured in the webapp directly.
+The settings for individual users concern only the configuration
+of the daemons they run and the mailboxes they fetch from.
+They can be configured in the webapp or API directly.
 Their defaults can be managed in the *Defaults* section of the admin user settings.

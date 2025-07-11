@@ -1,14 +1,23 @@
 version: 2
 
 build:
-  os: ubuntu-22.04
+  os: ubuntu-24.04
   tools:
     python: "3.12"
+  apt_packages:
+    - python3-dev
+    - default-mysql-client
   jobs:
-    post-install:
+    post_install:  # https://docs.readthedocs.com/platform/stable/build-customization.html#install-dependencies-with-poetry
       - pip install poetry
-      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH
-      - poetry install --with docs
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs
+    pre_build:
+      - python3 manage.py graph_models -a -g -o docs/source/db_graph.svg
+      - python3 manage.py spectacular --validate --file docs/source/api-schema.yml
+      - pydeps Emailkasten --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/Emailkasten_import_graph.svg
+      - pydeps core --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/core_import_graph.svg
+      - pydeps api --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/api_import_graph.svg
+      - pydeps web --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/web_import_graph.svg
 
 sphinx:
   configuration: docs/source/conf.py

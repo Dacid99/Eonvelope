@@ -3,7 +3,8 @@ Developers Section
 
 We welcome everyone who wants to contribute to this project!
 
-To get you started quickly and without unnecessary hickups, please make sure to read the guidelines for developers.
+To get you started quickly and without unnecessary hickups,
+please make sure to read the guidelines for developers.
 
 .. toctree::
     :maxdepth: 1
@@ -36,3 +37,6 @@ Graphical representation of the project code are found here
 
     db-graph
     import-graph
+
+.. include:: ../../../CONTRIBUTORS.md
+    :parser: myst_parser.sphinx_

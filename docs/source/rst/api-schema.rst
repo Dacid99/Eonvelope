@@ -1,6 +1,6 @@
 API Schema
 ==========
 
-.. include:: ../api-schema.yml
-
-`API Redoc Schema <../api-redoc.html>`_
+.. literalinclude:: ../api-schema.yml
+   :language: yaml
+   :caption: api-schema.yml

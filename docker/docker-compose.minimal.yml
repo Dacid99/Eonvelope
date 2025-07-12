@@ -1,5 +1,5 @@
 services:
-  db:
+  db:  # this service name must not be changed!!
     image: mariadb:latest
     container_name: emailkasten-db
     volumes:

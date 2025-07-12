@@ -41,10 +41,22 @@ If you encounter an issue please let us know via an issue or direct message!
 
 ### Recommended
 
-The project is intended to be run with *docker compose* using [the compose file](docker/docker-compose.yml) or an equivalent *docker run* command.
+The project is intended to be run with the container image provided at [dockerhub](https://hub.docker.com/repository/docker/dacid99/emailkasten/general).
+
+**Docker**
+
+Use *docker compose* using [the compose file](docker/docker-compose.minimal.yml) or an equivalent *docker run* command.
+
+**Podman**
+
+Do the same thing as above, just using *podman* instead of *docker*.
+
+**Kubernetes**
+
+You can use [the example kubernetes cluster setup](docker/kubernetes/minimal/) and launch it, for example via *minikube*.
 
 ### Advanced
-
+kubernetes
 Alternatively, you can run the application bare metal.
 
 1. Clone this repo.

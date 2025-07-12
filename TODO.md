@@ -26,8 +26,7 @@
 - saving old correspondent info (via fk maybe)
 - email_name uneditable, add real_name field
 - async parsing, sync saving
-- podman
-- kubernetes
+- auto transfer of pdfs to paperless
 
 ## To refactor
 
@@ -90,6 +89,6 @@
 - correspondentemails are broken
 - mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>
 - cascase doesn't trigger delete!
+- html version breaks iframes
 - optics:
-  - iframes are poorly scaled
   - checkboxes for boolean data instead of True and False

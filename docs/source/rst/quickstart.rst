@@ -23,4 +23,7 @@ see the :doc:`configurations documentation <configuration>`.
 If you need help with how to use the application refer
 to the :doc:`instructions overview <instructions>`.
 
+There are other ways you can run Emailkasten,
+please see :doc:`the installation guide <installation>` for details.
+
 In case you encounter a problem or have further questions, check the :doc:`FAQ <faq>`.

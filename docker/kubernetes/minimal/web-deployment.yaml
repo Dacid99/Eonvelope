@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose -f docker-compose.minimal.yml convert
+    kompose.version: 1.36.0 (ae2a39403)
+  labels:
+    io.kompose.service: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose -f docker-compose.minimal.yml convert
+        kompose.version: 1.36.0 (ae2a39403)
+      labels:
+        io.kompose.service: web
+    spec:
+      containers:
+        - env:
+            - name: ALLOWED_HOSTS
+              value: localhost,emailkasten.mydomain.tld
+            - name: DATABASE
+              value: email_archive_django
+            - name: DATABASE_PASSWORD
+              value: passwd
+            - name: DATABASE_USER
+              value: user
+            - name: DJANGO_SUPERUSER_PASSWORD
+              value: rootqwertz123
+            - name: SECRET_KEY
+              value: '''PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'''
+          image: emailkasten
+          name: emailkasten-web
+          ports:
+            - containerPort: 443
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /mnt/archive
+              name: web-claim0
+            - mountPath: /var/log/emailkasten
+              name: web-claim1
+      restartPolicy: Always
+      volumes:
+        - name: web-claim0
+          persistentVolumeClaim:
+            claimName: web-claim0
+        - name: web-claim1
+          persistentVolumeClaim:
+            claimName: web-claim1

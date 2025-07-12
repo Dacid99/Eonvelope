@@ -12,6 +12,14 @@ Setting up an Emailkasten server is quick and straightforward.
 The simplest path is described on :doc:`the quickstart page <quickstart>`.
 
 
+Do I need special hard- or software to run Emailkasten?
+-------------------------------------------------------
+
+One goal of this project is to be easily available across many platforms.
+Essentially, everything that can run containers is viable to deploy Emailkasten.
+That includes every modern Linux, Windows, MacOS, FreeBSD, etc.
+
+
 I have found a problem with the application, what should I do?
 --------------------------------------------------------------
 

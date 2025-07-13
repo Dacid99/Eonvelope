@@ -25,6 +25,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -578,24 +579,112 @@ CONSTANCE_CONFIG = {
         ),
         "array",
     ),
-    "HTML_WRAPPER": (
-        """<!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                    font-size: 14px;
-                    white-space: pre-wrap;
-                }
-            </style>
-        </head>
-        <body>
-            <pre>%s</pre>
-        </body>
-        </html>""",
-        _("The html template to wrap around plain text for html conversion."),
+    "EMAIL_HTML_TEMPLATE": (
+        """{% load i18n %}
+
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ email.email_subject }}</title>
+    <style>
+        {{ email_css }}
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="email-header">
+            <div class="email-subject">
+                {{ email.email_subject }}
+            </div>
+                <div class="email-datetime">
+                {% translate 'Received' %}: {{ email.datetime|date:"DATETIME_FORMAT" }}
+            </div>
+            <div class="email-meta">
+                {% for from_emailcorrespondent in from_emailcorrespondents %}
+                    {% translate 'From' %}: <a href="{{ from_emailcorrespondent.correspondent.get_absolute_url }}">{{ from_emailcorrespondent.correspondent.email_address }}</a><br>
+                {% endfor %}
+                {% for to_emailcorrespondent in to_emailcorrespondents %}
+                    {% translate 'To' %}: <a href="{{ to_emailcorrespondent.correspondent.get_absolute_url }}">{{ to_emailcorrespondent.correspondent.email_address }}</a><br>
+                {% endfor %}
+                {% for cc_emailcorrespondent in cc_emailcorrespondents %}
+                    {% translate 'CC' %}: <a href="{{ cc_emailcorrespondent.correspondent.get_absolute_url }}">{{ cc_emailcorrespondent.correspondent.email_address }}</a><br>
+                {% endfor %}
+                {% for bcc_emailcorrespondent in bcc_emailcorrespondents %}
+                    {% translate 'BCC' %}: <a href="{{ bcc_emailcorrespondent.correspondent.get_absolute_url }}">{{ bcc_emailcorrespondent.correspondent.email_address }}</a><br>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="email-body">
+            {% if email.html_bodytext %}
+                {{ email.html_bodytext|safe }}
+            {% else %}
+                <pre>
+                    {{ email.plain_bodytext }}
+                </pre>
+            {% endif %}
+        </div>
+        {% if email.attachments.exists %}
+        <div class="email-attachments">
+            <p><strong>{% translate 'Attachments' %}:</strong></p>
+            {% for attachment in email.attachments.all %}
+                <div class="attachment">
+                    <a href="{{ attachment.get_absolute_url }}">{{ attachment.file_name }}</a>
+                </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+""",
+        _(
+            "The html template used to render emails to html. Uses the django template syntax and has access to all fields of the email database table. Removing template tag imports may result in a 500 responses when requesting pages with email thumbnails, so be careful."
+        ),
+        str,
+    ),
+    "EMAIL_CSS": (
+        """body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .email-container {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+        }
+        .email-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .email-subject {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .email-meta,.email-datetime {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .email-body {
+            margin: 20px 0;
+        }
+        .email-attachments {
+            margin-top: 20px;
+        }
+        .attachment {
+            margin: 5px 0;
+        }""",
+        _(
+            "The css style used to render emails to html. Refer to HTML_TEMPLATE for context on the classes."
+        ),
         str,
     ),
     "DEFAULT_SAVE_TO_EML": (

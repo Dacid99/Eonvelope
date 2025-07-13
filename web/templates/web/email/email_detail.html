@@ -65,7 +65,9 @@
                      class="accordion-collapse collapse"
                      aria-labelledby="plain-text-header"
                      data-bs-parent="content-accordion">
-                    <div class="accordion-body">{{ object.plain_bodytext }}</div>
+                    <div class="accordion-body">
+                        <pre class="text-wrap">{{ object.plain_bodytext }}</pre>
+                    </div>
                 </div>
             </li>
             <li class="list-group-item accordion-item">

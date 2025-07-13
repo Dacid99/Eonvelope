@@ -48,7 +48,6 @@
 ## To implement
 
 - ensure threadsafe db operations in daemons
-- important headers in html repr
 - favicon.ico for the icon
 - time benchmarks in debug log
 - batch download and delete in web
@@ -88,6 +87,6 @@
 - correspondent is not user specific!
 - mysql may need some more care for use with timezone <https://docs.djangoproject.com/en/5.2/ref/databases/#time-zone-definitions>
 - cascase doesn't trigger delete!
-- html version breaks iframes
 - optics:
   - checkboxes for boolean data instead of True and False
+  - better name for daemon

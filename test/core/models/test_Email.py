@@ -39,6 +39,7 @@ from core.constants import (
     file_format_parsers,
 )
 from core.models import Correspondent, Email, Mailbox
+from Emailkasten.utils.workarounds import get_config
 
 from ...conftest import TEST_EMAIL_PARAMETERS
 from .test_Attachment import mock_Attachment_save_to_storage
@@ -868,6 +869,14 @@ def test_Email_create_from_email_bytes_dberror(
     mock_logger.warning.assert_not_called()
     mock_logger.exception.assert_called()
     mock_logger.critical.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_Email_html_version(fake_email, fake_attachment, fake_correspondent):
+    result = fake_email.html_version
+
+    assert result
+    assert get_config("EMAIL_CSS") in result
 
 
 @pytest.mark.django_db

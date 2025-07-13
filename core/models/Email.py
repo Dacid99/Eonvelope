@@ -35,6 +35,7 @@ from zipfile import ZipFile
 
 from django.core.files.storage import default_storage
 from django.db import models, transaction
+from django.template import engines
 from django.utils.translation import gettext as __
 from django.utils.translation import gettext_lazy as _
 
@@ -135,14 +136,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     Can be null if the mail has not been saved.
     When this entry is deleted, the file will be removed by :func:`core.signals.delete_Email.post_delete_email_files`.
     """
-
-    html_version = models.TextField(
-        default="",
-        null=False,
-        blank=True,
-        verbose_name=_("HTML version"),
-    )
-    """A html version of the email."""
 
     is_favorite = models.BooleanField(
         default=False,
@@ -539,6 +532,40 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             return None
         return new_email
 
+    @cached_property
+    def html_version(self) -> str:
+        """Renders a html version of this email.
+
+        Uses the template and css from constance settings.
+
+        Returns:
+            The emails html version.
+        """
+        engine = engines["django"]
+        template = engine.from_string(get_config("EMAIL_HTML_TEMPLATE"))
+        from_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.FROM
+        ).select_related("correspondent")
+        to_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.TO
+        ).select_related("correspondent")
+        cc_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.CC
+        ).select_related("correspondent")
+        bcc_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.BCC
+        ).select_related("correspondent")
+        return template.render(
+            context={
+                "email": self,
+                "email_css": get_config("EMAIL_CSS"),
+                "from_emailcorrespondents": from_emailcorrespondents,
+                "to_emailcorrespondents": to_emailcorrespondents,
+                "cc_emailcorrespondents": cc_emailcorrespondents,
+                "bcc_emailcorrespondents": bcc_emailcorrespondents,
+            }
+        )
+
     @override
     @cached_property
     def has_download(self) -> bool:
@@ -552,4 +579,4 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     @override
     @cached_property
     def has_thumbnail(self) -> bool:
-        return self.html_version != ""
+        return True

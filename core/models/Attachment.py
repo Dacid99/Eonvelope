@@ -23,6 +23,7 @@ from __future__ import annotations
 import contextlib
 import logging
 import os
+from functools import cached_property
 from hashlib import md5
 from io import BytesIO
 from tempfile import NamedTemporaryFile
@@ -224,9 +225,12 @@ class Attachment(
         with ZipFile(tempfile.name, "w") as zipfile:
             for attachment_item in queryset:
                 if attachment_item.file_path is not None:
-                    with zipfile.open(
-                        os.path.basename(attachment_item.file_path), "w"
-                    ) as zipped_file, contextlib.suppress(FileNotFoundError):
+                    with (
+                        zipfile.open(
+                            os.path.basename(attachment_item.file_path), "w"
+                        ) as zipped_file,
+                        contextlib.suppress(FileNotFoundError),
+                    ):
                         zipped_file.write(
                             default_storage.open(attachment_item.file_path).read()
                         )
@@ -282,14 +286,14 @@ class Attachment(
         return new_attachments
 
     @override
-    @property
+    @cached_property
     def has_download(self) -> bool:
         return self.file_path is not None
 
     @override
-    @property
+    @cached_property
     def has_thumbnail(self) -> bool:
-        return (
+        return self.file_path is not None and (
             self.content_maintype in {"image", "text"}
             or (
                 self.content_maintype == "audio"

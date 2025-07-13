@@ -25,6 +25,7 @@ import logging
 import logging.handlers
 import os
 import uuid
+from functools import cached_property
 from typing import TYPE_CHECKING, Any, Final, override
 
 from dirtyfields import DirtyFieldsMixin
@@ -247,7 +248,7 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         return False
 
     @override
-    @property
+    @cached_property
     def has_download(self) -> bool:
         """Daemon always has a logfile."""
         return self.log_filepath is not None

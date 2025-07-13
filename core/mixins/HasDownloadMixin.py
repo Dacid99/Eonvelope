@@ -18,7 +18,6 @@
 
 """Module with the :class:`core.mixins.HasDownloadMixin` mixin."""
 
-
 from django.urls import reverse
 
 

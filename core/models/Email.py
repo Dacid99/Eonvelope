@@ -26,6 +26,7 @@ import logging
 import os
 import shutil
 from email import policy
+from functools import cached_property
 from hashlib import md5
 from io import BytesIO
 from tempfile import NamedTemporaryFile, TemporaryDirectory
@@ -539,7 +540,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         return new_email
 
     @override
-    @property
+    @cached_property
     def has_download(self) -> bool:
         return self.eml_filepath is not None
 
@@ -549,6 +550,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         return ""
 
     @override
-    @property
+    @cached_property
     def has_thumbnail(self) -> bool:
         return self.html_version != ""

@@ -59,7 +59,6 @@ def test_output(fake_email, request_context):
     assert "is_favorite" in serializer_data
     assert serializer_data["is_favorite"] == fake_email.is_favorite
     assert "eml_filepath" not in serializer_data
-    assert "html_version" in serializer_data
     assert "mailbox" in serializer_data
     assert serializer_data["mailbox"] == fake_email.mailbox.id
     assert "headers" in serializer_data
@@ -81,7 +80,7 @@ def test_output(fake_email, request_context):
     assert len(serializer_data["correspondents"]) == 1
     assert isinstance(serializer_data["correspondents"][0], dict)
 
-    assert len(serializer_data) == 20
+    assert len(serializer_data) == 19
 
 
 @pytest.mark.django_db
@@ -106,7 +105,6 @@ def test_input(fake_email, request_context):
     assert "is_favorite" in serializer_data
     assert serializer_data["is_favorite"] == fake_email.is_favorite
     assert "eml_filepath" not in serializer_data
-    assert "html_version" not in serializer_data
     assert "mailbox" not in serializer_data
     assert "headers" not in serializer_data
     assert "x_spam" not in serializer_data

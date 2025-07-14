@@ -52,13 +52,6 @@ def mock_logger(mocker):
 
 
 @pytest.fixture
-def mock_message2html(mocker, faker):
-    mock_message2html = mocker.patch("core.models.Email.message2html", autospec=True)
-    mock_message2html.return_value = faker.text()
-    return mock_message2html
-
-
-@pytest.fixture
 def spy_save(mocker):
     """Fixture spying on :func:`django.db.models.Model.save`."""
     return mocker.spy(django.db.models.Model, "save")
@@ -897,20 +890,19 @@ def test_Email_has_download(fake_email, eml_filepath, expected_has_download):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "html_version, expected_has_thumbnail",
-    [
-        ("", False),
-        ("some/file/path", True),
-    ],
-)
-def test_Email_has_thumbnail(fake_email, html_version, expected_has_thumbnail):
-    """Tests :func:`core.models.Email.Email.has_download` in the two relevant cases."""
-    fake_email.html_version = html_version
+def test_Email_has_thumbnail_with_file(fake_email_with_file):
+    """Tests :func:`core.models.Email.Email.has_download` for an email with files."""
+    result = fake_email_with_file.has_thumbnail
 
+    assert result is True
+
+
+@pytest.mark.django_db
+def test_Email_has_thumbnail_no_file(fake_email):
+    """Tests :func:`core.models.Email.Email.has_download` for an email without files."""
     result = fake_email.has_thumbnail
 
-    assert result is expected_has_thumbnail
+    assert result is True
 
 
 @pytest.mark.django_db

@@ -47,7 +47,6 @@ from ..utils.mail_parsing import (
     get_bodytexts,
     get_header,
     is_x_spam,
-    message2html,
     parse_datetime_header,
 )
 from .Attachment import Attachment
@@ -405,7 +404,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             datasize=len(email_bytes),
             plain_bodytext=bodytexts.get("plain", ""),
             html_bodytext=bodytexts.get("html", ""),
-            html_version=message2html(email_message),
         )
 
     def add_correspondents(self) -> None:

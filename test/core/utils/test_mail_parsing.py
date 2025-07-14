@@ -219,27 +219,6 @@ def test_parse_mailbox_name_success(name_bytes, expected_name):
     "test_email_path, expected_email_features, expected_correspondents_features,expected_attachments_features",
     TEST_EMAIL_PARAMETERS,
 )
-def test_message2html(
-    test_email_path,
-    expected_email_features,
-    expected_correspondents_features,
-    expected_attachments_features,
-):
-    with open(test_email_path, "br") as test_email_file:
-        test_email_bytes = test_email_file.read()
-
-    result = mail_parsing.message2html(
-        email.message_from_bytes(test_email_bytes, policy=policy.default)
-    )
-
-    assert result
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "test_email_path, expected_email_features, expected_correspondents_features,expected_attachments_features",
-    TEST_EMAIL_PARAMETERS,
-)
 def test_get_bodytexts(
     test_email_path,
     expected_email_features,

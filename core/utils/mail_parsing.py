@@ -28,14 +28,10 @@ import email
 import email.header
 import email.utils
 import logging
-from base64 import b64encode
 from typing import TYPE_CHECKING
 
 import imap_tools.imap_utf7
 from django.utils import timezone
-from html_sanitizer.django import get_sanitizer
-
-from Emailkasten.utils.workarounds import get_config
 
 
 if TYPE_CHECKING:
@@ -159,99 +155,6 @@ def parse_mailbox_name(mailbox_bytes: bytes) -> str:
         .rsplit('"/"', maxsplit=1)[-1]
         .strip()
     )
-
-
-def message2html(email_message: EmailMessage) -> str:
-    """Creates a html presentation of an email.
-
-    Args:
-        email_bytes: The data of the mail to be converted.
-
-    Todo:
-        ignoreplaintext mechanism may ignore too broadly
-
-    Returns:
-        The html representation of the email.
-    """
-    ignore_plain_text = False
-
-    html_wrapper = get_config("HTML_WRAPPER")
-    html = ""
-    cid_content: dict[str, EmailMessage] = {}
-    attachments_footer = ""
-    for part in email_message.walk():
-        if part.get_content_subtype() == "alternative":
-            ignore_plain_text = True
-            continue
-        content_maintype = part.get_content_maintype()
-        content_subtype = part.get_content_subtype()
-        content_disposition = part.get_content_disposition()
-        # The order of the conditions is crucial
-        if content_maintype == "text":
-            if content_subtype == "html":
-                charset = part.get_content_charset("utf-8")
-                payload = part.get_payload(decode=True)
-                if isinstance(payload, bytes):
-                    html += payload.decode(charset, errors="replace")
-                else:
-                    logger.debug(
-                        "UNEXPECTED: %s/%s part payload was of type %s.",
-                        content_maintype,
-                        content_subtype,
-                        type(payload),
-                    )
-            elif not ignore_plain_text:
-                charset = part.get_content_charset("utf-8")
-                payload = part.get_payload(decode=True)
-                if isinstance(payload, bytes):
-                    text = payload.decode(charset, errors="replace")
-                    html += html_wrapper % text
-                else:
-                    logger.debug(
-                        "UNEXPECTED: %s/%s part payload was of type %s.",
-                        content_maintype,
-                        content_subtype,
-                        type(payload),
-                    )
-        elif content_maintype == "image":
-            if cid := part.get("Content-ID", None):
-                cid_content[cid.strip("<>")] = part
-
-        elif content_disposition == "inline":
-            if cid := part.get("Content-ID", None):
-                cid_content[cid.strip("<>")] = part
-            else:
-                file_name = (
-                    part.get_filename() or f"{hash(part)}.{part.get_content_subtype()}"
-                )
-                attachments_footer += "<li>" + file_name + "</li>"
-
-        elif content_disposition == "attachment":
-            file_name = (
-                part.get_filename() or f"{hash(part)}.{part.get_content_subtype()}"
-            )
-            attachments_footer += "<li>" + file_name + "</li>"
-
-    for cid, part in cid_content.items():
-        content_type = part.get_content_type()
-        part_bytes = part.get_payload(decode=True)
-        if isinstance(part_bytes, bytes):
-            base64part = b64encode(part_bytes).decode("utf-8")
-            html = html.replace(
-                f'src="cid:{cid}"', f'src="data:{content_type};base64,{base64part}"'
-            )
-        else:
-            logger.debug(
-                "UNEXPECTED: %s part payload was of type %s.",
-                content_type,
-                type(part_bytes),
-            )
-    if attachments_footer:
-        html = html.replace(
-            "</html>",
-            f"<p><hr><p><b>Attached Files:</b><p><ul>{attachments_footer}</ul></html>",
-        )
-    return get_sanitizer().sanitize(html)  # type: ignore[no-any-return]  # always returns a str, mypy can't read html_sanitizer
 
 
 def is_x_spam(x_spam_header: str | None) -> bool:

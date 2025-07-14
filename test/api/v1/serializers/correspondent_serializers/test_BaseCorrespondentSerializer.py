@@ -50,6 +50,10 @@ def test_output(fake_correspondent, request_context):
     assert serializer_data["list_subscribe"] == fake_correspondent.list_subscribe
     assert "list_unsubscribe" in serializer_data
     assert serializer_data["list_unsubscribe"] == fake_correspondent.list_unsubscribe
+    assert "list_unsubscribe_post" in serializer_data
+    assert (
+        serializer_data["list_unsubscribe"] == fake_correspondent.list_unsubscribe_post
+    )
     assert "list_post" in serializer_data
     assert serializer_data["list_post"] == fake_correspondent.list_post
     assert "list_help" in serializer_data
@@ -66,7 +70,7 @@ def test_output(fake_correspondent, request_context):
     assert (
         datetime.fromisoformat(serializer_data["updated"]) == fake_correspondent.updated
     )
-    assert len(serializer_data) == 13
+    assert len(serializer_data) == 14
 
 
 @pytest.mark.django_db
@@ -87,6 +91,7 @@ def test_input(fake_correspondent, request_context):
     assert "list_owner" not in serializer_data
     assert "list_subscribe" not in serializer_data
     assert "list_unsubscribe" not in serializer_data
+    assert "list_unsubscribe_post" not in serializer_data
     assert "list_post" not in serializer_data
     assert "list_help" not in serializer_data
     assert "list_archive" not in serializer_data

@@ -59,6 +59,7 @@ class BaseCorrespondentSerializer(serializers.ModelSerializer[Correspondent]):
             "list_owner",
             "list_subscribe",
             "list_unsubscribe",
+            "list_unsubscribe_post",
             "list_post",
             "list_help",
             "list_archive",

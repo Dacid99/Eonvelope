@@ -55,7 +55,7 @@ def test_list_noauth(noauth_api_client, url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(other_api_client, url):
+def test_list_auth_other(fake_email, other_api_client, url):
     """Tests the list method with the authenticated other user client."""
     response = other_api_client.get(url(DatabaseStatsView))
 

@@ -25,6 +25,7 @@ from .correspondent_serializers import (
     CorrespondentSerializer,
 )
 from .daemon_serializers import BaseDaemonSerializer
+from .DatabaseStatsSerializer import DatabaseStatsSerializer
 from .email_serializers import BaseEmailSerializer, EmailSerializer, FullEmailSerializer
 from .emailcorrespondent_serializers import (
     BaseEmailCorrespondentSerializer,
@@ -45,6 +46,7 @@ __all__ = [
     "BaseMailboxSerializer",
     "CorrespondentEmailSerializer",
     "CorrespondentSerializer",
+    "DatabaseStatsSerializer",
     "EmailCorrespondentSerializer",
     "EmailSerializer",
     "FullEmailSerializer",

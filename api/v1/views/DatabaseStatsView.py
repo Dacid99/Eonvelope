@@ -22,12 +22,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from core.models import Account, Attachment, Correspondent, Email, Mailbox
+from ..serializers import DatabaseStatsSerializer
 
 
 if TYPE_CHECKING:
@@ -39,6 +38,7 @@ class DatabaseStatsView(APIView):
 
     NAME = "stats"
     permission_classes = [IsAuthenticated]
+    serializer_class = DatabaseStatsSerializer
 
     def get(self, request: Request) -> Response:
         """Gets all the number of entries in the tables of the database.
@@ -49,27 +49,5 @@ class DatabaseStatsView(APIView):
         Returns:
             A dictionary with the count of the table entries.
         """
-        if not request.user.is_authenticated:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        email_count = Email.objects.filter(mailbox__account__user=request.user).count()
-        correspondent_count = (
-            Correspondent.objects.filter(emails__mailbox__account__user=request.user)
-            .distinct()
-            .count()
-        )
-        attachment_count = Attachment.objects.filter(
-            email__mailbox__account__user=request.user
-        ).count()
-        account_count = Account.objects.filter(user=request.user).count()
-        mailbox_count = Mailbox.objects.filter(account__user=request.user).count()
-
-        return Response(
-            {
-                "email_count": email_count,
-                "correspondent_count": correspondent_count,
-                "attachment_count": attachment_count,
-                "account_count": account_count,
-                "mailbox_count": mailbox_count,
-            }
-        )
+        data = self.serializer_class({}, context={"request": request}).data
+        return Response(data)

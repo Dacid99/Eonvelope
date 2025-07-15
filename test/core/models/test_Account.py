@@ -33,6 +33,7 @@ from core.constants import EmailProtocolChoices
 from core.models import Account, Mailbox
 from core.utils.fetchers import (
     BaseFetcher,
+    ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
     POP3_SSL_Fetcher,
@@ -178,6 +179,7 @@ def test_Account_clean(fake_account):
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
+        (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
     ],
 )
 def test_Account_get_fetcher_success(
@@ -223,6 +225,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
+        (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
     ],
 )
 def test_Account_get_fetcher_init_failure(
@@ -255,6 +258,7 @@ def test_Account_get_fetcher_init_failure(
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
+        (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
     ],
 )
 def test_Account_get_fetcher_class_success(

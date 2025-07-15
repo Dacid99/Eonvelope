@@ -19,20 +19,18 @@
 """core.utils.fetchers package containing the email fetcher classes for Emailkasten project."""
 
 from .BaseFetcher import BaseFetcher
+from .ExchangeFetcher import ExchangeFetcher
 from .IMAP4_SSL_Fetcher import IMAP4_SSL_Fetcher
 from .IMAP4Fetcher import IMAP4Fetcher
 from .POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from .POP3Fetcher import POP3Fetcher
 
 
-# from .ExchangeFetcher import ExchangeFetcher
-
-
 __all__ = [
     "BaseFetcher",
+    "ExchangeFetcher",
     "IMAP4Fetcher",
     "IMAP4_SSL_Fetcher",
     "POP3Fetcher",
     "POP3_SSL_Fetcher",
-    # "ExchangeFetcher"
 ]

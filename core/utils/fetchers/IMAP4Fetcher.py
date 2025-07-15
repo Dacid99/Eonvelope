@@ -52,6 +52,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     AVAILABLE_FETCHING_CRITERIA: ClassVar[list[str]] = [
         EmailFetchingCriterionChoices.ALL.value,
         EmailFetchingCriterionChoices.UNSEEN.value,
+        EmailFetchingCriterionChoices.SEEN.value,
         EmailFetchingCriterionChoices.RECENT.value,
         EmailFetchingCriterionChoices.NEW.value,
         EmailFetchingCriterionChoices.OLD.value,
@@ -74,11 +75,9 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
 
         Args:
             criterion_name: The criterion to prepare for the IMAP request.
-                If not in :attr:`AVAILABLE_FETCHING_CRITERIA`, returns None.
 
         Returns:
-            Formatted criterion to be used in IMAP request;
-            None if `criterion_name` is not in :attr:`AVAILABLE_FETCHING_CRITERIA`.
+            Formatted criterion to be used in IMAP request.
         """
         if criterion_name == EmailFetchingCriterionChoices.DAILY:
             start_time = timezone.now() - datetime.timedelta(days=1)

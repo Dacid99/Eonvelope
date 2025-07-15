@@ -5,7 +5,7 @@ A open-source self-hosted email archive using the [django framework](https://www
 ## Features
 
 - Automated continuous email fetching
-- Support for IMAP and POP (and planned support for Exchange)
+- Support for IMAP, POP and Exchange
 - Import and export of emails
 - Indexing of attachments and correspondents
 - Filter and search your emails, attachments, correspondents
@@ -21,7 +21,6 @@ Your emails are serious business, so this projects codebase has > 95% test-cover
 ### Roadmap
 
 - Consolidate existing features
-- Exchange support
 - Support for more containerization engines (podman, kubernetes, etc.)
 - ...
 
@@ -56,7 +55,7 @@ Do the same thing as above, just using *podman* instead of *docker*.
 You can use [the example kubernetes cluster setup](docker/kubernetes/minimal/) and launch it, for example via *minikube*.
 
 ### Advanced
-kubernetes
+
 Alternatively, you can run the application bare metal.
 
 1. Clone this repo.

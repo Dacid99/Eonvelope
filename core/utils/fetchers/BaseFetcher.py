@@ -32,6 +32,8 @@ if TYPE_CHECKING:
     from poplib import POP3
     from types import TracebackType
 
+    from exchangelib import Account as ExchangeAccount
+
     from ...models.Account import Account
     from ...models.Mailbox import Mailbox
 
@@ -66,7 +68,7 @@ class BaseFetcher(ABC):
             raise ValueError(
                 f"The protocol of {account} is not supported by fetcher {self.__class__.__name__}!"
             )
-        self._mail_client: IMAP4 | POP3 | None = None
+        self._mail_client: IMAP4 | POP3 | ExchangeAccount | None = None
 
     @abstractmethod
     def connect_to_host(self) -> None:
@@ -120,7 +122,7 @@ class BaseFetcher(ABC):
             raise ValueError(f"{mailbox} is not in {self.account}!")
 
     @abstractmethod
-    def fetch_mailboxes(self) -> list[bytes]:
+    def fetch_mailboxes(self) -> list[bytes | str]:
         """Fetches all mailbox names from the server.
 
         Returns:

@@ -25,11 +25,9 @@ import mailbox
 import os
 import shutil
 from io import BytesIO
-from multiprocessing import Value
-from pickle import bytes_types
 from tempfile import NamedTemporaryFile, TemporaryDirectory, gettempdir
 from typing import TYPE_CHECKING
-from zipfile import BadZipFile, ZipFile
+from zipfile import ZipFile
 
 import pytest
 from django.db import IntegrityError
@@ -37,10 +35,10 @@ from django.urls import reverse
 from model_bakery import baker
 from pyfakefs.fake_filesystem_unittest import Pause
 
-import test
 from core.constants import SupportedEmailUploadFormats, file_format_parsers
 from core.models import Account, Mailbox
 from core.utils.fetchers import (
+    ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
     POP3_SSL_Fetcher,
@@ -143,6 +141,7 @@ def test_Mailbox_unique_constraints():
 @pytest.mark.parametrize(
     "protocol, expected_fetching_criteria",
     [
+        (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -691,7 +690,7 @@ def test_Mailbox_has_download_with_email(fake_mailbox, fake_email):
 def test_Mailbox_has_download_no_email(fake_mailbox):
     """Tests :func:`core.models.Mailbox.Mailbox.has_download`."""
     assert not fake_mailbox.emails.exists()
-    
+
     result = fake_mailbox.has_download
 
     assert not result

@@ -35,6 +35,7 @@ from core.mixins.FavoriteMixin import FavoriteMixin
 from ..constants import EmailProtocolChoices
 from ..mixins.URLMixin import URLMixin
 from ..utils.fetchers import (
+    ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
     POP3_SSL_Fetcher,
@@ -44,7 +45,6 @@ from ..utils.fetchers.exceptions import MailAccountError
 from .Mailbox import Mailbox
 
 
-# from utils.fetchers import ExchangeFetcher
 if TYPE_CHECKING:
     from ..utils.fetchers import BaseFetcher
 
@@ -208,8 +208,8 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
             return POP3Fetcher
         if self.protocol == POP3_SSL_Fetcher.PROTOCOL:
             return POP3_SSL_Fetcher
-        # if self.protocol == ExchangeFetcher.PROTOCOL:
-        #     return ExchangeFetcher
+        if self.protocol == ExchangeFetcher.PROTOCOL:
+            return ExchangeFetcher
 
         logger.error(
             "The protocol %s is not implemented in a fetcher class!", self.protocol

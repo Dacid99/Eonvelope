@@ -41,13 +41,16 @@ class EmailFetchingCriterionChoices(TextChoices):
     UNSEEN = "UNSEEN", _("All UNSEEN emails")
     """Filter by "UNSEEN" flag."""
 
+    SEEN = "SEEN", _("All SEEN emails")
+    """Filter by "SEEN" flag."""
+
     ALL = "ALL", _("All emails")
     """Filter by "ALL" flag."""
 
     NEW = "NEW", _("All RECENT and UNSEEN emails")
     """Filter by "NEW" flag."""
 
-    OLD = "OLD", _("All emails that are not NEW")
+    OLD = "OLD", _("All emails that are not RECENT")
     """Filter by "OLD" flag."""
 
     FLAGGED = "FLAGGED", _("FLAGGED emails")
@@ -99,8 +102,8 @@ class EmailProtocolChoices(TextChoices):
     POP3_SSL = "POP3_SSL", _("POP3 over SSL")
     """The POP3 protocol over SSL"""
 
-    # EXCHANGE = "EXCHANGE", _("Microsoft Exchange")
-    # """Microsofts Exchange protocol"""
+    EXCHANGE = "EXCHANGE", _("Microsoft Exchange")
+    """Microsofts Exchange protocol"""
 
 
 class HeaderFields:

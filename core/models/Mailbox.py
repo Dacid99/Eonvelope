@@ -296,7 +296,7 @@ class Mailbox(
         logger.info("Successfully added emails from file.")
 
     @classmethod
-    def create_from_data(cls, mailbox_data: bytes, account: Account) -> Mailbox:
+    def create_from_data(cls, mailbox_data: bytes | str, account: Account) -> Mailbox:
         """Creates a :class:`core.models.Mailbox` from the mailboxname in bytes.
 
         Args:
@@ -309,7 +309,11 @@ class Mailbox(
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")
-        mailbox_name = parse_mailbox_name(mailbox_data)
+        mailbox_name = (
+            parse_mailbox_name(mailbox_data)
+            if isinstance(mailbox_data, bytes)
+            else mailbox_data
+        )
         try:
             new_mailbox = cls.objects.get(account=account, name=mailbox_name)
             logger.debug("%s already exists in db, it is skipped!", new_mailbox)

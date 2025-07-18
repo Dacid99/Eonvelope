@@ -114,12 +114,9 @@ def test_IMAP4Fetcher_make_fetching_criterion_date_criterion(
     ],
 )
 def test_IMAP4Fetcher_make_fetching_criterion_other_criterion(
-    faker, criterion_name, expected_result
+    criterion_name, expected_result
 ):
-    fake_datetime = faker.date_time_this_decade(tzinfo=faker.pytimezone())
-
-    with freeze_time(fake_datetime):
-        result = IMAP4Fetcher.make_fetching_criterion(criterion_name)
+    result = IMAP4Fetcher.make_fetching_criterion(criterion_name)
 
     assert result == expected_result
 

@@ -3,7 +3,6 @@
 ## Feature ideas
 
 - custom additional healthchecks
-- implement basic exchange
 - custom fetching filters with NOT, OR and custom criteria
 - combined filter for correspondent with mention
 - streamable logs for daemons
@@ -37,6 +36,7 @@
   - use more of the unittest api
   - replace modeltodict in form and serializer tests with payloads
 - emailcorrespondent creation for better integration of mailinglist
+- shorten redundant exception logging in fetchers
 
 ## To test
 
@@ -47,6 +47,7 @@
 ## To implement
 
 - ensure threadsafe db operations in daemons
+- fetch only specific errors in fetchers
 - favicon.ico for the icon
 - time benchmarks in debug log
 - batch download and delete in web

@@ -179,6 +179,8 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
 
         Create and sets :attr:`log_filepath` if it is null.
         """
+        if not self.log_filepath:
+            self.setup_logger()  # Order may be crucial here to set the logger up before its used
         if not self.pk:
             self.celery_task = PeriodicTask.objects.create(
                 interval=self.interval,
@@ -186,8 +188,6 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
                 task="core.tasks.fetch_emails",
                 args=json.dumps([str(self.uuid)]),
             )
-        if not self.log_filepath:
-            self.setup_logger()
         super().save(*args, **kwargs)
 
     @override

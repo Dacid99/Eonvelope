@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Account)
-def post_save_is_healthy(
+def post_save_account_is_healthy(
     sender: Account, instance: Account, created: bool, **kwargs: Any
 ) -> None:
     """Receiver function flagging all mailboxes of an account as unhealthy once that account becomes unhealthy.

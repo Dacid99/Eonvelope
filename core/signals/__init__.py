@@ -17,3 +17,18 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with signals for the Emailkasten database models."""
+
+from .delete_Attachment import post_delete_attachment
+from .delete_Email import post_delete_email
+from .save_Account import post_save_account_is_healthy
+from .save_Daemon import post_save_daemon_is_healthy
+from .save_Mailbox import post_save_mailbox_is_healthy
+
+
+__all__ = [
+    "post_delete_attachment",
+    "post_delete_email",
+    "post_save_account_is_healthy",
+    "post_save_daemon_is_healthy",
+    "post_save_mailbox_is_healthy",
+]

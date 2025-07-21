@@ -35,16 +35,12 @@ class CoreConfig(AppConfig):
     @override
     def ready(self) -> None:
         """Imports all model signals and registers the healthcheck backends."""
-        # ruff: noqa: F401
-        # pylint: disable=import-outside-toplevel, unused-import  # this is the way it is intended by django
+        # ruff: noqa: PLC0415
+        # pylint: disable=import-outside-toplevel  # this is the way it is intended by django-healthcheck
         from .backends import StorageIntegrityCheckBackend
 
         plugin_dir.register(StorageIntegrityCheckBackend)
 
-        from .signals import (
-            delete_Attachment,
-            delete_Email,
-            save_Account,
-            save_Daemon,
-            save_Mailbox,
-        )
+        # ruff: noqa: F401
+        # pylint: disable=import-outside-toplevel, unused-import  # this is the way it is intended by django
+        import core.signals

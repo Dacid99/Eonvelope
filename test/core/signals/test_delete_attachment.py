@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`core.signals.save_Account`."""
+"""Test module for :mod:`core.signals.delete_Attachment`."""
 
 import pytest
 from django.core.files.storage import default_storage

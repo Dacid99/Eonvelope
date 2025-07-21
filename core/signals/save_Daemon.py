@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Save signal receivers for the :class:`core.models.Daemon` model."""
+
 from __future__ import annotations
 
 import logging
@@ -32,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Daemon)
-def post_save_daemon(
+def post_save_daemon_is_healthy(
     sender: Daemon, instance: Daemon, created: bool, **kwargs: Any
 ) -> None:
     """Receiver function flagging the mailbox of a daemon as healthy once that daemon becomes healthy again.

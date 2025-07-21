@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Delete signal receivers for the :class:`core.models.Mailbox` model."""
+
 from __future__ import annotations
 
 import logging
@@ -33,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Mailbox)
-def post_save_is_healthy(
+def post_save_mailbox_is_healthy(
     sender: Mailbox, instance: Mailbox, created: bool, **kwargs: Any
 ) -> None:
     """Receiver function flagging account and daemons of a mailbox according to a healthflag change.

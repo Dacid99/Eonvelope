@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 @receiver(post_delete, sender=Email)
-def pre_delete_email(sender: Email, instance: Email, **kwargs: Any) -> None:
+def post_delete_email(sender: Email, instance: Email, **kwargs: Any) -> None:
     """Receiver function deleting the .eml file of the email from storage.
 
     Args:

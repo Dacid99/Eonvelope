@@ -20,7 +20,7 @@
 
 import zoneinfo
 
-from django.template import Library, Node, TemplateSyntaxError
+from django.template import Context, Library, Node, TemplateSyntaxError
 
 
 register = Library()
@@ -33,10 +33,10 @@ class GetAvailableTimezonesNode(Node):
         Analogous to :func:`django.templatetags.i18n.GetAvailableTimezonesNode`.
     """
 
-    def __init__(self, variable):
+    def __init__(self, variable) -> None:
         self.variable = variable
 
-    def render(self, context):
+    def render(self, context: Context):
         context[self.variable] = sorted(zoneinfo.available_timezones())
         return ""
 

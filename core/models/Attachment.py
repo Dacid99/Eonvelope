@@ -206,7 +206,9 @@ class Attachment(
         """
         if not queryset.exists():
             raise Attachment.DoesNotExist("The queryset is empty!")
-        tempfile = NamedTemporaryFile()
+        tempfile = (
+            NamedTemporaryFile()  # noqa: SIM115 ;  the file must not be closed as it is returned later
+        )
         with ZipFile(tempfile.name, "w") as zipfile:
             for attachment_item in queryset:
                 if attachment_item.file_path is not None:

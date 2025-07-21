@@ -88,7 +88,7 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         """Extended to add the intervaldata to the instance.
 
         Important:
-            The nested intervaldata must be poped as update does not support nested dicts!
+            The nested intervaldata must be popped as update does not support nested dicts!
             There should not be duplicate IntervalSchedules.
             https://django-celery-beat.readthedocs.io/en/latest/index.html#example-creating-interval-based-periodic-task
         """

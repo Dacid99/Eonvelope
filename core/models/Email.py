@@ -308,9 +308,9 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         """
         if not queryset.exists():
             raise Email.DoesNotExist("The queryset is empty!")
-        tempfile = NamedTemporaryFile(
-            suffix=".zip"
-        )  # the suffix allows zipping to this file with shutil
+        tempfile = NamedTemporaryFile(  # noqa: SIM115 ;  the file must not be closed as it is returned later
+            suffix=".zip"  # the suffix allows zipping to this file with shutil
+        )
         file_format = file_format.lower()
         if file_format == SupportedEmailDownloadFormats.ZIP_EML:
             with ZipFile(tempfile.name, "w") as zipfile:
@@ -385,7 +385,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             or md5(email_bytes).hexdigest(),
             datetime=parse_datetime_header(header_dict.get(HeaderFields.DATE)),
             email_subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
-            x_spam=header_dict.get(HeaderFields.X_SPAM, ""),
+            x_spam=header_dict.get(HeaderFields.X_SPAM) or "",
             datasize=len(email_bytes),
             plain_bodytext=bodytexts.get("plain", ""),
             html_bodytext=bodytexts.get("html", ""),
@@ -400,7 +400,10 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                     new_emailcorrespondents = EmailCorrespondent.create_from_header(
                         correspondent_header, mention, self
                     )
-                    if mention == HeaderFields.Correspondents.FROM:
+                    if (
+                        mention == HeaderFields.Correspondents.FROM
+                        and new_emailcorrespondents is not None
+                    ):
                         for new_emailcorrespondent in new_emailcorrespondents:
                             new_emailcorrespondent.correspondent.list_id = (
                                 self.headers.get(HeaderFields.MailingList.ID, "")
@@ -505,9 +508,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                 new_email.add_correspondents()
                 new_email.add_in_reply_to()
                 new_email.add_references()
-                attachments = Attachment.create_from_email_message(
-                    email_message, new_email
-                )
+                Attachment.create_from_email_message(email_message, new_email)
         except Exception:
             logger.exception(
                 "Failed creating email from bytes: Error while saving email to db!"

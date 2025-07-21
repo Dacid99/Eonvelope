@@ -30,6 +30,11 @@ from .utils.fetchers.exceptions import MailboxError
 
 @shared_task
 def fetch_emails(daemon_uuid_string: str) -> None:
+    """Celery task to fetch and store emails.
+
+    Args:
+        daemon_uuid_string: The uuid of the daemon instance that manages this task.
+    """
     logger = logging.getLogger(daemon_uuid_string)
 
     logger.info("-------------------------------------------\nFetching emails ...")

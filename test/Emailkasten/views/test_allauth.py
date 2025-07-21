@@ -19,7 +19,6 @@
 """Test for the :module:`allauth` views and templates."""
 
 import pytest
-
 from django.http import HttpResponse
 from django.urls import reverse
 from rest_framework import status
@@ -38,7 +37,7 @@ def test_login(client):
 @pytest.mark.django_db
 def test_logout(owner_client):
     response = owner_client.get(reverse("account_logout"))
-    
+
     assert isinstance(response, HttpResponse)
     assert response.status_code == status.HTTP_200_OK
 
@@ -46,7 +45,7 @@ def test_logout(owner_client):
 @pytest.mark.django_db
 def test_signup(client):
     response = client.get(reverse("account_signup"))
-    
+
     assert isinstance(response, HttpResponse)
     assert response.status_code == status.HTTP_200_OK
 
@@ -54,7 +53,7 @@ def test_signup(client):
 @pytest.mark.django_db
 def test_change_password(owner_client):
     response = owner_client.get(reverse("account_change_password"))
-    
+
     assert isinstance(response, HttpResponse)
     assert response.status_code == status.HTTP_200_OK
 
@@ -62,7 +61,7 @@ def test_change_password(owner_client):
 @pytest.mark.django_db
 def test_email(owner_client):
     response = owner_client.get(reverse("account_email"))
-    
+
     assert isinstance(response, HttpResponse)
     assert response.status_code == status.HTTP_200_OK
 
@@ -70,7 +69,6 @@ def test_email(owner_client):
 @pytest.mark.django_db
 def test_sessions(owner_client):
     response = owner_client.get(reverse("usersessions_list"))
-    
+
     assert isinstance(response, HttpResponse)
     assert response.status_code == status.HTTP_200_OK
-

@@ -179,7 +179,7 @@ class SafeIMAPMixin:
     @safe(exception=MailAccountError)
     def safe_login(
         self: IMAP4FetcherClass, *args: Any, **kwargs: Any
-    ) -> tuple[Literal["OK"], list[bytes]]:
+    ) -> tuple[Literal["OK"], list[bytes]] | tuple[str, str]:
         """The :func:`safe` wrapped version of :func:`imaplib.IMAP4.login`.
 
         In case the passwords contains utf-8 chars, use authenticate instead.
@@ -193,7 +193,10 @@ class SafeIMAPMixin:
             credentials = (
                 b"\0" + args[0].encode("utf-8") + b"\0" + args[1].encode("utf-8")
             )
-            response = self._mail_client.authenticate("PLAIN", lambda x: credentials)
+            response = self._mail_client.authenticate(
+                "PLAIN",
+                lambda x: credentials,  # noqa: ARG005 ;  authenticate method needs a callable that takes a single arg
+            )
         return response
 
     @safe(exception=MailboxError)

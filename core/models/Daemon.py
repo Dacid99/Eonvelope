@@ -228,6 +228,11 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         daemon_logger.addHandler(file_handler)
 
     def start(self) -> bool:
+        """Start the daemons :attr:`celery_task`.
+
+        Returns:
+            Whether the start operation was successful.
+        """
         logger.debug("Starting %s ...", self)
         if not self.celery_task.enabled:
             self.celery_task.enabled = True
@@ -238,6 +243,11 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         return False
 
     def stop(self) -> bool:
+        """Stops the daemons :attr:`celery_task`.
+
+        Returns:
+            Whether the stop operation was successful.
+        """
         logger.debug("Stopping %s ...", self)
         if self.celery_task.enabled:
             self.celery_task.enabled = False

@@ -27,13 +27,13 @@ from django.db import models
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 
-from core.models import Attachment
-
 from ..utils.widgets import AdaptedSelectDateWidget
 
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
+
+    from core.models import Attachment
 
 
 class AttachmentFilterSet(django_filters.FilterSet):

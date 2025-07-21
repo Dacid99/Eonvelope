@@ -255,6 +255,22 @@ zookeeper = ["kazoo (>=1.3.1)"]
 zstd = ["zstandard (==0.23.0)"]
 
 [[package]]
+name = "celery-stubs"
+version = "0.1.3"
+description = "celery stubs"
+optional = false
+python-versions = "*"
+groups = ["dev"]
+files = [
+    {file = "celery-stubs-0.1.3.tar.gz", hash = "sha256:0fb5345820f8a2bd14e6ffcbef2d10181e12e40f8369f551d7acc99d8d514919"},
+    {file = "celery_stubs-0.1.3-py3-none-any.whl", hash = "sha256:dfb9ad27614a8af028b2055bb4a4ae99ca5e9a8d871428a506646d62153218d7"},
+]
+
+[package.dependencies]
+mypy = ">=0.950"
+typing-extensions = ">=4.2.0"
+
+[[package]]
 name = "certifi"
 version = "2025.6.15"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -3630,4 +3646,4 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<4.0"
-content-hash = "705ec0f443eb05644178db415a4d36f2e688ef27de98bb6bed5bd989c1967568"
+content-hash = "9b18e9403332bd74a9a9ac1e0f20cbc103e7b8364c3fab4e801d98a5aedb7810"

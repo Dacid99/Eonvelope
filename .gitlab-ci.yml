@@ -1,22 +1,16 @@
-default:
-  image: python:3.13-rc-bookworm
-  interruptible: true
-  timeout: 90m
-  before_script:
-    - apt update -y && apt install -y "$APT_DEPENDENCIES"
-    - pip install poetry
-    - set -o pipefail
-    - export SECRET_KEY='HELPER_KEY'
+image: python:3.12
 
-workflow:
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      when: always
-    - if: '$CI_COMMIT_TAG'
-      when: always
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      when: always
-    - when: never
+before_script:
+  - apt update -y && apt install -y "$APT_DEPENDENCIES"
+  - pip install poetry
+  - set -o pipefail
+  - export SECRET_KEY='HELPER_KEY'
+
+workflow:  # when the pipeline should be triggered
+  rules:  # collect all rules from the jobs here
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_TAG
 
 variables:
   CI: "true"
@@ -28,7 +22,6 @@ variables:
   TEST_PATH: "test/"
   TEST_CONFIG_PATH: "test/"
   TEST_REPORT_PATH: "test/reports/"
-  DOCS_PATH: "docs/"
   DOCKER_PATH: "docker/"
   DOCKER_IMAGE_PATH: "/var/lib/docker/image/overlay2/"
 
@@ -36,23 +29,10 @@ stages:
   - check
   - check_and_commit
   - test
-  - docs
   - build
 
 include:
   - local: .gitlab/ci/.gitlab-ci-check.yml
-    rules:
-      - if: '$CI_COMMIT_BRANCH == "master"'
   - local: .gitlab/ci/.gitlab-ci-check_and_commit.yml
-    rules:
-      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   - local: .gitlab/ci/.gitlab-ci-test.yml
-    rules:
-      - if: '$CI_COMMIT_BRANCH == "master"'
-      - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  - local: .gitlab/ci/.gitlab-ci-docs.yml
-    rules:
-      - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG'
   - local: .gitlab/ci/.gitlab-ci-build.yml
-    rules:
-      - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG'

@@ -1,7 +1,8 @@
 check_and_commit_codebase:
   stage: check_and_commit
-  only:
-    - tags
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master"
   script:
     - echo "Checking codebase ..."
     - poetry install --with=dev
@@ -35,11 +36,16 @@ check_and_commit_codebase:
     - poetry run doc8 --config $CHECK_CONFIG_PATH'doc8.ini' docs/ >> $CHECK_REPORT_PATH'doc8_prebuild.ansi'
     - poetry run codespell --config=$CHECK_CONFIG_PATH'.codespellrc' Emailkasten/ core/ api/ web/ test/ docs/ .gitea/ .github/ .gitlab/ *.md >> $CHECK_REPORT_PATH'codespell_prebuild.ansi'
     - echo "Successfully checked codebase."
-    - echo "Commiting changes to codebase ..."
     - git add .
-    - git commit -m "CI:Cleanup by pipeline"
-    - git push origin HEAD:$CI_COMMIT_REF_NAME
-    - echo "Successfully commit changes to codebase."
+    - |
+      if [[ $(git diff --name-only --cached) ]]; then
+        echo "Commiting changes to codebase ..."
+        git commit -m "CI: Cleanup by pipeline"
+        git push origin HEAD:$CI_COMMIT_REF_NAME
+        echo "Successfully commit changes to codebase."
+      else
+        echo "No changes"
+      fi
   artifacts:
     paths:
       - "$CHECK_REPORT_PATH"

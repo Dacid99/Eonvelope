@@ -600,20 +600,20 @@ CONSTANCE_CONFIG = {
                 {{ email.email_subject }}
             </div>
                 <div class="email-datetime">
-                {% translate 'Received' %}: {{ email.datetime|date:"DATETIME_FORMAT" }}
+                {% translate "Received" %}: {{ email.datetime|date:"DATETIME_FORMAT" }}
             </div>
             <div class="email-meta">
                 {% for from_emailcorrespondent in from_emailcorrespondents %}
-                    {% translate 'From' %}: <a href="{{ from_emailcorrespondent.correspondent.get_absolute_url }}">{{ from_emailcorrespondent.correspondent.email_address }}</a><br>
+                    {% translate "From" %}: <a href="{{ from_emailcorrespondent.correspondent.get_absolute_url }}">{{ from_emailcorrespondent.correspondent.email_address }}</a><br>
                 {% endfor %}
                 {% for to_emailcorrespondent in to_emailcorrespondents %}
-                    {% translate 'To' %}: <a href="{{ to_emailcorrespondent.correspondent.get_absolute_url }}">{{ to_emailcorrespondent.correspondent.email_address }}</a><br>
+                    {% translate "To" %}: <a href="{{ to_emailcorrespondent.correspondent.get_absolute_url }}">{{ to_emailcorrespondent.correspondent.email_address }}</a><br>
                 {% endfor %}
                 {% for cc_emailcorrespondent in cc_emailcorrespondents %}
-                    {% translate 'CC' %}: <a href="{{ cc_emailcorrespondent.correspondent.get_absolute_url }}">{{ cc_emailcorrespondent.correspondent.email_address }}</a><br>
+                    {% translate "CC" %}: <a href="{{ cc_emailcorrespondent.correspondent.get_absolute_url }}">{{ cc_emailcorrespondent.correspondent.email_address }}</a><br>
                 {% endfor %}
                 {% for bcc_emailcorrespondent in bcc_emailcorrespondents %}
-                    {% translate 'BCC' %}: <a href="{{ bcc_emailcorrespondent.correspondent.get_absolute_url }}">{{ bcc_emailcorrespondent.correspondent.email_address }}</a><br>
+                    {% translate "BCC" %}: <a href="{{ bcc_emailcorrespondent.correspondent.get_absolute_url }}">{{ bcc_emailcorrespondent.correspondent.email_address }}</a><br>
                 {% endfor %}
             </div>
         </div>
@@ -628,7 +628,7 @@ CONSTANCE_CONFIG = {
         </div>
         {% if email.attachments.exists %}
         <div class="email-attachments">
-            <p><strong>{% translate 'Attachments' %}:</strong></p>
+            <p><strong>{% translate "Attachments" %}:</strong></p>
             {% for attachment in email.attachments.all %}
                 <div class="attachment">
                     <a href="{{ attachment.get_absolute_url }}">{{ attachment.file_name }}</a>
@@ -641,7 +641,7 @@ CONSTANCE_CONFIG = {
 </html>
 """,
         _(
-            "The html template used to render emails to html. Uses the django template syntax and has access to all fields of the email database table. Removing template tag imports may result in a 500 responses when requesting pages with email thumbnails, so be careful."
+            "The html template used to render emails to html. Uses the django template syntax and has access to all fields of the email database table. Do not use ' in this template, it will result in the thumbnail not showing! Removing template tag imports may result in 500 responses when requesting pages with email thumbnails, so be careful."
         ),
         str,
     ),

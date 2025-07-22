@@ -76,3 +76,5 @@
 - optics:
   - checkboxes for boolean data instead of True and False
   - better name for daemon
+  - icons on mailbox detail misplaced
+  - more space around welcome

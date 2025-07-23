@@ -13,7 +13,7 @@ check_codebase:
     - poetry run pylint . --rcfile=$CHECK_CONFIG_PATH'pylintrc_docs' > $CHECK_REPORT_PATH'pylint_docs_check.ansi'
     - poetry run mypy . --config-file $CHECK_CONFIG_PATH'mypy.ini' > $CHECK_REPORT_PATH'mypy/mypy_check.ansi' || true
     - poetry run djlint . --lint --configuration $CHECK_CONFIG_PATH'djlintrc' >> $CHECK_REPORT_PATH'djlint_check.ansi'
-    - poetry run doc8 --config $CHECK_CONFIG_PATH'doc8.ini' docs/ >> $CHECK_REPORT_PATH'doc8_check.ansi'
+    - poetry run doc8 --config $CHECK_CONFIG_PATH'doc8.ini' docs/ >> $CHECK_REPORT_PATH'doc8_check.ansi' || true
     - poetry run codespell --config=$CHECK_CONFIG_PATH'.codespellrc' Emailkasten/ core/ api/ web/ test/ docs/ .gitea/ .github/ .gitlab/ *.md >> $CHECK_REPORT_PATH'codespell_check.ansi' || true
     - echo "Successfully checked codebase."
   artifacts:

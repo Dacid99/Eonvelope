@@ -28,6 +28,7 @@ variables:
   DOCKER_IMAGE_PATH: "/var/lib/docker/image/overlay2/"
 
 stages:
+  - check_version
   - check
   - fix_and_format
   - test
@@ -35,6 +36,7 @@ stages:
 
 include:
   - local: .gitlab/ci/.gitlab-ci-check.yml
+  - local: .gitlab/ci/.gitlab-ci-check-version.yml
   - local: .gitlab/ci/.gitlab-ci-fix_and_format.yml
   - local: .gitlab/ci/.gitlab-ci-test.yml
   - local: .gitlab/ci/.gitlab-ci-build.yml

@@ -1,0 +1,12 @@
+check_version_match:
+  stage: check_version
+  rules:
+    - if: $CI_COMMIT_TAG
+  script:
+    - echo "Checking version tags ..."
+    - |
+      if [[ "$(poetry version -s)" != $CI_COMMIT_TAG ]]; then
+        echo "The version tag does not match the project version!"
+        exit 1
+      fi
+    - echo "Successfully compared version tags."

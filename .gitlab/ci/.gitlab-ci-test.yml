@@ -8,7 +8,7 @@ test_codebase:
     - echo "Testing codebase ..."
     - poetry install --with=dev
     - mkdir -p $TEST_REPORT_PATH
-    - poetry run pytest $TEST_PATH --config-file $TEST_CONFIG_PATH"/pytest.ini" > $TEST_REPORT_PATH"pytest_prebuild.ansi"
+    - poetry run pytest $TEST_PATH --config-file $TEST_CONFIG_PATH"/pytest.ini" > $TEST_REPORT_PATH"pytest_test.ansi"
     - echo "Successfully tested codebase."
   artifacts:
     paths:

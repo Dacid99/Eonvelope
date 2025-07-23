@@ -439,7 +439,7 @@ def test_POP3Fetcher_fetch_emails_exception_ignored(
 def test_POP3Fetcher_fetch_mailboxes(pop3_mailbox):
     result = POP3Fetcher(pop3_mailbox.account).fetch_mailboxes()
 
-    assert result == [b"INBOX"]
+    assert result == ["INBOX"]
 
 
 @pytest.mark.django_db

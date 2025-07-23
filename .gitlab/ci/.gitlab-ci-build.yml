@@ -1,5 +1,6 @@
 build_docker:
   stage: build
+  image: docker:stable
   rules:
     - if: $CI_COMMIT_TAG
   script:
@@ -12,10 +13,7 @@ build_docker:
         docker tag emailkasten dacid99/emailkasten:latest
         docker tag emailkasten dacid99/emailkasten:$CI_COMMIT_TAG
         echo $DOCKER_HUB_ACCESS_TOKEN | docker login -u $DOCKER_HUB_USER --password-stdin
+        docker push dacid99/emailkasten:latest
+        docker push dacid99/emailkasten:$CI_COMMIT_TAG
         echo "Successfully released docker image."
       fi
-  artifacts:
-    paths:
-      - "$DOCKER_IMAGE_PATH"
-    when: always
-    expire_in: 30 days

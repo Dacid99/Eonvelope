@@ -26,6 +26,11 @@ variables:
   TEST_REPORT_PATH: "test/reports/"
   DOCKER_PATH: "docker/"
   DOCKER_IMAGE_PATH: "/var/lib/docker/image/overlay2/"
+  DOCKER_DRIVER: overlay2
+  DOCKER_TLS_CERTDIR: ""
+
+services:
+  - docker:dind
 
 stages:
   - check_version

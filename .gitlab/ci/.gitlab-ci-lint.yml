@@ -1,9 +1,12 @@
-check_codebase:
-  stage: check
+lint_codebase:
+  stage: lint
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "master"
+  before_script:
+    - pip install poetry
+    - poetry install --with dev
   script:
     - echo "Checking codebase ..."
     - poetry install --with=dev
@@ -14,7 +17,6 @@ check_codebase:
     - poetry run mypy . --config-file $CHECK_CONFIG_PATH'mypy.ini' > $CHECK_REPORT_PATH'mypy/mypy_check.ansi' || true
     - poetry run djlint . --lint --configuration $CHECK_CONFIG_PATH'djlintrc' >> $CHECK_REPORT_PATH'djlint_check.ansi'
     - poetry run doc8 --config $CHECK_CONFIG_PATH'doc8.ini' docs/ >> $CHECK_REPORT_PATH'doc8_check.ansi' || true
-    - poetry run codespell --config=$CHECK_CONFIG_PATH'.codespellrc' Emailkasten/ core/ api/ web/ test/ docs/ .gitea/ .github/ .gitlab/ *.md >> $CHECK_REPORT_PATH'codespell_check.ansi' || true
     - echo "Successfully checked codebase."
   artifacts:
     paths:

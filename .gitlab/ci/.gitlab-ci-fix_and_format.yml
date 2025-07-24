@@ -1,26 +1,20 @@
 fix_and_format_codebase:
-  stage: fix_and_format
+  stage: check_fixes_and_format
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "master"
+  before_script:
+    - pip install poetry
+    - poetry install --with dev
   script:
-    - echo "Fixing and formatting codebase ..."
+    - echo "Checking for fixes and formatting ..."
     - poetry install --with=dev
     - mkdir -p $CHECK_REPORT_PATH
-    - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' --fix-only > $CHECK_REPORT_PATH'ruff_fix.ansi' || true
-    - poetry run black . --config=$CHECK_CONFIG_PATH'black_config' > $CHECKREPORT_PATH'black_format.ansi'
-    - poetry run djlint . --reformat --configuration $CHECK_CONFIG_PATH'djlintrc' > $CHECK_REPORT_PATH'djlint_format.ansi' || true
-    - echo "Successfully fixed and formatted codebase."
-    - git add .
-    - |
-      if [[ $(git diff --name-only --cached) ]]; then
-        echo "Commiting changes to codebase ..."
-        git commit -m "CI: Cleanup by pipeline"
-        git push origin HEAD:$CI_COMMIT_REF_NAME
-        echo "Successfully commit changes to codebase."
-      else
-        echo "No changes"
-      fi
+    - poetry run codespell -s --config=$CHECK_CONFIG_PATH'.codespellrc' Emailkasten/ core/ api/ web/ test/ docs/ .gitea/ .github/ .gitlab/ *.md >> $CHECK_REPORT_PATH'codespell_check.ansi' || true
+    - poetry run black . --config=$CHECK_CONFIG_PATH'black_config' --diff --color > $CHECKREPORT_PATH'black_format.ansi' || true
+    - poetry run djlint . --check --configuration $CHECK_CONFIG_PATH'djlintrc' > $CHECK_REPORT_PATH'djlint_format.ansi' || true
+    - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' --fix-only --show-fixes> $CHECK_REPORT_PATH'ruff_fix.ansi' || true
+    - echo "Successfully checked codebase for fixes and formatting."
   artifacts:
     paths:
       - "$CHECK_REPORT_PATH"

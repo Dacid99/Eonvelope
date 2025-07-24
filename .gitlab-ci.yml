@@ -2,7 +2,6 @@ image: python:3.13
 
 before_script:
   - apt update -y && apt install -y $APT_DEPENDENCIES
-  - pip install poetry
   - set -o pipefail
   - export SECRET_KEY='HELPER_KEY'
 
@@ -34,14 +33,14 @@ services:
 
 stages:
   - check_version
-  - check
-  - fix_and_format
+  - check_fixes_and_format
+  - lint
   - test
   - build
 
 include:
-  - local: .gitlab/ci/.gitlab-ci-check.yml
   - local: .gitlab/ci/.gitlab-ci-check-version.yml
   - local: .gitlab/ci/.gitlab-ci-fix_and_format.yml
+  - local: .gitlab/ci/.gitlab-ci-lint.yml
   - local: .gitlab/ci/.gitlab-ci-test.yml
   - local: .gitlab/ci/.gitlab-ci-build.yml

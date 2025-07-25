@@ -1,9 +1,13 @@
 image: python:3.13-alpine
 
-before_script:
-  - apk update && apk add --no-cache $APK_DEPENDENCIES
-  - set -o pipefail
-  - export SECRET_KEY='HELPER_KEY'
+default:
+  interruptible: true
+  before_script:
+    - set -o pipefail
+    - export SECRET_KEY='HELPER_KEY'
+    - apk update && apk add --no-cache $APK_DEPENDENCIES
+    - pip install poetry
+    - poetry install --with dev
 
 workflow:  # when the pipeline should be triggered
   rules:  # collect all rules from the jobs here

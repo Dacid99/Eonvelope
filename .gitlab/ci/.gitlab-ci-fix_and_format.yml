@@ -3,9 +3,6 @@ fix_and_format_codebase:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "master"
-  before_script:
-    - pip install poetry
-    - poetry install --with dev
   script:
     - echo "Checking for fixes and formatting ..."
     - poetry install --with=dev

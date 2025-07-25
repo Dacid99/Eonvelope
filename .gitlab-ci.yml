@@ -5,7 +5,7 @@ default:
   before_script:
     - set -o pipefail
     - export SECRET_KEY='HELPER_KEY'
-    - apk update && apk add --no-cache $APK_DEPENDENCIES
+    - apk update && apk add --no-cache ${APK_DEPENDENCIES}
     - pip install poetry
     - poetry install --with dev
 

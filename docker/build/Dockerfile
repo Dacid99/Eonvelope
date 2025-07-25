@@ -1,6 +1,6 @@
 FROM python:3.13-alpine3.22
 
-ARG APK_DEPENDENCIES='gettext \
+ARG APK_DEPENDENCIES="gettext \
     python3-dev \
     linux-headers \
     musl-dev \
@@ -12,7 +12,7 @@ ARG APK_DEPENDENCIES='gettext \
     rabbitmq-server \
     krb5 \
     openssl \
-    curl'
+    curl"
 ARG SRC_PATH=/mnt/
 ARG LOG_PATH=/var/log/emailkasten/
 
@@ -28,7 +28,6 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=${SRC_PATH}
 
 WORKDIR ${SRC_PATH}
-RUN echo $(ls ../)
 COPY . ${SRC_PATH}
 
 # install dependencies

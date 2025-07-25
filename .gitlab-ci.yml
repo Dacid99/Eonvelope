@@ -18,7 +18,7 @@ workflow:  # when the pipeline should be triggered
 variables:
   CI: "true"
   GITLAB_API_URL: "https://gitlab.com/-/project/$CI_PROJECT_ID"
-  APK_DEPENDENCIES: 'gettext \
+  APK_DEPENDENCIES: "gettext \
     python3-dev \
     linux-headers \
     musl-dev \
@@ -26,7 +26,7 @@ variables:
     build-base \
     mariadb-connector-c-dev \
     mariadb-dev \
-    mariadb-client'
+    mariadb-client"
   CHECK_PATH: "validation/"
   CHECK_CONFIG_PATH: "validation/"
   CHECK_REPORT_PATH: "validation/reports/"

@@ -28,7 +28,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=${SRC_PATH}
 
 WORKDIR ${SRC_PATH}
-COPY ../ ${SRC_PATH}
+RUN echo $(ls ../)
+COPY . ${SRC_PATH}
 
 # install dependencies
 RUN apk update && \

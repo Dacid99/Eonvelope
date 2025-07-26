@@ -1,7 +1,7 @@
 preview = false
 fix = true
 unsafe-fixes = false
-target-version = "py312"
+target-version = "py313"
 line-length = 88  # consistent with blacks default
 extend-exclude = ["manage.py", "*migrations*", "docs", "validation", "docker", ".vscode", ".pytest_cache", "__pycache__"]
 output-format = "full"
@@ -16,6 +16,7 @@ select = [
   "C4",   # flake8-comprehensions
   "C90",  # mccabe
   "COM",  # flake8-commas
+  "CPY",  # flake8-copyright
   "D",    # pydocstyle
   "DJ",   # flake8-django
   "DOC",  # pydoclint
@@ -69,6 +70,7 @@ ignore = [
   "ISC003",  # prefer explicit string concat over implicit concat
   "N999",    # module names can be PascalCase too
   "PLR09",   # we have our own complexity rules
+  "RUF012",  # django typically uses instance variables
   "TRY003",  # long exception messages from `tryceratops`
 ]
 external = [ "WPS" ]
@@ -104,6 +106,7 @@ parametrize-values-type = "list"
   "ANN",  # no type annotations in tests needed
   "N802",  # class names must be allowed as part of test function names
   "N803",  # class names must be allowed as part of fixture names
+  "N806",  # class names must be allowed as part of mock names
 ]
 
 [lint.extend-per-file-ignores]

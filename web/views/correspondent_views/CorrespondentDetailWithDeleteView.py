@@ -44,9 +44,7 @@ class CorrespondentDetailWithDeleteView(
     @override
     def get_queryset(self) -> QuerySet[Correspondent]:
         """Restricts the queryset to objects owned by the requesting user."""
-        return Correspondent.objects.filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
-            user=self.request.user
-        ).distinct()
+        return super().get_queryset().filter(user=self.request.user).distinct()
 
     @override
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:

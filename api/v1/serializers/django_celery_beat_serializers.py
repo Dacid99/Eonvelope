@@ -49,7 +49,7 @@ class IntervalScheduleSerializer(serializers.ModelSerializer[IntervalSchedule]):
         model: Final[type[Model]] = IntervalSchedule
         """The model to serialize."""
 
-        fields: ClassVar[list[str]] = "__all__"
+        fields = "__all__"
         """Include all fields."""
 
 

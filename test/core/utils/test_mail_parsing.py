@@ -70,20 +70,6 @@ def bad_email_message():
     return test_message
 
 
-@pytest.fixture
-def empty_email_message():
-    """An invalid :class:`email.message.Message`."""
-    test_message = EmailMessage()
-    return test_message
-
-
-@pytest.fixture
-def no_email_message():
-    """A none message."""
-    test_message = None
-    return test_message
-
-
 @pytest.mark.parametrize(
     "header, expected_result",
     [
@@ -135,15 +121,15 @@ def test_get_header_multi_joinparam_success(email_message, fake_multi_header):
     assert result == "test".join(fake_multi_header[1])
 
 
-def test_get_header_fallback(empty_email_message, fake_single_header):
-    result = mail_parsing.get_header(empty_email_message, fake_single_header[0])
+def test_get_header_fallback(fake_single_header):
+    result = mail_parsing.get_header(EmailMessage(), fake_single_header[0])
 
     assert result == ""
 
 
-def test_get_header_failure(no_email_message, fake_single_header):
+def test_get_header_failure(fake_single_header):
     with pytest.raises(AttributeError):
-        mail_parsing.get_header(no_email_message, fake_single_header[0])
+        mail_parsing.get_header(None, fake_single_header[0])
 
 
 def test_parse_datetime_header_success(faker, mock_logger):

@@ -224,7 +224,7 @@ class Mailbox(
         """Adds emails from a file to the db.
 
         Args:
-            file_data: The bytes of the mailbox file.
+            file: The mailbox file.
             file_format: The format of the mailbox file. Case-insensitive.
 
         Raises:
@@ -251,7 +251,7 @@ class Mailbox(
             parser_class = file_format_parsers[file_format]
             with NamedTemporaryFile() as tempfile:
                 tempfile.write(file.read())
-                parser = parser_class(tempfile.name, create=False)  # type: ignore[abstract]  # mailbox.Mailbox is used for typing only
+                parser = parser_class(tempfile.name, create=False)
                 parser.lock()
                 for key in parser.iterkeys():
                     with contextlib.suppress(
@@ -277,7 +277,7 @@ class Mailbox(
                 for name in os.listdir(tempdirpath):
                     path = os.path.join(tempdirpath, name)
                     if os.path.isdir(path):
-                        parser = parser_class(path, create=False)  # type: ignore[abstract]  # mailbox.Mailbox is used for typing only
+                        parser = parser_class(path, create=False)
                         parser.lock()
                         try:
                             for key in parser.iterkeys():
@@ -334,4 +334,4 @@ class Mailbox(
         Returns:
             A list of download formats and format names.
         """
-        return SupportedEmailDownloadFormats.choices
+        return SupportedEmailDownloadFormats.choices  # type: ignore[return-value]  # strPromise is compatible with str

@@ -28,7 +28,9 @@ from .exceptions import MailAccountError
 from .IMAP4Fetcher import IMAP4Fetcher
 
 
-class IMAP4_SSL_Fetcher(IMAP4Fetcher):
+class IMAP4_SSL_Fetcher(  # noqa: N801  # naming consistent with IMAP4_SSL class
+    IMAP4Fetcher
+):
     """Subclass of :class:`core.utils.fetchers.IMAP4Fetcher`.
 
     Does the same things, just using IMAP4_SSL protocol.

@@ -25,7 +25,7 @@ from core.constants import EmailProtocolChoices
 from core.utils.fetchers import IMAP4_SSL_Fetcher
 from core.utils.fetchers.exceptions import MailAccountError
 
-from .test_IMAP4Fetcher import FakeIMAP4error, mock_logger
+from .test_IMAP4Fetcher import FakeIMAP4Error, mock_logger
 
 
 @pytest.fixture
@@ -40,7 +40,7 @@ def mock_IMAP4_SSL(mocker, faker):
     mock_IMAP4_SSL = mocker.patch(
         "core.utils.fetchers.IMAP4_SSL_Fetcher.imaplib.IMAP4_SSL", autospec=True
     )
-    mock_IMAP4_SSL.error = FakeIMAP4error
+    mock_IMAP4_SSL.error = FakeIMAP4Error
     fake_response = faker.sentence().encode("utf-8")
     mock_IMAP4_SSL.return_value.login.return_value = ("OK", [fake_response])
     mock_IMAP4_SSL.return_value.noop.return_value = ("OK", [fake_response])

@@ -31,7 +31,7 @@ class EmailArchiveMixin(PageSizeMixin):
     BASE_TEMPLATE_NAME = "web/email/archive/"
     model: type[Email] | None = Email
     date_field: str | None = "datetime"
-    ordering = ["datetime"]
+    ordering: list[str] | None = ["datetime"]
     make_object_list = True
     allow_empty = True
     allow_future = True
@@ -41,6 +41,6 @@ class EmailArchiveMixin(PageSizeMixin):
         return (
             super()
             .get_queryset()
-            .filter(mailbox__account__user=self.request.user)  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+            .filter(mailbox__account__user=self.request.user)
             .select_related("mailbox", "mailbox__account")
         )

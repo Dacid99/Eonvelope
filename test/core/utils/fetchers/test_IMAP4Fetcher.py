@@ -33,8 +33,8 @@ from core.utils.fetchers import IMAP4Fetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
-class FakeIMAP4error(Exception):
-    pass
+class FakeIMAP4Error(Exception):
+    """Helper exception to patch the IMAP4error member of IMAP4."""
 
 
 @pytest.fixture(autouse=True)
@@ -60,7 +60,7 @@ def mock_IMAP4(mocker, faker):
     mock_IMAP4 = mocker.patch(
         "core.utils.fetchers.IMAP4Fetcher.imaplib.IMAP4", autospec=True
     )
-    mock_IMAP4.error = FakeIMAP4error
+    mock_IMAP4.error = FakeIMAP4Error
     fake_response = faker.sentence().encode("utf-8")
     mock_IMAP4.return_value.login.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.authenticate.return_value = ("OK", [fake_response])

@@ -46,7 +46,7 @@ def get_config(setting: str) -> Any:
         The requested setting value.
 
     Raises:
-        :class:`KeyError`: Raised from any exception that is related to a settings value not existing.
+        KeyError: Raised from any exception that is related to a settings value not existing.
     """
     try:
         return getattr(config, setting)

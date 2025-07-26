@@ -48,7 +48,7 @@ def test_illegal_states(
         daemon.save(update_fields=["is_healthy"])
 
     mailbox_with_daemons.refresh_from_db()
-    with pytest.raises(AssertionError):
+    with pytest.raises(AssertionError):  # noqa: PT012  # only one of these will raise
         assert mailbox_with_daemons.account.is_healthy is account_is_healthy
         assert mailbox_with_daemons.is_healthy is mailbox_is_healthy
         for daemon in mailbox_with_daemons.daemons.all():

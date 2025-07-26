@@ -17,6 +17,7 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Save signal receivers for the :class:`core.models.Account` model."""
+
 from __future__ import annotations
 
 import logging
@@ -33,7 +34,10 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=Account)
 def post_save_account_is_healthy(
-    sender: Account, instance: Account, created: bool, **kwargs: Any
+    sender: Account,
+    instance: Account,
+    created: bool,  # noqa: FBT001  # required for receiver decorator
+    **kwargs: Any,
 ) -> None:
     """Receiver function flagging all mailboxes of an account as unhealthy once that account becomes unhealthy.
 

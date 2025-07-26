@@ -19,6 +19,7 @@
 """Module with templatestags for timezone."""
 
 import zoneinfo
+from typing import Any, Literal, override
 
 from django.template import Context, Library, Node, TemplateSyntaxError
 
@@ -33,16 +34,26 @@ class GetAvailableTimezonesNode(Node):
         Analogous to :func:`django.templatetags.i18n.GetAvailableTimezonesNode`.
     """
 
-    def __init__(self, variable) -> None:
+    def __init__(self, variable: Any) -> None:
+        """Constructor for the node."""
         self.variable = variable
 
-    def render(self, context: Context):
+    @override
+    def render(self, context: Context) -> Literal[""]:
+        """Adds available timezones to the context.
+
+        Args:
+            context: The template context.
+
+        Returns:
+            The empty string
+        """
         context[self.variable] = sorted(zoneinfo.available_timezones())
         return ""
 
 
 @register.tag("get_available_timezones")
-def do_get_available_timezones(parser, token):
+def do_get_available_timezones(parser, token) -> GetAvailableTimezonesNode:
     """Store a list of available timezones in the context.
 
     Usage::
@@ -62,6 +73,7 @@ def do_get_available_timezones(parser, token):
     args = token.contents.split()
     if len(args) != 3 or args[1] != "as":
         raise TemplateSyntaxError(
-            "'get_available_timezones' requires 'as variable' (got %r)" % args
+            "'get_available_timezones' requires 'as variable' (got %r)"  # noqa: UP031  # does not need to be evaluated early
+            % args
         )
     return GetAvailableTimezonesNode(args[2])

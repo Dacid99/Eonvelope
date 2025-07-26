@@ -35,7 +35,10 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=Mailbox)
 def post_save_mailbox_is_healthy(
-    sender: Mailbox, instance: Mailbox, created: bool, **kwargs: Any
+    sender: Mailbox,
+    instance: Mailbox,
+    created: bool,  # noqa: FBT001  # required for receiver decorator
+    **kwargs: Any,
 ) -> None:
     """Receiver function flagging account and daemons of a mailbox according to a healthflag change.
 

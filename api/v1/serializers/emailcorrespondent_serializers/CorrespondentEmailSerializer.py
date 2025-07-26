@@ -20,7 +20,9 @@
 
 from __future__ import annotations
 
-from ..email_serializers import BaseEmailSerializer
+from typing import ClassVar
+
+from ..email_serializers.BaseEmailSerializer import BaseEmailSerializer
 from .BaseEmailCorrespondentSerializer import BaseEmailCorrespondentSerializer
 
 
@@ -38,7 +40,7 @@ class CorrespondentEmailSerializer(BaseEmailCorrespondentSerializer):
     class Meta(BaseEmailCorrespondentSerializer.Meta):
         """Metadata class for the serializer."""
 
-        fields = ["email", "mention"]
+        fields: ClassVar[list[str]] = ["email", "mention"]
         """Includes only :attr:`core.models.EmailCorrespondent.EmailCorrespondent.email`
         and :attr:`core.models.EmailCorrespondent.EmailCorrespondent.mention`.
         """

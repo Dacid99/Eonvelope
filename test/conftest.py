@@ -311,11 +311,13 @@ def fake_file(fake_file_bytes) -> BytesIO:
 
 @pytest.fixture
 def fake_timezone(faker):
+    """Fixture providing a randon timezone."""
     return faker.timezone()
 
 
 @pytest.fixture
 def fake_timezone_client(client, fake_timezone):
+    """Fixture providing a client with session timezone from :func:`fake_timezone`."""
     session = client.session
     session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = fake_timezone
     session.save()
@@ -324,13 +326,14 @@ def fake_timezone_client(client, fake_timezone):
 
 @pytest.fixture
 def fake_bad_timezone_client(client):
+    """Fixture providing a client with invalid session timezone."""
     session = client.session
     session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = "NO/TZONE"
     session.save()
 
 
 @pytest.fixture
-def fake_fs(settings) -> Generator[FakeFilesystem, None, None]:
+def fake_fs(settings) -> Generator[FakeFilesystem]:
     """Mocks a Linux filesystem for realistic testing.
 
     Contains a directory at the STORAGE_PATH setting to allow for testing without patching the storage backend.
@@ -736,6 +739,7 @@ def daemon_payload(faker, fake_mailbox) -> dict[str, Any]:
     Returns:
         The clean payload.
     """
+    # ruff: noqa: S311  # no cryptography going on here
     daemon_data = baker.prepare(
         Daemon,
         mailbox=fake_mailbox,

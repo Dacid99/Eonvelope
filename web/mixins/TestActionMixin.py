@@ -18,7 +18,6 @@
 
 """Module with :class:`web.mixins.TestActionMixin`."""
 
-
 from django.contrib import messages
 from django.http import HttpRequest, HttpResponse
 from django.utils.translation import gettext as _

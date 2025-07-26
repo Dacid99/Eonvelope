@@ -22,6 +22,7 @@ import datetime
 import email
 import os
 from io import BytesIO
+from tempfile import gettempdir
 from zipfile import ZipFile
 
 import django.db.models
@@ -254,7 +255,7 @@ def test_Attachment_queryset_as_file(
             assert zipped_file.read().strip() == fake_file.getvalue().strip()
     assert hasattr(result, "close")
     result.close()
-    assert os.listdir("/tmp") == []
+    assert os.listdir(gettempdir()) == []
 
 
 @pytest.mark.django_db

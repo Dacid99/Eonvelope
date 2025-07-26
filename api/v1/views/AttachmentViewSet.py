@@ -158,9 +158,8 @@ class AttachmentViewSet(
             )
         except Attachment.DoesNotExist:
             raise Http404("No attachments found") from None
-        else:
-            return FileResponse(
-                file,
-                as_attachment=True,
-                filename="attachments.zip",
-            )
+        return FileResponse(
+            file,
+            as_attachment=True,
+            filename="attachments.zip",
+        )

@@ -23,7 +23,7 @@ from __future__ import annotations
 import datetime
 import os
 from io import BytesIO
-from tempfile import TemporaryDirectory
+from tempfile import TemporaryDirectory, gettempdir
 from zipfile import ZipFile
 
 import django.db.models
@@ -395,7 +395,7 @@ def test_Email_queryset_as_file_zip_eml(fake_file, fake_email, fake_email_with_f
             )
     assert hasattr(result, "close")
     result.close()
-    assert os.listdir("/tmp") == []
+    assert os.listdir(gettempdir()) == []
 
 
 @pytest.mark.django_db
@@ -433,7 +433,7 @@ def test_Email_queryset_as_file_mailbox_file(
         )
     assert hasattr(result, "close")
     result.close()
-    assert os.listdir("/tmp") == []
+    assert os.listdir(gettempdir()) == []
 
 
 @pytest.mark.django_db
@@ -471,7 +471,7 @@ def test_Email_queryset_as_file_mailbox_zip(
             )
     assert hasattr(result, "close")
     result.close()
-    assert os.listdir("/tmp") == []
+    assert os.listdir(gettempdir()) == []
 
 
 @pytest.mark.django_db

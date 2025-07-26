@@ -166,7 +166,7 @@ class StorageShard(models.Model):
             False if there is no unique current storage directory
             or the count of files for one of the directories is wrong.
         """
-        unique_current = cls.objects.filter(current=True).count() < 2
+        unique_current = cls.objects.filter(current=True).count() in (0, 1)
         if not unique_current:
             logger.critical("More than one currently used storage directory!!!")
             return False

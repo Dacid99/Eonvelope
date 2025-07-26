@@ -190,8 +190,5 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
     def close(self) -> None:
         """Logs out of the account and closes the connection to the POP server if it is open."""
         self.logger.debug("Closing connection to %s ...", self.account)
-        if self._mail_client is None:
-            self.logger.debug("Connection to %s is already closed.", self.account)
-            return
         self.safe_quit()
         self.logger.info("Successfully closed connection to %s.", self.account)

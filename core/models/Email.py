@@ -308,9 +308,11 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         """
         if not queryset.exists():
             raise Email.DoesNotExist("The queryset is empty!")
-        tempfile = NamedTemporaryFile(  # noqa: SIM115 ;  the file must not be closed as it is returned later
-            suffix=".zip"  # the suffix allows zipping to this file with shutil
-        )
+        tempfile = (
+            NamedTemporaryFile(  # noqa: SIM115  # pylint: disable=consider-using-with
+                suffix=".zip"  # the suffix allows zipping to this file with shutil
+            )
+        )  # the file must not be closed as it is returned later
         file_format = file_format.lower()
         if file_format == SupportedEmailDownloadFormats.ZIP_EML:
             with ZipFile(tempfile.name, "w") as zipfile:
@@ -331,7 +333,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             SupportedEmailDownloadFormats.MMDF,
         ]:
             parser_class = file_format_parsers[file_format]
-            parser = parser_class(tempfile.name, create=True)  # type: ignore[abstract]  # mailbox.Mailbox is used for typing only
+            parser = parser_class(tempfile.name, create=True)
             parser.lock()
             for email_item in queryset:
                 if email_item.eml_filepath is not None:
@@ -345,7 +347,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             with TemporaryDirectory() as tempdirpath:
                 mailbox_path = os.path.join(tempdirpath, file_format)
                 parser_class = file_format_parsers[file_format]
-                parser = parser_class(mailbox_path, create=True)  # type: ignore[abstract]  # mailbox.Mailbox is used for typing only
+                parser = parser_class(mailbox_path, create=True)
                 parser.lock()
                 for email_item in queryset:
                     if email_item.eml_filepath is not None:
@@ -382,7 +384,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         return cls(
             headers=header_dict,
             message_id=header_dict.get(HeaderFields.MESSAGE_ID)
-            or md5(email_bytes).hexdigest(),
+            or md5(email_bytes).hexdigest(),  # noqa: S324  # no safe hash required here
             datetime=parse_datetime_header(header_dict.get(HeaderFields.DATE)),
             email_subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
             x_spam=header_dict.get(HeaderFields.X_SPAM) or "",

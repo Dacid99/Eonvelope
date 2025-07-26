@@ -30,7 +30,9 @@ from ...filters import CorrespondentEmailFilterSet
 from ..FilterPageView import FilterPageView
 
 
-class CorrespondentEmailsFilterView(LoginRequiredMixin, FilterPageView, SingleObjectMixin):  # type: ignore[misc]  # SingleObjectMixin attributes are shadowed purposefully
+class CorrespondentEmailsFilterView(
+    LoginRequiredMixin, FilterPageView, SingleObjectMixin
+):
     """View for filtering listed :class:`core.models.EmailCorrespondent` instances with a certain correspondent."""
 
     URL_NAME = "correspondent-emails"
@@ -42,12 +44,14 @@ class CorrespondentEmailsFilterView(LoginRequiredMixin, FilterPageView, SingleOb
 
     @override
     def get_queryset(self) -> QuerySet[EmailCorrespondent]:
-        correspondent_queryset = Correspondent.objects.filter(user=self.request.user).distinct()  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+        correspondent_queryset = Correspondent.objects.filter(
+            user=self.request.user  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+        ).distinct()
         self.object = self.get_object(queryset=correspondent_queryset)
         return (
             super()
             .get_queryset()
-            .filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+            .filter(
                 email__mailbox__account__user=self.request.user,
                 correspondent=self.object,
             )

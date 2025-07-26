@@ -113,8 +113,6 @@ def test_post_update_auth_owner(
     response = owner_client.post(
         detail_url(DaemonUpdateOrDeleteView, fake_daemon), daemon_with_interval_payload
     )
-    with open("daemon.html", "w") as f:
-        f.write(response.content.decode())
 
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)

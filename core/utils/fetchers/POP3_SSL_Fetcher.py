@@ -28,7 +28,9 @@ from .exceptions import MailAccountError
 from .POP3Fetcher import POP3Fetcher
 
 
-class POP3_SSL_Fetcher(POP3Fetcher):
+class POP3_SSL_Fetcher(  # noqa: N801  # naming consistent with POP3_SSL class
+    POP3Fetcher
+):
     """Subclass of :class:`core.utils.fetchers.POP3Fetcher`.
 
     Does the same things, just using POP3_SSL protocol.

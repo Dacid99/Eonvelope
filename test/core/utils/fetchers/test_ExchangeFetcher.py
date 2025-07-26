@@ -211,7 +211,6 @@ def test_ExchangeFetcher_connect_to_host_hostURL_success(
     timeout,
     http_protocol,
 ):
-    print(http_protocol)
     exchange_mailbox.account.mail_host = http_protocol + "path.MyDomain.tld"
     exchange_mailbox.account.mail_host_port = mail_host_port
     exchange_mailbox.account.timeout = timeout

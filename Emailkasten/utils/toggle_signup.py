@@ -40,7 +40,7 @@ class ToggleSignupAccountAdapter(
     """AccountAdapter class to allow toggling of signups for django-allauth."""
 
     @override
-    def is_open_for_signup(self, request: Request) -> bool:  # type: ignore[misc]  # Mypy can't find the base method for this
+    def is_open_for_signup(self, request: Request) -> bool:
         """Checks whether signups are allowed.
 
         Args:
@@ -65,9 +65,10 @@ class ToggleSignUpPermissionClass(AllowAny, IsAuthenticated, IsAdminUser):
 
         Args:
             request: The signup request.
+            view: The responding view.
 
         Returns:
-            If the signup request is permitted.
+            Whether the signup request is permitted.
         """
         if bool(settings.REGISTRATION_ENABLED) and bool(
             get_config("REGISTRATION_ENABLED")

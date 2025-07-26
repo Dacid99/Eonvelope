@@ -1,5 +1,6 @@
 {
     "use_gitignore": true,
+    "extend_exclude": "test,docs,validation,docker",
     "ignore_case": false,
     "ignore": "H030,H031,H006,H014,T002",
     "max_blank_lines": 3,
@@ -8,5 +9,7 @@
     "extension": "html",
     "blank_line_before_tag": "load,include,block",
     "blank_line_after_tag": "extends,load,include,endblock",
-    "format_css": true
+    "close_void_tags": true,
+    "format_css": true,
+    "format_js": true
 }

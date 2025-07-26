@@ -71,11 +71,11 @@ def test_Storage_healthcheck_clean_storage(mock_logger):
 @pytest.mark.override_config(STORAGE_MAX_FILES_PER_DIR=3)
 def test_Storage_healthcheck_filled_storage(settings):
     """Tests the correct initial allocation of storage by :class:`core.models.Storage.Storage`."""
-    for i in range(2 * 3 + 2):
+    for index in range(2 * 3 + 2):
         storage = StorageShard.get_current_storage()
         with open(
             os.path.join(
-                settings.STORAGE_PATH, str(storage.shard_directory_name), str(i)
+                settings.STORAGE_PATH, str(storage.shard_directory_name), str(index)
             ),
             "w",
         ) as f:

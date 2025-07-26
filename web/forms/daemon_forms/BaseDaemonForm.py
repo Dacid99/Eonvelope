@@ -91,7 +91,7 @@ class BaseDaemonForm(RequiredMarkerModelForm):
             self.initial["interval_period"] = self.instance.interval.period
 
     @override
-    def save(self, commit: bool = True) -> Daemon:
+    def save(self, commit: bool = True) -> Any:
         """Extended to add the intervaldata to the instance.
 
         Important:

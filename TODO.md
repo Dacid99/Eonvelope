@@ -35,7 +35,7 @@
   - use more of the unittest api
   - replace modeltodict in form and serializer tests with payloads
 - emailcorrespondent creation for better integration of mailinglist
-- shorten redundant exception logging in fetchers
+- shorten redundant exception logging in fetchers, move parts of the messages to the exc classes
 
 ## To test
 
@@ -60,7 +60,6 @@
 
 - rtd
 - weblate
-- test pipelines
 
 ### Work in progress
 
@@ -78,3 +77,8 @@
   - better name for daemon
   - icons on mailbox detail misplaced
   - more space around welcome
+  - iframes misscaled
+  - remove links from thumbnail
+  - contrast header key vs val
+- ci:
+  - djlint has no files to lint

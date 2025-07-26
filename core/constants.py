@@ -191,7 +191,14 @@ class SupportedEmailUploadFormats(TextChoices):
     MAILDIR = "zip[maildir]", _(".zip with maildir mailbox inside")
 
 
-file_format_parsers: Final[dict[str, type[mailbox.Mailbox]]] = {
+file_format_parsers: Final[
+    dict[
+        str,
+        type[
+            mailbox.mbox | mailbox.Babyl | mailbox.MMDF | mailbox.Maildir | mailbox.MH
+        ],
+    ]
+] = {
     SupportedEmailUploadFormats.MBOX.value: mailbox.mbox,
     SupportedEmailUploadFormats.BABYL.value: mailbox.Babyl,
     SupportedEmailUploadFormats.MMDF.value: mailbox.MMDF,

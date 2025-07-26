@@ -30,7 +30,8 @@ from core.utils.fetchers.exceptions import FetcherError, MailAccountError, Mailb
 
 type IMAP4Response = tuple[
     str,
-    list[bytes]
+    str
+    | list[bytes]
     | list[None]
     | list[Any]
     | list[bytes | None]

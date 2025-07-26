@@ -90,7 +90,6 @@ def test_post_auth_other(
         list_url(DaemonCreateView), daemon_with_interval_payload
     )
 
-    print(response.content.decode())
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(reverse("web:" + Daemon.get_list_web_url_name()))
@@ -133,8 +132,6 @@ def test_post_auth_owner(fake_fs, daemon_with_interval_payload, owner_client, li
     response = owner_client.post(
         list_url(DaemonCreateView), daemon_with_interval_payload
     )
-    with open("daemon.html", "w") as f:
-        f.write(response.content.decode())
 
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)

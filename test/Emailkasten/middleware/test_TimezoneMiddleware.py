@@ -33,7 +33,7 @@ def test_good_timezone(fake_timezone, client):
 
     assert timezone.get_current_timezone_name() == settings.TIME_ZONE
 
-    response = client.get("/")
+    client.get("/")
 
     assert timezone.get_current_timezone_name() == fake_timezone
 
@@ -48,7 +48,7 @@ def test_bad_timezone(client):
 
     assert timezone.get_current_timezone_name() == settings.TIME_ZONE
 
-    response = client.get("/")
+    client.get("/")
 
     assert timezone.get_current_timezone_name() == settings.TIME_ZONE
 
@@ -59,7 +59,7 @@ def test_bad_timezone(client):
 def test_no_timezone(client):
     assert timezone.get_current_timezone_name() == settings.TIME_ZONE
 
-    response = client.get("/")
+    client.get("/")
 
     assert timezone.get_current_timezone_name() == settings.TIME_ZONE
 

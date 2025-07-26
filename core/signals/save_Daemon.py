@@ -34,7 +34,10 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=Daemon)
 def post_save_daemon_is_healthy(
-    sender: Daemon, instance: Daemon, created: bool, **kwargs: Any
+    sender: Daemon,
+    instance: Daemon,
+    created: bool,  # noqa: FBT001  # required for receiver decorator
+    **kwargs: Any,
 ) -> None:
     """Receiver function flagging the mailbox of a daemon as healthy once that daemon becomes healthy again.
 

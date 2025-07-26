@@ -63,8 +63,6 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
     assert isinstance(response.context["object"], Account)
     assert "form" in response.context
     assert fake_account.mail_address in response.content.decode()
-    with open("edit.html", "w") as f:
-        f.write(response.content.decode())
 
 
 @pytest.mark.django_db

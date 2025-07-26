@@ -187,7 +187,8 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
                 If :attr:`criterion` is not in :attr:`IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA`.
-            MailboxError: If an error occurs or a bad response is returned.
+            MailAccountError: If an error occurs or a bad response is returned when accessing the server.
+            MailboxError: If an error occurs or a bad response is returned during an action on the mailbox.
         """
         super().fetch_emails(mailbox, criterion)
 
@@ -274,8 +275,5 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     def close(self) -> None:
         """Logs out of the account and closes the connection to the IMAP server if it is open."""
         self.logger.debug("Closing connection to %s ...", self.account)
-        if self._mail_client is None:
-            self.logger.debug("Connection to %s is already closed.", self.account)
-            return
         self.safe_logout()
         self.logger.info("Successfully closed connection to %s.", self.account)

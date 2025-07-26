@@ -31,7 +31,7 @@ from ..mixins import FavoriteMixin, URLMixin
 
 
 if TYPE_CHECKING:
-    from django.contrib.auth.models import AbstractUser
+    from django.contrib.auth.models import User
 
 
 logger = logging.getLogger(__name__)
@@ -192,7 +192,7 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
 
     @classmethod
     def create_from_correspondent_tuple(
-        cls, correspondent_tuple: tuple[str, str], user: AbstractUser
+        cls, correspondent_tuple: tuple[str, str], user: User
     ) -> Correspondent | None:
         """Creates a :class:`core.models.Correspondent` from email header data.
 

@@ -176,7 +176,7 @@ class Attachment(
         If the file already exists, does not overwrite.
 
         Args:
-            attachment_data: The data of the attachment to be saved.
+            attachment_payload: The data of the attachment to be saved.
         """
         if self.file_path:
             logger.debug("%s is already stored.", self)
@@ -207,8 +207,8 @@ class Attachment(
         if not queryset.exists():
             raise Attachment.DoesNotExist("The queryset is empty!")
         tempfile = (
-            NamedTemporaryFile()  # noqa: SIM115 ;  the file must not be closed as it is returned later
-        )
+            NamedTemporaryFile()  # noqa: SIM115  # pylint: disable=consider-using-with
+        )  #  the file must not be closed as it is returned later
         with ZipFile(tempfile.name, "w") as zipfile:
             for attachment_item in queryset:
                 if attachment_item.file_path is not None:
@@ -231,6 +231,7 @@ class Attachment(
 
         Args:
             email_message: The email_message to get and create all attachments from.
+            email: The email model created from the email_message.
 
         Returns:
             A list of :class:`core.models.Attachment` in the email message.

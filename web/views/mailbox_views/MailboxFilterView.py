@@ -45,6 +45,6 @@ class MailboxFilterView(LoginRequiredMixin, FilterPageView):
         return (
             super()
             .get_queryset()
-            .filter(account__user=self.request.user)  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+            .filter(account__user=self.request.user)
             .select_related("account")
         )

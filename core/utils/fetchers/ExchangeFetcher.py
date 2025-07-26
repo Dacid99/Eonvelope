@@ -22,7 +22,7 @@ from __future__ import annotations
 
 import datetime
 import os
-from typing import TYPE_CHECKING, Final, override
+from typing import TYPE_CHECKING, ClassVar, override
 
 import exchangelib
 import exchangelib.errors
@@ -52,7 +52,7 @@ class ExchangeFetcher(BaseFetcher):
     PROTOCOL = EmailProtocolChoices.EXCHANGE.value
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.Exchange`."""
 
-    AVAILABLE_FETCHING_CRITERIA: Final[list[str]] = [
+    AVAILABLE_FETCHING_CRITERIA: ClassVar[list[str]] = [
         EmailFetchingCriterionChoices.ALL.value,
         EmailFetchingCriterionChoices.SEEN.value,
         EmailFetchingCriterionChoices.UNSEEN.value,
@@ -71,7 +71,7 @@ class ExchangeFetcher(BaseFetcher):
         """Returns the queryset for the Exchange request.
 
         Args:
-            criterion_name: The criterion for the Exchange request.
+            criterion: The criterion for the Exchange request.
             base_query: The query to extend based on the criterion.
 
         Returns:
@@ -234,7 +234,8 @@ class ExchangeFetcher(BaseFetcher):
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
                 If :attr:`criterion` is not in :attr:`ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA`.
-            MailboxError: If an error occurs or a bad response is returned.
+            MailAccountError: If an error occurs or a bad response is returned when accessing the server.
+            MailboxError: If an error occurs or a bad response is returned during an action on the mailbox..
         """
         super().fetch_emails(mailbox, criterion)
         self.logger.debug(

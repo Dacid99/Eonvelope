@@ -61,8 +61,8 @@ def test_ShardedFileSystemStorage_save_multi(faker, fake_file):
     assert default_storage.listdir("")[0] == []
     assert default_storage.listdir("")[1] == []
 
-    for i in range(2 * 3 + 2):
-        default_storage.save(faker.name(), fake_file)
+    for index in range(2 * 3 + 2):
+        default_storage.save(faker.name() + str(index), fake_file)
 
     assert StorageShard.objects.count() == 3
     storage = StorageShard.objects.get(current=True)

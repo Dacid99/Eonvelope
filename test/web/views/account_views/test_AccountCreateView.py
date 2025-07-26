@@ -58,8 +58,6 @@ def test_get_auth_owner(owner_client, list_url):
     assert isinstance(response, HttpResponse)
     assert "web/account/account_create.html" in [t.name for t in response.templates]
     assert "form" in response.context
-    with open("create.html", "w") as f:
-        f.write(response.content.decode())
 
 
 @pytest.mark.django_db

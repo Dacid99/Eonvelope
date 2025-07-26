@@ -26,7 +26,7 @@ from Emailkasten.utils.workarounds import get_config
 
 
 class PageSizeMixin:
-    """An extended :class:`django_filters.views.FilterView` with fixed pagination."""
+    """Mixin for pagination with variable page size."""
 
     page_size_kwarg = "page_size"
     paginate_by = get_config("WEB_DEFAULT_PAGE_SIZE")

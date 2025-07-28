@@ -215,7 +215,7 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         """Sets up the logger for the daemon process."""
         daemon_logger = logging.getLogger(str(self.uuid))
         self.log_filepath = os.path.join(
-            settings.LOG_DIRECTORY_PATH,
+            settings.LOG_DIRECTORY_PATH.absolute(),
             f"{daemon_logger.name}.log",
         )
         file_handler = logging.handlers.RotatingFileHandler(

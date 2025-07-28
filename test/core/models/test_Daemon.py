@@ -22,6 +22,7 @@ import datetime
 import logging
 import logging.handlers
 import os
+from pathlib import Path
 from uuid import UUID
 
 import pytest
@@ -103,20 +104,27 @@ def test_Daemon_unique_together_constraint_mailbox_fetching_criterion(
 
 
 @pytest.mark.django_db
-def test_Daemon_save_logfile_creation(settings, fake_fs, fake_daemon):
+def test_Daemon_save_logfile_creation(faker, settings, fake_fs, fake_daemon):
     """Tests :func:`core.models.Correspondent.Correspondent.save`
     in case there is no log_filepath.
     """
+    fake_logdirpath = faker.file_path()
+    fake_fs.create_dir(fake_logdirpath)
+    settings.LOG_DIRECTORY_PATH = Path(fake_logdirpath)
     fake_daemon.log_filepath = None
 
     fake_daemon.save()
 
     fake_daemon.refresh_from_db()
-    assert os.path.dirname(fake_daemon.log_filepath) == str(settings.LOG_DIRECTORY_PATH)
+    assert os.path.dirname(fake_daemon.log_filepath) == str(
+        settings.LOG_DIRECTORY_PATH.absolute()
+    )
     logger = logging.getLogger(str(fake_daemon.uuid))
     assert len(logger.handlers) == 1
     assert isinstance(logger.handlers[0], logging.handlers.RotatingFileHandler)
-    assert logger.handlers[0].baseFilename == fake_daemon.log_filepath
+    assert os.path.abspath(logger.handlers[0].baseFilename) == os.path.abspath(
+        fake_daemon.log_filepath
+    )
     assert logger.handlers[0].backupCount == fake_daemon.log_backup_count
     assert logger.handlers[0].maxBytes == fake_daemon.logfile_size
 

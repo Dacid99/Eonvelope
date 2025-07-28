@@ -18,3 +18,4 @@ htmlcov/
 *.mo
 *.patch
 .coverage.*.c
+*.log

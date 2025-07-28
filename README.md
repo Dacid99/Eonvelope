@@ -21,8 +21,7 @@ Your emails are serious business, so this projects codebase has > 95% test-cover
 ### Roadmap
 
 - Consolidate existing features
-- Support for more containerization engines (podman, kubernetes, etc.)
-- ...
+- A LOT of other ideas (see [the TODO list](TODO.md))
 
 *Tell us what you'd like to see in a feature request issue!*
 
@@ -74,11 +73,11 @@ Check it out for details on configuration and instructions on how to use the run
 
 We are striving to support as many languages as possible to make the application accessible to everyone!
 
-Translation is done via weblate. If you want to add a language that is missing, go check it out! If the language is missing on weblate too, please file an issue using the missing-language template.
+Translation is done via [weblate](https://hosted.weblate.org/projects/emailkasten/). If you want to add a language that is missing, go check it out! If the language is missing on [weblate](https://hosted.weblate.org/projects/emailkasten/) too, please file an [issue](https://gitlab.com/Dacid99/emailkasten/-/issues) using the missing-language template.
 
 ## Accessibility
 
-Everybody should be able to use Emailkasten. Please don't hesitate to report any problem related to accessibility via an issue.
+Everybody should be able to use Emailkasten. Please don't hesitate to report any problem related to accessibility via an [issue](https://gitlab.com/Dacid99/emailkasten/-/issues).
 
 ## Contributing
 

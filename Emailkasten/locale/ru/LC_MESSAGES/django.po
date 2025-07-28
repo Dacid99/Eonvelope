@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-01 19:08+0000\n"
+"POT-Creation-Date: 2025-07-28 12:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,148 +20,167 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: Emailkasten/settings.py:479
+#: Emailkasten/settings.py:496
 msgid "Emailkasten API"
 msgstr ""
 
-#: Emailkasten/settings.py:480
+#: Emailkasten/settings.py:497
 msgid "The API schema for the Emailkasten server."
 msgstr ""
 
-#: Emailkasten/settings.py:499
+#: Emailkasten/settings.py:516
 msgid "The default page size for paginated API response data"
 msgstr ""
 
-#: Emailkasten/settings.py:504
+#: Emailkasten/settings.py:521
 msgid "The maximum page size for paginated API response data"
 msgstr ""
 
-#: Emailkasten/settings.py:509
+#: Emailkasten/settings.py:526
 msgid "The default page size for pagination in the webapp."
 msgstr ""
 
-#: Emailkasten/settings.py:515
+#: Emailkasten/settings.py:532
 msgid ""
 "The page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
 
-#: Emailkasten/settings.py:521
+#: Emailkasten/settings.py:538
 msgid "The default cycle period setting of a daemon in seconds"
 msgstr ""
 
-#: Emailkasten/settings.py:526
+#: Emailkasten/settings.py:543
 msgid "The default restart time setting of a daemon in seconds"
 msgstr ""
 
-#: Emailkasten/settings.py:531
+#: Emailkasten/settings.py:548
 msgid "The default number of daemon logfiles to keep"
 msgstr ""
 
-#: Emailkasten/settings.py:536
+#: Emailkasten/settings.py:553
 msgid "The default maximum size of a daemon logfile in bytes"
 msgstr ""
 
-#: Emailkasten/settings.py:542
+#: Emailkasten/settings.py:559
 msgid ""
 "The maximum numbers of files in one storage unit. Must not exceed 64000 for "
 "ext4 filesystem!"
 msgstr ""
 
-#: Emailkasten/settings.py:548
+#: Emailkasten/settings.py:565
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr ""
 
-#: Emailkasten/settings.py:554
+#: Emailkasten/settings.py:571
 msgid ""
 "A list of content types prefixes to parse as files even if they are not "
 "marked as such. For an exhaustive list of all available types see https://"
 "www.iana.org/assignments/media-types/media-types.xhtml#text"
 msgstr ""
 
-#: Emailkasten/settings.py:561
+#: Emailkasten/settings.py:578
 msgid ""
 "A list of content types prefixes to not parse as files if they are not "
 "marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
 msgstr ""
 
-#: Emailkasten/settings.py:582
-msgid "The html template to wrap around plain text for html conversion."
+#: Emailkasten/settings.py:642
+msgid ""
+"The html template used to render emails to html. Uses the django template "
+"syntax and has access to all fields of the email database table. Do not use "
+"' in this template, it will result in the thumbnail not showing! Removing "
+"template tag imports may result in 500 responses when requesting pages with "
+"email thumbnails, so be careful."
 msgstr ""
 
-#: Emailkasten/settings.py:587
+#: Emailkasten/settings.py:684
+msgid ""
+"The css style used to render emails to html. Refer to HTML_TEMPLATE for "
+"context on the classes."
+msgstr ""
+
+#: Emailkasten/settings.py:690
 msgid "The default mailbox setting whether to store mails as eml."
 msgstr ""
 
-#: Emailkasten/settings.py:592
+#: Emailkasten/settings.py:695
 msgid "The default mailbox setting whether to store attachments."
 msgstr ""
 
-#: Emailkasten/settings.py:598
+#: Emailkasten/settings.py:701
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
 msgstr ""
 
-#: Emailkasten/settings.py:605
+#: Emailkasten/settings.py:708
 msgid "Server Configurations"
 msgstr ""
 
-#: Emailkasten/settings.py:607
+#: Emailkasten/settings.py:710
 msgid "Default Values"
 msgstr ""
 
-#: Emailkasten/settings.py:618
+#: Emailkasten/settings.py:721
 msgid "Processing Settings"
 msgstr ""
 
-#: Emailkasten/settings.py:627
+#: Emailkasten/settings.py:730
 msgid "Storage Settings"
 msgstr ""
 
-#: Emailkasten/settings.py:631
+#: Emailkasten/settings.py:734
 msgid "API Settings"
 msgstr ""
 
-#: Emailkasten/settings.py:635
+#: Emailkasten/settings.py:738
 msgid "Web Settings"
 msgstr ""
 
-#: Emailkasten/templates/allauth/layouts/base.html:25
-#: Emailkasten/templates/allauth/layouts/base.html:33
-msgid "Emailkasten"
+#: Emailkasten/templates/429.html:6 Emailkasten/templates/429.html:11
+msgid "Too Many Requests"
 msgstr ""
 
-#: Emailkasten/templates/allauth/layouts/base.html:29
-msgid "Go to Emailkasten"
+#: Emailkasten/templates/429.html:13
+msgid "You are sending too many requests."
 msgstr ""
 
-#: Emailkasten/templates/allauth/layouts/base.html:40
-msgid "Toggle navigation"
-msgstr ""
-
-#: Emailkasten/templates/allauth/layouts/base.html:50
-msgid "Select timezone"
-msgstr ""
-
-#: Emailkasten/templates/allauth/layouts/base.html:54
-msgid "Select Timezone"
-msgstr ""
-
-#: Emailkasten/templates/allauth/layouts/base.html:72
-#: Emailkasten/templates/allauth/layouts/base.html:76
+#: Emailkasten/templates/allauth/elements/language_dropdown.html:8
+#: Emailkasten/templates/allauth/elements/language_dropdown.html:12
 msgid "Select Language"
 msgstr ""
 
-#: Emailkasten/templates/allauth/layouts/base.html:94
+#: Emailkasten/templates/allauth/elements/timezone_dropdown.html:8
+msgid "Select timezone"
+msgstr ""
+
+#: Emailkasten/templates/allauth/elements/timezone_dropdown.html:12
+msgid "Select Timezone"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:23
+#: Emailkasten/templates/allauth/layouts/base.html:31
+msgid "Emailkasten"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:27
+msgid "Go to Emailkasten"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:38
+msgid "Toggle navigation"
+msgstr ""
+
+#: Emailkasten/templates/allauth/layouts/base.html:58
 msgid "Sign Out"
 msgstr ""
 
-#: Emailkasten/templates/allauth/layouts/base.html:98
+#: Emailkasten/templates/allauth/layouts/base.html:62
 msgid "Sign In"
 msgstr ""
 
-#: Emailkasten/templates/allauth/layouts/base.html:101
+#: Emailkasten/templates/allauth/layouts/base.html:65
 msgid "Sign Up"
 msgstr ""
 
@@ -179,4 +198,34 @@ msgstr ""
 
 #: Emailkasten/templates/allauth/layouts/manage.html:37
 msgid "Admin panel"
+msgstr ""
+
+#: test/reports/cov/z_154eed06be127a1f_settings_py.html:692
+#: validation/reports/mypy/html/Emailkasten/settings.py.html:1404
+msgid "Received"
+msgstr ""
+
+#: test/reports/cov/z_154eed06be127a1f_settings_py.html:696
+#: validation/reports/mypy/html/Emailkasten/settings.py.html:1408
+msgid "From"
+msgstr ""
+
+#: test/reports/cov/z_154eed06be127a1f_settings_py.html:699
+#: validation/reports/mypy/html/Emailkasten/settings.py.html:1411
+msgid "To"
+msgstr ""
+
+#: test/reports/cov/z_154eed06be127a1f_settings_py.html:702
+#: validation/reports/mypy/html/Emailkasten/settings.py.html:1414
+msgid "CC"
+msgstr ""
+
+#: test/reports/cov/z_154eed06be127a1f_settings_py.html:705
+#: validation/reports/mypy/html/Emailkasten/settings.py.html:1417
+msgid "BCC"
+msgstr ""
+
+#: test/reports/cov/z_154eed06be127a1f_settings_py.html:718
+#: validation/reports/mypy/html/Emailkasten/settings.py.html:1430
+msgid "Attachments"
 msgstr ""

@@ -2,15 +2,12 @@
 
 ## Feature ideas
 
-- custom additional healthchecks
 - custom fetching filters with NOT, OR and custom criteria
 - combined filter for correspondent with mention
 - streamable logs for daemons
 - extensive database statistics
 - option to prohibit daemon for spambox
 - toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/)
-- show pdf attachments in pdfjs
-- combo queries via connectors
 - reprocess mail action
 - mechanism to remove all correspondents without emails
 - more daemon logging configs via model
@@ -25,6 +22,7 @@
 - saving old correspondent mailername info (via fk maybe)
 - async parsing, sync saving
 - auto transfer of pdfs to paperless
+- fetch once by criterion instead of hardcoded ALL
 
 ## To refactor
 
@@ -60,7 +58,6 @@
 ### For production
 
 - rtd
-- weblate
 
 ### Work in progress
 
@@ -77,5 +74,6 @@
 - optics:
   - checkboxes for boolean data instead of True and False
   - better name for daemon
+  - consistent margin around iframes
 - ci:
   - djlint has no files to lint

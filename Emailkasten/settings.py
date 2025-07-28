@@ -291,7 +291,7 @@ ROBOTS_USE_SITEMAP = False
 ROBOTS_USE_HOST = False
 
 # Logging   https://docs.djangoproject.com/en/5.2/topics/logging/
-LOG_DIRECTORY_PATH = Path("/var/log/emailkasten")
+LOG_DIRECTORY_PATH = Path(env("LOG_DIRECTORY_PATH", default="/var/log/emailkasten"))
 LOGFILE_MAXSIZE_DEFAULT = 10485760
 LOGFILE_MAXSIZE = env("LOGFILE_MAXSIZE", cast=int, default=LOGFILE_MAXSIZE_DEFAULT)
 LOGFILE_BACKUP_NUMBER_DEFAULT = 5

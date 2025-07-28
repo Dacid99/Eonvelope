@@ -280,8 +280,17 @@ class Attachment(
     @override
     @cached_property
     def has_thumbnail(self) -> bool:
+        """Whether the attachment has a mimetype that can be embedded into html.
+
+        References:
+            https://stackoverflow.com/questions/51107683/which-mime-types-can-be-displayed-in-browser
+        """
         return self.file_path is not None and (
-            self.content_maintype in {"image", "text"}
+            self.content_maintype in ["image", "font"]
+            or (
+                self.content_maintype == "text"
+                and not self.content_subtype.endswith("calendar")
+            )
             or (
                 self.content_maintype == "audio"
                 and self.content_subtype in ["ogg", "wav", "mpeg", "aac"]
@@ -289,6 +298,13 @@ class Attachment(
             or (
                 self.content_maintype == "video"
                 and self.content_subtype in ["ogg", "mp4", "mpeg", "webm", "avi"]
+            )
+            or (
+                self.content_maintype == "application"
+                and (
+                    self.content_subtype in ["pdf", "json"]
+                    or self.content_subtype.endswith(("xml", "script"))
+                )
             )
         )
 

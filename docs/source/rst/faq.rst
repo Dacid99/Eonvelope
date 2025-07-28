@@ -38,9 +38,9 @@ My language is missing in the translations, can I help to add it?
 
 Yes of course, we are always happy to include missing languages!
 
-Translation is done via weblate.
+Translation is done via `weblate <https://hosted.weblate.org/projects/emailkasten/>`_ .
 To get a quickstart look at :doc:`the translations instruction <translations>`.
-If your language is also missing on weblate,
+If your language is also missing on `weblate <https://hosted.weblate.org/projects/emailkasten/>`_ ,
 please file an issue using the missing-language template.
 
 

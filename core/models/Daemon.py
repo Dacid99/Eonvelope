@@ -101,10 +101,9 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
     When this field changes to `True`, the :attr:`core.models.Mailbox.is_healthy` field of :attr:`mailbox` will be set to `True` as well by a signal.
     """
 
-    log_filepath = models.FilePathField(
-        path=str(settings.LOG_DIRECTORY_PATH),
-        recursive=True,
+    log_filepath = models.CharField(
         unique=True,
+        max_length=255,
         verbose_name=_("logfilepath"),
     )
     """The logfile the daemon logs to. Is automatically set by :func:`save`. Unique."""

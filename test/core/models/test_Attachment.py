@@ -336,20 +336,32 @@ def test_Attachment_has_download(fake_attachment, file_path, expected_has_downlo
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, expected_has_thumbnail",
+    "content_maintype, content_subtype, expected_has_thumbnail",
     [
-        ("", False),
-        ("oo4vuy0s9yn", False),
-        ("image", True),
-        ("video", False),
-        ("application", False),
+        ("", "", False),
+        ("oo4vuy0s9yn", "a4ueiofdsj", False),
+        ("image", "734reoj", True),
+        ("font", "asdfr", True),
+        ("video", "mp4", True),
+        ("video", "45rtyghj", False),
+        ("text", "html", True),
+        ("text", "8549c", True),
+        ("text", "calendar", False),
+        ("application", "pdf", True),
+        ("application", "json", True),
+        ("application", "xml", True),
+        ("application", "rss+xml", True),
+        ("application", "javascript", True),
+        ("application", "emnoscript", True),
+        ("application", "854uqw", False),
     ],
 )
 def test_Attachment_has_thumbnail_with_file(
-    fake_attachment_with_file, content_maintype, expected_has_thumbnail
+    fake_attachment_with_file, content_maintype, content_subtype, expected_has_thumbnail
 ):
     """Tests :func:`core.models.Attachment.Attachment.has_thumbnail` in the two relevant cases."""
     fake_attachment_with_file.content_maintype = content_maintype
+    fake_attachment_with_file.content_subtype = content_subtype
 
     result = fake_attachment_with_file.has_thumbnail
 
@@ -358,18 +370,32 @@ def test_Attachment_has_thumbnail_with_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype",
+    "content_maintype, content_subtype",
     [
-        "",
-        "oo4vuy0s9yn",
-        "image",
-        "video",
-        "application",
+        ("", ""),
+        ("oo4vuy0s9yn", "a4ueiofdsj"),
+        ("image", "734reoj"),
+        ("font", "asdfr"),
+        ("video", "mp4"),
+        ("video", "45rtyghj"),
+        ("text", "html"),
+        ("text", "8549c"),
+        ("text", "calendar"),
+        ("application", "pdf"),
+        ("application", "json"),
+        ("application", "xml"),
+        ("application", "rss+xml"),
+        ("application", "javascript"),
+        ("application", "emnoscript"),
+        ("application", "854uqw"),
     ],
 )
-def test_Attachment_has_thumbnail_no_file(fake_attachment, content_maintype):
+def test_Attachment_has_thumbnail_no_file(
+    fake_attachment, content_maintype, content_subtype
+):
     """Tests :func:`core.models.Attachment.Attachment.has_thumbnail` in the two relevant cases."""
     fake_attachment.content_maintype = content_maintype
+    fake_attachment.content_subtype = content_subtype
 
     result = fake_attachment.has_thumbnail
 

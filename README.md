@@ -65,7 +65,7 @@ Finally the Emailkasten server is started via [the entrypoint script](docker/ent
 
 ## Docs
 
-The documentation is available on ReadTheDocs.
+The full documentation is available on [ReadTheDocs](https://emailkasten.readthedocs.io/latest/).
 
 Check it out for details on configuration and instructions on how to use the running server.
 
@@ -86,6 +86,8 @@ If you want to help us improving this project that is great! Please don't hesita
 To get you started smoothly just follow [the development guide](DEVELOPMENT.md). This will help you set up a workspace for working with this project conveniently!
 
 In order to keep the code maintainable and in a consistent style please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
+
+The complete source code documentation is part of the docs on [ReadTheDocs](https://emailkasten.readthedocs.io/latest/rst/developers.html)
 
 Thank you to [everybody who helped with advancing this project](CONTRIBUTORS.md)!
 

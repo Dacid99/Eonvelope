@@ -55,10 +55,6 @@
 - only show available fetching options in daemonform
 - helptexts for orientation instead of empty lists
 
-### For production
-
-- rtd
-
 ### Work in progress
 
 - tests

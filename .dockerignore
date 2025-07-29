@@ -128,7 +128,7 @@ share/python-wheels/
 tags
 test.py
 test/
-validation/
+tools/
 var/
 venv/
 wheels/

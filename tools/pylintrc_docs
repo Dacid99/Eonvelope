@@ -46,7 +46,7 @@ fail-under=0
 #from-stdin=
 
 # Files or directories to be skipped. They should be base names, not paths.
-ignore=CVS,migrations,validation,manage.py,docs,docker
+ignore=CVS,migrations,tools,manage.py,test,docs,docker
 
 # Add files or directories matching the regular expressions patterns to the
 # ignore-list. The regex matches against paths and can be in Posix or Windows
@@ -82,8 +82,7 @@ limit-inference-results=100
 
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
-load-plugins=pylint.extensions.bad_builtin,
-             pylint.extensions.docparams,
+load-plugins=pylint.extensions.docparams,
              pylintfileheader,
 
 # Pickle collected data for later comparisons.
@@ -117,244 +116,6 @@ unsafe-load-any-extension=no
 # In verbose mode, extra non-checker-related info will be displayed.
 #verbose=
 
-
-[BASIC]
-
-# Naming style matching correct argument names.
-argument-naming-style=camelCase
-
-# Regular expression matching correct argument names. Overrides argument-
-# naming-style. If left empty, argument names will be checked with the set
-# naming style.
-#argument-rgx=
-
-# Naming style matching correct attribute names.
-attr-naming-style=camelCase
-
-# Regular expression matching correct attribute names. Overrides attr-naming-
-# style. If left empty, attribute names will be checked with the set naming
-# style.
-#attr-rgx=
-
-# Bad variable names which should always be refused, separated by a comma.
-bad-names=foo,
-          bar,
-          baz,
-          toto,
-          tutu,
-          tata,
-          func
-
-# Bad variable names regexes, separated by a comma. If names match any regex,
-# they will always be refused
-bad-names-rgxs=^.{,2}$
-
-# Naming style matching correct class attribute names.
-class-attribute-naming-style=camelCase
-
-# Regular expression matching correct class attribute names. Overrides class-
-# attribute-naming-style. If left empty, class attribute names will be checked
-# with the set naming style.
-#class-attribute-rgx=
-
-# Naming style matching correct class constant names.
-class-const-naming-style=UPPER_CASE
-
-# Regular expression matching correct class constant names. Overrides class-
-# const-naming-style. If left empty, class constant names will be checked with
-# the set naming style.
-#class-const-rgx=
-
-# Naming style matching correct class names.
-class-naming-style=PascalCase
-
-# Regular expression matching correct class names. Overrides class-naming-
-# style. If left empty, class names will be checked with the set naming style.
-#class-rgx=
-
-# Naming style matching correct constant names.
-const-naming-style=UPPER_CASE
-
-# Regular expression matching correct constant names. Overrides const-naming-
-# style. If left empty, constant names will be checked with the set naming
-# style.
-#const-rgx=
-
-# Minimum line length for functions/classes that require docstrings, shorter
-# ones are exempt.
-docstring-min-length=-1
-
-# Naming style matching correct function names.
-function-naming-style=camelCase
-
-# Regular expression matching correct function names. Overrides function-
-# naming-style. If left empty, function names will be checked with the set
-# naming style.
-#function-rgx=
-
-# Good variable names which should always be accepted, separated by a comma.
-good-names=_,__,pk,OK,CC,TO,ID,id,Id
-
-# Good variable names regexes, separated by a comma. If names match any regex,
-# they will always be accepted
-good-names-rgxs=v\d
-
-# Include a hint for the correct naming format with invalid-name.
-include-naming-hint=yes
-
-# Naming style matching correct inline iteration names.
-inlinevar-naming-style=any
-
-# Regular expression matching correct inline iteration names. Overrides
-# inlinevar-naming-style. If left empty, inline iteration names will be checked
-# with the set naming style.
-#inlinevar-rgx=
-
-# Naming style matching correct method names.
-method-naming-style=camelCase
-
-# Regular expression matching correct method names. Overrides method-naming-
-# style. If left empty, method names will be checked with the set naming style.
-#method-rgx=
-
-# Naming style matching correct module names.
-module-naming-style=camelCase
-
-# Regular expression matching correct module names. Overrides module-naming-
-# style. If left empty, module names will be checked with the set naming style.
-#module-rgx=
-
-# Colon-delimited sets of names that determine each other's naming style when
-# the name regexes allow several styles.
-name-group=
-
-# Regular expression which should only match function or class names that do
-# not require a docstring.
-no-docstring-rgx=^$
-
-# List of decorators that produce properties, such as abc.abstractproperty. Add
-# to this list to register other decorators that produce valid properties.
-# These decorators are taken in consideration only for invalid-name.
-property-classes=abc.abstractproperty
-
-# Regular expression matching correct type alias names. If left empty, type
-# alias names will be checked with the set naming style.
-#typealias-rgx=
-
-# Regular expression matching correct type variable names. If left empty, type
-# variable names will be checked with the set naming style.
-#typevar-rgx=
-
-# Naming style matching correct variable names.
-variable-naming-style=camelCase
-
-# Regular expression matching correct variable names. Overrides variable-
-# naming-style. If left empty, variable names will be checked with the set
-# naming style.
-#variable-rgx=
-
-
-[CLASSES]
-
-# Warn about protected attribute access inside special methods
-check-protected-access-in-special-methods=no
-
-# List of method names used to declare (i.e. assign) instance attributes.
-defining-attr-methods=__init__,
-                      __new__,
-                      setUp,
-                      asyncSetUp,
-                      __post_init__
-
-# List of member names, which should be excluded from the protected access
-# warning.
-exclude-protected=_asdict,_fields,_replace,_source,_make,os._exit
-
-# List of valid names for the first argument in a class method.
-valid-classmethod-first-arg=cls
-
-# List of valid names for the first argument in a metaclass class method.
-valid-metaclass-classmethod-first-arg=mcs
-
-
-[DESIGN]
-
-# List of regular expressions of class ancestor names to ignore when counting
-# public methods (see R0903)
-exclude-too-few-public-methods=
-
-# List of qualified class names to ignore when counting class parents (see
-# R0901)
-ignored-parents=
-
-# Maximum number of arguments for function / method.
-max-args=5
-
-# Maximum number of attributes for a class (see R0902).
-max-attributes=7
-
-# Maximum number of boolean expressions in an if statement (see R0916).
-max-bool-expr=5
-
-# Maximum number of branch for function / method body.
-max-branches=12
-
-# Maximum number of locals for function / method body.
-max-locals=15
-
-# Maximum number of parents for a class (see R0901).
-max-parents=7
-
-# Maximum number of positional arguments for function / method.
-#max-positional-arguments=5
-
-# Maximum number of public methods for a class (see R0904).
-max-public-methods=20
-
-# Maximum number of return / yield for function / method body.
-max-returns=6
-
-# Maximum number of statements in function / method body.
-max-statements=50
-
-# Minimum number of public methods for a class (see R0903).
-min-public-methods=2
-
-
-[EXCEPTIONS]
-
-# Exceptions that will emit a warning when caught.
-overgeneral-exceptions=builtins.BaseException
-
-
-[FORMAT]
-
-# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
-expected-line-ending-format=
-
-# Regexp for a line that is allowed to be longer than the limit.
-ignore-long-lines=^\s*(# )?<?https?://\S+>?$
-
-# Number of spaces of indent required inside a hanging or continued line.
-indent-after-paren=4
-
-# String used as indentation unit. This is usually "    " (4 spaces) or "\t" (1
-# tab).
-indent-string='    '
-
-# Maximum number of characters on a single line.
-max-line-length=100
-
-# Maximum number of lines in a module.
-max-module-lines=1000
-
-# Allow the body of a class to be on the same line as the declaration if body
-# contains single statement.
-single-line-class-stmt=no
-
-# Allow the body of an if to be on the same line as the test if there is no
-# else.
-single-line-if-stmt=no
 
 
 [IMPORTS]
@@ -396,16 +157,6 @@ known-third-party=enchant
 preferred-modules=
 
 
-[LOGGING]
-
-# The type of string formatting that logging methods do. `old` means using %
-# formatting, `new` is for `{}` formatting.
-logging-format-style=old
-
-# Logging modules to check that the string format arguments are in logging
-# function parameter format.
-logging-modules=logging
-
 
 [MESSAGES CONTROL]
 
@@ -427,49 +178,22 @@ confidence=HIGH,
 # --enable=similarities". If you want to run only the classes checker, but have
 # no Warning level messages displayed, use "--disable=all --enable=classes
 # --disable=W".
-disable=raw-checker-failed,
-        line-too-long,
-        trailing-whitespace,
-        trailing-newlines,
-        missing-final-newline,
-        invalid-name,
-        no-else-return,
-        no-member,
-        missing-docstring,
-        too-few-public-methods,
-        unused-argument,
-        locally-disabled,
-        file-ignored,
-        deprecated-pragma,
-        use-implicit-booleaness-not-comparison-to-string,
-        use-implicit-booleaness-not-comparison-to-zero,
-        use-symbolic-message-instead,
-        similarities,
-        redefined-outer-name,
-        unused-import,
-        too-many-arguments,
-        too-many-positional-arguments,
-        protected-access,
-        pointless-statement,
-        use-implicit-booleaness-not-comparison,
-        missing-param-doc,
-        missing-type-doc
-
+disable=all
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option
 # multiple time (only on the command line, not in the configuration file where
 # it should appear only once). See also the "--disable" option for examples.
-enable=deprecated_builtins,
-       imports,
-       missing-docstring,
+enable=missing-docstring,
        missing-module-docstring,
        missing-class-docstring,
        missing-function-docstring,
        missing-module-docstring,
+       missing-type-doc,
        differing-param-doc,
        differing-type-doc,
        multiple-constructor-doc,
+       missing-param-doc,
        missing-raises-doc,
        useless-param-doc,
        useless-type-doc,
@@ -482,41 +206,6 @@ enable=deprecated_builtins,
        redundant-yields-doc,
        invalid-file-header
 
-
-
-[METHOD_ARGS]
-
-# List of qualified names (i.e., library.method) which require a timeout
-# parameter e.g. 'requests.api.get,requests.api.post'
-timeout-methods=requests.api.delete,requests.api.get,requests.api.head,requests.api.options,requests.api.patch,requests.api.post,requests.api.put,requests.api.request
-
-
-[MISCELLANEOUS]
-
-# List of note tags to take in consideration, separated by a comma.
-notes=FIXME,
-      XXX,
-      TODO
-
-# Regular expression of note tags to take in consideration.
-notes-rgx=
-
-
-[REFACTORING]
-
-# Maximum number of nested blocks for function / method body
-max-nested-blocks=5
-
-# Complete name of functions that never returns. When checking for
-# inconsistent-return-statements if a never returning function is called then
-# it will be considered as an explicit return statement and no message will be
-# printed.
-never-returning-functions=sys.exit,argparse.parse_error
-
-# Let 'consider-using-join' be raised when the separator to join on would be
-# non-empty (resulting in expected fixes of the type: ``"- " + " -
-# ".join(items)``)
-suggest-join-with-non-empty-separator=yes
 
 
 [REPORTS]
@@ -545,24 +234,6 @@ reports=yes
 score=yes
 
 
-[SIMILARITIES]
-
-# Comments are removed from the similarity computation
-ignore-comments=yes
-
-# Docstrings are removed from the similarity computation
-ignore-docstrings=yes
-
-# Imports are removed from the similarity computation
-ignore-imports=yes
-
-# Signatures are removed from the similarity computation
-ignore-signatures=yes
-
-# Minimum lines number of a similarity.
-min-similarity-lines=10
-
-
 [SPELLING]
 
 # Limits count of emitted suggestions for spelling mistakes.
@@ -586,16 +257,6 @@ spelling-private-dict-file=
 # --spelling-private-dict-file option) instead of raising a message.
 spelling-store-unknown-words=no
 
-
-[STRING]
-
-# This flag controls whether inconsistent-quotes generates a warning when the
-# character used as a quote delimiter is used inconsistently within a module.
-check-quote-consistency=no
-
-# This flag controls whether the implicit-str-concat should generate a warning
-# on implicit string concatenation in sequences defined over several lines.
-check-str-concat-over-line-jumps=no
 
 
 [TYPECHECK]
@@ -684,3 +345,7 @@ init-import=no
 # List of qualified module names which can have objects that can redefine
 # builtins.
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
+
+
+
+file-header=# SPDX-License-Identifier: AGPL-3.0-or-later\n#\n# Emailkasten - a open-source self-hostable email archiving server\n# Copyright \(C\) 2024  David & Philipp Aderbauer\n#\n# This program is free software: you can redistribute it and/or modify\n# it under the terms of the GNU Affero General Public License as\n# published by the Free Software Foundation, either version 3 of the\n# License, or \(at your option\) any later version.\n#\n# This program is distributed in the hope that it will be useful,\n# but WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n# GNU Affero General Public License for more details.\n#\n# You should have received a copy of the GNU Affero General Public License\n# along with this program. If not, see <https://www.gnu.org/licenses/>.\n

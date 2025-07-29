@@ -2,7 +2,7 @@
 omit =
     */migrations/*
     */test/*
-    */validation/*
+    */tools/*
     */docs/*
     */docker/*
     */.venv/*

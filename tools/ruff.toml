@@ -3,7 +3,7 @@ fix = true
 unsafe-fixes = false
 target-version = "py313"
 line-length = 88  # consistent with blacks default
-extend-exclude = ["manage.py", "*migrations*", "docs", "validation", "docker", ".vscode", ".pytest_cache", "__pycache__"]
+extend-exclude = ["manage.py", "*migrations*", "docs", "tools", "docker", ".vscode", ".pytest_cache", "__pycache__"]
 output-format = "full"
 
 [lint]

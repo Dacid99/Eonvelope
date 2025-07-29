@@ -107,7 +107,7 @@ exclude_patterns = [
     "**/docs",
     "**/.git",
     "**/migrations",
-    "**/validation",
+    "**/tools",
     "**/.mypy_cache",
     "**/.ruff_cache",
     "**/.pytest_cache",
@@ -172,7 +172,7 @@ apidoc_modules = [
 ]
 apidoc_exclude_patterns = [
     "**/.git/**",
-    "**/validation/**",
+    "**/tools/**",
     "**/docker/**",
     "**/migrations/**",
     "**/manage.py",

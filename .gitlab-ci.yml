@@ -27,9 +27,9 @@ variables:
     mariadb-connector-c-dev \
     mariadb-dev \
     mariadb-client"
-  CHECK_PATH: "validation/"
-  CHECK_CONFIG_PATH: "validation/"
-  CHECK_REPORT_PATH: "validation/reports/"
+  CHECK_PATH: "tools/"
+  CHECK_CONFIG_PATH: "tools/"
+  CHECK_REPORT_PATH: "tools/reports/"
   TEST_PATH: "test/"
   TEST_CONFIG_PATH: "test/"
   TEST_REPORT_PATH: "test/reports/"

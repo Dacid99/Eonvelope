@@ -1,6 +1,6 @@
 {
     "use_gitignore": true,
-    "extend_exclude": "test,docs,validation,docker",
+    "extend_exclude": "test,docs,tools,docker",
     "ignore_case": false,
     "ignore": "H030,H031,H006,H014,T002",
     "max_blank_lines": 3,

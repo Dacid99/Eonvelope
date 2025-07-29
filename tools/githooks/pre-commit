@@ -3,8 +3,8 @@ set -o pipefail
 
 SECRET_KEY='HELPER_KEY'
 
-CONFIG_PATH="validation/"
-REPORT_PATH="validation/reports/"
+CONFIG_PATH="tools/"
+REPORT_PATH="tools/reports/"
 
 
 CHANGED_PY_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.py$')

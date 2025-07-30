@@ -1,5 +1,6 @@
 #!/bin/bash
 set -o pipefail
+export PYTHONPATH=$PWD'/src/'
 
 SECRET_KEY='HELPER_KEY'
 
@@ -50,7 +51,7 @@ else
 fi
 
 #spellcheck
-poetry run codespell --config=$CONFIG_PATH'.codespellrc' Emailkasten/ core/ api/ web/ test/ docs/ .gitea/ .github/ .gitlab/ *.md > $REPORT_PATH'codespell_precommit.ansi'
+poetry run codespell --config=$CONFIG_PATH'.codespellrc' src/ test/ docs/ .gitea/ .github/ .gitlab/ *.md > $REPORT_PATH'codespell_precommit.ansi'
 
 echo "All precommit actions passed successfully."
 exit 0

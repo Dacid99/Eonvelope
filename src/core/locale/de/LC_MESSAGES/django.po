@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-28 12:11+0000\n"
-"PO-Revision-Date: 2025-07-29 17:03+0000\n"
+"PO-Revision-Date: 2025-07-31 21:02+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/core/"
 "de/>\n"
@@ -25,7 +25,7 @@ msgstr "Alle AKTUELLEN Emails"
 
 #: core/constants.py:41
 msgid "All UNSEEN emails"
-msgstr "Alle UNGESEHENEN Emails"
+msgstr "Alle UNLESENEN Emails"
 
 #: core/constants.py:44
 msgid "All SEEN emails"
@@ -37,7 +37,7 @@ msgstr "Alle Emails"
 
 #: core/constants.py:50
 msgid "All RECENT and UNSEEN emails"
-msgstr "Alle AKTUELLEN und UNGESEHENEN Emails"
+msgstr "Alle AKTUELLEN und UNGELESENEN Emails"
 
 #: core/constants.py:53
 msgid "All emails that are not RECENT"
@@ -73,19 +73,19 @@ msgstr "Alle UNGELÖSCHTEN Emails"
 
 #: core/constants.py:77
 msgid "All emails received the last DAY"
-msgstr "Alle am vorherigen Tag erhaltetenen Emails"
+msgstr "Alle Emails des VORTAGS"
 
 #: core/constants.py:80
 msgid "All emails received the last WEEK"
-msgstr "Alle in der letzte Woche erhaltetenen Emails"
+msgstr "Alle Emails der letzten WOCHE"
 
 #: core/constants.py:83
 msgid "All emails receiced the last MONTH"
-msgstr "Alle im letzten Monat erhaltetenen Emails"
+msgstr "Alle Emails des letzten MONATS"
 
 #: core/constants.py:86
 msgid "All emails received the last YEAR"
-msgstr "Alle im letzte Jahr erhaltetenen Emails"
+msgstr "Alle Emails des letzten JAHRES"
 
 #: core/constants.py:93
 msgid "IMAP4"
@@ -133,35 +133,35 @@ msgstr "Antwort-Auf"
 
 #: core/constants.py:149
 msgid "Resent-From"
-msgstr "Erneut gesendet von"
+msgstr "Weitergeleitet-Von"
 
 #: core/constants.py:150
 msgid "Resent-To"
-msgstr "Erneut gesendet an"
+msgstr "Weitergeleitet-An"
 
 #: core/constants.py:151
 msgid "Resent-Cc"
-msgstr "Erneut gesendet CC"
+msgstr "Weitergeleitet-CC"
 
 #: core/constants.py:152
 msgid "Resent-Bcc"
-msgstr "Erneut gesendet BCC"
+msgstr "Weitergeleitet-BCC"
 
 #: core/constants.py:153
 msgid "Resent-Sender"
-msgstr "Erneut gesendet Absender"
+msgstr "Weitergeleitet-Absender"
 
 #: core/constants.py:154
 msgid "Resent-Reply-To"
-msgstr "Erneut gesendet Antwort auf"
+msgstr "Weitergeleitet-Antwort-Auf"
 
 #: core/constants.py:157
 msgid "Envelope-To"
-msgstr "Umschlag An"
+msgstr "Umschlag-An"
 
 #: core/constants.py:159
 msgid "Delivered-To"
-msgstr "Zugestellt An"
+msgstr "Zugestellt-An"
 
 #: core/constants.py:160
 msgid "Return-Path"
@@ -177,7 +177,7 @@ msgstr "Zustellungsbenachrichtigung An"
 
 #: core/constants.py:174 core/constants.py:186
 msgid ".zip with .eml files inside"
-msgstr ".zip mit .eml Dateien als Inhalt"
+msgstr ".zip aus .eml Dateien"
 
 #: core/constants.py:175 core/constants.py:187
 msgid ".mbox"
@@ -229,7 +229,7 @@ msgstr "Die URL des Emailservers für das gewählte Protokoll."
 
 #: core/models/Account.py:86
 msgid "mailserver portnumber"
-msgstr "emailserver-Portnummer"
+msgstr "emailserver portnummer"
 
 #: core/models/Account.py:87
 msgid "The port of the mailserver for the chosen protocol."
@@ -237,11 +237,11 @@ msgstr "Die Portnummer des Emailservers für das gewählte Protokoll."
 
 #: core/models/Account.py:94
 msgid "email protocol"
-msgstr "email-protokoll"
+msgstr "email protokoll"
 
 #: core/models/Account.py:95
 msgid "The email protocol implemented by the server."
-msgstr "Das Emailprotokol des Emailservers."
+msgstr "Das Emailprotokoll des Emailservers."
 
 #: core/models/Account.py:102
 msgid "connection timeout"
@@ -289,35 +289,35 @@ msgstr "Dies löscht diesen Account, alle Mailboxen, Emails und Anhänge darin!"
 #: core/models/Account.py:174
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
-msgstr "Account %(mail_address)s mit Protokol %(protocol)s"
+msgstr "Account %(mail_address)s mit Protokoll %(protocol)s"
 
 #: core/models/Attachment.py:63
 msgid "filename"
-msgstr "Dateiname"
+msgstr "dateiname"
 
 #: core/models/Attachment.py:72
 msgid "filepath"
-msgstr "Dateipfad"
+msgstr "dateipfad"
 
 #: core/models/Attachment.py:82
 msgid "content disposition"
-msgstr "Inhaltsbestimmung"
+msgstr "inhaltsbestimmung"
 
 #: core/models/Attachment.py:89
 msgid "content ID"
-msgstr "Inhalts ID"
+msgstr "inhalts ID"
 
 #: core/models/Attachment.py:96
 msgid "content maintype"
-msgstr "Inhalts Haupttyp"
+msgstr "inhalts haupttyp"
 
 #: core/models/Attachment.py:103
 msgid "content subtype"
-msgstr "Inhalts Nebentyp"
+msgstr "inhalts untertyp"
 
 #: core/models/Attachment.py:108 core/models/Email.py:123
 msgid "datasize"
-msgstr "Datengröße"
+msgstr "datengröße"
 
 #: core/models/Attachment.py:122 core/models/EmailCorrespondent.py:44
 msgid "email"
@@ -338,11 +338,11 @@ msgstr "mailer name"
 
 #: core/models/Correspondent.py:54
 msgid "The mailer name of the correspondent."
-msgstr "Der Mail-Name des Korrespondenten."
+msgstr "Der Mailer-Name des Korrespondenten."
 
 #: core/models/Correspondent.py:62
 msgid "real name"
-msgstr "Klarname"
+msgstr "klarname"
 
 #: core/models/Correspondent.py:63
 msgid "The real name of the correspondent."

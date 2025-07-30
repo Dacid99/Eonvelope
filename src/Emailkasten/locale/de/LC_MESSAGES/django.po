@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-28 12:11+0000\n"
-"PO-Revision-Date: 2025-07-29 19:19+0000\n"
+"PO-Revision-Date: 2025-07-31 21:02+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/de/>\n"
@@ -49,7 +49,7 @@ msgstr ""
 
 #: Emailkasten/settings.py:538
 msgid "The default cycle period setting of a daemon in seconds"
-msgstr "Die Standard Periodendauer für Daemons in Sekunden."
+msgstr "Die Standard Periodendauer für Daemons in Sekunden"
 
 #: Emailkasten/settings.py:543
 msgid "The default restart time setting of a daemon in seconds"
@@ -61,7 +61,7 @@ msgstr "Die Standardanzahl an gespeicherten Daemon Logdateien"
 
 #: Emailkasten/settings.py:553
 msgid "The default maximum size of a daemon logfile in bytes"
-msgstr "Die Standard Daemon Logdateimaximalgröße in Bytes"
+msgstr "Die Standard Daemon Logdatei-Maximalgröße in Bytes"
 
 #: Emailkasten/settings.py:559
 msgid ""
@@ -73,7 +73,7 @@ msgstr ""
 
 #: Emailkasten/settings.py:565
 msgid "Whether or not to ignore emails that have a spam flag"
-msgstr "Ob als Spam markierte Emails ignoriert werden."
+msgstr "Ob als Spam markierte Emails ignoriert werden"
 
 #: Emailkasten/settings.py:571
 msgid ""
@@ -81,16 +81,19 @@ msgid ""
 "marked as such. For an exhaustive list of all available types see https://"
 "www.iana.org/assignments/media-types/media-types.xhtml#text"
 msgstr ""
-"Liste von Content-Typ-Präfixen die als Anhang verarbeitet werden obwohl sie "
-"nicht als solcher markiert sind."
+"Liste von Inhalts-Haupttypen die als Anhang verarbeitet werden obwohl sie "
+"nicht als solcher markiert sind. Für eine komplette Liste aller verfügbaren "
+"Typen siehe https://www.iana.org/assignments/media-types/media-"
+"types.xhtml#text"
 
 #: Emailkasten/settings.py:578
 msgid ""
 "A list of content types prefixes to not parse as files if they are not "
 "marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
 msgstr ""
-"List von Content-Typ-Suffixen die nicht als Datei gespeichert werden."
-"Überschreibt Elemente in 'SAVE_CONTENT_TYPE_PREFIXES'."
+"List von Inhalt-Untertypen die nicht als Datei gespeichert werden falls sie "
+"nicht als solche markiert sind. Überschreibt Elemente in "
+"'SAVE_CONTENT_TYPE_PREFIXES'."
 
 #: Emailkasten/settings.py:642
 msgid ""
@@ -102,7 +105,7 @@ msgid ""
 msgstr ""
 "Die HTML Schablone nach der Emails als HTML geschrieben werden. Verwendet "
 "die django template Syntax und hat Zugriff auf alle Felder der Email "
-"Datenbanktabelle. Die Entfernung von Templatetags kann zu 500 "
+"Datenbanktabelle. Die Entfernung von Templatetags kann zu HTTP 500 "
 "Fehlermeldungen führen wenn auf Seiten mit Emailvorschauen zugegriffen wird, "
 "also sei vorsichtig."
 
@@ -129,7 +132,7 @@ msgid ""
 msgstr ""
 "Schalte dies an um die Selbstregistrierung für neuen Benutzern zu erlauben. "
 "Diese Einstellung ist nur relevant wenn die REGISTRATION_ENABLED "
-"Umgebungsvariable True ist."
+"Umgebungsvariable wahr ist."
 
 #: Emailkasten/settings.py:708
 msgid "Server Configurations"
@@ -174,7 +177,7 @@ msgstr "Zeitzone wählen"
 
 #: Emailkasten/templates/allauth/elements/timezone_dropdown.html:12
 msgid "Select Timezone"
-msgstr "Zeitzone wählen"
+msgstr "Zeitzonenauswahl"
 
 #: Emailkasten/templates/allauth/layouts/base.html:23
 #: Emailkasten/templates/allauth/layouts/base.html:31
@@ -191,7 +194,7 @@ msgstr "Navigation umschalten"
 
 #: Emailkasten/templates/allauth/layouts/base.html:58
 msgid "Sign Out"
-msgstr "Ausloggen"
+msgstr "Abmelden"
 
 #: Emailkasten/templates/allauth/layouts/base.html:62
 msgid "Sign In"

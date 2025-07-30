@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-28 12:11+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-07-29 17:03+0000\n"
+"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/emailkasten/core/"
+"de/>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: core/constants.py:38
 msgid "All RECENT emails"
@@ -27,10 +28,8 @@ msgid "All UNSEEN emails"
 msgstr "Alle UNGESEHENEN Emails"
 
 #: core/constants.py:44
-#, fuzzy
-#| msgid "All UNSEEN emails"
 msgid "All SEEN emails"
-msgstr "Alle UNGESEHENEN Emails"
+msgstr "Alle GELESENEN Emails"
 
 #: core/constants.py:47
 msgid "All emails"
@@ -41,10 +40,8 @@ msgid "All RECENT and UNSEEN emails"
 msgstr "Alle AKTUELLEN und UNGESEHENEN Emails"
 
 #: core/constants.py:53
-#, fuzzy
-#| msgid "All emails that are not NEW"
 msgid "All emails that are not RECENT"
-msgstr "Alle Emails die nicht NEU sind"
+msgstr "Alle Emails die nicht AKTUELL sind"
 
 #: core/constants.py:56
 msgid "FLAGGED emails"
@@ -108,7 +105,7 @@ msgstr "POP3 via SSL"
 
 #: core/constants.py:105
 msgid "Microsoft Exchange"
-msgstr ""
+msgstr "Microsoft Exchange"
 
 #: core/constants.py:143
 msgid "From"
@@ -136,51 +133,51 @@ msgstr "Antwort-Auf"
 
 #: core/constants.py:149
 msgid "Resent-From"
-msgstr ""
+msgstr "Erneut gesendet von"
 
 #: core/constants.py:150
 msgid "Resent-To"
-msgstr ""
+msgstr "Erneut gesendet an"
 
 #: core/constants.py:151
 msgid "Resent-Cc"
-msgstr ""
+msgstr "Erneut gesendet CC"
 
 #: core/constants.py:152
 msgid "Resent-Bcc"
-msgstr ""
+msgstr "Erneut gesendet BCC"
 
 #: core/constants.py:153
 msgid "Resent-Sender"
-msgstr ""
+msgstr "Erneut gesendet Absender"
 
 #: core/constants.py:154
 msgid "Resent-Reply-To"
-msgstr ""
+msgstr "Erneut gesendet Antwort auf"
 
 #: core/constants.py:157
 msgid "Envelope-To"
-msgstr ""
+msgstr "Umschlag An"
 
 #: core/constants.py:159
 msgid "Delivered-To"
-msgstr ""
+msgstr "Zugestellt An"
 
 #: core/constants.py:160
 msgid "Return-Path"
-msgstr ""
+msgstr "Rücksendeadresse"
 
 #: core/constants.py:161
 msgid "Return-Receipt-To"
-msgstr ""
+msgstr "Zustellungsbeleg An"
 
 #: core/constants.py:164
 msgid "Disposition-Notification-To"
-msgstr ""
+msgstr "Zustellungsbenachrichtigung An"
 
 #: core/constants.py:174 core/constants.py:186
 msgid ".zip with .eml files inside"
-msgstr ""
+msgstr ".zip mit .eml Dateien als Inhalt"
 
 #: core/constants.py:175 core/constants.py:187
 msgid ".mbox"
@@ -196,71 +193,59 @@ msgstr ".mmdf"
 
 #: core/constants.py:178 core/constants.py:190
 msgid ".zip with mh mailbox inside"
-msgstr ""
+msgstr ".zip mit mh mailbox als Inhalt"
 
 #: core/constants.py:179 core/constants.py:191
 msgid ".zip with maildir mailbox inside"
-msgstr ""
+msgstr ".zip mit maildir Mailbox als Inhalt"
 
 #: core/constants.py:185
 msgid ".eml"
 msgstr ".eml"
 
 #: core/models/Account.py:63 core/models/Correspondent.py:46
-#, fuzzy
-#| msgid "Email address"
 msgid "email address"
-msgstr "Email Addresse"
+msgstr "emailaddresse"
 
 #: core/models/Account.py:64
 msgid "The mail address to the account."
 msgstr "Die Emailaddresse des Accounts."
 
 #: core/models/Account.py:70
-#, fuzzy
-#| msgid "Password"
 msgid "password"
-msgstr "Passwort"
+msgstr "passwort"
 
 #: core/models/Account.py:71
 msgid "The password to the account."
 msgstr "Das Passwort für den Account."
 
 #: core/models/Account.py:77
-#, fuzzy
-#| msgid "Mailserver-URL"
 msgid "mailserver URL"
-msgstr "Emailserver-URL"
+msgstr "emailserver-URL"
 
 #: core/models/Account.py:78
 msgid "The URL of the mailserver for the chosen protocol."
 msgstr "Die URL des Emailservers für das gewählte Protokoll."
 
 #: core/models/Account.py:86
-#, fuzzy
-#| msgid "Mailserver-Portnumber"
 msgid "mailserver portnumber"
-msgstr "Emailserver-Portnummer"
+msgstr "emailserver-Portnummer"
 
 #: core/models/Account.py:87
 msgid "The port of the mailserver for the chosen protocol."
 msgstr "Die Portnummer des Emailservers für das gewählte Protokoll."
 
 #: core/models/Account.py:94
-#, fuzzy
-#| msgid "Email Protocol"
 msgid "email protocol"
-msgstr "Email Protokoll"
+msgstr "email-protokoll"
 
 #: core/models/Account.py:95
 msgid "The email protocol implemented by the server."
 msgstr "Das Emailprotokol des Emailservers."
 
 #: core/models/Account.py:102
-#, fuzzy
-#| msgid "Connection Timeout"
 msgid "connection timeout"
-msgstr "Verbindungs Timeout"
+msgstr "verbindungstimeout"
 
 #: core/models/Account.py:103
 msgid "Timeout for the connection to the mailserver."
@@ -269,16 +254,16 @@ msgstr "Timeout für die Verbindung zum Emailserver."
 #: core/models/Account.py:109 core/models/Daemon.py:97
 #: core/models/Mailbox.py:102
 msgid "healthy"
-msgstr ""
+msgstr "gesund"
 
 #: core/models/Account.py:117 core/models/Attachment.py:114
 #: core/models/Correspondent.py:132 core/models/Email.py:141
 msgid "favorite"
-msgstr ""
+msgstr "Favorit"
 
 #: core/models/Account.py:125 core/models/Correspondent.py:69
 msgid "user"
-msgstr ""
+msgstr "Benutzer"
 
 #: core/models/Account.py:131 core/models/Attachment.py:128
 #: core/models/Correspondent.py:138 core/models/Daemon.py:128
@@ -286,14 +271,14 @@ msgstr ""
 #: core/models/Mailbox.py:96 core/models/Mailbox.py:110
 #: core/models/StorageShard.py:70
 msgid "created"
-msgstr ""
+msgstr "erstellt"
 
 #: core/models/Account.py:137 core/models/Attachment.py:134
 #: core/models/Correspondent.py:144 core/models/Daemon.py:134
 #: core/models/Email.py:185 core/models/EmailCorrespondent.py:71
 #: core/models/Mailbox.py:116 core/models/StorageShard.py:76
 msgid "last updated"
-msgstr ""
+msgstr "zuletzt aktualisiert"
 
 #: core/models/Account.py:144
 msgid ""
@@ -307,40 +292,36 @@ msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr "Account %(mail_address)s mit Protokol %(protocol)s"
 
 #: core/models/Attachment.py:63
-#, fuzzy
-#| msgid "Mailer name"
 msgid "filename"
-msgstr "Mail-Name"
+msgstr "Dateiname"
 
 #: core/models/Attachment.py:72
 msgid "filepath"
-msgstr ""
+msgstr "Dateipfad"
 
 #: core/models/Attachment.py:82
 msgid "content disposition"
-msgstr ""
+msgstr "Inhaltsbestimmung"
 
 #: core/models/Attachment.py:89
 msgid "content ID"
-msgstr ""
+msgstr "Inhalts ID"
 
 #: core/models/Attachment.py:96
 msgid "content maintype"
-msgstr ""
+msgstr "Inhalts Haupttyp"
 
 #: core/models/Attachment.py:103
 msgid "content subtype"
-msgstr ""
+msgstr "Inhalts Nebentyp"
 
 #: core/models/Attachment.py:108 core/models/Email.py:123
 msgid "datasize"
-msgstr ""
+msgstr "Datengröße"
 
 #: core/models/Attachment.py:122 core/models/EmailCorrespondent.py:44
-#, fuzzy
-#| msgid "All emails"
 msgid "email"
-msgstr "Alle Emails"
+msgstr "email"
 
 #: core/models/Attachment.py:140
 msgid "This will only delete this attachment, not the email."
@@ -352,58 +333,52 @@ msgid "Attachment %(file_name)s from %(email)s"
 msgstr "Anhang %(file_name)s in %(email)s"
 
 #: core/models/Correspondent.py:53
-#, fuzzy
-#| msgid "Mailer name"
 msgid "mailer name"
-msgstr "Mail-Name"
+msgstr "mailer name"
 
 #: core/models/Correspondent.py:54
 msgid "The mailer name of the correspondent."
 msgstr "Der Mail-Name des Korrespondenten."
 
 #: core/models/Correspondent.py:62
-#, fuzzy
-#| msgid "Mailer name"
 msgid "real name"
-msgstr "Mail-Name"
+msgstr "Klarname"
 
 #: core/models/Correspondent.py:63
-#, fuzzy
-#| msgid "The mailer name of the correspondent."
 msgid "The real name of the correspondent."
-msgstr "Der Mail-Name des Korrespondenten."
+msgstr "Der echte Name des Korrespondenten."
 
 #: core/models/Correspondent.py:76
 msgid "list ID"
-msgstr ""
+msgstr "listen ID"
 
 #: core/models/Correspondent.py:83
 msgid "list owner"
-msgstr ""
+msgstr "eigentümer der liste"
 
 #: core/models/Correspondent.py:90
 msgid "list subscribe"
-msgstr ""
+msgstr "liste abonnieren"
 
 #: core/models/Correspondent.py:97
 msgid "list unsubscribe"
-msgstr ""
+msgstr "liste deabonnieren"
 
 #: core/models/Correspondent.py:105
 msgid "list unsubscribe post"
-msgstr ""
+msgstr "liste deabonnieren senden"
 
 #: core/models/Correspondent.py:112
 msgid "list post"
-msgstr ""
+msgstr "an liste senden"
 
 #: core/models/Correspondent.py:119
 msgid "list help"
-msgstr ""
+msgstr "listen hilfe"
 
 #: core/models/Correspondent.py:126
 msgid "list archive"
-msgstr ""
+msgstr "listen archiv"
 
 #: core/models/Correspondent.py:150
 msgid "This will only delete this correspondent, not its emails."
@@ -416,17 +391,15 @@ msgstr "Korrespondent mit Mail-Addresse %(email_address)s"
 
 #: core/models/Daemon.py:59
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: core/models/Daemon.py:67 core/models/Email.py:159
 msgid "mailbox"
-msgstr ""
+msgstr "mailbox"
 
 #: core/models/Daemon.py:75
-#, fuzzy
-#| msgid "Fetching Criterion"
 msgid "fetching criterion"
-msgstr "Abruf Kriterium"
+msgstr "abfrage kriterium"
 
 #: core/models/Daemon.py:76
 msgid "The selection criterion for emails to archive."
@@ -434,37 +407,31 @@ msgstr "Das Kriterium nach dem Emails abgrufen werden."
 
 #: core/models/Daemon.py:84
 msgid "celery task"
-msgstr ""
+msgstr "celery auftrag"
 
 #: core/models/Daemon.py:90
-#, fuzzy
-#| msgid "Fetching Criterion"
 msgid "interval"
-msgstr "Abruf Kriterium"
+msgstr "intervall"
 
 #: core/models/Daemon.py:91
 msgid "The time between two daemon runs in seconds."
-msgstr "Die Zeit zwischen zwei "
+msgstr "Die Zeit zwischen zwei Ausführungen in Sekunden."
 
 #: core/models/Daemon.py:108
 msgid "logfilepath"
-msgstr ""
+msgstr "logdateipfad"
 
 #: core/models/Daemon.py:114
-#, fuzzy
-#| msgid "Logfile Backup Count"
 msgid "logfile backup count"
-msgstr "Zahl von Logdatei Backups"
+msgstr "zahl von logdatei backups"
 
 #: core/models/Daemon.py:115
 msgid "The number of historical logfiles to keep."
 msgstr "Die Zahl an gespeicherten alten Logdateien."
 
 #: core/models/Daemon.py:121
-#, fuzzy
-#| msgid "Logfile Maximum Size"
 msgid "logfile maximum size"
-msgstr "Logdateien Maximalgröße"
+msgstr "logdatei maximalgröße"
 
 #: core/models/Daemon.py:122
 msgid "The maximum size of a logfile in bytes."
@@ -481,59 +448,55 @@ msgstr "Emailfetcherdaemon %(uuid)s für Mailbox %(mailbox)s"
 
 #: core/models/Email.py:74
 msgid "message-ID"
-msgstr ""
+msgstr "nachrichten-ID"
 
 #: core/models/Email.py:79
 msgid "received"
-msgstr ""
+msgstr "erhalten"
 
 #: core/models/Email.py:87
 msgid "subject"
-msgstr ""
+msgstr "betreff"
 
 #: core/models/Email.py:94
 msgid "plain bodytext"
-msgstr ""
+msgstr "Klartextinhalt"
 
 #: core/models/Email.py:101
 msgid "HTML bodytext"
-msgstr ""
+msgstr "HTML-Textinhalt"
 
 #: core/models/Email.py:109
 msgid "in reply to"
-msgstr ""
+msgstr "antwort auf"
 
 #: core/models/Email.py:118
 msgid "referenced by"
-msgstr ""
+msgstr "referenziert von"
 
 #: core/models/Email.py:132
 msgid "EML filepath"
-msgstr ""
+msgstr "EML dateipfad"
 
 #: core/models/Email.py:150
 msgid "correspondents"
-msgstr ""
+msgstr "korrespondenten"
 
 #: core/models/Email.py:165
 msgid "headers"
-msgstr ""
+msgstr "kopfzeilen"
 
 #: core/models/Email.py:173
 msgid "X-Spam"
-msgstr ""
+msgstr "X-Spam"
 
 #: core/models/Email.py:192
-#, fuzzy
-#| msgid ""
-#| "This will delete this email and all its attachments but not its "
-#| "correspondents or mailinglists."
 msgid ""
 "This will delete this email and all its attachments but not its "
 "correspondents."
 msgstr ""
-"Dies löscht diese Email und alle ihre Anhänge aber nicht ihre "
-"Korrespondenten und Mailingliste."
+"Dies löscht diese Email und alle ihre Anhänge, aber nicht ihre "
+"Korrespondenten."
 
 #: core/models/Email.py:217
 #, python-format
@@ -542,11 +505,11 @@ msgstr "Email mit ID %(message_id)s, erhalten am %(datetime)s von %(mailbox)s"
 
 #: core/models/EmailCorrespondent.py:52
 msgid "correspondent"
-msgstr ""
+msgstr "korrespondent"
 
 #: core/models/EmailCorrespondent.py:59
 msgid "mention"
-msgstr ""
+msgstr "erwähnung"
 
 #: core/models/EmailCorrespondent.py:103
 #, python-format
@@ -559,27 +522,23 @@ msgstr ""
 
 #: core/models/Mailbox.py:66
 msgid "name"
-msgstr ""
+msgstr "name"
 
 #: core/models/Mailbox.py:74
 msgid "account"
-msgstr ""
+msgstr "account"
 
 #: core/models/Mailbox.py:80
-#, fuzzy
-#| msgid "Save attachments"
 msgid "save attachments"
-msgstr "Anhänge speichern"
+msgstr "anhänge speichern"
 
 #: core/models/Mailbox.py:82
 msgid "Whether the attachments from the emails in this mailbox will be saved."
 msgstr "Ob die Anhänge der Emails in dieser Mailbox gespeichert werden."
 
 #: core/models/Mailbox.py:89
-#, fuzzy
-#| msgid "Save as .eml"
 msgid "save as .eml"
-msgstr "Als .eml speichern"
+msgstr "als .eml speichern"
 
 #: core/models/Mailbox.py:90
 msgid "Whether the emails in this mailbox will be stored in .eml files."
@@ -596,71 +555,71 @@ msgid "Mailbox %(name)s of %(account)s"
 msgstr "Mailbox %(name)s in %(account)s"
 
 #: core/models/StorageShard.py:50
-#, fuzzy
-#| msgid "%(state)s storage directory %(path)s"
 msgid "shard directory name"
-msgstr "%(state)s Speicherordner %(path)s"
+msgstr "Speicherunterordner"
 
 #: core/models/StorageShard.py:56
-#, fuzzy
-#| msgid "Logfile Backup Count"
 msgid "file count"
-msgstr "Zahl von Logdatei Backups"
+msgstr "dateianzahl"
 
 #: core/models/StorageShard.py:63
 msgid "current"
-msgstr ""
+msgstr "aktuell"
 
 #: core/models/StorageShard.py:93
 msgid "Current"
-msgstr ""
+msgstr "Aktuell"
 
 #: core/models/StorageShard.py:93
 msgid "Archived"
-msgstr ""
+msgstr "Archiviert"
 
 #: core/models/StorageShard.py:94
-#, fuzzy, python-format
-#| msgid "%(state)s storage directory %(path)s"
+#, python-format
 msgid "%(state)s storage directory %(name)s"
-msgstr "%(state)s Speicherordner %(path)s"
+msgstr "%(state)s Speicherordner %(name)s"
 
 #: core/utils/fetchers/ExchangeFetcher.py:183
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of message_root!"
-msgstr "Ein %(error_class_name)s: %(error)s trat während %(action_name)s auf!"
+msgstr ""
+"Ein %(error_class_name)s: %(error)s trat während des Abrufens der "
+"Nachrichtenquelle auf!"
 
 #: core/utils/fetchers/ExchangeFetcher.py:204
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of "
 "%(mailbox_name)s!"
-msgstr "Ein %(error_class_name)s: %(error)s trat während %(action_name)s auf!"
+msgstr ""
+"Ein %(error_class_name)s: %(error)s trat während des Aufrufs von "
+"%(mailbox_name)s auf!"
 
 #: core/utils/fetchers/ExchangeFetcher.py:255
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during opening of message_root!"
-msgstr "Ein %(error_class_name)s: %(error)s trat während %(action_name)s auf!"
+msgstr ""
+"Ein %(error_class_name)s: %(error)s trat während des Öffnens der "
+"Nachrichtenquelle auf!"
 
 #: core/utils/fetchers/ExchangeFetcher.py:273
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of fetching of "
 "mail contents!"
-msgstr "Ein %(error_class_name)s: %(error)s trat während %(action_name)s auf!"
+msgstr ""
+"Ein %(error_class_name)s: %(error)s trat während des Abrufs der Emailinhalte "
+"auf!"
 
 #: core/utils/fetchers/ExchangeFetcher.py:327
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during scan of message_root!"
-msgstr "Ein %(error_class_name)s: %(error)s trat während %(action_name)s auf!"
+msgstr ""
+"Ein %(error_class_name)s: %(error)s trat während des Durchsuchens der "
+"Nachrichtenquelle auf!"
 
 #: core/utils/fetchers/SafeIMAPMixin.py:94
 #: core/utils/fetchers/SafePOPMixin.py:82

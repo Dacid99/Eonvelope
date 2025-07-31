@@ -116,7 +116,7 @@ class EmailFilterSet(filters.FilterSet):
             | Q(email_subject__icontains=value)
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
-            | Q(headers__has_key=value)
+            | Q(headers__has_any_keys=value)
             | Q(correspondents__email_address=value)
             | Q(attachments__file_name=value)
         ).distinct()

@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 
-sys.path.append(str(Path(__file__).resolve() / "src"))
+sys.path.append(str(Path(__file__).resolve().parent / "src"))
 
 
 def main():

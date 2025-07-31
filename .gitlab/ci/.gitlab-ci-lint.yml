@@ -3,7 +3,7 @@ lint_codebase:
   rules:
     - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null'
   script:
     - export PYTHONPATH=$PWD'/src/'
     - poetry install --with=dev

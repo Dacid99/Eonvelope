@@ -1,0 +1,30 @@
+{% extends "web/partials/bases/_base_card_editable.html" %}
+
+{% load i18n %}
+
+{% block card_title %}
+    {{ card_object.uuid }}
+{% endblock card_title %}
+
+{% block end_badges %}
+
+    {% include "web/daemon/partials/_is_running-badge.html" %}
+
+    {% include "web/partials/_health_badge.html" with object=card_object %}
+
+{% endblock end_badges %}
+
+
+{% block card_subtitle %}
+    {% translate "Mailbox" %}: <a href="{{ card_object.mailbox.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ card_object.mailbox.name }}</a>
+    <br />
+    {% translate "Account" %}: <a href="{{ card_object.mailbox.account.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ card_object.mailbox.account.mail_address }}</a>
+{% endblock card_subtitle %}
+
+
+{% block card_content %}
+    <div class="card-text">{% translate "Criterion" %}: {{ card_object.fetching_criterion }}</div>
+    <div class="card-text">{% translate "Interval" %}: {{ card_object.interval }}</div>
+{% endblock card_content %}

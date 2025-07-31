@@ -1,7 +1,7 @@
-build/*
-*/apidoc-rst/*
-source/images/*
-api-schema.yml
-*.log
+# alphanumeric order
 *.svg
-*.ansi
+*.yaml
+*.yml
+*/apidoc-rst/*
+*/images/*
+build/*

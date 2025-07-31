@@ -25,7 +25,7 @@ services:
       - 9999:8080
 
   web:
-    image: emailkasten
+    image: dacid99/emailkasten:latest
     container_name: emailkasten-web
     volumes:
       - /main/Emailkasten/test/archive:/mnt/archive

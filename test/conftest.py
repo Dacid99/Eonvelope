@@ -730,7 +730,7 @@ def correspondent_payload(faker, fake_email) -> dict[str, Any]:
 
 
 @pytest.fixture
-def daemon_payload(faker, fake_mailbox) -> dict[str, Any]:
+def daemon_payload(faker, fake_mailbox, fake_daemon) -> dict[str, Any]:
     """Fixture creating clean :class:`core.models.Daemon` payload with data deviating from the defaults.
 
     Args:
@@ -740,12 +740,13 @@ def daemon_payload(faker, fake_mailbox) -> dict[str, Any]:
         The clean payload.
     """
     # ruff: noqa: S311  # no cryptography going on here
+    fetching_choices = fake_mailbox.get_available_fetching_criteria()
+    if fake_daemon.fetching_criterion in fetching_choices:
+        fetching_choices.remove(fake_daemon.fetching_criterion)
     daemon_data = baker.prepare(
         Daemon,
         mailbox=fake_mailbox,
-        fetching_criterion=random.choice(
-            fake_mailbox.get_available_fetching_criteria()
-        ),
+        fetching_criterion=random.choice(fetching_choices),
         log_backup_count=random.randint(
             Daemon.log_backup_count.field.default + 1,
             Daemon.log_backup_count.field.default * 100,

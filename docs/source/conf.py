@@ -30,7 +30,7 @@ import django
 import tomli
 
 
-sys.path.insert(0, os.path.abspath("../.."))
+sys.path.insert(0, os.path.abspath("../../src/"))
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "Emailkasten.settings"
 django.setup()
@@ -107,7 +107,7 @@ exclude_patterns = [
     "**/docs",
     "**/.git",
     "**/migrations",
-    "**/validation",
+    "**/tools",
     "**/.mypy_cache",
     "**/.ruff_cache",
     "**/.pytest_cache",
@@ -164,15 +164,15 @@ autodoc_inherit_docstrings = True
 # https://www.sphinx-doc.org/en/master/usage/extensions/apidoc.html#configuration
 
 apidoc_modules = [
-    {"path": "../../Emailkasten", "destination": "apidoc-rst/Emailkasten"},
-    {"path": "../../core", "destination": "apidoc-rst/core"},
-    {"path": "../../api", "destination": "apidoc-rst/api"},
-    {"path": "../../web", "destination": "apidoc-rst/web"},
+    {"path": "../../src/Emailkasten", "destination": "apidoc-rst/Emailkasten"},
+    {"path": "../../src/core", "destination": "apidoc-rst/core"},
+    {"path": "../../src/api", "destination": "apidoc-rst/api"},
+    {"path": "../../src/web", "destination": "apidoc-rst/web"},
     {"path": "../../test", "destination": "apidoc-rst/test"},
 ]
 apidoc_exclude_patterns = [
     "**/.git/**",
-    "**/validation/**",
+    "**/tools/**",
     "**/docker/**",
     "**/migrations/**",
     "**/manage.py",

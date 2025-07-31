@@ -1,0 +1,91 @@
+{% extends "web/bases/base_list.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Archive" %}
+
+    {% block archive_title %}
+    {% endblock archive_title %}
+{% endblock title %}
+
+{% block nav_class_emails %}
+    link-light active
+{% endblock nav_class_emails %}
+
+{% block header_title %}
+    <a href="{% url 'web:email-archive-index' %}"
+       class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Email Archive" %}</a>
+
+    {% block header_archive_title %}
+    {% endblock header_archive_title %}
+{% endblock header_title %}
+
+{% block header_bar %}
+    <div class="d-flex justify-content-between align-items-center">
+        <a role="button" class="btn btn-outline-primary" href=" 
+            {% block previous_date_url %}{% endblock previous_date_url %}
+             ">
+
+            {% block previous_date_name %}
+            {% endblock previous_date_name %}
+
+        </a>
+        <ul class="btn-group">
+
+            {% block date_list_bar %}
+            {% endblock date_list_bar %}
+
+        </ul>
+        <a role="button" class="btn btn-outline-primary" href=" 
+            {% block next_date_url %}{% endblock next_date_url %}
+             ">
+
+            {% block next_date_name %}
+            {% endblock next_date_name %}
+
+        </a>
+    </div>
+{% endblock header_bar %}
+
+{% block pagination %}
+    {% if page_obj.paginator.num_pages > 1 %}
+        <div class="bg-white sticky-bottom pb-3">
+            <hr />
+
+            {% include "web/partials/_pagination.html" %}
+
+        </div>
+        <div class="offcanvas offcanvas-start"
+             data-bs-scroll="true"
+             tabindex="-1"
+             id="offcanvasFilter"
+             aria-labelledby="offcanvasFilterLabel">
+            <div class="offcanvas-header d-flex justify-content-between">
+                <h5 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h5>
+                <div class="btn-group align-items-center">
+
+                    {% include "web/partials/_clear_filter-button.html" %}
+
+                    {% include "web/partials/_clear_and_submit_filter-button.html" %}
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="offcanvas"
+                            aria-label="{% translate 'Close' %}"></button>
+                </div>
+            </div>
+            <div class="offcanvas-body">
+
+                {% include "web/partials/_filter-form.html" %}
+
+            </div>
+        </div>
+    {% endif %}
+{% endblock pagination %}
+
+{% block list %}
+
+    {% include "web/email/partials/_email_list.html" with emails=page_obj %}
+
+{% endblock list %}

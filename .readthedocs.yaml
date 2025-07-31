@@ -15,10 +15,10 @@ build:
     pre_build:
       - python3 manage.py graph_models -a -g -o docs/source/db_graph.svg
       - python3 manage.py spectacular --validate --file docs/source/api-schema.yml
-      - pydeps Emailkasten --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/Emailkasten_import_graph.svg
-      - pydeps core --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/core_import_graph.svg
-      - pydeps api --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/api_import_graph.svg
-      - pydeps web --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/web_import_graph.svg
+      - pydeps src/Emailkasten --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/Emailkasten_import_graph.svg
+      - pydeps src/core --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/core_import_graph.svg
+      - pydeps src/api --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/api_import_graph.svg
+      - pydeps src/web --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/web_import_graph.svg
 
 sphinx:
   configuration: docs/source/conf.py

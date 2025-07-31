@@ -54,17 +54,17 @@ pytest test
 
 ## Validation and Linting
 
-You can use the tools in validation/ to lint and check your changes.
+You can use the tools in tools/ to lint and check your changes.
 
 The code is formatted using black formatter.
 
 The imports are sorted with ruffs isort.
 
-There are preconfigured githooks in validation/githooks that format, check and lint the code before every commit.
+There are preconfigured githooks in tools/githooks that format, check and lint the code before every commit.
 Set them for your local repository via
 
 ```bash
-git config core.hooksPath validation/githooks/
+git config core.hooksPath tools/githooks/
 ```
 
 ## Workspace Recommendations
@@ -101,31 +101,31 @@ git config core.hooksPath validation/githooks/
 
 - everything for python and django
 - python test (with setting "python.testing.cwd": "/path/to/repo/test/")
-- ruff (with setting "ruff.configuration": "validation/ruff.toml")
+- ruff (with setting "ruff.configuration": "tools/ruff.toml")
 - pylint, with config
 
 ```json
-"pylint.args": ["--rcfile=validation/pylintrc_extension"]
+"pylint.args": ["--rcfile=tools/pylintrc_extension"]
 ```
 
 - mypy, with config
 
 ```json
- "mypy-type-checker.args": ["--config-file=validation/mypy.ini"]
+ "mypy-type-checker.args": ["--config-file=tools/mypy.ini"]
 ```
 
 - black, with config
 
 ```json
- "black-formatter.args": ["--config=validation/black_config"]
+ "black-formatter.args": ["--config=tools/black_config"]
 ```
 
 - python poetry
-- ANSI colors (iliazeus.vscode-ansi) (for validation reports)
+- ANSI colors (iliazeus.vscode-ansi) (for reports)
 - reStructuredText (lextudio.restructuredtext) for docs, with config
 
 ```json
- "restructuredtext.linter.doc8.extraArgs": ["--config /path/to/validation/doc8.ini"]
+ "restructuredtext.linter.doc8.extraArgs": ["--config /path/to/tools/doc8.ini"]
 ```
 
 - bootstrap 5 intellisense etc.

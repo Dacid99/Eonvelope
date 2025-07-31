@@ -7,7 +7,7 @@ debug_build_docker:
     - echo "Skip installing dependencies"
   script:
     - echo "Building debug docker image ..."
-    - docker build -f docker/build/Dockerfile -t emailkasten .
+    - docker build -f docker/Dockerfile -t emailkasten .
     - echo "Successfully built debug docker image."
     - echo "Releasing debug docker image ..."
     - docker tag emailkasten dacid99/emailkasten:$CI_COMMIT_TAG

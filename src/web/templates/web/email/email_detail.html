@@ -1,0 +1,243 @@
+{% extends "web/bases/base_detail_with_thumbnail.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Email Details" %} -
+{% endblock title %}
+
+{% block nav_class_emails %}
+    link-light active
+{% endblock nav_class_emails %}
+
+{% block card_class %}
+    {% if object.is_spam %}border-danger bg-danger-subtle{% endif %}
+{% endblock card_class %}
+
+{% block badges %}
+
+    {% include "web/partials/_favorite_badge.html" %}
+
+{% endblock badges %}
+
+{% block action_buttons %}
+
+    {% include "web/partials/_download-button.html" %}
+
+{% endblock action_buttons %}
+
+{% block card_title %}
+    {{ object.email_subject }}
+{% endblock card_title %}
+
+{% block card_content %}
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            {% translate "Date received" %}: {{ object.datetime|date:"DATE_FORMAT" }}
+        </li>
+        <li class="list-group-item">
+            {% translate "Time received" %}: {{ object.datetime|time:"TIME_FORMAT" }}
+        </li>
+        <li class="list-group-item">{% translate "Message Id" %}: {{ object.message_id }}</li>
+        <li class="list-group-item">{% translate "X-Spam" %}: {{ object.x_spam }}</li>
+        <li class="list-group-item">
+            {% translate "Datasize" %}: {{ object.datasize }} {% translate "bytes" %}
+        </li>
+        <li class="list-group-item list-group-item-action">
+            {% translate "Mailbox" %}: <a href="{{ object.mailbox.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.name }}</a>
+        </li>
+        <li class="list-group-item list-group-item-action">
+            {% translate "Account" %}: <a href="{{ object.mailbox.account.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.mail_address }}</a>
+        </li>
+        <div class="accordion accordion-flush" id="content-accordion">
+            <li class="list-group-item accordion-item">
+                <div class="accordion-header" id="plain-text-header">
+                    <button class="accordion-button collapsed p-0"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#plain-text"
+                            aria-expanded="true"
+                            aria-controls="plain-text">{% translate "Plain bodytext" %}</button>
+                </div>
+                <div id="plain-text"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="plain-text-header"
+                     data-bs-parent="content-accordion">
+                    <div class="accordion-body">
+                        <pre class="text-wrap">{{ object.plain_bodytext }}</pre>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item accordion-item">
+                <div class="accordion-header" id="html-text-header">
+                    <button class="accordion-button collapsed p-0"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#html-text"
+                            aria-expanded="true"
+                            aria-controls="html-text">{% translate "Html bodytext" %}</button>
+                </div>
+                <div id="html-text"
+                     class="accordion-collapse collapse"
+                     aria-labelledby="html-text-header"
+                     data-bs-parent="content-accordion">
+                    <div class="accordion-body">
+                        <code>{{ object.html_bodytext }}</code>
+                    </div>
+                </div>
+            </li>
+        </div>
+    </ul>
+{% endblock card_content %}
+
+{% block thumbnail %}
+    <!--order is critical to keep style and sandbox in case of an issue with the src-->
+    <iframe sandbox
+            class="h-100 w-100"
+            title="{% translate 'Email content' %}"
+            src="{{ object.get_absolute_thumbnail_url }}"></iframe>
+{% endblock thumbnail %}
+
+
+{% block card_extras %}
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">
+                {% translate "Correspondents" %}<i class="fa-solid fa-address-book mx-2" aria-hidden="true"></i>
+            </h4>
+
+            {% include "web/emailcorrespondents/partials/_emailcorrespondents_list.html" with emailcorrespondents=object.emailcorrespondents.all %}
+
+        </div>
+    </div>
+    {% if object.attachments.exists %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    {% translate "Attachments" %}<i class="fa-solid fa-paperclip mx-2" aria-hidden="true"></i>
+                </h4>
+
+                {% include "web/attachment/partials/_attachment_list.html" with attachments=object.attachments.all %}
+
+            </div>
+        </div>
+    {% endif %}
+    <div class="card accordion" id="accordionFlushExample">
+        <div class="accordion-item">
+            <button class="accordion-button collapsed"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseOne"
+                    aria-expanded="false"
+                    aria-controls="flush-collapseOne">
+                <h4 class="card-title" id="flush-headingOne">{% translate "Headers" %}</h4>
+            </button>
+            <div id="flush-collapseOne"
+                 class="accordion-collapse collapse"
+                 aria-labelledby="flush-headingOne"
+                 data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <ul class="list-group list-group-flush">
+                        {% for headername, headervalue in object.headers.items %}
+                            <li class="list-group-item">
+                                <b>{{ headername|title }}</b>: {{ headervalue }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">
+                {% translate "Conversation" %}<i class="fa-solid fa-comments mx-2" aria-hidden="true"></i>
+            </h4>
+
+            {% include "web/email/partials/_email_list.html" with emails=object.full_conversation %}
+
+        </div>
+    </div>
+    {% if object.in_reply_to.exists %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    {% translate "In Reply To" %}<i class="fa-solid fa-share mx-2" aria-hidden="true"></i>
+                </h4>
+                <ul class="list-group list-group-flush">
+                    {% for in_reply_to_email in object.in_reply_to.all %}
+                        <li class="list-group-item list-group-item-action">
+                            <a href="{{ in_reply_to_email.get_absolute_url }}"
+                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                {{ in_reply_to_email.email_subject }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if object.replies.exists %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    {% translate "Replies" %}<i class="fa-solid fa-reply mx-2" aria-hidden="true"></i>
+                </h4>
+
+                <ul class="list-group list-group-flush">
+                    {% for reply_email in object.replies.all %}
+                        <li class="list-group-item list-group-item-action">
+                            <a href="{{ reply_email.get_absolute_url }}"
+                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                {{ reply_email.email_subject }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if object.references.exists %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    {% translate "References" %}<i class="fa-solid fa-share mx-2" aria-hidden="true"></i>
+                </h4>
+                <ul class="list-group list-group-flush">
+                    {% for referenced_email in object.references.all %}
+                        <li class="list-group-item list-group-item-action">
+                            <a href="{{ referenced_email.get_absolute_url }}"
+                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                {{ referenced_email.email_subject }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if object.referenced_by.exists %}
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    {% translate "Referenced by" %}<i class="fa-solid fa-reply mx-2" aria-hidden="true"></i>
+                </h4>
+                <ul class="list-group list-group-flush">
+                    {% for referencing_email in object.referenced_by.all %}
+                        <li class="list-group-item list-group-item-action">
+                            <a href="{{ referencing_email.get_absolute_url }}"
+                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                {{ referencing_email.email_subject }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock card_extras %}

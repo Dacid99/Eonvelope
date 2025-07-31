@@ -1,0 +1,51 @@
+{% extends "web/bases/base.html" %}
+
+{% load static i18n %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+            <h2>
+
+                {% block header_title %}
+                {% endblock header_title %}
+
+            </h2>
+            <h4 class="text-center">
+
+                {% block header_subtitle %}
+                {% endblock header_subtitle %}
+
+            </h4>
+        </div>
+        <div>
+
+            {% block header_buttons %}
+            {% endblock header_buttons %}
+
+        </div>
+    </div>
+    <div class="d-grid m-1">
+
+        {% block header_bar %}
+        {% endblock header_bar %}
+
+    </div>
+
+    <hr />
+
+    {% block list %}
+    {% endblock list %}
+
+    {% block pagination %}
+    {% endblock pagination %}
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+    <script src="{% static 'web/js/toggle-favorite.js' %}"></script>
+
+    {% block other_scripts %}
+    {% endblock other_scripts %}
+{% endblock scripts %}

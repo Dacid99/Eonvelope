@@ -1,0 +1,21 @@
+{% load i18n tz timezones %}
+
+<form class="d-flex" action="{% url 'set_timezone' %}" method="post">
+    {% csrf_token %}
+    {% get_available_timezones as TIMEZONES %}
+    {% get_current_timezone as TIMEZONE_CODE %}
+    <label for="timezone-dropdown" class="form-label visually-hidden">
+        {% translate 'Select timezone' %}
+    </label>
+    <select id="timezone-dropdown"
+            class="form-select"
+            aria-label="{% translate 'Select timezone' %}"
+            name="timezone"
+            onchange="this.form.submit()">
+
+        {% for tz in TIMEZONES %}
+            <option {% if tz == TIMEZONE_CODE %}selected{% endif %} value="{{ tz }}">{{ tz }}</option>
+        {% endfor %}
+
+    </select>
+</form>

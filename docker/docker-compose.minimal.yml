@@ -18,7 +18,7 @@ services:
       start_period: 10s
 
   web:
-    image: emailkasten
+    image: dacid99/emailkasten:latest
     container_name: emailkasten-web
     volumes:
       - /main/Emailkasten/test/archive:/mnt/archive

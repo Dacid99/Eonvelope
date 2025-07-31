@@ -1,5 +1,2 @@
-reports/*
-.pytest_cache/
-.mypy_cache/
-.coverage.*
+# ordering: directories first, alphanumeric order
 *.html

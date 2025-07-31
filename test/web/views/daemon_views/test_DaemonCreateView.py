@@ -125,7 +125,10 @@ def test_post_auth_other_strange_mailbox(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(fake_fs, daemon_with_interval_payload, owner_client, list_url):
+@pytest.mark.parametrize("run", range(100))
+def test_post_auth_owner(
+    fake_fs, daemon_with_interval_payload, owner_client, list_url, run
+):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated owner user client."""
     assert Daemon.objects.all().count() == 1
 

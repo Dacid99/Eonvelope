@@ -1,0 +1,57 @@
+#!/bin/bash
+set -o pipefail
+export PYTHONPATH=$PWD'/src/'
+
+SECRET_KEY='HELPER_KEY'
+
+CONFIG_PATH="tools/"
+REPORT_PATH="tools/reports/"
+
+
+CHANGED_PY_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.py$')
+
+if [ -z "$CHANGED_PY_FILES" ]; then
+  echo "No Python files in commit."
+else
+  poetry run ruff check --config=$CONFIG_PATH'ruff.toml' $CHANGED_PY_FILES > $REPORT_PATH'ruff_precommit.ansi'
+
+  poetry run black --config=$CONFIG_PATH'black_config' $CHANGED_PY_FILES > $REPORT_PATH'black_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Formatting code failed, please check "$REPORT_PATH"black_precommit.ansi ."
+    exit 1
+  fi
+
+  git add $CHANGED_PY_FILES
+
+  #typecheck
+  poetry run mypy --config-file $CONFIG_PATH'mypy.ini' $CHANGED_PY_FILES > $REPORT_PATH'mypy/mypy_precommit.ansi'
+fi
+
+CHANGED_HTML_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.html$')
+
+if [ -z "$CHANGED_HTML_FILES" ]; then
+  echo "No html files in commit."
+else
+  poetry run djlint --reformat --configuration $CONFIG_PATH'djlintrc' $CHANGED_HTML_FILES > $REPORT_PATH'djlint_precommit.ansi'
+  git add $CHANGED_HTML_FILES
+
+  poetry run djlint --lint --configuration $CONFIG_PATH'djlintrc' $CHANGED_HTML_FILES > $REPORT_PATH'djlint_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Djlint failed, please check "$REPORT_PATH"djlint_precommit.ansi ."
+    exit 1
+  fi
+fi
+
+CHANGED_RST_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep '\.rst$')
+
+if [ -z "$CHANGED_RST_FILES" ]; then
+  echo "No html files in commit."
+else
+  poetry run doc8 --config $CONFIG_PATH'doc8.ini' $CHANGED_RST_FILES > $REPORT_PATH'doc8_precommit.ansi'
+fi
+
+#spellcheck
+poetry run codespell --config=$CONFIG_PATH'.codespellrc' src/ test/ docs/ .gitea/ .github/ .gitlab/ *.md > $REPORT_PATH'codespell_precommit.ansi'
+
+echo "All precommit actions passed successfully."
+exit 0

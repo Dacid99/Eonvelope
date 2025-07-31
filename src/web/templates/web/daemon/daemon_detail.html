@@ -1,0 +1,58 @@
+{% extends "web/bases/base_detail_editable.html" %}
+
+{% load i18n %}
+
+{% block title %}
+    {% translate "Daemon Details" %} -
+{% endblock title %}
+
+{% block nav_class_daemons %}
+    link-light active
+{% endblock nav_class_daemons %}
+
+{% block badges %}
+
+    {% include "web/daemon/partials/_is_running-badge.html" with daemon=object %}
+
+    {% include "web/partials/_health_badge.html" %}
+
+{% endblock badges %}
+
+{% block action_buttons %}
+
+    {% include "web/daemon/partials/_start-button.html" with daemon=object %}
+
+    {% include "web/daemon/partials/_stop-button.html" with daemon=object %}
+
+    {% include "web/daemon/partials/_download_logs-button.html" %}
+
+{% endblock action_buttons %}
+
+{% block card_title %}
+    {{ object.uuid }}
+{% endblock card_title %}
+
+{% block card_subtitle %}
+    {% translate "Mailbox" %}: <a href="{{ object.mailbox.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.name }}</a>
+    <br />
+    {% translate "Account" %}: <a href="{{ object.mailbox.account.get_absolute_url }}"
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.mail_address }}</a>
+{% endblock card_subtitle %}
+
+{% block card_content %}
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            {% translate "Criterion" %}: {{ object.get_fetching_criterion_display }}
+        </li>
+        <li class="list-group-item">{% translate "Interval" %}: {{ object.interval }}</li>
+        <li class="list-group-item">{% translate "Last Run" %}: {{ object.celery_task.last_run_at }}</li>
+        <li class="list-group-item">
+            {% translate "Total Run Count" %}: {{ object.celery_task.total_run_count }}
+        </li>
+        <li class="list-group-item">{% translate "Logfile Backups" %}: {{ object.log_backup_count }}</li>
+        <li class="list-group-item">
+            {% translate "Logfile max size" %}: {{ object.logfile_size }} {% translate "bytes" %}
+        </li>
+    </ul>
+{% endblock card_content %}

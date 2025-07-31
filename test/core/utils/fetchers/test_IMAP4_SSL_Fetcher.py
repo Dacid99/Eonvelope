@@ -53,6 +53,14 @@ def mock_IMAP4_SSL(mocker, faker):
     return mock_IMAP4_SSL
 
 
+@pytest.fixture(autouse=True)
+def mock_ssl_create_default_context(mocker):
+    return mocker.patch(
+        "ssl.create_default_context",
+        return_value=mocker.sentinel,
+    )
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "mail_host_port, timeout",
@@ -64,19 +72,27 @@ def mock_IMAP4_SSL(mocker, faker):
     ],
 )
 def test_IMAP4Fetcher_connect_to_host_success(
-    imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL, mail_host_port, timeout
+    imap_ssl_mailbox,
+    mock_ssl_create_default_context,
+    mock_logger,
+    mock_IMAP4_SSL,
+    mail_host_port,
+    timeout,
 ):
     imap_ssl_mailbox.account.mail_host_port = mail_host_port
     imap_ssl_mailbox.account.timeout = timeout
 
     IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
-    kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
+    kwargs = {
+        "host": imap_ssl_mailbox.account.mail_host,
+        "ssl_context": mock_ssl_create_default_context.return_value,
+    }
     if mail_host_port:
         kwargs["port"] = mail_host_port
     if timeout:
         kwargs["timeout"] = timeout
-    mock_IMAP4_SSL.assert_called_with(**kwargs)
+    mock_IMAP4_SSL.assert_called_once_with(**kwargs)
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()
     mock_logger.error.assert_not_called()
@@ -84,18 +100,21 @@ def test_IMAP4Fetcher_connect_to_host_success(
 
 @pytest.mark.django_db
 def test_IMAP4Fetcher_connect_to_host_exception(
-    imap_ssl_mailbox, mock_logger, mock_IMAP4_SSL
+    imap_ssl_mailbox, mock_ssl_create_default_context, mock_logger, mock_IMAP4_SSL
 ):
     mock_IMAP4_SSL.side_effect = AssertionError
 
     with pytest.raises(MailAccountError, match="AssertionError occurred"):
         IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
-    kwargs = {"host": imap_ssl_mailbox.account.mail_host, "ssl_context": None}
+    kwargs = {
+        "host": imap_ssl_mailbox.account.mail_host,
+        "ssl_context": mock_ssl_create_default_context.return_value,
+    }
     if port := imap_ssl_mailbox.account.mail_host_port:
         kwargs["port"] = port
     if timeout := imap_ssl_mailbox.account.timeout:
         kwargs["timeout"] = timeout
-    mock_IMAP4_SSL.assert_called_with(**kwargs)
+    mock_IMAP4_SSL.assert_called_once_with(**kwargs)
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_called()

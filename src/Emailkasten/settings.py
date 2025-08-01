@@ -507,9 +507,10 @@ CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
+# Solution to have list types, see https://github.com/jazzband/django-constance/issues/620
 CONSTANCE_ADDITIONAL_FIELDS = {
-    "array": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
-    "json": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
+    list: ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
+    dict: ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
 }
 
 CONSTANCE_CONFIG = {
@@ -533,7 +534,7 @@ CONSTANCE_CONFIG = {
         _(
             "Page size options for pagination in the webapp. Should contain the WEB_DEFAULT_PAGE_SIZE value."
         ),
-        "array",
+        list,
     ),
     "DAEMON_CYCLE_PERIOD_DEFAULT": (
         60,
@@ -570,14 +571,14 @@ CONSTANCE_CONFIG = {
         _(
             "List of content types prefixes to parse as files even if they are not marked as such. For an exhaustive list of all available types see https://www.iana.org/assignments/media-types/media-types.xhtml#text"
         ),
-        "array",
+        list,
     ),
     "DONT_SAVE_CONTENT_TYPE_SUFFIXES": (
         ["plain", "html"],
         _(
             "List of content types prefixes to not parse as files if they are not marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
         ),
-        "array",
+        list,
     ),
     "EMAIL_HTML_TEMPLATE": (
         """{% load i18n %}
@@ -704,8 +705,8 @@ CONSTANCE_CONFIG = {
     ),
 }
 
-CONSTANCE_FIELDSETS = (
-    (_("Server Configurations"), ("REGISTRATION_ENABLED")),
+CONSTANCE_CONFIG_FIELDSETS = (
+    (_("Server Configurations"), ("REGISTRATION_ENABLED",)),
     (
         _("Default Values"),
         (
@@ -721,21 +722,28 @@ CONSTANCE_FIELDSETS = (
         _("Processing Settings"),
         (
             "THROW_OUT_SPAM",
-            "HTML_WRAPPER",
+            "EMAIL_HTML_TEMPLATE",
+            "EMAIL_CSS",
             "SAVE_CONTENT_TYPE_PREFIXES",
             "DONT_SAVE_CONTENT_TYPE_SUFFIXES",
         ),
     ),
     (
         _("Storage Settings"),
-        ("STORAGE_MAX_FILES_PER_DIR"),
+        ("STORAGE_MAX_FILES_PER_DIR",),
     ),
     (
         _("API Settings"),
-        ("API_DEFAULT_PAGE_SIZE", "API_MAX_PAGE_SIZE"),
+        (
+            "API_DEFAULT_PAGE_SIZE",
+            "API_MAX_PAGE_SIZE",
+        ),
     ),
     (
         _("Web Settings"),
-        ("WEB_DEFAULT_PAGE_SIZE", "WEB_PAGE_SIZES_OPTIONS"),
+        (
+            "WEB_DEFAULT_PAGE_SIZE",
+            "WEB_PAGE_SIZES_OPTIONS",
+        ),
     ),
 )

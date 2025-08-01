@@ -237,8 +237,8 @@ class Attachment(
         """
         if email.pk is None:
             raise ValueError("Email is not in db!")
-        save_maintypes = get_config("SAVE_CONTENT_TYPE_PREFIXES")
-        ignore_subtypes = get_config("DONT_SAVE_CONTENT_TYPE_SUFFIXES")
+        ignore_maintypes = get_config("DONT_PARSE_CONTENT_MAINTYPES")
+        ignore_subtypes = get_config("DONT_PARSE_CONTENT_SUBTYPES")
         new_attachments = []
         for part in email_message.walk():
             if part.is_multipart():
@@ -247,8 +247,16 @@ class Attachment(
             content_disposition = part.get_content_disposition()
             content_maintype = part.get_content_maintype()
             content_subtype = part.get_content_subtype()
-            if content_disposition or (
-                content_maintype in save_maintypes
+            # first part of the condition checks whether the part qualifies as attachment in general,
+            # the second one whether the parts contenttype is blacklisted
+            if (
+                content_disposition
+                or (
+                    content_maintype != "text"
+                    or content_subtype not in ["plain", "html"]
+                )
+            ) and (
+                content_maintype not in ignore_maintypes
                 and content_subtype not in ignore_subtypes
             ):
                 part_payload = part.get_payload(decode=True)

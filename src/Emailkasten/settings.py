@@ -507,12 +507,14 @@ CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
-# Solution to have list types, see https://github.com/jazzband/django-constance/issues/620
+# Solution to have collection types, see https://github.com/jazzband/django-constance/issues/620
 CONSTANCE_ADDITIONAL_FIELDS = {
-    list: ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
-    dict: ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
+    list: ["django.forms.fields.JSONField", {"widget": "django.forms.Textarea"}],
+    dict: ["django.forms.fields.JSONField", {"widget": "django.forms.Textarea"}],
 }
 
+# if one of these defaults is changed, that change is not applied to existing default configurations
+# to still apply the new default to existing servers, change the name of the setting!
 CONSTANCE_CONFIG = {
     "API_DEFAULT_PAGE_SIZE": (
         20,
@@ -566,17 +568,15 @@ CONSTANCE_CONFIG = {
         _("Whether or not to ignore emails that have a spam flag"),
         bool,
     ),
-    "SAVE_CONTENT_TYPE_PREFIXES": (
-        ["image", "audio", "video", "model", "font", "application"],
-        _(
-            "List of content types prefixes to parse as files even if they are not marked as such. For an exhaustive list of all available types see https://www.iana.org/assignments/media-types/media-types.xhtml#text"
-        ),
+    "DONT_PARSE_CONTENT_MAINTYPES": (
+        [],
+        _("List of content types prefixes to not parse as files."),
         list,
     ),
-    "DONT_SAVE_CONTENT_TYPE_SUFFIXES": (
-        ["plain", "html"],
+    "DONT_PARSE_CONTENT_SUBTYPES": (
+        [],
         _(
-            "List of content types prefixes to not parse as files if they are not marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
+            "List of content types prefixes to not parse as files. Plain and HTML text is always ignored as its the bodytext."
         ),
         list,
     ),
@@ -724,8 +724,8 @@ CONSTANCE_CONFIG_FIELDSETS = (
             "THROW_OUT_SPAM",
             "EMAIL_HTML_TEMPLATE",
             "EMAIL_CSS",
-            "SAVE_CONTENT_TYPE_PREFIXES",
-            "DONT_SAVE_CONTENT_TYPE_SUFFIXES",
+            "DONT_PARSE_CONTENT_MAINTYPES",
+            "DONT_PARSE_CONTENT_SUBTYPES",
         ),
     ),
     (

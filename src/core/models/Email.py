@@ -553,11 +553,11 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         )
 
     @override
-    @cached_property
+    @property
     def has_download(self) -> bool:
         return self.eml_filepath is not None
 
     @override
-    @cached_property
+    @property
     def has_thumbnail(self) -> bool:
         return True

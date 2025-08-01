@@ -190,7 +190,7 @@ class Attachment(
         self.save(update_fields=["file_path"])
         logger.debug("Successfully stored attachment.")
 
-    @cached_property
+    @property
     def content_type(self) -> str:
         """Reconstructs the full MIME content type of the attachment.
 
@@ -290,7 +290,7 @@ class Attachment(
         return new_attachments
 
     @override
-    @cached_property
+    @property
     def has_download(self) -> bool:
         return self.file_path is not None
 

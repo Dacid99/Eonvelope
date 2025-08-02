@@ -188,7 +188,7 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
             .exclude(pk=self.pk)
             .exists()
         ):
-            raise ValidationError({"mail_address": "This account already exists."})
+            raise ValidationError({"mail_address": _("This account already exists.")})
 
     def get_fetcher_class(self) -> type[BaseFetcher]:
         """Returns the fetcher class from :class:`core.utils.fetchers` corresponding to :attr:`protocol`.

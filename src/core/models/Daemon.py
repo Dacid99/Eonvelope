@@ -204,11 +204,15 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
             ):
                 raise ValidationError(
                     {
-                        "fetching_criterion": "This fetching criterion is not available for this mailbox!"
+                        "fetching_criterion": _(
+                            "This fetching criterion is not available for this mailbox!"
+                        )
                     }
                 )
         except Daemon.mailbox.RelatedObjectDoesNotExist:
-            raise ValidationError({"mailbox": "No valid mailbox selected!"}) from None
+            raise ValidationError(
+                {"mailbox": _("No valid mailbox selected!")}
+            ) from None
 
     def setup_logger(self) -> None:
         """Sets up the logger for the daemon process."""

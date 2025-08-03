@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Final
 
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from api.constants import FilterSetups
@@ -29,11 +30,15 @@ from core.models import Mailbox
 
 
 if TYPE_CHECKING:
-    from django.db.models import Model
+    from django.db.models import Model, QuerySet
 
 
 class MailboxFilterSet(filters.FilterSet):
     """The filter class for :class:`core.models.Mailbox`."""
+
+    search = filters.CharFilter(
+        method="filter_text_fields",
+    )
 
     class Meta:
         """Metadata class for the filter."""
@@ -53,3 +58,23 @@ class MailboxFilterSet(filters.FilterSet):
             "account__protocol": FilterSetups.CHOICE,
             "account__is_healthy": FilterSetups.BOOL,
         }
+
+    def filter_text_fields(
+        self, queryset: QuerySet[Mailbox], name: str, value: str
+    ) -> QuerySet[Mailbox]:
+        """Filters textfields in the model.
+
+        Args:
+            queryset: The basic queryset to filter.
+            name: The name of the filterfield.
+            value: The value to filter by.
+
+        Returns:
+            The filtered queryset.
+        """
+        return queryset.filter(
+            Q(name__icontains=value)
+            | Q(account__mail_address__icontains=value)
+            | Q(account__mail_host__icontains=value)
+            | Q(account__protocol__icontains=value)
+        ).distinct()

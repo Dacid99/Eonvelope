@@ -93,6 +93,7 @@ class CorrespondentFilterSet(django_filters.FilterSet):
             | Q(list_owner__icontains=value)
             | Q(list_subscribe__icontains=value)
             | Q(list_unsubscribe__icontains=value)
+            | Q(list_unsubscribe_post__icontains=value)
             | Q(list_post__icontains=value)
             | Q(list_help__icontains=value)
             | Q(list_archive__icontains=value)

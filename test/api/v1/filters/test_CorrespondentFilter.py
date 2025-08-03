@@ -31,6 +31,36 @@ from .conftest import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
+    "searched_field",
+    [
+        "email_address",
+        "email_name",
+        "real_name",
+        "list_id",
+        "list_owner",
+        "list_subscribe",
+        "list_unsubscribe",
+        "list_unsubscribe_post",
+        "list_post",
+        "list_help",
+        "list_archive",
+    ],
+)
+def test_search_filter(faker, correspondent_queryset, searched_field):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s search filtering."""
+    target_text = faker.sentence()
+    target_id = faker.random.randint(0, len(correspondent_queryset) - 1)
+    correspondent_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    query = {"search": target_text[2:10]}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.count() == 1
+    assert filtered_data.get().id == target_id
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
 def test_real_name_filter(
@@ -160,6 +190,26 @@ def test_list_unsubscribe_filter(
     for the :attr:`core.models.Correspondent.Correspondent.list_unsubscribe` field.
     """
     query = {"list_unsubscribe" + lookup_expr: filterquery}
+
+    filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_list_unsubscribe_post_filter(
+    correspondent_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s filtering
+    for the :attr:`core.models.Correspondent.Correspondent.list_unsubscribe_post` field.
+    """
+    query = {"list_unsubscribe_post" + lookup_expr: filterquery}
 
     filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs
 

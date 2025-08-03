@@ -193,6 +193,7 @@ def correspondent_queryset(
                 list_owner=text_test_item,
                 list_subscribe=text_test_item,
                 list_unsubscribe=text_test_item,
+                list_unsubscribe_post=text_test_item,
                 list_post=text_test_item,
                 list_help=text_test_item,
                 list_archive=text_test_item,

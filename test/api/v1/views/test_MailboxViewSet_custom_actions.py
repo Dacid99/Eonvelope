@@ -28,6 +28,7 @@ from rest_framework.response import Response
 from api.v1.views import MailboxViewSet
 from core.constants import EmailFetchingCriterionChoices
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from test.conftest import fake_mailbox
 
 
 @pytest.fixture
@@ -171,6 +172,57 @@ def test_test_mailbox_failure_auth_owner(
     assert "error" in response.data
     assert fake_error_message in response.data["error"]
     mock_Mailbox_test_connection.assert_called_once_with(fake_mailbox)
+
+
+@pytest.mark.django_db
+def test_fetching_options_noauth(
+    noauth_api_client,
+    custom_detail_action_url,
+    fake_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetching_options` action with an unauthenticated user client."""
+    response = noauth_api_client.get(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_FETCHING_OPTIONS, fake_mailbox
+        )
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert "options" not in response.data
+
+
+@pytest.mark.django_db
+def test_fetching_options_auth_other(
+    other_api_client,
+    custom_detail_action_url,
+    fake_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetching_options` action with the authenticated other user client."""
+    response = other_api_client.get(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_FETCHING_OPTIONS, fake_mailbox
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "options" not in response.data
+
+
+@pytest.mark.django_db
+def test_fetching_options_auth_owner(
+    owner_api_client,
+    custom_detail_action_url,
+    fake_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetching_options` action with the authenticated owner user client."""
+    response = owner_api_client.get(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_FETCHING_OPTIONS, fake_mailbox
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["options"] == fake_mailbox.get_available_fetching_criteria()
 
 
 @pytest.mark.django_db

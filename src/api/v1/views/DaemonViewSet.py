@@ -83,30 +83,6 @@ class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
             return Daemon.objects.none()
         return Daemon.objects.filter(mailbox__account__user=self.request.user).select_related("interval", "celery_task")  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
 
-    URL_PATH_FETCHING_OPTIONS = "fetching-options"
-    URL_NAME_FETCHING_OPTIONS = "fetching-options"
-
-    @action(
-        detail=True,
-        methods=["get"],
-        url_path=URL_PATH_FETCHING_OPTIONS,
-        url_name=URL_NAME_FETCHING_OPTIONS,
-    )
-    def fetching_options(self, request: Request, pk: int | None = None) -> Response:
-        """Action method returning all fetching options for the daemon.
-
-        Args:
-            request: The request triggering the action.
-            pk: int: The private key of the daemon. Defaults to None.
-
-        Returns:
-            A response detailing the request status.
-        """
-        daemon = self.get_object()
-
-        available_fetching_options = daemon.mailbox.get_available_fetching_criteria()
-        return Response({"options": available_fetching_options})
-
     URL_PATH_START = "start"
     URL_NAME_START = "start"
 

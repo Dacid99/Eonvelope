@@ -120,6 +120,30 @@ class MailboxViewSet(
         response.data["mailbox"] = self.get_serializer(mailbox).data
         return response
 
+    URL_PATH_FETCHING_OPTIONS = "fetching-options"
+    URL_NAME_FETCHING_OPTIONS = "fetching-options"
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_FETCHING_OPTIONS,
+        url_name=URL_NAME_FETCHING_OPTIONS,
+    )
+    def fetching_options(self, request: Request, pk: int | None = None) -> Response:
+        """Action method returning all fetching options for the mailbox.
+
+        Args:
+            request: The request triggering the action.
+            pk: int: The private key of the mailbox. Defaults to None.
+
+        Returns:
+            A response detailing the request status.
+        """
+        mailbox = self.get_object()
+
+        available_fetching_options = mailbox.get_available_fetching_criteria()
+        return Response({"options": available_fetching_options})
+
     URL_PATH_FETCH_ALL = "fetch-all"
     URL_NAME_FETCH_ALL = "fetch-all"
 

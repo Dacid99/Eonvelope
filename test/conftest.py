@@ -678,6 +678,7 @@ def account_payload(owner_user) -> dict[str, Any]:
     )
     payload = model_to_dict(account_data)
     payload.pop("id")
+    payload.pop("user")
     return {key: value for key, value in payload.items() if value is not None}
 
 

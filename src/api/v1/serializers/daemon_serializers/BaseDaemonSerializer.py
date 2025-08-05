@@ -20,12 +20,12 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Final, override
+from typing import TYPE_CHECKING, Any, ClassVar, Final, override
 
 from django_celery_beat.models import IntervalSchedule
 from rest_framework import serializers
 
-from core.models import Daemon
+from core.models import Daemon, Mailbox
 
 from ..django_celery_beat_serializers import (
     IntervalScheduleSerializer,
@@ -71,17 +71,38 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
 
         read_only_fields: Final[list[str]] = [
             "uuid",
-            "mailbox",
             "is_healthy",
             "created",
             "updated",
         ]
         """The :attr:`core.models.Daemon.Daemon.uuid`,
-        :attr:`core.models.Daemon.Daemon.mailbox`,
         :attr:`core.models.Daemon.Daemon.is_healthy`,
         :attr:`core.models.Daemon.Daemon.created` and
         :attr:`core.models.Daemon.Daemon.updated` fields are read-only.
         """
+
+    def validate_mailbox(self, value: Mailbox) -> Mailbox:
+        """Validate that the given mailbox belongs to the requesting user."""
+        if (
+            "request" not in self.context
+            or value.account.user != self.context["request"].user
+        ):
+            raise serializers.ValidationError("No mailbox with that id found.")
+        return value
+
+    @override
+    def validate(self, attrs: Any) -> Any:
+        """Validate that the given fetching_criterion is available for the mailbox."""
+        if (
+            attrs["fetching_criterion"]
+            not in attrs["mailbox"].get_available_fetching_criteria()
+        ):
+            raise serializers.ValidationError(
+                {
+                    "fetching_criterion": "This fetching criterion is not available for this mailbox."
+                }
+            )
+        return super().validate(attrs)
 
     @override
     def update(self, instance: Daemon, validated_data: dict) -> Daemon:
@@ -92,9 +113,26 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
             There should not be duplicate IntervalSchedules.
             https://django-celery-beat.readthedocs.io/en/latest/index.html#example-creating-interval-based-periodic-task
         """
+        interval_data = validated_data.pop("interval", None)
+        if interval_data:
+            instance.interval, _ = IntervalSchedule.objects.get_or_create(
+                every=interval_data["every"],
+                period=interval_data["period"],
+            )
+        return super().update(instance, validated_data)
+
+    @override
+    def create(self, validated_data: dict) -> Daemon:
+        """Extended to add the intervaldata to the instance.
+
+        Important:
+            The nested intervaldata must be popped as create does not support nested dicts!
+            There should not be duplicate IntervalSchedules.
+            https://django-celery-beat.readthedocs.io/en/latest/index.html#example-creating-interval-based-periodic-task
+        """
         interval_data = validated_data.pop("interval")
-        instance.interval, _ = IntervalSchedule.objects.get_or_create(
+        interval, _ = IntervalSchedule.objects.get_or_create(
             every=interval_data["every"],
             period=interval_data["period"],
         )
-        return super().update(instance, validated_data)
+        return super().create({**validated_data, "interval": interval})

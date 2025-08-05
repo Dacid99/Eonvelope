@@ -34,7 +34,6 @@ from rest_framework.response import Response
 from core.models import Daemon
 
 from ..filters import DaemonFilterSet
-from ..mixins.NoCreateMixin import NoCreateMixin
 from ..serializers import BaseDaemonSerializer
 
 
@@ -43,10 +42,10 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
+class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
     """Viewset for the :class:`core.models.Daemon`.
 
-    Provides all but the create action.
+    Provides all CRUD actions.
 
     Note:
         To update instances the user must specify format "json" with the request.

@@ -23,6 +23,7 @@
 - async parsing, sync saving
 - auto transfer of pdfs to paperless
 - fetch once by criterion instead of hardcoded ALL
+- setting for thumbnail datasize threshold
 
 ## To refactor
 
@@ -52,9 +53,10 @@
 - dependency-upgrading tool for your project dependencies? (eg. dependabot, PyUp, Renovate, pip-tools, Snyx)
 - daemonize celery worker
 - coverage in test job
-- api creation of daemons
 - mailbox specific daemon create view
 - only show available fetching options in daemonform
+- move fetching options endpoint to mailbox
+- loosen account unique constraint in terms of protocol
 
 ### Work in progress
 
@@ -68,12 +70,13 @@
 - daemon logger setup doesnt persist
 - running tests from test dir
 - storage is incremented by healthcheck
-- daemon api allows unavailable criteria
 - updating daemon logging doesnt change the daemon logger
 - fetchers can raise valueerror but that is not caught
 which can happen if the user changes the protocol of an account with existing fetchers and the criteria become unavailable (what happens if task raises?)
 - optics:
   - better name for daemon
   - make email on attachment a card
+  - weird pagination in base-archive
+  - empyt checkbox instead of xmark
 - ci:
   - djlint has no files to lint

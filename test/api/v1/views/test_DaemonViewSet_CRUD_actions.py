@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import pytest
+from django.forms import model_to_dict
 from rest_framework import status
 
 from api.v1.views import DaemonViewSet
@@ -215,14 +216,17 @@ def test_post_auth_other(other_api_client, daemon_with_interval_payload, list_ur
         format="json",
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "mailbox" in response.data
     assert "logfile_size" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
         Daemon.objects.get(logfile_size=daemon_with_interval_payload["logfile_size"])
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_api_client, daemon_with_interval_payload, list_url):
+def test_post_auth_owner(
+    owner_api_client, owner_user, daemon_with_interval_payload, list_url
+):
     """Tests the post method on :class:`api.v1.views.DaemonViewSet` with the authenticated owner user client."""
     response = owner_api_client.post(
         list_url(DaemonViewSet),
@@ -230,10 +234,27 @@ def test_post_auth_owner(owner_api_client, daemon_with_interval_payload, list_ur
         format="json",
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-    assert "logfile_size" not in response.data
-    with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(logfile_size=daemon_with_interval_payload["logfile_size"])
+    assert response.status_code == status.HTTP_201_CREATED
+    assert "logfile_size" in response.data
+    assert response.data["logfile_size"] == daemon_with_interval_payload["logfile_size"]
+    posted_daemon = Daemon.objects.get(
+        fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
+        mailbox=daemon_with_interval_payload["mailbox"],
+    )
+    assert posted_daemon is not None
+    assert posted_daemon.mailbox.account.user == owner_user
+
+
+@pytest.mark.django_db
+def test_post_duplicate_auth_owner(fake_daemon, owner_api_client, list_url):
+    """Tests the post method on :class:`api.v1.views.AccountViewSet` with the authenticated owner user client and duplicate data."""
+    payload = model_to_dict(fake_daemon)
+    payload.pop("id")
+    clean_payload = {key: value for key, value in payload.items() if value is not None}
+
+    response = owner_api_client.post(list_url(DaemonViewSet), data=clean_payload)
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.django_db

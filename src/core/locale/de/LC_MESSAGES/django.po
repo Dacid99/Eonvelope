@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-28 12:11+0000\n"
-"PO-Revision-Date: 2025-07-31 21:02+0000\n"
-"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
+"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/core/"
 "de/>\n"
 "Language: de\n"
@@ -209,7 +209,7 @@ msgstr "emailaddresse"
 
 #: core/models/Account.py:64
 msgid "The mail address to the account."
-msgstr "Die Emailaddresse des Accounts."
+msgstr "Die E-Mail-Adresse des Kontos."
 
 #: core/models/Account.py:70
 msgid "password"
@@ -217,7 +217,7 @@ msgstr "passwort"
 
 #: core/models/Account.py:71
 msgid "The password to the account."
-msgstr "Das Passwort für den Account."
+msgstr "Das Passwort fürs Konto."
 
 #: core/models/Account.py:77
 msgid "mailserver URL"
@@ -225,7 +225,7 @@ msgstr "emailserver-URL"
 
 #: core/models/Account.py:78
 msgid "The URL of the mailserver for the chosen protocol."
-msgstr "Die URL des Emailservers für das gewählte Protokoll."
+msgstr "Die URL des E-Mail-Servers für das gewählte Protokoll."
 
 #: core/models/Account.py:86
 msgid "mailserver portnumber"
@@ -233,7 +233,7 @@ msgstr "emailserver portnummer"
 
 #: core/models/Account.py:87
 msgid "The port of the mailserver for the chosen protocol."
-msgstr "Die Portnummer des Emailservers für das gewählte Protokoll."
+msgstr "Die Portnummer des E-Mail-Servers für das gewählte Protokoll."
 
 #: core/models/Account.py:94
 msgid "email protocol"
@@ -241,7 +241,7 @@ msgstr "email protokoll"
 
 #: core/models/Account.py:95
 msgid "The email protocol implemented by the server."
-msgstr "Das Emailprotokoll des Emailservers."
+msgstr "Das E-Mail-Protokoll des E-Mail-Servers."
 
 #: core/models/Account.py:102
 msgid "connection timeout"
@@ -249,7 +249,7 @@ msgstr "verbindungstimeout"
 
 #: core/models/Account.py:103
 msgid "Timeout for the connection to the mailserver."
-msgstr "Timeout für die Verbindung zum Emailserver."
+msgstr "Zeitüberschreitung für die Verbindung zum E-Mail-Server."
 
 #: core/models/Account.py:109 core/models/Daemon.py:97
 #: core/models/Mailbox.py:102
@@ -284,12 +284,12 @@ msgstr "zuletzt aktualisiert"
 msgid ""
 "This will delete this account and all mailboxes, emails and attachments "
 "found in it!"
-msgstr "Dies löscht diesen Account, alle Mailboxen, Emails und Anhänge darin!"
+msgstr "Dies löscht dieses Konto, alle Mailboxen, E-Mails und Anhänge darin!"
 
 #: core/models/Account.py:174
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
-msgstr "Account %(mail_address)s mit Protokoll %(protocol)s"
+msgstr "Konto %(mail_address)s mit Protokoll %(protocol)s"
 
 #: core/models/Attachment.py:63
 msgid "filename"
@@ -325,7 +325,7 @@ msgstr "email"
 
 #: core/models/Attachment.py:140
 msgid "This will only delete this attachment, not the email."
-msgstr "Dies löscht nur diesen Anhang, nicht seine Email."
+msgstr "Dies löscht nur diesen Anhang, nicht seine E-Mail."
 
 #: core/models/Attachment.py:155
 #, python-format
@@ -526,7 +526,7 @@ msgstr "name"
 
 #: core/models/Mailbox.py:74
 msgid "account"
-msgstr "account"
+msgstr "konto"
 
 #: core/models/Mailbox.py:80
 msgid "save attachments"

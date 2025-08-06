@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-28 12:11+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/emailkasten/core/"
+"fr/>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: core/constants.py:38
 msgid "All RECENT emails"
@@ -108,23 +109,23 @@ msgstr ""
 
 #: core/constants.py:143
 msgid "From"
-msgstr ""
+msgstr "De"
 
 #: core/constants.py:144
 msgid "To"
-msgstr ""
+msgstr "À"
 
 #: core/constants.py:145
 msgid "CC"
-msgstr ""
+msgstr "CC"
 
 #: core/constants.py:146
 msgid "BCC"
-msgstr ""
+msgstr "CCi"
 
 #: core/constants.py:147
 msgid "Sender"
-msgstr ""
+msgstr "Expéditeur"
 
 #: core/constants.py:148
 msgid "Reply-To"
@@ -204,65 +205,65 @@ msgstr ""
 
 #: core/models/Account.py:63 core/models/Correspondent.py:46
 msgid "email address"
-msgstr ""
+msgstr "adresse courriel"
 
 #: core/models/Account.py:64
 msgid "The mail address to the account."
-msgstr ""
+msgstr "L'adresse électronique de ce compte."
 
 #: core/models/Account.py:70
 msgid "password"
-msgstr ""
+msgstr "mot de passe"
 
 #: core/models/Account.py:71
 msgid "The password to the account."
-msgstr ""
+msgstr "Le mot de passe du compte."
 
 #: core/models/Account.py:77
 msgid "mailserver URL"
-msgstr ""
+msgstr "URL du serveur de messagerie"
 
 #: core/models/Account.py:78
 msgid "The URL of the mailserver for the chosen protocol."
-msgstr ""
+msgstr "L'URL du serveur de messagerie pour le protocole choisi."
 
 #: core/models/Account.py:86
 msgid "mailserver portnumber"
-msgstr ""
+msgstr "numéro de port du serveur de messagerie"
 
 #: core/models/Account.py:87
 msgid "The port of the mailserver for the chosen protocol."
-msgstr ""
+msgstr "Le port du serveur de messagerie pour le protocole choisi."
 
 #: core/models/Account.py:94
 msgid "email protocol"
-msgstr ""
+msgstr "protocole de courriel"
 
 #: core/models/Account.py:95
 msgid "The email protocol implemented by the server."
-msgstr ""
+msgstr "Le protocole de courriel implémenté par le serveur."
 
 #: core/models/Account.py:102
 msgid "connection timeout"
-msgstr ""
+msgstr "délai d'attente de connexion"
 
 #: core/models/Account.py:103
 msgid "Timeout for the connection to the mailserver."
-msgstr ""
+msgstr "Délai d'attente pour la connexion au serveur de messagerie."
 
 #: core/models/Account.py:109 core/models/Daemon.py:97
 #: core/models/Mailbox.py:102
 msgid "healthy"
-msgstr ""
+msgstr "sain"
 
 #: core/models/Account.py:117 core/models/Attachment.py:114
 #: core/models/Correspondent.py:132 core/models/Email.py:141
 msgid "favorite"
-msgstr ""
+msgstr "favori"
 
 #: core/models/Account.py:125 core/models/Correspondent.py:69
 msgid "user"
-msgstr ""
+msgstr "utilisateur"
 
 #: core/models/Account.py:131 core/models/Attachment.py:128
 #: core/models/Correspondent.py:138 core/models/Daemon.py:128
@@ -270,82 +271,84 @@ msgstr ""
 #: core/models/Mailbox.py:96 core/models/Mailbox.py:110
 #: core/models/StorageShard.py:70
 msgid "created"
-msgstr ""
+msgstr "créé"
 
 #: core/models/Account.py:137 core/models/Attachment.py:134
 #: core/models/Correspondent.py:144 core/models/Daemon.py:134
 #: core/models/Email.py:185 core/models/EmailCorrespondent.py:71
 #: core/models/Mailbox.py:116 core/models/StorageShard.py:76
 msgid "last updated"
-msgstr ""
+msgstr "dernière mise à jour"
 
 #: core/models/Account.py:144
 msgid ""
 "This will delete this account and all mailboxes, emails and attachments "
 "found in it!"
 msgstr ""
+"Ceci supprimera ce compte et toutes les boîtes de réception, courriels et "
+"pièces jointes qu'il contient !"
 
 #: core/models/Account.py:174
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
-msgstr ""
+msgstr "Compte %(mail_address)s avec le protocole %(protocol)s"
 
 #: core/models/Attachment.py:63
 msgid "filename"
-msgstr ""
+msgstr "nom du fichier"
 
 #: core/models/Attachment.py:72
 msgid "filepath"
-msgstr ""
+msgstr "chemin du fichier"
 
 #: core/models/Attachment.py:82
 msgid "content disposition"
-msgstr ""
+msgstr "disposition du contenu"
 
 #: core/models/Attachment.py:89
 msgid "content ID"
-msgstr ""
+msgstr "identifiant du contenu"
 
 #: core/models/Attachment.py:96
 msgid "content maintype"
-msgstr ""
+msgstr "type principal du contenu"
 
 #: core/models/Attachment.py:103
 msgid "content subtype"
-msgstr ""
+msgstr "type secondaire du contenu"
 
 #: core/models/Attachment.py:108 core/models/Email.py:123
 msgid "datasize"
-msgstr ""
+msgstr "taille des données"
 
 #: core/models/Attachment.py:122 core/models/EmailCorrespondent.py:44
 msgid "email"
-msgstr ""
+msgstr "courriel"
 
 #: core/models/Attachment.py:140
 msgid "This will only delete this attachment, not the email."
-msgstr ""
+msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
 
 #: core/models/Attachment.py:155
 #, python-format
 msgid "Attachment %(file_name)s from %(email)s"
-msgstr ""
+msgstr "Pièce jointe %(file_name)s de %(email)s"
 
 #: core/models/Correspondent.py:53
 msgid "mailer name"
-msgstr ""
+msgstr "nom d'expéditeur"
 
 #: core/models/Correspondent.py:54
 msgid "The mailer name of the correspondent."
-msgstr ""
+msgstr "Le nom d'expéditeur du correspondant."
 
 #: core/models/Correspondent.py:62
 msgid "real name"
-msgstr ""
+msgstr "vrai nom"
 
 #: core/models/Correspondent.py:63
 msgid "The real name of the correspondent."
-msgstr ""
+msgstr "Le vrai nom du correspondant."
 
 #: core/models/Correspondent.py:76
 msgid "list ID"
@@ -447,31 +450,31 @@ msgstr ""
 
 #: core/models/Email.py:74
 msgid "message-ID"
-msgstr ""
+msgstr "identifiant du message"
 
 #: core/models/Email.py:79
 msgid "received"
-msgstr ""
+msgstr "reçu"
 
 #: core/models/Email.py:87
 msgid "subject"
-msgstr ""
+msgstr "objet"
 
 #: core/models/Email.py:94
 msgid "plain bodytext"
-msgstr ""
+msgstr "texte brut"
 
 #: core/models/Email.py:101
 msgid "HTML bodytext"
-msgstr ""
+msgstr "texte HTML"
 
 #: core/models/Email.py:109
 msgid "in reply to"
-msgstr ""
+msgstr "en réponse à"
 
 #: core/models/Email.py:118
 msgid "referenced by"
-msgstr ""
+msgstr "référencé par"
 
 #: core/models/Email.py:132
 msgid "EML filepath"
@@ -479,15 +482,15 @@ msgstr ""
 
 #: core/models/Email.py:150
 msgid "correspondents"
-msgstr ""
+msgstr "correspondants"
 
 #: core/models/Email.py:165
 msgid "headers"
-msgstr ""
+msgstr "en-têtes"
 
 #: core/models/Email.py:173
 msgid "X-Spam"
-msgstr ""
+msgstr "X-Spam"
 
 #: core/models/Email.py:192
 msgid ""
@@ -502,11 +505,11 @@ msgstr ""
 
 #: core/models/EmailCorrespondent.py:52
 msgid "correspondent"
-msgstr ""
+msgstr "correspondant"
 
 #: core/models/EmailCorrespondent.py:59
 msgid "mention"
-msgstr ""
+msgstr "mention"
 
 #: core/models/EmailCorrespondent.py:103
 #, python-format
@@ -517,11 +520,11 @@ msgstr ""
 
 #: core/models/Mailbox.py:66
 msgid "name"
-msgstr ""
+msgstr "nom"
 
 #: core/models/Mailbox.py:74
 msgid "account"
-msgstr ""
+msgstr "compte"
 
 #: core/models/Mailbox.py:80
 msgid "save attachments"
@@ -619,3 +622,4 @@ msgstr ""
 #, python-format
 msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
 msgstr ""
+"Une %(error_class_name)s: %(error)s s'est produite pendant %(action_name)s !"

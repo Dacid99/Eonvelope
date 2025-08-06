@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-28 12:11+0000\n"
+"POT-Creation-Date: 2025-08-06 20:23+0000\n"
 "PO-Revision-Date: 2025-08-06 08:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim5@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
@@ -16,274 +16,274 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
-"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
-"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
-"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.13-dev\n"
 
-#: core/constants.py:38
+#: src/core/constants.py:38
 msgid "All RECENT emails"
 msgstr "Усі ОСТАННІ електронні листи"
 
-#: core/constants.py:41
+#: src/core/constants.py:41
 msgid "All UNSEEN emails"
 msgstr "Усі НЕБАЧЕНІ електронні листи"
 
-#: core/constants.py:44
+#: src/core/constants.py:44
 msgid "All SEEN emails"
 msgstr "Усі переглянуті електронні листи"
 
-#: core/constants.py:47
+#: src/core/constants.py:47
 msgid "All emails"
 msgstr "Усі електронні листи"
 
-#: core/constants.py:50
+#: src/core/constants.py:50
 msgid "All RECENT and UNSEEN emails"
 msgstr "Усі ОСТАННІ та НЕПЕРЕГЛЯНУТІ електронні листи"
 
-#: core/constants.py:53
+#: src/core/constants.py:53
 msgid "All emails that are not RECENT"
 msgstr "Усі електронні листи, які не є НЕЩОДАВНІМИ"
 
-#: core/constants.py:56
+#: src/core/constants.py:56
 msgid "FLAGGED emails"
 msgstr "ПОМІЧЕНІ електронні листи"
 
-#: core/constants.py:59
+#: src/core/constants.py:59
 msgid "All email DRAFTs"
 msgstr "Усі чернетки електронної пошти"
 
-#: core/constants.py:62
+#: src/core/constants.py:62
 msgid "All emails that are not DRAFTs"
 msgstr "Усі електронні листи, які не є чернетками"
 
-#: core/constants.py:65
+#: src/core/constants.py:65
 msgid "All ANSWERED emails"
 msgstr "Усі електронні листи з ВІДПОВІДЯМИ"
 
-#: core/constants.py:68
+#: src/core/constants.py:68
 msgid "All UNANSWERED emails"
 msgstr "Усі електронні листи БЕЗ ВІДПОВІДІ"
 
-#: core/constants.py:71
+#: src/core/constants.py:71
 msgid "All DELETED emails"
 msgstr "Усі ВИДАЛЕНІ електронні листи"
 
-#: core/constants.py:74
+#: src/core/constants.py:74
 msgid "All UNDELETED emails"
 msgstr "Усі НЕВИДАЛЕНІ електронні листи"
 
-#: core/constants.py:77
+#: src/core/constants.py:77
 msgid "All emails received the last DAY"
 msgstr "Усі електронні листи отримано останнього ДНЯ"
 
-#: core/constants.py:80
+#: src/core/constants.py:80
 msgid "All emails received the last WEEK"
 msgstr "Усі електронні листи отримано минулого ТИЖНЯ"
 
-#: core/constants.py:83
+#: src/core/constants.py:83
 msgid "All emails receiced the last MONTH"
 msgstr "Усі електронні листи отримані за останній МІСЯЦЬ"
 
-#: core/constants.py:86
+#: src/core/constants.py:86
 msgid "All emails received the last YEAR"
 msgstr "Усі електронні листи, отримані за останній РІК"
 
-#: core/constants.py:93
+#: src/core/constants.py:93
 msgid "IMAP4"
 msgstr "IMAP4"
 
-#: core/constants.py:96
-msgid "IMAP4 over SSL"
-msgstr "IMAP4 через SSL"
+#: src/core/constants.py:96
+msgid "IMAP4 (unencrypted)"
+msgstr ""
 
-#: core/constants.py:99
+#: src/core/constants.py:99
 msgid "POP3"
 msgstr "POP3"
 
-#: core/constants.py:102
-msgid "POP3 over SSL"
-msgstr "POP3 через SSL"
+#: src/core/constants.py:102
+msgid "POP3  (unencrypted)"
+msgstr ""
 
-#: core/constants.py:105
+#: src/core/constants.py:105
 msgid "Microsoft Exchange"
 msgstr "Microsoft Exchange"
 
-#: core/constants.py:143
+#: src/core/constants.py:143
 msgid "From"
 msgstr "Від"
 
-#: core/constants.py:144
+#: src/core/constants.py:144
 msgid "To"
 msgstr "До"
 
-#: core/constants.py:145
+#: src/core/constants.py:145
 msgid "CC"
 msgstr "CC"
 
-#: core/constants.py:146
+#: src/core/constants.py:146
 msgid "BCC"
 msgstr "BCC"
 
-#: core/constants.py:147
+#: src/core/constants.py:147
 msgid "Sender"
 msgstr "Відправник"
 
-#: core/constants.py:148
+#: src/core/constants.py:148
 msgid "Reply-To"
 msgstr "Відповісти"
 
-#: core/constants.py:149
+#: src/core/constants.py:149
 msgid "Resent-From"
 msgstr "Повторно відправлено"
 
-#: core/constants.py:150
+#: src/core/constants.py:150
 msgid "Resent-To"
 msgstr "Надіслано повторно"
 
-#: core/constants.py:151
+#: src/core/constants.py:151
 msgid "Resent-Cc"
 msgstr "Повторно надіслати копію"
 
-#: core/constants.py:152
+#: src/core/constants.py:152
 msgid "Resent-Bcc"
 msgstr "Повторно надіслати приховану копію"
 
-#: core/constants.py:153
+#: src/core/constants.py:153
 msgid "Resent-Sender"
 msgstr "Повторно відправнику"
 
-#: core/constants.py:154
+#: src/core/constants.py:154
 msgid "Resent-Reply-To"
 msgstr "Надіслати відповідь"
 
-#: core/constants.py:157
+#: src/core/constants.py:157
 msgid "Envelope-To"
 msgstr "Конверт для"
 
-#: core/constants.py:159
+#: src/core/constants.py:159
 msgid "Delivered-To"
 msgstr "Доставлено до"
 
-#: core/constants.py:160
+#: src/core/constants.py:160
 msgid "Return-Path"
 msgstr "Зворотній шлях"
 
-#: core/constants.py:161
+#: src/core/constants.py:161
 msgid "Return-Receipt-To"
 msgstr "Повернення-Квитанція-Адрес"
 
-#: core/constants.py:164
+#: src/core/constants.py:164
 msgid "Disposition-Notification-To"
 msgstr "Повідомлення про розпорядження"
 
-#: core/constants.py:174 core/constants.py:186
+#: src/core/constants.py:174 src/core/constants.py:186
 msgid ".zip with .eml files inside"
 msgstr ".zip з файлами .eml всередині"
 
-#: core/constants.py:175 core/constants.py:187
+#: src/core/constants.py:175 src/core/constants.py:187
 msgid ".mbox"
 msgstr ".mbox"
 
-#: core/constants.py:176 core/constants.py:188
+#: src/core/constants.py:176 src/core/constants.py:188
 msgid ".babyl"
 msgstr ".babyl"
 
-#: core/constants.py:177 core/constants.py:189
+#: src/core/constants.py:177 src/core/constants.py:189
 msgid ".mmdf"
 msgstr ".mmdf"
 
-#: core/constants.py:178 core/constants.py:190
+#: src/core/constants.py:178 src/core/constants.py:190
 msgid ".zip with mh mailbox inside"
 msgstr ".zip з поштовою скринькою mh всередині"
 
-#: core/constants.py:179 core/constants.py:191
+#: src/core/constants.py:179 src/core/constants.py:191
 msgid ".zip with maildir mailbox inside"
 msgstr ".zip з поштовою скринькою maildir всередині"
 
-#: core/constants.py:185
+#: src/core/constants.py:185
 msgid ".eml"
 msgstr ".eml"
 
-#: core/models/Account.py:63 core/models/Correspondent.py:46
+#: src/core/models/Account.py:63 src/core/models/Correspondent.py:46
 msgid "email address"
 msgstr "адреса електронної пошти"
 
-#: core/models/Account.py:64
+#: src/core/models/Account.py:64
 msgid "The mail address to the account."
 msgstr "Поштова адреса для облікового запису."
 
-#: core/models/Account.py:70
+#: src/core/models/Account.py:70
 msgid "password"
 msgstr "пароль"
 
-#: core/models/Account.py:71
+#: src/core/models/Account.py:71
 msgid "The password to the account."
 msgstr "Пароль до облікового запису."
 
-#: core/models/Account.py:77
+#: src/core/models/Account.py:77
 msgid "mailserver URL"
 msgstr "URL-адреса поштового сервера"
 
-#: core/models/Account.py:78
+#: src/core/models/Account.py:78
 msgid "The URL of the mailserver for the chosen protocol."
 msgstr "URL-адреса поштового сервера для вибраного протоколу."
 
-#: core/models/Account.py:86
+#: src/core/models/Account.py:86
 msgid "mailserver portnumber"
 msgstr "номер порту поштового сервера"
 
-#: core/models/Account.py:87
+#: src/core/models/Account.py:87
 msgid "The port of the mailserver for the chosen protocol."
 msgstr "Порт поштового сервера для вибраного протоколу."
 
-#: core/models/Account.py:94
+#: src/core/models/Account.py:94
 msgid "email protocol"
 msgstr "протокол електронної пошти"
 
-#: core/models/Account.py:95
+#: src/core/models/Account.py:95
 msgid "The email protocol implemented by the server."
 msgstr "Протокол електронної пошти, реалізований сервером."
 
-#: core/models/Account.py:102
+#: src/core/models/Account.py:102
 msgid "connection timeout"
 msgstr "час очікування з'єднання"
 
-#: core/models/Account.py:103
+#: src/core/models/Account.py:103
 msgid "Timeout for the connection to the mailserver."
 msgstr "Тайм-аут для підключення до поштового сервера."
 
-#: core/models/Account.py:109 core/models/Daemon.py:97
-#: core/models/Mailbox.py:102
+#: src/core/models/Account.py:109 src/core/models/Daemon.py:96
+#: src/core/models/Mailbox.py:102
 msgid "healthy"
 msgstr "здоровий"
 
-#: core/models/Account.py:117 core/models/Attachment.py:114
-#: core/models/Correspondent.py:132 core/models/Email.py:141
+#: src/core/models/Account.py:117 src/core/models/Attachment.py:114
+#: src/core/models/Correspondent.py:132 src/core/models/Email.py:141
 msgid "favorite"
 msgstr "улюблений"
 
-#: core/models/Account.py:125 core/models/Correspondent.py:69
+#: src/core/models/Account.py:125 src/core/models/Correspondent.py:69
 msgid "user"
 msgstr "користувач"
 
-#: core/models/Account.py:131 core/models/Attachment.py:128
-#: core/models/Correspondent.py:138 core/models/Daemon.py:128
-#: core/models/Email.py:179 core/models/EmailCorrespondent.py:65
-#: core/models/Mailbox.py:96 core/models/Mailbox.py:110
-#: core/models/StorageShard.py:70
+#: src/core/models/Account.py:131 src/core/models/Attachment.py:128
+#: src/core/models/Correspondent.py:138 src/core/models/Daemon.py:126
+#: src/core/models/Email.py:179 src/core/models/EmailCorrespondent.py:65
+#: src/core/models/Mailbox.py:96 src/core/models/Mailbox.py:110
+#: src/core/models/StorageShard.py:70
 msgid "created"
 msgstr "створений"
 
-#: core/models/Account.py:137 core/models/Attachment.py:134
-#: core/models/Correspondent.py:144 core/models/Daemon.py:134
-#: core/models/Email.py:185 core/models/EmailCorrespondent.py:71
-#: core/models/Mailbox.py:116 core/models/StorageShard.py:76
+#: src/core/models/Account.py:137 src/core/models/Attachment.py:134
+#: src/core/models/Correspondent.py:144 src/core/models/Daemon.py:132
+#: src/core/models/Email.py:185 src/core/models/EmailCorrespondent.py:71
+#: src/core/models/Mailbox.py:116 src/core/models/StorageShard.py:76
 msgid "last updated"
 msgstr "останнє оновлення"
 
-#: core/models/Account.py:144
+#: src/core/models/Account.py:144
 msgid ""
 "This will delete this account and all mailboxes, emails and attachments "
 "found in it!"
@@ -291,211 +291,223 @@ msgstr ""
 "Це видалить цей обліковий запис та всі поштові скриньки, електронні листи та "
 "вкладення, знайдені в ньому!"
 
-#: core/models/Account.py:174
+#: src/core/models/Account.py:174
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr "Обліковий запис %(mail_address)s з протоколом %(protocol)s"
 
-#: core/models/Attachment.py:63
+#: src/core/models/Account.py:191
+msgid "This account already exists."
+msgstr ""
+
+#: src/core/models/Attachment.py:63
 msgid "filename"
 msgstr "ім'я файлу"
 
-#: core/models/Attachment.py:72
+#: src/core/models/Attachment.py:72
 msgid "filepath"
 msgstr "шлях до файлу"
 
-#: core/models/Attachment.py:82
+#: src/core/models/Attachment.py:82
 msgid "content disposition"
 msgstr "розташування контенту"
 
-#: core/models/Attachment.py:89
+#: src/core/models/Attachment.py:89
 msgid "content ID"
 msgstr "ідентифікатор вмісту"
 
-#: core/models/Attachment.py:96
+#: src/core/models/Attachment.py:96
 msgid "content maintype"
 msgstr "основний тип контенту"
 
-#: core/models/Attachment.py:103
+#: src/core/models/Attachment.py:103
 msgid "content subtype"
 msgstr "підтип контенту"
 
-#: core/models/Attachment.py:108 core/models/Email.py:123
+#: src/core/models/Attachment.py:108 src/core/models/Email.py:123
 msgid "datasize"
 msgstr "розмір даних"
 
-#: core/models/Attachment.py:122 core/models/EmailCorrespondent.py:44
+#: src/core/models/Attachment.py:122 src/core/models/EmailCorrespondent.py:44
 msgid "email"
 msgstr "електронна пошта"
 
-#: core/models/Attachment.py:140
+#: src/core/models/Attachment.py:140
 msgid "This will only delete this attachment, not the email."
 msgstr "Це видалить лише це вкладення, а не електронний лист."
 
-#: core/models/Attachment.py:155
+#: src/core/models/Attachment.py:155
 #, python-format
 msgid "Attachment %(file_name)s from %(email)s"
 msgstr "Вкладення %(file_name)s від %(email)s"
 
-#: core/models/Correspondent.py:53
+#: src/core/models/Correspondent.py:53
 msgid "mailer name"
 msgstr "ім'я поштового адміністратора"
 
-#: core/models/Correspondent.py:54
+#: src/core/models/Correspondent.py:54
 msgid "The mailer name of the correspondent."
 msgstr "Ім'я кореспондента, що розсилає листи."
 
-#: core/models/Correspondent.py:62
+#: src/core/models/Correspondent.py:62
 msgid "real name"
 msgstr "справжнє ім'я"
 
-#: core/models/Correspondent.py:63
+#: src/core/models/Correspondent.py:63
 msgid "The real name of the correspondent."
 msgstr "Справжнє ім'я кореспондента."
 
-#: core/models/Correspondent.py:76
+#: src/core/models/Correspondent.py:76
 msgid "list ID"
 msgstr "ідентифікатор списку"
 
-#: core/models/Correspondent.py:83
+#: src/core/models/Correspondent.py:83
 msgid "list owner"
 msgstr "власник списку"
 
-#: core/models/Correspondent.py:90
+#: src/core/models/Correspondent.py:90
 msgid "list subscribe"
 msgstr "підписатися на список"
 
-#: core/models/Correspondent.py:97
+#: src/core/models/Correspondent.py:97
 msgid "list unsubscribe"
 msgstr "список відписок"
 
-#: core/models/Correspondent.py:105
+#: src/core/models/Correspondent.py:105
 msgid "list unsubscribe post"
 msgstr "список публікацій зі скасування підписки"
 
-#: core/models/Correspondent.py:112
+#: src/core/models/Correspondent.py:112
 msgid "list post"
 msgstr "список публікацій"
 
-#: core/models/Correspondent.py:119
+#: src/core/models/Correspondent.py:119
 msgid "list help"
 msgstr "довідка зі списку"
 
-#: core/models/Correspondent.py:126
+#: src/core/models/Correspondent.py:126
 msgid "list archive"
 msgstr "архів списків"
 
-#: core/models/Correspondent.py:150
+#: src/core/models/Correspondent.py:150
 msgid "This will only delete this correspondent, not its emails."
 msgstr "Це видалить лише цього кореспондента, а не його електронні листи."
 
-#: core/models/Correspondent.py:173
+#: src/core/models/Correspondent.py:173
 #, python-format
 msgid "Correspondent with address %(email_address)s"
 msgstr "Кореспондент з адресою %(email_address)s"
 
-#: core/models/Daemon.py:59
+#: src/core/models/Daemon.py:58
 msgid "UUID"
 msgstr "UUID"
 
-#: core/models/Daemon.py:67 core/models/Email.py:159
+#: src/core/models/Daemon.py:66 src/core/models/Email.py:159
 msgid "mailbox"
 msgstr "поштова скринька"
 
-#: core/models/Daemon.py:75
+#: src/core/models/Daemon.py:74
 msgid "fetching criterion"
 msgstr "критерій отримання"
 
-#: core/models/Daemon.py:76
+#: src/core/models/Daemon.py:75
 msgid "The selection criterion for emails to archive."
 msgstr "Критерій вибору електронних листів для архівування."
 
-#: core/models/Daemon.py:84
+#: src/core/models/Daemon.py:83
 msgid "celery task"
 msgstr "завдання з селери"
 
-#: core/models/Daemon.py:90
+#: src/core/models/Daemon.py:89
 msgid "interval"
 msgstr "інтервал"
 
-#: core/models/Daemon.py:91
+#: src/core/models/Daemon.py:90
 msgid "The time between two daemon runs in seconds."
 msgstr "Час між двома демонами вимірюється в секундах."
 
-#: core/models/Daemon.py:108
+#: src/core/models/Daemon.py:106
 msgid "logfilepath"
 msgstr "шлях до файлу журналу"
 
-#: core/models/Daemon.py:114
+#: src/core/models/Daemon.py:112
 msgid "logfile backup count"
 msgstr "кількість резервних копій файлів журналу"
 
-#: core/models/Daemon.py:115
+#: src/core/models/Daemon.py:113
 msgid "The number of historical logfiles to keep."
 msgstr "Кількість файлів журналів, які потрібно зберігати."
 
-#: core/models/Daemon.py:121
+#: src/core/models/Daemon.py:119
 msgid "logfile maximum size"
 msgstr "максимальний розмір файлу журналу"
 
-#: core/models/Daemon.py:122
+#: src/core/models/Daemon.py:120
 msgid "The maximum size of a logfile in bytes."
 msgstr "Максимальний розмір файлу журналу в байтах."
 
-#: core/models/Daemon.py:140
+#: src/core/models/Daemon.py:138
 msgid "This will only delete this daemon, not its mailbox."
 msgstr "Це видалить лише цей демон, а не його поштову скриньку."
 
-#: core/models/Daemon.py:171
+#: src/core/models/Daemon.py:169
 #, python-format
 msgid "Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s"
 msgstr "Демон Emailfetcher %(uuid)s для поштової скриньки %(mailbox)s"
 
-#: core/models/Email.py:74
+#: src/core/models/Daemon.py:208
+msgid "This fetching criterion is not available for this mailbox!"
+msgstr ""
+
+#: src/core/models/Daemon.py:214
+msgid "No valid mailbox selected!"
+msgstr ""
+
+#: src/core/models/Email.py:74
 msgid "message-ID"
 msgstr "ідентифікатор повідомлення"
 
-#: core/models/Email.py:79
+#: src/core/models/Email.py:79
 msgid "received"
 msgstr "отримано"
 
-#: core/models/Email.py:87
+#: src/core/models/Email.py:87
 msgid "subject"
 msgstr "предмет"
 
-#: core/models/Email.py:94
+#: src/core/models/Email.py:94
 msgid "plain bodytext"
 msgstr "звичайний текст основного тексту"
 
-#: core/models/Email.py:101
+#: src/core/models/Email.py:101
 msgid "HTML bodytext"
 msgstr "Основний текст HTML"
 
-#: core/models/Email.py:109
+#: src/core/models/Email.py:109
 msgid "in reply to"
 msgstr "у відповідь на"
 
-#: core/models/Email.py:118
+#: src/core/models/Email.py:118
 msgid "referenced by"
 msgstr "на який посилається"
 
-#: core/models/Email.py:132
+#: src/core/models/Email.py:132
 msgid "EML filepath"
 msgstr "Шлях до файлу EML"
 
-#: core/models/Email.py:150
+#: src/core/models/Email.py:150
 msgid "correspondents"
 msgstr "кореспонденти"
 
-#: core/models/Email.py:165
+#: src/core/models/Email.py:165
 msgid "headers"
 msgstr "заголовки"
 
-#: core/models/Email.py:173
+#: src/core/models/Email.py:173
 msgid "X-Spam"
 msgstr "X-Спам"
 
-#: core/models/Email.py:192
+#: src/core/models/Email.py:192
 msgid ""
 "This will delete this email and all its attachments but not its "
 "correspondents."
@@ -503,22 +515,22 @@ msgstr ""
 "Це видалить цей електронний лист та всі його вкладення, але не його "
 "кореспондентів."
 
-#: core/models/Email.py:217
+#: src/core/models/Email.py:217
 #, python-format
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
 "Електронний лист з ідентифікатором %(message_id)s, отриманий %(datetime)s "
 "від %(mailbox)s"
 
-#: core/models/EmailCorrespondent.py:52
+#: src/core/models/EmailCorrespondent.py:52
 msgid "correspondent"
 msgstr "кореспондент"
 
-#: core/models/EmailCorrespondent.py:59
+#: src/core/models/EmailCorrespondent.py:59
 msgid "mention"
 msgstr "згадка"
 
-#: core/models/EmailCorrespondent.py:103
+#: src/core/models/EmailCorrespondent.py:103
 #, python-format
 msgid ""
 "Email-Correspondent connection from email %(email)s to correspondent "
@@ -527,70 +539,70 @@ msgstr ""
 "Зв'язок електронної пошти-кореспондента з електронної пошти %(email)s до "
 "кореспондента %(correspondent)s зі згадкою %(mention)s"
 
-#: core/models/Mailbox.py:66
+#: src/core/models/Mailbox.py:66
 msgid "name"
 msgstr "ім'я"
 
-#: core/models/Mailbox.py:74
+#: src/core/models/Mailbox.py:74
 msgid "account"
 msgstr "обліковий запис"
 
-#: core/models/Mailbox.py:80
+#: src/core/models/Mailbox.py:80
 msgid "save attachments"
 msgstr "зберігати вкладення"
 
-#: core/models/Mailbox.py:82
+#: src/core/models/Mailbox.py:82
 msgid "Whether the attachments from the emails in this mailbox will be saved."
 msgstr ""
 "Чи будуть збережені вкладення з електронних листів у цій поштовій скриньці."
 
-#: core/models/Mailbox.py:89
+#: src/core/models/Mailbox.py:89
 msgid "save as .eml"
 msgstr "зберегти як .eml"
 
-#: core/models/Mailbox.py:90
+#: src/core/models/Mailbox.py:90
 msgid "Whether the emails in this mailbox will be stored in .eml files."
 msgstr ""
 "Чи зберігатимуться електронні листи в цій поштовій скриньці у файлах .eml."
 
-#: core/models/Mailbox.py:123
+#: src/core/models/Mailbox.py:123
 msgid ""
 "This will delete this mailbox and all emails and attachments found in it!"
 msgstr ""
 "Це видалить цю поштову скриньку та всі електронні листи й вкладення, "
 "знайдені в ній!"
 
-#: core/models/Mailbox.py:146
+#: src/core/models/Mailbox.py:146
 #, python-format
 msgid "Mailbox %(name)s of %(account)s"
 msgstr "Поштова скринька %(name)s з %(account)s"
 
-#: core/models/StorageShard.py:50
+#: src/core/models/StorageShard.py:50
 msgid "shard directory name"
 msgstr "назва каталогу шарду"
 
-#: core/models/StorageShard.py:56
+#: src/core/models/StorageShard.py:56
 msgid "file count"
 msgstr "кількість файлів"
 
-#: core/models/StorageShard.py:63
+#: src/core/models/StorageShard.py:63
 msgid "current"
 msgstr "поточний"
 
-#: core/models/StorageShard.py:93
+#: src/core/models/StorageShard.py:93
 msgid "Current"
 msgstr "Поточний"
 
-#: core/models/StorageShard.py:93
+#: src/core/models/StorageShard.py:93
 msgid "Archived"
 msgstr "Архівовано"
 
-#: core/models/StorageShard.py:94
+#: src/core/models/StorageShard.py:94
 #, python-format
 msgid "%(state)s storage directory %(name)s"
 msgstr "%(state)s каталог сховища %(name)s"
 
-#: core/utils/fetchers/ExchangeFetcher.py:183
+#: src/core/utils/fetchers/ExchangeFetcher.py:184
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of message_root!"
@@ -598,7 +610,7 @@ msgstr ""
 "Під час оновлення message_root сталася помилка %(error_class_name)s: "
 "%(error)s!"
 
-#: core/utils/fetchers/ExchangeFetcher.py:204
+#: src/core/utils/fetchers/ExchangeFetcher.py:205
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of "
@@ -607,7 +619,7 @@ msgstr ""
 "Помилка %(error_class_name)s: під час оновлення %(mailbox_name)s сталася "
 "помилка %(error)s!"
 
-#: core/utils/fetchers/ExchangeFetcher.py:255
+#: src/core/utils/fetchers/ExchangeFetcher.py:256
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during opening of message_root!"
@@ -615,16 +627,18 @@ msgstr ""
 "Під час відкриття message_root сталася помилка %(error_class_name)s: "
 "%(error)s!"
 
-#: core/utils/fetchers/ExchangeFetcher.py:273
-#, python-format
+#: src/core/utils/fetchers/ExchangeFetcher.py:274
+#, fuzzy, python-format
+#| msgid ""
+#| "An %(error_class_name)s: %(error)s occurred during refresh of fetching of "
+#| "mail contents!"
 msgid ""
-"An %(error_class_name)s: %(error)s occurred during refresh of fetching of "
-"mail contents!"
+"An %(error_class_name)s: %(error)s occurred during fetching of mail contents!"
 msgstr ""
 "Помилка %(error_class_name)s: під час оновлення отримання вмісту пошти "
 "сталася помилка %(error)s!"
 
-#: core/utils/fetchers/ExchangeFetcher.py:327
+#: src/core/utils/fetchers/ExchangeFetcher.py:328
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during scan of message_root!"
@@ -632,8 +646,8 @@ msgstr ""
 "Під час сканування кореневого_повідомлення_message_root сталася помилка "
 "%(error_class_name)s: %(error)s!"
 
-#: core/utils/fetchers/SafeIMAPMixin.py:94
-#: core/utils/fetchers/SafePOPMixin.py:82
+#: src/core/utils/fetchers/SafeIMAPMixin.py:94
+#: src/core/utils/fetchers/SafePOPMixin.py:82
 #, python-format
 msgid ""
 "Bad server response for %(command_name)s:\n"
@@ -642,8 +656,8 @@ msgstr ""
 "Неправильна відповідь сервера для %(command_name)s:\n"
 "%(response)s"
 
-#: core/utils/fetchers/SafeIMAPMixin.py:161
-#: core/utils/fetchers/SafePOPMixin.py:150
+#: src/core/utils/fetchers/SafeIMAPMixin.py:161
+#: src/core/utils/fetchers/SafePOPMixin.py:150
 #, python-format
 msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
 msgstr ""

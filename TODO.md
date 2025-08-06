@@ -52,7 +52,6 @@
 - batch download and delete in web
 - dependency-upgrading tool for your project dependencies? (eg. dependabot, PyUp, Renovate, pip-tools, Snyx)
 - daemonize celery worker
-- coverage in test job
 
 ### Work in progress
 

@@ -69,6 +69,27 @@ def test_get_auth_owner(owner_client, fake_mailbox, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_owner_criterion_choices(owner_client, fake_mailbox, detail_url):
+    """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated owner user client."""
+    fake_mailbox.account.protocol = EmailProtocolChoices.POP3
+    fake_mailbox.account.save(update_fields=["protocol"])
+
+    response = owner_client.get(detail_url(MailboxCreateDaemonView, fake_mailbox))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/mailbox/mailbox_daemon_create.html" in [
+        t.name for t in response.templates
+    ]
+    assert "form" in response.context
+    assert isinstance(response.context["form"], CreateDaemonForm)
+    assert len(response.context["form"].fields["fetching_criterion"].choices) == 1
+    assert response.context["form"].initial["mailbox"] == fake_mailbox.id
+    assert "object" in response.context
+    assert response.context["object"] == fake_mailbox
+
+
+@pytest.mark.django_db
 def test_post_noauth(
     daemon_with_interval_payload, client, fake_mailbox, detail_url, login_url
 ):

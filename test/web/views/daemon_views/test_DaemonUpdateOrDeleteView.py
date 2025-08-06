@@ -23,6 +23,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import status
 
+from core.constants import EmailProtocolChoices
 from core.models import Daemon
 from web.views import DaemonUpdateOrDeleteView
 
@@ -62,6 +63,24 @@ def test_get_auth_owner(fake_daemon, owner_client, detail_url):
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
     assert "form" in response.context
+    assert str(fake_daemon.uuid) in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_get_auth_owner_criterion_choices(fake_daemon, owner_client, detail_url):
+    """Tests :class:`web.views.DaemonUpdateOrDeleteView` with the authenticated owner user client."""
+    fake_daemon.mailbox.account.protocol = EmailProtocolChoices.POP3
+    fake_daemon.mailbox.account.save(update_fields=["protocol"])
+
+    response = owner_client.get(detail_url(DaemonUpdateOrDeleteView, fake_daemon))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/daemon/daemon_edit.html" in [t.name for t in response.templates]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Daemon)
+    assert "form" in response.context
+    assert len(response.context["form"].fields["fetching_criterion"].choices) == 1
     assert str(fake_daemon.uuid) in response.content.decode()
 
 

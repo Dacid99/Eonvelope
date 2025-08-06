@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-07-28 12:11+0000\n"
-"PO-Revision-Date: 2025-07-31 21:02+0000\n"
-"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
+"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/web/"
 "de/>\n"
 "Language: de\n"
@@ -71,11 +71,11 @@ msgstr "Dateiformat"
 
 #: web/forms/UploadEmailForm.py:36
 msgid "Select the format of the email file you want to upload."
-msgstr "Wähle das Format der Emaildatei die du hochladen möchtest."
+msgstr "Wähle das Format der E-Mail-Datei, die du hochladen möchtest."
 
 #: web/forms/UploadEmailForm.py:41
 msgid "Email or Mailbox file"
-msgstr "Email oder Mailbox Datei"
+msgstr "E-Mail- oder Mailbox-Datei"
 
 #: web/forms/UploadEmailForm.py:42
 msgid "Pick a file for upload."
@@ -96,7 +96,7 @@ msgstr "Test war erfolgreich"
 
 #: web/templates/400.html:6 web/templates/400.html:10
 msgid "Request Error"
-msgstr "Anfrage Fehler"
+msgstr "Anfrage-Fehler"
 
 #: web/templates/400.html:11
 msgid "There was something wrong with your request."
@@ -117,7 +117,7 @@ msgstr "Du hast nicht die Erlaubnis diese Seite anzufragen."
 
 #: web/templates/403.html:12
 msgid "First aid: Check if you are logged in."
-msgstr "Erste Hilfe: Überprüfe ob du eingeloggt bist."
+msgstr "Erste Hilfe: Überprüfe, ob du angemeldet bist."
 
 #: web/templates/403_csrf.html:11
 msgid "CSRF Verification failed!"
@@ -125,7 +125,7 @@ msgstr "CSRF Verifikation fehlgeschlagen!"
 
 #: web/templates/403_csrf.html:12
 msgid "First aid: Check your cookie settings."
-msgstr "Erste Hilfe: Überprüfe deine Cookie Einstellungen."
+msgstr "Erste Hilfe: Überprüfe deine Cookie-Einstellungen."
 
 #: web/templates/404.html:6 web/templates/404.html:10
 msgid "Page Not Found"
@@ -158,7 +158,7 @@ msgstr ""
 
 #: web/templates/web/account/account_create.html:6
 msgid "Add Account"
-msgstr "Account hinzufügen"
+msgstr "Konto hinzufügen"
 
 #: web/templates/web/account/account_create.html:33
 #: web/templates/web/daemon/daemon_create.html:33
@@ -168,7 +168,7 @@ msgstr "Abbrechen"
 
 #: web/templates/web/account/account_detail.html:6
 msgid "Account Details"
-msgstr "Account Details"
+msgstr "Details zum Konto"
 
 #: web/templates/web/account/account_detail.html:41
 msgid "Host"
@@ -203,7 +203,7 @@ msgstr "Mailboxen"
 #: web/templates/web/dashboard.html:16
 #: web/templates/web/mailbox/mailbox_detail.html:73
 msgid "Latest Emails"
-msgstr "Neueste Emails"
+msgstr "Neueste E-Mails"
 
 #: web/templates/web/account/account_detail.html:75
 #: web/templates/web/correspondent/correspondent_detail.html:64
@@ -214,7 +214,7 @@ msgstr "Alle ansehen"
 
 #: web/templates/web/account/account_edit.html:6
 msgid "Edit Account"
-msgstr "Account bearbeiten"
+msgstr "Konto bearbeiten"
 
 #: web/templates/web/account/account_email_filter_list.html:6
 #: web/templates/web/mailbox/mailbox_email_filter_list.html:6
@@ -229,31 +229,31 @@ msgstr "Konten"
 
 #: web/templates/web/account/partials/_add_button.html:6
 msgid "Add account"
-msgstr "Account hinzufügen"
+msgstr "Konto hinzufügen"
 
 #: web/templates/web/account/partials/_update_mailboxes-button.html:9
 msgid "Update Mailboxes"
-msgstr "Aktualisiere Mailboxen"
+msgstr "Mailboxen aktualisieren"
 
 #: web/templates/web/attachment/attachment_detail.html:6
 msgid "Attachment Details"
-msgstr "Anhang Details"
+msgstr "Anhang-Details"
 
 #: web/templates/web/attachment/attachment_detail.html:35
 msgid "Email"
-msgstr "Email"
+msgstr "E-Mail"
 
 #: web/templates/web/attachment/attachment_detail.html:39
 msgid "Content Type"
-msgstr "Content-Typ"
+msgstr "Inhaltstyp"
 
 #: web/templates/web/attachment/attachment_detail.html:43
 msgid "Content Disposition"
-msgstr "Content-Bestimmung"
+msgstr "Inhaltsbestimmung"
 
 #: web/templates/web/attachment/attachment_detail.html:47
 msgid "Content Id"
-msgstr "Content-Id"
+msgstr "Inhalt-ID"
 
 #: web/templates/web/attachment/attachment_detail.html:50
 msgid "Size"
@@ -285,7 +285,7 @@ msgstr "MIME-Typ"
 
 #: web/templates/web/attachment/partials/_attachment_card.html:24
 msgid "In email"
-msgstr "In Email"
+msgstr "In E-Mail"
 
 #: web/templates/web/attachment/partials/_thumbnail.html:17
 msgid "Attachment image"
@@ -297,7 +297,7 @@ msgstr "Textanhang"
 
 #: web/templates/web/attachment/partials/_thumbnail.html:25
 msgid "Attachment file content"
-msgstr "Anhang Dateiinhalt"
+msgstr "Anhangdatei-Inhalt"
 
 #: web/templates/web/bases/base.html:14
 #: web/templates/web/partials/_navbar.html:6
@@ -328,12 +328,12 @@ msgstr "Aktionen-Knopfgruppe"
 
 #: web/templates/web/bases/base_filter_list.html:10
 msgid "Show filter options"
-msgstr "Zeige Filter"
+msgstr "Filter zeigen"
 
 #: web/templates/web/bases/base_filter_list.html:33
 #: web/templates/web/email/archive/base_archive.html:65
 msgid "Filter options"
-msgstr "Filter Optionen"
+msgstr "Filter-Optionen"
 
 #: web/templates/web/bases/base_filter_list.html:43
 #: web/templates/web/email/archive/base_archive.html:75
@@ -344,11 +344,11 @@ msgstr "Schließen"
 
 #: web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
-msgstr "Korrespondent Details"
+msgstr "Korrespondent-Details"
 
 #: web/templates/web/correspondent/correspondent_detail.html:30
 msgid "Mailer name"
-msgstr "Mailer Name"
+msgstr "Mailer-Name"
 
 #: web/templates/web/correspondent/correspondent_detail.html:33
 msgid "Subscribe"
@@ -398,7 +398,7 @@ msgstr "Daemon hinzufügen"
 
 #: web/templates/web/daemon/daemon_detail.html:6
 msgid "Daemon Details"
-msgstr "Daemon Details"
+msgstr "Details zum Daemon"
 
 #: web/templates/web/daemon/daemon_detail.html:36
 #: web/templates/web/daemon/daemon_edit.html:18
@@ -416,7 +416,7 @@ msgstr "Mailbox"
 #: web/templates/web/mailbox/mailbox_detail.html:43
 #: web/templates/web/mailbox/partials/_mailbox_card.html:24
 msgid "Account"
-msgstr "Account"
+msgstr "Konto"
 
 #: web/templates/web/daemon/daemon_detail.html:46
 #: web/templates/web/daemon/partials/_daemon_card.html:28
@@ -438,11 +438,11 @@ msgstr "Gesamtzahl Ausführungen"
 
 #: web/templates/web/daemon/daemon_detail.html:55
 msgid "Logfile Backups"
-msgstr "Logdatei Backups"
+msgstr "Datensicherungen der Protokolldateien"
 
 #: web/templates/web/daemon/daemon_detail.html:57
 msgid "Logfile max size"
-msgstr "Logdatei Maximalgröße"
+msgstr "Maximalgröße der Protokolldateien"
 
 #: web/templates/web/daemon/daemon_edit.html:6
 msgid "Edit Daemon"
@@ -475,11 +475,11 @@ msgstr "Pausiert"
 
 #: web/templates/web/daemon/partials/_start-button.html:8
 msgid "Start"
-msgstr "Start"
+msgstr "Starten"
 
 #: web/templates/web/daemon/partials/_stop-button.html:9
 msgid "Stop"
-msgstr "Stop"
+msgstr "Stoppen"
 
 #: web/templates/web/dashboard.html:6
 msgid "Dashboard"
@@ -506,11 +506,11 @@ msgstr "Anzahl"
 #: web/templates/web/email/email_filter_list.html:14
 #: web/templates/web/partials/_navbar.html:20
 msgid "Emails"
-msgstr "Emails"
+msgstr "E-Mails"
 
 #: web/templates/web/email/archive/base_archive.html:18
 msgid "Email Archive"
-msgstr "Email-Archiv"
+msgstr "E-Mail-Archiv"
 
 #: web/templates/web/email/archive/day.html:6
 #: web/templates/web/email/archive/day.html:10
@@ -542,7 +542,7 @@ msgstr "Woche"
 
 #: web/templates/web/email/archive/week.html:15
 msgid "Week #"
-msgstr "Woche #"
+msgstr "Woche Nr."
 
 #: web/templates/web/email/archive/year.html:6
 #: web/templates/web/email/archive/year.html:10
@@ -551,7 +551,7 @@ msgstr "Jahr"
 
 #: web/templates/web/email/email_detail.html:6
 msgid "Email Details"
-msgstr "Email Details"
+msgstr "Details zur E-Mail"
 
 #: web/templates/web/email/email_detail.html:39
 msgid "Time received"
@@ -559,7 +559,7 @@ msgstr "Erhalten um"
 
 #: web/templates/web/email/email_detail.html:41
 msgid "Message Id"
-msgstr "Nachrichten-Id"
+msgstr "Nachrichten-ID"
 
 #: web/templates/web/email/email_detail.html:42
 msgid "X-Spam"
@@ -575,12 +575,12 @@ msgstr "Klartext"
 
 #: web/templates/web/email/email_detail.html:80
 msgid "Html bodytext"
-msgstr "Html Inhalt"
+msgstr "HTML-Inhalt"
 
 #: web/templates/web/email/email_detail.html:99
 #: web/templates/web/email/partials/_email_card.html:36
 msgid "Email content"
-msgstr "Email Inhalt"
+msgstr "E-Mail-Inhalt"
 
 #: web/templates/web/email/email_detail.html:135
 msgid "Headers"
@@ -612,7 +612,7 @@ msgstr "Erhalten"
 
 #: web/templates/web/mailbox/mailbox_detail.html:6
 msgid "Mailbox Details"
-msgstr "Mailbox Details"
+msgstr "Mailbox-Details"
 
 #: web/templates/web/mailbox/mailbox_detail.html:50
 msgid "Save attachments"
@@ -620,7 +620,7 @@ msgstr "Anhänge speichern"
 
 #: web/templates/web/mailbox/mailbox_detail.html:51
 msgid "Save mails as .eml"
-msgstr "Emails als .eml speichern"
+msgstr "E-Mails als .eml speichern"
 
 #: web/templates/web/mailbox/mailbox_edit.html:6
 msgid "Edit Mailbox"
@@ -640,11 +640,11 @@ msgstr "Hochladen"
 
 #: web/templates/web/mailbox/partials/_upload_email-button.html:6
 msgid "Upload emails"
-msgstr "Emails hochladen"
+msgstr "E-Mails hochladen"
 
 #: web/templates/web/mailbox/upload_email.html:6
 msgid "Upload email"
-msgstr "Email hochladen"
+msgstr "E-Mail hochladen"
 
 #: web/templates/web/mailbox/upload_email.html:20
 msgid "Back to mailbox"
@@ -652,15 +652,15 @@ msgstr "Zurück zur Mailbox"
 
 #: web/templates/web/mailbox/upload_email.html:25
 msgid "Upload emails to the mailbox"
-msgstr "Lade Emails in die Mailbox hoch"
+msgstr "E-Mails in die Mailbox hochladen"
 
 #: web/templates/web/partials/_clear_and_submit_filter-button.html:4
 msgid "& Submit"
-msgstr "&amp; Abfragen"
+msgstr "und abfragen"
 
 #: web/templates/web/partials/_clear_filter-button.html:4
 msgid "Reset"
-msgstr "Reset"
+msgstr "Zurücksetzen"
 
 #: web/templates/web/partials/_date_created-small.html:3
 msgid "Added"
@@ -678,12 +678,12 @@ msgstr "Löschen"
 #: web/templates/web/partials/_delete-modal.html:12
 #, python-format
 msgid "Delete %(object)s"
-msgstr "Lösche %(object)s"
+msgstr "%(object)s löschen"
 
 #: web/templates/web/partials/_delete-modal.html:21
 #, python-format
 msgid "Are you sure you want to delete %(object)s?"
-msgstr "Bist du sicher dass du %(object)s löschen willst?"
+msgstr "Bist du sicher, dass du %(object)s löschen willst?"
 
 #: web/templates/web/partials/_edit-button.html:6
 msgid "Edit"
@@ -707,7 +707,7 @@ msgstr "2025 Emailkasten. Lizensiert unter AGPLv3. Alle Rechte vorbehalten."
 
 #: web/templates/web/partials/_footer.html:11
 msgid "Github"
-msgstr "Github"
+msgstr "GitHub"
 
 #: web/templates/web/partials/_footer.html:14
 msgid "Gitlab"
@@ -772,7 +772,7 @@ msgid ""
 "Updating mailboxes failed\n"
 "%(error)s"
 msgstr ""
-"Mailboxen aktualisieren fehlgeschlagen\n"
+"Aktualisierung der Mailboxen fehlgeschlagen\n"
 "%(error)s"
 
 #: web/views/account_views/AccountDetailWithDeleteView.py:98

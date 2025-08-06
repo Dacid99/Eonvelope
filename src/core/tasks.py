@@ -24,8 +24,9 @@ from uuid import UUID
 
 from celery import shared_task
 
+from core.utils.fetchers.exceptions import FetcherError
+
 from .models.Daemon import Daemon
-from .utils.fetchers.exceptions import FetcherError
 
 
 @shared_task
@@ -37,7 +38,9 @@ def fetch_emails(daemon_uuid_string: str) -> None:
     """
     logger = logging.getLogger(daemon_uuid_string)
 
-    logger.info("-------------------------------------------\nFetching emails ...")
+    logger.info(
+        "-------------------------------------------\nPerforming fetching emails task ..."
+    )
     start_time = time.time()
 
     try:
@@ -48,18 +51,28 @@ def fetch_emails(daemon_uuid_string: str) -> None:
         return
     try:
         daemon.mailbox.fetch(daemon.fetching_criterion)
-    except FetcherError:
+    except Exception as exc:
         logger.exception(
             "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nFailed to fetch emails!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
         )
         daemon.is_healthy = False
-        daemon.save(update_fields=["is_healthy"])
-
-    daemon.is_healthy = True
+        if isinstance(exc, ValueError):
+            logger.warning(
+                "The chosen fetching criterion is not available for this mailbox! Change it to a valid choice to fix this error."
+            )
+        elif isinstance(exc, FetcherError):
+            logger.error(
+                "There was an issue with the mailbox or account. Please test them before continuing."
+            )
+        else:
+            logger.error("This is an unexpected error! Please file an issue report!")
+    else:
+        logger.info("Successfully fetched emails.")
+        daemon.is_healthy = True
     daemon.save(update_fields=["is_healthy"])
 
     end_time = time.time()
     logger.info(
-        "Success fetching emails, completed in %s seconds\n!------------------------------------------",
+        "Fetching emails task finished in %s seconds\n!------------------------------------------",
         end_time - start_time,
     )

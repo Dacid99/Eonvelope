@@ -40,7 +40,6 @@
 
 - views customactions for response with updated modeldata
 - storagebackend for colliding file/dir
-- test celery daemons
 - test failing single message fetch (imap,pop)
 
 ## To implement
@@ -65,12 +64,12 @@
 - running tests from test dir
 - storage is incremented by healthcheck
 - updating daemon logging doesnt change the daemon logger
-- fetchers can raise valueerror but that is not caught
-which can happen if the user changes the protocol of an account with existing fetchers and the criteria become unavailable (what happens if task raises?)
 - optics:
   - better name for daemon
   - make email on attachment a card
   - weird pagination in base-archive
   - empyt checkbox instead of xmark
+  - translate validationerror
+  - makemessages
 - ci:
   - djlint has no files to lint

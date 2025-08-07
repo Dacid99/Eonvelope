@@ -57,7 +57,7 @@ def spy_save(mocker):
     return mocker.spy(django.db.models.Model, "save")
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def mock_Email_save_eml_to_storage(mocker):
     """Fixture patching :func:`core.models.Email.Email.save_eml_to_storage`."""
     return mocker.patch("core.models.Email.Email.save_eml_to_storage", autospec=True)

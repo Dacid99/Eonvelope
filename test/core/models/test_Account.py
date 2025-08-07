@@ -143,32 +143,34 @@ def test_Account_foreign_key_deletion(fake_account):
 def test_Account_unique_constraints(django_user_model):
     """Tests the unique constraints of :class:`core.models.Account.Account`."""
 
-    account_1 = baker.make(Account, mail_address="abc123")
-    account_2 = baker.make(Account, mail_address="abc123")
+    account_1 = baker.make(
+        Account, mail_address="abc123", protocol=EmailProtocolChoices.IMAP
+    )
+    account_2 = baker.make(
+        Account, mail_address="abc123", protocol=EmailProtocolChoices.IMAP
+    )
     assert account_1.mail_address == account_2.mail_address
+    assert account_1.protocol == account_2.protocol
     assert account_1.user != account_2.user
 
     user = baker.make(django_user_model)
 
-    account_1 = baker.make(Account, user=user)
-    account_2 = baker.make(Account, user=user)
+    account_1 = baker.make(Account, user=user, protocol=EmailProtocolChoices.IMAP)
+    account_2 = baker.make(Account, user=user, protocol=EmailProtocolChoices.IMAP)
     assert account_1.mail_address != account_2.mail_address
+    assert account_1.protocol == account_2.protocol
     assert account_1.user == account_2.user
 
-    baker.make(Account, mail_address="abc123", user=user)
-    with pytest.raises(IntegrityError):
-        baker.make(Account, mail_address="abc123", user=user)
-
-
-@pytest.mark.django_db
-def test_Account_clean(fake_account):
-    """Tests the clean field validation of :class:`core.models.Account.Account`."""
-    account_duplicate = baker.prepare(
-        Account, mail_address=fake_account.mail_address, user=fake_account.user
+    baker.make(
+        Account, mail_address="abc123", user=user, protocol=EmailProtocolChoices.IMAP
     )
-
-    with pytest.raises(ValidationError):
-        account_duplicate.clean()
+    with pytest.raises(IntegrityError):
+        baker.make(
+            Account,
+            mail_address="abc123",
+            user=user,
+            protocol=EmailProtocolChoices.IMAP,
+        )
 
 
 @pytest.mark.django_db

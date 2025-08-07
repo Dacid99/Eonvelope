@@ -118,6 +118,7 @@ def test_post_duplicate_auth_owner(
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
     account_payload["mail_address"] = fake_account.mail_address
+    account_payload["protocol"] = fake_account.protocol
     response = owner_client.post(list_url(AccountCreateView), account_payload)
 
     assert Account.objects.all().count() == 1

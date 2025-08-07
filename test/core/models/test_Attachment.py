@@ -43,7 +43,7 @@ def mock_logger(mocker):
     return mocker.patch("core.models.Attachment.logger", autospec=True)
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture
 def mock_Attachment_save_to_storage(mocker):
     return mocker.patch(
         "core.models.Attachment.Attachment.save_to_storage", autospec=True

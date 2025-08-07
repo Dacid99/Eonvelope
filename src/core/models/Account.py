@@ -180,11 +180,15 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
     def clean(self) -> None:
         """Validation for the unique together constraint on :attr:`mail_account`.
 
+        Required to allow correct validation of the create form.
+
         Raises:
             ValidationError: If the instance violates the constraint.
         """
         if (
-            Account.objects.filter(user=self.user, mail_address=self.mail_address)
+            Account.objects.filter(
+                user=self.user, mail_address=self.mail_address, protocol=self.protocol
+            )
             .exclude(pk=self.pk)
             .exists()
         ):

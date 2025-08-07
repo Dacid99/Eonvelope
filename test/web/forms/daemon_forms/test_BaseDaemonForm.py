@@ -24,7 +24,6 @@ from model_bakery import baker
 
 from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
 from web.forms import BaseDaemonForm
-from web.views.email_views.archive_views import EmailArchiveIndexView
 
 
 @pytest.mark.django_db

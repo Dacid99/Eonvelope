@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"PO-Revision-Date: 2025-08-08 07:02+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/fr/>\n"
@@ -45,63 +45,69 @@ msgstr "Pièces jointes"
 
 #: src/Emailkasten/settings.py:498
 msgid "Emailkasten API"
-msgstr ""
+msgstr "API d'Emailkasten"
 
 #: src/Emailkasten/settings.py:499
 msgid "The API schema for the Emailkasten server."
-msgstr ""
+msgstr "Le schéma d'API pour le serveur d'Emailkasten."
 
 #: src/Emailkasten/settings.py:521
 msgid "Default page size for paginated API response data"
-msgstr ""
+msgstr "Taille de la page par défaut pour les données de réponse API paginées"
 
 #: src/Emailkasten/settings.py:526
 msgid "Maximum page size for paginated API response data"
-msgstr ""
+msgstr "Taille max. de la page pour les données de réponse API paginées"
 
 #: src/Emailkasten/settings.py:531
 msgid "Default page size for pagination in the webapp."
-msgstr ""
+msgstr "Taille par défaut de la page pour la pagination dans l'appli Web."
 
 #: src/Emailkasten/settings.py:537
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
+"Options de la taille de la page pour la pagination dans l'appli Web. Devrait "
+"contenir la valeur WEB_DEFAULT_PAGE_SIZE."
 
 #: src/Emailkasten/settings.py:543
 msgid "Default cycle period setting of a daemon in seconds"
-msgstr ""
+msgstr "Paramètre par défaut du cycle du démon en secondes"
 
 #: src/Emailkasten/settings.py:548
 msgid "Default restart time setting of a daemon in seconds"
-msgstr ""
+msgstr "Paramètre par défaut du temps de redémarrage du démon en secondes"
 
 #: src/Emailkasten/settings.py:553
 msgid "Default number of daemon logfiles to keep"
-msgstr ""
+msgstr "Nombre par défaut de fichiers de journalisation du démon à conserver"
 
 #: src/Emailkasten/settings.py:558
 msgid "Default maximum size of a daemon logfile in bytes"
 msgstr ""
+"Taille maximale par défaut du fichier de journalisation du démon en octets"
 
 #: src/Emailkasten/settings.py:563
 msgid "Maximum numbers of files in one storage unit."
-msgstr ""
+msgstr "Nombre maximal de fichiers dans une seule unité de stockage."
 
 #: src/Emailkasten/settings.py:568
 msgid "Whether or not to ignore emails that have a spam flag"
-msgstr ""
+msgstr "S'il faut ou non ignorer les courriels marqués comme indésirables"
 
 #: src/Emailkasten/settings.py:573
 msgid "List of content types prefixes to not parse as files."
 msgstr ""
+"Liste des préfixes de types de contenu à ne pas analyser comme fichiers."
 
 #: src/Emailkasten/settings.py:579
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
 msgstr ""
+"Liste des préfixes de types de contenu à ne pas analyser comme fichiers. Le "
+"texte en clair et HTML est toujours ignoré puisque c'est son corps."
 
 #: src/Emailkasten/settings.py:643
 msgid ""
@@ -110,26 +116,40 @@ msgid ""
 "tag imports may result in 500 responses when requesting pages with email "
 "thumbnails, so be careful."
 msgstr ""
+"Le modèle HTML utilisé pour rendre les courriels en .html utilise la syntaxe "
+"du modèle django et a accès à tous les champs de la table de base de données "
+"de courriel. Retirer les importations d'étiquettes de modèle peut donner "
+"lieu à 500 réponses lorsque vous demandez des pages avec des vignettes de "
+"courriels, alors soyez prudent·e."
 
 #: src/Emailkasten/settings.py:685
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
 msgstr ""
+"Style CSS utilisé pour rendre les courriels en .html. Se réfère à "
+"HTML_TEMPLATE pour le contexte sur les classes."
 
 #: src/Emailkasten/settings.py:691
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr ""
+"Paramètre par défaut de la boîte de réception pour le stockage des courriels "
+"en tant que .eml."
 
 #: src/Emailkasten/settings.py:696
 msgid "Default mailbox setting whether to store attachments."
 msgstr ""
+"Paramètre par défaut de la boîte de réception pour stocker les pièces "
+"jointes."
 
 #: src/Emailkasten/settings.py:702
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
 msgstr ""
+"Définir ceci comme Vrai pour permettre aux nouveaux utilisateurs de "
+"s'inscrire. Ce paramètre ne prend effet que si le paramètre d'environnement "
+"REGISTRATION_ENABLED n'est pas 0."
 
 #: src/Emailkasten/settings.py:709
 msgid "Server Configurations"

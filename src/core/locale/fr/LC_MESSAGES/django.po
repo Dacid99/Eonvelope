@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"PO-Revision-Date: 2025-08-08 07:01+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/emailkasten/core/"
 "fr/>\n"
@@ -33,7 +33,7 @@ msgstr ""
 
 #: src/core/constants.py:47
 msgid "All emails"
-msgstr ""
+msgstr "Tous les courriels"
 
 #: src/core/constants.py:50
 msgid "All RECENT and UNSEEN emails"
@@ -295,7 +295,7 @@ msgstr "Compte %(mail_address)s avec le protocole %(protocol)s"
 
 #: src/core/models/Account.py:191
 msgid "This account already exists."
-msgstr ""
+msgstr "Ce compte existe déjà."
 
 #: src/core/models/Attachment.py:63
 msgid "filename"
@@ -356,11 +356,11 @@ msgstr "Le vrai nom du correspondant."
 
 #: src/core/models/Correspondent.py:76
 msgid "list ID"
-msgstr ""
+msgstr "identifiant de liste"
 
 #: src/core/models/Correspondent.py:83
 msgid "list owner"
-msgstr ""
+msgstr "propriétaire de la liste"
 
 #: src/core/models/Correspondent.py:90
 msgid "list subscribe"

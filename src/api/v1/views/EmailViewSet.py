@@ -41,7 +41,7 @@ from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models import Email, EmailCorrespondent
 
 from ..filters import EmailFilterSet
-from ..serializers import EmailSerializer, FullEmailSerializer
+from ..serializers import BaseEmailSerializer, FullEmailSerializer
 
 
 if TYPE_CHECKING:
@@ -251,7 +251,7 @@ class EmailViewSet(
         """
         email = self.get_object()
         conversation = email.full_conversation()
-        conversation_serializer = EmailSerializer(conversation, many=True)
+        conversation_serializer = BaseEmailSerializer(conversation, many=True)
         return Response({"emails": conversation_serializer.data})
 
     URL_PATH_SUBCONVERSATION = "sub-conversation"
@@ -275,5 +275,5 @@ class EmailViewSet(
         """
         email = self.get_object()
         conversation = email.sub_conversation()
-        conversation_serializer = EmailSerializer(conversation, many=True)
+        conversation_serializer = BaseEmailSerializer(conversation, many=True)
         return Response({"emails": conversation_serializer.data})

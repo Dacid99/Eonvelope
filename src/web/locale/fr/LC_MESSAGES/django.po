@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"PO-Revision-Date: 2025-08-08 07:02+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/emailkasten/web/"
 "fr/>\n"
@@ -167,10 +167,8 @@ msgid "Add Account"
 msgstr "Ajouter un compte"
 
 #: src/web/templates/web/account/account_create.html:20
-#, fuzzy
-#| msgid "Account"
 msgid "New Account"
-msgstr "Compte"
+msgstr "Nouveau compte"
 
 #: src/web/templates/web/account/account_create.html:37
 #: src/web/templates/web/daemon/daemon_create.html:33
@@ -247,23 +245,25 @@ msgstr "Ajouter un compte"
 
 #: src/web/templates/web/account/partials/_email_list_alternative.html:4
 msgid "You can fetch emails from one of this accounts mailboxes."
-msgstr ""
+msgstr "Vous pouvez récupérer les courriels d'une de ces boîtes de réception."
 
 #: src/web/templates/web/account/partials/_filter_list_alternative.html:7
 msgid "No email accounts found."
-msgstr ""
+msgstr "Aucun compte de messagerie trouvé."
 
 #: src/web/templates/web/account/partials/_filter_list_alternative.html:11
 msgid "Go ahead and add some."
-msgstr ""
+msgstr "Allez-y et ajoutez-en un."
 
 #: src/web/templates/web/account/partials/_mailboxes_list_alternative.html:4
 msgid "You can add mailboxes for this account by fetching them from the server"
 msgstr ""
+"Vous pouvez ajouter des boîtes de réception pour ce compte en les récupérant "
+"depuis le serveur"
 
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:4
 msgid "Test this account to make sure it can be accessed."
-msgstr ""
+msgstr "Testez ce compte pour être sûr qu'il est accessible."
 
 #: src/web/templates/web/account/partials/_update_mailboxes-button.html:9
 msgid "Update Mailboxes"
@@ -322,23 +322,21 @@ msgid "In email"
 msgstr "Dans le courriel"
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:7
-#, fuzzy
-#| msgid "Save attachments"
 msgid "No attachments found."
-msgstr "Enregistrer les pièces jointes"
+msgstr "Aucune pièce jointe trouvée."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:11
 msgid ""
 "You can fetching some along with emails from the mailboxes you have set up."
 msgstr ""
+"Vous pouvez en récupérer, avec les courriels, depuis les boîtes de réception "
+"que vous avez configurées."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:17
 #: src/web/templates/web/correspondent/partials/_filter_list_alternative.html:17
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:17
-#, fuzzy
-#| msgid "Back to mailbox"
 msgid "Go to mailboxes"
-msgstr "Retour à la boîte de réception"
+msgstr "Voir les boîtes de réception"
 
 #: src/web/templates/web/attachment/partials/_thumbnail.html:17
 msgid "Attachment image"
@@ -446,15 +444,15 @@ msgid "Correspondents"
 msgstr "Correspondants"
 
 #: src/web/templates/web/correspondent/partials/_filter_list_alternative.html:7
-#, fuzzy
-#| msgid "Correspondents"
 msgid "No correspondents found."
-msgstr "Correspondants"
+msgstr "Aucun correspondant trouvé."
 
 #: src/web/templates/web/correspondent/partials/_filter_list_alternative.html:11
 msgid ""
 "You can add some by fetching the emails from the mailboxes you have set up."
 msgstr ""
+"Vous pouvez en ajouter en récupérant les courriels des boîtes de réception "
+"que vous avez configurées."
 
 #: src/web/templates/web/daemon/daemon_create.html:6
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:6
@@ -494,8 +492,6 @@ msgid "Interval"
 msgstr "Intervalle"
 
 #: src/web/templates/web/daemon/daemon_detail.html:49
-#, fuzzy
-#| msgid "Last Run Datetime"
 msgid "Last Run"
 msgstr "Dernière exécution"
 
@@ -536,11 +532,13 @@ msgstr "Téléchargement"
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:7
 msgid "No daemons found."
-msgstr ""
+msgstr "Aucun démon trouvé."
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:11
 msgid "Add one to a mailbox to fetch its contents on a regular basis."
 msgstr ""
+"Ajoutez-en un à une boîte de réception pour récupérer son contenu de manière "
+"régulière."
 
 #: src/web/templates/web/daemon/partials/_is_running-badge.html:4
 msgid "Running"
@@ -685,7 +683,7 @@ msgstr "Référencé par"
 
 #: src/web/templates/web/email/partials/_archive_list_alternative.html:7
 msgid "No emails found for this timeframe."
-msgstr ""
+msgstr "Aucun courriel trouvé pour cette période."
 
 #: src/web/templates/web/email/partials/_email_card.html:27
 msgid "Received"
@@ -693,23 +691,22 @@ msgstr "Reçus"
 
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:7
 msgid "No emails found."
-msgstr ""
+msgstr "Aucun courriel trouvé."
 
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:11
 msgid "You can fetch some from the mailboxes you have set up."
 msgstr ""
+"Vous pouvez en récupérer depuis les boîtes de réception que vous avez "
+"configurées."
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:18
-#, fuzzy
-#| msgid "Daemons"
 msgid "New Daemon"
-msgstr "Démons"
+msgstr "Nouveaux démons"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:22
-#, fuzzy, python-format
-#| msgid "Delete %(object)s"
+#, python-format
 msgid "for %(object.name)s"
-msgstr "Supprimer %(object)s"
+msgstr "pour %(object.name)s"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:6
 msgid "Mailbox Details"
@@ -722,14 +719,12 @@ msgstr "Enregistrer les pièces jointes"
 #: src/web/templates/web/mailbox/mailbox_detail.html:53
 #: src/web/templates/web/mailbox/mailbox_detail.html:61
 msgid "on"
-msgstr ""
+msgstr "activé"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:55
 #: src/web/templates/web/mailbox/mailbox_detail.html:63
-#, fuzzy
-#| msgid "of"
 msgid "off"
-msgstr "de"
+msgstr "désactivé"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:59
 msgid "Save mails as .eml"
@@ -748,33 +743,35 @@ msgid ""
 "You can set up daemons for this mailbox to fetch its contents on a regular "
 "schedule."
 msgstr ""
+"Vous pouvez configurer des démons pour cette boîte de réception pour "
+"récupérer son contenu régulièrement."
 
 #: src/web/templates/web/mailbox/partials/_emails_list_alternative.html:5
 msgid ""
 "Fetch emails from this mailbox by setting up a daemon or fetching the "
 "content once."
 msgstr ""
+"Récupérez des courriels depuis cette boîte de réception en configurant un "
+"démon ou en récupérant le contenu une première fois."
 
 #: src/web/templates/web/mailbox/partials/_fetch_all-button.html:9
-#, fuzzy
-#| msgid "Fetch content"
 msgid "Fetch contents"
-msgstr "Récupérer le contenu"
+msgstr "Récupérer les contenus"
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:7
 msgid "No mailboxes found."
-msgstr ""
+msgstr "Aucune boîte de réception trouvée."
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:11
 msgid ""
 "You can add some by fetching the mailboxes from an account you have set up."
 msgstr ""
+"Vous pouvez en ajouter une en récupérant les boîtes de réception depuis un "
+"compte que vous avez configuré."
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:17
-#, fuzzy
-#| msgid "Add account"
 msgid "Go to accounts"
-msgstr "Ajouter un compte"
+msgstr "Voir les comptes"
 
 #: src/web/templates/web/mailbox/partials/_submit_upload-button.html:6
 msgid "Upload"
@@ -782,7 +779,7 @@ msgstr "Téléverser"
 
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:4
 msgid "Test this mailbox to make sure it can be accessed."
-msgstr ""
+msgstr "Testez cette boîte de réception pour être sûr qu'elle est accessible."
 
 #: src/web/templates/web/mailbox/partials/_upload_email-button.html:6
 msgid "Upload emails"

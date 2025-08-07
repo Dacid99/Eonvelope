@@ -205,7 +205,10 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         self.logger.debug("Successfully opened mailbox.")
 
         self.logger.debug("Searching %s messages in %s ...", search_criterion, mailbox)
-        _, message_uids = self.safe_uid("SEARCH", search_criterion)
+        if "SORT" in self._mail_client.capabilities:
+            _, message_uids = self.safe_uid("SORT", "(DATE)", "UTF-8", search_criterion)
+        else:
+            _, message_uids = self.safe_uid("SEARCH", search_criterion)
         self.logger.info(
             "Found %s messages with uIDs %s in %s.",
             search_criterion,

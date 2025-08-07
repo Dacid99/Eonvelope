@@ -62,6 +62,7 @@ def mock_IMAP4(mocker, faker):
     )
     mock_IMAP4.error = FakeIMAP4Error
     fake_response = faker.sentence().encode("utf-8")
+    mock_IMAP4.return_value.capabilities = []
     mock_IMAP4.return_value.login.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.authenticate.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.noop.return_value = ("OK", [fake_response])
@@ -443,7 +444,36 @@ def test_IMAP4Fetcher_test_mailbox_exception_ignored(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails_success(
+def test_IMAP4Fetcher_fetch_emails_success_sort(
+    mocker, imap_mailbox, mock_logger, mock_IMAP4
+):
+    mock_IMAP4.return_value.capabilities = ["SORT"]
+    expected_uid_fetch_calls = [
+        mocker.call("FETCH", uID, "(RFC822)")
+        for uID in mock_IMAP4.return_value.uid.return_value[1][0].split()
+    ]
+
+    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+
+    assert result == [mock_IMAP4.return_value.uid.return_value[1][0][1]] * len(
+        expected_uid_fetch_calls
+    )
+    mock_IMAP4.return_value.select.assert_called_once_with(
+        utf7_encode(imap_mailbox.name), readonly=True
+    )
+    assert mock_IMAP4.return_value.uid.call_count == len(expected_uid_fetch_calls) + 1
+    mock_IMAP4.return_value.uid.assert_has_calls(
+        [mocker.call("SORT", "(DATE)", "UTF-8", "ALL"), *expected_uid_fetch_calls]
+    )
+    mock_IMAP4.return_value.unselect.assert_called_once_with()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_IMAP4Fetcher_fetch_emails_success_search(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     expected_uid_fetch_calls = [

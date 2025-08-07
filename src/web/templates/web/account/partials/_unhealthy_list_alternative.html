@@ -1,11 +1,11 @@
 {% extends "web/partials/bases/_base_list_alternative.html" %}
 
-{% block statement_text %}
+{% block instruction_text %}
     {% translate "Test this account to make sure it can be accessed." %}
-{% endblock statement_text %}
+{% endblock instruction_text %}
 
 {% block instruction_buttons %}
 
-    {% include "web/account/partials/_test-button.html" %}
+    {% include "web/partials/_test-button.html" %}
 
 {% endblock instruction_buttons %}

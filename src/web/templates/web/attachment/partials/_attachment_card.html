@@ -7,9 +7,7 @@
 {% endblock card_title %}
 
 {% block card_subtitle %}
-    <div class="card-text">
-        {% translate "MIME-Type" %}: {{ card_object.content_maintype }}/{{ card_object.content_subtype }}
-    </div>
+    <div class="card-text">{% translate "MIME Content-Type" %}: {{ card_object.content_type }}</div>
 {% endblock card_subtitle %}
 
 {% block start_badges %}
@@ -20,6 +18,9 @@
 
 
 {% block card_content %}
+    <div class="card-text">
+        {% translate "Datasize" %}: {{ card_object.datasize }} {% translate "bytes" %}
+    </div>
     <div class="card-text">
         {% translate "In email" %}: <a href="{{ card_object.email.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ card_object.email.email_subject }}</a>

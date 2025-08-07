@@ -31,7 +31,10 @@
 
 {% block card_content %}
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">{% translate "Content Type" %}: {{ object.content_type }}</li>
+        <li class="list-group-item">
+            {% translate "Size" %}: {{ object.datasize }} {% translate "bytes" %}
+        </li>
+        <li class="list-group-item">{% translate "MIME Content-Type" %}: {{ object.content_type }}</li>
         {% if object.content_disposition %}
             <li class="list-group-item">
                 {% translate "Content Disposition" %}: {{ object.content_disposition }}
@@ -40,9 +43,6 @@
         {% if object.content_id %}
             <li class="list-group-item">{% translate "Content Id" %}: {{ object.content_id }}</li>
         {% endif %}
-        <li class="list-group-item">
-            {% translate "Size" %}: {{ object.datasize }} {% translate "bytes" %}
-        </li>
         <li class="list-group-item">{% translate "Date received" %}: {{ object.email.datetime }}</li>
     </ul>
 {% endblock card_content %}

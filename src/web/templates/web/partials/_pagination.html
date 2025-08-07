@@ -1,7 +1,7 @@
 {% load i18n %}
 
 <div class="d-flex align-items-center justify-content-between">
-    <span>{% translate "Results" %}: {{ page_obj.count }}</span>
+    <span>{% translate "Results" %}: {{ page_obj.paginator.count }}</span>
     <ul class="nav pagination" aria-label="{% translate 'Page navigation' %}">
         {% if page_obj.has_previous %}
             <li class="page-item">

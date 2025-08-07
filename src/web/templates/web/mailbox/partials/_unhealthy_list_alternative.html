@@ -1,12 +1,14 @@
 {% extends "web/partials/bases/_base_list_alternative.html" %}
 
-{% block statement_text %}
+{% load i18n %}
+
+{% block instruction_text %}
     {% translate "Test this mailbox to make sure it can be accessed." %}
-{% endblock statement_text %}
+{% endblock instruction_text %}
 
 
 {% block instruction_buttons %}
 
-    {% include "web/mailbox/partials/_test-button.html" %}
+    {% include "web/partials/_test-button.html" %}
 
 {% endblock instruction_buttons %}

@@ -10,16 +10,17 @@
     link-light active
 {% endblock nav_class_daemons %}
 
-{% block cancel_to_list_button %}
+{% block close_to_list_button %}
     <a class="btn-close" href="{{ object.get_absolute_url }}" role="button"></a>
-{% endblock cancel_to_list_button %}
+{% endblock close_to_list_button %}
 
 {% block card_title %}
     {% translate "New Daemon" %}
 {% endblock card_title %}
 
 {% block card_subtitle %}
-    {% blocktranslate %}for {{ object.name }}{% endblocktranslate %}
+    {% translate "for" %} <a href="{{ object.get_absolute_url }}"
+    class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.name }}</a>
 {% endblock card_subtitle %}
 
 {% block form %}

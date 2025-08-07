@@ -24,6 +24,7 @@ import contextlib
 import email
 import logging
 import os
+import re
 import shutil
 from email import policy
 from functools import cached_property
@@ -451,12 +452,13 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         if self.headers:
             referenced_message_ids = self.headers.get(HeaderFields.REFERENCES)
             if referenced_message_ids:
-                for referenced_message_id in referenced_message_ids.split(","):
-                    for referenced_email in Email.objects.filter(
-                        message_id=referenced_message_id.strip(),
-                        mailbox__account__user=self.mailbox.account.user,
-                    ):
-                        self.references.add(referenced_email)
+                for referenced_message_id in re.split(r"[ ,]", referenced_message_ids):
+                    if referenced_message_id.strip():
+                        for referenced_email in Email.objects.filter(
+                            message_id=referenced_message_id.strip(),
+                            mailbox__account__user=self.mailbox.account.user,
+                        ):
+                            self.references.add(referenced_email)
 
     @classmethod
     def create_from_email_bytes(

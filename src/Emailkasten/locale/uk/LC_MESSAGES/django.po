@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"PO-Revision-Date: 2025-08-08 07:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim5@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/uk/>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.13-dev\n"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:693
@@ -55,31 +55,21 @@ msgid "The API schema for the Emailkasten server."
 msgstr "Схема API для сервера Emailkasten."
 
 #: src/Emailkasten/settings.py:521
-#, fuzzy
-#| msgid "The default page size for paginated API response data"
 msgid "Default page size for paginated API response data"
 msgstr ""
-"Розмір сторінки за замовчуванням для даних відповідей API з розбивкою на "
-"сторінки"
+"Розмір сторінки за замовчуванням для даних відповідей API з посторінковою "
+"структурою"
 
 #: src/Emailkasten/settings.py:526
-#, fuzzy
-#| msgid "The maximum page size for paginated API response data"
 msgid "Maximum page size for paginated API response data"
 msgstr ""
 "Максимальний розмір сторінки для даних відповідей API з розбивкою на сторінки"
 
 #: src/Emailkasten/settings.py:531
-#, fuzzy
-#| msgid "The default page size for pagination in the webapp."
 msgid "Default page size for pagination in the webapp."
 msgstr "Розмір сторінки за замовчуванням для пагінації у вебзастосунку."
 
 #: src/Emailkasten/settings.py:537
-#, fuzzy
-#| msgid ""
-#| "The page size options for pagination in the webapp. Should contain the "
-#| "WEB_DEFAULT_PAGE_SIZE value."
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
@@ -88,39 +78,25 @@ msgstr ""
 "значення WEB_DEFAULT_PAGE_SIZE."
 
 #: src/Emailkasten/settings.py:543
-#, fuzzy
-#| msgid "The default cycle period setting of a daemon in seconds"
 msgid "Default cycle period setting of a daemon in seconds"
 msgstr "Налаштування періоду циклу демона за замовчуванням у секундах"
 
 #: src/Emailkasten/settings.py:548
-#, fuzzy
-#| msgid "The default restart time setting of a daemon in seconds"
 msgid "Default restart time setting of a daemon in seconds"
-msgstr "Стандартне налаштування часу перезапуску демона в секундах"
+msgstr "Налаштування часу перезапуску демона за замовчуванням у секундах"
 
 #: src/Emailkasten/settings.py:553
-#, fuzzy
-#| msgid "The default number of daemon logfiles to keep"
 msgid "Default number of daemon logfiles to keep"
 msgstr ""
 "Кількість файлів журналів демона, які потрібно зберігати за замовчуванням"
 
 #: src/Emailkasten/settings.py:558
-#, fuzzy
-#| msgid "The default maximum size of a daemon logfile in bytes"
 msgid "Default maximum size of a daemon logfile in bytes"
 msgstr "Максимальний розмір файлу журналу демона за замовчуванням у байтах"
 
 #: src/Emailkasten/settings.py:563
-#, fuzzy
-#| msgid ""
-#| "The maximum numbers of files in one storage unit. Must not exceed 64000 "
-#| "for ext4 filesystem!"
 msgid "Maximum numbers of files in one storage unit."
-msgstr ""
-"Максимальна кількість файлів в одному блоці зберігання. Не повинна "
-"перевищувати 64000 для файлової системи ext4!"
+msgstr "Максимальна кількість файлів в одному сховищі."
 
 #: src/Emailkasten/settings.py:568
 msgid "Whether or not to ignore emails that have a spam flag"
@@ -128,46 +104,30 @@ msgstr "Чи ігнорувати електронні листи з позна�
 
 #: src/Emailkasten/settings.py:573
 msgid "List of content types prefixes to not parse as files."
-msgstr ""
+msgstr "Список префіксів типів контенту, які не слід розбирати як файли."
 
 #: src/Emailkasten/settings.py:579
-#, fuzzy
-#| msgid ""
-#| "A list of content types prefixes to not parse as files if they are not "
-#| "marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
 msgstr ""
-"Список префіксів типів контенту, які не слід розбирати як файли, якщо вони "
-"не позначені як такі. Перезаписує елементи в 'SAVE_CONTENT_TYPE_PREFIXES'."
+"Список префіксів типів контенту, які не слід розбирати як файли. Звичайний "
+"текст і текст HTML завжди ігноруються, оскільки це основний текст."
 
 #: src/Emailkasten/settings.py:643
-#, fuzzy
-#| msgid ""
-#| "The html template used to render emails to html. Uses the django template "
-#| "syntax and has access to all fields of the email database table. Do not "
-#| "use ' in this template, it will result in the thumbnail not showing! "
-#| "Removing template tag imports may result in 500 responses when requesting "
-#| "pages with email thumbnails, so be careful."
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
 "tag imports may result in 500 responses when requesting pages with email "
 "thumbnails, so be careful."
 msgstr ""
-"Шаблон html, який використовується для відображення електронних листів у "
-"форматі html. Використовує синтаксис шаблонів django та має доступ до всіх "
-"полів таблиці бази даних електронної пошти. Не використовуйте ' у цьому "
-"шаблоні, це призведе до того, що мініатюра не відображатиметься! Видалення "
-"імпорту тегів шаблону може призвести до 500 відповідей під час запиту "
-"сторінок із мініатюрами електронних листів, тому будьте обережні."
+"Шаблон Html, що використовується для відображення електронних листів у "
+"форматі HTML. Використовує синтаксис шаблонів Django та має доступ до всіх "
+"полів таблиці бази даних електронної пошти. Видалення імпорту тегів шаблону "
+"може призвести до 500 відповідей під час запиту сторінок із мініатюрами "
+"електронних листів, тому будьте обережні."
 
 #: src/Emailkasten/settings.py:685
-#, fuzzy
-#| msgid ""
-#| "The css style used to render emails to html. Refer to HTML_TEMPLATE for "
-#| "context on the classes."
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
@@ -176,16 +136,12 @@ msgstr ""
 "html. Зверніться до HTML_TEMPLATE для ознайомлення з контекстом класів."
 
 #: src/Emailkasten/settings.py:691
-#, fuzzy
-#| msgid "The default mailbox setting whether to store mails as eml."
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr ""
 "Налаштування поштової скриньки за замовчуванням, яке визначає, чи зберігати "
 "листи у форматі EML."
 
 #: src/Emailkasten/settings.py:696
-#, fuzzy
-#| msgid "The default mailbox setting whether to store attachments."
 msgid "Default mailbox setting whether to store attachments."
 msgstr ""
 "Налаштування поштової скриньки за замовчуванням, яке визначає, чи зберігати "

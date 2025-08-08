@@ -1,0 +1,186 @@
+# taken from https://gitlab.com/dependabot-gitlab/dependabot-standalone/-/blob/main/templates/template.yml?ref_type=heads
+spec:
+  inputs:
+    dependabot_gitlab_image:
+      description: The image base name to use for the dependabot-gitlab
+      default: andrcuns/dependabot-gitlab
+    dependabot_gitlab_version:
+      description: The image tag to use for the dependabot-gitlab
+      default: latest
+    gitlab_ssl_cert_file:
+      description: The self-signed certificate to access gitlab
+      default: ""
+    log_color:
+      description: Whether to colorize the log output
+      default: "true"
+    log_level:
+      description: The log level to use for the dependabot-gitlab
+      default: info
+    stage_name:
+      description: The name of the stage for dependency update jobs
+      default: dependabot
+    image_registry_separator:
+      description: The separator to use for the image registry. Useful if the image registry is not docker.io and updater images are stored in sub-registries.
+      default: "-"
+---
+.dependabot-gitlab:
+  image:
+    name: $[[ inputs.dependabot_gitlab_image ]]$[[ inputs.image_registry_separator ]]${CI_JOB_NAME}:$[[ inputs.dependabot_gitlab_version ]]
+    entrypoint: [""]
+  stage: $[[ inputs.stage_name ]]
+  variables:
+    GIT_STRATEGY: none
+    RAILS_ENV: production
+    SECRET_KEY_BASE: key
+    PACKAGE_MANAGER: $CI_JOB_NAME
+    SETTINGS__GITLAB_URL: $CI_SERVER_URL
+    SETTINGS__STANDALONE: "true"
+    SETTINGS__LOG_COLOR: $[[ inputs.log_color ]]
+    SETTINGS__LOG_LEVEL: $[[ inputs.log_level ]]
+    SETTINGS__GITLAB_ACCESS_TOKEN: $DEPENDABOT_GITLAB_ACCESS_TOKEN
+    SETTINGS__GITHUB_ACCESS_TOKEN: ${DEPENDABOT_GITHUB_ACCESS_TOKEN:-""}
+    SSL_CERT_FILE: $[[ inputs.gitlab_ssl_cert_file ]]
+  script:
+    - '[ -z "${SSL_CERT_FILE}" ] && unset SSL_CERT_FILE || true'
+    - cd /home/dependabot/app
+    - bundle exec rake "dependabot:update[${PROJECT_PATH:-$CI_PROJECT_PATH},${PACKAGE_MANAGER?},${DIRECTORY},${CONFIG_ENTRY_NAME}]"
+
+bundler:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bbundler\b/'
+
+pip:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bpip\b/'
+
+npm:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /(\bnpm|yarn\b)/'
+
+maven:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bmaven\b/'
+
+gradle:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bgradle\b/'
+
+cargo:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bcargo\b/'
+
+mix:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bmix\b/'
+
+composer:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bcomposer\b/'
+
+nuget:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bnuget\b/'
+
+gomod:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bgomod\b/'
+
+elm:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\belm\b/'
+
+gitsubmodule:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bgitsubmodule\b/'
+
+docker:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bdocker\b/ && $PACKAGE_MANAGER_SET !~ /\bdocker-compose\b/'
+
+docker-compose:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bdocker-compose\b/'
+
+terraform:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bterraform\b/'
+
+pub:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bpub\b/'
+
+swift:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bswift\b/'
+
+devcontainers:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bdevcontainers\b/'
+
+bun:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bbun\b/'
+
+dotnet-sdk:
+  extends: .dependabot-gitlab
+  rules:
+    - if: $DEPENDENCY_UPDATES_DISABLED
+      when: never
+    - if: '$CI_PIPELINE_SOURCE == "schedule" && $PACKAGE_MANAGER_SET =~ /\bdotnet-sdk\b/'

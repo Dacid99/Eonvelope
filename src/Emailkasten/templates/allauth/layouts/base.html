@@ -15,6 +15,8 @@
         <link href="{% static 'fontawesomefree/css/solid.css' %}"
               rel="stylesheet"
               type="text/css" />
+        <script src="{% static 'web/js/bs_theme-toggler.js' %}"></script>
+
         <title>
 
             {% block head_title %}
@@ -38,8 +40,12 @@
                             aria-label="{% translate 'Toggle navigation' %}">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarText">
-                        <div class="d-flex flex-column flex-sm-row gap-2 text-nowrap align-items-center">
+                    <div class="collapse navbar-collapse justify-content-between"
+                         id="navbarText">
+
+                        {% include "allauth/elements/theme_dropdown.html" %}
+
+                        <div class="d-flex flex-column flex-sm-row gap-3 text-nowrap align-items-center">
                             <div class="d-flex align-items-center gap-1">
                                 <i class="fa-solid fa-globe" aria-hidden="true"></i>
 
@@ -47,25 +53,26 @@
 
                             </div>
                             <div class="d-flex align-items-center gap-1">
+
                                 <i class="fa-solid fa-language" aria-hidden="true"></i>
 
                                 {% include "allauth/elements/language_dropdown.html" %}
 
-                                <div>
-                                    {% if user.is_authenticated %}
-                                        <a href="{% url 'account_logout' %}"
-                                           class="btn btn-danger"
-                                           role="button">{% translate "Sign Out" %}</a>
-                                    {% else %}
-                                        <a href="{% url 'account_login' %}"
-                                           class="btn btn-primary"
-                                           role="button">{% translate "Sign In" %}</a>
-                                        {% url 'account_signup' as signup_url_ %}
-                                        {% if signup_url_ %}
-                                            <a href="{{ signup_url_ }}" class="btn btn-secondary" role="button">{% translate "Sign Up" %}</a>
-                                        {% endif %}
+                            </div>
+                            <div>
+                                {% if user.is_authenticated %}
+                                    <a href="{% url 'account_logout' %}"
+                                       class="btn btn-danger"
+                                       role="button">{% translate "Sign Out" %}</a>
+                                {% else %}
+                                    <a href="{% url 'account_login' %}"
+                                       class="btn btn-primary"
+                                       role="button">{% translate "Sign In" %}</a>
+                                    {% url 'account_signup' as signup_url_ %}
+                                    {% if signup_url_ %}
+                                        <a href="{{ signup_url_ }}" class="btn btn-secondary" role="button">{% translate "Sign Up" %}</a>
                                     {% endif %}
-                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

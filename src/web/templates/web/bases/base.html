@@ -2,7 +2,7 @@
 
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ LANGUAGE_CODE }}" data-bs-theme="auto">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,6 +23,8 @@
         <link href="{% static 'fontawesomefree/css/solid.css' %}"
               rel="stylesheet"
               type="text/css" />
+        <script src="{% static 'web/js/bs_theme-toggler.js' %}"></script>
+
     </head>
 
     <body>

@@ -7,10 +7,6 @@ updates:
     rebase-strategy: auto
     allow:
       - dependency-type: all
-    groups:
-      dev-dependencies:
-        patterns:
-          - "*"
     # auto-merge: true
 
 # options reference: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference#package-ecosystem

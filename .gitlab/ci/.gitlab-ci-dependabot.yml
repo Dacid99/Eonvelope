@@ -38,7 +38,7 @@ spec:
     SETTINGS__LOG_COLOR: $[[ inputs.log_color ]]
     SETTINGS__LOG_LEVEL: $[[ inputs.log_level ]]
     SETTINGS__GITLAB_ACCESS_TOKEN: $DEPENDABOT_GITLAB_ACCESS_TOKEN
-    SETTINGS__GITHUB_ACCESS_TOKEN: ${DEPENDABOT_GITHUB_ACCESS_TOKEN:-""}
+    SETTINGS__GITHUB_ACCESS_TOKEN: $DEPENDABOT_GITHUB_ACCESS_TOKEN
     SSL_CERT_FILE: $[[ inputs.gitlab_ssl_cert_file ]]
   before_script:
     - '[ -z "${SSL_CERT_FILE}" ] && unset SSL_CERT_FILE || true'

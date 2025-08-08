@@ -6,6 +6,9 @@
             class="btn btn-outline-primary"
             name="fetch_all"
             {% if not mailbox.is_healthy %}disabled{% endif %}>
-        {% translate "Fetch contents" %}
+        {% translate "Fetch contents" as button_text %}
+
+        {% include "web/partials/_spinner-text.html" with text=button_text %}
+
     </button>
 </form>

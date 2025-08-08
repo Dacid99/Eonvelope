@@ -6,6 +6,9 @@
             class="btn btn-outline-primary"
             name="update_mailboxes"
             {% if not account.is_healthy %}disabled{% endif %}>
-        {% translate "Update Mailboxes" %}
+        {% translate "Update Mailboxes" as button_text %}
+
+        {% include "web/partials/_spinner-text.html" with text=button_text %}
+
     </button>
 </form>

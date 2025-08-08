@@ -35,3 +35,8 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'web/js/spinner-text.js' %}"></script>
+{% endblock scripts %}

@@ -15,7 +15,7 @@
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
 - autotest account before form submission, fetch mailboxes on submission
-- [spinner](https://getbootstrap.com/docs/5.3/components/spinners/) and [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
+- [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
 - more tags
 - autotagging
@@ -70,5 +70,7 @@
 - updating daemon logging doesnt change the daemon logger
 - optics:
   - better name for daemon
+  - more space for thumbnails in detailview
+  - overflow-scroll for images
 - ci:
   - djlint has no files to lint

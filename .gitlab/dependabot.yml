@@ -4,12 +4,11 @@ updates:
     directory: /
     schedule:
       interval: monthly
-    open-pull-requests-limit: 20
     rebase-strategy: auto
     allow:
       - dependency-type: all
     groups:
-      all-dependencies:
+      dev-dependencies:
         patterns:
           - "*"
     # auto-merge: true

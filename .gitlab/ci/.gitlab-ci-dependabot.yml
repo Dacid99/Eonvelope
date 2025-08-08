@@ -40,9 +40,10 @@ spec:
     SETTINGS__GITLAB_ACCESS_TOKEN: $DEPENDABOT_GITLAB_ACCESS_TOKEN
     SETTINGS__GITHUB_ACCESS_TOKEN: ${DEPENDABOT_GITHUB_ACCESS_TOKEN:-""}
     SSL_CERT_FILE: $[[ inputs.gitlab_ssl_cert_file ]]
-  script:
+  before_script:
     - '[ -z "${SSL_CERT_FILE}" ] && unset SSL_CERT_FILE || true'
     - cd /home/dependabot/app
+  script:
     - bundle exec rake "dependabot:update[${PROJECT_PATH:-$CI_PROJECT_PATH},${PACKAGE_MANAGER?},${DIRECTORY},${CONFIG_ENTRY_NAME}]"
 
 bundler:

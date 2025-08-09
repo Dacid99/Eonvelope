@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-06 08:02+0000\n"
-"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
+"PO-Revision-Date: 2025-08-09 15:02+0000\n"
+"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/de/>\n"
 "Language: de\n"
@@ -45,140 +45,96 @@ msgstr "Anhänge"
 
 #: src/Emailkasten/settings.py:498
 msgid "Emailkasten API"
-msgstr "Emailkasten API"
+msgstr "Emailkasten-API"
 
 #: src/Emailkasten/settings.py:499
 msgid "The API schema for the Emailkasten server."
-msgstr "Das API Schema des Emailkasten Servers."
+msgstr "Das API-Schema des Emailkasten-Servers."
 
 #: src/Emailkasten/settings.py:521
-#, fuzzy
-#| msgid "The default page size for paginated API response data"
 msgid "Default page size for paginated API response data"
-msgstr "Die Standard Seitengröße für API Anwortdaten"
+msgstr "Standard-Seitengröße für API-Anwortdaten"
 
 #: src/Emailkasten/settings.py:526
-#, fuzzy
-#| msgid "The maximum page size for paginated API response data"
 msgid "Maximum page size for paginated API response data"
-msgstr "Die maximale Seitengröße für API Antwortdaten"
+msgstr "Maximale Seitengröße für API-Antwortdaten"
 
 #: src/Emailkasten/settings.py:531
-#, fuzzy
-#| msgid "The default page size for pagination in the webapp."
 msgid "Default page size for pagination in the webapp."
-msgstr "Die Standard Seitengröße für die Webapp."
+msgstr "Standard-Seitengröße für die Webapp."
 
 #: src/Emailkasten/settings.py:537
-#, fuzzy
-#| msgid ""
-#| "The page size options for pagination in the webapp. Should contain the "
-#| "WEB_DEFAULT_PAGE_SIZE value."
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
-"Die Seitengrößen Optionen in der Webapp. Sollte den Wert von "
+"Seitengrößen-Optionen in der Webapp. Sollte den Wert von "
 "WEB_DEFAULT_PAGE_SIZE enthalten."
 
 #: src/Emailkasten/settings.py:543
-#, fuzzy
-#| msgid "The default cycle period setting of a daemon in seconds"
 msgid "Default cycle period setting of a daemon in seconds"
-msgstr "Die Standard Periodendauer für Daemons in Sekunden"
+msgstr "Standard-Periodendauer für Daemons in Sekunden"
 
 #: src/Emailkasten/settings.py:548
-#, fuzzy
-#| msgid "The default restart time setting of a daemon in seconds"
 msgid "Default restart time setting of a daemon in seconds"
-msgstr "Die Standard Neustart Wartezeit für Daemons in Sekunden"
+msgstr "Standard-Neustart-Wartezeit für Daemons in Sekunden"
 
 #: src/Emailkasten/settings.py:553
-#, fuzzy
-#| msgid "The default number of daemon logfiles to keep"
 msgid "Default number of daemon logfiles to keep"
-msgstr "Die Standardanzahl an gespeicherten Daemon Logdateien"
+msgstr "Standardanzahl an gespeicherten Daemon Protokolldateien"
 
 #: src/Emailkasten/settings.py:558
-#, fuzzy
-#| msgid "The default maximum size of a daemon logfile in bytes"
 msgid "Default maximum size of a daemon logfile in bytes"
-msgstr "Die Standard Daemon Logdatei-Maximalgröße in Bytes"
+msgstr "Standard-Maximalgröße für eine Daemon-Protokolldatei in Bytes"
 
 #: src/Emailkasten/settings.py:563
-#, fuzzy
-#| msgid ""
-#| "The maximum numbers of files in one storage unit. Must not exceed 64000 "
-#| "for ext4 filesystem!"
 msgid "Maximum numbers of files in one storage unit."
-msgstr ""
-"Die maximale Anzahl von Dateien in einem Speicherordner. Darf für ein ext4 "
-"Dateisystem nicht größer als 64000 sein!"
+msgstr "Maximale Anzahl von Dateien in einer Speichereinheit."
 
 #: src/Emailkasten/settings.py:568
 msgid "Whether or not to ignore emails that have a spam flag"
-msgstr "Ob als Spam markierte Emails ignoriert werden"
+msgstr "Ob als Spam markierte E-Mails ignoriert werden"
 
 #: src/Emailkasten/settings.py:573
 msgid "List of content types prefixes to not parse as files."
-msgstr ""
+msgstr "Liste der Inhaltstypenpräfixe, um nicht als Dateien zu analysieren."
 
 #: src/Emailkasten/settings.py:579
-#, fuzzy
-#| msgid ""
-#| "A list of content types prefixes to not parse as files if they are not "
-#| "marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
 msgstr ""
-"List von Inhalt-Untertypen die nicht als Datei gespeichert werden falls sie "
-"nicht als solche markiert sind. Überschreibt Elemente in "
-"'SAVE_CONTENT_TYPE_PREFIXES'."
+"Liste von Inhalt-Untertypen die nicht als Datei gespeichert werden. Plain- "
+"und HTML-Text werden immer ignoriert und als Haupttext behandelt."
 
 #: src/Emailkasten/settings.py:643
-#, fuzzy
-#| msgid ""
-#| "The html template used to render emails to html. Uses the django template "
-#| "syntax and has access to all fields of the email database table. Do not "
-#| "use ' in this template, it will result in the thumbnail not showing! "
-#| "Removing template tag imports may result in 500 responses when requesting "
-#| "pages with email thumbnails, so be careful."
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
 "tag imports may result in 500 responses when requesting pages with email "
 "thumbnails, so be careful."
 msgstr ""
-"Die HTML Schablone nach der Emails als HTML geschrieben werden. Verwendet "
-"die django template Syntax und hat Zugriff auf alle Felder der Email "
+"HTML-Schablone mit der E-Mails als HTML geschrieben werden. Verwendet die "
+"django template Syntax und hat Zugriff auf alle Felder der E-Mail "
 "Datenbanktabelle. Die Entfernung von Templatetags kann zu HTTP 500 "
-"Fehlermeldungen führen wenn auf Seiten mit Emailvorschauen zugegriffen wird, "
-"also sei vorsichtig."
+"Fehlermeldungen führen wenn auf Seiten mit E-Mail-Vorschauen zugegriffen "
+"wird, also sei vorsichtig."
 
 #: src/Emailkasten/settings.py:685
-#, fuzzy
-#| msgid ""
-#| "The css style used to render emails to html. Refer to HTML_TEMPLATE for "
-#| "context on the classes."
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
 msgstr ""
-"Der css Style mit dem Emails in HTML dargestellt werden. Kontext zu den "
+"Der CSS-Stil, mit dem E-Mails in HTML dargestellt werden. Kontext zu den "
 "einzelnen Klassen findet sich in HTML_TEMPLATE."
 
 #: src/Emailkasten/settings.py:691
-#, fuzzy
-#| msgid "The default mailbox setting whether to store mails as eml."
 msgid "Default mailbox setting whether to store mails as eml."
-msgstr "Die Standard Mailboxeinstellung ob Emails als eml gespeichert werden."
+msgstr "Standard-Mailboxeinstellung, ob E-Mails als eml gespeichert werden."
 
 #: src/Emailkasten/settings.py:696
-#, fuzzy
-#| msgid "The default mailbox setting whether to store attachments."
 msgid "Default mailbox setting whether to store attachments."
-msgstr "Die Standard Mailboxeinstellung ob Anhänge gespeichert werden."
+msgstr "Standard-Mailboxeinstellung, ob Anhänge gespeichert werden."
 
 #: src/Emailkasten/settings.py:702
 msgid ""

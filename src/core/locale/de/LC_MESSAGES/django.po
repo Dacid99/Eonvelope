@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-06 08:02+0000\n"
-"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
+"PO-Revision-Date: 2025-08-09 15:02+0000\n"
+"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/core/"
 "de/>\n"
 "Language: de\n"
@@ -33,59 +33,59 @@ msgstr "Alle GELESENEN Emails"
 
 #: src/core/constants.py:47
 msgid "All emails"
-msgstr "Alle Emails"
+msgstr "Alle E-Mails"
 
 #: src/core/constants.py:50
 msgid "All RECENT and UNSEEN emails"
-msgstr "Alle AKTUELLEN und UNGELESENEN Emails"
+msgstr "Alle AKTUELLEN und UNGELESENEN E-Mails"
 
 #: src/core/constants.py:53
 msgid "All emails that are not RECENT"
-msgstr "Alle Emails die nicht AKTUELL sind"
+msgstr "Alle E-Mails die nicht AKTUELL sind"
 
 #: src/core/constants.py:56
 msgid "FLAGGED emails"
-msgstr "MARKIERTE Emails"
+msgstr "MARKIERTE E-Mails"
 
 #: src/core/constants.py:59
 msgid "All email DRAFTs"
-msgstr "Alle Email ENTWÜRFE"
+msgstr "Alle E-Mail-ENTWÜRFE"
 
 #: src/core/constants.py:62
 msgid "All emails that are not DRAFTs"
-msgstr "Alle Emails die keine ENTWÜRFE sind"
+msgstr "Alle E-Mails, die keine ENTWÜRFE sind"
 
 #: src/core/constants.py:65
 msgid "All ANSWERED emails"
-msgstr "Alle BEANTWORTETEN Emails"
+msgstr "Alle BEANTWORTETEN E-Mails"
 
 #: src/core/constants.py:68
 msgid "All UNANSWERED emails"
-msgstr "Alle UNBEANTORTETEN Emails"
+msgstr "Alle UNBEANTORTETEN E-Mails"
 
 #: src/core/constants.py:71
 msgid "All DELETED emails"
-msgstr "Alle GELÖSCHTEN Emails"
+msgstr "Alle GELÖSCHTEN E-Mails"
 
 #: src/core/constants.py:74
 msgid "All UNDELETED emails"
-msgstr "Alle UNGELÖSCHTEN Emails"
+msgstr "Alle UNGELÖSCHTEN E-Mails"
 
 #: src/core/constants.py:77
 msgid "All emails received the last DAY"
-msgstr "Alle Emails des VORTAGS"
+msgstr "Alle E-Mails des VORTAGS"
 
 #: src/core/constants.py:80
 msgid "All emails received the last WEEK"
-msgstr "Alle Emails der letzten WOCHE"
+msgstr "Alle E-Mails der letzten WOCHE"
 
 #: src/core/constants.py:83
 msgid "All emails receiced the last MONTH"
-msgstr "Alle Emails des letzten MONATS"
+msgstr "Alle E-Mails des letzten MONATS"
 
 #: src/core/constants.py:86
 msgid "All emails received the last YEAR"
-msgstr "Alle Emails des letzten JAHRES"
+msgstr "Alle E-Mails des letzten JAHRES"
 
 #: src/core/constants.py:93
 msgid "IMAP4"
@@ -93,7 +93,7 @@ msgstr "IMAP4"
 
 #: src/core/constants.py:96
 msgid "IMAP4 (unencrypted)"
-msgstr ""
+msgstr "IMAP4 (unverschlüsselt)"
 
 #: src/core/constants.py:99
 msgid "POP3"
@@ -101,7 +101,7 @@ msgstr "POP3"
 
 #: src/core/constants.py:102
 msgid "POP3  (unencrypted)"
-msgstr ""
+msgstr "POP3 (unverschlüsselt)"
 
 #: src/core/constants.py:105
 msgid "Microsoft Exchange"
@@ -293,7 +293,7 @@ msgstr "Konto %(mail_address)s mit Protokoll %(protocol)s"
 
 #: src/core/models/Account.py:191
 msgid "This account already exists."
-msgstr ""
+msgstr "Dieses Konto existiert schon."
 
 #: src/core/models/Attachment.py:63
 msgid "filename"
@@ -452,11 +452,11 @@ msgstr "Emailfetcherdaemon %(uuid)s für Mailbox %(mailbox)s"
 
 #: src/core/models/Daemon.py:208
 msgid "This fetching criterion is not available for this mailbox!"
-msgstr ""
+msgstr "Dieses Abruf-Kriterium ist für diese Mailbox nicht verfügbar!"
 
 #: src/core/models/Daemon.py:214
 msgid "No valid mailbox selected!"
-msgstr ""
+msgstr "Keine gültige Mailbox ausgewählt!"
 
 #: src/core/models/Email.py:74
 msgid "message-ID"
@@ -617,10 +617,7 @@ msgstr ""
 "Nachrichtenquelle auf!"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:274
-#, fuzzy, python-format
-#| msgid ""
-#| "An %(error_class_name)s: %(error)s occurred during refresh of fetching of "
-#| "mail contents!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during fetching of mail contents!"
 msgstr ""

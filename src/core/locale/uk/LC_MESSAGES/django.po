@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-06 08:02+0000\n"
+"PO-Revision-Date: 2025-08-08 07:01+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim5@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "core/uk/>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.13-dev\n"
 
 #: src/core/constants.py:38
@@ -96,7 +96,7 @@ msgstr "IMAP4"
 
 #: src/core/constants.py:96
 msgid "IMAP4 (unencrypted)"
-msgstr ""
+msgstr "IMAP4 (незашифрований)"
 
 #: src/core/constants.py:99
 msgid "POP3"
@@ -104,7 +104,7 @@ msgstr "POP3"
 
 #: src/core/constants.py:102
 msgid "POP3  (unencrypted)"
-msgstr ""
+msgstr "POP3  (незашифрований)"
 
 #: src/core/constants.py:105
 msgid "Microsoft Exchange"
@@ -298,7 +298,7 @@ msgstr "Обліковий запис %(mail_address)s з протоколом %
 
 #: src/core/models/Account.py:191
 msgid "This account already exists."
-msgstr ""
+msgstr "Цей обліковий запис вже існує."
 
 #: src/core/models/Attachment.py:63
 msgid "filename"
@@ -457,11 +457,11 @@ msgstr "Демон Emailfetcher %(uuid)s для поштової скриньк�
 
 #: src/core/models/Daemon.py:208
 msgid "This fetching criterion is not available for this mailbox!"
-msgstr ""
+msgstr "Цей критерій отримання недоступний для цієї поштової скриньки!"
 
 #: src/core/models/Daemon.py:214
 msgid "No valid mailbox selected!"
-msgstr ""
+msgstr "Не вибрано дійсну поштову скриньку!"
 
 #: src/core/models/Email.py:74
 msgid "message-ID"
@@ -628,15 +628,12 @@ msgstr ""
 "%(error)s!"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:274
-#, fuzzy, python-format
-#| msgid ""
-#| "An %(error_class_name)s: %(error)s occurred during refresh of fetching of "
-#| "mail contents!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during fetching of mail contents!"
 msgstr ""
-"Помилка %(error_class_name)s: під час оновлення отримання вмісту пошти "
-"сталася помилка %(error)s!"
+"Помилка %(error_class_name)s: під час отримання вмісту пошти сталася помилка "
+"%(error)s!"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:328
 #, python-format

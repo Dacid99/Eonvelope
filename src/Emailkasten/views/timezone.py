@@ -44,7 +44,7 @@ def set_timezone(request: HttpRequest) -> HttpResponse:
     any state.
 
     Note:
-        Analogous to :func:`django.conf.i18n.views.get_language`.
+        Analogous to :func:`django.views.i18n.get_language`.
     """
     next_url = request.POST.get("next", request.GET.get("next"))
     if (
@@ -64,14 +64,25 @@ def set_timezone(request: HttpRequest) -> HttpResponse:
     response = HttpResponseRedirect(next_url) if next_url else HttpResponse(status=204)
     if request.method == "POST":
         timezone_code = request.POST.get(TIMEZONE_FIELD_NAME)
-        if timezone_code:
-            try:
-                zoneinfo.ZoneInfo(timezone_code)
-            except zoneinfo.ZoneInfoNotFoundError:
-                return response
-            else:
-                request.session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = request.POST[
-                    TIMEZONE_FIELD_NAME
-                ]
-
+        if timezone_code and check_for_timezone(timezone_code):
+            request.session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = request.POST[
+                TIMEZONE_FIELD_NAME
+            ]
     return response
+
+
+def check_for_timezone(timezone_code: str) -> bool:
+    """Check the timezone code for validity and availability.
+
+    Args:
+        The code of the timezone.
+
+    Returns:
+        Whether the timezone code is valid and the tz data available.s
+    """
+    try:
+        zoneinfo.ZoneInfo(timezone_code)
+    except zoneinfo.ZoneInfoNotFoundError:
+        return False
+    else:
+        return True

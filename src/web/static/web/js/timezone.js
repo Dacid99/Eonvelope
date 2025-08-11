@@ -22,12 +22,12 @@
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': Cookies.get('csrftoken')
                 },
                 credentials: 'include',
                 mode: 'same-origin',
-                body: JSON.stringify({ timezone }),
+                body: `timezone=${encodeURIComponent(timezone)}`,
             }
         );
         fetch(request).then(() => {

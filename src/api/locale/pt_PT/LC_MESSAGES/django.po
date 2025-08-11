@@ -3,19 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-11 09:31+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-08-12 15:02+0000\n"
+"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
+"Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
+"emailkasten/api/pt_PT/>\n"
+"Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: src/api/v1/mixins/NoCreateMixin.py:34
 msgid "POST method is not allowed on this endpoint."
@@ -37,16 +39,16 @@ msgstr ""
 
 #: src/api/v1/views/AccountViewSet.py:116
 msgid "Updated mailboxes"
-msgstr ""
+msgstr "Caixas de mensagens atualizadas"
 
 #: src/api/v1/views/AccountViewSet.py:140
 msgid "Tested mailaccount"
-msgstr ""
+msgstr "Conta de correio testada"
 
 #: src/api/v1/views/AttachmentViewSet.py:116
 #: src/api/v1/views/AttachmentViewSet.py:198
 msgid "Attachment file not found"
-msgstr ""
+msgstr "Ficheiro de anexo não encontrado"
 
 #: src/api/v1/views/AttachmentViewSet.py:153
 msgid "Attachment ids missing in request."

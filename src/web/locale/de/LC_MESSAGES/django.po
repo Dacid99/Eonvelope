@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-11 09:31+0000\n"
-"PO-Revision-Date: 2025-08-09 15:01+0000\n"
+"PO-Revision-Date: 2025-08-12 15:02+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/web/"
 "de/>\n"
@@ -63,7 +63,7 @@ msgstr "Anzahl an Intervallen"
 
 #: src/web/filters/DaemonFilterSet.py:75
 msgid "Interval period"
-msgstr "Intervaldauer"
+msgstr "Intervalldauer"
 
 #: src/web/filters/DaemonFilterSet.py:80
 msgid "Enabled"
@@ -86,12 +86,14 @@ msgid "Pick a file for upload."
 msgstr "Wähle eine Datei zum Hochladen."
 
 #: src/web/mixins/TestActionMixin.py:47
-#, fuzzy, python-format
-#| msgid "There was something wrong with your request."
+#, python-format
 msgid ""
 "Test failed, there is something wrong with this objects setup\n"
 "%(error)s"
-msgstr "Etwas lief falsch mit deiner Anfrage."
+msgstr ""
+"Test fehlgeschlagen, etwas stimmt nicht mit der Konfiguration dieses Objekts."
+"\n"
+"%(error)s"
 
 #: src/web/mixins/TestActionMixin.py:52
 #, python-format
@@ -103,20 +105,17 @@ msgstr ""
 "%(error)s"
 
 #: src/web/mixins/TestActionMixin.py:56
-#, fuzzy, python-format
-#| msgid ""
-#| "Test failed\n"
-#| "%(error)s"
+#, python-format
 msgid ""
 "Test failed due to an unexpected error\n"
 "%(error)s"
 msgstr ""
-"Test fehlgeschlagen\n"
+"Test fehlgeschlagen aufgrund eines unerwarteten Fehlers\n"
 "%(error)s"
 
 #: src/web/mixins/TestActionMixin.py:60
 msgid "Test was successful"
-msgstr "Test war erfolgreich"
+msgstr "Test erfolgreich"
 
 #: src/web/templates/400.html:6 src/web/templates/400.html:10
 msgid "Request Error"
@@ -198,7 +197,7 @@ msgstr "Abbrechen"
 
 #: src/web/templates/web/account/account_detail.html:6
 msgid "Account Details"
-msgstr "Details zum Konto"
+msgstr "Konto Details"
 
 #: src/web/templates/web/account/account_detail.html:41
 msgid "Host"
@@ -263,7 +262,7 @@ msgstr "Konto hinzufügen"
 
 #: src/web/templates/web/account/partials/_email_list_alternative.html:6
 msgid "You can fetch emails from one of this accounts mailboxes."
-msgstr "Du kannst E-Mails von einem dieser Konten-Mailboxen holen."
+msgstr "Du kannst E-Mails aus einer Mailbox dieses Kontos abrufen."
 
 #: src/web/templates/web/account/partials/_filter_list_alternative.html:7
 msgid "No email accounts found."
@@ -271,18 +270,17 @@ msgstr "Keine E-Mail-Konten gefunden."
 
 #: src/web/templates/web/account/partials/_filter_list_alternative.html:11
 msgid "Go ahead and add some."
-msgstr "Mach weiter und füge einige hinzu."
+msgstr "Leg los und füge einige hinzu."
 
 #: src/web/templates/web/account/partials/_mailboxes_list_alternative.html:6
 msgid "You can add mailboxes for this account by fetching them from the server"
 msgstr ""
 "Du kannst Mailboxen für dieses Konto hinzufügen, indem du sie vom Server "
-"holst"
+"abfrägst"
 
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
 msgid "Test this account to make sure it can be accessed."
-msgstr ""
-"Teste dieses Konto, um sicherzustellen, dass es aufgerufen werden kann."
+msgstr "Teste dieses Konto um zu überprüfen dass der Zugriff funktioniert."
 
 #: src/web/templates/web/account/partials/_update_mailboxes-button.html:9
 msgid "Update Mailboxes"
@@ -290,14 +288,12 @@ msgstr "Mailboxen aktualisieren"
 
 #: src/web/templates/web/attachment/attachment_detail.html:6
 msgid "Attachment Details"
-msgstr "Anhang-Details"
+msgstr "Anhang Details"
 
 #: src/web/templates/web/attachment/attachment_detail.html:32
 #: src/web/templates/web/attachment/partials/_attachment_card.html:10
-#, fuzzy
-#| msgid "Content Type"
 msgid "MIME Content-Type"
-msgstr "Inhaltstyp"
+msgstr "MIME Inhaltstyp"
 
 #: src/web/templates/web/attachment/attachment_detail.html:38
 msgid "Size"
@@ -353,14 +349,13 @@ msgstr "Keine Anhänge gefunden."
 msgid ""
 "You can fetching some along with emails from the mailboxes you have set up."
 msgstr ""
-"Du kannst einige, zusammen mit E-Mails von den Mailboxen, die du "
-"eingerichtet hast, holen."
+"Du kannst einige hinzufügen, indem du E-Mails aus deinen Mailboxen abrufst."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:17
 #: src/web/templates/web/correspondent/partials/_filter_list_alternative.html:17
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:17
 msgid "Go to mailboxes"
-msgstr "Zu Mailboxes"
+msgstr "Zu den Mailboxen"
 
 #: src/web/templates/web/attachment/partials/_thumbnail.html:17
 msgid "Attachment image"
@@ -442,7 +437,7 @@ msgstr "Schließen"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
-msgstr "Korrespondent-Details"
+msgstr "Korrespondent Details"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:31
 msgid "Mailer name"
@@ -450,7 +445,7 @@ msgstr "Mailer-Name"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:36
 msgid "Mailinglist"
-msgstr ""
+msgstr "Mailing-Liste"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:39
 msgid "Subscribe"
@@ -494,8 +489,7 @@ msgstr "Keine Korrespondenten gefunden."
 msgid ""
 "You can add some by fetching the emails from the mailboxes you have set up."
 msgstr ""
-"Du kannst einige hinzufügen, indem du die E-Mails aus den Mailboxen, die du "
-"eingerichtet hast, holen."
+"Du kannst einige hinzufügen, indem du E-Mails aus deinen Mailboxen abrufst."
 
 #: src/web/templates/web/daemon/daemon_create.html:6
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:6
@@ -504,7 +498,7 @@ msgstr "Daemon hinzufügen"
 
 #: src/web/templates/web/daemon/daemon_detail.html:6
 msgid "Daemon Details"
-msgstr "Details zum Daemon"
+msgstr "Daemon Details"
 
 #: src/web/templates/web/daemon/daemon_detail.html:38
 #: src/web/templates/web/daemon/daemon_detail.html:66
@@ -545,11 +539,11 @@ msgstr "Gesamtzahl Ausführungen"
 
 #: src/web/templates/web/daemon/daemon_detail.html:55
 msgid "Logfile Backups"
-msgstr "Datensicherungen der Protokolldateien"
+msgstr "Sicherungen der Protokolldateien"
 
 #: src/web/templates/web/daemon/daemon_detail.html:57
 msgid "Logfile max size"
-msgstr "Maximalgröße der Protokolldateien"
+msgstr "Maximalgröße der Logdateien"
 
 #: src/web/templates/web/daemon/daemon_edit.html:6
 msgid "Edit Daemon"
@@ -564,7 +558,7 @@ msgstr "Daemon hinzufügen"
 #: src/web/templates/web/mailbox/partials/_download_dropdown.html:9
 #: src/web/templates/web/partials/_download-button.html:5
 msgid "Download"
-msgstr "Download"
+msgstr "Herunterladen"
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:7
 msgid "No daemons found."
@@ -593,7 +587,7 @@ msgstr "Stoppen"
 
 #: src/web/templates/web/dashboard.html:6
 msgid "Dashboard"
-msgstr "Dashboard"
+msgstr "Startseite"
 
 #: src/web/templates/web/dashboard.html:10
 msgid "Welcome to Emailkasten"
@@ -613,7 +607,7 @@ msgstr "Anzahl"
 
 #: src/web/templates/web/email/archive/base_archive.html:18
 msgid "Email Archive"
-msgstr "E-Mail-Archiv"
+msgstr "E-Mai Archiv"
 
 #: src/web/templates/web/email/archive/day.html:6
 #: src/web/templates/web/email/archive/day.html:10
@@ -654,7 +648,7 @@ msgstr "Jahr"
 
 #: src/web/templates/web/email/email_detail.html:6
 msgid "Email Details"
-msgstr "Details zur E-Mail"
+msgstr "E-Mail Details"
 
 #: src/web/templates/web/email/email_detail.html:39
 msgid "Time received"
@@ -723,15 +717,15 @@ msgstr "Du kannst einige aus Mailboxen, die du eingerichtet hast, abrufen."
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:18
 msgid "New Daemon"
-msgstr "Neue Daemons"
+msgstr "Neuer Daemon"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:22
 msgid "for"
-msgstr ""
+msgstr "für"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:6
 msgid "Mailbox Details"
-msgstr "Mailbox-Details"
+msgstr "Mailbox Details"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:51
 msgid "Save attachments"
@@ -764,35 +758,35 @@ msgid ""
 "You can set up daemons for this mailbox to fetch its contents on a regular "
 "schedule."
 msgstr ""
-"Du kannst Daemons für diese Mailbox einrichten, um ihre Inhalte auf einem "
-"regelmäßigen Zeitplan zu holen."
+"Du kannst Daemons für diese Mailbox einrichten, um ihre Inhalte regelmäßig "
+"abzurufen."
 
 #: src/web/templates/web/mailbox/partials/_emails_list_alternative.html:8
 msgid ""
 "Fetch emails from this mailbox by setting up a daemon or fetching the "
 "content once."
 msgstr ""
-"Rufe E-Mails aus diesem Mailbox ab, indem du einen Daemon einrichten oder "
-"den Inhalt einmal abrufen."
+"Rufe E-Mails aus dieser Mailbox ab, indem du einen Daemon einrichtest oder "
+"ihren Inhalt einmal abrufst."
 
 #: src/web/templates/web/mailbox/partials/_fetch_all-button.html:9
 msgid "Fetch contents"
-msgstr "Inhalte abrufen"
+msgstr "Inhalt abrufen"
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:7
 msgid "No mailboxes found."
-msgstr "Keine Mailboxes gefunden."
+msgstr "Keine Mailboxen gefunden."
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:11
 msgid ""
 "You can add some by fetching the mailboxes from an account you have set up."
 msgstr ""
-"Du kannst einige hinzufügen, indem du sie aus den Mailboxen eines Accounts, "
-"den du eingerichtet hast, abfragst."
+"Du kannst einige hinzufügen, indem du sie aus den Mailboxen eines deiner "
+"Accounts abfragst."
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:17
 msgid "Go to accounts"
-msgstr "Zu Konten"
+msgstr "Zu den Konten"
 
 #: src/web/templates/web/mailbox/partials/_submit_upload-button.html:6
 #: src/web/templates/web/mailbox/partials/_submit_upload-button.html:7
@@ -802,7 +796,8 @@ msgstr "Hochladen"
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:6
 msgid "Test this mailbox to make sure it can be accessed."
 msgstr ""
-"Teste diese Mailbox, um sicherzustellen, dass sie aufgerufen werden kann."
+"Teste diese Mailbox, um sicherzustellen, dass auf sie zugegriffen werden "
+"kann."
 
 #: src/web/templates/web/mailbox/partials/_upload_email-button.html:6
 msgid "Upload emails"
@@ -822,7 +817,7 @@ msgstr "E-Mails in die Mailbox hochladen"
 
 #: src/web/templates/web/partials/_clear_and_submit_filter-button.html:4
 msgid "& Submit"
-msgstr "und abfragen"
+msgstr "und Filtern"
 
 #: src/web/templates/web/partials/_clear_filter-button.html:4
 msgid "Reset"
@@ -899,11 +894,11 @@ msgstr "Problem"
 
 #: src/web/templates/web/partials/_health_badge.html:15
 msgid "Health unknown"
-msgstr "Gesundheit unbekannt"
+msgstr "Zustand unbekannt"
 
 #: src/web/templates/web/partials/_pagination.html:4
 msgid "Results"
-msgstr ""
+msgstr "Einträge"
 
 #: src/web/templates/web/partials/_pagination.html:5
 msgid "Page navigation"
@@ -973,7 +968,7 @@ msgstr ""
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:99
 msgid "Fetching successful"
-msgstr "Abrufen war erfolgreich"
+msgstr "Abrufen erfolgreich"
 
 #: src/web/views/mailbox_views/UploadEmailView.py:74
 msgid "The file could not be processed!"

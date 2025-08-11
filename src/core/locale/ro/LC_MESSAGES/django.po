@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-06 20:23+0000\n"
+"POT-Creation-Date: 2025-08-11 09:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -251,13 +251,13 @@ msgstr ""
 msgid "Timeout for the connection to the mailserver."
 msgstr ""
 
-#: src/core/models/Account.py:109 src/core/models/Daemon.py:96
-#: src/core/models/Mailbox.py:102
+#: src/core/models/Account.py:109 src/core/models/Daemon.py:97
+#: src/core/models/Mailbox.py:103
 msgid "healthy"
 msgstr ""
 
 #: src/core/models/Account.py:117 src/core/models/Attachment.py:114
-#: src/core/models/Correspondent.py:132 src/core/models/Email.py:141
+#: src/core/models/Correspondent.py:132 src/core/models/Email.py:142
 msgid "favorite"
 msgstr ""
 
@@ -266,17 +266,17 @@ msgid "user"
 msgstr ""
 
 #: src/core/models/Account.py:131 src/core/models/Attachment.py:128
-#: src/core/models/Correspondent.py:138 src/core/models/Daemon.py:126
-#: src/core/models/Email.py:179 src/core/models/EmailCorrespondent.py:65
-#: src/core/models/Mailbox.py:96 src/core/models/Mailbox.py:110
+#: src/core/models/Correspondent.py:138 src/core/models/Daemon.py:127
+#: src/core/models/Email.py:180 src/core/models/EmailCorrespondent.py:65
+#: src/core/models/Mailbox.py:97 src/core/models/Mailbox.py:111
 #: src/core/models/StorageShard.py:70
 msgid "created"
 msgstr ""
 
 #: src/core/models/Account.py:137 src/core/models/Attachment.py:134
-#: src/core/models/Correspondent.py:144 src/core/models/Daemon.py:132
-#: src/core/models/Email.py:185 src/core/models/EmailCorrespondent.py:71
-#: src/core/models/Mailbox.py:116 src/core/models/StorageShard.py:76
+#: src/core/models/Correspondent.py:144 src/core/models/Daemon.py:133
+#: src/core/models/Email.py:186 src/core/models/EmailCorrespondent.py:71
+#: src/core/models/Mailbox.py:117 src/core/models/StorageShard.py:76
 msgid "last updated"
 msgstr ""
 
@@ -291,7 +291,7 @@ msgstr ""
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr ""
 
-#: src/core/models/Account.py:191
+#: src/core/models/Account.py:195
 msgid "This account already exists."
 msgstr ""
 
@@ -319,7 +319,7 @@ msgstr ""
 msgid "content subtype"
 msgstr ""
 
-#: src/core/models/Attachment.py:108 src/core/models/Email.py:123
+#: src/core/models/Attachment.py:108 src/core/models/Email.py:124
 msgid "datasize"
 msgstr ""
 
@@ -393,122 +393,122 @@ msgstr ""
 msgid "Correspondent with address %(email_address)s"
 msgstr ""
 
-#: src/core/models/Daemon.py:58
+#: src/core/models/Daemon.py:59
 msgid "UUID"
 msgstr ""
 
-#: src/core/models/Daemon.py:66 src/core/models/Email.py:159
+#: src/core/models/Daemon.py:67 src/core/models/Email.py:160
 msgid "mailbox"
 msgstr ""
 
-#: src/core/models/Daemon.py:74
+#: src/core/models/Daemon.py:75
 msgid "fetching criterion"
 msgstr ""
 
-#: src/core/models/Daemon.py:75
+#: src/core/models/Daemon.py:76
 msgid "The selection criterion for emails to archive."
 msgstr ""
 
-#: src/core/models/Daemon.py:83
+#: src/core/models/Daemon.py:84
 msgid "celery task"
 msgstr ""
 
-#: src/core/models/Daemon.py:89
+#: src/core/models/Daemon.py:90
 msgid "interval"
 msgstr ""
 
-#: src/core/models/Daemon.py:90
+#: src/core/models/Daemon.py:91
 msgid "The time between two daemon runs in seconds."
 msgstr ""
 
-#: src/core/models/Daemon.py:106
+#: src/core/models/Daemon.py:107
 msgid "logfilepath"
 msgstr ""
 
-#: src/core/models/Daemon.py:112
+#: src/core/models/Daemon.py:113
 msgid "logfile backup count"
 msgstr ""
 
-#: src/core/models/Daemon.py:113
+#: src/core/models/Daemon.py:114
 msgid "The number of historical logfiles to keep."
 msgstr ""
 
-#: src/core/models/Daemon.py:119
+#: src/core/models/Daemon.py:120
 msgid "logfile maximum size"
 msgstr ""
 
-#: src/core/models/Daemon.py:120
+#: src/core/models/Daemon.py:121
 msgid "The maximum size of a logfile in bytes."
 msgstr ""
 
-#: src/core/models/Daemon.py:138
+#: src/core/models/Daemon.py:139
 msgid "This will only delete this daemon, not its mailbox."
 msgstr ""
 
-#: src/core/models/Daemon.py:169
+#: src/core/models/Daemon.py:170
 #, python-format
 msgid "Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s"
 msgstr ""
 
-#: src/core/models/Daemon.py:208
+#: src/core/models/Daemon.py:211
 msgid "This fetching criterion is not available for this mailbox!"
 msgstr ""
 
-#: src/core/models/Daemon.py:214
+#: src/core/models/Daemon.py:217
 msgid "No valid mailbox selected!"
 msgstr ""
 
-#: src/core/models/Email.py:74
+#: src/core/models/Email.py:75
 msgid "message-ID"
 msgstr ""
 
-#: src/core/models/Email.py:79
+#: src/core/models/Email.py:80
 msgid "received"
 msgstr ""
 
-#: src/core/models/Email.py:87
+#: src/core/models/Email.py:88
 msgid "subject"
 msgstr ""
 
-#: src/core/models/Email.py:94
+#: src/core/models/Email.py:95
 msgid "plain bodytext"
 msgstr ""
 
-#: src/core/models/Email.py:101
+#: src/core/models/Email.py:102
 msgid "HTML bodytext"
 msgstr ""
 
-#: src/core/models/Email.py:109
+#: src/core/models/Email.py:110
 msgid "in reply to"
 msgstr ""
 
-#: src/core/models/Email.py:118
+#: src/core/models/Email.py:119
 msgid "referenced by"
 msgstr ""
 
-#: src/core/models/Email.py:132
+#: src/core/models/Email.py:133
 msgid "EML filepath"
 msgstr ""
 
-#: src/core/models/Email.py:150
+#: src/core/models/Email.py:151
 msgid "correspondents"
 msgstr ""
 
-#: src/core/models/Email.py:165
+#: src/core/models/Email.py:166
 msgid "headers"
 msgstr ""
 
-#: src/core/models/Email.py:173
+#: src/core/models/Email.py:174
 msgid "X-Spam"
 msgstr ""
 
-#: src/core/models/Email.py:192
+#: src/core/models/Email.py:193
 msgid ""
 "This will delete this email and all its attachments but not its "
 "correspondents."
 msgstr ""
 
-#: src/core/models/Email.py:217
+#: src/core/models/Email.py:218
 #, python-format
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
@@ -528,36 +528,36 @@ msgid ""
 "%(correspondent)s with mention %(mention)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:66
+#: src/core/models/Mailbox.py:67
 msgid "name"
 msgstr ""
 
-#: src/core/models/Mailbox.py:74
+#: src/core/models/Mailbox.py:75
 msgid "account"
 msgstr ""
 
-#: src/core/models/Mailbox.py:80
+#: src/core/models/Mailbox.py:81
 msgid "save attachments"
 msgstr ""
 
-#: src/core/models/Mailbox.py:82
+#: src/core/models/Mailbox.py:83
 msgid "Whether the attachments from the emails in this mailbox will be saved."
 msgstr ""
 
-#: src/core/models/Mailbox.py:89
+#: src/core/models/Mailbox.py:90
 msgid "save as .eml"
 msgstr ""
 
-#: src/core/models/Mailbox.py:90
+#: src/core/models/Mailbox.py:91
 msgid "Whether the emails in this mailbox will be stored in .eml files."
 msgstr ""
 
-#: src/core/models/Mailbox.py:123
+#: src/core/models/Mailbox.py:124
 msgid ""
 "This will delete this mailbox and all emails and attachments found in it!"
 msgstr ""
 
-#: src/core/models/Mailbox.py:146
+#: src/core/models/Mailbox.py:147
 #, python-format
 msgid "Mailbox %(name)s of %(account)s"
 msgstr ""
@@ -587,32 +587,26 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:184
+#: src/core/utils/fetchers/ExchangeFetcher.py:195
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of message_root!"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:205
+#: src/core/utils/fetchers/ExchangeFetcher.py:216
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of "
 "%(mailbox_name)s!"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:256
-#, python-format
-msgid ""
-"An %(error_class_name)s: %(error)s occurred during opening of message_root!"
-msgstr ""
-
-#: src/core/utils/fetchers/ExchangeFetcher.py:274
+#: src/core/utils/fetchers/ExchangeFetcher.py:270
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during fetching of mail contents!"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:328
+#: src/core/utils/fetchers/ExchangeFetcher.py:323
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during scan of message_root!"

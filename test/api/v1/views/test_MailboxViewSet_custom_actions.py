@@ -626,7 +626,7 @@ def test_upload_mailbox_bad_file_or_format_auth_owner(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert response.data["detail"] == str(mock_Mailbox_add_emails_from_file.side_effect)
+    assert response.data["error"] == str(mock_Mailbox_add_emails_from_file.side_effect)
     mock_Mailbox_add_emails_from_file.assert_called_once()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data

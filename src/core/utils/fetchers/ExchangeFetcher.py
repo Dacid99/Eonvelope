@@ -116,7 +116,7 @@ class ExchangeFetcher(BaseFetcher):
         """Opens the connection to the Exchange server using the credentials from :attr:`account`.
 
         Raises:
-            MailAccountError: If an error occurs or a bad response is returned.
+            MailAccountError: If an error occurs accessing the msg_folder_root.
         """
 
         self.logger.debug("Setting up connection to %s ...", self.account)
@@ -146,7 +146,7 @@ class ExchangeFetcher(BaseFetcher):
                 retry_policy=retry_policy,
             )
         )
-        self._mail_client = exchangelib.Account(
+        exchange_account = exchangelib.Account(
             primary_smtp_address=self.account.mail_address,
             config=config,
             access_type=exchangelib.DELEGATE,
@@ -155,6 +155,17 @@ class ExchangeFetcher(BaseFetcher):
                 "UTC"
             ),  # for consistency with celery and django settings
         )
+        try:
+            self._mail_client = exchange_account.msg_folder_root
+        except exchangelib.errors.EWSError as error:
+            self.logger.exception(
+                "An %s occurred connecting to %s!",
+                error.__class__.__name__,
+                self.account,
+            )
+            raise MailAccountError(
+                f"An {error.__class__.__name__}: {error} occurred connecting to {self.account}!"
+            ) from error
         self.logger.info("Successfully set up connection to %s.", self.account)
 
     @override
@@ -173,7 +184,7 @@ class ExchangeFetcher(BaseFetcher):
 
         self.logger.debug("Testing %s ...", self.account)
         try:
-            self._mail_client.msg_folder_root.refresh()
+            self._mail_client.refresh()
         except exchangelib.errors.EWSError as error:
             self.logger.exception(
                 "An %s occurred during refresh of message_root!",
@@ -235,7 +246,6 @@ class ExchangeFetcher(BaseFetcher):
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
                 If :attr:`criterion` is not in :attr:`ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA`.
-            MailAccountError: If an error occurs or a bad response is returned when accessing the server.
             MailboxError: If an error occurs or a bad response is returned during an action on the mailbox..
         """
         super().fetch_emails(mailbox, criterion)
@@ -244,22 +254,6 @@ class ExchangeFetcher(BaseFetcher):
             criterion,
             mailbox,
         )
-        try:
-            self._mail_client.msg_folder_root  # noqa: B018  # technically pointless but required here to catch account issues in the right place
-        except exchangelib.errors.EWSError as error:
-            self.logger.exception(
-                "An %s occurred during opening of message_root!",
-                error.__class__.__name__,
-            )
-            raise MailAccountError(
-                _(
-                    "An %(error_class_name)s: %(error)s occurred during opening of message_root!"
-                )
-                % {
-                    "error_class_name": error.__class__.__name__,
-                    "error": error,
-                },
-            ) from error
         try:
             mailbox_folder = self.open_mailbox(mailbox)
             mail_query = self.make_fetching_query(
@@ -312,11 +306,10 @@ class ExchangeFetcher(BaseFetcher):
         """
         self.logger.debug("Fetching mailboxes at %s ...", self.account)
         try:
-            mail_root = self._mail_client.msg_folder_root
-            mail_root_path = mail_root.absolute
+            mail_root_path = self._mail_client.absolute
             mailbox_names = [
                 os.path.relpath(folder.absolute, mail_root_path)
-                for folder in mail_root.walk()
+                for folder in self._mail_client.walk()
                 if isinstance(folder, exchangelib.Folder)
                 and folder.folder_class == "IPF.Note"
             ]
@@ -349,7 +342,7 @@ class ExchangeFetcher(BaseFetcher):
         Returns:
             The mailbox folder instance.
         """
-        mailbox_folder = self._mail_client.msg_folder_root
+        mailbox_folder = self._mail_client
         for folder_name in mailbox.name.split("/"):
             mailbox_folder = mailbox_folder / folder_name
         return mailbox_folder

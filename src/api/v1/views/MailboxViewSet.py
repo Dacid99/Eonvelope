@@ -23,6 +23,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, override
 
 from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -106,7 +107,7 @@ class MailboxViewSet(
         mailbox = self.get_object()
         response = Response(
             {
-                "detail": "Tested mailbox",
+                "detail": _("Tested mailbox"),
             }
         )
         try:
@@ -169,13 +170,13 @@ class MailboxViewSet(
         except FetcherError as error:
             response = Response(
                 {
-                    "detail": "Error with mailaccount or mailbox occurred!",
+                    "detail": _("Error with mailaccount or mailbox occurred."),
                     "error": str(error),
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
-            response = Response({"detail": "All mails fetched"})
+            response = Response({"detail": _("All emails fetched.")})
         mailbox.refresh_from_db()
         response.data["mailbox"] = self.get_serializer(mailbox).data
         return response
@@ -208,7 +209,7 @@ class MailboxViewSet(
         file_format = request.query_params.get("file_format", None)
         if not file_format:
             return Response(
-                {"detail": "File format missing in request!"},
+                {"detail": _("File format missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
@@ -216,11 +217,14 @@ class MailboxViewSet(
             file = Email.queryset_as_file(mailbox.emails.all(), file_format)
         except ValueError:
             return Response(
-                {"detail": f"File format {file_format} is not supported!"},
+                {
+                    "detail": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         except Email.DoesNotExist:
-            raise Http404("No emails found.") from None
+            raise Http404(_("No emails found.")) from None
         else:
             return FileResponse(
                 file,
@@ -250,13 +254,16 @@ class MailboxViewSet(
         file_format = request.data.get("format", None)
         if file_format is None:
             return Response(
-                {"detail": "File format missing in request!"},
+                {
+                    "detail": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         uploaded_file = request.FILES.get("file", None)
         if uploaded_file is None:
             return Response(
-                {"detail": "File missing in request!"},
+                {"detail": _("File missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
@@ -264,13 +271,16 @@ class MailboxViewSet(
             mailbox.add_emails_from_file(uploaded_file, file_format)
         except ValueError as error:
             return Response(
-                {"detail": str(error)},
+                {
+                    "detail": _("An error occurred while processing the file."),
+                    "error": str(error),
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox_serializer = self.get_serializer(mailbox)
         return Response(
             {
-                "detail": "Successfully uploaded mailbox file.",
+                "detail": _("Successfully uploaded mailbox file."),
                 "mailbox": mailbox_serializer.data,
             }
         )

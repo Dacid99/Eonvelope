@@ -70,7 +70,6 @@
 - daemon may not update task interval correctly!
 - optics:
   - better name for daemon
-  - translate api
   - mobile optimizations:
     - breakpoint for created-updated footer
     - sticky pagination gets stuck

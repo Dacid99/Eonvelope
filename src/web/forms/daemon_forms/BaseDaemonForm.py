@@ -75,8 +75,6 @@ class BaseDaemonForm(RequiredMarkerModelForm):
 
         fields: ClassVar[list[str]] = [
             "fetching_criterion",
-            "log_backup_count",
-            "logfile_size",
         ]
         """Exposes all fields that the user should be able to change."""
 

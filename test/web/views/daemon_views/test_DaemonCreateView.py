@@ -95,15 +95,13 @@ def test_post_auth_other(
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(reverse("web:" + Daemon.get_list_web_url_name()))
     assert Daemon.objects.all().count() == 2
-    added_daemon = Daemon.objects.filter(
-        fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
-        mailbox=daemon_with_interval_payload["mailbox"],
-    ).get()
     assert (
-        added_daemon.log_backup_count
-        == daemon_with_interval_payload["log_backup_count"]
+        Daemon.objects.filter(
+            fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
+            mailbox=daemon_with_interval_payload["mailbox"],
+        ).count()
+        == 1
     )
-    assert added_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -138,15 +136,13 @@ def test_post_auth_owner(daemon_with_interval_payload, owner_client, list_url):
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(reverse("web:" + Daemon.get_list_web_url_name()))
     assert Daemon.objects.all().count() == 2
-    added_daemon = Daemon.objects.filter(
-        fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
-        mailbox=daemon_with_interval_payload["mailbox"],
-    ).get()
     assert (
-        added_daemon.log_backup_count
-        == daemon_with_interval_payload["log_backup_count"]
+        Daemon.objects.filter(
+            fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
+            mailbox=daemon_with_interval_payload["mailbox"],
+        ).count()
+        == 1
     )
-    assert added_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db

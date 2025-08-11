@@ -148,15 +148,13 @@ def test_post_auth_owner(
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(fake_mailbox.get_absolute_url())
     assert Daemon.objects.all().count() == 2
-    added_daemon = Daemon.objects.filter(
-        fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
-        mailbox=daemon_with_interval_payload["mailbox"],
-    ).get()
     assert (
-        added_daemon.log_backup_count
-        == daemon_with_interval_payload["log_backup_count"]
+        Daemon.objects.filter(
+            fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
+            mailbox=daemon_with_interval_payload["mailbox"],
+        ).count()
+        == 1
     )
-    assert added_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db

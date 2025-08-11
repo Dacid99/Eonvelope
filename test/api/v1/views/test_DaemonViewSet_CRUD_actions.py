@@ -63,7 +63,7 @@ def test_get_noauth(fake_daemon, noauth_api_client, detail_url):
     response = noauth_api_client.get(detail_url(DaemonViewSet, fake_daemon))
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "logfile_size" not in response.data
+    assert "fetching_criterion" not in response.data
 
 
 @pytest.mark.django_db
@@ -80,7 +80,7 @@ def test_get_auth_owner(fake_daemon, owner_api_client, detail_url):
     response = owner_api_client.get(detail_url(DaemonViewSet, fake_daemon))
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["logfile_size"] == fake_daemon.logfile_size
+    assert response.data["fetching_criterion"] == fake_daemon.fetching_criterion
 
 
 @pytest.mark.django_db
@@ -95,9 +95,12 @@ def test_patch_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "logfile_size" not in response.data
+    assert "fetching_criterion" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
+    assert (
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
+    )
 
 
 @pytest.mark.django_db
@@ -112,9 +115,12 @@ def test_patch_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert "logfile_size" not in response.data
+    assert "fetching_criterion" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
+    assert (
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
+    )
 
 
 @pytest.mark.django_db
@@ -133,9 +139,15 @@ def test_patch_auth_owner(
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["logfile_size"] == daemon_with_interval_payload["logfile_size"]
+    assert (
+        response.data["fetching_criterion"]
+        == daemon_with_interval_payload["fetching_criterion"]
+    )
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
+    assert (
+        fake_daemon.fetching_criterion
+        == daemon_with_interval_payload["fetching_criterion"]
+    )
 
 
 @pytest.mark.django_db
@@ -150,9 +162,12 @@ def test_put_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "logfile_size" not in response.data
+    assert "fetching_criterion" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
+    assert (
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
+    )
 
 
 @pytest.mark.django_db
@@ -167,9 +182,12 @@ def test_put_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    assert "logfile_size" not in response.data
+    assert "fetching_criterion" not in response.data
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
+    assert (
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
+    )
 
 
 @pytest.mark.django_db
@@ -187,9 +205,15 @@ def test_put_auth_owner(
         format="json",
     )
     assert response.status_code == status.HTTP_200_OK
-    assert response.data["logfile_size"] == daemon_with_interval_payload["logfile_size"]
+    assert (
+        response.data["fetching_criterion"]
+        == daemon_with_interval_payload["fetching_criterion"]
+    )
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
+    assert (
+        fake_daemon.fetching_criterion
+        == daemon_with_interval_payload["fetching_criterion"]
+    )
 
 
 @pytest.mark.django_db
@@ -202,9 +226,11 @@ def test_post_noauth(noauth_api_client, daemon_with_interval_payload, list_url):
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    assert "logfile_size" not in response.data
+    assert "fetching_criterion" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(logfile_size=daemon_with_interval_payload["logfile_size"])
+        Daemon.objects.get(
+            fetching_criterion=daemon_with_interval_payload["fetching_criterion"]
+        )
 
 
 @pytest.mark.django_db
@@ -218,9 +244,11 @@ def test_post_auth_other(other_api_client, daemon_with_interval_payload, list_ur
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "mailbox" in response.data
-    assert "logfile_size" not in response.data
+    assert "fetching_criterion" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
-        Daemon.objects.get(logfile_size=daemon_with_interval_payload["logfile_size"])
+        Daemon.objects.get(
+            fetching_criterion=daemon_with_interval_payload["fetching_criterion"]
+        )
 
 
 @pytest.mark.django_db
@@ -235,8 +263,11 @@ def test_post_auth_owner(
     )
 
     assert response.status_code == status.HTTP_201_CREATED
-    assert "logfile_size" in response.data
-    assert response.data["logfile_size"] == daemon_with_interval_payload["logfile_size"]
+    assert "fetching_criterion" in response.data
+    assert (
+        response.data["fetching_criterion"]
+        == daemon_with_interval_payload["fetching_criterion"]
+    )
     posted_daemon = Daemon.objects.get(
         fetching_criterion=daemon_with_interval_payload["fetching_criterion"],
         mailbox=daemon_with_interval_payload["mailbox"],
@@ -264,7 +295,7 @@ def test_delete_noauth(fake_daemon, noauth_api_client, detail_url):
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size is not None
+    assert fake_daemon.fetching_criterion is not None
 
 
 @pytest.mark.django_db
@@ -274,7 +305,7 @@ def test_delete_auth_other(fake_daemon, other_api_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     fake_daemon.refresh_from_db()
-    assert fake_daemon.logfile_size is not None
+    assert fake_daemon.fetching_criterion is not None
 
 
 @pytest.mark.django_db

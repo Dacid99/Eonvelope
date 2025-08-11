@@ -20,10 +20,8 @@
 
 from __future__ import annotations
 
-import os
 from typing import TYPE_CHECKING, Final, override
 
-from django.http import FileResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
@@ -176,44 +174,3 @@ class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
         daemon_data = self.get_serializer(daemon).data
         response.data["daemon"] = daemon_data
         return response
-
-    URL_PATH_LOG_DOWNLOAD = "log/download"
-    URL_NAME_LOG_DOWNLOAD = "log-download"
-
-    @action(
-        detail=True,
-        methods=["get"],
-        url_path=URL_PATH_LOG_DOWNLOAD,
-        url_name=URL_NAME_LOG_DOWNLOAD,
-    )
-    def log_download(self, request: Request, pk: int | None = None) -> FileResponse:
-        """Action method downloading the log file of the daemon.
-
-        Args:
-            request: The request triggering the action.
-            pk: int: The private key of the daemon. Defaults to None.
-
-        Raises:
-            Http404: If the filepath is not in the database or it doesn't exist.
-
-        Returns:
-            A fileresponse containing the requested file.
-        """
-        daemon = self.get_object()
-
-        number_query_param = request.query_params.get("number", "0")
-        try:
-            number = int(number_query_param)
-        except ValueError:
-            number = 0
-        number_suffix = f".{number}" if number > 0 else ""
-        daemon_log_filepath = daemon.log_filepath + number_suffix
-        if not daemon_log_filepath or not os.path.exists(daemon_log_filepath):
-            raise Http404(_("Logfile not found"))
-
-        daemon_log_filename = os.path.basename(daemon_log_filepath)
-        return FileResponse(
-            open(daemon_log_filepath, "rb"),
-            as_attachment=True,
-            filename=daemon_log_filename,
-        )

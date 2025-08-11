@@ -67,9 +67,7 @@ def test_Daemon_fields(fake_daemon):
     assert fake_daemon.fetching_criterion == constants.EmailFetchingCriterionChoices.ALL
     assert fake_daemon.interval is not None
     assert fake_daemon.is_healthy is None
-    assert fake_daemon.log_filepath is not None
-    assert fake_daemon.log_backup_count == get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
-    assert fake_daemon.logfile_size == get_config("DAEMON_LOGFILE_SIZE_DEFAULT")
+    assert fake_daemon.last_error is not None
     assert fake_daemon.updated is not None
     assert isinstance(fake_daemon.updated, datetime.datetime)
     assert fake_daemon.created is not None
@@ -95,13 +93,6 @@ def test_Daemon_foreign_key_deletion(fake_daemon):
 
 
 @pytest.mark.django_db
-def test_Daemon_unique_constraint_log_filepath(fake_daemon):
-    """Tests the unique constraints on :attr:`core.models.Daemon.Daemon.log_filepath` of :class:`core.models.Daemon.Daemon`."""
-    with pytest.raises(IntegrityError):
-        baker.make(Daemon, log_filepath=fake_daemon.log_filepath)
-
-
-@pytest.mark.django_db
 def test_Daemon_unique_together_constraint_mailbox_fetching_criterion(
     faker, fake_daemon
 ):
@@ -111,7 +102,6 @@ def test_Daemon_unique_together_constraint_mailbox_fetching_criterion(
             Daemon,
             mailbox=fake_daemon.mailbox,
             fetching_criterion=fake_daemon.fetching_criterion,
-            log_filepath=faker.file_path(extension="log"),
         )
 
 
@@ -123,35 +113,7 @@ def test_Daemon_valid_fetching_criterion_constraint(faker, fake_daemon):
             Daemon,
             mailbox=fake_daemon.mailbox,
             fetching_criterion="BAD_CRITERION",
-            log_filepath=faker.file_path(extension="log"),
         )
-
-
-@pytest.mark.django_db
-def test_Daemon_save_logfile_creation(faker, settings, fake_fs, fake_daemon):
-    """Tests :func:`core.models.Correspondent.Correspondent.save`
-    in case there is no log_filepath.
-    """
-    fake_logdirpath = faker.file_path()
-    fake_fs.create_dir(fake_logdirpath)
-    settings.LOG_DIRECTORY_PATH = Path(fake_logdirpath)
-    fake_daemon.log_filepath = None
-
-    fake_daemon.save()
-
-    fake_daemon.refresh_from_db()
-    assert os.path.dirname(fake_daemon.log_filepath) == str(
-        settings.LOG_DIRECTORY_PATH.absolute()
-    )
-    logger = logging.getLogger(str(fake_daemon.uuid))
-    assert logger.level <= logging.INFO
-    assert len(logger.handlers) == 1
-    assert isinstance(logger.handlers[0], logging.handlers.RotatingFileHandler)
-    assert os.path.abspath(logger.handlers[0].baseFilename) == os.path.abspath(
-        fake_daemon.log_filepath
-    )
-    assert logger.handlers[0].backupCount == fake_daemon.log_backup_count
-    assert logger.handlers[0].maxBytes == fake_daemon.logfile_size
 
 
 @pytest.mark.django_db
@@ -208,23 +170,6 @@ def test_Daemon_test_failure(mock_celery_app, fake_daemon, error):
         "core.tasks.fetch_emails", args=args, kwargs=kwargs
     )
     mock_celery_app.send_task.return_value.get.assert_called_once_with()
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "log_filepath, expected_has_download",
-    [
-        (None, False),
-        ("some/log/file/path", True),
-    ],
-)
-def test_Daemon_has_download(fake_daemon, log_filepath, expected_has_download):
-    """Tests :func:`core.models.Daemon.Daemon.has_download` in the two relevant cases."""
-    fake_daemon.log_filepath = log_filepath
-
-    result = fake_daemon.has_download
-
-    assert result == expected_has_download
 
 
 @pytest.mark.django_db

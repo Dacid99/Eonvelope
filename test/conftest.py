@@ -417,7 +417,6 @@ def fake_daemon(faker, fake_mailbox) -> Daemon:
     """
     return baker.make(
         Daemon,
-        log_filepath=faker.file_path(extension="log"),
         mailbox=fake_mailbox,
     )
 
@@ -559,7 +558,6 @@ def fake_other_daemon(faker, fake_other_mailbox) -> Daemon:
     """
     return baker.make(
         Daemon,
-        log_filepath=faker.file_path(extension="log"),
         mailbox=fake_other_mailbox,
     )
 
@@ -752,15 +750,6 @@ def daemon_payload(faker, fake_mailbox, fake_daemon) -> dict[str, Any]:
         Daemon,
         mailbox=fake_mailbox,
         fetching_criterion=faker.random.choice(fetching_choices),
-        log_backup_count=faker.random.randint(
-            Daemon.log_backup_count.field.default + 1,
-            Daemon.log_backup_count.field.default * 100,
-        ),
-        logfile_size=faker.random.randint(
-            Daemon.logfile_size.field.default + 1,
-            Daemon.logfile_size.field.default * 100,
-        ),
-        log_filepath=faker.file_path(),
     )
     payload = model_to_dict(daemon_data)
     payload.pop("id")

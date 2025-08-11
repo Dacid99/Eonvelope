@@ -101,9 +101,9 @@ def test_post_update_noauth(
     )
     fake_daemon.refresh_from_db()
     assert (
-        fake_daemon.log_backup_count != daemon_with_interval_payload["log_backup_count"]
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
     )
-    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -119,9 +119,9 @@ def test_post_update_auth_other(
     assert "404.html" in [t.name for t in response.templates]
     fake_daemon.refresh_from_db()
     assert (
-        fake_daemon.log_backup_count != daemon_with_interval_payload["log_backup_count"]
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
     )
-    assert fake_daemon.logfile_size != daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db
@@ -138,9 +138,9 @@ def test_post_update_auth_owner(
     assert response.url.startswith(reverse("web:daemon-filter-list"))
     fake_daemon.refresh_from_db()
     assert (
-        fake_daemon.log_backup_count == daemon_with_interval_payload["log_backup_count"]
+        fake_daemon.fetching_criterion
+        == daemon_with_interval_payload["fetching_criterion"]
     )
-    assert fake_daemon.logfile_size == daemon_with_interval_payload["logfile_size"]
 
 
 @pytest.mark.django_db

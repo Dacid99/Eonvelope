@@ -22,24 +22,18 @@ from __future__ import annotations
 
 import json
 import logging
-import logging.handlers
-import os
 import uuid
 from typing import TYPE_CHECKING, Any, Final, override
 
 from celery import current_app
 from dirtyfields import DirtyFieldsMixin
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import IntervalSchedule, PeriodicTask
 
-from Emailkasten.utils.workarounds import get_config
-
 from ..constants import EmailFetchingCriterionChoices
-from ..mixins import HasDownloadMixin, URLMixin
+from ..mixins import URLMixin
 
 
 if TYPE_CHECKING:
@@ -50,7 +44,7 @@ logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
 
-class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
+class Daemon(DirtyFieldsMixin, URLMixin, models.Model):
     """Database model for the daemon fetching a mailbox."""
 
     uuid = models.UUIDField(
@@ -83,6 +77,7 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         null=True,
         verbose_name=_("celery task"),
     )
+    """The periodic celery task wrapped by this daemon."""
 
     interval: models.ForeignKey[IntervalSchedule] = models.ForeignKey(
         IntervalSchedule,
@@ -90,7 +85,7 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
         verbose_name=_("interval"),
         help_text=_("The time between two daemon runs in seconds."),
     )
-    """The period with which the daemon is running. :attr:`constance.config('DAEMON_CYCLE_PERIOD_DEFAULT')` by default."""
+    """The period with which the daemon is running."""
 
     is_healthy = models.BooleanField(
         null=True,
@@ -101,26 +96,12 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
     When this field changes to `True`, the :attr:`core.models.Mailbox.is_healthy` field of :attr:`mailbox` will be set to `True` as well by a signal.
     """
 
-    log_filepath = models.CharField(
-        unique=True,
-        max_length=255,
-        verbose_name=_("logfilepath"),
+    last_error = models.TextField(
+        blank=True,
+        default="",
+        verbose_name=_("last error"),
     )
-    """The logfile the daemon logs to. Is automatically set by :func:`save`. Unique."""
-
-    log_backup_count = models.PositiveSmallIntegerField(
-        default=get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT"),
-        verbose_name=_("logfile backup count"),
-        help_text=_("The number of historical logfiles to keep."),
-    )
-    """The number of backup logfiles for the daemon. :attr:`constance.config('DAEMON_LOG_BACKUP_COUNT_DEFAULT')` by default."""
-
-    logfile_size = models.PositiveIntegerField(
-        default=get_config("DAEMON_LOGFILE_SIZE_DEFAULT"),
-        verbose_name=_("logfile maximum size"),
-        help_text=_("The maximum size of a logfile in bytes."),
-    )
-    """The maximum size of a logfile for the daemon in bytes. :attr:`constance.config('DAEMON_LOGFILE_SIZE_DEFAULT')` by default."""
+    """The error from the most recent failed task execution."""
 
     created = models.DateTimeField(
         auto_now_add=True,
@@ -174,14 +155,7 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
 
     @override
     def save(self, *args: Any, **kwargs: Any) -> None:
-        """Extended :django::func:`django.models.Model.save` method.
-
-        Create and sets :attr:`log_filepath` if it is null.
-        """
-        if not self.log_filepath:
-            self.setup_logger()  # Order may be crucial here to set the logger up before its used
-        # else:
-        #     self.update_logger()
+        """Extended :django::func:`django.models.Model.save` method."""
         if not self.pk:
             self.celery_task = PeriodicTask.objects.create(
                 interval=self.interval,
@@ -189,6 +163,9 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
                 task="core.tasks.fetch_emails",
                 args=json.dumps([str(self.uuid)]),
             )
+        else:
+            self.celery_task.interval = self.interval
+            self.celery_task.save()
         super().save(*args, **kwargs)
 
     @override
@@ -216,29 +193,6 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
             raise ValidationError(
                 {"mailbox": _("No valid mailbox selected!")}
             ) from None
-
-    def setup_logger(self) -> None:
-        """Sets up the logger for the daemon process."""
-        daemon_logger = logging.getLogger(str(self.uuid))
-        daemon_logger.setLevel(logging.DEBUG)
-        self.log_filepath = os.path.join(
-            settings.LOG_DIRECTORY_PATH.absolute(),
-            f"{daemon_logger.name}.log",
-        )
-        file_handler = logging.handlers.RotatingFileHandler(
-            filename=self.log_filepath,
-            backupCount=self.log_backup_count,
-            maxBytes=self.logfile_size,
-        )
-        file_handler.setFormatter(logging.Formatter(settings.LOGFORMAT, style="{"))
-        daemon_logger.addHandler(file_handler)
-
-    # def update_logger(self) -> None:
-    #     """Sets up the logger for the daemon process."""
-    #     daemon_logger = logging.getLogger(str(self.uuid))
-    #     file_handler = daemon_logger.handlers[0]
-    #     file_handler.backupCount = self.log_backup_count
-    #     file_handler.maxBytes = self.logfile_size
 
     def test(self) -> None:
         """Tests whether the data in the model is correct and the daemons task can be run.
@@ -290,14 +244,3 @@ class Daemon(DirtyFieldsMixin, HasDownloadMixin, URLMixin, models.Model):
             return True
         logger.debug("%s was not running.", self)
         return False
-
-    @override
-    @property
-    def has_download(self) -> bool:
-        """Daemon always has a logfile."""
-        return self.log_filepath is not None
-
-    @override
-    def get_absolute_download_url(self) -> str:
-        """Returns the url of the log download api endpoint."""
-        return reverse(f"api:v1:{self.BASENAME}-log-download", kwargs={"pk": self.pk})

@@ -18,8 +18,6 @@
 
 """Test file for :mod:`core.tasks`."""
 
-import logging
-
 import pytest
 
 from core.tasks import fetch_emails
@@ -29,13 +27,6 @@ from test.conftest import TEST_EMAIL_PARAMETERS
 from .models.test_Account import mock_Account_get_fetcher, mock_fetcher
 from .models.test_Attachment import mock_Attachment_save_to_storage
 from .models.test_Email import mock_Email_save_eml_to_storage
-
-
-@pytest.fixture(autouse=True)
-def mock_get_daemon_logger(mocker, fake_daemon):
-    mock_getLogger = mocker.patch("core.tasks.logging.getLogger")
-    mock_getLogger.return_value = mocker.MagicMock(spec=logging.Logger)
-    return mock_getLogger
 
 
 @pytest.fixture
@@ -57,23 +48,21 @@ def mock_Account_get_test_email_fetcher(
 @pytest.mark.django_db
 def test_fetch_emails_task_success(
     fake_daemon,
-    mock_get_daemon_logger,
     mock_Attachment_save_to_storage,
     mock_Email_save_eml_to_storage,
 ):
     assert fake_daemon.mailbox.emails.count() == 0
+    assert fake_daemon.is_healthy is not True
 
     fetch_emails(str(fake_daemon.uuid))
 
-    mock_get_daemon_logger.assert_called_with(str(fake_daemon.uuid))
-    mock_get_daemon_logger.return_value.info.assert_called()
     fake_daemon.refresh_from_db()
     assert fake_daemon.mailbox.emails.count() == 1
     assert fake_daemon.is_healthy is True
 
 
 @pytest.mark.django_db
-def test_fetch_emails_task_bad_daemon_uuid(faker, fake_daemon, mock_get_daemon_logger):
+def test_fetch_emails_task_bad_daemon_uuid(faker, fake_daemon):
     assert fake_daemon.mailbox.emails.count() == 0
 
     fetch_emails(faker.uuid4())
@@ -82,66 +71,75 @@ def test_fetch_emails_task_bad_daemon_uuid(faker, fake_daemon, mock_get_daemon_l
 
 
 @pytest.mark.django_db
-def test_fetch_emails_task_MailboxError(
-    fake_daemon, mock_test_email_fetcher, mock_get_daemon_logger
-):
-    mock_test_email_fetcher.fetch_emails.side_effect = MailboxError
+def test_fetch_emails_task_MailboxError(faker, fake_daemon, mock_test_email_fetcher):
+    fake_error_message = faker.sentence()
+    mock_test_email_fetcher.fetch_emails.side_effect = MailboxError(fake_error_message)
+
+    assert fake_daemon.is_healthy is not True
 
     with pytest.raises(MailboxError):
         fetch_emails(str(fake_daemon.uuid))
 
-    mock_get_daemon_logger.return_value.exception.assert_called()
     fake_daemon.refresh_from_db()
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.mailbox.is_healthy is False
+    assert fake_daemon.last_error == fake_error_message
 
 
 @pytest.mark.django_db
 def test_fetch_emails_task_MailAccountError(
-    fake_daemon, mock_test_email_fetcher, mock_get_daemon_logger
+    faker, fake_daemon, mock_test_email_fetcher
 ):
-    mock_test_email_fetcher.fetch_emails.side_effect = MailAccountError
+    fake_error_message = faker.sentence()
+    mock_test_email_fetcher.fetch_emails.side_effect = MailAccountError(
+        fake_error_message
+    )
 
     assert fake_daemon.mailbox.emails.count() == 0
+    assert fake_daemon.is_healthy is not True
 
     with pytest.raises(MailAccountError):
         fetch_emails(str(fake_daemon.uuid))
 
-    mock_get_daemon_logger.return_value.exception.assert_called()
     fake_daemon.refresh_from_db()
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.mailbox.account.is_healthy is False
+    assert fake_daemon.last_error == fake_error_message
 
 
 @pytest.mark.django_db
 def test_fetch_emails_task_unexpected_error(
-    fake_daemon, mock_test_email_fetcher, mock_get_daemon_logger
+    faker, fake_daemon, mock_test_email_fetcher
 ):
-    mock_test_email_fetcher.fetch_emails.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_test_email_fetcher.fetch_emails.side_effect = AssertionError(
+        fake_error_message
+    )
 
     assert fake_daemon.mailbox.emails.count() == 0
+    assert fake_daemon.is_healthy is not True
 
     with pytest.raises(AssertionError):
         fetch_emails(str(fake_daemon.uuid))
 
-    mock_get_daemon_logger.return_value.exception.assert_called()
     fake_daemon.refresh_from_db()
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.is_healthy is False
+    assert fake_daemon.last_error == fake_error_message
 
 
 @pytest.mark.django_db
-def test_fetch_emails_task_ValueError(
-    fake_daemon, mock_test_email_fetcher, mock_get_daemon_logger
-):
-    mock_test_email_fetcher.fetch_emails.side_effect = ValueError
+def test_fetch_emails_task_ValueError(faker, fake_daemon, mock_test_email_fetcher):
+    fake_error_message = faker.sentence()
+    mock_test_email_fetcher.fetch_emails.side_effect = ValueError(fake_error_message)
 
     assert fake_daemon.mailbox.emails.count() == 0
+    assert fake_daemon.is_healthy is not True
 
     with pytest.raises(ValueError):
         fetch_emails(str(fake_daemon.uuid))
 
-    mock_get_daemon_logger.return_value.exception.assert_called()
     fake_daemon.refresh_from_db()
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.is_healthy is False
+    assert fake_daemon.last_error == fake_error_message

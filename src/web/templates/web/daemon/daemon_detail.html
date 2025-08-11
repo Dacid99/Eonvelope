@@ -52,10 +52,13 @@
         <li class="list-group-item">
             {% translate "Total Run Count" %}: {{ object.celery_task.total_run_count }}
         </li>
-        <li class="list-group-item">{% translate "Logfile Backups" %}: {{ object.log_backup_count }}</li>
-        <li class="list-group-item">
-            {% translate "Logfile max size" %}: {{ object.logfile_size }} {% translate "bytes" %}
-        </li>
+        {% if not object.is_healthy %}
+            <li class="list-group-item">
+                {% translate "Latest Error" %}: <pre><code>{{ object.last_error }}</code></pre>
+                <br />
+                <strong>{% translate "Test the daemon to see what is going wrong." %}</strong>
+            </li>
+        {% endif %}
     </ul>
 {% endblock card_content %}
 

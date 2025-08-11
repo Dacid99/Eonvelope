@@ -270,6 +270,7 @@ def test_Mailbox_test_get_fetcher_error(
     """Tests :func:`core.models.Mailbox.Mailbox.test`
     in case :func:`core.models.Account.Account.get_fetcher`
     raises a :class:`core.utils.fetchers.exceptions.MailAccountError`.
+    In that case the account should not be flagged, as that is already done in get_fetcher itself.
     """
     mock_Account_get_fetcher.side_effect = MailAccountError
     fake_mailbox.is_healthy = True
@@ -278,7 +279,7 @@ def test_Mailbox_test_get_fetcher_error(
     with pytest.raises(MailAccountError):
         fake_mailbox.test()
 
-    assert fake_mailbox.account.is_healthy is False
+    assert fake_mailbox.account.is_healthy is True
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.test.assert_not_called()
     mock_logger.info.assert_called()

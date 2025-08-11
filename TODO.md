@@ -4,14 +4,11 @@
 
 - custom fetching filters with NOT, OR and custom criteria
 - combined filter for correspondent with mention
-- streamable logs for daemons
 - extensive database statistics
 - option to prohibit daemon for spambox
 - toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/)
 - reprocess mail action
 - mechanism to remove all correspondents without emails
-- more daemon logging configs via model
-- streaming daemon logs
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
 - autotest account before form submission, fetch mailboxes on submission
@@ -25,7 +22,8 @@
 - fetch once by criterion instead of hardcoded ALL
 - use post-unsubscribe-method to interpret post-unsubscribe as link
 - emailconversation subpage
-- grappelli admin page
+- time benchmarks in debug log
+- batch download and delete in web
 
 ## To refactor
 
@@ -38,6 +36,7 @@
 - emailcorrespondent creation for better integration of mailinglist
 - shorten redundant exception logging in fetchers, move parts of the messages to the exc classes
 - streamline serializer and form tests
+- sort settings
 
 ## To test
 
@@ -47,11 +46,8 @@
 
 ## To implement
 
-- ensure threadsafe db operations in daemons
 - fetch only specific errors in fetchers
 - favicon.ico for the icon
-- time benchmarks in debug log
-- batch download and delete in web
 - daemonize celery worker
 
 ### Work in progress
@@ -63,13 +59,15 @@
 ## To fix
 
 - migrate from dependabot to renovate
+- ci should be more granular, shouldnt fail early
 - fetching too many emails leads to browser timeout
 - running tests from test dir
 - storage is incremented by healthcheck
-- updating daemon logging doesnt change the daemon logger
 - daemon may not update task interval correctly!
 - optics:
   - better name for daemon
+  - email alt in mailbox yells from statement
+  - margin around check and x icon
   - mobile optimizations:
     - breakpoint for created-updated footer
     - sticky pagination gets stuck

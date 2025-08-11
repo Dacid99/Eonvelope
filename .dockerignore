@@ -76,6 +76,8 @@ $RECYCLE.BIN/
 .tox/
 .venv/
 .vscode/
+.weblate
+.weblate.ini
 __pycache__/
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]

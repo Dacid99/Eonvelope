@@ -41,7 +41,6 @@ def test_output(fake_daemon, request_context):
 
     assert "id" in serializer_data
     assert serializer_data["id"] == fake_daemon.id
-    assert "log_filepath" not in serializer_data
     assert "uuid" in serializer_data
     assert serializer_data["uuid"] == str(fake_daemon.uuid)
     assert "mailbox" in serializer_data
@@ -68,17 +67,15 @@ def test_output(fake_daemon, request_context):
         serializer_data["celery_task"]["total_run_count"]
         == fake_daemon.celery_task.total_run_count
     )
-    assert "log_backup_count" in serializer_data
-    assert serializer_data["log_backup_count"] == fake_daemon.log_backup_count
-    assert "logfile_size" in serializer_data
-    assert serializer_data["logfile_size"] == fake_daemon.logfile_size
+    assert "last_error" in serializer_data
+    assert serializer_data["last_error"] == fake_daemon.last_error
     assert "is_healthy" in serializer_data
     assert serializer_data["is_healthy"] == fake_daemon.is_healthy
     assert "created" in serializer_data
     assert datetime.fromisoformat(serializer_data["created"]) == fake_daemon.created
     assert "updated" in serializer_data
     assert datetime.fromisoformat(serializer_data["updated"]) == fake_daemon.updated
-    assert len(serializer_data) == 11
+    assert len(serializer_data) == 10
 
 
 @pytest.mark.django_db
@@ -91,7 +88,6 @@ def test_input(daemon_with_interval_payload, request_context):
     serializer_data = serializer.validated_data
 
     assert "id" not in serializer_data
-    assert "log_filepath" not in serializer_data
     assert "uuid" not in serializer_data
     assert "mailbox" in serializer_data
     assert isinstance(serializer_data["mailbox"], Mailbox)
@@ -114,19 +110,11 @@ def test_input(daemon_with_interval_payload, request_context):
         == daemon_with_interval_payload["interval"]["period"]
     )
     assert "celery_task" not in serializer_data
-    assert "log_backup_count" in serializer_data
-    assert (
-        serializer_data["log_backup_count"]
-        == daemon_with_interval_payload["log_backup_count"]
-    )
-    assert "logfile_size" in serializer_data
-    assert (
-        serializer_data["logfile_size"] == daemon_with_interval_payload["logfile_size"]
-    )
+    assert "last_error" not in serializer_data
     assert "is_healthy" not in serializer_data
     assert "created" not in serializer_data
     assert "updated" not in serializer_data
-    assert len(serializer_data) == 5
+    assert len(serializer_data) == 3
 
 
 @pytest.mark.django_db
@@ -239,38 +227,6 @@ def test_post_bad_interval_every(
 
     assert not serializer.is_valid()
     assert serializer["interval"]["every"].errors
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize("bad_log_backup_count", [-1])
-def test_post_bad_log_backup_count(
-    fake_daemon, daemon_with_interval_payload, request_context, bad_log_backup_count
-):
-    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
-    daemon_with_interval_payload["log_backup_count"] = bad_log_backup_count
-
-    serializer = BaseDaemonSerializer(
-        instance=fake_daemon, data=daemon_with_interval_payload, context=request_context
-    )
-
-    assert not serializer.is_valid()
-    assert serializer["log_backup_count"].errors
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize("bad_logfile_size", [-1])
-def test_post_bad_logfile_size(
-    fake_daemon, daemon_with_interval_payload, request_context, bad_logfile_size
-):
-    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
-    daemon_with_interval_payload["logfile_size"] = bad_logfile_size
-
-    serializer = BaseDaemonSerializer(
-        instance=fake_daemon, data=daemon_with_interval_payload, context=request_context
-    )
-
-    assert not serializer.is_valid()
-    assert serializer["logfile_size"].errors
 
 
 @pytest.mark.django_db

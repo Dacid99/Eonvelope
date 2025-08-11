@@ -545,26 +545,6 @@ CONSTANCE_CONFIG = {
         ),
         int,
     ),
-    "DAEMON_CYCLE_PERIOD_DEFAULT": (
-        60,
-        _("Default cycle period setting of a daemon in seconds"),
-        int,
-    ),
-    "DAEMON_RESTART_TIME_DEFAULT": (
-        10,
-        _("Default restart time setting of a daemon in seconds"),
-        int,
-    ),
-    "DAEMON_LOG_BACKUP_COUNT_DEFAULT": (
-        5,
-        _("Default number of daemon logfiles to keep"),
-        int,
-    ),
-    "DAEMON_LOGFILE_SIZE_DEFAULT": (
-        1 * 1024 * 1024,
-        _("Default maximum size of a daemon logfile in bytes"),
-        int,
-    ),
     "STORAGE_MAX_FILES_PER_DIR": (
         10000,
         _("Maximum numbers of files in one storage unit."),
@@ -719,10 +699,6 @@ CONSTANCE_CONFIG_FIELDSETS = (
         (
             "DEFAULT_SAVE_TO_EML",
             "DEFAULT_SAVE_ATTACHMENTS",
-            "DAEMON_CYCLE_PERIOD_DEFAULT",
-            "DAEMON_RESTART_TIME_DEFAULT",
-            "DAEMON_LOG_BACKUP_COUNT_DEFAULT",
-            "DAEMON_LOGFILE_SIZE_DEFAULT",
         ),
     ),
     (

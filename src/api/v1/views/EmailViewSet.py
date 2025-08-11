@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Final, override
 from django.core.files.storage import default_storage
 from django.db.models import Prefetch
 from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
@@ -130,7 +131,7 @@ class EmailViewSet(
 
         file_path = email.eml_filepath
         if not file_path or not default_storage.exists(file_path):
-            raise Http404("EMl file not found")
+            raise Http404(_("eml file not found"))
 
         file_name = os.path.basename(file_path)
         return FileResponse(
@@ -170,13 +171,13 @@ class EmailViewSet(
         file_format = request.query_params.get("file_format", None)
         if not file_format:
             return Response(
-                {"detail": "File format missing in request!"},
+                {"detail": _("File format missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         requested_ids = request.query_params.getlist("id", [])
         if not requested_ids:
             return Response(
-                {"detail": "Email ids missing in request!"},
+                {"detail": _("Email ids missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
@@ -185,11 +186,14 @@ class EmailViewSet(
             )
         except ValueError:
             return Response(
-                {"detail": f"File format {file_format} is not supported!"},
+                {
+                    "detail": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         except Email.DoesNotExist:
-            raise Http404("No emails found") from None
+            raise Http404(_("No emails found")) from None
         else:
             return FileResponse(
                 file,

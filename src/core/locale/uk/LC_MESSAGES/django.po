@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-06 20:23+0000\n"
+"POT-Creation-Date: 2025-08-11 09:31+0000\n"
 "PO-Revision-Date: 2025-08-08 07:01+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim5@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
-"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
-"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
-"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.13-dev\n"
 
 #: src/core/constants.py:38
@@ -254,13 +254,13 @@ msgstr "час очікування з'єднання"
 msgid "Timeout for the connection to the mailserver."
 msgstr "Тайм-аут для підключення до поштового сервера."
 
-#: src/core/models/Account.py:109 src/core/models/Daemon.py:96
-#: src/core/models/Mailbox.py:102
+#: src/core/models/Account.py:109 src/core/models/Daemon.py:97
+#: src/core/models/Mailbox.py:103
 msgid "healthy"
 msgstr "здоровий"
 
 #: src/core/models/Account.py:117 src/core/models/Attachment.py:114
-#: src/core/models/Correspondent.py:132 src/core/models/Email.py:141
+#: src/core/models/Correspondent.py:132 src/core/models/Email.py:142
 msgid "favorite"
 msgstr "улюблений"
 
@@ -269,17 +269,17 @@ msgid "user"
 msgstr "користувач"
 
 #: src/core/models/Account.py:131 src/core/models/Attachment.py:128
-#: src/core/models/Correspondent.py:138 src/core/models/Daemon.py:126
-#: src/core/models/Email.py:179 src/core/models/EmailCorrespondent.py:65
-#: src/core/models/Mailbox.py:96 src/core/models/Mailbox.py:110
+#: src/core/models/Correspondent.py:138 src/core/models/Daemon.py:127
+#: src/core/models/Email.py:180 src/core/models/EmailCorrespondent.py:65
+#: src/core/models/Mailbox.py:97 src/core/models/Mailbox.py:111
 #: src/core/models/StorageShard.py:70
 msgid "created"
 msgstr "створений"
 
 #: src/core/models/Account.py:137 src/core/models/Attachment.py:134
-#: src/core/models/Correspondent.py:144 src/core/models/Daemon.py:132
-#: src/core/models/Email.py:185 src/core/models/EmailCorrespondent.py:71
-#: src/core/models/Mailbox.py:116 src/core/models/StorageShard.py:76
+#: src/core/models/Correspondent.py:144 src/core/models/Daemon.py:133
+#: src/core/models/Email.py:186 src/core/models/EmailCorrespondent.py:71
+#: src/core/models/Mailbox.py:117 src/core/models/StorageShard.py:76
 msgid "last updated"
 msgstr "останнє оновлення"
 
@@ -296,7 +296,7 @@ msgstr ""
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr "Обліковий запис %(mail_address)s з протоколом %(protocol)s"
 
-#: src/core/models/Account.py:191
+#: src/core/models/Account.py:195
 msgid "This account already exists."
 msgstr "Цей обліковий запис вже існує."
 
@@ -324,7 +324,7 @@ msgstr "основний тип контенту"
 msgid "content subtype"
 msgstr "підтип контенту"
 
-#: src/core/models/Attachment.py:108 src/core/models/Email.py:123
+#: src/core/models/Attachment.py:108 src/core/models/Email.py:124
 msgid "datasize"
 msgstr "розмір даних"
 
@@ -398,116 +398,116 @@ msgstr "Це видалить лише цього кореспондента, а
 msgid "Correspondent with address %(email_address)s"
 msgstr "Кореспондент з адресою %(email_address)s"
 
-#: src/core/models/Daemon.py:58
+#: src/core/models/Daemon.py:59
 msgid "UUID"
 msgstr "UUID"
 
-#: src/core/models/Daemon.py:66 src/core/models/Email.py:159
+#: src/core/models/Daemon.py:67 src/core/models/Email.py:160
 msgid "mailbox"
 msgstr "поштова скринька"
 
-#: src/core/models/Daemon.py:74
+#: src/core/models/Daemon.py:75
 msgid "fetching criterion"
 msgstr "критерій отримання"
 
-#: src/core/models/Daemon.py:75
+#: src/core/models/Daemon.py:76
 msgid "The selection criterion for emails to archive."
 msgstr "Критерій вибору електронних листів для архівування."
 
-#: src/core/models/Daemon.py:83
+#: src/core/models/Daemon.py:84
 msgid "celery task"
 msgstr "завдання з селери"
 
-#: src/core/models/Daemon.py:89
+#: src/core/models/Daemon.py:90
 msgid "interval"
 msgstr "інтервал"
 
-#: src/core/models/Daemon.py:90
+#: src/core/models/Daemon.py:91
 msgid "The time between two daemon runs in seconds."
 msgstr "Час між двома демонами вимірюється в секундах."
 
-#: src/core/models/Daemon.py:106
+#: src/core/models/Daemon.py:107
 msgid "logfilepath"
 msgstr "шлях до файлу журналу"
 
-#: src/core/models/Daemon.py:112
+#: src/core/models/Daemon.py:113
 msgid "logfile backup count"
 msgstr "кількість резервних копій файлів журналу"
 
-#: src/core/models/Daemon.py:113
+#: src/core/models/Daemon.py:114
 msgid "The number of historical logfiles to keep."
 msgstr "Кількість файлів журналів, які потрібно зберігати."
 
-#: src/core/models/Daemon.py:119
+#: src/core/models/Daemon.py:120
 msgid "logfile maximum size"
 msgstr "максимальний розмір файлу журналу"
 
-#: src/core/models/Daemon.py:120
+#: src/core/models/Daemon.py:121
 msgid "The maximum size of a logfile in bytes."
 msgstr "Максимальний розмір файлу журналу в байтах."
 
-#: src/core/models/Daemon.py:138
+#: src/core/models/Daemon.py:139
 msgid "This will only delete this daemon, not its mailbox."
 msgstr "Це видалить лише цей демон, а не його поштову скриньку."
 
-#: src/core/models/Daemon.py:169
+#: src/core/models/Daemon.py:170
 #, python-format
 msgid "Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s"
 msgstr "Демон Emailfetcher %(uuid)s для поштової скриньки %(mailbox)s"
 
-#: src/core/models/Daemon.py:208
+#: src/core/models/Daemon.py:211
 msgid "This fetching criterion is not available for this mailbox!"
 msgstr "Цей критерій отримання недоступний для цієї поштової скриньки!"
 
-#: src/core/models/Daemon.py:214
+#: src/core/models/Daemon.py:217
 msgid "No valid mailbox selected!"
 msgstr "Не вибрано дійсну поштову скриньку!"
 
-#: src/core/models/Email.py:74
+#: src/core/models/Email.py:75
 msgid "message-ID"
 msgstr "ідентифікатор повідомлення"
 
-#: src/core/models/Email.py:79
+#: src/core/models/Email.py:80
 msgid "received"
 msgstr "отримано"
 
-#: src/core/models/Email.py:87
+#: src/core/models/Email.py:88
 msgid "subject"
 msgstr "предмет"
 
-#: src/core/models/Email.py:94
+#: src/core/models/Email.py:95
 msgid "plain bodytext"
 msgstr "звичайний текст основного тексту"
 
-#: src/core/models/Email.py:101
+#: src/core/models/Email.py:102
 msgid "HTML bodytext"
 msgstr "Основний текст HTML"
 
-#: src/core/models/Email.py:109
+#: src/core/models/Email.py:110
 msgid "in reply to"
 msgstr "у відповідь на"
 
-#: src/core/models/Email.py:118
+#: src/core/models/Email.py:119
 msgid "referenced by"
 msgstr "на який посилається"
 
-#: src/core/models/Email.py:132
+#: src/core/models/Email.py:133
 msgid "EML filepath"
 msgstr "Шлях до файлу EML"
 
-#: src/core/models/Email.py:150
+#: src/core/models/Email.py:151
 msgid "correspondents"
 msgstr "кореспонденти"
 
-#: src/core/models/Email.py:165
+#: src/core/models/Email.py:166
 msgid "headers"
 msgstr "заголовки"
 
-#: src/core/models/Email.py:173
+#: src/core/models/Email.py:174
 msgid "X-Spam"
 msgstr "X-Спам"
 
-#: src/core/models/Email.py:192
+#: src/core/models/Email.py:193
 msgid ""
 "This will delete this email and all its attachments but not its "
 "correspondents."
@@ -515,7 +515,7 @@ msgstr ""
 "Це видалить цей електронний лист та всі його вкладення, але не його "
 "кореспондентів."
 
-#: src/core/models/Email.py:217
+#: src/core/models/Email.py:218
 #, python-format
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
@@ -539,40 +539,40 @@ msgstr ""
 "Зв'язок електронної пошти-кореспондента з електронної пошти %(email)s до "
 "кореспондента %(correspondent)s зі згадкою %(mention)s"
 
-#: src/core/models/Mailbox.py:66
+#: src/core/models/Mailbox.py:67
 msgid "name"
 msgstr "ім'я"
 
-#: src/core/models/Mailbox.py:74
+#: src/core/models/Mailbox.py:75
 msgid "account"
 msgstr "обліковий запис"
 
-#: src/core/models/Mailbox.py:80
+#: src/core/models/Mailbox.py:81
 msgid "save attachments"
 msgstr "зберігати вкладення"
 
-#: src/core/models/Mailbox.py:82
+#: src/core/models/Mailbox.py:83
 msgid "Whether the attachments from the emails in this mailbox will be saved."
 msgstr ""
 "Чи будуть збережені вкладення з електронних листів у цій поштовій скриньці."
 
-#: src/core/models/Mailbox.py:89
+#: src/core/models/Mailbox.py:90
 msgid "save as .eml"
 msgstr "зберегти як .eml"
 
-#: src/core/models/Mailbox.py:90
+#: src/core/models/Mailbox.py:91
 msgid "Whether the emails in this mailbox will be stored in .eml files."
 msgstr ""
 "Чи зберігатимуться електронні листи в цій поштовій скриньці у файлах .eml."
 
-#: src/core/models/Mailbox.py:123
+#: src/core/models/Mailbox.py:124
 msgid ""
 "This will delete this mailbox and all emails and attachments found in it!"
 msgstr ""
 "Це видалить цю поштову скриньку та всі електронні листи й вкладення, "
 "знайдені в ній!"
 
-#: src/core/models/Mailbox.py:146
+#: src/core/models/Mailbox.py:147
 #, python-format
 msgid "Mailbox %(name)s of %(account)s"
 msgstr "Поштова скринька %(name)s з %(account)s"
@@ -602,7 +602,7 @@ msgstr "Архівовано"
 msgid "%(state)s storage directory %(name)s"
 msgstr "%(state)s каталог сховища %(name)s"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:184
+#: src/core/utils/fetchers/ExchangeFetcher.py:195
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of message_root!"
@@ -610,7 +610,7 @@ msgstr ""
 "Під час оновлення message_root сталася помилка %(error_class_name)s: "
 "%(error)s!"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:205
+#: src/core/utils/fetchers/ExchangeFetcher.py:216
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during refresh of "
@@ -619,15 +619,7 @@ msgstr ""
 "Помилка %(error_class_name)s: під час оновлення %(mailbox_name)s сталася "
 "помилка %(error)s!"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:256
-#, python-format
-msgid ""
-"An %(error_class_name)s: %(error)s occurred during opening of message_root!"
-msgstr ""
-"Під час відкриття message_root сталася помилка %(error_class_name)s: "
-"%(error)s!"
-
-#: src/core/utils/fetchers/ExchangeFetcher.py:274
+#: src/core/utils/fetchers/ExchangeFetcher.py:270
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during fetching of mail contents!"
@@ -635,7 +627,7 @@ msgstr ""
 "Помилка %(error_class_name)s: під час отримання вмісту пошти сталася помилка "
 "%(error)s!"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:328
+#: src/core/utils/fetchers/ExchangeFetcher.py:323
 #, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during scan of message_root!"
@@ -659,3 +651,11 @@ msgstr ""
 msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
 msgstr ""
 "Помилка %(error_class_name)s: %(error)s сталася під час %(action_name)s!"
+
+#, python-format
+#~ msgid ""
+#~ "An %(error_class_name)s: %(error)s occurred during opening of "
+#~ "message_root!"
+#~ msgstr ""
+#~ "Під час відкриття message_root сталася помилка %(error_class_name)s: "
+#~ "%(error)s!"

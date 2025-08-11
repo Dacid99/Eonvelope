@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-08 07:02+0000\n"
+"PO-Revision-Date: 2025-08-11 10:08+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/fr/>\n"
@@ -19,27 +19,33 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.13-dev\n"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:693
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:700
+#: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1434
 msgid "Received"
-msgstr "Reçus"
+msgstr "Reçu"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:697
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:704
+#: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1438
 msgid "From"
 msgstr "De"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:700
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:707
+#: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1441
 msgid "To"
 msgstr "À"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:703
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:710
+#: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1444
 msgid "CC"
 msgstr "CC"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:706
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:713
+#: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1447
 msgid "BCC"
 msgstr "CCi"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:719
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:726
+#: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1460
 msgid "Attachments"
 msgstr "Pièces jointes"
 
@@ -71,37 +77,43 @@ msgstr ""
 "Options de la taille de la page pour la pagination dans l'appli Web. Devrait "
 "contenir la valeur WEB_DEFAULT_PAGE_SIZE."
 
-#: src/Emailkasten/settings.py:543
+#: src/Emailkasten/settings.py:544
+msgid ""
+"Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
+"will not be loaded."
+msgstr ""
+
+#: src/Emailkasten/settings.py:550
 msgid "Default cycle period setting of a daemon in seconds"
 msgstr "Paramètre par défaut du cycle du démon en secondes"
 
-#: src/Emailkasten/settings.py:548
+#: src/Emailkasten/settings.py:555
 msgid "Default restart time setting of a daemon in seconds"
 msgstr "Paramètre par défaut du temps de redémarrage du démon en secondes"
 
-#: src/Emailkasten/settings.py:553
+#: src/Emailkasten/settings.py:560
 msgid "Default number of daemon logfiles to keep"
 msgstr "Nombre par défaut de fichiers de journalisation du démon à conserver"
 
-#: src/Emailkasten/settings.py:558
+#: src/Emailkasten/settings.py:565
 msgid "Default maximum size of a daemon logfile in bytes"
 msgstr ""
 "Taille maximale par défaut du fichier de journalisation du démon en octets"
 
-#: src/Emailkasten/settings.py:563
+#: src/Emailkasten/settings.py:570
 msgid "Maximum numbers of files in one storage unit."
 msgstr "Nombre maximal de fichiers dans une seule unité de stockage."
 
-#: src/Emailkasten/settings.py:568
+#: src/Emailkasten/settings.py:575
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr "S'il faut ou non ignorer les courriels marqués comme indésirables"
 
-#: src/Emailkasten/settings.py:573
+#: src/Emailkasten/settings.py:580
 msgid "List of content types prefixes to not parse as files."
 msgstr ""
 "Liste des préfixes de types de contenu à ne pas analyser comme fichiers."
 
-#: src/Emailkasten/settings.py:579
+#: src/Emailkasten/settings.py:586
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
@@ -109,7 +121,7 @@ msgstr ""
 "Liste des préfixes de types de contenu à ne pas analyser comme fichiers. Le "
 "texte en clair et HTML est toujours ignoré puisque c'est son corps."
 
-#: src/Emailkasten/settings.py:643
+#: src/Emailkasten/settings.py:650
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
@@ -122,27 +134,27 @@ msgstr ""
 "lieu à 500 réponses lorsque vous demandez des pages avec des vignettes de "
 "courriels, alors soyez prudent·e."
 
-#: src/Emailkasten/settings.py:685
+#: src/Emailkasten/settings.py:692
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
 msgstr ""
-"Style CSS utilisé pour rendre les courriels en .html. Se réfère à "
+"Style CSS utilisé pour rendre les courriels en .html. Se référer à "
 "HTML_TEMPLATE pour le contexte sur les classes."
 
-#: src/Emailkasten/settings.py:691
+#: src/Emailkasten/settings.py:698
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr ""
 "Paramètre par défaut de la boîte de réception pour le stockage des courriels "
 "en tant que .eml."
 
-#: src/Emailkasten/settings.py:696
+#: src/Emailkasten/settings.py:703
 msgid "Default mailbox setting whether to store attachments."
 msgstr ""
 "Paramètre par défaut de la boîte de réception pour stocker les pièces "
 "jointes."
 
-#: src/Emailkasten/settings.py:702
+#: src/Emailkasten/settings.py:709
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
@@ -151,27 +163,27 @@ msgstr ""
 "s'inscrire. Ce paramètre ne prend effet que si le paramètre d'environnement "
 "REGISTRATION_ENABLED n'est pas 0."
 
-#: src/Emailkasten/settings.py:709
+#: src/Emailkasten/settings.py:716
 msgid "Server Configurations"
 msgstr "Configuration du serveur"
 
-#: src/Emailkasten/settings.py:711
+#: src/Emailkasten/settings.py:718
 msgid "Default Values"
 msgstr "Valeurs par défaut"
 
-#: src/Emailkasten/settings.py:722
+#: src/Emailkasten/settings.py:729
 msgid "Processing Settings"
 msgstr "Paramètres de traitement"
 
-#: src/Emailkasten/settings.py:732
+#: src/Emailkasten/settings.py:739
 msgid "Storage Settings"
 msgstr "Paramètres de stockage"
 
-#: src/Emailkasten/settings.py:736
+#: src/Emailkasten/settings.py:743
 msgid "API Settings"
 msgstr "Paramètres API"
 
-#: src/Emailkasten/settings.py:743
+#: src/Emailkasten/settings.py:750
 msgid "Web Settings"
 msgstr "Paramètres Web"
 
@@ -188,33 +200,40 @@ msgstr "Vous envoyez trop de requêtes."
 msgid "Select Language"
 msgstr "Sélectionnez une langue"
 
-#: src/Emailkasten/templates/allauth/elements/timezone_dropdown.html:8
-#: src/Emailkasten/templates/allauth/elements/timezone_dropdown.html:12
-msgid "Select timezone"
-msgstr "Sélectionnez un fuseau horaire"
+#: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:21
+msgid "Light"
+msgstr ""
 
-#: src/Emailkasten/templates/allauth/layouts/base.html:23
-#: src/Emailkasten/templates/allauth/layouts/base.html:31
+#: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:30
+msgid "Dark"
+msgstr ""
+
+#: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:39
+msgid "Auto"
+msgstr ""
+
+#: src/Emailkasten/templates/allauth/layouts/base.html:25
+#: src/Emailkasten/templates/allauth/layouts/base.html:34
 msgid "Emailkasten"
 msgstr "Emailkasten"
 
-#: src/Emailkasten/templates/allauth/layouts/base.html:27
+#: src/Emailkasten/templates/allauth/layouts/base.html:29
 msgid "Go to Emailkasten"
 msgstr "Aller à Emailkasten"
 
-#: src/Emailkasten/templates/allauth/layouts/base.html:38
+#: src/Emailkasten/templates/allauth/layouts/base.html:41
 msgid "Toggle navigation"
 msgstr "Basculer la navigation"
 
-#: src/Emailkasten/templates/allauth/layouts/base.html:58
+#: src/Emailkasten/templates/allauth/layouts/base.html:59
 msgid "Sign Out"
 msgstr "Se déconnecter"
 
-#: src/Emailkasten/templates/allauth/layouts/base.html:62
+#: src/Emailkasten/templates/allauth/layouts/base.html:63
 msgid "Sign In"
 msgstr "Se connecter"
 
-#: src/Emailkasten/templates/allauth/layouts/base.html:65
+#: src/Emailkasten/templates/allauth/layouts/base.html:66
 msgid "Sign Up"
 msgstr "S'inscrire"
 
@@ -233,3 +252,6 @@ msgstr "Sessions"
 #: src/Emailkasten/templates/allauth/layouts/manage.html:37
 msgid "Admin panel"
 msgstr "Panneau admin"
+
+#~ msgid "Select timezone"
+#~ msgstr "Sélectionnez un fuseau horaire"

@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from django.utils.translation import gettext_lazy as _
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -55,8 +56,8 @@ class ToggleFavoriteMixin:
         toggle_object = self.get_object()
         toggle_object.is_favorite = not toggle_object.is_favorite
         toggle_object.save(update_fields=["is_favorite"])
-        return Response(
-            {
-                "detail": f"{toggle_object} {"un" if not toggle_object.is_favorite  else ""}marked as favorite."
-            }
-        )
+        if toggle_object.is_favorite:
+            message = _("%(object)s marked as favorite.") % {"object": toggle_object}
+        else:
+            message = _("%(object)s unmarked as favorite.") % {"object": toggle_object}
+        return Response({"detail": message})

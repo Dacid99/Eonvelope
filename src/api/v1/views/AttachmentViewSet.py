@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Final, override
 
 from django.core.files.storage import default_storage
 from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
@@ -112,7 +113,7 @@ class AttachmentViewSet(
 
         attachment_file_path = attachment.file_path
         if not attachment_file_path or not default_storage.exists(attachment_file_path):
-            raise Http404("Attachment file not found")
+            raise Http404(_("Attachment file not found"))
 
         attachment_file_name = attachment.file_name
         return FileResponse(
@@ -149,7 +150,7 @@ class AttachmentViewSet(
         requested_ids = request.query_params.getlist("id", [])
         if not requested_ids:
             return Response(
-                {"detail": "Attachment ids missing in request!"},
+                {"detail": _("Attachment ids missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
@@ -157,7 +158,7 @@ class AttachmentViewSet(
                 self.get_queryset().filter(pk__in=requested_ids)
             )
         except Attachment.DoesNotExist:
-            raise Http404("No attachments found") from None
+            raise Http404(_("No attachments found")) from None
         return FileResponse(
             file,
             as_attachment=True,
@@ -194,7 +195,7 @@ class AttachmentViewSet(
 
         attachment_file_path = attachment.file_path
         if not attachment_file_path or not default_storage.exists(attachment_file_path):
-            raise Http404("Attachment file not found")
+            raise Http404(_("Attachment file not found"))
 
         attachment_file_name = attachment.file_name
         response = FileResponse(

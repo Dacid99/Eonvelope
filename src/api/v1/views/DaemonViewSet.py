@@ -24,6 +24,7 @@ import os
 from typing import TYPE_CHECKING, Final, override
 
 from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -105,7 +106,7 @@ class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
         daemon = self.get_object()
         response = Response(
             {
-                "detail": "Tested daemon",
+                "detail": _("Tested daemon"),
             }
         )
         try:
@@ -135,10 +136,10 @@ class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
         daemon = self.get_object()
         result = daemon.start()
         if result:
-            response = Response({"detail": "Daemon started"})
+            response = Response({"detail": _("Daemon started")})
         else:
             response = Response(
-                {"detail": "Daemon already running"},
+                {"detail": _("Daemon is already running")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         daemon.refresh_from_db()
@@ -165,10 +166,10 @@ class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
         daemon = self.get_object()
         result = daemon.stop()
         if result:
-            response = Response({"status": "Daemon stopped"})
+            response = Response({"status": _("Daemon stopped")})
         else:
             response = Response(
-                {"status": "Daemon not running"},
+                {"status": _("Daemon not running")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         daemon.refresh_from_db()
@@ -208,7 +209,7 @@ class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
         number_suffix = f".{number}" if number > 0 else ""
         daemon_log_filepath = daemon.log_filepath + number_suffix
         if not daemon_log_filepath or not os.path.exists(daemon_log_filepath):
-            raise Http404("Log file not found")
+            raise Http404(_("Logfile not found"))
 
         daemon_log_filename = os.path.basename(daemon_log_filepath)
         return FileResponse(

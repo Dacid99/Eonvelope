@@ -188,7 +188,6 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
                 If :attr:`criterion` is not in :attr:`IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA`.
-            MailAccountError: If an error occurs or a bad response is returned when accessing the server.
             MailboxError: If an error occurs or a bad response is returned during an action on the mailbox.
         """
         super().fetch_emails(mailbox, criterion)

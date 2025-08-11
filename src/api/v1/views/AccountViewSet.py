@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, override
 
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -106,13 +107,13 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         except MailAccountError as error:
             response = Response(
                 data={
-                    "detail": "Error with mailaccount occurred!",
+                    "detail": _("An error with the mailaccount occurred."),
                     "error": str(error),
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
-            response = Response(data={"detail": "Updated mailboxes"})
+            response = Response(data={"detail": _("Updated mailboxes")})
         account.refresh_from_db()
         response.data["account"] = self.get_serializer(account).data
         return response
@@ -136,7 +137,7 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         account = self.get_object()
         response = Response(
             {
-                "detail": "Tested mailaccount",
+                "detail": _("Tested mailaccount"),
             }
         )
         try:

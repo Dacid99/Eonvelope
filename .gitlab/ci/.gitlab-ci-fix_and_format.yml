@@ -5,14 +5,13 @@ fix_and_format_codebase:
       when: manual
     - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null'
   script:
-    - export PYTHONPATH=$PWD'/src/'
     - echo "Checking for fixes and formatting ..."
     - poetry install --with=dev
     - mkdir -p $CHECK_REPORT_PATH
-    - poetry run codespell -s --config=$CHECK_CONFIG_PATH'.codespellrc' src/ test/ docs/ .gitea/ .github/ .gitlab/ *.md > $CHECK_REPORT_PATH'codespell_check.ansi' || true
-    - poetry run black . --config=$CHECK_CONFIG_PATH'black_config' --diff --color > $CHECKREPORT_PATH'black_format.ansi' || true
-    - poetry run djlint src/ --check --configuration $CHECK_CONFIG_PATH'djlintrc' > $CHECK_REPORT_PATH'djlint_format.ansi' || true
-    - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' --fix-only --show-fixes > $CHECK_REPORT_PATH'ruff_fix.ansi' || true
+    - poetry run codespell -s --config=$CHECK_CONFIG_PATH'.codespellrc' src/ test/ docs/ .gitea/ .github/ .gitlab/ *.md | tee $CHECK_REPORT_PATH'codespell_check.ansi' || true
+    - poetry run black . --config=$CHECK_CONFIG_PATH'black_config' --diff --color | tee $CHECKREPORT_PATH'black_format.ansi' || true
+    - poetry run djlint src/ --check --configuration $CHECK_CONFIG_PATH'djlintrc' | tee $CHECK_REPORT_PATH'djlint_format.ansi' || true
+    - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' --fix-only --show-fixes | tee $CHECK_REPORT_PATH'ruff_fix.ansi' || true
     - echo "Successfully checked codebase for fixes and formatting."
   artifacts:
     paths:

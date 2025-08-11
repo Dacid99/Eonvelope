@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-11 09:31+0000\n"
-"PO-Revision-Date: 2025-08-11 11:42+0000\n"
+"PO-Revision-Date: 2025-08-12 15:01+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/api/"
 "de/>\n"
@@ -21,7 +21,7 @@ msgstr ""
 
 #: src/api/v1/mixins/NoCreateMixin.py:34
 msgid "POST method is not allowed on this endpoint."
-msgstr "POST Methode ist an diese Endpoint nicht erlaubt."
+msgstr "POST ist an diesem Endpoint nicht erlaubt."
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:60
 #, python-format

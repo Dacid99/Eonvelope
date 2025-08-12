@@ -1,5 +1,5 @@
 fix_and_format_codebase:
-  stage: check_fixes_and_format
+  stage: check
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual

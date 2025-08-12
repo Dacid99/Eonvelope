@@ -58,7 +58,6 @@
 ## To fix
 
 - migrate from dependabot to renovate
-- ci should be more granular, shouldnt fail early
 - fetching too many emails leads to browser timeout
 - running tests from test dir
 - storage is incremented by healthcheck

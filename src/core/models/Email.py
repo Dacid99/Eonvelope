@@ -282,6 +282,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             root_email = root_email.in_reply_to.first()
         return root_email.sub_conversation()
 
+    @property
     def is_spam(self) -> bool:
         """Checks the spam headers to decide whether the mail is spam.
 
@@ -557,6 +558,11 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                 "bcc_emailcorrespondents": bcc_emailcorrespondents,
             }
         )
+
+    @override
+    @property
+    def has_thumbnail(self) -> bool:
+        return not self.is_spam
 
     @override
     @property

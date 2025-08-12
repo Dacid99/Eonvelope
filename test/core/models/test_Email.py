@@ -364,7 +364,7 @@ def test_Email_is_spam(fake_email, x_spam, expected_result):
     """Tests :func:`core.models.Email.Email.is_spam`."""
     fake_email.x_spam = x_spam
 
-    result = fake_email.is_spam()
+    result = fake_email.is_spam
 
     assert result is expected_result
 
@@ -935,6 +935,26 @@ def test_Email_has_download(fake_email, eml_filepath, expected_has_download):
     fake_email.eml_filepath = eml_filepath
 
     result = fake_email.has_download
+
+    assert result == expected_has_download
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "x_spam, expected_has_download",
+    [
+        ("NO", True),
+        ("NO, NO", True),
+        ("YES", False),
+        ("YES,NO", False),
+        ("", True),
+    ],
+)
+def test_Email_has_thumbnail(fake_email, x_spam, expected_has_download):
+    """Tests :func:`core.models.Email.Email.has_download` in the two relevant cases."""
+    fake_email.x_spam = x_spam
+
+    result = fake_email.has_thumbnail
 
     assert result == expected_has_download
 

@@ -262,6 +262,7 @@ class Mailbox(
                             zipfile.read(zipped_file), mailbox=self
                         )
             except BadZipFile as error:
+                logger.exception("Error parsing file as %s!", file_format)
                 raise ValueError("The given file could not be processed!") from error
         elif file_format in [
             SupportedEmailUploadFormats.MBOX,
@@ -291,6 +292,7 @@ class Mailbox(
                     with ZipFile(file) as zipfile:
                         zipfile.extractall(tempdirpath)
                 except BadZipFile as error:
+                    logger.exception("Error parsing file as %s!", file_format)
                     raise ValueError(
                         "The given file could not be processed!"
                     ) from error
@@ -307,11 +309,13 @@ class Mailbox(
                         except (
                             FileNotFoundError
                         ) as error:  # raised if the given maildir doesn't have the expected structure
+                            logger.exception("Error parsing file as %s!", file_format)
                             raise ValueError(
                                 "The given file could not be processed!"
                             ) from error
                         parser.close()
         else:
+            logger.debug("Unsupported fileformat for uploaded file.")
             raise ValueError("The given file format is not supported!")
         logger.info("Successfully added emails from file.")
 
@@ -335,15 +339,15 @@ class Mailbox(
             else mailbox_data
         )
         if mailbox_name in get_config("IGNORED_MAILBOXES"):
-            logger.debug("%s is in the ignorelist, it is skipped!", mailbox_name)
+            logger.debug("%s is in the ignorelist, it is skipped.", mailbox_name)
             return None
         try:
             new_mailbox = cls.objects.get(account=account, name=mailbox_name)
-            logger.debug("%s already exists in db, it is skipped!", new_mailbox)
+            logger.debug("%s already exists in db, it is skipped.", new_mailbox)
         except Mailbox.DoesNotExist:
             new_mailbox = cls(account=account, name=mailbox_name)
             new_mailbox.save()
-            logger.debug("Successfully saved mailbox to db!")
+            logger.debug("Successfully saved mailbox %s to db.", mailbox_name)
         return new_mailbox
 
     @override

@@ -275,13 +275,8 @@ class ExchangeFetcher(BaseFetcher):
                 },
             ) from error
         self.logger.info(
-            "Found %s %s messages in %s.",
+            "Successfully searched and fetched %s %s messages in %s.",
             len(mail_data_list),
-            criterion,
-            mailbox,
-        )
-        self.logger.debug(
-            "Successfully searched and fetched %s messages in %s.",
             criterion,
             mailbox,
         )
@@ -304,7 +299,7 @@ class ExchangeFetcher(BaseFetcher):
         Raises:
             MailAccountError: If an error occurs or a bad response is returned.
         """
-        self.logger.debug("Fetching mailboxes at %s ...", self.account)
+        self.logger.debug("Fetching mailboxes in %s ...", self.account)
         try:
             mail_root_path = self._mail_client.absolute
             mailbox_names = [
@@ -327,6 +322,7 @@ class ExchangeFetcher(BaseFetcher):
                     "error": error,
                 },
             ) from error
+        self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
         return mailbox_names
 
     @override

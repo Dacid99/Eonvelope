@@ -333,6 +333,14 @@ LOGGING = {
             "backupCount": LOGFILE_BACKUP_NUMBER,
             "formatter": "default",
         },
+        "amqp_logfile": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIRECTORY_PATH / "amqp.log",
+            "maxBytes": LOGFILE_MAXSIZE,
+            "backupCount": LOGFILE_BACKUP_NUMBER,
+            "formatter": "default",
+        },
         "emailkasten_logfile": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
@@ -376,11 +384,16 @@ LOGGING = {
             "level": env("DJANGO_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
             "propagate": False,
         },
-        # "celery": {
-        #     "handlers": ["console", "celery_logfile"],
-        #     "level": env("CELERY_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
-        #     "propagate": False,
-        # },
+        "celery": {
+            "handlers": ["console", "celery_logfile"],
+            "level": env("CELERY_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
+            "propagate": False,
+        },
+        "amqp": {
+            "handlers": ["console", "amqp_logfile"],
+            "level": env("AMQP_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
+            "propagate": False,
+        },
         "core": {
             "handlers": ["core_logfile"],
             "level": env("APP_LOG_LEVEL", default=LOGLEVEL_DEFAULT),

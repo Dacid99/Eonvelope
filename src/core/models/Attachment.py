@@ -246,6 +246,7 @@ class Attachment(
         """
         if email.pk is None:
             raise ValueError("Email is not in db!")
+        logger.debug("Parsing and saving attachments in email %s ...", email.message_id)
         ignore_maintypes = get_config("DONT_PARSE_CONTENT_MAINTYPES")
         ignore_subtypes = get_config("DONT_PARSE_CONTENT_SUBTYPES")
         new_attachments = []
@@ -285,8 +286,10 @@ class Attachment(
                         datasize=len(part_payload),
                         email=email,
                     )
+                    logger.debug("Saving attachment %s to db ...", part.get_filename())
                     new_attachment.save(attachment_payload=part_payload)
                     new_attachments.append(new_attachment)
+        logger.debug("Successfully parsed and saved attachments.")
         return new_attachments
 
     @override

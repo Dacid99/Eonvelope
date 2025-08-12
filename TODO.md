@@ -45,7 +45,6 @@
 ## To implement
 
 - fetch only specific errors in fetchers
-- fetchers dont log to core
 - favicon.ico for the icon
 - daemonize celery worker
 
@@ -57,6 +56,7 @@
 
 ## To fix
 
+- use exceptions from addemailsfromfile for response
 - migrate from dependabot to renovate
 - fetching too many emails leads to browser timeout
 - running tests from test dir

@@ -290,6 +290,8 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
         self.is_healthy = True
         self.save(update_fields=["is_healthy"])
 
+        logger.info("Parsing mailbox data ...")
+
         for mailbox_data in mailbox_list:
             Mailbox.create_from_data(mailbox_data, self)
 

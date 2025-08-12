@@ -51,7 +51,9 @@ def get_config(setting: str) -> Any:
     try:
         return getattr(config, setting)
     except Exception as exc:
-        logger.info("Failed to retrieve a constance config value, using workaround ...")
+        logger.debug(
+            "Failed to retrieve a constance config value, using workaround ..."
+        )
         try:
             return CONSTANCE_CONFIG[setting][0]
         except KeyError as keyexc:

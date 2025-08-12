@@ -214,9 +214,11 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
             return None
         try:
             correspondent = cls.objects.get(email_address=address.strip(), user=user)
+            logger.debug("Correspondent %s already exists in db.", address)
         except cls.DoesNotExist:
             correspondent = cls(
                 email_address=address.strip(), email_name=name, user=user
             )
             correspondent.save()
+            logger.debug("Successfully saved correspondent %s to db.", address)
         return correspondent

@@ -490,6 +490,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             )
             or md5(email_bytes).hexdigest()  # noqa: S324  # no safe hash required here
         )
+        logger.debug("Parsed email %s ...", message_id)
         x_spam = get_header(email_message, HeaderFields.X_SPAM) or ""
         if is_x_spam(x_spam) and get_config("THROW_OUT_SPAM"):
             logger.debug(
@@ -511,6 +512,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         new_email.mailbox = mailbox
 
         logger.debug("Successfully parsed email.")
+        logger.debug("Saving email %s to db...", message_id)
         try:
             with transaction.atomic():
                 new_email.save(email_data=email_bytes)
@@ -523,6 +525,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                 "Failed creating email from bytes: Error while saving email to db!"
             )
             return None
+        logger.debug("Successfully saved email to db.")
         return new_email
 
     @cached_property

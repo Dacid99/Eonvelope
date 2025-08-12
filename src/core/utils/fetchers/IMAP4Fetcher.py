@@ -260,7 +260,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         Raises:
             MailAccountError: If an error occurs or a bad response is returned.
         """
-        self.logger.debug("Fetching mailboxes at %s ...", self.account)
+        self.logger.debug("Fetching mailboxes in %s ...", self.account)
         _, mailboxes = self.safe_list()
         bytes_mailboxes = [
             mailbox for mailbox in mailboxes if isinstance(mailbox, bytes)

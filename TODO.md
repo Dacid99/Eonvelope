@@ -62,7 +62,6 @@
 - fetching too many emails leads to browser timeout
 - running tests from test dir
 - storage is incremented by healthcheck
-- daemon may not update task interval correctly!
 - optics:
   - better name for daemon
   - email alt in mailbox yells from statement

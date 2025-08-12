@@ -20,21 +20,17 @@
 
 import datetime
 import json
-import logging
-import logging.handlers
-import os
-from pathlib import Path
 from uuid import UUID
 
 import pytest
 from django.db import IntegrityError
 from django.urls import reverse
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from model_bakery import baker
 
 from core import constants
 from core.models import Daemon, Mailbox
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from Emailkasten.utils.workarounds import get_config
 
 
 @pytest.fixture(autouse=True)
@@ -114,6 +110,40 @@ def test_Daemon_valid_fetching_criterion_constraint(faker, fake_daemon):
             mailbox=fake_daemon.mailbox,
             fetching_criterion="BAD_CRITERION",
         )
+
+
+@pytest.mark.django_db
+def test_Daemon_save_new(fake_mailbox):
+    """Tests :func:`core.models.Correspondent.Correspondent.delete`
+    in case the interval was changed.
+    """
+    new_interval = baker.make(IntervalSchedule)
+    new_daemon = baker.prepare(Daemon, interval=new_interval, mailbox=fake_mailbox)
+    new_daemon.celery_task = None
+
+    new_daemon.save()
+
+    new_daemon.refresh_from_db()
+    assert new_daemon.celery_task
+    assert isinstance(new_daemon.celery_task, PeriodicTask)
+    assert new_daemon.celery_task.interval == new_daemon.interval
+    assert new_daemon.celery_task.task == "core.tasks.fetch_emails"
+    assert new_daemon.celery_task.args == json.dumps([str(new_daemon.uuid)])
+
+
+@pytest.mark.django_db
+def test_Daemon_save_updated_interval(fake_daemon):
+    """Tests :func:`core.models.Correspondent.Correspondent.delete`
+    in case the interval was changed.
+    """
+    new_interval = baker.make(IntervalSchedule)
+    fake_daemon.interval = new_interval
+
+    assert fake_daemon.celery_task.interval != new_interval
+
+    fake_daemon.save()
+
+    assert fake_daemon.celery_task.interval == new_interval
 
 
 @pytest.mark.django_db

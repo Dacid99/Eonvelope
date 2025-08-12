@@ -5,7 +5,6 @@
 - custom fetching filters with NOT, OR and custom criteria
 - combined filter for correspondent with mention
 - extensive database statistics
-- option to prohibit daemon for spambox
 - toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/)
 - reprocess mail action
 - mechanism to remove all correspondents without emails
@@ -22,7 +21,6 @@
 - fetch once by criterion instead of hardcoded ALL
 - use post-unsubscribe-method to interpret post-unsubscribe as link
 - emailconversation subpage
-- time benchmarks in debug log
 - batch download and delete in web
 
 ## To refactor
@@ -47,6 +45,7 @@
 ## To implement
 
 - fetch only specific errors in fetchers
+- fetchers dont log to core
 - favicon.ico for the icon
 - daemonize celery worker
 

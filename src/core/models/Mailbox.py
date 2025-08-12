@@ -325,7 +325,7 @@ class Mailbox(
 
         Returns:
             The :class:`core.models.Mailbox` instance with data from the bytes.
-            `None` if the mailbox already exists in the db.
+            `None` if the mailbox name is in the ignorelist.
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")
@@ -334,6 +334,9 @@ class Mailbox(
             if isinstance(mailbox_data, bytes)
             else mailbox_data
         )
+        if mailbox_name in get_config("IGNORED_MAILBOXES"):
+            logger.debug("%s is in the ignorelist, it is skipped!", mailbox_name)
+            return None
         try:
             new_mailbox = cls.objects.get(account=account, name=mailbox_name)
             logger.debug("%s already exists in db, it is skipped!", new_mailbox)

@@ -696,6 +696,27 @@ def test_Mailbox_create_from_data_duplicate(
 
 
 @pytest.mark.django_db
+def test_Mailbox_create_from_data_ignored(
+    faker, override_config, fake_mailbox, mock_logger, mock_parse_mailbox_name
+):
+    """Tests :func:`core.models.Account.Account.create_from_data`
+    in case of data that is already in the db.
+    """
+    fake_name_bytes = faker.name().encode()
+
+    assert Mailbox.objects.count() == 1
+
+    mock_parse_mailbox_name.return_value = fake_mailbox.name
+    with override_config(IGNORED_MAILBOXES=[mock_parse_mailbox_name.return_value]):
+        new_mailbox = Mailbox.create_from_data(fake_name_bytes, fake_mailbox.account)
+
+    assert Mailbox.objects.count() == 1
+    assert new_mailbox is None
+    mock_parse_mailbox_name.assert_called_once_with(fake_name_bytes)
+    mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
 def test_Mailbox_create_from_data_no_account(faker, mock_parse_mailbox_name):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of data that is already in the db.

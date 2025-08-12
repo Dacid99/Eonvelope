@@ -555,6 +555,13 @@ CONSTANCE_CONFIG = {
         _("Whether or not to ignore emails that have a spam flag"),
         bool,
     ),
+    "IGNORED_MAILBOXES": (
+        ["Spam", "Junk"],
+        _(
+            "List of mailboxes that are ignored when looking up mailboxes in an account."
+        ),
+        list,
+    ),
     "DONT_PARSE_CONTENT_MAINTYPES": (
         [""],
         _("List of content types prefixes to not parse as files."),
@@ -705,6 +712,7 @@ CONSTANCE_CONFIG_FIELDSETS = (
         _("Processing Settings"),
         (
             "THROW_OUT_SPAM",
+            "IGNORED_MAILBOXES",
             "EMAIL_HTML_TEMPLATE",
             "EMAIL_CSS",
             "DONT_PARSE_CONTENT_MAINTYPES",

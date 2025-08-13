@@ -163,7 +163,7 @@ def test_IMAP4Fetcher___init___bad_protocol(
     spy_IMAP4Fetcher_connect_to_host = mocker.spy(IMAP4Fetcher, "connect_to_host")
     imap_mailbox.account.protocol = EmailProtocolChoices.POP3
 
-    with pytest.raises(ValueError, match="not supported"):
+    with pytest.raises(ValueError, match="protocol"):
         IMAP4Fetcher(imap_mailbox.account)
 
     spy_IMAP4Fetcher_connect_to_host.assert_not_called()

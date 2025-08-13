@@ -201,7 +201,7 @@ def test_ExchangeFetcher___init___bad_protocol(
     spy_ExchangeFetcher_connect_to_host = mocker.spy(ExchangeFetcher, "connect_to_host")
     exchange_mailbox.account.protocol = EmailProtocolChoices.POP3
 
-    with pytest.raises(ValueError, match="not supported"):
+    with pytest.raises(ValueError, match="protocol"):
         ExchangeFetcher(exchange_mailbox.account)
 
     spy_ExchangeFetcher_connect_to_host.assert_not_called()

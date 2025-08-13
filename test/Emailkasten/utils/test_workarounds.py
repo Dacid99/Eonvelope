@@ -72,9 +72,9 @@ def test_get_config_workaround_success(monkeypatch, faker, mock_logger, mock_get
     mock_getattr.assert_called_once()
     assert config_value == fake_config_default
 
-    mock_logger.info.assert_called()
+    mock_logger.debug.assert_called()
     mock_logger.critical.assert_not_called()
-    mock_logger.debug.assert_not_called()
+    mock_logger.info.assert_not_called()
     mock_logger.error.assert_not_called()
 
 
@@ -91,7 +91,7 @@ def test_get_config_workaround_failure(monkeypatch, faker, mock_logger, mock_get
         get_config("NO_CONFIG")
 
     mock_getattr.assert_called_once()
-    mock_logger.info.assert_called()
+    mock_logger.debug.assert_called()
     mock_logger.critical.assert_called()
-    mock_logger.debug.assert_not_called()
+    mock_logger.info.assert_not_called()
     mock_logger.error.assert_not_called()

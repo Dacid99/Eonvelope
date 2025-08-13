@@ -23,7 +23,6 @@ from typing import override
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
 from django.http import HttpResponse
-from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView
 from django.views.generic.edit import FormView
 
@@ -70,8 +69,8 @@ class UploadEmailView(LoginRequiredMixin, DetailView, FormView):
         self.object = self.get_object()  # required to reconcile FormView and DetailView
         try:
             self.object.add_emails_from_file(file, file_format)
-        except ValueError:
-            form.add_error("file", _("The file could not be processed!"))
+        except ValueError as error:
+            form.add_error("file", str(error))
             return self.form_invalid(form)
         else:
             return super().form_valid(form)

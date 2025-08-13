@@ -263,7 +263,7 @@ class Mailbox(
                         )
             except BadZipFile as error:
                 logger.exception("Error parsing file as %s!", file_format)
-                raise ValueError("The given file could not be processed!") from error
+                raise ValueError(_("The given file is not a valid zipfile.")) from error
         elif file_format in [
             SupportedEmailUploadFormats.MBOX,
             SupportedEmailUploadFormats.MMDF,
@@ -294,7 +294,7 @@ class Mailbox(
                 except BadZipFile as error:
                     logger.exception("Error parsing file as %s!", file_format)
                     raise ValueError(
-                        "The given file could not be processed!"
+                        _("The given file is not a valid zipfile.")
                     ) from error
                 for name in os.listdir(tempdirpath):
                     path = os.path.join(tempdirpath, name)
@@ -311,12 +311,13 @@ class Mailbox(
                         ) as error:  # raised if the given maildir doesn't have the expected structure
                             logger.exception("Error parsing file as %s!", file_format)
                             raise ValueError(
-                                "The given file could not be processed!"
+                                _("The given file is not a valid %(file_format)s.")
+                                % {"file_format": file_format}
                             ) from error
                         parser.close()
         else:
             logger.debug("Unsupported fileformat for uploaded file.")
-            raise ValueError("The given file format is not supported!")
+            raise ValueError(_("The given file format is not supported."))
         logger.info("Successfully added emails from file.")
 
     @classmethod

@@ -57,7 +57,6 @@
 
 ## To fix
 
-- use exceptions from addemailsfromfile for response
 - migrate from dependabot to renovate
 - fetching too many emails leads to browser timeout
 - running tests from test dir

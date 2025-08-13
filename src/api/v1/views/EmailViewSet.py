@@ -38,6 +38,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.utils import query_param_list_to_typed_list
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models import Email, EmailCorrespondent
 
@@ -174,10 +175,19 @@ class EmailViewSet(
                 {"detail": _("File format missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        requested_ids = request.query_params.getlist("id", [])
-        if not requested_ids:
+        requested_id_query_params = request.query_params.getlist("id", [])
+        if not requested_id_query_params:
             return Response(
                 {"detail": _("Email ids missing in request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            requested_ids = query_param_list_to_typed_list(
+                requested_id_query_params, int
+            )
+        except ValueError:
+            return Response(
+                {"detail": _("Email ids given in invalid format.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:

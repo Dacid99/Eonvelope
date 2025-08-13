@@ -22,6 +22,7 @@
 - use post-unsubscribe-method to interpret post-unsubscribe as link
 - emailconversation subpage
 - batch download and delete in web
+- download for account
 
 ## To refactor
 

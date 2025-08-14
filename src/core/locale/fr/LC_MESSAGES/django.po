@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-11 09:31+0000\n"
-"PO-Revision-Date: 2025-08-08 07:01+0000\n"
+"PO-Revision-Date: 2025-08-15 11:01+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/emailkasten/core/"
 "fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: src/core/constants.py:38
 msgid "All RECENT emails"
@@ -29,7 +29,7 @@ msgstr ""
 
 #: src/core/constants.py:44
 msgid "All SEEN emails"
-msgstr ""
+msgstr "Tous les courriels VUS"
 
 #: src/core/constants.py:47
 msgid "All emails"
@@ -603,12 +603,12 @@ msgid ""
 msgstr ""
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:270
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "An %(error_class_name)s: %(error)s occurred during fetching of mail contents!"
 msgstr ""
-"Une %(error_class_name)s: %(error)s s'est produite pendant %(action_name)s !"
+"Un %(error_class_name)s : %(error)s s'est produit lors de la saisie du "
+"contenu du courrier !"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:323
 #, python-format

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-11 12:29+0000\n"
-"PO-Revision-Date: 2025-08-11 10:08+0000\n"
+"PO-Revision-Date: 2025-08-15 11:01+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/emailkasten/web/"
 "it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: src/web/filters/AccountFilterSet.py:56
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -381,7 +381,7 @@ msgstr "Attiva/disattiva la navigazione"
 #: src/web/templates/web/email/email_filter_list.html:6
 #: src/web/templates/web/email/email_filter_list.html:14
 msgid "Emails"
-msgstr ""
+msgstr "E-mail"
 
 #: src/web/templates/web/bases/base.html:56
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:6
@@ -389,7 +389,7 @@ msgstr ""
 #: src/web/templates/web/dashboard.html:54
 #: src/web/templates/web/email/email_detail.html:108
 msgid "Correspondents"
-msgstr ""
+msgstr "Corrispondenti"
 
 #: src/web/templates/web/bases/base.html:67
 #: src/web/templates/web/daemon/daemon_filter_list.html:6
@@ -403,7 +403,7 @@ msgstr ""
 #: src/web/templates/web/bases/base_detail.html:22
 #: src/web/templates/web/bases/base_detail_with_thumbnail.html:19
 msgid "Toolbar with button groups"
-msgstr ""
+msgstr "Barra degli strumenti con gruppi pulsanti"
 
 #: src/web/templates/web/bases/base_create.html:16
 #: src/web/templates/web/bases/base_detail.html:40
@@ -426,7 +426,7 @@ msgstr ""
 
 #: src/web/templates/web/bases/base_filter_list.html:21
 msgid "Filter options"
-msgstr ""
+msgstr "Opzioni di filtro"
 
 #: src/web/templates/web/bases/base_filter_list.html:29
 #: src/web/templates/web/partials/_delete-modal.html:17
@@ -447,46 +447,48 @@ msgstr ""
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:39
 msgid "Subscribe"
-msgstr ""
+msgstr "Iscriviti"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:42
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Disiscriviti"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:46
 msgid "Unsubscribe Method"
-msgstr ""
+msgstr "Metodo di cancellazione"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:50
 msgid "Post"
-msgstr ""
+msgstr "Invia"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:53
 #: src/web/templates/web/email/archive/base_archive.html:6
 #: src/web/templates/web/email/email_filter_list.html:20
 msgid "Archive"
-msgstr ""
+msgstr "Archivio"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:56
 msgid "Help"
-msgstr ""
+msgstr "Aiuto"
 
 #: src/web/templates/web/correspondent/correspondent_edit.html:6
 msgid "Edit Correspondent"
-msgstr ""
+msgstr "Modifica il corrispondente"
 
 #: src/web/templates/web/correspondent/correspondent_email_filter_list.html:6
 msgid "with"
-msgstr ""
+msgstr "con"
 
 #: src/web/templates/web/correspondent/partials/_filter_list_alternative.html:7
 msgid "No correspondents found."
-msgstr ""
+msgstr "Nessun corrispondente trovato."
 
 #: src/web/templates/web/correspondent/partials/_filter_list_alternative.html:11
 msgid ""
 "You can add some by fetching the emails from the mailboxes you have set up."
 msgstr ""
+"È possibile aggiungere alcuni prendendo le e-mail dalle caselle di posta che "
+"hai impostato."
 
 #: src/web/templates/web/daemon/daemon_create.html:6
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:6
@@ -504,7 +506,7 @@ msgstr ""
 #: src/web/templates/web/email/email_detail.html:47
 #: src/web/templates/web/email/partials/_email_card.html:17
 msgid "Mailbox"
-msgstr ""
+msgstr "Casella di posta"
 
 #: src/web/templates/web/daemon/daemon_detail.html:41
 #: src/web/templates/web/daemon/daemon_edit.html:21
@@ -514,17 +516,17 @@ msgstr ""
 #: src/web/templates/web/mailbox/mailbox_detail.html:43
 #: src/web/templates/web/mailbox/partials/_mailbox_card.html:24
 msgid "Account"
-msgstr ""
+msgstr "Account"
 
 #: src/web/templates/web/daemon/daemon_detail.html:48
 #: src/web/templates/web/daemon/partials/_daemon_card.html:28
 msgid "Criterion"
-msgstr ""
+msgstr "Criteri"
 
 #: src/web/templates/web/daemon/daemon_detail.html:50
 #: src/web/templates/web/daemon/partials/_daemon_card.html:29
 msgid "Interval"
-msgstr ""
+msgstr "Intervallo"
 
 #: src/web/templates/web/daemon/daemon_detail.html:51
 msgid "Last Run"
@@ -536,11 +538,11 @@ msgstr ""
 
 #: src/web/templates/web/daemon/daemon_detail.html:55
 msgid "Logfile Backups"
-msgstr ""
+msgstr "Backup dei file di registro"
 
 #: src/web/templates/web/daemon/daemon_detail.html:57
 msgid "Logfile max size"
-msgstr ""
+msgstr "Dimensioni massime dei file di registro"
 
 #: src/web/templates/web/daemon/daemon_edit.html:6
 msgid "Edit Daemon"
@@ -555,7 +557,7 @@ msgstr ""
 #: src/web/templates/web/mailbox/partials/_download_dropdown.html:9
 #: src/web/templates/web/partials/_download-button.html:5
 msgid "Download"
-msgstr ""
+msgstr "Scarica"
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:7
 msgid "No daemons found."
@@ -564,132 +566,134 @@ msgstr ""
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:11
 msgid "Add one to a mailbox to fetch its contents on a regular basis."
 msgstr ""
+"Aggiungi uno a una casella di posta per recuperare il suo contenuto "
+"regolarmente."
 
 #: src/web/templates/web/daemon/partials/_is_running-badge.html:4
 msgid "Running"
-msgstr ""
+msgstr "In esecuzione"
 
 #: src/web/templates/web/daemon/partials/_is_running-badge.html:4
 msgid "Paused"
-msgstr ""
+msgstr "In pausa"
 
 #: src/web/templates/web/daemon/partials/_start-button.html:8
 msgid "Start"
-msgstr ""
+msgstr "Avvia"
 
 #: src/web/templates/web/daemon/partials/_stop-button.html:9
 msgid "Stop"
-msgstr ""
+msgstr "Ferma"
 
 #: src/web/templates/web/dashboard.html:6
 msgid "Dashboard"
-msgstr ""
+msgstr "Pannello di controllo"
 
 #: src/web/templates/web/dashboard.html:10
 msgid "Welcome to Emailkasten"
-msgstr ""
+msgstr "Benvenuti a Emailkasten"
 
 #: src/web/templates/web/dashboard.html:34
 msgid "Statistics"
-msgstr ""
+msgstr "Statistiche"
 
 #: src/web/templates/web/dashboard.html:40
 msgid "Data"
-msgstr ""
+msgstr "Dati"
 
 #: src/web/templates/web/dashboard.html:41
 msgid "Count"
-msgstr ""
+msgstr "Numero"
 
 #: src/web/templates/web/email/archive/base_archive.html:18
 msgid "Email Archive"
-msgstr ""
+msgstr "Archivio delle e-mail"
 
 #: src/web/templates/web/email/archive/day.html:6
 #: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
-msgstr ""
+msgstr "Giorno"
 
 #: src/web/templates/web/email/archive/index.html:6
 #: src/web/templates/web/email/archive/index.html:10
 msgid "Latest"
-msgstr ""
+msgstr "Più recenti"
 
 #: src/web/templates/web/email/archive/index.html:18
 msgid "Today"
-msgstr ""
+msgstr "Oggi"
 
 #: src/web/templates/web/email/archive/index.html:26
 msgid "This week"
-msgstr ""
+msgstr "Questa settimana"
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
 msgid "Month"
-msgstr ""
+msgstr "Mese"
 
 #: src/web/templates/web/email/archive/week.html:6
 #: src/web/templates/web/email/archive/week.html:10
 msgid "Week"
-msgstr ""
+msgstr "Settimana"
 
 #: src/web/templates/web/email/archive/week.html:15
 msgid "Week #"
-msgstr ""
+msgstr "Settimana nº"
 
 #: src/web/templates/web/email/archive/year.html:6
 #: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
-msgstr ""
+msgstr "Anno"
 
 #: src/web/templates/web/email/email_detail.html:6
 msgid "Email Details"
-msgstr ""
+msgstr "Dettagli dell'e-mail"
 
 #: src/web/templates/web/email/email_detail.html:39
 msgid "Time received"
-msgstr ""
+msgstr "Ricevuto alle"
 
 #: src/web/templates/web/email/email_detail.html:41
 msgid "Message Id"
-msgstr ""
+msgstr "Identificatore del messaggio"
 
 #: src/web/templates/web/email/email_detail.html:42
 msgid "X-Spam"
-msgstr ""
+msgstr "X-Spam"
 
 #: src/web/templates/web/email/email_detail.html:62
 msgid "Plain bodytext"
-msgstr ""
+msgstr "Testo del corpo"
 
 #: src/web/templates/web/email/email_detail.html:80
 msgid "Html bodytext"
-msgstr ""
+msgstr "Testo HTML"
 
 #: src/web/templates/web/email/email_detail.html:99
 #: src/web/templates/web/email/partials/_email_card.html:36
 msgid "Email content"
-msgstr ""
+msgstr "Contenuto dell'e-mail"
 
 #: src/web/templates/web/email/email_detail.html:135
 msgid "Headers"
-msgstr ""
+msgstr "Intestazioni"
 
 #: src/web/templates/web/email/email_detail.html:156
 msgid "Conversation"
-msgstr ""
+msgstr "Conversazione"
 
 #: src/web/templates/web/email/email_detail.html:167
 msgid "In Reply To"
-msgstr ""
+msgstr "In risposta a"
 
 #: src/web/templates/web/email/email_detail.html:180
 msgid "Replies"
-msgstr ""
+msgstr "Risposte"
 
 #: src/web/templates/web/email/email_detail.html:193
 msgid "References"
-msgstr ""
+msgstr "Referenze"
 
 #: src/web/templates/web/email/email_detail.html:206
 msgid "Referenced by"
@@ -697,7 +701,7 @@ msgstr ""
 
 #: src/web/templates/web/email/partials/_archive_list_alternative.html:7
 msgid "No emails found for this timeframe."
-msgstr ""
+msgstr "Nessuna e-mail trovata per questo periodo di tempo."
 
 #: src/web/templates/web/email/partials/_email_card.html:27
 msgid "Received"
@@ -705,11 +709,11 @@ msgstr "Ricevuto"
 
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:7
 msgid "No emails found."
-msgstr ""
+msgstr "Nessuna e-mail trovata."
 
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:11
 msgid "You can fetch some from the mailboxes you have set up."
-msgstr ""
+msgstr "È possibile recuperare alcuni dalle caselle di posta che hai impostato."
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:18
 msgid "New Daemon"
@@ -717,37 +721,37 @@ msgstr ""
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:22
 msgid "for"
-msgstr ""
+msgstr "per"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:6
 msgid "Mailbox Details"
-msgstr ""
+msgstr "Dettagli della casella di posta"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:51
 msgid "Save attachments"
-msgstr ""
+msgstr "Salva gli allegati"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:53
 #: src/web/templates/web/mailbox/mailbox_detail.html:61
 msgid "on"
-msgstr ""
+msgstr "attivato"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:55
 #: src/web/templates/web/mailbox/mailbox_detail.html:63
 msgid "off"
-msgstr ""
+msgstr "disattivato"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:59
 msgid "Save mails as .eml"
-msgstr ""
+msgstr "Salva le e-mail come .eml"
 
 #: src/web/templates/web/mailbox/mailbox_edit.html:6
 msgid "Edit Mailbox"
-msgstr ""
+msgstr "Modifica le caselle di posta"
 
 #: src/web/templates/web/mailbox/mailbox_email_filter_list.html:7
 msgid "of"
-msgstr ""
+msgstr "di"
 
 #: src/web/templates/web/mailbox/partials/_daemons_list_alternative.html:8
 msgid ""
@@ -776,12 +780,12 @@ msgstr ""
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:17
 msgid "Go to accounts"
-msgstr ""
+msgstr "Vai agli account"
 
 #: src/web/templates/web/mailbox/partials/_submit_upload-button.html:6
 #: src/web/templates/web/mailbox/partials/_submit_upload-button.html:7
 msgid "Upload"
-msgstr ""
+msgstr "Carica"
 
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:6
 msgid "Test this mailbox to make sure it can be accessed."
@@ -789,132 +793,132 @@ msgstr ""
 
 #: src/web/templates/web/mailbox/partials/_upload_email-button.html:6
 msgid "Upload emails"
-msgstr ""
+msgstr "Carica le e-mail"
 
 #: src/web/templates/web/mailbox/upload_email.html:6
 msgid "Upload email"
-msgstr ""
+msgstr "Carica l'e-mail"
 
 #: src/web/templates/web/mailbox/upload_email.html:20
 msgid "Back to mailbox"
-msgstr ""
+msgstr "Torna alla casella di posta"
 
 #: src/web/templates/web/mailbox/upload_email.html:25
 msgid "Upload emails to the mailbox"
-msgstr ""
+msgstr "Carica le e-mail alla casella di posta"
 
 #: src/web/templates/web/partials/_clear_and_submit_filter-button.html:4
 msgid "& Submit"
-msgstr ""
+msgstr "e invia"
 
 #: src/web/templates/web/partials/_clear_filter-button.html:4
 msgid "Reset"
-msgstr ""
+msgstr "Ripristina"
 
 #: src/web/templates/web/partials/_date_created-small.html:3
 msgid "Added"
-msgstr ""
+msgstr "Aggiunto"
 
 #: src/web/templates/web/partials/_date_updated-small.html:3
 msgid "Last changed"
-msgstr ""
+msgstr "Ultimo cambiamento"
 
 #: src/web/templates/web/partials/_delete-button.html:7
 #: src/web/templates/web/partials/_delete-modal.html:32
 msgid "Delete"
-msgstr ""
+msgstr "Elimina"
 
 #: src/web/templates/web/partials/_delete-modal.html:12
 #, python-format
 msgid "Delete %(object)s"
-msgstr ""
+msgstr "Elimina %(object)s"
 
 #: src/web/templates/web/partials/_delete-modal.html:21
 #, python-format
 msgid "Are you sure you want to delete %(object)s?"
-msgstr ""
+msgstr "Vuoi davvero eliminare %(object)s?"
 
 #: src/web/templates/web/partials/_edit-button.html:6
 msgid "Edit"
-msgstr ""
+msgstr "Modifica"
 
 #: src/web/templates/web/partials/_end_edit-button.html:6
 msgid "End edit"
-msgstr ""
+msgstr "Finisce la modifica"
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
 msgid "Favorite"
-msgstr ""
+msgstr "Preferito"
 
 #: src/web/templates/web/partials/_filter-form.html:5
 #: src/web/templates/web/partials/_filter-form.html:9
 msgid "Filter"
-msgstr ""
+msgstr "Filtra"
 
 #: src/web/templates/web/partials/_footer.html:6
 msgid "2025 Emailkasten. Licensed under AGPLv3. All rights reserved."
-msgstr ""
+msgstr "2025 Emailkasten. Licenziata sotto AGPLv3. Tutti i diritti riservati."
 
 #: src/web/templates/web/partials/_footer.html:11
 msgid "Github"
-msgstr ""
+msgstr "GitHub"
 
 #: src/web/templates/web/partials/_footer.html:14
 msgid "Gitlab"
-msgstr ""
+msgstr "Gitlab"
 
 #: src/web/templates/web/partials/_footer.html:17
 msgid "Documentation"
-msgstr ""
+msgstr "Documentazione"
 
 #: src/web/templates/web/partials/_footer.html:20
 #: src/web/templates/web/partials/_footer.html:23
 msgid "Translating"
-msgstr ""
+msgstr "Traduzioni"
 
 #: src/web/templates/web/partials/_health_badge.html:5
 msgid "Healthy"
-msgstr ""
+msgstr "Sano"
 
 #: src/web/templates/web/partials/_health_badge.html:10
 msgid "Unhealthy"
-msgstr ""
+msgstr "Problema"
 
 #: src/web/templates/web/partials/_health_badge.html:15
 msgid "Health unknown"
-msgstr ""
+msgstr "Stato sconosciuto"
 
 #: src/web/templates/web/partials/_pagination.html:4
 msgid "Results"
-msgstr ""
+msgstr "Risultati"
 
 #: src/web/templates/web/partials/_pagination.html:5
 msgid "Page navigation"
-msgstr ""
+msgstr "Pagina di navigazione"
 
 #: src/web/templates/web/partials/_pagination.html:9
 msgid "Previous"
-msgstr ""
+msgstr "Precedente"
 
 #: src/web/templates/web/partials/_pagination.html:26
 msgid "Next"
-msgstr ""
+msgstr "Successivo"
 
 #: src/web/templates/web/partials/_pagination.html:39
 msgid "Page Size"
-msgstr ""
+msgstr "Dimensioni della pagina"
 
 #: src/web/templates/web/partials/_submit_form-button.html:3
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: src/web/templates/web/partials/_test-button.html:6
 msgid "Test"
-msgstr ""
+msgstr "Test"
 
 #: src/web/utils/forms.py:30 src/web/utils/forms.py:46
 msgid " *"
-msgstr ""
+msgstr " *"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:95
 #, python-format
@@ -922,10 +926,12 @@ msgid ""
 "Updating mailboxes failed\n"
 "%(error)s"
 msgstr ""
+"Aggiornamento delle caselle di posta non riuscito\n"
+"%(error)s"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:98
 msgid "Updating mailboxes successful"
-msgstr ""
+msgstr "Aggiornamento delle caselle di posta riuscito"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:80
 msgid "Daemon started successfully"

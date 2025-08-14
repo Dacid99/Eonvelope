@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-06 20:23+0000\n"
-"PO-Revision-Date: 2025-08-11 10:08+0000\n"
+"PO-Revision-Date: 2025-08-15 10:02+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:700
 #: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1434
@@ -84,6 +84,8 @@ msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
 msgstr ""
+"Dimensioni massime dei dati per una miniatura nell'applicazione web. Le "
+"miniature più grandi di questo non saranno caricate."
 
 #: src/Emailkasten/settings.py:550
 msgid "Default cycle period setting of a daemon in seconds"
@@ -203,15 +205,15 @@ msgstr "Seleziona la lingua"
 
 #: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:21
 msgid "Light"
-msgstr ""
+msgstr "Chiaro"
 
 #: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:30
 msgid "Dark"
-msgstr ""
+msgstr "Scuro"
 
 #: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:39
 msgid "Auto"
-msgstr ""
+msgstr "Automatico"
 
 #: src/Emailkasten/templates/allauth/layouts/base.html:25
 #: src/Emailkasten/templates/allauth/layouts/base.html:34

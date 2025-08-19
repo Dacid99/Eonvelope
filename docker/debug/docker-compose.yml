@@ -40,7 +40,7 @@ services:
       - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
       - ALLOWED_HOSTS=localhost,emailkasten.mydomain.tld # all allowed host URLs separated by ,
       - APP_LOG_LEVEL=DEBUG
-      - DJANGO_LOG_LEVEL=DEBUG
+      - DJANGO_LOG_LEVEL=INFO
       - CELERY_LOG_LEVEL=DEBUG
       - AMQP_LOG_LEVEL=DEBUG
       - LOGFILE_MAXSIZE=10485760

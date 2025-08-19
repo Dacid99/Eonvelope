@@ -10,4 +10,4 @@ echo "Successfully started celery worker."
 echo "Starting celery beat ..."
 poetry run celery -A src.Emailkasten beat --loglevel=${CELERY_LOG_LEVEL} -S django --detach
 echo "Successfully started celery beat."
-poetry run python3 manage.py runserver 8000 --insecure
+poetry run python3 manage.py runserver 0.0.0.0:8000 --insecure

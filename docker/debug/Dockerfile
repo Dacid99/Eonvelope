@@ -46,7 +46,7 @@ ENV SECRET_KEY=
 EXPOSE 8000
 
 # entrypoint
-RUN chmod +x docker/entrypoint.sh
-ENTRYPOINT [ "./docker/entrypoint.sh" ]
+RUN chmod +x docker/debug/entrypoint.sh
+ENTRYPOINT [ "./docker/debug/entrypoint.sh" ]
 
-HEALTHCHECK --interval=60s --timeout=10s --start-period=5s --retries=3 CMD curl -kf https://localhost:443/health/ || exit 1
+HEALTHCHECK --interval=60s --timeout=10s --start-period=5s --retries=3 CMD curl -f http://localhost:8000/health/ || exit 1

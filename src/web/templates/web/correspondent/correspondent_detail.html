@@ -16,6 +16,12 @@
 
 {% endblock badges %}
 
+{% block action_buttons %}
+
+    {% include "web/partials/_download-button.html" %}
+
+{% endblock action_buttons %}
+
 {% block card_title %}
     <a href="mailto:{{ object.email_address }}"
        class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.email_address }}</a>

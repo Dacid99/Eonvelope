@@ -24,7 +24,6 @@ import pytest
 from django.core.files.storage import default_storage
 from django.http import FileResponse
 from rest_framework import status
-from rest_framework.response import Response
 
 from api.v1.views import AttachmentViewSet
 from core.models import Attachment

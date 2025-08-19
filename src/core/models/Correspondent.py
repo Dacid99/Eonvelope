@@ -21,24 +21,27 @@
 from __future__ import annotations
 
 import logging
+from io import BytesIO
 from typing import TYPE_CHECKING, Final, override
 
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from vobject import vCard
 
-from ..mixins import FavoriteMixin, URLMixin
+from ..mixins import FavoriteMixin, HasDownloadMixin, URLMixin
 
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
+    from django.db.models import QuerySet
 
 
 logger = logging.getLogger(__name__)
 """The logger instance for the module."""
 
 
-class Correspondent(URLMixin, FavoriteMixin, models.Model):
+class Correspondent(HasDownloadMixin, URLMixin, FavoriteMixin, models.Model):
     """Database model for the correspondent data found in a mail."""
 
     email_address = models.CharField(
@@ -174,6 +177,7 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
             "email_address": self.email_address
         }
 
+    @property
     def is_mailinglist(self) -> bool:
         """Whether the correspondent is a mailinglist.
 
@@ -189,6 +193,30 @@ class Correspondent(URLMixin, FavoriteMixin, models.Model):
             or self.list_subscribe
             or self.list_unsubscribe
         )
+
+    @property
+    def name(self) -> str:
+        """Gets the best available name for the correspondent, if necessary from the mailaddress.
+
+        Returns:
+            The most accurate available name of the correspondent.
+        """
+        return self.real_name or self.email_name or self.email_address.split("@")[0]
+
+    @staticmethod
+    def queryset_as_file(queryset: QuerySet) -> BytesIO:
+        if not queryset.exists():
+            raise Correspondent.DoesNotExist("The queryset is empty!")
+        vcard_buffer = BytesIO()
+        for correspondent in queryset:
+            correspondent_vcard = vCard()
+            correspondent_vcard.add("email").value = correspondent.email_address
+            correspondent_vcard.add("fn").value = correspondent.name
+            if correspondent.email_name and correspondent.real_name:
+                correspondent_vcard.add("nickname").value = correspondent.email_name
+            vcard_buffer.write(correspondent_vcard.serialize().encode())
+        vcard_buffer.seek(0)
+        return vcard_buffer
 
     @classmethod
     def create_from_correspondent_tuple(

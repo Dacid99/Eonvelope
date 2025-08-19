@@ -24,6 +24,7 @@ import datetime
 from typing import TYPE_CHECKING
 
 import pytest
+import vobject
 from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
@@ -95,6 +96,40 @@ def test_Correspondent_unique_together_constraint(fake_correspondent):
             user=fake_correspondent.user,
             email_address=fake_correspondent.email_address,
         )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "email_name, real_name, email_address, expected_name",
+    [
+        ("", "", "abc113@web.ca", "abc113"),
+        ("john doe", "", "jd@mail.it", "john doe"),
+        ("", "dudeonline", "lol@somewhere.io", "dudeonline"),
+        ("mailer", "real", "email@address.us", "real"),
+    ],
+)
+def test_Correspondent_name(
+    fake_correspondent, email_name, real_name, email_address, expected_name
+):
+    fake_correspondent.email_name = email_name
+    fake_correspondent.real_name = real_name
+    fake_correspondent.email_address = email_address
+
+    result = fake_correspondent.name
+
+    assert result == expected_name
+
+
+@pytest.mark.django_db
+def test_Correspondent_queryset_as_file(fake_correspondent):
+    result = Correspondent.queryset_as_file(Correspondent.objects.all())
+
+    assert hasattr(result, "read")
+    for correspondent_vcard in vobject.readComponents(result.read().decode()):
+        correspondent_vcard.fn = fake_correspondent.name
+        correspondent_vcard.email = fake_correspondent.email_address
+    assert hasattr(result, "close")
+    result.close()
 
 
 @pytest.mark.django_db

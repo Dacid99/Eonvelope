@@ -2660,6 +2660,18 @@ files = [
 six = ">=1.5"
 
 [[package]]
+name = "pytz"
+version = "2025.2"
+description = "World timezone definitions, modern and historical"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "pytz-2025.2-py2.py3-none-any.whl", hash = "sha256:5ddf76296dd8c44c26eb8f4b6f35488f3ccbf6fbbd7adee0b7262d43f0ec2f00"},
+    {file = "pytz-2025.2.tar.gz", hash = "sha256:360b9e3dbb49a209c21ad61809c7fb453643e048b38924c765813546746e81c3"},
+]
+
+[[package]]
 name = "pyxdg"
 version = "0.28"
 description = "PyXDG contains implementations of freedesktop.org standards in python."
@@ -3710,6 +3722,23 @@ files = [
 ]
 
 [[package]]
+name = "vobject"
+version = "0.9.9"
+description = "A full-featured Python package for parsing and creating iCalendar and vCard files"
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "vobject-0.9.9-py2.py3-none-any.whl", hash = "sha256:0fbdb982065cf4d1843a5d5950c88510041c6de026bda49c3502721de1c6ac3d"},
+    {file = "vobject-0.9.9.tar.gz", hash = "sha256:ac44e5d7e2079d84c1d52c50a615b9bec4b1ba958608c4c7fe40cbf33247b38e"},
+]
+
+[package.dependencies]
+python-dateutil = {version = ">=2.7.0", markers = "python_version >= \"3.10\""}
+pytz = "*"
+six = "*"
+
+[[package]]
 name = "wcwidth"
 version = "0.2.13"
 description = "Measures the displayed width of unicode strings in a terminal"
@@ -3762,4 +3791,4 @@ test = ["build (==1.2.1)", "pytest", "pytest-cov", "responses (>=0.10.1,<0.26.0)
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "b73ed4649e1a2de1c31d154082cae422b11621f623a287630275396f996556ed"
+content-hash = "d0b925b1a2679a21c6b34bfcd839e75c50fe58f92b609d7cc10d178d9a8d223b"

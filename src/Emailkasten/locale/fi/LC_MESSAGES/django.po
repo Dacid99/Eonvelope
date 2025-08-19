@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-11 09:31+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-08-20 22:02+0000\n"
+"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
+"Language-Team: Finnish <https://hosted.weblate.org/projects/emailkasten/"
+"emailkasten/fi/>\n"
+"Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.13\n"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:700
 #: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1434
@@ -26,12 +27,12 @@ msgstr ""
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:704
 #: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1438
 msgid "From"
-msgstr ""
+msgstr "Lähettäjä"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:707
 #: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1441
 msgid "To"
-msgstr ""
+msgstr "Vastaanottaja"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:710
 #: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1444
@@ -46,7 +47,7 @@ msgstr ""
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:726
 #: tools/reports/mypy/html/src/Emailkasten/settings.py.html:1460
 msgid "Attachments"
-msgstr ""
+msgstr "Liitteet"
 
 #: src/Emailkasten/settings.py:498
 msgid "Emailkasten API"
@@ -148,85 +149,87 @@ msgstr ""
 
 #: src/Emailkasten/settings.py:718
 msgid "Default Values"
-msgstr ""
+msgstr "Oletusarvot"
 
 #: src/Emailkasten/settings.py:729
 msgid "Processing Settings"
-msgstr ""
+msgstr "Käsittelyasetukset"
 
 #: src/Emailkasten/settings.py:739
 msgid "Storage Settings"
-msgstr ""
+msgstr "Varastointiasetukset"
 
 #: src/Emailkasten/settings.py:743
 msgid "API Settings"
-msgstr ""
+msgstr "API-asetukset"
 
 #: src/Emailkasten/settings.py:750
 msgid "Web Settings"
-msgstr ""
+msgstr "Verkkoasetukset"
 
 #: src/Emailkasten/templates/429.html:6 src/Emailkasten/templates/429.html:11
 msgid "Too Many Requests"
-msgstr ""
+msgstr "Liikaa pyyntöjä"
 
 #: src/Emailkasten/templates/429.html:13
 msgid "You are sending too many requests."
-msgstr ""
+msgstr "Lähetät liikaa pyyntöjä."
 
 #: src/Emailkasten/templates/allauth/elements/language_dropdown.html:8
 #: src/Emailkasten/templates/allauth/elements/language_dropdown.html:12
 msgid "Select Language"
-msgstr ""
+msgstr "Valitse kieli"
 
 #: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:21
 msgid "Light"
-msgstr ""
+msgstr "Vaalea"
 
 #: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:30
 msgid "Dark"
-msgstr ""
+msgstr "Tumma"
 
 #: src/Emailkasten/templates/allauth/elements/theme_dropdown.html:39
 msgid "Auto"
-msgstr ""
+msgstr "Automaattinen"
 
 #: src/Emailkasten/templates/allauth/layouts/base.html:25
 #: src/Emailkasten/templates/allauth/layouts/base.html:34
 msgid "Emailkasten"
-msgstr ""
+msgstr "Emailkasten"
 
 #: src/Emailkasten/templates/allauth/layouts/base.html:29
 msgid "Go to Emailkasten"
-msgstr ""
+msgstr "Mene Emailkasteniin"
 
 #: src/Emailkasten/templates/allauth/layouts/base.html:41
+#, fuzzy
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Vaihda navigointi"
 
 #: src/Emailkasten/templates/allauth/layouts/base.html:59
 msgid "Sign Out"
-msgstr ""
+msgstr "Kirjaudu ulos"
 
 #: src/Emailkasten/templates/allauth/layouts/base.html:63
 msgid "Sign In"
-msgstr ""
+msgstr "Kirjaudu sisään"
 
 #: src/Emailkasten/templates/allauth/layouts/base.html:66
 msgid "Sign Up"
-msgstr ""
+msgstr "Rekisteröidy"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:14
+#, fuzzy
 msgid "Change Email"
-msgstr ""
+msgstr "Muuta sähköpostia"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:22
 msgid "Change Password"
-msgstr ""
+msgstr "Vaihda salasana"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:30
 msgid "Sessions"
-msgstr ""
+msgstr "Istunnot"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:37
 msgid "Admin panel"

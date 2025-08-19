@@ -1674,6 +1674,29 @@ yaml = ["PyYAML (>=3.10)"]
 zookeeper = ["kazoo (>=2.8.0)"]
 
 [[package]]
+name = "krb5"
+version = "0.7.1"
+description = "Kerberos API bindings for Python"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "krb5-0.7.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:cbdcd2c4514af5ca32d189bc31f30fee2ab297dcbff74a53bd82f92ad1f6e0ef"},
+    {file = "krb5-0.7.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:40ad837d563865946cffd65a588f24876da2809aa5ce4412de49442d7cf11d50"},
+    {file = "krb5-0.7.1-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:8f503ec4b44dedb6bfe49b636d5e4df89399b27a1d06218a876a37d5651c5ab3"},
+    {file = "krb5-0.7.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:af6eedfe51b759a8851c41e67f7ae404c382d510b14b626ec52cca564547a7f7"},
+    {file = "krb5-0.7.1-cp312-cp312-macosx_10_13_x86_64.whl", hash = "sha256:a075da3721b188070d801814c58652d04d3f37ccbf399dee63251f5ff27d2987"},
+    {file = "krb5-0.7.1-cp312-cp312-macosx_11_0_arm64.whl", hash = "sha256:af1932778cd462852e2a25596737cf0ae4e361f69e892b6c3ef3a29c960de3a0"},
+    {file = "krb5-0.7.1-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:3c4c2c5b48f7685a281ae88aabbc7719e35e8af454ea812cf3c38759369c7aac"},
+    {file = "krb5-0.7.1-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:7590317af8c9633e420f90d112163687dbdd8fc9c3cee6a232d6537bcb5a65c3"},
+    {file = "krb5-0.7.1-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:87a592359cc545d061de703c164be4eabb977e3e8cae1ef0d969fadc644f9df6"},
+    {file = "krb5-0.7.1-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:9c8c1d5967a910562dbffae74bdbe8a364d78a6cecce0a429ec17776d4729e74"},
+    {file = "krb5-0.7.1-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:44045e1f8a26927229eedbf262d3e8a5f0451acb1f77c3bd23cad1dc6244e8ad"},
+    {file = "krb5-0.7.1-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:e9b71148b8974fc032268df23643a4089677dc3d53b65167e26e1e72eaf43204"},
+    {file = "krb5-0.7.1.tar.gz", hash = "sha256:ed5f13d5031489b10d8655c0ada28a81c2391b3ecb8a08c6d739e1e5835bc450"},
+]
+
+[[package]]
 name = "libcst"
 version = "1.8.2"
 description = "A concrete syntax tree with AST-like properties for Python 3.0 through 3.13 programs."
@@ -3739,4 +3762,4 @@ test = ["build (==1.2.1)", "pytest", "pytest-cov", "responses (>=0.10.1,<0.26.0)
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "17e52bb78aa76dfd530bc1e072794ab54d3f61c581fb7f4ad2f013de86c7145b"
+content-hash = "b73ed4649e1a2de1c31d154082cae422b11621f623a287630275396f996556ed"

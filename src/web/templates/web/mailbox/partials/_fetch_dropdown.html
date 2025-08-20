@@ -3,16 +3,12 @@
 <form method="post">
     {% csrf_token %}
     <div class="dropdown">
-        <button class="btn btn-outline-primary dropdown-toggle {% if not object.has_download %}disabled{% endif %}"
+        <button class="btn btn-outline-primary dropdown-toggle"
                 type="button"
-                id="dropdownDownloadMenuButton"
+                id="dropdownFetchMenuButton"
                 data-bs-toggle="dropdown"
-                aria-expanded="false"
-                aria-label="{% translate 'Download' %}"
-                {% if not object.has_download %}aria-disabled="true"{% endif %}>
-            <i class="fa fa-download" aria-hidden="true"></i>
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownDownloadMenuButton">
+                aria-expanded="false">{% translate 'Fetch' %}</button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownFetchMenuButton">
             {% for criterion, label in mailbox.available_fetching_criterion_choices %}
                 <li>
                     <button class="btn dropdown-item"

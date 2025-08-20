@@ -48,19 +48,19 @@
 {% block card_content %}
     <ul class="list-group list-group-flush">
         <li class="list-group-item">
-            {% translate "Save attachments" %}:
+            {% translate "Save attachments" %}
             {% if object.save_attachments %}
-                <i class="fa-solid fa-check" aria-label={% translate "on" %}></i>
+                <i class="fa-solid fa-check mx-1" aria-label={% translate "on" %}></i>
             {% else %}
-                <i class="fa-solid fa-xmark" aria-label={% translate "off" %}></i>
+                <i class="fa-solid fa-xmark mx-1" aria-label={% translate "off" %}></i>
             {% endif %}
         </li>
         <li class="list-group-item">
-            {% translate "Save mails as .eml" %}:
+            {% translate "Save mails as .eml" %}
             {% if object.save_to_eml %}
-                <i class="fa-solid fa-check" aria-label={% translate "on" %}></i>
+                <i class="fa-solid fa-check mx-1" aria-label={% translate "on" %}></i>
             {% else %}
-                <i class="fa-solid fa-xmark" aria-label={% translate "off" %}></i>
+                <i class="fa-solid fa-xmark mx-1" aria-label={% translate "off" %}></i>
             {% endif %}
         </li>
     </ul>

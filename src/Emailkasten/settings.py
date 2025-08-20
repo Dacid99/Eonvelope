@@ -662,8 +662,8 @@ CONSTANCE_CONFIG = {
         }
         .email-container {
             border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
+            border-radius: 3px;
+            padding: 16px;
         }
         .email-header {
             border-bottom: 1px solid #eee;

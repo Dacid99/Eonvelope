@@ -1,20 +1,20 @@
 {% load i18n %}
 
 <div class="dropdown">
-    <button class="btn btn-outline-primary dropdown-toggle {% if not object.has_download %}disabled{% endif %}"
+    <button class="btn btn-outline-primary dropdown-toggle {% if not mailbox.has_download %}disabled{% endif %}"
             type="button"
             id="dropdownDownloadMenuButton"
             data-bs-toggle="dropdown"
             aria-expanded="false"
             aria-label="{% translate 'Download' %}"
-            {% if not object.has_download %}aria-disabled="true"{% endif %}>
+            {% if not mailbox.has_download %}aria-disabled="true"{% endif %}>
         <i class="fa fa-download" aria-hidden="true"></i>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownDownloadMenuButton">
         {% for format, format_name in mailbox.available_download_formats %}
             <li>
                 <a class="dropdown-item"
-                   href="{{ object.get_absolute_download_url }}?file_format={{ format }}"
+                   href="{{ mailbox.get_absolute_download_url }}?file_format={{ format }}"
                    target="_blank">{{ format_name }}</a>
             </li>
         {% endfor %}

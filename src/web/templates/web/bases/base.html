@@ -44,7 +44,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="collapse navbar-collapse nav-pills" id="navbarNav">
-                        <div class="navbar-nav me-auto align-items-end">
+                        <div class="navbar-nav me-auto">
                             <a class="nav-link 
                                 {% block nav_class_emails %}link-body-emphasis{% endblock nav_class_emails %}
                              " href="{% url 'web:email-filter-list' %}">{% translate "Emails" %}<i class="fa-regular fa-envelope mx-1" aria-hidden="true"></i></a>
@@ -55,7 +55,7 @@
                                 {% block nav_class_correspondents %}link-body-emphasis{% endblock nav_class_correspondents %}
                              " href="{% url 'web:correspondent-filter-list' %}">{% translate "Correspondents" %}<i class="fa-solid fa-address-book mx-1" aria-hidden="true"></i></a>
                         </div>
-                        <div class="navbar-nav me-auto align-items-end">
+                        <div class="navbar-nav me-auto">
                             <a class="nav-link 
                                 {% block nav_class_accounts %}link-body-emphasis{% endblock nav_class_accounts %}
                              " href="{% url 'web:account-filter-list' %}">{% translate "Accounts" %}<i class="fa-solid fa-at mx-1"></i></a>

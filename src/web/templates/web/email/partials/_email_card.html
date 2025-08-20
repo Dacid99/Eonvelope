@@ -32,7 +32,7 @@
 {% block thumbnail %}
     <!--order is critical to keep style and sandbox in case of an issue with the src-->
     <iframe sandbox
-            class="h-100 w-100 p-1"
+            class="h-100 w-100 p-1 rounded"
             title="{% translate 'Email content' %}"
             src="{{ card_object.get_absolute_thumbnail_url }}"></iframe>
 {% endblock thumbnail %}

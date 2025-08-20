@@ -84,3 +84,21 @@ def test_ShardedFileSystemStorage_save_unsafe_name(fake_file, unsafe_name):
     assert os.path.dirname(result) == str(storage.shard_directory_name)
     assert "/" not in os.path.basename(result)
     assert "~" not in os.path.basename(result)
+
+
+@pytest.mark.django_db
+def test_ShardedFileSystemStorage_delete_single(faker, fake_file):
+    fake_name = faker.name()
+    file_name = default_storage.save(fake_name, fake_file)
+
+    assert StorageShard.objects.count() == 1
+    storage = StorageShard.objects.first()
+    assert storage.file_count == 1
+    assert default_storage.exists(file_name)
+
+    default_storage.delete(file_name)
+
+    assert StorageShard.objects.count() == 1
+    storage = StorageShard.objects.first()
+    assert storage.file_count == 0
+    assert not default_storage.exists(file_name)

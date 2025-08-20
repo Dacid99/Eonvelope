@@ -21,11 +21,10 @@
 from __future__ import annotations
 
 import os
-from io import BytesIO
 from typing import TYPE_CHECKING
 
 import pytest
-from django.core.files.storage import default_storage
+from health_check.storage.backends import DefaultFileStorageHealthCheck
 
 from core.models import StorageShard
 
@@ -121,3 +120,13 @@ def test_Storage_health_check_missing_dir(settings, mock_logger):
 
     assert not health
     mock_logger.critical.assert_called()
+
+
+@pytest.mark.django_db
+def test_DefaultStorageStorageHealthCheck():
+    assert StorageShard.get_current_storage().file_count == 0
+
+    result = DefaultFileStorageHealthCheck().check_status()
+
+    assert result is True
+    assert StorageShard.get_current_storage().file_count == 0

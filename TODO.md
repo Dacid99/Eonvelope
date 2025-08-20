@@ -58,8 +58,8 @@
 
 - migrate from dependabot to renovate
 - fetching too many emails leads to browser timeout
-- running tests from test dir
-- storage is incremented by healthcheck
+- streamline queryparams and field names across web and api
+- make 400 responses return field specific errors
 - optics:
   - better name for daemon
 - ci:

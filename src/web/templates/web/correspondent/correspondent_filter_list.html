@@ -19,3 +19,9 @@
     {% include "web/correspondent/partials/_correspondent_list.html" with correspondents=page_obj %}
 
 {% endblock list %}
+
+{% block list_alternative %}
+
+    {% include "web/correspondent/partials/_filter_list_alternative.html" %}
+
+{% endblock list_alternative %}

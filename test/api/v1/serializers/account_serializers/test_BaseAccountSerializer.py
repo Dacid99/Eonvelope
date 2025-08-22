@@ -62,34 +62,35 @@ def test_output(fake_account, request_context):
 
 
 @pytest.mark.django_db
-def test_input(fake_account, request_context):
+def test_input(account_payload, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = BaseAccountSerializer(
-        data=model_to_dict(fake_account), context=request_context
-    )
+    assert "user" not in account_payload
+
+    serializer = BaseAccountSerializer(data=account_payload, context=request_context)
     assert serializer.is_valid()
     serializer_data = serializer.validated_data
 
     assert "id" not in serializer_data
     assert "password" in serializer_data
-    assert serializer_data["password"] == fake_account.password
+    assert serializer_data["password"] == account_payload["password"]
     assert "mail_address" in serializer_data
-    assert serializer_data["mail_address"] == fake_account.mail_address
+    assert serializer_data["mail_address"] == account_payload["mail_address"]
     assert "mail_host" in serializer_data
-    assert serializer_data["mail_host"] == fake_account.mail_host
+    assert serializer_data["mail_host"] == account_payload["mail_host"]
     assert "mail_host_port" in serializer_data
-    assert serializer_data["mail_host_port"] == fake_account.mail_host_port
+    assert serializer_data["mail_host_port"] == account_payload["mail_host_port"]
     assert "protocol" in serializer_data
-    assert serializer_data["protocol"] == fake_account.protocol
+    assert serializer_data["protocol"] == account_payload["protocol"]
     assert "timeout" in serializer_data
-    assert serializer_data["timeout"] == fake_account.timeout
+    assert serializer_data["timeout"] == account_payload["timeout"]
     assert "is_healthy" not in serializer_data
     assert "is_favorite" in serializer_data
-    assert serializer_data["is_favorite"] == fake_account.is_favorite
+    assert serializer_data["is_favorite"] == account_payload["is_favorite"]
     assert "created" not in serializer_data
     assert "updated" not in serializer_data
-    assert "user" not in serializer_data
-    assert len(serializer_data) == 7
+    assert "user" in serializer_data
+    assert serializer_data["user"] == request_context["request"].user
+    assert len(serializer_data) == 8
 
 
 @pytest.mark.django_db
@@ -152,3 +153,17 @@ def test_input_bad_timeout(fake_account, account_payload, request_context, bad_t
 
     assert not serializer.is_valid()
     assert serializer["timeout"].errors
+
+
+@pytest.mark.django_db
+def test_input_duplicate(fake_account, request_context):
+    """Tests input direction of :class:`api.v1.serializers.BaseAccountSerializer`."""
+    payload = model_to_dict(fake_account)
+    payload.pop("id")
+    payload.pop("user")
+    clean_payload = {key: value for key, value in payload.items() if value is not None}
+
+    serializer = BaseAccountSerializer(data=clean_payload, context=request_context)
+
+    assert not serializer.is_valid()
+    assert serializer.errors

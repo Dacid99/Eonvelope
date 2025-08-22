@@ -23,9 +23,9 @@
 
     {% include "web/partials/_test-button.html" %}
 
-    {% include "web/mailbox/partials/_fetch_all-button.html" with mailbox=object %}
+    {% include "web/mailbox/partials/_fetch_dropdown.html" with mailbox=object %}
 
-    {% include "web/daemon/partials/_add_button.html" %}
+    {% include "web/mailbox/partials/_add_daemon_button.html" with mailbox=object %}
 
     {% include "web/mailbox/partials/_download_dropdown.html" with mailbox=object %}
 
@@ -47,8 +47,22 @@
 
 {% block card_content %}
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">{% translate "Save attachments" %}: {{ object.save_attachments }}</li>
-        <li class="list-group-item">{% translate "Save mails as .eml" %}: {{ object.save_to_eml }}</li>
+        <li class="list-group-item">
+            {% translate "Save attachments" %}
+            {% if object.save_attachments %}
+                <i class="fa-solid fa-check mx-1" aria-label={% translate "on" %}></i>
+            {% else %}
+                <i class="fa-solid fa-xmark mx-1" aria-label={% translate "off" %}></i>
+            {% endif %}
+        </li>
+        <li class="list-group-item">
+            {% translate "Save mails as .eml" %}
+            {% if object.save_to_eml %}
+                <i class="fa-solid fa-check mx-1" aria-label={% translate "on" %}></i>
+            {% else %}
+                <i class="fa-solid fa-xmark mx-1" aria-label={% translate "off" %}></i>
+            {% endif %}
+        </li>
     </ul>
 {% endblock card_content %}
 
@@ -60,9 +74,20 @@
                 {% translate "Daemons" %}<i class="fa-solid fa-robot mx-2" aria-hidden="true"></i>
             </h4>
             <div class="m-1">
+                {% if object.daemons.exists %}
 
-                {% include "web/daemon/partials/_daemon_list.html" with daemons=object.daemons.all %}
+                    {% include "web/daemon/partials/_daemon_list.html" with daemons=object.daemons.all %}
 
+                {% elif not object.is_healthy %}
+
+                    {% include "web/mailbox/partials/_unhealthy_list_alternative.html" %}
+
+
+                {% else %}
+
+                    {% include "web/mailbox/partials/_daemons_list_alternative.html" %}
+
+                {% endif %}
             </div>
         </div>
     </div>
@@ -72,13 +97,25 @@
                 <h4 class="card-title">
                     {% translate "Latest Emails" %}<i class="fa-solid fa-envelope mx-2" aria-hidden="true"></i>
                 </h4>
-                <a role="button"
-                   class="btn btn-outline-primary"
-                   href="{% url 'web:mailbox-emails' object.pk %}">{% translate "View all" %}</a>
+                {% if latest_emails %}
+                    <a role="button"
+                       class="btn btn-outline-primary"
+                       href="{% url 'web:mailbox-emails' object.pk %}">{% translate "View all" %}</a>
+                {% endif %}
             </div>
+            {% if latest_emails %}
 
-            {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
+                {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
 
+            {% elif not object.is_healthy %}
+
+                {% include "web/mailbox/partials/_unhealthy_list_alternative.html" %}
+
+            {% else %}
+
+                {% include "web/mailbox/partials/_emails_list_alternative.html" %}
+
+            {% endif %}
         </div>
     </div>
 {% endblock card_extras %}

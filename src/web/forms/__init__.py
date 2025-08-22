@@ -20,7 +20,7 @@
 
 from .account_forms import BaseAccountForm
 from .correspondent_forms import BaseCorrespondentForm
-from .daemon_forms import BaseDaemonForm, CreateDaemonForm
+from .daemon_forms import BaseDaemonForm, CreateDaemonForm, CreateMailboxDaemonForm
 from .mailbox_forms import BaseMailboxForm
 
 
@@ -30,4 +30,5 @@ __all__ = [
     "BaseDaemonForm",
     "BaseMailboxForm",
     "CreateDaemonForm",
+    "CreateMailboxDaemonForm",
 ]

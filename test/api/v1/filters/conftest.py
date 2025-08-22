@@ -410,7 +410,6 @@ def daemon_queryset(unblocked_db, mailbox_queryset) -> QuerySet[Daemon, Daemon]:
                 interval=interval,
                 is_healthy=bool_test_item,
                 mailbox=mailbox_queryset.get(id=number + 1),
-                log_filepath=TEXT_TEST_ITEMS[number],
             )
             daemon.celery_task = celery_task
             daemon.save(update_fields=["celery_task"])
@@ -434,6 +433,7 @@ def correspondent_queryset(
                 list_owner=text_test_item,
                 list_subscribe=text_test_item,
                 list_unsubscribe=text_test_item,
+                list_unsubscribe_post=text_test_item,
                 list_post=text_test_item,
                 list_help=text_test_item,
                 list_archive=text_test_item,

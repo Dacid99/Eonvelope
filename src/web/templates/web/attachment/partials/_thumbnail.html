@@ -17,28 +17,22 @@
          alt="{% translate 'Attachment image' %}" />
 {% elif attachment.content_maintype == "text" %}
     <iframe sandbox
-            class="w-100 h-100 p-1"
+            class="w-100 h-100 p-1 rounded"
             title="{% translate 'Attachment text' %}"
             src="{{ attachment.get_absolute_thumbnail_url }}"></iframe>
 {% elif attachment.content_maintype == "application" %}
-    <embed class="w-100 h-100 p-1"
+    <embed class="w-100 h-100 p-1 rounded"
            title="{% translate 'Attachment file content' %}"
            src="{{ attachment.get_absolute_thumbnail_url }}" />
 {% elif attachment.content_maintype == "font" %}
     <style>
         @font-face {
-            font-family: attachment_ {
-                    {
-                    attachment.id
-                }
-            }
-
-            ;
+            font-family: attachment_{{ attachment.id }};
             src: url('{{ attachment.get_absolute_thumbnail_url }}');
         }
     </style>
-    <h1 style="font-family='attachment_{{ attachment.id }}'"
-        class="text-center">
+    <h1 class="text-center p-2"
+        style="font-family: attachment_{{ attachment.id }}">
         Aa
         <br />
         Zz

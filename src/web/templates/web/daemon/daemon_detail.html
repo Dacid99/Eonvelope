@@ -20,6 +20,8 @@
 
 {% block action_buttons %}
 
+    {% include "web/partials/_test-button.html" %}
+
     {% include "web/daemon/partials/_start-button.html" with daemon=object %}
 
     {% include "web/daemon/partials/_stop-button.html" with daemon=object %}
@@ -50,9 +52,25 @@
         <li class="list-group-item">
             {% translate "Total Run Count" %}: {{ object.celery_task.total_run_count }}
         </li>
-        <li class="list-group-item">{% translate "Logfile Backups" %}: {{ object.log_backup_count }}</li>
-        <li class="list-group-item">
-            {% translate "Logfile max size" %}: {{ object.logfile_size }} {% translate "bytes" %}
-        </li>
+        {% if not object.is_healthy %}
+            <li class="list-group-item">
+                {% translate "Latest Error" %}: <pre><code>{{ object.last_error }}</code></pre>
+                <br />
+                <strong>{% translate "Test the daemon to see what is going wrong." %}</strong>
+            </li>
+        {% endif %}
     </ul>
 {% endblock card_content %}
+
+{% block card_extras %}
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">
+                {% translate "Mailbox" %}<i class="fa-solid fa-inbox mx-2" aria-hidden="true"></i>
+            </h4>
+
+            {% include "web/mailbox/partials/_mailbox_card.html" with card_object=object.mailbox %}
+
+        </div>
+    </div>
+{% endblock card_extras %}

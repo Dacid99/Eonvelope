@@ -121,7 +121,7 @@ def test_post_delete_auth_owner(fake_account, owner_client, detail_url):
 
 @pytest.mark.django_db
 def test_post_test_noauth(
-    fake_account, client, detail_url, login_url, mock_Account_test_connection
+    fake_account, client, detail_url, login_url, mock_Account_test
 ):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -135,12 +135,12 @@ def test_post_test_noauth(
     assert response.url.endswith(
         f"?next={detail_url(AccountDetailWithDeleteView, fake_account)}"
     )
-    mock_Account_test_connection.assert_not_called()
+    mock_Account_test.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_post_test_auth_other(
-    fake_account, other_client, detail_url, mock_Account_test_connection
+    fake_account, other_client, detail_url, mock_Account_test
 ):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
@@ -150,12 +150,12 @@ def test_post_test_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [t.name for t in response.templates]
-    mock_Account_test_connection.assert_not_called()
+    mock_Account_test.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_post_test_success_auth_owner(
-    fake_account, owner_client, detail_url, mock_Account_test_connection
+    fake_account, owner_client, detail_url, mock_Account_test
 ):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
@@ -173,16 +173,16 @@ def test_post_test_success_auth_owner(
     assert len(response.context["messages"]) == 1
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
-    mock_Account_test_connection.assert_called_once()
+    mock_Account_test.assert_called_once()
 
 
 @pytest.mark.django_db
 def test_post_test_failure_auth_owner(
-    faker, fake_account, owner_client, detail_url, mock_Account_test_connection
+    faker, fake_account, owner_client, detail_url, mock_Account_test
 ):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     fake_error_message = faker.sentence()
-    mock_Account_test_connection.side_effect = MailAccountError(fake_error_message)
+    mock_Account_test.side_effect = MailAccountError(fake_error_message)
 
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
@@ -199,20 +199,20 @@ def test_post_test_failure_auth_owner(
     assert len(response.context["messages"]) == 1
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
-    mock_Account_test_connection.assert_called_once()
+    mock_Account_test.assert_called_once()
     assert fake_error_message in response.content.decode()
 
 
 @pytest.mark.django_db
 def test_post_test_missing_action_auth_owner(
-    fake_account, owner_client, detail_url, mock_Account_test_connection
+    fake_account, owner_client, detail_url, mock_Account_test
 ):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(detail_url(AccountDetailWithDeleteView, fake_account))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
-    mock_Account_test_connection.assert_not_called()
+    mock_Account_test.assert_not_called()
 
 
 @pytest.mark.django_db

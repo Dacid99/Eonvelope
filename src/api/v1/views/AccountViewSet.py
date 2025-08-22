@@ -22,11 +22,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, override
 
-from django.db import IntegrityError
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -42,7 +41,6 @@ from ..serializers import AccountSerializer
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request
-    from rest_framework.serializers import BaseSerializer
 
 
 class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
@@ -84,21 +82,6 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
             "mailboxes"
         )
 
-    @override
-    def perform_create(self, serializer: BaseSerializer[Account]) -> None:
-        """Adds the request user to the serializer data of the create request.
-
-        Args:
-            serializer: The serializer data of the create request.
-
-        Raises:
-            ValidationError: If an IntegrityError occurs.
-        """
-        try:
-            serializer.save(user=self.request.user)
-        except IntegrityError:
-            raise ValidationError({"detail": "This account already exists!"}) from None
-
     URL_PATH_UPDATE_MAILBOXES = "update-mailboxes"
     URL_NAME_UPDATE_MAILBOXES = "update-mailboxes"
 
@@ -124,13 +107,13 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         except MailAccountError as error:
             response = Response(
                 data={
-                    "detail": "Error with mailaccount occurred!",
+                    "detail": _("An error with the mailaccount occurred."),
                     "error": str(error),
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
-            response = Response(data={"detail": "Updated mailboxes"})
+            response = Response(data={"detail": _("Updated mailboxes")})
         account.refresh_from_db()
         response.data["account"] = self.get_serializer(account).data
         return response
@@ -154,11 +137,11 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         account = self.get_object()
         response = Response(
             {
-                "detail": "Tested mailaccount",
+                "detail": _("Tested mailaccount"),
             }
         )
         try:
-            account.test_connection()
+            account.test()
         except MailAccountError as error:
             response.data["result"] = False
             response.data["error"] = str(error)

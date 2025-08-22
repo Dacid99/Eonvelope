@@ -35,10 +35,8 @@ def mock_Account_update_mailboxes(mocker):
 
 
 @pytest.fixture
-def mock_Account_test_connection(mocker):
-    return mocker.patch(
-        "api.v1.views.AccountViewSet.Account.test_connection", autospec=True
-    )
+def mock_Account_test(mocker):
+    return mocker.patch("api.v1.views.AccountViewSet.Account.test", autospec=True)
 
 
 @pytest.mark.django_db
@@ -133,7 +131,7 @@ def test_test_noauth(
     fake_account,
     noauth_api_client,
     custom_detail_action_url,
-    mock_Account_test_connection,
+    mock_Account_test,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with an unauthenticated user client."""
     previous_is_healthy = fake_account.is_healthy
@@ -145,7 +143,7 @@ def test_test_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_Account_test_connection.assert_not_called()
+    mock_Account_test.assert_not_called()
     fake_account.refresh_from_db()
     assert fake_account.is_healthy is previous_is_healthy
     assert "mail_address" not in response.data
@@ -156,7 +154,7 @@ def test_test_auth_other(
     fake_account,
     other_api_client,
     custom_detail_action_url,
-    mock_Account_test_connection,
+    mock_Account_test,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated other user client."""
 
@@ -169,7 +167,7 @@ def test_test_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_Account_test_connection.assert_not_called()
+    mock_Account_test.assert_not_called()
     fake_account.refresh_from_db()
     assert fake_account.is_healthy is previous_is_healthy
     assert "mail_address" not in response.data
@@ -180,7 +178,7 @@ def test_test_success_auth_owner(
     fake_account,
     owner_api_client,
     custom_detail_action_url,
-    mock_Account_test_connection,
+    mock_Account_test,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
 
@@ -196,7 +194,7 @@ def test_test_success_auth_owner(
     )
     assert response.data["result"] is True
     assert "error" not in response.data
-    mock_Account_test_connection.assert_called_once_with(fake_account)
+    mock_Account_test.assert_called_once_with(fake_account)
 
 
 @pytest.mark.django_db
@@ -205,11 +203,11 @@ def test_test_failure_auth_owner(
     fake_account,
     owner_api_client,
     custom_detail_action_url,
-    mock_Account_test_connection,
+    mock_Account_test,
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test` action with the authenticated owner user client."""
     fake_error_message = faker.sentence()
-    mock_Account_test_connection.side_effect = MailAccountError(fake_error_message)
+    mock_Account_test.side_effect = MailAccountError(fake_error_message)
 
     response = owner_api_client.post(
         custom_detail_action_url(
@@ -224,7 +222,7 @@ def test_test_failure_auth_owner(
     assert response.data["result"] is False
     assert "error" in response.data
     assert fake_error_message in response.data["error"]
-    mock_Account_test_connection.assert_called_once_with(fake_account)
+    mock_Account_test.assert_called_once_with(fake_account)
 
 
 @pytest.mark.django_db

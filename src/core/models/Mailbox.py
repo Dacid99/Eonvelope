@@ -34,6 +34,7 @@ from django.utils.translation import gettext_lazy as _
 from Emailkasten.utils.workarounds import get_config
 
 from ..constants import (
+    EmailFetchingCriterionChoices,
     SupportedEmailDownloadFormats,
     SupportedEmailUploadFormats,
     file_format_parsers,
@@ -148,10 +149,9 @@ class Mailbox(
             "name": self.name,
         }
 
-    def get_available_fetching_criteria(self) -> tuple[str]:
+    @property
+    def available_fetching_criteria(self) -> tuple[str]:
         """Gets the available fetching criteria based on the mail protocol of this mailbox.
-
-        Used by :func:`api.v1.views.MailboxViewSet.fetching_options` to show the choices for fetching to the user.
 
         Returns:
             A tuple of all available fetching criteria for this mailbox.
@@ -161,7 +161,23 @@ class Mailbox(
         """
         return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
 
-    def test_connection(self) -> None:
+    @property
+    def available_fetching_criterion_choices(self) -> list[tuple[str, str]]:
+        """Gets the available fetching criterion choices based on the mail protocol of this mailbox.
+
+        Returns:
+            A choices-type tuple of all available fetching criteria for this mailbox.
+
+        Raises:
+            ValueError: If the account has an unimplemented protocol.
+        """
+        return [
+            (criterion, label)
+            for criterion, label in EmailFetchingCriterionChoices.choices
+            if criterion in self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA
+        ]
+
+    def test(self) -> None:
         """Tests whether the data in the model is correct.
 
         Tests connecting and logging in to the mailhost and account.
@@ -174,19 +190,19 @@ class Mailbox(
         """
 
         logger.info("Testing %s ...", self)
-        try:
-            with self.account.get_fetcher() as fetcher:
+        with self.account.get_fetcher() as fetcher:
+            try:
                 fetcher.test(self)
-        except MailboxError as error:
-            logger.info("Failed testing %s with error: %s.", self, error)
-            self.is_healthy = False
-            self.save(update_fields=["is_healthy"])
-            raise
-        except MailAccountError as error:
-            logger.info("Failed testing %s with error %s.", self.account, error)
-            self.account.is_healthy = False
-            self.account.save(update_fields=["is_healthy"])
-            raise
+            except MailboxError as error:
+                logger.info("Failed testing %s with error: %s.", self, error)
+                self.is_healthy = False
+                self.save(update_fields=["is_healthy"])
+                raise
+            except MailAccountError as error:
+                logger.info("Failed testing %s with error %s.", self.account, error)
+                self.account.is_healthy = False
+                self.account.save(update_fields=["is_healthy"])
+                raise
         self.is_healthy = True
         self.save(update_fields=["is_healthy"])
         logger.info("Successfully tested mailbox")
@@ -200,15 +216,22 @@ class Mailbox(
             criterion: The criterion used to fetch emails from the mailbox.
 
         Raises:
-            MailboxError: If fetching failed.
+            MailboxError: Reraised if fetching failed due to a MailboxError.
+            MailAccountError: Reraised if fetching failed due to a MailAccountError.
         """
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
         with self.account.get_fetcher() as fetcher:
             try:
                 fetched_mails = fetcher.fetch_emails(self, criterion)
-            except MailboxError:
+            except MailboxError as error:
+                logger.info("Failed fetching %s with error: %s.", self, error)
                 self.is_healthy = False
                 self.save(update_fields=["is_healthy"])
+                raise
+            except MailAccountError as error:
+                logger.info("Failed fetching %s with error: %s.", self, error)
+                self.account.is_healthy = False
+                self.account.save(update_fields=["is_healthy"])
                 raise
         self.is_healthy = True
         self.save(update_fields=["is_healthy"])
@@ -242,7 +265,8 @@ class Mailbox(
                             zipfile.read(zipped_file), mailbox=self
                         )
             except BadZipFile as error:
-                raise ValueError("The given file could not be processed!") from error
+                logger.exception("Error parsing file as %s!", file_format)
+                raise ValueError(_("The given file is not a valid zipfile.")) from error
         elif file_format in [
             SupportedEmailUploadFormats.MBOX,
             SupportedEmailUploadFormats.MMDF,
@@ -271,8 +295,9 @@ class Mailbox(
                     with ZipFile(file) as zipfile:
                         zipfile.extractall(tempdirpath)
                 except BadZipFile as error:
+                    logger.exception("Error parsing file as %s!", file_format)
                     raise ValueError(
-                        "The given file could not be processed!"
+                        _("The given file is not a valid zipfile.")
                     ) from error
                 for name in os.listdir(tempdirpath):
                     path = os.path.join(tempdirpath, name)
@@ -287,16 +312,21 @@ class Mailbox(
                         except (
                             FileNotFoundError
                         ) as error:  # raised if the given maildir doesn't have the expected structure
+                            logger.exception("Error parsing file as %s!", file_format)
                             raise ValueError(
-                                "The given file could not be processed!"
+                                _("The given file is not a valid %(file_format)s.")
+                                % {"file_format": file_format}
                             ) from error
                         parser.close()
         else:
-            raise ValueError("The given file format is not supported!")
+            logger.debug("Unsupported fileformat for uploaded file.")
+            raise ValueError(_("The given file format is not supported."))
         logger.info("Successfully added emails from file.")
 
     @classmethod
-    def create_from_data(cls, mailbox_data: bytes | str, account: Account) -> Mailbox:
+    def create_from_data(
+        cls, mailbox_data: bytes | str, account: Account
+    ) -> Mailbox | None:
         """Creates a :class:`core.models.Mailbox` from the mailboxname in bytes.
 
         Args:
@@ -305,7 +335,7 @@ class Mailbox(
 
         Returns:
             The :class:`core.models.Mailbox` instance with data from the bytes.
-            `None` if the mailbox already exists in the db.
+            `None` if the mailbox name is in the ignorelist.
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")
@@ -314,13 +344,16 @@ class Mailbox(
             if isinstance(mailbox_data, bytes)
             else mailbox_data
         )
+        if mailbox_name in get_config("IGNORED_MAILBOXES"):
+            logger.debug("%s is in the ignorelist, it is skipped.", mailbox_name)
+            return None
         try:
             new_mailbox = cls.objects.get(account=account, name=mailbox_name)
-            logger.debug("%s already exists in db, it is skipped!", new_mailbox)
+            logger.debug("%s already exists in db, it is skipped.", new_mailbox)
         except Mailbox.DoesNotExist:
             new_mailbox = cls(account=account, name=mailbox_name)
             new_mailbox.save()
-            logger.debug("Successfully saved mailbox to db!")
+            logger.debug("Successfully saved mailbox %s to db.", mailbox_name)
         return new_mailbox
 
     @override

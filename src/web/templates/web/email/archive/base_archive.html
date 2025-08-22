@@ -50,36 +50,11 @@
 
 {% block pagination %}
     {% if page_obj.paginator.num_pages > 1 %}
-        <div class="bg-white sticky-bottom pb-3">
+        <div class="bg-body sticky-bottom pb-3">
             <hr />
 
             {% include "web/partials/_pagination.html" %}
 
-        </div>
-        <div class="offcanvas offcanvas-start"
-             data-bs-scroll="true"
-             tabindex="-1"
-             id="offcanvasFilter"
-             aria-labelledby="offcanvasFilterLabel">
-            <div class="offcanvas-header d-flex justify-content-between">
-                <h5 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h5>
-                <div class="btn-group align-items-center">
-
-                    {% include "web/partials/_clear_filter-button.html" %}
-
-                    {% include "web/partials/_clear_and_submit_filter-button.html" %}
-
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="offcanvas"
-                            aria-label="{% translate 'Close' %}"></button>
-                </div>
-            </div>
-            <div class="offcanvas-body">
-
-                {% include "web/partials/_filter-form.html" %}
-
-            </div>
         </div>
     {% endif %}
 {% endblock pagination %}
@@ -89,3 +64,9 @@
     {% include "web/email/partials/_email_list.html" with emails=page_obj %}
 
 {% endblock list %}
+
+{% block list_alternative %}
+
+    {% include "web/email/partials/_archive_list_alternative.html" %}
+
+{% endblock list_alternative %}

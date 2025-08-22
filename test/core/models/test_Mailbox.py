@@ -35,7 +35,11 @@ from django.urls import reverse
 from model_bakery import baker
 from pyfakefs.fake_filesystem_unittest import Pause
 
-from core.constants import SupportedEmailUploadFormats, file_format_parsers
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    SupportedEmailUploadFormats,
+    file_format_parsers,
+)
 from core.models import Account, Mailbox
 from core.utils.fetchers import (
     ExchangeFetcher,
@@ -160,20 +164,50 @@ def test_Mailbox_get_available_fetching_criteria(
 
     fake_mailbox.account.protocol = protocol
     fake_mailbox.account.save()
-    assert fake_mailbox.get_available_fetching_criteria() == expected_fetching_criteria
+    assert fake_mailbox.available_fetching_criteria == expected_fetching_criteria
 
 
 @pytest.mark.django_db
-def test_Mailbox_test_connection_success(
+@pytest.mark.parametrize(
+    "protocol, expected_fetching_criteria",
+    [
+        (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+    ],
+)
+def test_Mailbox_get_available_fetching_criteria(
+    fake_mailbox, protocol, expected_fetching_criteria
+):
+    """Tests :func:`core.models.Mailbox.Mailbox.get_available_fetching_criteria`.
+
+    Args:
+        protocol: The protocol parameter.
+        expected_fetching_criteria: The expected fetching_criteria result parameter.
+    """
+
+    fake_mailbox.account.protocol = protocol
+    fake_mailbox.account.save()
+    assert fake_mailbox.available_fetching_criterion_choices == [
+        (criterion, label)
+        for criterion, label in EmailFetchingCriterionChoices.choices
+        if criterion in expected_fetching_criteria
+    ]
+
+
+@pytest.mark.django_db
+def test_Mailbox_test_success(
     fake_mailbox, mock_logger, mock_fetcher, mock_Account_get_fetcher
 ):
-    """Tests :func:`core.models.Mailbox.Mailbox.test_connection`
+    """Tests :func:`core.models.Mailbox.Mailbox.test`
     in case of success.
     """
     fake_mailbox.is_healthy = False
     fake_mailbox.save(update_fields=["is_healthy"])
 
-    fake_mailbox.test_connection()
+    fake_mailbox.test()
 
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy is True
@@ -184,17 +218,17 @@ def test_Mailbox_test_connection_success(
 
 
 @pytest.mark.django_db
-def test_Mailbox_test_connection_bad_protocol(
+def test_Mailbox_test_bad_protocol(
     fake_mailbox, mock_logger, mock_Account_get_fetcher, mock_fetcher
 ):
-    """Tests :func:`core.models.Mailbox.Mailbox.test_connection`
+    """Tests :func:`core.models.Mailbox.Mailbox.test`
     in case the account of the mailbox has a bad :attr:`core.models.Account.Account.protocol` field
     and thus get_fetcher raises a :class:`ValueError`.
     """
     mock_Account_get_fetcher.side_effect = ValueError
 
     with pytest.raises(ValueError):
-        fake_mailbox.test_connection()
+        fake_mailbox.test()
 
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.test.assert_not_called()
@@ -203,14 +237,14 @@ def test_Mailbox_test_connection_bad_protocol(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("test_side_effect", [MailboxError, MailAccountError])
-def test_Mailbox_test_connection_failure(
+def test_Mailbox_test_failure(
     fake_mailbox,
     mock_logger,
     mock_Account_get_fetcher,
     mock_fetcher,
     test_side_effect,
 ):
-    """Tests :func:`core.models.Mailbox.Mailbox.test_connection`
+    """Tests :func:`core.models.Mailbox.Mailbox.test`
     in case the test fails with a :class:`core.utils.fetchers.exceptions.FetcherError`.
     """
     mock_fetcher.test.side_effect = test_side_effect
@@ -218,7 +252,7 @@ def test_Mailbox_test_connection_failure(
     fake_mailbox.save(update_fields=["is_healthy"])
 
     with pytest.raises(test_side_effect):
-        fake_mailbox.test_connection()
+        fake_mailbox.test()
 
     if test_side_effect == MailboxError:
         assert fake_mailbox.is_healthy is False
@@ -230,21 +264,22 @@ def test_Mailbox_test_connection_failure(
 
 
 @pytest.mark.django_db
-def test_Mailbox_test_connection_get_fetcher_error(
+def test_Mailbox_test_get_fetcher_error(
     fake_mailbox, mock_logger, mock_Account_get_fetcher, mock_fetcher
 ):
-    """Tests :func:`core.models.Mailbox.Mailbox.test_connection`
+    """Tests :func:`core.models.Mailbox.Mailbox.test`
     in case :func:`core.models.Account.Account.get_fetcher`
     raises a :class:`core.utils.fetchers.exceptions.MailAccountError`.
+    In that case the account should not be flagged, as that is already done in get_fetcher itself.
     """
     mock_Account_get_fetcher.side_effect = MailAccountError
     fake_mailbox.is_healthy = True
     fake_mailbox.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailAccountError):
-        fake_mailbox.test_connection()
+        fake_mailbox.test()
 
-    assert fake_mailbox.account.is_healthy is False
+    assert fake_mailbox.account.is_healthy is True
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.test.assert_not_called()
     mock_logger.info.assert_called()
@@ -657,6 +692,27 @@ def test_Mailbox_create_from_data_duplicate(
     assert new_mailbox.pk is not None
     mock_parse_mailbox_name.assert_called_once_with(fake_name_bytes)
     assert new_mailbox == fake_mailbox
+    mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
+def test_Mailbox_create_from_data_ignored(
+    faker, override_config, fake_mailbox, mock_logger, mock_parse_mailbox_name
+):
+    """Tests :func:`core.models.Account.Account.create_from_data`
+    in case of data that is already in the db.
+    """
+    fake_name_bytes = faker.name().encode()
+
+    assert Mailbox.objects.count() == 1
+
+    mock_parse_mailbox_name.return_value = fake_mailbox.name
+    with override_config(IGNORED_MAILBOXES=[mock_parse_mailbox_name.return_value]):
+        new_mailbox = Mailbox.create_from_data(fake_name_bytes, fake_mailbox.account)
+
+    assert Mailbox.objects.count() == 1
+    assert new_mailbox is None
+    mock_parse_mailbox_name.assert_called_once_with(fake_name_bytes)
     mock_logger.debug.assert_called()
 
 

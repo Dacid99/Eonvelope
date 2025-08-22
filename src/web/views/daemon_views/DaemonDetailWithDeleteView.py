@@ -29,6 +29,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import DeletionMixin
 
 from core.models import Daemon
+from web.mixins.TestActionMixin import TestActionMixin
 
 from ...mixins.CustomActionMixin import CustomActionMixin
 from ..DetailWithDeleteView import DetailWithDeleteView
@@ -39,6 +40,7 @@ class DaemonDetailWithDeleteView(
     LoginRequiredMixin,
     DetailWithDeleteView,
     CustomActionMixin,
+    TestActionMixin,
 ):
     """View for a single :class:`core.models.Daemon` instance."""
 

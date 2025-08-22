@@ -21,6 +21,8 @@ To make it easier to read and understand your merge requests please follow these
 
 - Please do not change and commit the project configuration and test files unless you need to add a new dependency or it is inevitable for your change to work.
 
+- If you change or add strings marked for translation, please do not run `python manage.py makemessages` and change the translation files in the merge request. Changes to these files need to be synchronized with weblate, that will be done after the branches are merged.
+
 - Your merge request should already have been properly tested by yourself.
 
 - Every merge request will be linted and checked using the tools in the validation folder. Please make sure to do this yourself as well.

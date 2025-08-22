@@ -44,3 +44,15 @@ function clearForm() {
     clearFormElement(form);
     return form;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const offcanvas = document.getElementById('offcanvasFilter');
+    if (offcanvas) {
+        offcanvas.addEventListener('shown.bs.offcanvas', function () {
+            const searchInput = offcanvas.querySelector('input[type="search"]');
+            if (searchInput) {
+                searchInput.focus();
+            }
+        });
+    }
+});

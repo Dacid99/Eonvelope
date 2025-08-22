@@ -49,6 +49,7 @@ from .email_views import (
     EmailYearArchiveView,
 )
 from .mailbox_views import (
+    MailboxCreateDaemonView,
     MailboxDetailWithDeleteView,
     MailboxEmailsFilterView,
     MailboxFilterView,
@@ -81,6 +82,7 @@ __all__ = [
     "EmailMonthArchiveView",
     "EmailWeekArchiveView",
     "EmailYearArchiveView",
+    "MailboxCreateDaemonView",
     "MailboxDetailWithDeleteView",
     "MailboxEmailsFilterView",
     "MailboxFilterView",

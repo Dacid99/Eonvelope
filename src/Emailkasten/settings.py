@@ -333,6 +333,14 @@ LOGGING = {
             "backupCount": LOGFILE_BACKUP_NUMBER,
             "formatter": "default",
         },
+        "amqp_logfile": {
+            "level": "DEBUG",
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": LOG_DIRECTORY_PATH / "amqp.log",
+            "maxBytes": LOGFILE_MAXSIZE,
+            "backupCount": LOGFILE_BACKUP_NUMBER,
+            "formatter": "default",
+        },
         "emailkasten_logfile": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
@@ -376,11 +384,16 @@ LOGGING = {
             "level": env("DJANGO_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
             "propagate": False,
         },
-        # "celery": {
-        #     "handlers": ["console", "celery_logfile"],
-        #     "level": env("CELERY_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
-        #     "propagate": False,
-        # },
+        "celery": {
+            "handlers": ["console", "celery_logfile"],
+            "level": env("CELERY_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
+            "propagate": False,
+        },
+        "amqp": {
+            "handlers": ["console", "amqp_logfile"],
+            "level": env("AMQP_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
+            "propagate": False,
+        },
         "core": {
             "handlers": ["core_logfile"],
             "level": env("APP_LOG_LEVEL", default=LOGLEVEL_DEFAULT),
@@ -507,11 +520,14 @@ CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 
+# Solution to have collection types, see https://github.com/jazzband/django-constance/issues/620
 CONSTANCE_ADDITIONAL_FIELDS = {
-    "array": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
-    "json": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
+    list: ["django.forms.fields.JSONField", {"widget": "django.forms.Textarea"}],
+    dict: ["django.forms.fields.JSONField", {"widget": "django.forms.Textarea"}],
+    "text": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
 }
-
+# if one of these defaults is changed, that change is not applied to existing default configurations
+# to still apply the new default to existing servers, change the name of the setting!
 CONSTANCE_CONFIG = {
     "API_DEFAULT_PAGE_SIZE": (
         20,
@@ -533,26 +549,13 @@ CONSTANCE_CONFIG = {
         _(
             "Page size options for pagination in the webapp. Should contain the WEB_DEFAULT_PAGE_SIZE value."
         ),
-        "array",
+        list,
     ),
-    "DAEMON_CYCLE_PERIOD_DEFAULT": (
-        60,
-        _("Default cycle period setting of a daemon in seconds"),
-        int,
-    ),
-    "DAEMON_RESTART_TIME_DEFAULT": (
-        10,
-        _("Default restart time setting of a daemon in seconds"),
-        int,
-    ),
-    "DAEMON_LOG_BACKUP_COUNT_DEFAULT": (
-        5,
-        _("Default number of daemon logfiles to keep"),
-        int,
-    ),
-    "DAEMON_LOGFILE_SIZE_DEFAULT": (
-        1 * 1024 * 1024,
-        _("Default maximum size of a daemon logfile in bytes"),
+    "WEB_THUMBNAIL_MAX_DATASIZE": (
+        10000000,
+        _(
+            "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this will not be loaded."
+        ),
         int,
     ),
     "STORAGE_MAX_FILES_PER_DIR": (
@@ -565,19 +568,24 @@ CONSTANCE_CONFIG = {
         _("Whether or not to ignore emails that have a spam flag"),
         bool,
     ),
-    "SAVE_CONTENT_TYPE_PREFIXES": (
-        ["image", "audio", "video", "model", "font", "application"],
+    "IGNORED_MAILBOXES": (
+        ["Spam", "Junk"],
         _(
-            "List of content types prefixes to parse as files even if they are not marked as such. For an exhaustive list of all available types see https://www.iana.org/assignments/media-types/media-types.xhtml#text"
+            "List of mailboxes that are ignored when looking up mailboxes in an account."
         ),
-        "array",
+        list,
     ),
-    "DONT_SAVE_CONTENT_TYPE_SUFFIXES": (
-        ["plain", "html"],
+    "DONT_PARSE_CONTENT_MAINTYPES": (
+        [""],
+        _("List of content types prefixes to not parse as files."),
+        list,
+    ),
+    "DONT_PARSE_CONTENT_SUBTYPES": (
+        [""],
         _(
-            "List of content types prefixes to not parse as files if they are not marked as such. Overrides elements in 'SAVE_CONTENT_TYPE_PREFIXES'."
+            "List of content types prefixes to not parse as files. Plain and HTML text is always ignored as its the bodytext."
         ),
-        "array",
+        list,
     ),
     "EMAIL_HTML_TEMPLATE": (
         """{% load i18n %}
@@ -641,7 +649,7 @@ CONSTANCE_CONFIG = {
         _(
             "Html template used to render emails to html. Uses the django template syntax and has access to all fields of the email database table. Removing template tag imports may result in 500 responses when requesting pages with email thumbnails, so be careful."
         ),
-        str,
+        "text",
     ),
     "EMAIL_CSS": (
         """body {
@@ -650,12 +658,12 @@ CONSTANCE_CONFIG = {
             color: #333;
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 10px;
         }
         .email-container {
             border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 20px;
+            border-radius: 3px;
+            padding: 16px;
         }
         .email-header {
             border-bottom: 1px solid #eee;
@@ -683,7 +691,7 @@ CONSTANCE_CONFIG = {
         _(
             "Css style used to render emails to html. Refer to HTML_TEMPLATE for context on the classes."
         ),
-        str,
+        "text",
     ),
     "DEFAULT_SAVE_TO_EML": (
         True,
@@ -704,38 +712,43 @@ CONSTANCE_CONFIG = {
     ),
 }
 
-CONSTANCE_FIELDSETS = (
-    (_("Server Configurations"), ("REGISTRATION_ENABLED")),
+CONSTANCE_CONFIG_FIELDSETS = (
+    (_("Server Configurations"), ("REGISTRATION_ENABLED",)),
     (
         _("Default Values"),
         (
             "DEFAULT_SAVE_TO_EML",
             "DEFAULT_SAVE_ATTACHMENTS",
-            "DAEMON_CYCLE_PERIOD_DEFAULT",
-            "DAEMON_RESTART_TIME_DEFAULT",
-            "DAEMON_LOG_BACKUP_COUNT_DEFAULT",
-            "DAEMON_LOGFILE_SIZE_DEFAULT",
         ),
     ),
     (
         _("Processing Settings"),
         (
             "THROW_OUT_SPAM",
-            "HTML_WRAPPER",
-            "SAVE_CONTENT_TYPE_PREFIXES",
-            "DONT_SAVE_CONTENT_TYPE_SUFFIXES",
+            "IGNORED_MAILBOXES",
+            "EMAIL_HTML_TEMPLATE",
+            "EMAIL_CSS",
+            "DONT_PARSE_CONTENT_MAINTYPES",
+            "DONT_PARSE_CONTENT_SUBTYPES",
         ),
     ),
     (
         _("Storage Settings"),
-        ("STORAGE_MAX_FILES_PER_DIR"),
+        ("STORAGE_MAX_FILES_PER_DIR",),
     ),
     (
         _("API Settings"),
-        ("API_DEFAULT_PAGE_SIZE", "API_MAX_PAGE_SIZE"),
+        (
+            "API_DEFAULT_PAGE_SIZE",
+            "API_MAX_PAGE_SIZE",
+        ),
     ),
     (
         _("Web Settings"),
-        ("WEB_DEFAULT_PAGE_SIZE", "WEB_PAGE_SIZES_OPTIONS"),
+        (
+            "WEB_DEFAULT_PAGE_SIZE",
+            "WEB_PAGE_SIZES_OPTIONS",
+            "WEB_THUMBNAIL_MAX_DATASIZE",
+        ),
     ),
 )

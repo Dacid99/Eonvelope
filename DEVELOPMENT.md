@@ -6,12 +6,18 @@ Your global python version should be at least *3.13*.
 
 If necessary you can install it via [the deadsnakes ppa](https://launchpad.net/~deadsnakes/+archive/ubuntu/ppa).
 
-Make sure to also install the *python-dev* version!
+Make sure to also install the **python-dev** version!
 
 First install the packages required for the build environment, on debian based distros:
 
 ```bash
-sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client krb5-user krb5-multidev libmysqlclient-dev pkg-config mysql-server nodejs npm
+sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client libkrb5-dev libmysqlclient-dev pkg-config
+```
+
+and on redhat distros:
+
+```bash
+sudo dnf -y update && dnf -y install gcc gettext mysql-devel krb5-devel pkgconf
 ```
 
 Then to install the python dependencies start a new virtual environment and activate it:
@@ -51,6 +57,11 @@ The projects tests are in the test/ directory. You can run them from the project
 ```bash
 pytest test
 ```
+
+If you want to test your changes manually, you can use the files in docker/debug/ to build and create a debug docker image.
+
+It uses djangos runserver instead of gunicorn, allowing you to manipulate the source and static files while the server is running, e.g. via docker exec.
+To test the webui on other devices, like your phone or tablet, add your machines IP to ALLOWED_HOSTS and you will be able to access the debug application from other devices as well.
 
 ## Validation and Linting
 
@@ -94,30 +105,40 @@ git config core.hooksPath tools/githooks/
 - Disable html autoformatting, it messes up django templates on a regular basis
 
 ```json
-"html.format.enable": false
+    "html.format.enable": false
 ```
 
 #### Extensions
 
 - everything for python and django
-- python test (with setting "python.testing.cwd": "/path/to/repo/test/")
-- ruff (with setting "ruff.configuration": "tools/ruff.toml")
+- python test, with config
+
+```json
+    "python.testing.cwd": "/path/to/repo/test/"
+```
+
+- ruff, with config
+
+```json
+    "ruff.configuration": "tools/ruff.toml")
+```
+
 - pylint, with config
 
 ```json
-"pylint.args": ["--rcfile=tools/pylintrc_extension"]
+    "pylint.args": ["--rcfile=tools/pylintrc_extension"]
 ```
 
 - mypy, with config
 
 ```json
- "mypy-type-checker.args": ["--config-file=tools/mypy.ini"]
+    "mypy-type-checker.args": ["--config-file=tools/mypy.ini"]
 ```
 
 - black, with config
 
 ```json
- "black-formatter.args": ["--config=tools/black_config"]
+    "black-formatter.args": ["--config=tools/black_config"]
 ```
 
 - python poetry
@@ -125,7 +146,7 @@ git config core.hooksPath tools/githooks/
 - reStructuredText (lextudio.restructuredtext) for docs, with config
 
 ```json
- "restructuredtext.linter.doc8.extraArgs": ["--config /path/to/tools/doc8.ini"]
+    "restructuredtext.linter.doc8.extraArgs": ["--config /path/to/tools/doc8.ini"]
 ```
 
 - bootstrap 5 intellisense etc.

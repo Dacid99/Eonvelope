@@ -20,10 +20,9 @@
 
 from __future__ import annotations
 
-import os
 from typing import TYPE_CHECKING, Final, override
 
-from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -34,7 +33,6 @@ from rest_framework.response import Response
 from core.models import Daemon
 
 from ..filters import DaemonFilterSet
-from ..mixins.NoCreateMixin import NoCreateMixin
 from ..serializers import BaseDaemonSerializer
 
 
@@ -43,10 +41,10 @@ if TYPE_CHECKING:
     from rest_framework.request import Request
 
 
-class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
+class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
     """Viewset for the :class:`core.models.Daemon`.
 
-    Provides all but the create action.
+    Provides all CRUD actions.
 
     Note:
         To update instances the user must specify format "json" with the request.
@@ -84,32 +82,41 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
             return Daemon.objects.none()
         return Daemon.objects.filter(mailbox__account__user=self.request.user).select_related("interval", "celery_task")  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
 
-    URL_PATH_FETCHING_OPTIONS = "fetching-options"
-    URL_NAME_FETCHING_OPTIONS = "fetching-options"
+    URL_PATH_START = "start"
+    URL_NAME_START = "start"
+
+    URL_PATH_TEST = "test"
+    URL_NAME_TEST = "test"
 
     @action(
-        detail=True,
-        methods=["get"],
-        url_path=URL_PATH_FETCHING_OPTIONS,
-        url_name=URL_NAME_FETCHING_OPTIONS,
+        detail=True, methods=["post"], url_path=URL_PATH_TEST, url_name=URL_NAME_TEST
     )
-    def fetching_options(self, request: Request, pk: int | None = None) -> Response:
-        """Action method returning all fetching options for the daemon.
+    def test(self, request: Request, pk: int | None = None) -> Response:
+        """Action method testing the daemon data of the mailbox.
 
         Args:
             request: The request triggering the action.
-            pk: int: The private key of the daemon. Defaults to None.
+            pk: The private key of the daemon. Defaults to None.
 
         Returns:
-            A response detailing the request status.
+            A response detailing the test result for the daemon.
         """
         daemon = self.get_object()
-
-        available_fetching_options = daemon.mailbox.get_available_fetching_criteria()
-        return Response({"options": available_fetching_options})
-
-    URL_PATH_START = "start"
-    URL_NAME_START = "start"
+        response = Response(
+            {
+                "detail": _("Tested daemon"),
+            }
+        )
+        try:
+            daemon.test()
+        except Exception as error:
+            response.data["result"] = False
+            response.data["error"] = str(error)
+        else:
+            response.data["result"] = True
+        daemon.refresh_from_db()
+        response.data["daemon"] = self.get_serializer(daemon).data
+        return response
 
     @action(
         detail=True, methods=["post"], url_path=URL_PATH_START, url_name=URL_NAME_START
@@ -127,10 +134,10 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
         daemon = self.get_object()
         result = daemon.start()
         if result:
-            response = Response({"detail": "Daemon started"})
+            response = Response({"detail": _("Daemon started")})
         else:
             response = Response(
-                {"detail": "Daemon already running"},
+                {"detail": _("Daemon is already running")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         daemon.refresh_from_db()
@@ -157,54 +164,13 @@ class DaemonViewSet(NoCreateMixin, viewsets.ModelViewSet[Daemon]):
         daemon = self.get_object()
         result = daemon.stop()
         if result:
-            response = Response({"status": "Daemon stopped"})
+            response = Response({"status": _("Daemon stopped")})
         else:
             response = Response(
-                {"status": "Daemon not running"},
+                {"status": _("Daemon not running")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         daemon.refresh_from_db()
         daemon_data = self.get_serializer(daemon).data
         response.data["daemon"] = daemon_data
         return response
-
-    URL_PATH_LOG_DOWNLOAD = "log/download"
-    URL_NAME_LOG_DOWNLOAD = "log-download"
-
-    @action(
-        detail=True,
-        methods=["get"],
-        url_path=URL_PATH_LOG_DOWNLOAD,
-        url_name=URL_NAME_LOG_DOWNLOAD,
-    )
-    def log_download(self, request: Request, pk: int | None = None) -> FileResponse:
-        """Action method downloading the log file of the daemon.
-
-        Args:
-            request: The request triggering the action.
-            pk: int: The private key of the daemon. Defaults to None.
-
-        Raises:
-            Http404: If the filepath is not in the database or it doesn't exist.
-
-        Returns:
-            A fileresponse containing the requested file.
-        """
-        daemon = self.get_object()
-
-        number_query_param = request.query_params.get("number", "0")
-        try:
-            number = int(number_query_param)
-        except ValueError:
-            number = 0
-        number_suffix = f".{number}" if number > 0 else ""
-        daemon_log_filepath = daemon.log_filepath + number_suffix
-        if not daemon_log_filepath or not os.path.exists(daemon_log_filepath):
-            raise Http404("Log file not found")
-
-        daemon_log_filename = os.path.basename(daemon_log_filepath)
-        return FileResponse(
-            open(daemon_log_filepath, "rb"),
-            as_attachment=True,
-            filename=daemon_log_filename,
-        )

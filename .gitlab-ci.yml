@@ -5,6 +5,8 @@ default:
   before_script:
     - set -o pipefail
     - export SECRET_KEY='HELPER_KEY'
+    - export PYTHONPATH='src'
+    - export DJANGO_SETTINGS_MODULE='Emailkasten.settings'
     - apk update && apk add --no-cache ${APK_DEPENDENCIES}
     - pip install poetry
     - poetry install --with dev
@@ -14,6 +16,7 @@ workflow:  # when the pipeline should be triggered
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null'
     - if: $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 variables:
   CI: "true"
@@ -22,8 +25,8 @@ variables:
     python3-dev \
     linux-headers \
     musl-dev \
-    gcc \
     build-base \
+    krb5-dev \
     mariadb-connector-c-dev \
     mariadb-dev \
     mariadb-client"
@@ -33,22 +36,17 @@ variables:
   TEST_PATH: "test/"
   TEST_CONFIG_PATH: "test/"
   TEST_REPORT_PATH: "test/reports/"
-  DOCKER_PATH: "docker/"
-  DOCKER_IMAGE_PATH: "/var/lib/docker/image/overlay2/"
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
 
 services:
   - docker:dind
 
 stages:
-  - check_version
-  - check_fixes_and_format
-  - lint
-  - test
+  - dependabot
+  - check
   - build
 
 include:
+  - local: .gitlab/ci/.gitlab-ci-dependabot.yml
   - local: .gitlab/ci/.gitlab-ci-check-version.yml
   - local: .gitlab/ci/.gitlab-ci-fix_and_format.yml
   - local: .gitlab/ci/.gitlab-ci-lint.yml

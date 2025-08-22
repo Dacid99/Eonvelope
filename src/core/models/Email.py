@@ -24,6 +24,7 @@ import contextlib
 import email
 import logging
 import os
+import re
 import shutil
 from email import policy
 from functools import cached_property
@@ -281,6 +282,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             root_email = root_email.in_reply_to.first()
         return root_email.sub_conversation()
 
+    @property
     def is_spam(self) -> bool:
         """Checks the spam headers to decide whether the mail is spam.
 
@@ -449,14 +451,19 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     def add_references(self) -> None:
         """Adds the references from the headerfields to the model."""
         if self.headers:
-            referenced_message_ids = self.headers.get(HeaderFields.REFERENCES)
-            if referenced_message_ids:
-                for referenced_message_id in referenced_message_ids.split(","):
-                    for referenced_email in Email.objects.filter(
-                        message_id=referenced_message_id.strip(),
-                        mailbox__account__user=self.mailbox.account.user,
-                    ):
-                        self.references.add(referenced_email)
+            references_header = self.headers.get(HeaderFields.REFERENCES)
+            if references_header:
+                referenced_message_ids = [
+                    message_id.strip()
+                    for message_id in re.split(r"[ ,]", references_header)
+                ]
+                for referenced_message_id in referenced_message_ids:
+                    if referenced_message_id:  # re.split may produce empty strings
+                        for referenced_email in Email.objects.filter(
+                            message_id=referenced_message_id,
+                            mailbox__account__user=self.mailbox.account.user,
+                        ):
+                            self.references.add(referenced_email)
 
     @classmethod
     def create_from_email_bytes(
@@ -483,6 +490,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             )
             or md5(email_bytes).hexdigest()  # noqa: S324  # no safe hash required here
         )
+        logger.debug("Parsed email %s ...", message_id)
         x_spam = get_header(email_message, HeaderFields.X_SPAM) or ""
         if is_x_spam(x_spam) and get_config("THROW_OUT_SPAM"):
             logger.debug(
@@ -504,6 +512,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         new_email.mailbox = mailbox
 
         logger.debug("Successfully parsed email.")
+        logger.debug("Saving email %s to db...", message_id)
         try:
             with transaction.atomic():
                 new_email.save(email_data=email_bytes)
@@ -516,6 +525,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                 "Failed creating email from bytes: Error while saving email to db!"
             )
             return None
+        logger.debug("Successfully saved email to db.")
         return new_email
 
     @cached_property
@@ -553,11 +563,11 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         )
 
     @override
-    @cached_property
-    def has_download(self) -> bool:
-        return self.eml_filepath is not None
+    @property
+    def has_thumbnail(self) -> bool:
+        return not self.is_spam
 
     @override
-    @cached_property
-    def has_thumbnail(self) -> bool:
-        return True
+    @property
+    def has_download(self) -> bool:
+        return self.eml_filepath is not None

@@ -1,0 +1,56 @@
+services:
+  db:
+    image: mariadb:latest
+    container_name: emailkasten-db
+    volumes:
+      - /path/to/emailkasten/debug/mysql:/var/lib/mysql
+    environment:
+      - MARIADB_DATABASE=email_archive_django # must match web:DATABASE_NAME
+      - MARIADB_USER=user # must match web:DATABASE_USER
+      - MARIADB_PASSWORD=passwd # must match web:DATABASE_PASSWORD
+      - MARIADB_ROOT_PASSWORD=example
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'" ]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  adminer:
+    image: adminer:latest
+    container_name: emailkasten-adminer
+    restart: unless-stopped
+    ports:
+      - 9999:8080
+
+  web:
+    image: emailkasten-debug
+    container_name: emailkasten-web
+    volumes:
+      - /path/to/emailkasten/debug/archive:/mnt/archive
+      - /path/to/emailkasten/debug/log:/var/log/emailkasten
+    ports:
+      - 1122:8000
+    environment:
+      - DATABASE=email_archive_django # must match db:MARIADB_DATABASE
+      - DATABASE_USER=user # must match db:MARIADB_USER
+      - DATABASE_PASSWORD=passwd # must match db:MARIADB_PASSWORD
+      - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
+      - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
+      - ALLOWED_HOSTS=localhost,emailkasten.mydomain.tld # all allowed host URLs separated by ,
+      - APP_LOG_LEVEL=DEBUG
+      - DJANGO_LOG_LEVEL=INFO
+      - CELERY_LOG_LEVEL=DEBUG
+      - AMQP_LOG_LEVEL=DEBUG
+      - LOGFILE_MAXSIZE=10485760
+      - LOGFILE_BACKUP_NUMBER=5
+      - RECONNECT_RETRIES=10
+      - RECONNECT_DELAY=10
+      - REGISTRATION_ENABLED=False
+      - STRICT_PASSWORDS=True
+      - DEBUG=True
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy

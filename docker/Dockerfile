@@ -1,16 +1,15 @@
-FROM python:3.13-alpine3.22
+FROM python:3.13-alpine
 
 ARG APK_DEPENDENCIES="gettext \
     python3-dev \
     linux-headers \
     musl-dev \
-    gcc \
     build-base \
     mariadb-connector-c-dev \
     mariadb-dev \
     mariadb-client \
     rabbitmq-server \
-    krb5 \
+    krb5-dev \
     openssl \
     curl"
 ARG SRC_PATH=/opt/

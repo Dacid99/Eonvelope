@@ -31,6 +31,21 @@ from .conftest import (
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("searched_field", ["file_name", "content_id"])
+def test_search_filter(faker, attachment_queryset, searched_field):
+    """Tests :class:`api.v1.filters.AttachmentFilterSet`'s search filtering."""
+    target_text = faker.sentence()
+    target_id = faker.random.randint(0, len(attachment_queryset) - 1)
+    attachment_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    query = {"search": target_text[2:10]}
+
+    filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs
+
+    assert filtered_data.count() == 1
+    assert filtered_data.get().id == target_id
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )

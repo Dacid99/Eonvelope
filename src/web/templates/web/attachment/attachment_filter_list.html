@@ -19,3 +19,9 @@
     {% include "web/attachment/partials/_attachment_list.html" with attachments=page_obj %}
 
 {% endblock list %}
+
+{% block list_alternative %}
+
+    {% include "web/attachment/partials/_filter_list_alternative.html" %}
+
+{% endblock list_alternative %}

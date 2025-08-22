@@ -1,0 +1,18 @@
+{% extends "web/partials/bases/_base_list_alternative.html" %}
+
+{% load i18n %}
+
+
+{% block statement_text %}
+    {% translate "No emails found." %}
+{% endblock statement_text %}
+
+{% block instruction_text %}
+    {% translate "You can fetch some from the mailboxes you have set up." %}
+{% endblock instruction_text %}
+
+{% block instruction_buttons %}
+    <a role="button"
+       class="btn btn-primary"
+       href="{% url 'web:mailbox-filter-list' %}">{% translate "Go to mailboxes" %}</a>
+{% endblock instruction_buttons %}

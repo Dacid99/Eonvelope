@@ -118,6 +118,7 @@ pyvenv.cfg
 reports/
 sdist/
 share/python-wheels/
+staticfiles/
 tags
 test.py
 var/

@@ -152,8 +152,8 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
 
         constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
-                fields=["mail_address", "user"],
-                name="account_unique_together_mail_address_user",
+                fields=["mail_address", "protocol", "user"],
+                name="account_unique_together_mail_address_protocol_user",
             ),
             models.CheckConstraint(
                 condition=models.Q(protocol__in=EmailProtocolChoices.values),
@@ -180,15 +180,19 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
     def clean(self) -> None:
         """Validation for the unique together constraint on :attr:`mail_account`.
 
+        Required to allow correct validation of the create form.
+
         Raises:
             ValidationError: If the instance violates the constraint.
         """
         if (
-            Account.objects.filter(user=self.user, mail_address=self.mail_address)
+            Account.objects.filter(
+                user=self.user, mail_address=self.mail_address, protocol=self.protocol
+            )
             .exclude(pk=self.pk)
             .exists()
         ):
-            raise ValidationError({"mail_address": "This account already exists."})
+            raise ValidationError({"mail_address": _("This account already exists.")})
 
     def get_fetcher_class(self) -> type[BaseFetcher]:
         """Returns the fetcher class from :class:`core.utils.fetchers` corresponding to :attr:`protocol`.
@@ -243,7 +247,7 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
             raise
         return fetcher
 
-    def test_connection(self) -> None:
+    def test(self) -> None:
         """Tests whether the data in the model is correct.
 
         Tests connecting and logging in to the mailhost and account.
@@ -285,6 +289,8 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
                 raise
         self.is_healthy = True
         self.save(update_fields=["is_healthy"])
+
+        logger.info("Parsing mailbox data ...")
 
         for mailbox_data in mailbox_list:
             Mailbox.create_from_data(mailbox_data, self)

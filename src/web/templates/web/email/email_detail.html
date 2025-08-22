@@ -95,7 +95,7 @@
 {% block thumbnail %}
     <!--order is critical to keep style and sandbox in case of an issue with the src-->
     <iframe sandbox
-            class="h-100 w-100"
+            class="h-100 w-100 p-1 rounded"
             title="{% translate 'Email content' %}"
             src="{{ object.get_absolute_thumbnail_url }}"></iframe>
 {% endblock thumbnail %}
@@ -166,16 +166,9 @@
                 <h4 class="card-title">
                     {% translate "In Reply To" %}<i class="fa-solid fa-share mx-2" aria-hidden="true"></i>
                 </h4>
-                <ul class="list-group list-group-flush">
-                    {% for in_reply_to_email in object.in_reply_to.all %}
-                        <li class="list-group-item list-group-item-action">
-                            <a href="{{ in_reply_to_email.get_absolute_url }}"
-                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-                                {{ in_reply_to_email.email_subject }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+
+                {% include "web/email/partials/_email_list.html" with emails=object.in_reply_to.all %}
+
             </div>
         </div>
     {% endif %}
@@ -187,16 +180,8 @@
                     {% translate "Replies" %}<i class="fa-solid fa-reply mx-2" aria-hidden="true"></i>
                 </h4>
 
-                <ul class="list-group list-group-flush">
-                    {% for reply_email in object.replies.all %}
-                        <li class="list-group-item list-group-item-action">
-                            <a href="{{ reply_email.get_absolute_url }}"
-                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-                                {{ reply_email.email_subject }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                {% include "web/email/partials/_email_list.html" with emails=object.replies.all %}
+
             </div>
         </div>
     {% endif %}
@@ -207,16 +192,9 @@
                 <h4 class="card-title">
                     {% translate "References" %}<i class="fa-solid fa-share mx-2" aria-hidden="true"></i>
                 </h4>
-                <ul class="list-group list-group-flush">
-                    {% for referenced_email in object.references.all %}
-                        <li class="list-group-item list-group-item-action">
-                            <a href="{{ referenced_email.get_absolute_url }}"
-                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-                                {{ referenced_email.email_subject }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+
+                {% include "web/email/partials/_email_list.html" with emails=object.references.all %}
+
             </div>
         </div>
     {% endif %}
@@ -227,16 +205,9 @@
                 <h4 class="card-title">
                     {% translate "Referenced by" %}<i class="fa-solid fa-reply mx-2" aria-hidden="true"></i>
                 </h4>
-                <ul class="list-group list-group-flush">
-                    {% for referencing_email in object.referenced_by.all %}
-                        <li class="list-group-item list-group-item-action">
-                            <a href="{{ referencing_email.get_absolute_url }}"
-                               class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
-                                {{ referencing_email.email_subject }}
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+
+                {% include "web/email/partials/_email_list.html" with emails=object.referenced_by.all %}
+
             </div>
         </div>
     {% endif %}

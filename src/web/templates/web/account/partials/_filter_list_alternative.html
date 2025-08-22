@@ -1,0 +1,18 @@
+{% extends "web/partials/bases/_base_list_alternative.html" %}
+
+{% load i18n %}
+
+
+{% block statement_text %}
+    {% translate "No email accounts found." %}
+{% endblock statement_text %}
+
+{% block instruction_text %}
+    {% translate "Go ahead and add some." %}
+{% endblock instruction_text %}
+
+{% block instruction_buttons %}
+
+    {% include "web/account/partials/_add_button.html" %}
+
+{% endblock instruction_buttons %}

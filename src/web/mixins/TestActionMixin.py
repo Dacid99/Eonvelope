@@ -39,9 +39,23 @@ class TestActionMixin:
         """
         self.object = self.get_object()
         try:
-            self.object.test_connection()
+            self.object.test()
+        except ValueError as error:
+            messages.error(
+                request,
+                _(
+                    "Test failed, there is something wrong with this objects setup\n%(error)s"
+                )
+                % {"error": str(error)},
+            )
         except FetcherError as error:
             messages.error(request, _("Test failed\n%(error)s") % {"error": str(error)})
+        except Exception as error:
+            messages.error(
+                request,
+                _("Test failed due to an unexpected error\n%(error)s")
+                % {"error": str(error)},
+            )
         else:
             messages.success(request, _("Test was successful"))
         self.object.refresh_from_db()

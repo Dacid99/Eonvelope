@@ -27,7 +27,7 @@ class HasDownloadMixin:
     @property
     def has_download(self) -> bool:
         """Checks whether a download is possible for the instance."""
-        return False
+        return True
 
     def get_absolute_download_url(self) -> str:
         """Returns the url of the download api endpoint."""

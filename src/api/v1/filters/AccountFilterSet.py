@@ -71,5 +71,7 @@ class AccountFilterSet(filters.FilterSet):
             The filtered queryset.
         """
         return queryset.filter(
-            Q(mail_address__icontains=value) | Q(mail_host__icontains=value)
+            Q(mail_address__icontains=value)
+            | Q(mail_host__icontains=value)
+            | Q(protocol__icontains=value)
         ).distinct()

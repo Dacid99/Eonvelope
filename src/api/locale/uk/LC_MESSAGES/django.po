@@ -1,0 +1,174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-22 09:37+0000\n"
+"PO-Revision-Date: 2025-08-12 15:02+0000\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
+"api/uk/>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 5.13-dev\n"
+
+#: src/api/v1/mixins/NoCreateMixin.py:34
+msgid "POST method is not allowed on this endpoint."
+msgstr "Метод POST не дозволено на цій кінцевій точці."
+
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:60
+#, python-format
+msgid "%(object)s marked as favorite."
+msgstr "%(object)s позначено як обране."
+
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:62
+#, python-format
+msgid "%(object)s unmarked as favorite."
+msgstr "%(object)s знято з обраного."
+
+#: src/api/v1/views/AccountViewSet.py:110
+msgid "An error with the mailaccount occurred."
+msgstr "Сталася помилка з обліковим записом пошти."
+
+#: src/api/v1/views/AccountViewSet.py:116
+msgid "Updated mailboxes"
+msgstr "Оновлені поштові скриньки"
+
+#: src/api/v1/views/AccountViewSet.py:140
+msgid "Tested mailaccount"
+msgstr "Перевірений обліковий запис електронної пошти"
+
+#: src/api/v1/views/AttachmentViewSet.py:117
+#: src/api/v1/views/AttachmentViewSet.py:208
+msgid "Attachment file not found"
+msgstr "Вкладений файл не знайдено"
+
+#: src/api/v1/views/AttachmentViewSet.py:154
+msgid "Attachment ids missing in request."
+msgstr "У запиті відсутні ідентифікатори вкладень."
+
+#: src/api/v1/views/AttachmentViewSet.py:163
+#, fuzzy
+#| msgid "Attachment ids missing in request."
+msgid "Attachment ids given in invalid format."
+msgstr "У запиті відсутні ідентифікатори вкладень."
+
+#: src/api/v1/views/AttachmentViewSet.py:171
+msgid "No attachments found"
+msgstr "Вкладень не знайдено"
+
+#: src/api/v1/views/CorrespondentViewSet.py:168
+#, fuzzy
+#| msgid "Attachment ids missing in request."
+msgid "Correspondent ids missing in request."
+msgstr "У запиті відсутні ідентифікатори вкладень."
+
+#: src/api/v1/views/CorrespondentViewSet.py:177
+msgid "Correspondent ids given in invalid format."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:185
+#, fuzzy
+#| msgid "No attachments found"
+msgid "No correspondents found"
+msgstr "Вкладень не знайдено"
+
+#: src/api/v1/views/DaemonViewSet.py:107
+msgid "Tested daemon"
+msgstr "Перевірений демон"
+
+#: src/api/v1/views/DaemonViewSet.py:137
+msgid "Daemon started"
+msgstr "Демон запущено"
+
+#: src/api/v1/views/DaemonViewSet.py:140
+msgid "Daemon is already running"
+msgstr "Демон вже запущено"
+
+#: src/api/v1/views/DaemonViewSet.py:167
+msgid "Daemon stopped"
+msgstr "Демон зупинився"
+
+#: src/api/v1/views/DaemonViewSet.py:170
+msgid "Daemon not running"
+msgstr "Демон не працює"
+
+#: src/api/v1/views/EmailViewSet.py:135
+msgid "eml file not found"
+msgstr "eml-файл не знайдено"
+
+#: src/api/v1/views/EmailViewSet.py:175 src/api/v1/views/MailboxViewSet.py:226
+msgid "File format missing in request."
+msgstr "У запиті відсутній формат файлу."
+
+#: src/api/v1/views/EmailViewSet.py:181
+msgid "Email ids missing in request."
+msgstr "У запиті відсутні ідентифікатори електронної пошти."
+
+#: src/api/v1/views/EmailViewSet.py:190
+#, fuzzy
+#| msgid "Email ids missing in request."
+msgid "Email ids given in invalid format."
+msgstr "У запиті відсутні ідентифікатори електронної пошти."
+
+#: src/api/v1/views/EmailViewSet.py:200 src/api/v1/views/MailboxViewSet.py:235
+#: src/api/v1/views/MailboxViewSet.py:272
+#, python-format
+msgid "File format %(file_format)s is not supported."
+msgstr "Формат файлу %(file_format)s не підтримується."
+
+#: src/api/v1/views/EmailViewSet.py:206
+msgid "No emails found"
+msgstr "Електронних листів не знайдено"
+
+#: src/api/v1/views/MailboxViewSet.py:109
+msgid "Tested mailbox"
+msgstr "Перевірена поштова скринька"
+
+#: src/api/v1/views/MailboxViewSet.py:170
+#, fuzzy
+#| msgid "File missing in request."
+msgid "Fetching criterion missing in request."
+msgstr "У запиті відсутній файл."
+
+#: src/api/v1/views/MailboxViewSet.py:177
+msgid "The given fetching criterion is not available for this mailbox."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:187
+msgid "Error with mailaccount or mailbox occurred."
+msgstr ""
+"Сталася помилка з обліковим записом електронної пошти або поштовою скринькою."
+
+#: src/api/v1/views/MailboxViewSet.py:193
+msgid "All emails fetched."
+msgstr "Усі електронні листи отримано."
+
+#: src/api/v1/views/MailboxViewSet.py:241
+msgid "No emails found."
+msgstr "Електронна пошта не знайдено."
+
+#: src/api/v1/views/MailboxViewSet.py:280
+msgid "File missing in request."
+msgstr "У запиті відсутній файл."
+
+#: src/api/v1/views/MailboxViewSet.py:289
+msgid "An error occurred while processing the file."
+msgstr "Під час обробки файлу сталася помилка."
+
+#: src/api/v1/views/MailboxViewSet.py:297
+msgid "Successfully uploaded mailbox file."
+msgstr "Файл поштової скриньки успішно завантажено."
+
+#~ msgid "Logfile not found"
+#~ msgstr "Файл журналу не знайдено"

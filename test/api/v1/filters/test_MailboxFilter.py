@@ -30,6 +30,21 @@ from .conftest import (
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("searched_field", ["name"])
+def test_search_filter(faker, mailbox_queryset, searched_field):
+    """Tests :class:`api.v1.filters.MailboxFilterSet`'s search filtering."""
+    target_text = faker.sentence()
+    target_id = faker.random.randint(0, len(mailbox_queryset) - 1)
+    mailbox_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    query = {"search": target_text[2:10]}
+
+    filtered_data = MailboxFilterSet(query, queryset=mailbox_queryset).qs
+
+    assert filtered_data.count() == 1
+    assert filtered_data.get().id == target_id
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )

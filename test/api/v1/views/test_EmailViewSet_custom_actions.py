@@ -211,7 +211,41 @@ def test_batch_download_bad_format_auth_owner(owner_api_client, custom_list_acti
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("ids", [[1], [1, 5], [1, 2, 100]])
+@pytest.mark.parametrize(
+    "bad_ids",
+    [
+        ["abc"],
+        ["1e2"],
+        ["5.3"],
+        ["4ur"],
+    ],
+)
+def test_batch_download_bad_ids_auth_owner(
+    owner_api_client, custom_list_action_url, mock_Email_queryset_as_file, bad_ids
+):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"id": bad_ids},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not isinstance(response, FileResponse)
+    mock_Email_queryset_as_file.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "ids, expected_ids",
+    [
+        (["1"], [1]),
+        (["1", " 2", "100"], [1, 2, 100]),
+        (["1,2", "10"], [1, 2, 10]),
+        (["4,6, 8"], [4, 6, 8]),
+    ],
+)
 def test_batch_download_auth_owner(
     faker,
     fake_file_bytes,
@@ -220,6 +254,7 @@ def test_batch_download_auth_owner(
     custom_list_action_url,
     mock_Email_queryset_as_file,
     ids,
+    expected_ids,
 ):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
     with the authenticated owner user client.
@@ -241,7 +276,7 @@ def test_batch_download_auth_owner(
     assert b"".join(response.streaming_content) == fake_file_bytes
     mock_Email_queryset_as_file.assert_called_once()
     assert list(mock_Email_queryset_as_file.call_args.args[0]) == list(
-        Email.objects.filter(pk__in=ids, mailbox__account__user=owner_user)
+        Email.objects.filter(pk__in=expected_ids, mailbox__account__user=owner_user)
     )
     assert mock_Email_queryset_as_file.call_args.args[1] == fake_format
 

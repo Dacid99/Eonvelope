@@ -1,8 +1,8 @@
 {% load i18n %}
 
-<div class="d-flex align-items-center justify-content-end">
-    <ul class="nav pagination mx-auto"
-        aria-label="{% translate 'Page navigation' %}">
+<div class="d-flex align-items-center justify-content-between">
+    <span>{% translate "Results" %}: {{ page_obj.paginator.count }}</span>
+    <ul class="nav pagination" aria-label="{% translate 'Page navigation' %}">
         {% if page_obj.has_previous %}
             <li class="page-item">
                 <a class="page-link"

@@ -28,7 +28,7 @@ class HasThumbnailMixin:
     @property
     def has_thumbnail(self) -> bool:
         """Checks whether a thumbnail download is possible for the instance."""
-        return False
+        return True
 
     def get_absolute_thumbnail_url(self) -> str:
         """Returns the url of the thumbail download api endpoint."""

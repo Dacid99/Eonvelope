@@ -18,6 +18,7 @@
 
 """web.views.mailbox_views package containing views for the :class:`core.models.Mailbox` data."""
 
+from .MailboxCreateDaemonView import MailboxCreateDaemonView
 from .MailboxDetailWithDeleteView import MailboxDetailWithDeleteView
 from .MailboxEmailsFilterView import MailboxEmailsFilterView
 from .MailboxFilterView import MailboxFilterView
@@ -26,6 +27,7 @@ from .UploadEmailView import UploadEmailView
 
 
 __all__ = [
+    "MailboxCreateDaemonView",
     "MailboxDetailWithDeleteView",
     "MailboxEmailsFilterView",
     "MailboxFilterView",

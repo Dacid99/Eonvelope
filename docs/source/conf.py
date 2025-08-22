@@ -65,7 +65,6 @@ extensions = [
     "sphinx.ext.graphviz",
     "sphinx.ext.apidoc",  # sphinx-apidoc run automatically with sphinx-build
     "sphinx_autodoc_typehints",
-    "sphinx_rtd_theme",
     "myst_parser",
 ]
 
@@ -121,13 +120,30 @@ source_suffix = {
 
 # Options for HTML output
 
-html_theme = "sphinx_rtd_theme"
+html_theme = "alabaster"
+html_sidebars = {
+    "**": [
+        "about.html",
+        "searchfield.html",
+        "navigation.html",
+        "relations.html",
+        "donate.html",
+    ]
+}
 html_theme_options = {
-    "collapse_navigation": True,
-    "navigation_depth": -1,
-    "prev_next_buttons_location": "both",
+    "description": "A open-source self-hostable email archive using the django framework",
+    "logo": "",
+    # "logo_name": ,
+    "touch_icon": "",
+    "github_button": True,
+    "github_repo": "Emailkasten",
+    "github_user": "Dacid99",
+    "show_powered_by": True,
+    "show_relbars": True,
+    "fixed_sidebar": True,
 }
 html_title = "Emailkasten Docs"
+html_short_title = "Emailkasten Docs"
 html_logo = ""
 html_favicon = ""
 html_static_path = ["_static"]

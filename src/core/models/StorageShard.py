@@ -134,6 +134,14 @@ class StorageShard(models.Model):
             self.save(update_fields=["file_count"])
         logger.debug("Successfully incremented subdirectory count.")
 
+    def decrement_file_count(self) -> None:
+        """Decrements the :attr:`file_count` but never below 0."""
+        logger.debug("Decrementing subdirectory count of %s ..", self)
+        if self.file_count > 0:
+            self.file_count -= 1
+            self.save(update_fields=["file_count"])
+        logger.debug("Successfully decremented subdirectory count.")
+
     @classmethod
     def _add_shard(cls) -> StorageShard:
         """Adds a new current storage directory."""

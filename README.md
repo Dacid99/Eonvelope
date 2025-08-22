@@ -1,6 +1,6 @@
 # Emailkasten
 
-A open-source self-hosted email archive using the [django framework](https://www.djangoproject.com/).
+A open-source self-hostable email archive using the [django framework](https://www.djangoproject.com/).
 
 ## Features
 
@@ -10,7 +10,7 @@ A open-source self-hosted email archive using the [django framework](https://www
 - Indexing of attachments and correspondents
 - Filter and search your emails, attachments, correspondents
 - Identification of related emails
-- Bootstrap5 webapp
+- Mobile-friendly Bootstrap5 webapp
 - Full-fledged API
 - Multi-language and timezone support
 - Easy docker setup and configuration
@@ -23,7 +23,7 @@ Your emails are serious business, so this projects codebase has > 95% test-cover
 - Consolidate existing features
 - A LOT of other ideas (see [the TODO list](TODO.md))
 
-*Tell us what you'd like to see in a feature request issue!*
+*Tell us what you'd like to see in a feature request!*
 
 ## We need your opinion
 
@@ -89,7 +89,8 @@ In order to keep the code maintainable and in a consistent style please make sur
 
 The complete source code documentation is part of the docs on [ReadTheDocs](https://emailkasten.readthedocs.io/latest/rst/developers.html)
 
-Thank you to [everybody who helped with advancing this project](CONTRIBUTORS.md)!
+Thank you to [everybody who helped with advancing this project](CONTRIBUTORS.md)
+and [who helped with translation](TRANSLATORS.rst)!
 
 ## License
 

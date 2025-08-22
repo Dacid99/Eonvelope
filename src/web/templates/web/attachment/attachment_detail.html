@@ -28,15 +28,14 @@
     {{ object.file_name }}
 {% endblock card_title %}
 
+{% block card_subtitle %}
+    {% translate "MIME Content-Type" %}: {{ object.content_type }}
+{% endblock card_subtitle %}
 
 {% block card_content %}
     <ul class="list-group list-group-flush">
-        <li class="list-group-item list-group-item-action ">
-            {% translate "Email" %}: <a href="{{ object.email.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.email.email_subject }}</a>
-        </li>
         <li class="list-group-item">
-            {% translate "Content Type" %}: {{ object.content_maintype }}/{{ object.content_subtype }}
+            {% translate "Size" %}: {{ object.datasize }} {% translate "bytes" %}
         </li>
         {% if object.content_disposition %}
             <li class="list-group-item">
@@ -46,9 +45,6 @@
         {% if object.content_id %}
             <li class="list-group-item">{% translate "Content Id" %}: {{ object.content_id }}</li>
         {% endif %}
-        <li class="list-group-item">
-            {% translate "Size" %}: {{ object.datasize }} {% translate "bytes" %}
-        </li>
         <li class="list-group-item">{% translate "Date received" %}: {{ object.email.datetime }}</li>
     </ul>
 {% endblock card_content %}
@@ -58,3 +54,16 @@
     {% include "web/attachment/partials/_thumbnail.html" with attachment=object %}
 
 {% endblock thumbnail %}
+
+{% block card_extras %}
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">
+                {% translate "Email" %}<i class="fa-solid fa-envelope mx-2" aria-hidden="true"></i>
+            </h4>
+
+            {% include "web/email/partials/_email_card.html" with card_object=object.email %}
+
+        </div>
+    </div>
+{% endblock card_extras %}

@@ -4,7 +4,8 @@ Integrations
 You can intertwine this application with other self-hosted services.
 The following list contains instructions on how to go about this for the integrations we are
 aware of.
-If we are missing something, feel free to contribute an extension of this page.
+If there's something here,
+feel free to contribute an extension of this page or please give us a heads-up about it.
 
 Searxng
 -------
@@ -19,7 +20,7 @@ The API endpoint for the email search is:
 
     /api/v1/emails/?search=
 
-The results are listed under ``'results'``.
+The search results are listed under ``'results'``.
 
 You can also integrate searches for all other data that Emailkasten holds.
 For instance, to search the attachments data, use:

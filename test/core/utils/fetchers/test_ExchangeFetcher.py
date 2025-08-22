@@ -67,6 +67,7 @@ def mock_QuerySet(mocker, mock_Message):
     mock_QuerySet = mocker.MagicMock(spec=exchangelib.queryset.QuerySet)
     queryset_content = [mock_Message, mock_Message]
     mock_QuerySet.__iter__.return_value = queryset_content
+    mock_QuerySet.order_by.return_value = mock_QuerySet
     mock_QuerySet.all.return_value.__iter__.return_value = queryset_content
     mock_QuerySet.filter.return_value.__iter__.return_value = queryset_content[:1]
     return mock_QuerySet
@@ -172,10 +173,25 @@ def test_ExchangeFetcher___init___success(
     result = ExchangeFetcher(exchange_mailbox.account)
 
     assert result.account == exchange_mailbox.account
-    assert result._mail_client == mock_ExchangeAccount.return_value
+    assert result._mail_client == mock_ExchangeAccount.return_value.msg_folder_root
     spy_ExchangeFetcher_connect_to_host.assert_called_once()
     mock_logger.exception.assert_not_called()
     mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher___init___failure(
+    mocker, faker, exchange_mailbox, mock_logger, mock_ExchangeAccount
+):
+    fake_error_message = faker.sentence()
+    type(mock_ExchangeAccount.return_value).msg_folder_root = mocker.PropertyMock(
+        side_effect=exchangelib.errors.EWSError(fake_error_message)
+    )
+
+    with pytest.raises(MailAccountError, match=fake_error_message):
+        ExchangeFetcher(exchange_mailbox.account)
+
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db
@@ -185,7 +201,7 @@ def test_ExchangeFetcher___init___bad_protocol(
     spy_ExchangeFetcher_connect_to_host = mocker.spy(ExchangeFetcher, "connect_to_host")
     exchange_mailbox.account.protocol = EmailProtocolChoices.POP3
 
-    with pytest.raises(ValueError, match="not supported"):
+    with pytest.raises(ValueError, match="protocol"):
         ExchangeFetcher(exchange_mailbox.account)
 
     spy_ExchangeFetcher_connect_to_host.assert_not_called()
@@ -480,6 +496,7 @@ def test_ExchangeFetcher_fetch_emails_all_success(
     result = ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
 
     assert result == [item.mime_content for item in mock_QuerySet.__iter__.return_value]
+    mock_QuerySet.order_by.assert_called_once_with("datetime_received")
     mock_msg_folder_root.__truediv__.assert_called_once_with(exchange_mailbox.name)
     mock_msg_folder_root.__truediv__.return_value.__truediv__.assert_not_called()
     mock_logger.debug.assert_called()
@@ -499,6 +516,7 @@ def test_ExchangeFetcher_fetch_emails_subfolder_all_success(
     result = ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
 
     assert result == [item.mime_content for item in mock_QuerySet.__iter__.return_value]
+    mock_QuerySet.order_by.assert_called_once_with("datetime_received")
     mock_msg_folder_root.__truediv__.assert_called_once_with(fake_folder_name)
     mock_msg_folder_root.__truediv__.return_value.__truediv__.assert_called_once_with(
         fake_subfolder_name
@@ -539,22 +557,6 @@ def test_ExchangeFetcher_fetch_emails_wrong_mailbox(exchange_mailbox, mock_logge
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_ewserror_msg_root(
-    mocker, faker, exchange_mailbox, mock_logger, mock_ExchangeAccount
-):
-    fake_error_message = faker.sentence()
-    type(mock_ExchangeAccount.return_value).msg_folder_root = mocker.PropertyMock(
-        side_effect=exchangelib.errors.EWSError(fake_error_message)
-    )
-
-    with pytest.raises(MailAccountError, match=f"EWSError.*?{fake_error_message}"):
-        ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
-
-    mock_logger.debug.assert_called()
-    mock_logger.exception.assert_called()
-
-
-@pytest.mark.django_db
 def test_ExchangeFetcher_fetch_emails_ewserror_query(
     faker, exchange_mailbox, mock_logger, mock_Folder
 ):
@@ -566,22 +568,6 @@ def test_ExchangeFetcher_fetch_emails_ewserror_query(
 
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_called()
-
-
-@pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_other_exception_msg_root(
-    mocker, faker, exchange_mailbox, mock_logger, mock_ExchangeAccount
-):
-    fake_error_message = faker.sentence()
-    type(mock_ExchangeAccount.return_value).msg_folder_root = mocker.PropertyMock(
-        side_effect=AssertionError(fake_error_message)
-    )
-
-    with pytest.raises(AssertionError, match=fake_error_message):
-        ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
-
-    mock_logger.debug.assert_called()
-    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -618,22 +604,6 @@ def test_ExchangeFetcher_fetch_mailboxes_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_mailboxes_ewserror_msg_root(
-    mocker, faker, exchange_mailbox, mock_logger, mock_ExchangeAccount
-):
-    fake_error_message = faker.sentence()
-    type(mock_ExchangeAccount.return_value).msg_folder_root = mocker.PropertyMock(
-        side_effect=exchangelib.errors.EWSError(fake_error_message)
-    )
-
-    with pytest.raises(MailAccountError, match=f"EWSError.*?{fake_error_message}"):
-        ExchangeFetcher(exchange_mailbox.account).fetch_mailboxes()
-
-    mock_logger.debug.assert_called()
-    mock_logger.exception.assert_called()
-
-
-@pytest.mark.django_db
 def test_ExchangeFetcher_fetch_mailboxes_ewserror_walk(
     faker, exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
@@ -648,22 +618,6 @@ def test_ExchangeFetcher_fetch_mailboxes_ewserror_walk(
     mock_msg_folder_root.walk.assert_called_once_with()
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_called()
-
-
-@pytest.mark.django_db
-def test_ExchangeFetcher_fetch_mailboxes_other_exception_msg_root(
-    mocker, faker, exchange_mailbox, mock_logger, mock_ExchangeAccount
-):
-    fake_error_message = faker.sentence()
-    type(mock_ExchangeAccount.return_value).msg_folder_root = mocker.PropertyMock(
-        side_effect=AssertionError(fake_error_message)
-    )
-
-    with pytest.raises(AssertionError, match=fake_error_message):
-        ExchangeFetcher(exchange_mailbox.account).fetch_mailboxes()
-
-    mock_logger.debug.assert_called()
-    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db

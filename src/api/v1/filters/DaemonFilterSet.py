@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Final
 
+from django.db.models import Q
 from django_filters import rest_framework as filters
 
 from api.constants import FilterSetups
@@ -29,12 +30,15 @@ from core.models import Daemon
 
 
 if TYPE_CHECKING:
-    from django.db.models import Model
+    from django.db.models import Model, QuerySet
 
 
 class DaemonFilterSet(filters.FilterSet):
     """The filter class for :class:`core.models.Mailbox`."""
 
+    search = filters.CharFilter(
+        method="filter_text_fields",
+    )
     mail_address__icontains = filters.CharFilter(
         field_name="mailbox__account__mail_address", lookup_expr="icontains"
     )
@@ -139,3 +143,25 @@ class DaemonFilterSet(filters.FilterSet):
             "mailbox__name": FilterSetups.TEXT,
             "mailbox__is_healthy": FilterSetups.BOOL,
         }
+
+    def filter_text_fields(
+        self, queryset: QuerySet[Daemon], name: str, value: str
+    ) -> QuerySet[Daemon]:
+        """Filters textfields in the model.
+
+        Args:
+            queryset: The basic queryset to filter.
+            name: The name of the filterfield.
+            value: The value to filter by.
+
+        Returns:
+            The filtered queryset.
+        """
+        return queryset.filter(
+            Q(uuid__icontains=value)
+            | Q(fetching_criterion__icontains=value)
+            | Q(mailbox__name__icontains=value)
+            | Q(mailbox__account__mail_address__icontains=value)
+            | Q(mailbox__account__mail_host__icontains=value)
+            | Q(mailbox__account__protocol__icontains=value)
+        ).distinct()

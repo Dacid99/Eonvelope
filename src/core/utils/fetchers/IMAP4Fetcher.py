@@ -49,7 +49,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     PROTOCOL = EmailProtocolChoices.IMAP.value
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.IMAP`."""
 
-    AVAILABLE_FETCHING_CRITERIA: tuple[str] = (
+    AVAILABLE_FETCHING_CRITERIA = (
         EmailFetchingCriterionChoices.ALL.value,
         EmailFetchingCriterionChoices.UNSEEN.value,
         EmailFetchingCriterionChoices.SEEN.value,
@@ -188,7 +188,6 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
                 If :attr:`criterion` is not in :attr:`IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA`.
-            MailAccountError: If an error occurs or a bad response is returned when accessing the server.
             MailboxError: If an error occurs or a bad response is returned during an action on the mailbox.
         """
         super().fetch_emails(mailbox, criterion)
@@ -205,7 +204,10 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         self.logger.debug("Successfully opened mailbox.")
 
         self.logger.debug("Searching %s messages in %s ...", search_criterion, mailbox)
-        _, message_uids = self.safe_uid("SEARCH", search_criterion)
+        if "SORT" in self._mail_client.capabilities:
+            _, message_uids = self.safe_uid("SORT", "(DATE)", "UTF-8", search_criterion)
+        else:
+            _, message_uids = self.safe_uid("SEARCH", search_criterion)
         self.logger.info(
             "Found %s messages with uIDs %s in %s.",
             search_criterion,
@@ -258,7 +260,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         Raises:
             MailAccountError: If an error occurs or a bad response is returned.
         """
-        self.logger.debug("Fetching mailboxes at %s ...", self.account)
+        self.logger.debug("Fetching mailboxes in %s ...", self.account)
         _, mailboxes = self.safe_list()
         bytes_mailboxes = [
             mailbox for mailbox in mailboxes if isinstance(mailbox, bytes)

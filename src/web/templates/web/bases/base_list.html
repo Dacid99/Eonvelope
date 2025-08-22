@@ -34,10 +34,27 @@
 
     <hr />
 
-    {% block list %}
-    {% endblock list %}
+    {% if page_obj.paginator.count > 0 %}
+
+        {% block list %}
+        {% endblock list %}
+
+    {% else %}
+
+        {% block list_alternative %}
+        {% endblock list_alternative %}
+
+    {% endif %}
 
     {% block pagination %}
+        {% if page_obj.paginator.num_pages > 1 %}
+            <div class="bg-body sticky-bottom pb-3">
+                <hr />
+
+                {% include "web/partials/_pagination.html" %}
+
+            </div>
+        {% endif %}
     {% endblock pagination %}
 
 {% endblock content %}
@@ -46,6 +63,4 @@
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
     <script src="{% static 'web/js/toggle-favorite.js' %}"></script>
 
-    {% block other_scripts %}
-    {% endblock other_scripts %}
 {% endblock scripts %}

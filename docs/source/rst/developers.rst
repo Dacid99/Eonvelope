@@ -21,8 +21,16 @@ If you are looking for a thing to help with please check out the ToDo list for i
 
     todo
 
+Maybe you are using Emailkasten in parallel to another similar service.
+Programs that migrate databases from other applications to the Emailkasten database layout are always welcome.
 
-The source code documentation can be found here
+If you are interested in such an endeavour, please get in touch.
+
+You can find a graphical representation of the Emailkasten database layout :doc:`on this page <db-graph>`.
+We are always happy to help and give additional detailed information about the database layout.
+
+
+The full source code documentation can be found here
 
 .. toctree::
     :maxdepth: 1
@@ -30,13 +38,10 @@ The source code documentation can be found here
     modules
 
 
-Graphical representation of the project code are found here
+Graphical representation of the project code are shown on these pages
 
 .. toctree::
     :maxdepth: 1
 
     db-graph
     import-graph
-
-.. include:: ../../../CONTRIBUTORS.md
-    :parser: myst_parser.sphinx_

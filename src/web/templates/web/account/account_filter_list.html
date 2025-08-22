@@ -26,3 +26,9 @@
     {% include "web/account/partials/_account_list.html" with accounts=page_obj %}
 
 {% endblock list %}
+
+{% block list_alternative %}
+
+    {% include "web/account/partials/_filter_list_alternative.html" %}
+
+{% endblock list_alternative %}

@@ -39,6 +39,5 @@ def mailbox_with_daemons(faker, fake_mailbox, fake_daemon) -> Mailbox:
         Daemon,
         mailbox=fake_mailbox,
         fetching_criterion=EmailFetchingCriterionChoices.NEW.value,
-        log_filepath=faker.file_path(extension="log"),
     )
     return fake_mailbox

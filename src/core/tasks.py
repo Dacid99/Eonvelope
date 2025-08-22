@@ -18,28 +18,27 @@
 
 """Module with the tasks for celery."""
 
-import logging
-import time
 from uuid import UUID
 
 from celery import shared_task
 
+from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+
 from .models.Daemon import Daemon
-from .utils.fetchers.exceptions import MailboxError
 
 
 @shared_task
-def fetch_emails(daemon_uuid_string: str) -> None:
+def fetch_emails(  # this must not be renamed or moved, otherwise existing daemons will break!
+    daemon_uuid_string: str,
+) -> None:
     """Celery task to fetch and store emails.
 
     Args:
         daemon_uuid_string: The uuid of the daemon instance that manages this task.
+
+    Raises:
+        Exception: Any exception that is raised during fetching.
     """
-    logger = logging.getLogger(daemon_uuid_string)
-
-    logger.info("-------------------------------------------\nFetching emails ...")
-    start_time = time.time()
-
     try:
         daemon = Daemon.objects.select_related("mailbox").get(
             uuid=UUID(daemon_uuid_string)
@@ -48,18 +47,16 @@ def fetch_emails(daemon_uuid_string: str) -> None:
         return
     try:
         daemon.mailbox.fetch(daemon.fetching_criterion)
-    except MailboxError:
-        logger.exception(
-            "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nFailed to fetch emails!\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-        )
+    except Exception as exc:
         daemon.is_healthy = False
-        daemon.save(update_fields=["is_healthy"])
-
+        daemon.last_error = str(exc)
+        daemon.save(update_fields=["is_healthy", "last_error"])
+        if isinstance(exc, MailAccountError):
+            daemon.mailbox.account.is_healthy = False
+            daemon.mailbox.account.save(update_fields=["is_healthy"])
+        elif isinstance(exc, MailboxError):
+            daemon.mailbox.is_healthy = False
+            daemon.mailbox.save(update_fields=["is_healthy"])
+        raise
     daemon.is_healthy = True
     daemon.save(update_fields=["is_healthy"])
-
-    end_time = time.time()
-    logger.info(
-        "Success fetching emails, completed in %s seconds\n!------------------------------------------",
-        end_time - start_time,
-    )

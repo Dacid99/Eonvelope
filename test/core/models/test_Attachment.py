@@ -236,6 +236,16 @@ def test_Attachment_save_with_data_failure(
 
 
 @pytest.mark.django_db
+def test_Attachment_content_type(fake_attachment):
+    result = fake_attachment.content_type
+
+    assert (
+        result
+        == fake_attachment.content_maintype + "/" + fake_attachment.content_subtype
+    )
+
+
+@pytest.mark.django_db
 def test_Attachment_queryset_as_file(
     fake_file, fake_attachment, fake_attachment_with_file
 ):
@@ -362,6 +372,7 @@ def test_Attachment_has_thumbnail_with_file(
     """Tests :func:`core.models.Attachment.Attachment.has_thumbnail` in the two relevant cases."""
     fake_attachment_with_file.content_maintype = content_maintype
     fake_attachment_with_file.content_subtype = content_subtype
+    fake_attachment_with_file.datasize = 0
 
     result = fake_attachment_with_file.has_thumbnail
 
@@ -372,8 +383,6 @@ def test_Attachment_has_thumbnail_with_file(
 @pytest.mark.parametrize(
     "content_maintype, content_subtype",
     [
-        ("", ""),
-        ("oo4vuy0s9yn", "a4ueiofdsj"),
         ("image", "734reoj"),
         ("font", "asdfr"),
         ("video", "mp4"),
@@ -403,12 +412,80 @@ def test_Attachment_has_thumbnail_no_file(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype",
+    [
+        ("image", "734reoj"),
+        ("font", "asdfr"),
+        ("video", "mp4"),
+        ("video", "45rtyghj"),
+        ("text", "html"),
+        ("text", "8549c"),
+        ("text", "calendar"),
+        ("application", "pdf"),
+        ("application", "json"),
+        ("application", "xml"),
+        ("application", "rss+xml"),
+        ("application", "javascript"),
+        ("application", "emnoscript"),
+        ("application", "854uqw"),
+    ],
+)
+def test_Attachment_has_thumbnail_spam(
+    fake_attachment_with_file, content_maintype, content_subtype
+):
+    """Tests :func:`core.models.Attachment.Attachment.has_thumbnail` in the two relevant cases."""
+    fake_attachment_with_file.content_maintype = content_maintype
+    fake_attachment_with_file.content_subtype = content_subtype
+    fake_attachment_with_file.datasize = 0
+    fake_attachment_with_file.email.x_spam = "YES"
+    fake_attachment_with_file.email.save()
+
+    result = fake_attachment_with_file.has_thumbnail
+
+    assert result is False
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype",
+    [
+        ("image", "734reoj"),
+        ("font", "asdfr"),
+        ("video", "mp4"),
+        ("video", "45rtyghj"),
+        ("text", "html"),
+        ("text", "8549c"),
+        ("text", "calendar"),
+        ("application", "pdf"),
+        ("application", "json"),
+        ("application", "xml"),
+        ("application", "rss+xml"),
+        ("application", "javascript"),
+        ("application", "emnoscript"),
+        ("application", "854uqw"),
+    ],
+)
+def test_Attachment_has_thumbnail_too_large(
+    override_config, fake_attachment, content_maintype, content_subtype
+):
+    """Tests :func:`core.models.Attachment.Attachment.has_thumbnail` in the two relevant cases."""
+    fake_attachment.content_maintype = content_maintype
+    fake_attachment.content_subtype = content_subtype
+
+    with override_config(WEB_THUMBNAIL_MAX_DATASIZE=0):
+        result = fake_attachment.has_thumbnail
+
+    assert result is False
+
+
+@pytest.mark.django_db
 def test_Attachment_get_absolute_thumbnail_url(fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.get_absolute_thumbnail_url`."""
     result = fake_attachment.get_absolute_thumbnail_url()
 
     assert result == reverse(
-        f"api:v1:{fake_attachment.BASENAME}-download",
+        f"api:v1:{fake_attachment.BASENAME}-thumbnail",
         kwargs={"pk": fake_attachment.pk},
     )
 

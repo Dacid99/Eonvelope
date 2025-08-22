@@ -1,8 +1,8 @@
 #!/bin/bash
 set -o pipefail
-export PYTHONPATH=$PWD'/src/'
 
-SECRET_KEY='HELPER_KEY'
+export PYTHONPATH=$PWD'/src/'
+export DJANGO_SETTINGS_MODULE='Emailkasten.settings'
 
 CONFIG_PATH="tools/"
 REPORT_PATH="tools/reports/"
@@ -35,9 +35,15 @@ else
   poetry run djlint --reformat --configuration $CONFIG_PATH'djlintrc' $CHANGED_HTML_FILES > $REPORT_PATH'djlint_precommit.ansi'
   git add $CHANGED_HTML_FILES
 
-  poetry run djlint --lint --configuration $CONFIG_PATH'djlintrc' $CHANGED_HTML_FILES > $REPORT_PATH'djlint_precommit.ansi'
+  poetry run djlint --lint --configuration $CONFIG_PATH'djlintrc' $CHANGED_HTML_FILES >> $REPORT_PATH'djlint_precommit.ansi'
   if [ $? -ne 0 ]; then
     echo "Djlint failed, please check "$REPORT_PATH"djlint_precommit.ansi ."
+    exit 1
+  fi
+
+  poetry run django-admin validate_templates > $REPORT_PATH'validate_templates_precommit.ansi'
+  if [ $? -ne 0 ]; then
+    echo "Validation of templates failed, please check "$REPORT_PATH"validate_templates_precommit.ansi ."
     exit 1
   fi
 fi

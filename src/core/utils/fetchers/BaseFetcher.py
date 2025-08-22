@@ -43,7 +43,7 @@ class BaseFetcher(ABC):
     PROTOCOL = ""
     """Name of the used protocol, should be one of :class:`MailFetchingProtocols`."""
 
-    AVAILABLE_FETCHING_CRITERIA: tuple[str] = []
+    AVAILABLE_FETCHING_CRITERIA: tuple[str, ...] = ("",)
     """Tuple of all criteria available for fetching. Should refer to :class:`MailFetchingCriteria`. Must be immutable!"""
 
     @abstractmethod
@@ -54,15 +54,15 @@ class BaseFetcher(ABC):
             account: The model of the account to fetch from.
         """
         self.account = account
-        self.logger = logging.getLogger(str(self))
+        self.logger = logging.getLogger(self.__module__)
         if account.protocol != self.PROTOCOL:
             self.logger.error(
-                "The protocol of %s is not supported by fetcher %s!",
+                "The protocol of %s is not implemented by fetcher %s!",
                 account,
                 self.__class__.__name__,
             )
             raise ValueError(
-                f"The protocol of {account} is not supported by fetcher {self.__class__.__name__}!"
+                f"The protocol of {account} is not implemented by fetcher {self.__class__.__name__}!"
             )
 
     @abstractmethod

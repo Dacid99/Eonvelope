@@ -10,6 +10,8 @@ The time to maintain and advance this project is precious, so we need to focus a
 
 If your problem doesn't fall in one of these categories, please go ahead and fill out the report. The more information you provide the more material we can work with in order to reach a quick and complete fix.
 
+- [ ] I have checked that there is no existing issue dealing with this problem.
+
 ## Summary
 
 *Summarize the bug and how you discovered it. This gives us a first idea of what may be going on.*

@@ -25,3 +25,9 @@
     {% include "web/daemon/partials/_daemon_list.html" with daemons=page_obj %}
 
 {% endblock list %}
+
+{% block list_alternative %}
+
+    {% include "web/daemon/partials/_filter_list_alternative.html" %}
+
+{% endblock list_alternative %}

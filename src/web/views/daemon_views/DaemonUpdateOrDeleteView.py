@@ -44,3 +44,14 @@ class DaemonUpdateOrDeleteView(LoginRequiredMixin, UpdateOrDeleteView):
     def get_queryset(self) -> QuerySet[Daemon]:
         """Restricts the queryset to objects owned by the requesting user."""
         return super().get_queryset().filter(mailbox__account__user=self.request.user)
+
+    @override
+    def get_form(
+        self, form_class: type[BaseDaemonForm] | None = None
+    ) -> BaseDaemonForm:
+        form = super().get_form(form_class)
+        form.fields["fetching_criterion"].choices = (
+            self.object.mailbox.available_fetching_criterion_choices
+        )
+
+        return form

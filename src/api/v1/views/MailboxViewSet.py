@@ -23,6 +23,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Final, override
 
 from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -31,7 +32,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
-from core import constants
 from core.models import Email, Mailbox
 from core.utils.fetchers.exceptions import FetcherError
 
@@ -106,11 +106,11 @@ class MailboxViewSet(
         mailbox = self.get_object()
         response = Response(
             {
-                "detail": "Tested mailbox",
+                "detail": _("Tested mailbox"),
             }
         )
         try:
-            mailbox.test_connection()
+            mailbox.test()
         except FetcherError as error:
             response.data["result"] = False
             response.data["error"] = str(error)
@@ -120,16 +120,40 @@ class MailboxViewSet(
         response.data["mailbox"] = self.get_serializer(mailbox).data
         return response
 
-    URL_PATH_FETCH_ALL = "fetch-all"
-    URL_NAME_FETCH_ALL = "fetch-all"
+    URL_PATH_FETCHING_OPTIONS = "fetching-options"
+    URL_NAME_FETCHING_OPTIONS = "fetching-options"
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_FETCHING_OPTIONS,
+        url_name=URL_NAME_FETCHING_OPTIONS,
+    )
+    def fetching_options(self, request: Request, pk: int | None = None) -> Response:
+        """Action method returning all fetching options for the mailbox.
+
+        Args:
+            request: The request triggering the action.
+            pk: int: The private key of the mailbox. Defaults to None.
+
+        Returns:
+            A response detailing the request status.
+        """
+        mailbox = self.get_object()
+
+        available_fetching_options = mailbox.available_fetching_criteria
+        return Response({"options": available_fetching_options})
+
+    URL_PATH_FETCH = "fetch"
+    URL_NAME_FETCH = "fetch"
 
     @action(
         detail=True,
         methods=["post"],
-        url_path=URL_PATH_FETCH_ALL,
-        url_name=URL_NAME_FETCH_ALL,
+        url_path=URL_PATH_FETCH,
+        url_name=URL_NAME_FETCH,
     )
-    def fetch_all(self, request: Request, pk: int | None = None) -> Response:
+    def fetch(self, request: Request, pk: int | None = None) -> Response:
         """Action method fetching all mails from the mailbox.
 
         Args:
@@ -140,18 +164,33 @@ class MailboxViewSet(
             A response with the mailbox data.
         """
         mailbox = self.get_object()
+        criterion = request.data.get("criterion")
+        if not criterion:
+            return Response(
+                {"detail": _("Fetching criterion missing in request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if criterion not in mailbox.available_fetching_criteria:
+            return Response(
+                {
+                    "detail": _(
+                        "The given fetching criterion is not available for this mailbox."
+                    )
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         try:
-            mailbox.fetch(constants.EmailFetchingCriterionChoices.ALL)
+            mailbox.fetch(criterion)
         except FetcherError as error:
             response = Response(
                 {
-                    "detail": "Error with mailaccount or mailbox occurred!",
+                    "detail": _("Error with mailaccount or mailbox occurred."),
                     "error": str(error),
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         else:
-            response = Response({"detail": "All mails fetched"})
+            response = Response({"detail": _("All emails fetched.")})
         mailbox.refresh_from_db()
         response.data["mailbox"] = self.get_serializer(mailbox).data
         return response
@@ -184,7 +223,7 @@ class MailboxViewSet(
         file_format = request.query_params.get("file_format", None)
         if not file_format:
             return Response(
-                {"detail": "File format missing in request!"},
+                {"detail": _("File format missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
@@ -192,11 +231,14 @@ class MailboxViewSet(
             file = Email.queryset_as_file(mailbox.emails.all(), file_format)
         except ValueError:
             return Response(
-                {"detail": f"File format {file_format} is not supported!"},
+                {
+                    "detail": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         except Email.DoesNotExist:
-            raise Http404("No emails found.") from None
+            raise Http404(_("No emails found.")) from None
         else:
             return FileResponse(
                 file,
@@ -226,13 +268,16 @@ class MailboxViewSet(
         file_format = request.data.get("format", None)
         if file_format is None:
             return Response(
-                {"detail": "File format missing in request!"},
+                {
+                    "detail": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         uploaded_file = request.FILES.get("file", None)
         if uploaded_file is None:
             return Response(
-                {"detail": "File missing in request!"},
+                {"detail": _("File missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox = self.get_object()
@@ -240,13 +285,16 @@ class MailboxViewSet(
             mailbox.add_emails_from_file(uploaded_file, file_format)
         except ValueError as error:
             return Response(
-                {"detail": str(error)},
+                {
+                    "detail": _("An error occurred while processing the file."),
+                    "error": str(error),
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         mailbox_serializer = self.get_serializer(mailbox)
         return Response(
             {
-                "detail": "Successfully uploaded mailbox file.",
+                "detail": _("Successfully uploaded mailbox file."),
                 "mailbox": mailbox_serializer.data,
             }
         )

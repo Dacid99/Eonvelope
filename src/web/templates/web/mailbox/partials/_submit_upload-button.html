@@ -3,4 +3,9 @@
 <button class="btn btn-primary"
         type="submit"
         name="upload"
-        aria-label="{% translate 'Upload' %}">{% translate "Upload" %}</button>
+        aria-label="{% translate 'Upload' %}">
+    {% translate "Upload" as button_text %}
+
+    {% include "web/partials/_spinner-text.html" with text=button_text %}
+
+</button>

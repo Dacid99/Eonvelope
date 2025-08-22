@@ -364,7 +364,7 @@ def test_Email_is_spam(fake_email, x_spam, expected_result):
     """Tests :func:`core.models.Email.Email.is_spam`."""
     fake_email.x_spam = x_spam
 
-    result = fake_email.is_spam()
+    result = fake_email.is_spam
 
     assert result is expected_result
 
@@ -580,7 +580,7 @@ def test_Email_add_references_no_header(fake_email):
 
 @pytest.mark.django_db
 def test_Email_add_references_no_match(faker, fake_email):
-    fake_message_id = faker.name()
+    fake_message_id = faker.word()
     fake_email.headers = {"references": fake_message_id}
 
     assert fake_email.references.count() == 0
@@ -592,7 +592,7 @@ def test_Email_add_references_no_match(faker, fake_email):
 
 @pytest.mark.django_db
 def test_Email_add_references_single(faker, fake_email):
-    fake_message_id = faker.name()
+    fake_message_id = faker.word()
     fake_referenced_email = baker.make(
         Email, message_id=fake_message_id, mailbox=fake_email.mailbox
     )
@@ -619,15 +619,17 @@ def test_Email_add_references_other_email(fake_email, fake_other_email):
 
 @pytest.mark.django_db
 def test_Email_add_references_multi(faker, fake_email):
-    fake_message_id_1 = faker.name()
-    fake_message_id_2 = faker.name()
+    fake_message_id_1 = faker.word()
+    fake_message_id_2 = faker.word()
     fake_referenced_email_1 = baker.make(
         Email, message_id=fake_message_id_1, mailbox=fake_email.mailbox
     )
     fake_referenced_email_2 = baker.make(
         Email, message_id=fake_message_id_2, mailbox=fake_email.mailbox
     )
-    fake_email.headers = {"references": fake_message_id_1 + ", " + fake_message_id_2}
+    fake_email.headers = {
+        "references": fake_message_id_1 + ", " + fake_message_id_2 + "  "
+    }
 
     assert fake_email.references.count() == 0
 
@@ -732,7 +734,7 @@ def test_Email_add_correspondents_multi(faker, fake_email):
     )
     fake_email.headers = {
         fake_mention_1: fake_email_address_1,
-        fake_mention_2: fake_email_address_2,
+        fake_mention_2: "  " + fake_email_address_2 + " ",
     }
 
     assert fake_email.correspondents.count() == 0
@@ -933,6 +935,26 @@ def test_Email_has_download(fake_email, eml_filepath, expected_has_download):
     fake_email.eml_filepath = eml_filepath
 
     result = fake_email.has_download
+
+    assert result == expected_has_download
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "x_spam, expected_has_download",
+    [
+        ("NO", True),
+        ("NO, NO", True),
+        ("YES", False),
+        ("YES,NO", False),
+        ("", True),
+    ],
+)
+def test_Email_has_thumbnail(fake_email, x_spam, expected_has_download):
+    """Tests :func:`core.models.Email.Email.has_download` in the two relevant cases."""
+    fake_email.x_spam = x_spam
+
+    result = fake_email.has_thumbnail
 
     assert result == expected_has_download
 

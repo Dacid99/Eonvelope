@@ -30,41 +30,18 @@ from .conftest import (
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
-)
-def test_name_filter(mailbox_queryset, lookup_expr, filterquery, expected_indices):
-    """Tests :class:`web.filters.MailboxFilterSet`'s filtering
-    for the :attr:`core.models.Mailbox.Mailbox.name` field.
-    """
-    query = {"name" + lookup_expr: filterquery}
+@pytest.mark.parametrize("searched_field", ["name"])
+def test_text_search_filter(faker, mailbox_queryset, searched_field):
+    """Tests :class:`web.filters.MailboxFilterSet`'s search filtering."""
+    target_text = faker.sentence()
+    target_id = faker.random.randint(0, len(mailbox_queryset) - 1)
+    mailbox_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    query = {"text_search": target_text[2:10]}
 
     filtered_data = MailboxFilterSet(query, queryset=mailbox_queryset).qs
 
-    assert filtered_data.distinct().count() == filtered_data.count()
-    assert filtered_data.count() == len(expected_indices)
-    for data in filtered_data:
-        assert data.id - 1 in expected_indices
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
-)
-def test_account__mail_address_filter(
-    mailbox_queryset, lookup_expr, filterquery, expected_indices
-):
-    """Tests :class:`web.filters.MailboxFilterSet`'s filtering
-    for the :attr:`core.models.Mailbox.Mailbox.name` field.
-    """
-    query = {"account__mail_address" + lookup_expr: filterquery}
-
-    filtered_data = MailboxFilterSet(query, queryset=mailbox_queryset).qs
-
-    assert filtered_data.distinct().count() == filtered_data.count()
-    assert filtered_data.count() == len(expected_indices)
-    for data in filtered_data:
-        assert data.id - 1 in expected_indices
+    assert filtered_data.count() == 1
+    assert filtered_data.get().id == target_id
 
 
 @pytest.mark.django_db

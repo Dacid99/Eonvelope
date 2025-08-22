@@ -25,30 +25,43 @@ from web.filters import EmailCorrespondentFilterSet
 from .conftest import (
     BOOL_TEST_PARAMETERS,
     DATETIME_TEST_PARAMETERS,
-    TEXT_TEST_PARAMETERS,
 )
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    "searched_field",
+    [
+        "email_address",
+        "email_name",
+        "real_name",
+        "list_id",
+        "list_owner",
+        "list_subscribe",
+        "list_unsubscribe",
+        "list_unsubscribe_post",
+        "list_post",
+        "list_help",
+        "list_archive",
+    ],
 )
 def test_text_search_filter(
-    emailcorrespondents_queryset, lookup_expr, filterquery, expected_indices
+    faker, emailcorrespondents_queryset, correspondent_queryset, searched_field
 ):
-    """Tests :class:`web.filters.EmailCorrespondentFilterSet`'s filtering
-    for the :attr:`core.models.Correspondent.Correspondent.text_search` field.
-    """
-    query = {"text_search": filterquery}
+    """Tests :class:`web.filters.EmailCorrespondentFilterSet`'s search filtering."""
+    target_text = faker.sentence()
+    target_id = faker.random.randint(0, len(emailcorrespondents_queryset) - 1)
+    correspondent_queryset.filter(
+        correspondentemails=emailcorrespondents_queryset.get(id=target_id)
+    ).update(**{searched_field: target_text})
+    query = {"text_search": target_text[2:10]}
 
     filtered_data = EmailCorrespondentFilterSet(
         query, queryset=emailcorrespondents_queryset
     ).qs
 
-    assert filtered_data.distinct().count() == filtered_data.count()
-    assert filtered_data.count() == len(expected_indices)
-    for data in filtered_data:
-        assert data.id - 1 in expected_indices
+    assert filtered_data.count() == 1
+    assert filtered_data.get().id == target_id
 
 
 @pytest.mark.django_db

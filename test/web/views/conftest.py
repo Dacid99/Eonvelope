@@ -133,10 +133,10 @@ def custom_detail_action_url() -> Callable[[type[ModelViewSet], str, Model], str
 
 
 @pytest.fixture
-def mock_Account_test_connection(mocker):
-    """Patches :func:`core.models.Account.Account.test_connection` for testing of the test action."""
+def mock_Account_test(mocker):
+    """Patches :func:`core.models.Account.Account.test` for testing of the test action."""
     return mocker.patch(
-        "core.models.Account.Account.test_connection",
+        "core.models.Account.Account.test",
         autospec=True,
     )
 
@@ -151,10 +151,10 @@ def mock_Account_update_mailboxes(mocker):
 
 
 @pytest.fixture
-def mock_Mailbox_test_connection(mocker):
-    """Patches :func:`core.models.Mailbox.Mailbox.test_connection` for testing of the test action."""
+def mock_Mailbox_test(mocker):
+    """Patches :func:`core.models.Mailbox.Mailbox.test` for testing of the test action."""
     return mocker.patch(
-        "core.models.Mailbox.Mailbox.test_connection",
+        "core.models.Mailbox.Mailbox.test",
         autospec=True,
     )
 
@@ -166,3 +166,9 @@ def mock_Mailbox_fetch(mocker):
         "core.models.Mailbox.Mailbox.fetch",
         autospec=True,
     )
+
+
+@pytest.fixture
+def mock_Daemon_test(mocker):
+    """Patches :func:`core.models.Daemon.Daemon.test` for testing of the test action."""
+    return mocker.patch("core.models.Daemon.Daemon.test", autospec=True)

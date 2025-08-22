@@ -48,15 +48,24 @@ def fake_date_headervalue(faker):
 
 
 @pytest.fixture
-def fake_multi_header(faker):
-    return (faker.word(), [faker.sentence(nb_words=5), faker.name(), faker.file_name()])
+def fake_unstripped_header(faker):
+    return (faker.word(), " " + faker.sentence(nb_words=2) + "  ")
 
 
 @pytest.fixture
-def email_message(fake_single_header, fake_multi_header):
+def fake_multi_header(faker):
+    return (
+        faker.word(),
+        [faker.sentence(nb_words=5), faker.name(), "  " + faker.name() + " "],
+    )
+
+
+@pytest.fixture
+def email_message(fake_single_header, fake_unstripped_header, fake_multi_header):
     """A valid :class:`email.message.EmailMessage`."""
     test_message = EmailMessage()
     test_message.add_header(*fake_single_header)
+    test_message.add_header(*fake_unstripped_header)
     for value in fake_multi_header[1]:
         test_message.add_header(fake_multi_header[0], value)
     return test_message
@@ -104,13 +113,19 @@ def test_decode_header_success(header, expected_result):
 def test_get_header_single_success(email_message, fake_single_header):
     result = mail_parsing.get_header(email_message, fake_single_header[0])
 
-    assert result == fake_single_header[1]
+    assert result == fake_single_header[1].strip()
+
+
+def test_get_header_unstripped_success(email_message, fake_unstripped_header):
+    result = mail_parsing.get_header(email_message, fake_unstripped_header[0])
+
+    assert result == fake_unstripped_header[1].strip()
 
 
 def test_get_header_multi_success(email_message, fake_multi_header):
     result = mail_parsing.get_header(email_message, fake_multi_header[0])
 
-    assert result == ", ".join(fake_multi_header[1])
+    assert result == ",".join([header.strip() for header in fake_multi_header[1]])
 
 
 def test_get_header_multi_joinparam_success(email_message, fake_multi_header):
@@ -118,7 +133,7 @@ def test_get_header_multi_joinparam_success(email_message, fake_multi_header):
         email_message, fake_multi_header[0], joining_string="test"
     )
 
-    assert result == "test".join(fake_multi_header[1])
+    assert result == "test".join([header.strip() for header in fake_multi_header[1]])
 
 
 def test_get_header_fallback(fake_single_header):

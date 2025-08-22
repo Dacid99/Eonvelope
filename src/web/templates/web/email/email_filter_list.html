@@ -25,3 +25,9 @@
     {% include "web/email/partials/_email_list.html" with emails=page_obj %}
 
 {% endblock list %}
+
+{% block list_alternative %}
+
+    {% include "web/email/partials/_filter_list_alternative.html" %}
+
+{% endblock list_alternative %}

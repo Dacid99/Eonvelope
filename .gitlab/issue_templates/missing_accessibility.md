@@ -1,5 +1,7 @@
 **Thank you for taking the time to report missing accessibility in the Emailkasten frontend!**
 
+- [ ] I have checked that there is no existing issue dealing with this problem.
+
 ## Location *
 
 *Where the inaccessible UI element(s) can be found. Ideally the URL and location description in that page.*

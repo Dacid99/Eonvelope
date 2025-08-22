@@ -190,6 +190,15 @@ class Attachment(
         self.save(update_fields=["file_path"])
         logger.debug("Successfully stored attachment.")
 
+    @property
+    def content_type(self) -> str:
+        """Reconstructs the full MIME content type of the attachment.
+
+        Returns:
+            The attachments content type.
+        """
+        return self.content_maintype + "/" + self.content_subtype
+
     @staticmethod
     def queryset_as_file(queryset: QuerySet[Attachment]) -> _TemporaryFileWrapper:
         """Processes the files of the emails in the queryset into a temporary file.
@@ -237,8 +246,9 @@ class Attachment(
         """
         if email.pk is None:
             raise ValueError("Email is not in db!")
-        save_maintypes = get_config("SAVE_CONTENT_TYPE_PREFIXES")
-        ignore_subtypes = get_config("DONT_SAVE_CONTENT_TYPE_SUFFIXES")
+        logger.debug("Parsing and saving attachments in email %s ...", email.message_id)
+        ignore_maintypes = get_config("DONT_PARSE_CONTENT_MAINTYPES")
+        ignore_subtypes = get_config("DONT_PARSE_CONTENT_SUBTYPES")
         new_attachments = []
         for part in email_message.walk():
             if part.is_multipart():
@@ -247,8 +257,16 @@ class Attachment(
             content_disposition = part.get_content_disposition()
             content_maintype = part.get_content_maintype()
             content_subtype = part.get_content_subtype()
-            if content_disposition or (
-                content_maintype in save_maintypes
+            # first part of the condition checks whether the part qualifies as attachment in general,
+            # the second one whether the parts contenttype is blacklisted
+            if (
+                content_disposition
+                or (
+                    content_maintype != "text"
+                    or content_subtype not in ["plain", "html"]
+                )
+            ) and (
+                content_maintype not in ignore_maintypes
                 and content_subtype not in ignore_subtypes
             ):
                 part_payload = part.get_payload(decode=True)
@@ -268,12 +286,14 @@ class Attachment(
                         datasize=len(part_payload),
                         email=email,
                     )
+                    logger.debug("Saving attachment %s to db ...", part.get_filename())
                     new_attachment.save(attachment_payload=part_payload)
                     new_attachments.append(new_attachment)
+        logger.debug("Successfully parsed and saved attachments.")
         return new_attachments
 
     @override
-    @cached_property
+    @property
     def has_download(self) -> bool:
         return self.file_path is not None
 
@@ -285,33 +305,30 @@ class Attachment(
         References:
             https://stackoverflow.com/questions/51107683/which-mime-types-can-be-displayed-in-browser
         """
-        return self.file_path is not None and (
-            self.content_maintype in ["image", "font"]
-            or (
-                self.content_maintype == "text"
-                and not self.content_subtype.endswith("calendar")
-            )
-            or (
-                self.content_maintype == "audio"
-                and self.content_subtype in ["ogg", "wav", "mpeg", "aac"]
-            )
-            or (
-                self.content_maintype == "video"
-                and self.content_subtype in ["ogg", "mp4", "mpeg", "webm", "avi"]
-            )
-            or (
-                self.content_maintype == "application"
-                and (
-                    self.content_subtype in ["pdf", "json"]
-                    or self.content_subtype.endswith(("xml", "script"))
+        return (
+            self.file_path is not None
+            and not self.email.is_spam
+            and (self.datasize <= get_config("WEB_THUMBNAIL_MAX_DATASIZE"))
+            and (
+                self.content_maintype in ["image", "font"]
+                or (
+                    self.content_maintype == "text"
+                    and not self.content_subtype.endswith("calendar")
+                )
+                or (
+                    self.content_maintype == "audio"
+                    and self.content_subtype in ["ogg", "wav", "mpeg", "aac"]
+                )
+                or (
+                    self.content_maintype == "video"
+                    and self.content_subtype in ["ogg", "mp4", "mpeg", "webm", "avi"]
+                )
+                or (
+                    self.content_maintype == "application"
+                    and (
+                        self.content_subtype in ["pdf", "json"]
+                        or self.content_subtype.endswith(("xml", "script"))
+                    )
                 )
             )
         )
-
-    @override
-    def get_absolute_thumbnail_url(self) -> str:
-        """Returns the url of the thumbnail download api endpoint.
-
-        As there is no dedicated thumbnail, it is identical to the download url.
-        """
-        return self.get_absolute_download_url()

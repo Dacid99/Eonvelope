@@ -20,6 +20,7 @@
 
 from typing import Any
 
+from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -30,6 +31,6 @@ class NoCreateMixin:
     def create(self, *args: Any, **kwargs: Any) -> Response:
         """Disables the POST method for the viewset."""
         return Response(
-            {"detail": "POST method is not allowed on this endpoint."},
+            {"detail": _("POST method is not allowed on this endpoint.")},
             status=status.HTTP_405_METHOD_NOT_ALLOWED,
         )

@@ -24,6 +24,7 @@ from typing import TYPE_CHECKING, Final, override
 
 from django.core.files.storage import default_storage
 from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
@@ -34,6 +35,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.utils import query_param_list_to_typed_list
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models import Attachment
 
@@ -112,7 +114,7 @@ class AttachmentViewSet(
 
         attachment_file_path = attachment.file_path
         if not attachment_file_path or not default_storage.exists(attachment_file_path):
-            raise Http404("Attachment file not found")
+            raise Http404(_("Attachment file not found"))
 
         attachment_file_name = attachment.file_name
         return FileResponse(
@@ -146,10 +148,19 @@ class AttachmentViewSet(
             A fileresponse containing the requested file.
             A 400 response if the id param is missing in the request.
         """
-        requested_ids = request.query_params.getlist("id", [])
-        if not requested_ids:
+        requested_id_query_params = request.query_params.getlist("id", [])
+        if not requested_id_query_params:
             return Response(
-                {"detail": "Attachment ids missing in request!"},
+                {"detail": _("Attachment ids missing in request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            requested_ids = query_param_list_to_typed_list(
+                requested_id_query_params, int
+            )
+        except ValueError:
+            return Response(
+                {"detail": _("Attachment ids given in invalid format.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
@@ -157,9 +168,52 @@ class AttachmentViewSet(
                 self.get_queryset().filter(pk__in=requested_ids)
             )
         except Attachment.DoesNotExist:
-            raise Http404("No attachments found") from None
+            raise Http404(_("No attachments found")) from None
         return FileResponse(
             file,
             as_attachment=True,
             filename="attachments.zip",
         )
+
+    URL_PATH_THUMBNAIL = "thumbnail"
+    URL_NAME_THUMBNAIL = "thumbnail"
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_THUMBNAIL,
+        url_name=URL_NAME_THUMBNAIL,
+    )
+    def download_thumbnail(
+        self, request: Request, pk: int | None = None
+    ) -> FileResponse:
+        """Action method downloading the attachment thumbnail.
+
+        Returns the same filedata as 'download', but as inline.
+
+        Args:
+            request: The request triggering the action.
+            pk: The private key of the attachment to download. Defaults to None.
+
+        Raises:
+            Http404: If the filepath is not in the database or it doesn't exist.
+
+        Returns:
+            A fileresponse containing the requested file.
+        """
+        attachment = self.get_object()
+
+        attachment_file_path = attachment.file_path
+        if not attachment_file_path or not default_storage.exists(attachment_file_path):
+            raise Http404(_("Attachment file not found"))
+
+        attachment_file_name = attachment.file_name
+        response = FileResponse(
+            default_storage.open(attachment_file_path, "rb"),
+            as_attachment=False,
+            filename=attachment_file_name,
+            content_type=attachment.content_type,
+        )
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+        response.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
+        return response

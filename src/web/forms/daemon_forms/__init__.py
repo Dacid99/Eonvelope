@@ -20,6 +20,7 @@
 
 from .BaseDaemonForm import BaseDaemonForm
 from .CreateDaemonForm import CreateDaemonForm
+from .CreateMailboxDaemonForm import CreateMailboxDaemonForm
 
 
-__all__ = ["BaseDaemonForm", "CreateDaemonForm"]
+__all__ = ["BaseDaemonForm", "CreateDaemonForm", "CreateMailboxDaemonForm"]

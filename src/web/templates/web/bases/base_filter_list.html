@@ -11,18 +11,6 @@
 {% endblock header_bar %}
 
 
-{% block pagination %}
-    {% if page_obj.paginator.num_pages > 1 %}
-        <div class="bg-white sticky-bottom pb-3">
-            <hr />
-
-            {% include "web/partials/_pagination.html" %}
-
-        </div>
-    {% endif %}
-{% endblock pagination %}
-
-
 {% block overlay_elements %}
     <div class="offcanvas offcanvas-start"
          data-bs-scroll="true"
@@ -30,12 +18,10 @@
          id="offcanvasFilter"
          aria-labelledby="offcanvasFilterLabel">
         <div class="offcanvas-header d-flex justify-content-between">
-            <h5 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h5>
+            <h4 class="offcanvas-title" id="offcanvasFilterLabel">{% translate "Filter options" %}</h4>
             <div class="btn-group align-items-center">
 
                 {% include "web/partials/_clear_filter-button.html" %}
-
-                {% include "web/partials/_clear_and_submit_filter-button.html" %}
 
                 <button type="button"
                         class="btn-close"
@@ -52,10 +38,9 @@
 {% endblock overlay_elements %}
 
 
-{% block other_scripts %}
+{% block scripts %}
+
+    {{ block.super }}
     <script src="{% static 'web/js/form-utils.js' %}"></script>
 
-    {% block other_scripts_2 %}
-    {% endblock other_scripts_2 %}
-
-{% endblock other_scripts %}
+{% endblock scripts %}

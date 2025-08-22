@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Final
+from typing import TYPE_CHECKING, Final
 
 from rest_framework import serializers
 
@@ -44,6 +44,9 @@ class BaseAccountSerializer(serializers.ModelSerializer[Account]):
     is set to write-only for security reasons.
     """
 
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    """The :attr:`core.models.Account.Account.user` field is included but hidden."""
+
     class Meta:
         """Metadata class for the base serializer.
 
@@ -55,8 +58,8 @@ class BaseAccountSerializer(serializers.ModelSerializer[Account]):
         model: Final[type[Model]] = Account
         """The model to serialize."""
 
-        exclude: ClassVar[list[str]] = ["user"]
-        """Exclude the :attr:`core.models.Account.Account.user` field."""
+        fields = "__all__"
+        """Include all fields."""
 
         read_only_fields: Final[list[str]] = ["is_healthy", "created", "updated"]
         """The :attr:`core.models.Account.Account.is_healthy`,

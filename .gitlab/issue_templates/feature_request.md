@@ -1,5 +1,7 @@
 **Thank you for your effort to provide a feature idea for the Emailkasten project!**
 
+- [ ] I have checked that there is no existing issue discussing this feature.
+
 ## Summary
 
 *Summarize the feature you'd like us to add.*

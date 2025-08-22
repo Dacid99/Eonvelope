@@ -24,6 +24,7 @@ import datetime
 from typing import TYPE_CHECKING
 
 import pytest
+import vobject
 from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
@@ -98,6 +99,40 @@ def test_Correspondent_unique_together_constraint(fake_correspondent):
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "email_name, real_name, email_address, expected_name",
+    [
+        ("", "", "abc113@web.ca", "abc113"),
+        ("john doe", "", "jd@mail.it", "john doe"),
+        ("", "dudeonline", "lol@somewhere.io", "dudeonline"),
+        ("mailer", "real", "email@address.us", "real"),
+    ],
+)
+def test_Correspondent_name(
+    fake_correspondent, email_name, real_name, email_address, expected_name
+):
+    fake_correspondent.email_name = email_name
+    fake_correspondent.real_name = real_name
+    fake_correspondent.email_address = email_address
+
+    result = fake_correspondent.name
+
+    assert result == expected_name
+
+
+@pytest.mark.django_db
+def test_Correspondent_queryset_as_file(fake_correspondent):
+    result = Correspondent.queryset_as_file(Correspondent.objects.all())
+
+    assert hasattr(result, "read")
+    for correspondent_vcard in vobject.readComponents(result.read().decode()):
+        correspondent_vcard.fn = fake_correspondent.name
+        correspondent_vcard.email = fake_correspondent.email_address
+    assert hasattr(result, "close")
+    result.close()
+
+
+@pytest.mark.django_db
 def test_Correspondent_create_from_correspondent_tuple_success(
     fake_correspondent_tuple, owner_user
 ):
@@ -116,6 +151,31 @@ def test_Correspondent_create_from_correspondent_tuple_success(
     assert Correspondent.objects.count() == 1
     assert result.email_name == fake_correspondent_tuple[0]
     assert result.email_address == fake_correspondent_tuple[1]
+
+
+@pytest.mark.django_db
+def test_Correspondent_create_from_correspondent_tuple_success_unstripped_address(
+    fake_correspondent_tuple, owner_user
+):
+    """Tests :func:`core.models.Correspondent.Correspondent.create_from_correspondent_tuple`
+    in case of success.
+    """
+    fake_correspondent_tuple = (
+        fake_correspondent_tuple[0],
+        " " + fake_correspondent_tuple[1] + " ",
+    )
+    assert Correspondent.objects.count() == 0
+
+    result = Correspondent.create_from_correspondent_tuple(
+        fake_correspondent_tuple, owner_user
+    )
+
+    assert isinstance(result, Correspondent)
+    assert result.pk is not None
+    assert result.user == owner_user
+    assert Correspondent.objects.count() == 1
+    assert result.email_name == fake_correspondent_tuple[0]
+    assert result.email_address == fake_correspondent_tuple[1].strip()
 
 
 @pytest.mark.django_db

@@ -52,6 +52,7 @@ from .views import (
     EmailMonthArchiveView,
     EmailWeekArchiveView,
     EmailYearArchiveView,
+    MailboxCreateDaemonView,
     MailboxDetailWithDeleteView,
     MailboxEmailsFilterView,
     MailboxFilterView,
@@ -199,6 +200,11 @@ urlpatterns = [
         "mailboxes/<int:pk>/edit/",
         MailboxUpdateOrDeleteView.as_view(),
         name=MailboxUpdateOrDeleteView.URL_NAME,
+    ),
+    path(
+        "mailboxes/<int:pk>/add-daemon/",
+        MailboxCreateDaemonView.as_view(),
+        name=MailboxCreateDaemonView.URL_NAME,
     ),
     path(
         "mailboxes/<int:pk>/upload/",

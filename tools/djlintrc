@@ -9,7 +9,5 @@
     "extension": "html",
     "blank_line_before_tag": "load,include,block",
     "blank_line_after_tag": "extends,load,include,endblock",
-    "close_void_tags": true,
-    "format_css": true,
-    "format_js": true
+    "close_void_tags": true
 }

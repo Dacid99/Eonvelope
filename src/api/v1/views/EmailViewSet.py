@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, Final, override
 from django.core.files.storage import default_storage
 from django.db.models import Prefetch
 from django.http import FileResponse, Http404
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
@@ -37,11 +38,12 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from api.utils import query_param_list_to_typed_list
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from core.models import Email, EmailCorrespondent
 
 from ..filters import EmailFilterSet
-from ..serializers import EmailSerializer, FullEmailSerializer
+from ..serializers import BaseEmailSerializer, FullEmailSerializer
 
 
 if TYPE_CHECKING:
@@ -130,7 +132,7 @@ class EmailViewSet(
 
         file_path = email.eml_filepath
         if not file_path or not default_storage.exists(file_path):
-            raise Http404("EMl file not found")
+            raise Http404(_("eml file not found"))
 
         file_name = os.path.basename(file_path)
         return FileResponse(
@@ -170,13 +172,22 @@ class EmailViewSet(
         file_format = request.query_params.get("file_format", None)
         if not file_format:
             return Response(
-                {"detail": "File format missing in request!"},
+                {"detail": _("File format missing in request.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        requested_ids = request.query_params.getlist("id", [])
-        if not requested_ids:
+        requested_id_query_params = request.query_params.getlist("id", [])
+        if not requested_id_query_params:
             return Response(
-                {"detail": "Email ids missing in request!"},
+                {"detail": _("Email ids missing in request.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        try:
+            requested_ids = query_param_list_to_typed_list(
+                requested_id_query_params, int
+            )
+        except ValueError:
+            return Response(
+                {"detail": _("Email ids given in invalid format.")},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         try:
@@ -185,11 +196,14 @@ class EmailViewSet(
             )
         except ValueError:
             return Response(
-                {"detail": f"File format {file_format} is not supported!"},
+                {
+                    "detail": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
                 status=status.HTTP_400_BAD_REQUEST,
             )
         except Email.DoesNotExist:
-            raise Http404("No emails found") from None
+            raise Http404(_("No emails found")) from None
         else:
             return FileResponse(
                 file,
@@ -251,7 +265,7 @@ class EmailViewSet(
         """
         email = self.get_object()
         conversation = email.full_conversation()
-        conversation_serializer = EmailSerializer(conversation, many=True)
+        conversation_serializer = BaseEmailSerializer(conversation, many=True)
         return Response({"emails": conversation_serializer.data})
 
     URL_PATH_SUBCONVERSATION = "sub-conversation"
@@ -275,5 +289,5 @@ class EmailViewSet(
         """
         email = self.get_object()
         conversation = email.sub_conversation()
-        conversation_serializer = EmailSerializer(conversation, many=True)
+        conversation_serializer = BaseEmailSerializer(conversation, many=True)
         return Response({"emails": conversation_serializer.data})

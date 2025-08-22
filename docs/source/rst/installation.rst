@@ -10,21 +10,23 @@ While the general functionalities are stable, there may be breaking changes none
 If you need to archive your emails for a critical purpose, it is not recommended to solely
 rely on this application.
 
-The docker image comes with a SSL certificate issued and signed by the emailkasten project.
-It ensures safe communication between your reverse proxy and within your local network.
-It is not safe for use on the general web.
+The docker image comes with a SSL certificate issued and signed by the Emailkasten project.
+It ensures safe communication between your server and your reverse proxy
+as well as within your local network.
 
-Therefore, do not expose this application to the web without a reverse proxy like nginx.
+It is not safe or intended for use on the open web.
+
+Therefore, do not expose this application to the web without a reverse proxy like `nginx <https://nginx.org>`_.
 
 
 Recommended
 -----------
 
 The project is intended to be run with the container image
-provided at [dockerhub](https://hub.docker.com/repository/docker/dacid99/emailkasten/general).
+provided at `dockerhub <https://hub.docker.com/repository/docker/dacid99/emailkasten/general>`_.
 
 The emailkasten service mounts 2 volumes,
-one for the logfiles of emailkasten and one for the files that emailkasten archives.
+one for the logfiles of Emailkasten and one for the files that Emailkasten archives.
 
 .. Note::
     You can also mount all logfiles of the container by changing the path in the docker-compose.yml to /var/log.
@@ -68,3 +70,56 @@ Alternatively, you can run the application bare metal.
    in the django application settings ``Emailkasten/settings.py`` on your machine.
 4. Finally the Emailkasten server is started via the docker entrypoint script
    ``docker/docker-compose.yml``.
+
+
+Updating
+========
+
+You can update your Emailkasten server by getting and deploying the latest version from `dockerhub <https://hub.docker.com/repository/docker/dacid99/emailkasten/general>`_.
+
+Database migrations
+-------------------
+
+If there are structural changes to the database of Emailkasten,
+these changes will be implemented and mitigated by migrations applied before the Emailkasten container starts.
+This ensures continuity of the data.
+Sometimes there are changes that may not be easy to mitigate with a migration alone.
+In that case a script for this purpose to be applied manually in the Emailkasten will be supplied.
+
+It can be run from the terminal of your server with
+
+.. code-block:: bash
+
+   docker exec -it emailkasten-web poetry run python3 manage.py runscript scriptname
+
+Swap in the name of the specific script for the migration fix.
+Just the name is required, drop the .py suffix.
+If your containers have different names, you may have to exchange the `emailkasten-web` part.
+
+For more details see `the django docs on this topic <https://django-extensions.readthedocs.io/en/latest/runscript.html>`_.
+
+
+
+
+
+Migration
+=========
+
+To new server
+-------------
+
+If you already have a running Emailkasten instance and want to move it to a new server there are 4 steps you can go through to do so in a save manner.
+
+1. Locate and docker volumes of all containers in the docker stack in the old servers storage.
+2. Copy these complete folders to the new server to the locations of the volumes on the new server.
+3. Copy the docker compose from the old server setup to the new server and adjust the volume paths if necessary. Do not change the passwords and secret key!
+4. Start the stack. Done.
+
+
+From other service
+------------------
+
+In principle it is possible to migrate to Emailkasten from another service fetching emails.
+The main part is required for this is a migration that rewrites that services database into one compatible with Emailkasten.
+
+If you are interested in providing such a program for the application you are using right now, please get in touch!

@@ -34,24 +34,25 @@ from .conftest import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    "searched_field", ["message_id", "email_subject", "plain_bodytext", "html_bodytext"]
 )
 def test_text_search_filter(
-    emailcorrespondents_queryset, lookup_expr, filterquery, expected_indices
+    faker, emailcorrespondents_queryset, email_queryset, searched_field
 ):
-    """Tests :class:`web.filters.CorrespondentEmailFilterSet`'s filtering
-    for the :attr:`core.models.Email.Email.message_id` field.
-    """
-    query = {"text_search": filterquery}
+    """Tests :class:`web.filters.CorrespondentEmailFilterSet`'s search filtering."""
+    target_text = faker.sentence()
+    target_id = faker.random.randint(0, len(emailcorrespondents_queryset) - 1)
+    email_queryset.filter(
+        emailcorrespondents=emailcorrespondents_queryset.get(id=target_id)
+    ).update(**{searched_field: target_text})
+    query = {"text_search": target_text[2:10]}
 
     filtered_data = CorrespondentEmailFilterSet(
         query, queryset=emailcorrespondents_queryset
     ).qs
 
-    assert filtered_data.distinct().count() == filtered_data.count()
-    assert filtered_data.count() == len(expected_indices)
-    for data in filtered_data:
-        assert data.id - 1 in expected_indices
+    assert filtered_data.count() == 1
+    assert filtered_data.get().id == target_id
 
 
 @pytest.mark.django_db

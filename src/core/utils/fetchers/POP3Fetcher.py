@@ -46,7 +46,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
     PROTOCOL = EmailProtocolChoices.POP3.value
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.POP3`."""
 
-    AVAILABLE_FETCHING_CRITERIA: tuple[str] = (EmailFetchingCriterionChoices.ALL.value,)
+    AVAILABLE_FETCHING_CRITERIA = (EmailFetchingCriterionChoices.ALL.value,)
     """Tuple of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
     Must be immutable!
     """
@@ -168,8 +168,6 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
 
             full_message = b"\n".join(message_data)
             mail_data_list.append(full_message)
-        self.logger.debug("Successfully retrieved all messages in %s.", mailbox)
-
         self.logger.debug("Successfully fetched all messages in %s.", mailbox)
 
         return mail_data_list

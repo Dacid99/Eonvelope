@@ -1,5 +1,5 @@
 test_codebase:
-  stage: test
+  stage: check
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
@@ -7,12 +7,12 @@ test_codebase:
     - if: $CI_COMMIT_TAG
   script:
     - echo "Testing codebase ..."
-    - poetry install --with=dev
     - mkdir -p $TEST_REPORT_PATH
-    - poetry run pytest $TEST_PATH --config-file $TEST_CONFIG_PATH"pytest.ini" > $TEST_REPORT_PATH"pytest_test.ansi"
+    - poetry run pytest $TEST_PATH --config-file $TEST_CONFIG_PATH"pytest.ini" | tee $TEST_REPORT_PATH"pytest_test.ansi"
     - echo "Successfully tested codebase."
   artifacts:
     paths:
       - "$TEST_REPORT_PATH"
     when: always
     expire_in: 30 days
+  coverage: '/^\d+(?:\.\d+)?\s*$/'

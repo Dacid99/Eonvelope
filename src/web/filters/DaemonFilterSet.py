@@ -20,7 +20,10 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import django_filters
+from django.db import models
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import IntervalSchedule
@@ -28,6 +31,12 @@ from django_celery_beat.models import IntervalSchedule
 from core.constants import EmailFetchingCriterionChoices
 
 from ..utils.widgets import AdaptedSelectDateWidget
+
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
+
+    from core.models import Daemon
 
 
 class DaemonFilterSet(django_filters.FilterSet):
@@ -45,6 +54,11 @@ class DaemonFilterSet(django_filters.FilterSet):
         ]
     )
 
+    text_search = django_filters.CharFilter(
+        method="filter_text_fields",
+        label=_("Search"),
+        widget=widgets.SearchInput,
+    )
     fetching_criterion = django_filters.MultipleChoiceFilter(
         choices=EmailFetchingCriterionChoices.choices,
         widget=widgets.CheckboxSelectMultiple,
@@ -81,3 +95,25 @@ class DaemonFilterSet(django_filters.FilterSet):
         field_name="is_healthy",
         widget=widgets.NullBooleanSelect,
     )
+
+    def filter_text_fields(
+        self, queryset: QuerySet[Daemon], name: str, value: str
+    ) -> QuerySet[Daemon]:
+        """Filters textfields in the model.
+
+        Args:
+            queryset: The basic queryset to filter.
+            name: The name of the filterfield.
+            value: The value to filter by.
+
+        Returns:
+            The filtered queryset.
+        """
+        return queryset.filter(
+            models.Q(uuid__icontains=value)
+            | models.Q(fetching_criterion__icontains=value)
+            | models.Q(mailbox__name__icontains=value)
+            | models.Q(mailbox__account__mail_address__icontains=value)
+            | models.Q(mailbox__account__mail_host__icontains=value)
+            | models.Q(mailbox__account__protocol__icontains=value)
+        ).distinct()

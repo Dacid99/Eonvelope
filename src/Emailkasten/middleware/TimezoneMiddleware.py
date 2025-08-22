@@ -18,12 +18,16 @@
 
 """Module with the :class:`TimezoneMiddleware`."""
 
+import logging
 import zoneinfo
 from collections.abc import Callable
 
 from django.http.request import HttpRequest
 from django.http.response import HttpResponse
 from django.utils import timezone
+
+
+logger = logging.getLogger(__name__)
 
 
 class TimezoneMiddleware:
@@ -55,4 +59,5 @@ class TimezoneMiddleware:
             )
         except zoneinfo.ZoneInfoNotFoundError:
             timezone.activate(timezone.get_default_timezone())
+            logger.debug("Timezone %s not found, using default timezone.")
         return self.get_response(request)

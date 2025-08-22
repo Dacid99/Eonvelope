@@ -69,14 +69,16 @@ def decode_header(header: Header | str) -> str:
 def get_header(
     email_message: EmailMessage,
     header_name: str,
-    joining_string: str = ", ",
-) -> str | None:
+    joining_string: str = ",",
+) -> str:
     """Shorthand to safely get a header from a :class:`email.message.EmailMessage`.
+
+    Strips trailing whitespace from the header.
 
     Args:
         email_message: The message to get the header from.
         header_name: The name of the header field.
-        joining_string: The string to join multiple headers with. Default to ', ' which is safe for CharFields.
+        joining_string: The string to join multiple headers with. Default to ',' which is safe for CharFields.
 
     Returns:
         The decoded header field as a string if found
@@ -85,7 +87,9 @@ def get_header(
     encoded_header = email_message.get_all(header_name)
     if not encoded_header:
         return ""
-    return joining_string.join([decode_header(header) for header in encoded_header])
+    return joining_string.join(
+        [decode_header(header).strip() for header in encoded_header]
+    )
 
 
 def parse_datetime_header(date_header: str | None) -> datetime.datetime:

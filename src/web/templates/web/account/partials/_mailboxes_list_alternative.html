@@ -1,0 +1,13 @@
+{% extends "web/partials/bases/_base_list_alternative.html" %}
+
+{% load i18n %}
+
+{% block instruction_text %}
+    {% translate "You can add mailboxes for this account by fetching them from the server" %}
+{% endblock instruction_text %}
+
+{% block instruction_buttons %}
+
+    {% include "web/account/partials/_update_mailboxes-button.html" with account=object %}
+
+{% endblock instruction_buttons %}

@@ -94,7 +94,11 @@ class SafeIMAPMixin:
                     _("Bad server response for %(command_name)s:\n%(response)s")
                     % {"command_name": command_name, "response": response}
                 )
-        self.logger.debug("Server responded %s as expected.", response[0])
+        self.logger.debug(
+            "Server responded %s to %s as expected.",
+            expected_status,
+            command_name,
+        )
 
     @overload
     @staticmethod

@@ -41,3 +41,12 @@ class ShardedFileSystemStorage(FileSystemStorage):
         save_return = super()._save(name, content)
         storage_shard.increment_file_count()
         return save_return
+
+    @override
+    def delete(self, name: str) -> None:
+        """Extended method for deleting files in a storage directory."""
+        storage_shard = StorageShard.objects.get(
+            shard_directory_name=os.path.dirname(name)
+        )
+        super().delete(name)
+        storage_shard.decrement_file_count()

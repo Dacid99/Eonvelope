@@ -12,5 +12,9 @@
 
 
 {% block card_subtitle %}
-    {{ card_object.real_name }}
+    {% if card_object.real_name %}
+        {{ card_object.real_name }}
+    {% elif card_object.email_name %}
+        {{ card_object.email_name }}
+    {% endif %}
 {% endblock card_subtitle %}

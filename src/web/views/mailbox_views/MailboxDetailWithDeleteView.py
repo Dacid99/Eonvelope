@@ -79,8 +79,8 @@ class MailboxDetailWithDeleteView(
             return DeletionMixin.post(self, request)
         return CustomActionMixin.post(self, request)
 
-    def handle_fetch_all(self, request: HttpRequest) -> HttpResponse:
-        """Handler function for the `fetch-all` action.
+    def handle_fetch(self, request: HttpRequest) -> HttpResponse:
+        """Handler function for the `fetch` action.
 
         Args:
             request: The action request to handle.
@@ -89,8 +89,18 @@ class MailboxDetailWithDeleteView(
             A template response with the updated view after the action.
         """
         self.object = self.get_object()
+        criterion = request.POST.get("fetch") or EmailFetchingCriterionChoices.ALL.value
+        if criterion not in self.object.available_fetching_criteria:
+            messages.warning(
+                request,
+                _(
+                    "The chosen criterion %(criterion)s is not available for this mailbox."
+                )
+                % {"criterion": criterion},
+            )
+            return self.get(request)
         try:
-            self.object.fetch(EmailFetchingCriterionChoices.ALL)
+            self.object.fetch(criterion)
         except FetcherError as error:
             messages.error(
                 request, _("Fetching failed\n%(error)s") % {"error": str(error)}

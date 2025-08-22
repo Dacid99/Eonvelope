@@ -1,9 +1,9 @@
 <div class="card">
     {% if card_object.has_thumbnail %}
         <div class="row g-0">
-            <div class="col-md-8">
+            <div class="col-lg-8 d-flex flex-column order-2 order-lg-1">
             {% endif %}
-            <div class="card-body">
+            <div class="card-body d-flex flex-column text-break">
                 <div class="d-flex justify-content-between">
                     <div class="d-inline-flex">
                         <h5 class="card-title me-2">
@@ -35,11 +35,13 @@
                     {% endblock card_subtitle %}
 
                 </h6>
+                <div class="mt-auto">
 
-                {% block card_content %}
-                {% endblock card_content %}
+                    {% block card_content %}
+                    {% endblock card_content %}
 
-                <div class="card-text text-end">
+                </div>
+                <div class="card-text d-flex flex-column flex-lg-row justify-content-end text-end mt-auto">
 
                     {% include "web/partials/_date_created-small.html" with object=card_object %}
 
@@ -51,7 +53,7 @@
             </div>
             {% if card_object.has_thumbnail %}
             </div>
-            <div class="col-md-4">
+            <div class="col-lg-4 order-1 order-lg-2">
 
                 {% block thumbnail %}
                 {% endblock thumbnail %}

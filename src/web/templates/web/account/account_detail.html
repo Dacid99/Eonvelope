@@ -60,7 +60,19 @@
                 {% translate "Mailboxes" %}<i class="fa-solid fa-inbox mx-2" aria-hidden="true"></i>
             </h4>
 
-            {% include "web/mailbox/partials/_mailbox_list.html" with mailboxes=object.mailboxes.all %}
+            {% if object.mailboxes.exists %}
+
+                {% include "web/mailbox/partials/_mailbox_list.html" with mailboxes=object.mailboxes.all %}
+
+            {% elif not object.is_healthy %}
+
+                {% include "web/account/partials/_unhealthy_list_alternative.html" %}
+
+            {% else %}
+
+                {% include "web/account/partials/_mailboxes_list_alternative.html" %}
+
+            {% endif %}
 
         </div>
     </div>
@@ -70,12 +82,26 @@
                 <h4 class="card-title">
                     {% translate "Latest Emails" %}<i class="fa-solid fa-envelope mx-1" aria-hidden="true"></i>
                 </h4>
-                <a role="button"
-                   class="btn btn-outline-primary"
-                   href="{% url 'web:account-emails' object.pk %}">{% translate "View all" %}</a>
+                {% if latest_emails %}
+                    <a role="button"
+                       class="btn btn-outline-primary"
+                       href="{% url 'web:account-emails' object.pk %}">{% translate "View all" %}</a>
+                {% endif %}
             </div>
 
-            {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
+            {% if latest_emails %}
+
+                {% include "web/email/partials/_email_list.html" with emails=latest_emails %}
+
+            {% elif not object.is_healthy %}
+
+                {% include "web/account/partials/_unhealthy_list_alternative.html" %}
+
+            {% else %}
+
+                {% include "web/account/partials/_emails_list_alternative.html" %}
+
+            {% endif %}
 
         </div>
     </div>

@@ -1,0 +1,22 @@
+{% load i18n %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle"
+                type="button"
+                id="dropdownFetchMenuButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">{% translate 'Fetch' %}</button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownFetchMenuButton">
+            {% for criterion, label in mailbox.available_fetching_criterion_choices %}
+                <li>
+                    <button class="btn dropdown-item"
+                            type="submit"
+                            name="fetch"
+                            value="{{ criterion }}">{{ label }}</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</form>

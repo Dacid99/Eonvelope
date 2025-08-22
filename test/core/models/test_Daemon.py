@@ -19,20 +19,18 @@
 """Test module for :mod:`core.models.Daemon`."""
 
 import datetime
-import logging
-import logging.handlers
-import os
-from pathlib import Path
+import json
 from uuid import UUID
 
 import pytest
 from django.db import IntegrityError
 from django.urls import reverse
+from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from model_bakery import baker
 
 from core import constants
 from core.models import Daemon, Mailbox
-from Emailkasten.utils.workarounds import get_config
+from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
 @pytest.fixture(autouse=True)
@@ -45,6 +43,16 @@ def mock_logger(mocker):
     return mocker.patch("core.models.Daemon.logger", autospec=True)
 
 
+@pytest.fixture
+def mock_Mailbox_fetch(mocker):
+    return mocker.patch("core.models.Mailbox.Mailbox.fetch")
+
+
+@pytest.fixture
+def mock_celery_app(mocker):
+    return mocker.patch("core.models.Daemon.current_app", autospec=True)
+
+
 @pytest.mark.django_db
 def test_Daemon_fields(fake_daemon):
     """Tests the fields of :class:`core.models.Daemon.Daemon`."""
@@ -55,9 +63,7 @@ def test_Daemon_fields(fake_daemon):
     assert fake_daemon.fetching_criterion == constants.EmailFetchingCriterionChoices.ALL
     assert fake_daemon.interval is not None
     assert fake_daemon.is_healthy is None
-    assert fake_daemon.log_filepath is not None
-    assert fake_daemon.log_backup_count == get_config("DAEMON_LOG_BACKUP_COUNT_DEFAULT")
-    assert fake_daemon.logfile_size == get_config("DAEMON_LOGFILE_SIZE_DEFAULT")
+    assert fake_daemon.last_error is not None
     assert fake_daemon.updated is not None
     assert isinstance(fake_daemon.updated, datetime.datetime)
     assert fake_daemon.created is not None
@@ -83,13 +89,6 @@ def test_Daemon_foreign_key_deletion(fake_daemon):
 
 
 @pytest.mark.django_db
-def test_Daemon_unique_constraint_log_filepath(fake_daemon):
-    """Tests the unique constraints on :attr:`core.models.Daemon.Daemon.log_filepath` of :class:`core.models.Daemon.Daemon`."""
-    with pytest.raises(IntegrityError):
-        baker.make(Daemon, log_filepath=fake_daemon.log_filepath)
-
-
-@pytest.mark.django_db
 def test_Daemon_unique_together_constraint_mailbox_fetching_criterion(
     faker, fake_daemon
 ):
@@ -99,51 +98,108 @@ def test_Daemon_unique_together_constraint_mailbox_fetching_criterion(
             Daemon,
             mailbox=fake_daemon.mailbox,
             fetching_criterion=fake_daemon.fetching_criterion,
-            log_filepath=faker.file_path(extension="log"),
         )
 
 
 @pytest.mark.django_db
-def test_Daemon_save_logfile_creation(faker, settings, fake_fs, fake_daemon):
-    """Tests :func:`core.models.Correspondent.Correspondent.save`
-    in case there is no log_filepath.
+def test_Daemon_valid_fetching_criterion_constraint(faker, fake_daemon):
+    """Tests the constraint on :attr:`core.models.Daemon.Daemon.fetching_criterion` of :class:`core.models.Daemon.Daemon`."""
+    with pytest.raises(IntegrityError):
+        baker.make(
+            Daemon,
+            mailbox=fake_daemon.mailbox,
+            fetching_criterion="BAD_CRITERION",
+        )
+
+
+@pytest.mark.django_db
+def test_Daemon_save_new(fake_mailbox):
+    """Tests :func:`core.models.Correspondent.Correspondent.delete`
+    in case the interval was changed.
     """
-    fake_logdirpath = faker.file_path()
-    fake_fs.create_dir(fake_logdirpath)
-    settings.LOG_DIRECTORY_PATH = Path(fake_logdirpath)
-    fake_daemon.log_filepath = None
+    new_interval = baker.make(IntervalSchedule)
+    new_daemon = baker.prepare(Daemon, interval=new_interval, mailbox=fake_mailbox)
+    new_daemon.celery_task = None
+
+    new_daemon.save()
+
+    new_daemon.refresh_from_db()
+    assert new_daemon.celery_task
+    assert isinstance(new_daemon.celery_task, PeriodicTask)
+    assert new_daemon.celery_task.interval == new_daemon.interval
+    assert new_daemon.celery_task.task == "core.tasks.fetch_emails"
+    assert new_daemon.celery_task.args == json.dumps([str(new_daemon.uuid)])
+
+
+@pytest.mark.django_db
+def test_Daemon_save_updated_interval(fake_daemon):
+    """Tests :func:`core.models.Correspondent.Correspondent.delete`
+    in case the interval was changed.
+    """
+    new_interval = baker.make(IntervalSchedule)
+    fake_daemon.interval = new_interval
+
+    assert fake_daemon.celery_task.interval != new_interval
 
     fake_daemon.save()
 
-    fake_daemon.refresh_from_db()
-    assert os.path.dirname(fake_daemon.log_filepath) == str(
-        settings.LOG_DIRECTORY_PATH.absolute()
+    assert fake_daemon.celery_task.interval == new_interval
+
+
+@pytest.mark.django_db
+def test_Daemon_delete_celery_task_deletion(fake_daemon):
+    """Tests :func:`core.models.Correspondent.Correspondent.delete`
+    in case there is a celery_task.
+    """
+    daemon_task = fake_daemon.celery_task
+
+    assert daemon_task is not None
+
+    fake_daemon.delete()
+
+    with pytest.raises(daemon_task.__class__.DoesNotExist):
+        daemon_task.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_Daemon_delete_no_celery_task(fake_daemon):
+    """Tests :func:`core.models.Correspondent.Correspondent.delete`
+    in case there is a celery_task.
+    """
+    fake_daemon.celery_task = None
+
+    fake_daemon.delete()
+    # check that there's no attempt to delete the None-task that would raise
+
+
+@pytest.mark.django_db
+def test_Daemon_test_success(mock_celery_app, fake_daemon):
+    fake_daemon.test()
+    args = json.loads(fake_daemon.celery_task.args or "[]")
+    kwargs = json.loads(fake_daemon.celery_task.kwargs or "{}")
+
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_emails", args=args, kwargs=kwargs
     )
-    logger = logging.getLogger(str(fake_daemon.uuid))
-    assert len(logger.handlers) == 1
-    assert isinstance(logger.handlers[0], logging.handlers.RotatingFileHandler)
-    assert os.path.abspath(logger.handlers[0].baseFilename) == os.path.abspath(
-        fake_daemon.log_filepath
-    )
-    assert logger.handlers[0].backupCount == fake_daemon.log_backup_count
-    assert logger.handlers[0].maxBytes == fake_daemon.logfile_size
+    mock_celery_app.send_task.return_value.get.assert_called_once_with()
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "log_filepath, expected_has_download",
-    [
-        (None, False),
-        ("some/log/file/path", True),
-    ],
+    "error", [AssertionError, ValueError, MailAccountError, MailboxError]
 )
-def test_Daemon_has_download(fake_daemon, log_filepath, expected_has_download):
-    """Tests :func:`core.models.Daemon.Daemon.has_download` in the two relevant cases."""
-    fake_daemon.log_filepath = log_filepath
+def test_Daemon_test_failure(mock_celery_app, fake_daemon, error):
+    mock_celery_app.send_task.return_value.get.side_effect = error
+    args = json.loads(fake_daemon.celery_task.args or "[]")
+    kwargs = json.loads(fake_daemon.celery_task.kwargs or "{}")
 
-    result = fake_daemon.has_download
+    with pytest.raises(error):
+        fake_daemon.test()
 
-    assert result == expected_has_download
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_emails", args=args, kwargs=kwargs
+    )
+    mock_celery_app.send_task.return_value.get.assert_called_once_with()
 
 
 @pytest.mark.django_db

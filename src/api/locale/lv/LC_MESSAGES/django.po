@@ -1,0 +1,157 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-22 09:37+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
+
+#: src/api/v1/mixins/NoCreateMixin.py:34
+msgid "POST method is not allowed on this endpoint."
+msgstr ""
+
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:60
+#, python-format
+msgid "%(object)s marked as favorite."
+msgstr ""
+
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:62
+#, python-format
+msgid "%(object)s unmarked as favorite."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:110
+msgid "An error with the mailaccount occurred."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:116
+msgid "Updated mailboxes"
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:140
+msgid "Tested mailaccount"
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:117
+#: src/api/v1/views/AttachmentViewSet.py:208
+msgid "Attachment file not found"
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:154
+msgid "Attachment ids missing in request."
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:163
+msgid "Attachment ids given in invalid format."
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:171
+msgid "No attachments found"
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:168
+msgid "Correspondent ids missing in request."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:177
+msgid "Correspondent ids given in invalid format."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:185
+msgid "No correspondents found"
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:107
+msgid "Tested daemon"
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:137
+msgid "Daemon started"
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:140
+msgid "Daemon is already running"
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:167
+msgid "Daemon stopped"
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:170
+msgid "Daemon not running"
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:135
+msgid "eml file not found"
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:175 src/api/v1/views/MailboxViewSet.py:226
+msgid "File format missing in request."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:181
+msgid "Email ids missing in request."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:190
+msgid "Email ids given in invalid format."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:200 src/api/v1/views/MailboxViewSet.py:235
+#: src/api/v1/views/MailboxViewSet.py:272
+#, python-format
+msgid "File format %(file_format)s is not supported."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:206
+msgid "No emails found"
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:109
+msgid "Tested mailbox"
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:170
+msgid "Fetching criterion missing in request."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:177
+msgid "The given fetching criterion is not available for this mailbox."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:187
+msgid "Error with mailaccount or mailbox occurred."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:193
+msgid "All emails fetched."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:241
+msgid "No emails found."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:280
+msgid "File missing in request."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:289
+msgid "An error occurred while processing the file."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:297
+msgid "Successfully uploaded mailbox file."
+msgstr ""

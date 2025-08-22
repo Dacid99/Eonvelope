@@ -16,6 +16,12 @@
 
 {% endblock badges %}
 
+{% block action_buttons %}
+
+    {% include "web/partials/_download-button.html" %}
+
+{% endblock action_buttons %}
+
 {% block card_title %}
     <a href="mailto:{{ object.email_address }}"
        class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.email_address }}</a>
@@ -27,27 +33,36 @@
 
 {% block card_content %}
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">{% translate "Mailer name" %}: {{ object.email_name }}</li>
+        {% if object.email_name %}
+            <li class="list-group-item">{% translate "Mailer name" %}: {{ object.email_name }}</li>
+        {% endif %}
+
         {% if object.is_mailinglist %}
-            <li class="list-group-item">
-                {% translate "Subscribe" %}: <a href="mailto:{{ object.list_subscribe }}"
-    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_subscribe }}</a>
+            <li class="list-group-item d-flex align-items-center">
+                <span class="me-3">{% translate "Mailinglist" %}:</span>
+                <ul class="list-group-flush">
+                    {% if object.list_subscribe %}
+                        <li class="list-group-item">{% translate "Subscribe" %}: {{ object.list_subscribe }}</li>
+                    {% endif %}
+                    {% if object.list_unsubscribe %}
+                        <li class="list-group-item">{% translate "Unsubscribe" %}: {{ object.list_unsubscribe }}"</li>
+                    {% endif %}
+                    {% if object.list_unsubscribe_post %}
+                        <li class="list-group-item">
+                            {% translate "Unsubscribe Method" %}: {{ object.list_unsubscribe_post }}
+                        </li>
+                    {% endif %}
+                    {% if object.list_post %}
+                        <li class="list-group-item">{% translate "Post" %}: {{ object.list_post }}</li>
+                    {% endif %}
+                    {% if object.list_archive %}
+                        <li class="list-group-item">{% translate "Archive" %}: {{ object.list_archive }}</li>
+                    {% endif %}
+                    {% if object.list_help %}
+                        <li class="list-group-item">{% translate "Help" %}: {{ object.list_help }}</li>
+                    {% endif %}
+                </ul>
             </li>
-            <li class="list-group-item">
-                {% translate "Unsubscribe" %}: <a href="mailto:{{ object.list_unsubscribe }}"
-    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_unsubscribe }}</a>
-            </li>
-            {% if object.list_unsubscribe_post %}
-                <li class="list-group-item">
-                    {% translate "Unsubscribe Method" %}: {{ object.list_unsubscribe_post }}
-                </li>
-            {% endif %}
-            <li class="list-group-item">
-                {% translate "Post" %}: <a href="mailto:{{ object.list_post }}"
-    class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.list_post }}</a>
-            </li>
-            <li class="list-group-item">{% translate "Archive" %}: {{ object.list_archive }}</li>
-            <li class="list-group-item">{% translate "Help" %}: {{ object.list_help }}</li>
         {% endif %}
     </ul>
 {% endblock card_content %}

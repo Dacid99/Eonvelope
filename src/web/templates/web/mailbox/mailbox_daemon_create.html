@@ -1,0 +1,39 @@
+{% extends "web/bases/base_create.html" %}
+
+{% load i18n django_bootstrap5 %}
+
+{% block title %}
+    {% translate "Add Daemon" %} -
+{% endblock title %}
+
+{% block nav_class_daemons %}
+    link-light active
+{% endblock nav_class_daemons %}
+
+{% block close_to_list_button %}
+    <a class="btn-close" href="{{ object.get_absolute_url }}" role="button"></a>
+{% endblock close_to_list_button %}
+
+{% block card_title %}
+    {% translate "New Daemon" %}
+{% endblock card_title %}
+
+{% block card_subtitle %}
+    {% translate "for" %} <a href="{{ object.get_absolute_url }}"
+    class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.name }}</a>
+{% endblock card_subtitle %}
+
+{% block form %}
+    {% bootstrap_field form.mailbox %}
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">{% bootstrap_field form.interval_every %}</li>
+        <li class="list-group-item">{% bootstrap_field form.interval_period %}</li>
+        <li class="list-group-item">{% bootstrap_field form.fetching_criterion %}</li>
+    </ul>
+{% endblock form %}
+
+{% block cancel_form_button %}
+    <a type="button"
+       class="btn btn-secondary"
+       href="{{ object.get_absolute_url }}">{% translate "Cancel" %}</a>
+{% endblock cancel_form_button %}

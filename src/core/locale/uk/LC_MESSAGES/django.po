@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-22 09:37+0000\n"
-"PO-Revision-Date: 2025-08-08 07:01+0000\n"
-"Last-Translator: Максим Горпиніч <gorpinicmaksim5@gmail.com>\n"
+"PO-Revision-Date: 2025-08-23 13:01+0000\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "core/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 5.13\n"
 
 #: src/core/constants.py:38
 msgid "All RECENT emails"
@@ -428,7 +428,7 @@ msgstr "Час між двома демонами вимірюється в се
 
 #: src/core/models/Daemon.py:102
 msgid "last error"
-msgstr ""
+msgstr "остання помилка"
 
 #: src/core/models/Daemon.py:120
 msgid "This will only delete this daemon, not its mailbox."
@@ -563,16 +563,16 @@ msgstr "Поштова скринька %(name)s з %(account)s"
 
 #: src/core/models/Mailbox.py:269 src/core/models/Mailbox.py:300
 msgid "The given file is not a valid zipfile."
-msgstr ""
+msgstr "Вказаний файл не є дійсним zip-архівом."
 
 #: src/core/models/Mailbox.py:317
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
-msgstr ""
+msgstr "Вказаний файл не є коректним %(file_format)s."
 
 #: src/core/models/Mailbox.py:323
 msgid "The given file format is not supported."
-msgstr ""
+msgstr "Вказаний формат файлу не підтримується."
 
 #: src/core/models/StorageShard.py:50
 msgid "shard directory name"

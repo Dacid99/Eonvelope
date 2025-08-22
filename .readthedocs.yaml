@@ -6,6 +6,7 @@ build:
     python: "3.13"
   apt_packages:
     - python3-dev
+    - libkrb5-dev
     - default-mysql-client
     - graphviz
   jobs:

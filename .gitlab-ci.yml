@@ -14,7 +14,7 @@ default:
 workflow:  # when the pipeline should be triggered
   rules:  # collect all rules from the jobs here
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG == null'
     - if: $CI_COMMIT_TAG
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
@@ -36,10 +36,6 @@ variables:
   TEST_PATH: "test/"
   TEST_CONFIG_PATH: "test/"
   TEST_REPORT_PATH: "test/reports/"
-  DOCKER_PATH: "docker/"
-  DOCKER_IMAGE_PATH: "/var/lib/docker/image/overlay2/"
-  DOCKER_DRIVER: overlay2
-  DOCKER_TLS_CERTDIR: ""
 
 services:
   - docker:dind

@@ -1,3 +1,7 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# Copyright © 2024 David Aderbauer & The Emailkasten Contributors
+
 FROM python:3.13-alpine
 
 ARG APK_DEPENDENCIES="gettext \

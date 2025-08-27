@@ -26,7 +26,7 @@ from django.db.models import QuerySet
 from core.models import Daemon
 
 from ...filters import DaemonFilterSet
-from ..FilterPageView import FilterPageView
+from ..base import FilterPageView
 
 
 class DaemonFilterView(LoginRequiredMixin, FilterPageView):

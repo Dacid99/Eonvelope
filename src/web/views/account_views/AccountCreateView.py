@@ -31,10 +31,10 @@ from ...forms import BaseAccountForm
 class AccountCreateView(LoginRequiredMixin, CreateView):
     """View for creating a single :class:`core.models.Account` instance."""
 
+    URL_NAME = Account.BASENAME + "-create"
     model = Account
     form_class = BaseAccountForm
     template_name = "web/account/account_create.html"
-    URL_NAME = Account.BASENAME + "-create"
 
     @override
     def get_form(

@@ -31,10 +31,10 @@ from ...forms import CreateDaemonForm
 class DaemonCreateView(LoginRequiredMixin, CreateView):
     """View for creating a single :class:`core.models.Daemon` instance."""
 
+    URL_NAME = Daemon.BASENAME + "-create"
     model = Daemon
     form_class = CreateDaemonForm
     template_name = "web/daemon/daemon_create.html"
-    URL_NAME = Daemon.BASENAME + "-create"
 
     @override
     def get_form_kwargs(self) -> dict[str, Any]:

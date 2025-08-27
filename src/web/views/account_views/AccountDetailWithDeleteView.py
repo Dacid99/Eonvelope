@@ -33,7 +33,7 @@ from core.utils.fetchers.exceptions import MailAccountError
 from web.mixins.CustomActionMixin import CustomActionMixin
 from web.mixins.TestActionMixin import TestActionMixin
 
-from ..DetailWithDeleteView import DetailWithDeleteView
+from ..base import DetailWithDeleteView
 from .AccountFilterView import AccountFilterView
 
 

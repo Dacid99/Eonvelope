@@ -26,7 +26,7 @@ from django.db.models import QuerySet
 from core.models import Attachment
 
 from ...filters import AttachmentFilterSet
-from ..FilterPageView import FilterPageView
+from ..base import FilterPageView
 
 
 class AttachmentFilterView(LoginRequiredMixin, FilterPageView):

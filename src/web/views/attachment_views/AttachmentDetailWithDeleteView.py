@@ -26,7 +26,7 @@ from django.urls import reverse_lazy
 
 from core.models import Attachment
 
-from ..DetailWithDeleteView import DetailWithDeleteView
+from ..base import DetailWithDeleteView
 from .AttachmentFilterView import AttachmentFilterView
 
 

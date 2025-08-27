@@ -26,7 +26,7 @@ from django.db.models import QuerySet
 from core.models import Correspondent
 
 from ...filters import CorrespondentFilterSet
-from ..FilterPageView import FilterPageView
+from ..base import FilterPageView
 
 
 class CorrespondentFilterView(LoginRequiredMixin, FilterPageView):

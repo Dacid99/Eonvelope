@@ -16,10 +16,15 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`web.views.FilterPageView.FilterPageView`."""
+"""Module with baseviews for the Emailkasten webapp."""
+
 
 from typing import Any, override
 
+from django.core.exceptions import ImproperlyConfigured
+from django.http import HttpRequest, HttpResponse
+from django.views.generic import DetailView
+from django.views.generic.edit import DeletionMixin, UpdateView
 from django_filters.views import FilterView
 
 from web.mixins import PageSizeMixin
@@ -45,3 +50,37 @@ class FilterPageView(PageSizeMixin, FilterView):
                 context["query"][query_param] = query_value
 
         return context
+
+
+class DetailWithDeleteView(DetailView, DeletionMixin):
+    """A view for model details with an option to delete."""
+
+
+class UpdateOrDeleteView(UpdateView, DeletionMixin):
+    """A view that implements both updating and deleting."""
+
+    delete_success_url: str | None = None
+    """The URL to redirect to after deletion. Must be set."""
+
+    success_url: str | None = None
+    """The URL to redirect to after form submission.
+    If this is not set, the models get_absolute_url method is used.
+    """
+
+    @override
+    def get_success_url(self) -> str:
+        """Overridden method to redirect to filter-list after `delete` else to detail."""
+        if "delete" in self.request.POST:
+            if self.delete_success_url:
+                return self.delete_success_url
+            raise ImproperlyConfigured(
+                "No URL to redirect to. Provide a delete_success_url."
+            )
+        return UpdateView.get_success_url(self)
+
+    @override
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        """Overridden method to distinguish the `delete` button."""
+        if "delete" in request.POST:
+            return DeletionMixin.post(self, request, *args, **kwargs)
+        return UpdateView.post(self, request, *args, **kwargs)

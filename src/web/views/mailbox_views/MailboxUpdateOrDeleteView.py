@@ -27,18 +27,18 @@ from django.urls import reverse_lazy
 from core.models import Mailbox
 
 from ...forms import BaseMailboxForm
-from ..UpdateOrDeleteView import UpdateOrDeleteView
+from ..base import UpdateOrDeleteView
 from .MailboxFilterView import MailboxFilterView
 
 
 class MailboxUpdateOrDeleteView(LoginRequiredMixin, UpdateOrDeleteView):
     """View for updating or deleting a single :class:`core.models.Mailbox` instance."""
 
+    URL_NAME = Mailbox.get_edit_web_url_name()
     model = Mailbox
     form_class = BaseMailboxForm
     template_name = "web/mailbox/mailbox_edit.html"
     delete_success_url = reverse_lazy("web:" + MailboxFilterView.URL_NAME)
-    URL_NAME = Mailbox.get_edit_web_url_name()
 
     @override
     def get_queryset(self) -> QuerySet[Mailbox]:

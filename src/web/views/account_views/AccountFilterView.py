@@ -26,7 +26,7 @@ from django.db.models import QuerySet
 from core.models import Account
 
 from ...filters import AccountFilterSet
-from ..FilterPageView import FilterPageView
+from ..base import FilterPageView
 
 
 class AccountFilterView(LoginRequiredMixin, FilterPageView):

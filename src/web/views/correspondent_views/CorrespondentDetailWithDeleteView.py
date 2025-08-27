@@ -26,7 +26,7 @@ from django.urls import reverse_lazy
 
 from core.models import Correspondent, EmailCorrespondent
 
-from ..DetailWithDeleteView import DetailWithDeleteView
+from ..base import DetailWithDeleteView
 from .CorrespondentFilterView import CorrespondentFilterView
 
 

@@ -34,7 +34,7 @@ from core.utils.fetchers.exceptions import FetcherError
 
 from ...mixins.CustomActionMixin import CustomActionMixin
 from ...mixins.TestActionMixin import TestActionMixin
-from ..DetailWithDeleteView import DetailWithDeleteView
+from ..base import DetailWithDeleteView
 from .MailboxFilterView import MailboxFilterView
 
 

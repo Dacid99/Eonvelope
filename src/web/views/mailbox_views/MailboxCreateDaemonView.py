@@ -34,10 +34,10 @@ from ...forms import CreateMailboxDaemonForm
 class MailboxCreateDaemonView(LoginRequiredMixin, DetailView, BaseFormView):
     """View for creating a single :class:`core.models.Daemon` instance."""
 
+    URL_NAME = Mailbox.BASENAME + "-create-daemon"
     model = Mailbox
     form_class = CreateMailboxDaemonForm
     template_name = "web/mailbox/mailbox_daemon_create.html"
-    URL_NAME = Mailbox.BASENAME + "-create-daemon"
 
     @override
     def get_queryset(self) -> QuerySet[Mailbox]:

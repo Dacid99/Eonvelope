@@ -26,7 +26,7 @@ from django.db.models import QuerySet
 from core.models import Email
 
 from ...filters import EmailFilterSet
-from ..FilterPageView import FilterPageView
+from ..base import FilterPageView
 
 
 class EmailFilterView(LoginRequiredMixin, FilterPageView):

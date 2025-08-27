@@ -27,18 +27,18 @@ from django.urls import reverse_lazy
 from core.models import Correspondent
 
 from ...forms import BaseCorrespondentForm
-from ..UpdateOrDeleteView import UpdateOrDeleteView
+from ..base import UpdateOrDeleteView
 from .CorrespondentFilterView import CorrespondentFilterView
 
 
 class CorrespondentUpdateOrDeleteView(LoginRequiredMixin, UpdateOrDeleteView):
     """View for updating or deleting a single :class:`core.models.Correspondent` instance."""
 
+    URL_NAME = Correspondent.get_edit_web_url_name()
     model = Correspondent
     form_class = BaseCorrespondentForm
     template_name = "web/correspondent/correspondent_edit.html"
     delete_success_url = reverse_lazy("web:" + CorrespondentFilterView.URL_NAME)
-    URL_NAME = Correspondent.get_edit_web_url_name()
 
     @override
     def get_queryset(self) -> QuerySet[Correspondent]:

@@ -32,7 +32,7 @@ from core.models import Daemon
 from web.mixins.TestActionMixin import TestActionMixin
 
 from ...mixins.CustomActionMixin import CustomActionMixin
-from ..DetailWithDeleteView import DetailWithDeleteView
+from ..base import DetailWithDeleteView
 from .DaemonFilterView import DaemonFilterView
 
 

@@ -27,18 +27,18 @@ from django.urls import reverse_lazy
 from core.models import Daemon
 
 from ...forms import BaseDaemonForm
-from ..UpdateOrDeleteView import UpdateOrDeleteView
+from ..base import UpdateOrDeleteView
 from .DaemonFilterView import DaemonFilterView
 
 
 class DaemonUpdateOrDeleteView(LoginRequiredMixin, UpdateOrDeleteView):
     """View for updating or deleting a single :class:`core.models.Daemon` instance."""
 
+    URL_NAME = Daemon.get_edit_web_url_name()
     model = Daemon
     form_class = BaseDaemonForm
     template_name = "web/daemon/daemon_edit.html"
     delete_success_url = reverse_lazy("web:" + DaemonFilterView.URL_NAME)
-    URL_NAME = Daemon.get_edit_web_url_name()
 
     @override
     def get_queryset(self) -> QuerySet[Daemon]:

@@ -16,3 +16,10 @@ Documentation License
 
 .. include:: ../../LICENSE
     :parser: myst_parser.sphinx_
+
+
+Third-Party-Licenses
+--------------------
+
+.. include:: ../../../THIRD-PARTY-LICENSES
+    :parser: myst_parser.sphinx_

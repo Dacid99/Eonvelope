@@ -198,6 +198,7 @@ class EmailViewSet(
             default_storage.open(file_path, "rb"),
             as_attachment=True,
             filename=file_name,
+            content_type="message/rfc822",
         )
 
     URL_PATH_DOWNLOAD_BATCH = "download"

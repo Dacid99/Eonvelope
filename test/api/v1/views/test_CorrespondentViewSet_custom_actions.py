@@ -103,6 +103,8 @@ def test_download_auth_owner(
         in response["Content-Disposition"]
     )
     assert "attachment" in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert response.headers["Content-Type"] == "text/vcard"
     assert (
         b"".join(response.streaming_content)
         == Correspondent.queryset_as_file(
@@ -227,6 +229,8 @@ def test_batch_download_auth_owner(
     assert isinstance(response, FileResponse)
     assert "Content-Disposition" in response.headers
     assert 'filename="correspondents.vcf"' in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert response.headers["Content-Type"] == "text/vcard"
     assert b"".join(response.streaming_content) == fake_file_bytes
     mock_Correspondent_queryset_as_file.assert_called_once()
     assert list(mock_Correspondent_queryset_as_file.call_args.args[0]) == list(

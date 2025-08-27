@@ -169,6 +169,7 @@ class CorrespondentViewSet(
             ),
             as_attachment=True,
             filename=correspondent.name.replace(" ", "_") + ".vcf",
+            content_type="text/vcard",
         )
 
     URL_PATH_DOWNLOAD_BATCH = "download"
@@ -214,4 +215,5 @@ class CorrespondentViewSet(
             file,
             as_attachment=True,
             filename="correspondents.vcf",
+            content_type="text/vcard",
         )

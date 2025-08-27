@@ -159,11 +159,11 @@ class AttachmentViewSet(
         if not attachment_file_path or not default_storage.exists(attachment_file_path):
             raise Http404(_("Attachment file not found"))
 
-        attachment_file_name = attachment.file_name
         return FileResponse(
             default_storage.open(attachment_file_path, "rb"),
             as_attachment=True,
-            filename=attachment_file_name,
+            filename=attachment.file_name,
+            content_type=attachment.content_type or None,
         )
 
     URL_PATH_DOWNLOAD_BATCH = "download"
@@ -211,6 +211,7 @@ class AttachmentViewSet(
             file,
             as_attachment=True,
             filename="attachments.zip",
+            content_type="application/zip",
         )
 
     URL_PATH_THUMBNAIL = "thumbnail"
@@ -245,12 +246,11 @@ class AttachmentViewSet(
         if not attachment_file_path or not default_storage.exists(attachment_file_path):
             raise Http404(_("Attachment file not found"))
 
-        attachment_file_name = attachment.file_name
         response = FileResponse(
             default_storage.open(attachment_file_path, "rb"),
             as_attachment=False,
-            filename=attachment_file_name,
-            content_type=attachment.content_type,
+            filename=attachment.file_name,
+            content_type=attachment.content_type or None,
         )
         response.headers["X-Frame-Options"] = "SAMEORIGIN"
         response.headers["Content-Security-Policy"] = "frame-ancestors 'self'"

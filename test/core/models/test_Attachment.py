@@ -236,13 +236,22 @@ def test_Attachment_save_with_data_failure(
 
 
 @pytest.mark.django_db
-def test_Attachment_content_type(fake_attachment):
+@pytest.mark.parametrize(
+    "maintype, subtype, expected_mimetype",
+    [
+        ("abc", "xyz", "abc/xyz"),
+        ("tyu", "", ""),
+        ("", "gh4", ""),
+        ("", "", ""),
+    ],
+)
+def test_Attachment_content_type(fake_attachment, maintype, subtype, expected_mimetype):
+    fake_attachment.content_maintype = maintype
+    fake_attachment.content_subtype = subtype
+
     result = fake_attachment.content_type
 
-    assert (
-        result
-        == fake_attachment.content_maintype + "/" + fake_attachment.content_subtype
-    )
+    assert result == expected_mimetype
 
 
 @pytest.mark.django_db

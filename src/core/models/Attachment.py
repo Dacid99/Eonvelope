@@ -195,9 +195,11 @@ class Attachment(
         """Reconstructs the full MIME content type of the attachment.
 
         Returns:
-            The attachments content type.
+            The attachments content type if known, else "".
         """
-        return self.content_maintype + "/" + self.content_subtype
+        if self.content_maintype and self.content_subtype:
+            return self.content_maintype + "/" + self.content_subtype
+        return ""
 
     @staticmethod
     def queryset_as_file(queryset: QuerySet[Attachment]) -> _TemporaryFileWrapper:

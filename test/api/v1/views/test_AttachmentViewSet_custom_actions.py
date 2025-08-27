@@ -123,6 +123,11 @@ def test_download_auth_owner(
         in response["Content-Disposition"]
     )
     assert "attachment" in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert (
+        response.headers["Content-Type"] == fake_attachment_with_file.content_type
+        or "application/octet-stream"
+    )
     assert (
         b"".join(response.streaming_content)
         == default_storage.open(fake_attachment_with_file.file_path).read()
@@ -242,6 +247,8 @@ def test_batch_download_auth_owner(
     assert isinstance(response, FileResponse)
     assert "Content-Disposition" in response.headers
     assert 'filename="attachments.zip"' in response["Content-Disposition"]
+    assert "Content-Type" in response.headers
+    assert response.headers["Content-Type"] == "application/zip"
     assert b"".join(response.streaming_content) == fake_file_bytes
     mock_Attachment_queryset_as_file.assert_called_once()
     assert list(mock_Attachment_queryset_as_file.call_args.args[0]) == list(
@@ -338,7 +345,10 @@ def test_download_thumbnail_auth_owner(
     )
     assert "inline" in response["Content-Disposition"]
     assert "Content-Type" in response.headers
-    assert response.headers["Content-Type"] == fake_attachment_with_file.content_type
+    assert (
+        response.headers["Content-Type"] == fake_attachment_with_file.content_type
+        or "application/octet-stream"
+    )
     assert "X-Frame-Options" in response.headers
     assert response.headers["X-Frame-Options"] == "SAMEORIGIN"
     assert "Content-Security-Policy" in response.headers

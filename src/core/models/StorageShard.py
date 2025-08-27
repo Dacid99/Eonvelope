@@ -143,13 +143,6 @@ class StorageShard(models.Model):
         logger.debug("Successfully decremented subdirectory count.")
 
     @classmethod
-    def _add_shard(cls) -> StorageShard:
-        """Adds a new current storage directory."""
-        new_shard = cls(current=True)
-        new_shard.save()
-        return new_shard
-
-    @classmethod
     def get_current_storage(cls) -> StorageShard:
         """Gets the current storage instance.
 
@@ -164,6 +157,13 @@ class StorageShard(models.Model):
             storage_entry = cls._add_shard()
             logger.info("Successfully created first storage directory.")
         return storage_entry
+
+    @classmethod
+    def _add_shard(cls) -> StorageShard:
+        """Adds a new current storage directory."""
+        new_shard = cls(current=True)
+        new_shard.save()
+        return new_shard
 
     @classmethod
     def healthcheck(cls) -> bool:

@@ -58,6 +58,10 @@ class Attachment(
 ):
     """Database model for an attachment file in a mail."""
 
+    BASENAME = "attachment"
+
+    DELETE_NOTICE = _("This will only delete this attachment, not the email.")
+
     file_name = models.CharField(
         max_length=255,
         verbose_name=_("filename"),
@@ -135,10 +139,6 @@ class Attachment(
     )
     """The datetime this entry was last updated. Is set automatically."""
 
-    BASENAME = "attachment"
-
-    DELETE_NOTICE = _("This will only delete this attachment, not the email.")
-
     class Meta:
         """Metadata class for the model."""
 
@@ -190,6 +190,47 @@ class Attachment(
         self.save(update_fields=["file_path"])
         logger.debug("Successfully stored attachment.")
 
+    @override
+    @property
+    def has_download(self) -> bool:
+        return self.file_path is not None
+
+    @override
+    @cached_property
+    def has_thumbnail(self) -> bool:
+        """Whether the attachment has a mimetype that can be embedded into html.
+
+        References:
+            https://stackoverflow.com/questions/51107683/which-mime-types-can-be-displayed-in-browser
+        """
+        return (
+            self.file_path is not None
+            and not self.email.is_spam
+            and (self.datasize <= get_config("WEB_THUMBNAIL_MAX_DATASIZE"))
+            and (
+                self.content_maintype in ["image", "font"]
+                or (
+                    self.content_maintype == "text"
+                    and not self.content_subtype.endswith("calendar")
+                )
+                or (
+                    self.content_maintype == "audio"
+                    and self.content_subtype in ["ogg", "wav", "mpeg", "aac"]
+                )
+                or (
+                    self.content_maintype == "video"
+                    and self.content_subtype in ["ogg", "mp4", "mpeg", "webm", "avi"]
+                )
+                or (
+                    self.content_maintype == "application"
+                    and (
+                        self.content_subtype in ["pdf", "json"]
+                        or self.content_subtype.endswith(("xml", "script"))
+                    )
+                )
+            )
+        )
+
     @property
     def content_type(self) -> str:
         """Reconstructs the full MIME content type of the attachment.
@@ -200,38 +241,6 @@ class Attachment(
         if self.content_maintype and self.content_subtype:
             return self.content_maintype + "/" + self.content_subtype
         return ""
-
-    @staticmethod
-    def queryset_as_file(queryset: QuerySet[Attachment]) -> _TemporaryFileWrapper:
-        """Processes the files of the emails in the queryset into a temporary file.
-
-        Args:
-            queryset: The email queryset to compile into a file.
-
-        Returns:
-            The temporary file wrapper.
-
-        Raises:
-            Attachment.DoesNotExist: If the :attr:`queryset` is empty.
-        """
-        if not queryset.exists():
-            raise Attachment.DoesNotExist("The queryset is empty!")
-        tempfile = (
-            NamedTemporaryFile()  # noqa: SIM115  # pylint: disable=consider-using-with
-        )  #  the file must not be closed as it is returned later
-        with ZipFile(tempfile.name, "w") as zipfile:
-            for attachment_item in queryset:
-                if attachment_item.file_path is not None:
-                    with (
-                        zipfile.open(
-                            os.path.basename(attachment_item.file_path), "w"
-                        ) as zipped_file,
-                        contextlib.suppress(FileNotFoundError),
-                    ):
-                        zipped_file.write(
-                            default_storage.open(attachment_item.file_path).read()
-                        )
-        return tempfile
 
     @classmethod
     def create_from_email_message(
@@ -294,43 +303,34 @@ class Attachment(
         logger.debug("Successfully parsed and saved attachments.")
         return new_attachments
 
-    @override
-    @property
-    def has_download(self) -> bool:
-        return self.file_path is not None
+    @staticmethod
+    def queryset_as_file(queryset: QuerySet[Attachment]) -> _TemporaryFileWrapper:
+        """Processes the files of the emails in the queryset into a temporary file.
 
-    @override
-    @cached_property
-    def has_thumbnail(self) -> bool:
-        """Whether the attachment has a mimetype that can be embedded into html.
+        Args:
+            queryset: The email queryset to compile into a file.
 
-        References:
-            https://stackoverflow.com/questions/51107683/which-mime-types-can-be-displayed-in-browser
+        Returns:
+            The temporary file wrapper.
+
+        Raises:
+            Attachment.DoesNotExist: If the :attr:`queryset` is empty.
         """
-        return (
-            self.file_path is not None
-            and not self.email.is_spam
-            and (self.datasize <= get_config("WEB_THUMBNAIL_MAX_DATASIZE"))
-            and (
-                self.content_maintype in ["image", "font"]
-                or (
-                    self.content_maintype == "text"
-                    and not self.content_subtype.endswith("calendar")
-                )
-                or (
-                    self.content_maintype == "audio"
-                    and self.content_subtype in ["ogg", "wav", "mpeg", "aac"]
-                )
-                or (
-                    self.content_maintype == "video"
-                    and self.content_subtype in ["ogg", "mp4", "mpeg", "webm", "avi"]
-                )
-                or (
-                    self.content_maintype == "application"
-                    and (
-                        self.content_subtype in ["pdf", "json"]
-                        or self.content_subtype.endswith(("xml", "script"))
-                    )
-                )
-            )
-        )
+        if not queryset.exists():
+            raise Attachment.DoesNotExist("The queryset is empty!")
+        tempfile = (
+            NamedTemporaryFile()  # noqa: SIM115  # pylint: disable=consider-using-with
+        )  #  the file must not be closed as it is returned later
+        with ZipFile(tempfile.name, "w") as zipfile:
+            for attachment_item in queryset:
+                if attachment_item.file_path is not None:
+                    with (
+                        zipfile.open(
+                            os.path.basename(attachment_item.file_path), "w"
+                        ) as zipped_file,
+                        contextlib.suppress(FileNotFoundError),
+                    ):
+                        zipped_file.write(
+                            default_storage.open(attachment_item.file_path).read()
+                        )
+        return tempfile

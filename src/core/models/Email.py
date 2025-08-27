@@ -70,6 +70,12 @@ logger = logging.getLogger(__name__)
 class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models.Model):
     """Database model for an email."""
 
+    BASENAME = "email"
+
+    DELETE_NOTICE = _(
+        "This will delete this email and all its attachments but not its correspondents."
+    )
+
     message_id = models.CharField(
         max_length=255,
         verbose_name=_("message-ID"),
@@ -187,12 +193,6 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
     )
     """The datetime this entry was last updated. Is set automatically."""
 
-    BASENAME = "email"
-
-    DELETE_NOTICE = _(
-        "This will delete this email and all its attachments but not its correspondents."
-    )
-
     class Meta:
         """Metadata class for the model."""
 
@@ -254,6 +254,76 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         self.save(update_fields=["eml_filepath"])
         logger.debug("Successfully stored email as eml.")
 
+    def add_correspondents(self) -> None:
+        """Adds the correspondents from the headerfields to the model."""
+        if self.headers:
+            for mention in HeaderFields.Correspondents.values:
+                correspondent_header = self.headers.get(mention)
+                if correspondent_header:
+                    new_emailcorrespondents = EmailCorrespondent.create_from_header(
+                        correspondent_header, mention, self
+                    )
+                    if (
+                        mention == HeaderFields.Correspondents.FROM
+                        and new_emailcorrespondents is not None
+                    ):
+                        for new_emailcorrespondent in new_emailcorrespondents:
+                            new_emailcorrespondent.correspondent.list_id = (
+                                self.headers.get(HeaderFields.MailingList.ID, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_help = (
+                                self.headers.get(HeaderFields.MailingList.HELP, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_archive = (
+                                self.headers.get(HeaderFields.MailingList.ARCHIVE, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_subscribe = (
+                                self.headers.get(HeaderFields.MailingList.SUBSCRIBE, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_unsubscribe = (
+                                self.headers.get(
+                                    HeaderFields.MailingList.UNSUBSCRIBE, ""
+                                )
+                            )
+                            new_emailcorrespondent.correspondent.list_unsubscribe_post = self.headers.get(
+                                HeaderFields.MailingList.UNSUBSCRIBE_POST, ""
+                            )
+                            new_emailcorrespondent.correspondent.list_post = (
+                                self.headers.get(HeaderFields.MailingList.POST, "")
+                            )
+                            new_emailcorrespondent.correspondent.list_owner = (
+                                self.headers.get(HeaderFields.MailingList.OWNER, "")
+                            )
+                            new_emailcorrespondent.correspondent.save()
+
+    def add_in_reply_to(self) -> None:
+        """Adds the in-reply-to emails from the headerfields to the model."""
+        if self.headers:
+            in_reply_to_message_id = self.headers.get(HeaderFields.IN_REPLY_TO)
+            if in_reply_to_message_id:
+                for in_reply_to_email in Email.objects.filter(
+                    message_id=in_reply_to_message_id.strip(),
+                    mailbox__account__user=self.mailbox.account.user,
+                ):
+                    self.in_reply_to.add(in_reply_to_email)
+
+    def add_references(self) -> None:
+        """Adds the references from the headerfields to the model."""
+        if self.headers:
+            references_header = self.headers.get(HeaderFields.REFERENCES)
+            if references_header:
+                referenced_message_ids = [
+                    message_id.strip()
+                    for message_id in re.split(r"[ ,]", references_header)
+                ]
+                for referenced_message_id in referenced_message_ids:
+                    if referenced_message_id:  # re.split may produce empty strings
+                        for referenced_email in Email.objects.filter(
+                            message_id=referenced_message_id,
+                            mailbox__account__user=self.mailbox.account.user,
+                        ):
+                            self.references.add(referenced_email)
+
     def sub_conversation(self) -> list[Email]:
         """Gets all emails that follow this email in the conversation.
 
@@ -282,6 +352,50 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             root_email = root_email.in_reply_to.first()
         return root_email.sub_conversation()
 
+    @override
+    @property
+    def has_download(self) -> bool:
+        return self.eml_filepath is not None
+
+    @override
+    @property
+    def has_thumbnail(self) -> bool:
+        return not self.is_spam
+
+    @cached_property
+    def html_version(self) -> str:
+        """Renders a html version of this email.
+
+        Uses the template and css from constance settings.
+
+        Returns:
+            The emails html version.
+        """
+        engine = engines["django"]
+        template = engine.from_string(get_config("EMAIL_HTML_TEMPLATE"))
+        from_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.FROM
+        ).select_related("correspondent")
+        to_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.TO
+        ).select_related("correspondent")
+        cc_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.CC
+        ).select_related("correspondent")
+        bcc_emailcorrespondents = self.emailcorrespondents.filter(
+            mention=HeaderFields.Correspondents.BCC
+        ).select_related("correspondent")
+        return template.render(
+            context={
+                "email": self,
+                "email_css": get_config("EMAIL_CSS"),
+                "from_emailcorrespondents": from_emailcorrespondents,
+                "to_emailcorrespondents": to_emailcorrespondents,
+                "cc_emailcorrespondents": cc_emailcorrespondents,
+                "bcc_emailcorrespondents": bcc_emailcorrespondents,
+            }
+        )
+
     @property
     def is_spam(self) -> bool:
         """Checks the spam headers to decide whether the mail is spam.
@@ -290,6 +404,96 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
             Whether the mail is considered spam.
         """
         return is_x_spam(self.x_spam)
+
+    @classmethod
+    def fill_from_email_bytes(cls, email_bytes: bytes) -> Email:
+        """Constructs an :class:`core.models.Email` from an email in bytes form.
+
+        Args:
+            email_bytes: The email bytes to parse the emaildata from.
+
+        Returns:
+            The :class:`core.models.Email` instance with data from the bytes.
+        """
+        email_message = email.message_from_bytes(email_bytes, policy=policy.default)
+        header_dict: dict[str, str | None] = {}
+        for header_name in email_message:
+            header_dict[header_name.lower()] = get_header(email_message, header_name)
+        bodytexts = get_bodytexts(email_message)
+        return cls(
+            headers=header_dict,
+            message_id=header_dict.get(HeaderFields.MESSAGE_ID)
+            or md5(email_bytes).hexdigest(),  # noqa: S324  # no safe hash required here
+            datetime=parse_datetime_header(header_dict.get(HeaderFields.DATE)),
+            email_subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
+            x_spam=header_dict.get(HeaderFields.X_SPAM) or "",
+            datasize=len(email_bytes),
+            plain_bodytext=bodytexts.get("plain", ""),
+            html_bodytext=bodytexts.get("html", ""),
+        )
+
+    @classmethod
+    def create_from_email_bytes(
+        cls, email_bytes: bytes, mailbox: Mailbox
+    ) -> Email | None:
+        """Creates an :class:`core.models.Email` from an email in bytes form.
+
+        Args:
+            email_bytes: The email bytes to parse the emaildata from.
+            mailbox: The mailbox the email is in.
+
+        Returns:
+            The :class:`core.models.Email` instance with data from the bytes.
+            None if there is no Message-ID header in :attr:`email_message`,
+            if the mail already exists in the db or
+            if the mail is spam and is supposed to be thrown out.
+        """
+        email_message = email.message_from_bytes(email_bytes, policy=policy.default)
+
+        message_id = (
+            get_header(
+                email_message,
+                HeaderFields.MESSAGE_ID,
+            )
+            or md5(email_bytes).hexdigest()  # noqa: S324  # no safe hash required here
+        )
+        logger.debug("Parsed email %s ...", message_id)
+        x_spam = get_header(email_message, HeaderFields.X_SPAM) or ""
+        if is_x_spam(x_spam) and get_config("THROW_OUT_SPAM"):
+            logger.debug(
+                "Skipping email with Message-ID %s in %s, it is flagged as spam.",
+                message_id,
+                mailbox,
+            )
+            return None
+
+        if cls.objects.filter(message_id=message_id, mailbox=mailbox).exists():
+            logger.debug(
+                "Skipping email with Message-ID %s in %s, it already exists in the db.",
+                message_id,
+                mailbox,
+            )
+            return None
+
+        new_email = cls.fill_from_email_bytes(email_bytes=email_bytes)
+        new_email.mailbox = mailbox
+
+        logger.debug("Successfully parsed email.")
+        logger.debug("Saving email %s to db...", message_id)
+        try:
+            with transaction.atomic():
+                new_email.save(email_data=email_bytes)
+                new_email.add_correspondents()
+                new_email.add_in_reply_to()
+                new_email.add_references()
+                Attachment.create_from_email_message(email_message, new_email)
+        except Exception:
+            logger.exception(
+                "Failed creating email from bytes: Error while saving email to db!"
+            )
+            return None
+        logger.debug("Successfully saved email to db.")
+        return new_email
 
     @staticmethod
     def queryset_as_file(
@@ -367,207 +571,3 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
         else:
             raise ValueError("The given file format is not supported!")
         return tempfile
-
-    @classmethod
-    def fill_from_email_bytes(cls, email_bytes: bytes) -> Email:
-        """Constructs an :class:`core.models.Email` from an email in bytes form.
-
-        Args:
-            email_bytes: The email bytes to parse the emaildata from.
-
-        Returns:
-            The :class:`core.models.Email` instance with data from the bytes.
-        """
-        email_message = email.message_from_bytes(email_bytes, policy=policy.default)
-        header_dict: dict[str, str | None] = {}
-        for header_name in email_message:
-            header_dict[header_name.lower()] = get_header(email_message, header_name)
-        bodytexts = get_bodytexts(email_message)
-        return cls(
-            headers=header_dict,
-            message_id=header_dict.get(HeaderFields.MESSAGE_ID)
-            or md5(email_bytes).hexdigest(),  # noqa: S324  # no safe hash required here
-            datetime=parse_datetime_header(header_dict.get(HeaderFields.DATE)),
-            email_subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
-            x_spam=header_dict.get(HeaderFields.X_SPAM) or "",
-            datasize=len(email_bytes),
-            plain_bodytext=bodytexts.get("plain", ""),
-            html_bodytext=bodytexts.get("html", ""),
-        )
-
-    def add_correspondents(self) -> None:
-        """Adds the correspondents from the headerfields to the model."""
-        if self.headers:
-            for mention in HeaderFields.Correspondents.values:
-                correspondent_header = self.headers.get(mention)
-                if correspondent_header:
-                    new_emailcorrespondents = EmailCorrespondent.create_from_header(
-                        correspondent_header, mention, self
-                    )
-                    if (
-                        mention == HeaderFields.Correspondents.FROM
-                        and new_emailcorrespondents is not None
-                    ):
-                        for new_emailcorrespondent in new_emailcorrespondents:
-                            new_emailcorrespondent.correspondent.list_id = (
-                                self.headers.get(HeaderFields.MailingList.ID, "")
-                            )
-                            new_emailcorrespondent.correspondent.list_help = (
-                                self.headers.get(HeaderFields.MailingList.HELP, "")
-                            )
-                            new_emailcorrespondent.correspondent.list_archive = (
-                                self.headers.get(HeaderFields.MailingList.ARCHIVE, "")
-                            )
-                            new_emailcorrespondent.correspondent.list_subscribe = (
-                                self.headers.get(HeaderFields.MailingList.SUBSCRIBE, "")
-                            )
-                            new_emailcorrespondent.correspondent.list_unsubscribe = (
-                                self.headers.get(
-                                    HeaderFields.MailingList.UNSUBSCRIBE, ""
-                                )
-                            )
-                            new_emailcorrespondent.correspondent.list_unsubscribe_post = self.headers.get(
-                                HeaderFields.MailingList.UNSUBSCRIBE_POST, ""
-                            )
-                            new_emailcorrespondent.correspondent.list_post = (
-                                self.headers.get(HeaderFields.MailingList.POST, "")
-                            )
-                            new_emailcorrespondent.correspondent.list_owner = (
-                                self.headers.get(HeaderFields.MailingList.OWNER, "")
-                            )
-                            new_emailcorrespondent.correspondent.save()
-
-    def add_in_reply_to(self) -> None:
-        """Adds the in-reply-to emails from the headerfields to the model."""
-        if self.headers:
-            in_reply_to_message_id = self.headers.get(HeaderFields.IN_REPLY_TO)
-            if in_reply_to_message_id:
-                for in_reply_to_email in Email.objects.filter(
-                    message_id=in_reply_to_message_id.strip(),
-                    mailbox__account__user=self.mailbox.account.user,
-                ):
-                    self.in_reply_to.add(in_reply_to_email)
-
-    def add_references(self) -> None:
-        """Adds the references from the headerfields to the model."""
-        if self.headers:
-            references_header = self.headers.get(HeaderFields.REFERENCES)
-            if references_header:
-                referenced_message_ids = [
-                    message_id.strip()
-                    for message_id in re.split(r"[ ,]", references_header)
-                ]
-                for referenced_message_id in referenced_message_ids:
-                    if referenced_message_id:  # re.split may produce empty strings
-                        for referenced_email in Email.objects.filter(
-                            message_id=referenced_message_id,
-                            mailbox__account__user=self.mailbox.account.user,
-                        ):
-                            self.references.add(referenced_email)
-
-    @classmethod
-    def create_from_email_bytes(
-        cls, email_bytes: bytes, mailbox: Mailbox
-    ) -> Email | None:
-        """Creates an :class:`core.models.Email` from an email in bytes form.
-
-        Args:
-            email_bytes: The email bytes to parse the emaildata from.
-            mailbox: The mailbox the email is in.
-
-        Returns:
-            The :class:`core.models.Email` instance with data from the bytes.
-            None if there is no Message-ID header in :attr:`email_message`,
-            if the mail already exists in the db or
-            if the mail is spam and is supposed to be thrown out.
-        """
-        email_message = email.message_from_bytes(email_bytes, policy=policy.default)
-
-        message_id = (
-            get_header(
-                email_message,
-                HeaderFields.MESSAGE_ID,
-            )
-            or md5(email_bytes).hexdigest()  # noqa: S324  # no safe hash required here
-        )
-        logger.debug("Parsed email %s ...", message_id)
-        x_spam = get_header(email_message, HeaderFields.X_SPAM) or ""
-        if is_x_spam(x_spam) and get_config("THROW_OUT_SPAM"):
-            logger.debug(
-                "Skipping email with Message-ID %s in %s, it is flagged as spam.",
-                message_id,
-                mailbox,
-            )
-            return None
-
-        if cls.objects.filter(message_id=message_id, mailbox=mailbox).exists():
-            logger.debug(
-                "Skipping email with Message-ID %s in %s, it already exists in the db.",
-                message_id,
-                mailbox,
-            )
-            return None
-
-        new_email = cls.fill_from_email_bytes(email_bytes=email_bytes)
-        new_email.mailbox = mailbox
-
-        logger.debug("Successfully parsed email.")
-        logger.debug("Saving email %s to db...", message_id)
-        try:
-            with transaction.atomic():
-                new_email.save(email_data=email_bytes)
-                new_email.add_correspondents()
-                new_email.add_in_reply_to()
-                new_email.add_references()
-                Attachment.create_from_email_message(email_message, new_email)
-        except Exception:
-            logger.exception(
-                "Failed creating email from bytes: Error while saving email to db!"
-            )
-            return None
-        logger.debug("Successfully saved email to db.")
-        return new_email
-
-    @cached_property
-    def html_version(self) -> str:
-        """Renders a html version of this email.
-
-        Uses the template and css from constance settings.
-
-        Returns:
-            The emails html version.
-        """
-        engine = engines["django"]
-        template = engine.from_string(get_config("EMAIL_HTML_TEMPLATE"))
-        from_emailcorrespondents = self.emailcorrespondents.filter(
-            mention=HeaderFields.Correspondents.FROM
-        ).select_related("correspondent")
-        to_emailcorrespondents = self.emailcorrespondents.filter(
-            mention=HeaderFields.Correspondents.TO
-        ).select_related("correspondent")
-        cc_emailcorrespondents = self.emailcorrespondents.filter(
-            mention=HeaderFields.Correspondents.CC
-        ).select_related("correspondent")
-        bcc_emailcorrespondents = self.emailcorrespondents.filter(
-            mention=HeaderFields.Correspondents.BCC
-        ).select_related("correspondent")
-        return template.render(
-            context={
-                "email": self,
-                "email_css": get_config("EMAIL_CSS"),
-                "from_emailcorrespondents": from_emailcorrespondents,
-                "to_emailcorrespondents": to_emailcorrespondents,
-                "cc_emailcorrespondents": cc_emailcorrespondents,
-                "bcc_emailcorrespondents": bcc_emailcorrespondents,
-            }
-        )
-
-    @override
-    @property
-    def has_thumbnail(self) -> bool:
-        return not self.is_spam
-
-    @override
-    @property
-    def has_download(self) -> bool:
-        return self.eml_filepath is not None

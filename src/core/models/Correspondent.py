@@ -44,6 +44,10 @@ logger = logging.getLogger(__name__)
 class Correspondent(HasDownloadMixin, URLMixin, FavoriteMixin, models.Model):
     """Database model for the correspondent data found in a mail."""
 
+    BASENAME = "correspondent"
+
+    DELETE_NOTICE = _("This will only delete this correspondent, not its emails.")
+
     email_address = models.CharField(
         max_length=255,
         verbose_name=_("email address"),
@@ -148,10 +152,6 @@ class Correspondent(HasDownloadMixin, URLMixin, FavoriteMixin, models.Model):
     )
     """The datetime this entry was last updated. Is set automatically."""
 
-    BASENAME = "correspondent"
-
-    DELETE_NOTICE = _("This will only delete this correspondent, not its emails.")
-
     class Meta:
         """Metadata class for the model."""
 
@@ -203,21 +203,6 @@ class Correspondent(HasDownloadMixin, URLMixin, FavoriteMixin, models.Model):
         """
         return self.real_name or self.email_name or self.email_address.split("@")[0]
 
-    @staticmethod
-    def queryset_as_file(queryset: QuerySet) -> BytesIO:
-        if not queryset.exists():
-            raise Correspondent.DoesNotExist("The queryset is empty!")
-        vcard_buffer = BytesIO()
-        for correspondent in queryset:
-            correspondent_vcard = vCard()
-            correspondent_vcard.add("email").value = correspondent.email_address
-            correspondent_vcard.add("fn").value = correspondent.name
-            if correspondent.email_name and correspondent.real_name:
-                correspondent_vcard.add("nickname").value = correspondent.email_name
-            vcard_buffer.write(correspondent_vcard.serialize().encode())
-        vcard_buffer.seek(0)
-        return vcard_buffer
-
     @classmethod
     def create_from_correspondent_tuple(
         cls, correspondent_tuple: tuple[str, str], user: User
@@ -250,3 +235,18 @@ class Correspondent(HasDownloadMixin, URLMixin, FavoriteMixin, models.Model):
             correspondent.save()
             logger.debug("Successfully saved correspondent %s to db.", address)
         return correspondent
+
+    @staticmethod
+    def queryset_as_file(queryset: QuerySet) -> BytesIO:
+        if not queryset.exists():
+            raise Correspondent.DoesNotExist("The queryset is empty!")
+        vcard_buffer = BytesIO()
+        for correspondent in queryset:
+            correspondent_vcard = vCard()
+            correspondent_vcard.add("email").value = correspondent.email_address
+            correspondent_vcard.add("fn").value = correspondent.name
+            if correspondent.email_name and correspondent.real_name:
+                correspondent_vcard.add("nickname").value = correspondent.email_name
+            vcard_buffer.write(correspondent_vcard.serialize().encode())
+        vcard_buffer.seek(0)
+        return vcard_buffer

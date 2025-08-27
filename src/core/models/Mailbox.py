@@ -48,6 +48,7 @@ from .Email import Email
 if TYPE_CHECKING:
     from .Account import Account
 
+
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 
@@ -61,6 +62,12 @@ class Mailbox(
     models.Model,
 ):
     """Database model for a mailbox in a mail account."""
+
+    BASENAME = "mailbox"
+
+    DELETE_NOTICE = _(
+        "This will delete this mailbox and all emails and attachments found in it!"
+    )
 
     name = models.CharField(
         max_length=255,
@@ -118,12 +125,6 @@ class Mailbox(
     )
     """The datetime this entry was last updated. Is set automatically."""
 
-    BASENAME = "mailbox"
-
-    DELETE_NOTICE = _(
-        "This will delete this mailbox and all emails and attachments found in it!"
-    )
-
     class Meta:
         """Metadata class for the model."""
 
@@ -148,34 +149,6 @@ class Mailbox(
             "account": self.account,
             "name": self.name,
         }
-
-    @property
-    def available_fetching_criteria(self) -> tuple[str]:
-        """Gets the available fetching criteria based on the mail protocol of this mailbox.
-
-        Returns:
-            A tuple of all available fetching criteria for this mailbox.
-
-        Raises:
-            ValueError: If the account has an unimplemented protocol.
-        """
-        return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
-
-    @property
-    def available_fetching_criterion_choices(self) -> list[tuple[str, str]]:
-        """Gets the available fetching criterion choices based on the mail protocol of this mailbox.
-
-        Returns:
-            A choices-type tuple of all available fetching criteria for this mailbox.
-
-        Raises:
-            ValueError: If the account has an unimplemented protocol.
-        """
-        return [
-            (criterion, label)
-            for criterion, label in EmailFetchingCriterionChoices.choices
-            if criterion in self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA
-        ]
 
     def test(self) -> None:
         """Tests whether the data in the model is correct.
@@ -323,6 +296,48 @@ class Mailbox(
             raise ValueError(_("The given file format is not supported."))
         logger.info("Successfully added emails from file.")
 
+    @override
+    @property
+    def has_download(self) -> bool:
+        return self.emails.exists()
+
+    @property
+    def available_fetching_criteria(self) -> tuple[str]:
+        """Gets the available fetching criteria based on the mail protocol of this mailbox.
+
+        Returns:
+            A tuple of all available fetching criteria for this mailbox.
+
+        Raises:
+            ValueError: If the account has an unimplemented protocol.
+        """
+        return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
+
+    @property
+    def available_fetching_criterion_choices(self) -> list[tuple[str, str]]:
+        """Gets the available fetching criterion choices based on the mail protocol of this mailbox.
+
+        Returns:
+            A choices-type tuple of all available fetching criteria for this mailbox.
+
+        Raises:
+            ValueError: If the account has an unimplemented protocol.
+        """
+        return [
+            (criterion, label)
+            for criterion, label in EmailFetchingCriterionChoices.choices
+            if criterion in self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA
+        ]
+
+    @property
+    def available_download_formats(self) -> list[tuple[str, str]]:
+        """Get all formats that emails in this mailbox can be downloaded in.
+
+        Returns:
+            A list of download formats and format names.
+        """
+        return SupportedEmailDownloadFormats.choices  # type: ignore[return-value]  # strPromise is compatible with str
+
     @classmethod
     def create_from_data(
         cls, mailbox_data: bytes | str, account: Account
@@ -355,16 +370,3 @@ class Mailbox(
             new_mailbox.save()
             logger.debug("Successfully saved mailbox %s to db.", mailbox_name)
         return new_mailbox
-
-    @override
-    @property
-    def has_download(self) -> bool:
-        return self.emails.exists()
-
-    def available_download_formats(self) -> list[tuple[str, str]]:
-        """Get all formats that emails in this mailbox can be downloaded.
-
-        Returns:
-            A list of download formats and format names.
-        """
-        return SupportedEmailDownloadFormats.choices  # type: ignore[return-value]  # strPromise is compatible with str

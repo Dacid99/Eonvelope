@@ -56,6 +56,12 @@ logger = logging.getLogger(__name__)
 class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
     """Database model for the account data of a mail account."""
 
+    BASENAME = "account"
+
+    DELETE_NOTICE = _(
+        "This will delete this account and all mailboxes, emails and attachments found in it!"
+    )
+
     MAX_MAIL_HOST_PORT = 65535
 
     mail_address = models.EmailField(
@@ -137,12 +143,6 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
         verbose_name=_("last updated"),
     )
     """The datetime this entry was last updated. Is set automatically."""
-
-    BASENAME = "account"
-
-    DELETE_NOTICE = _(
-        "This will delete this account and all mailboxes, emails and attachments found in it!"
-    )
 
     class Meta:
         """Metadata class for the model."""

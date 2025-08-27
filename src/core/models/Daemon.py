@@ -47,6 +47,10 @@ logger = logging.getLogger(__name__)
 class Daemon(DirtyFieldsMixin, URLMixin, models.Model):
     """Database model for the daemon fetching a mailbox."""
 
+    BASENAME = "daemon"
+
+    DELETE_NOTICE = _("This will only delete this daemon, not its mailbox.")
+
     uuid = models.UUIDField(
         default=uuid.uuid4,
         editable=False,
@@ -114,10 +118,6 @@ class Daemon(DirtyFieldsMixin, URLMixin, models.Model):
         verbose_name=_("last updated"),
     )
     """The datetime this entry was last updated. Is set automatically."""
-
-    BASENAME = "daemon"
-
-    DELETE_NOTICE = _("This will only delete this daemon, not its mailbox.")
 
     class Meta:
         """Metadata class for the model."""

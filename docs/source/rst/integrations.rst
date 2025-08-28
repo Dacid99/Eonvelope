@@ -38,8 +38,8 @@ For instance, to search the attachments data, use:
 Similar patterns apply for correspondents, accounts, mailboxes, etc.
 Check the API schema or the browsable API for more details.
 
-To grant access, you can create an ``accesstoken`` in the admin panel
-or via the browsable API and provide it in the configuration of the ``JSONEngine``.
+To grant access, you can create a persistent ``accesstoken`` in the admin panel
+and provide it in the configuration of the ``JSONEngine``.
 
 Here is an exemplary configuration:
 
@@ -47,23 +47,35 @@ Here is an exemplary configuration:
 
     - name: emailkasten-emails
       engine: json_engine
-      shortcut: em
-      categories: [external memory]
+      shortcut: emls
+      categories: [ external memory ]
       disabled: false
       paging: true
       content_html_to_text: true
-      search_url: https://emailkasten.mydomain.tld/api/v1/emails/?search={query}&page={pageno}
+      search_url: https://<emailkasten.mydomain.tld>/api/v1/emails/?search={query}&page={pageno}
+      verify: false
       url_query: id
-      url_prefix: https://emailkasten.mydomain.tld/api/v1/emails/
+      url_prefix: https://<emailkasten.mydomain.tld>/emails/
       results_query: results
       title_query: email_subject
-      content_query: html_bodytext/plain_bodytext
+      content_query: plain_bodytext
       headers:
-        Authorization: your_accesstoken
+        Authorization: token <your_accesstoken>
       about:
-        website: https://emailkasten.mydomain.tld/
+        website: https://<emailkasten.mydomain.tld>/
+        official_api_documentation: https://<emailkasten.mydomain.tld>/api/schema/swagger/
         use_official_api: true
         require_api_key: true
         results: JSON
+
+Adapt this for your setup by exchanging all variables in <> brackets.
+In case you prefer the redoc over the swagger api docs, you can switch that too.
+If the connection to the emailkasten instance is not using its self-signed certificate (e.g. because you reverse-proxy),
+you can ditch the 'verify: false' line.
+
+To search something other than emails,
+exchange 'emails' with the data name your interested in, e.g. 'attachments'.
+Then pick content_query parameters based on what info you'd like to be shown in the searxng interface.
+Dont forget to come up with a different shortcut name.
 
 See the `Searxng docs on this subject <https://docs.searxng.org/dev/engines/json_engine.html>`_ for more details.

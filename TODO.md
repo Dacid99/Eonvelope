@@ -35,7 +35,6 @@
 - shorten redundant exception logging in fetchers, move parts of the messages to the exc classes
 - streamline serializer and form tests
 - use pre-commit
-- paginate conversation api response data
 
 ## To test
 

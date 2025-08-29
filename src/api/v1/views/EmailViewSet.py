@@ -312,6 +312,8 @@ class EmailViewSet(
     def conversation(self, request: Request, pk: int | None = None) -> Response:
         """Action method getting the complete conversation a mail is part of.
 
+        The response data is paginated analogous to the list method.
+
         Args:
             request: The request triggering the action.
             pk: The private key of the email to get the complete conversation it belongs to. Defaults to None.
@@ -321,5 +323,11 @@ class EmailViewSet(
         """
         email = self.get_object()
         conversation = email.conversation
+
+        page = self.paginate_queryset(conversation)
+        if page is not None:
+            conversation_serializer = BaseEmailSerializer(page, many=True)
+            return self.get_paginated_response(conversation_serializer.data)
+
         conversation_serializer = BaseEmailSerializer(conversation, many=True)
         return Response(conversation_serializer.data)

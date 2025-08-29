@@ -26,7 +26,6 @@ import pytest
 from django.core.files.storage import default_storage
 from django.http import FileResponse
 from rest_framework import status
-from rest_framework.response import Response
 
 from api.v1.views import EmailViewSet
 from core.constants import SupportedEmailDownloadFormats
@@ -38,15 +37,6 @@ def mock_Email_queryset_as_file(mocker, fake_file):
     return mocker.patch(
         "api.v1.views.EmailViewSet.Email.queryset_as_file",
         return_value=fake_file,
-    )
-
-
-@pytest.fixture
-def mock_Email_conversation(mocker, fake_email):
-    return mocker.patch(
-        "api.v1.views.EmailViewSet.Email.conversation",
-        autospec=True,
-        return_value=[fake_email],
     )
 
 
@@ -341,9 +331,9 @@ def test_thumbnail_auth_owner(
 @pytest.mark.django_db
 def test_conversation_noauth(
     fake_email,
+    fake_email_conversation,
     noauth_api_client,
     custom_detail_action_url,
-    mock_Email_conversation,
 ):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.conversation` action with an unauthenticated user client."""
     response = noauth_api_client.get(
@@ -353,15 +343,14 @@ def test_conversation_noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_Email_conversation.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_conversation_auth_other(
     fake_email,
+    fake_email_conversation,
     other_api_client,
     custom_detail_action_url,
-    mock_Email_conversation,
 ):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.conversation` action with the authenticated other user client."""
     response = other_api_client.get(
@@ -371,15 +360,14 @@ def test_conversation_auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_Email_conversation.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_conversation_auth_owner(
     fake_email,
+    fake_email_conversation,
     owner_api_client,
     custom_detail_action_url,
-    mock_Email_conversation,
 ):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.conversation` action with the authenticated owner user client."""
     response = owner_api_client.get(
@@ -389,9 +377,8 @@ def test_conversation_auth_owner(
     )
 
     assert response.status_code == status.HTTP_200_OK
-    assert len(response.data) == 1
-    assert response.data[0]["id"] == fake_email.id
-    mock_Email_conversation.assert_called_once_with(fake_email)
+    assert response.data["count"] == 8
+    assert len(response.data["results"]) == 8
 
 
 @pytest.mark.django_db

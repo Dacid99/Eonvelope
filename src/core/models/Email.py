@@ -324,7 +324,7 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                         ):
                             self.references.add(referenced_email)
 
-    @property
+    @cached_property
     def conversation(self) -> QuerySet[Email]:
         """Gets all emails that are connected to this email either via references or in_reply_to.
 
@@ -346,9 +346,9 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
 
             UNION ALL
 
-            SELECT parent.id
-            FROM emails parent
-            JOIN emails_links l ON l.to_email_id = parent.id
+            SELECT DISTINCT linked.id
+            FROM emails linked
+            JOIN emails_links l ON l.to_email_id = linked.id
             JOIN conversation_root cr ON cr.id = l.from_email_id
         ),
 
@@ -364,9 +364,9 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
 
             UNION ALL
 
-            SELECT child.id
-            FROM emails child
-            JOIN emails_links l ON l.from_email_id = child.id
+            SELECT DISTINCT linking.id
+            FROM emails linking
+            JOIN emails_links l ON l.from_email_id = linking.id
             JOIN conversation_thread ct ON l.to_email_id = ct.id
         )
 

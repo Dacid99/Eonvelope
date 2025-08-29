@@ -159,13 +159,10 @@ class ExchangeFetcher(BaseFetcher):
             self._mail_client = exchange_account.msg_folder_root
         except exchangelib.errors.EWSError as error:
             self.logger.exception(
-                "An %s occurred connecting to %s!",
-                error.__class__.__name__,
+                "Error connecting to %s!",
                 self.account,
             )
-            raise MailAccountError(
-                f"An {error.__class__.__name__}: {error} occurred connecting to {self.account}!"
-            ) from error
+            raise MailAccountError(error, "connecting") from error
         self.logger.info("Successfully set up connection to %s.", self.account)
 
     @override
@@ -186,19 +183,8 @@ class ExchangeFetcher(BaseFetcher):
         try:
             self._mail_client.refresh()
         except exchangelib.errors.EWSError as error:
-            self.logger.exception(
-                "An %s occurred during refresh of message_root!",
-                error.__class__.__name__,
-            )
-            raise MailAccountError(
-                _(
-                    "An %(error_class_name)s: %(error)s occurred during refresh of message_root!"
-                )
-                % {
-                    "error_class_name": error.__class__.__name__,
-                    "error": error,
-                },
-            ) from error
+            self.logger.exception("Error during refresh of message_root!")
+            raise MailAccountError(error, _("refresh")) from error
         self.logger.debug("Successfully tested %s.", self.account)
 
         if mailbox is not None:
@@ -207,20 +193,10 @@ class ExchangeFetcher(BaseFetcher):
                 self.open_mailbox(mailbox).refresh()
             except exchangelib.errors.EWSError as error:
                 self.logger.exception(
-                    "An %s occurred during refresh of %s!",
-                    error.__class__.__name__,
+                    "Error during refresh of %s!",
                     mailbox.name,
                 )
-                raise MailboxError(
-                    _(
-                        "An %(error_class_name)s: %(error)s occurred during refresh of %(mailbox_name)s!"
-                    )
-                    % {
-                        "error_class_name": error.__class__.__name__,
-                        "error": error,
-                        "mailbox_name": mailbox.name,
-                    },
-                ) from error
+                raise MailboxError(error, _("refresh")) from error
             self.logger.debug("Successfully tested %s.", mailbox)
 
     @override
@@ -261,19 +237,8 @@ class ExchangeFetcher(BaseFetcher):
             )
             mail_data_list = [mail.mime_content for mail in mail_query]
         except exchangelib.errors.EWSError as error:
-            self.logger.exception(
-                "An %s occurred during refresh of mail contents!",
-                error.__class__.__name__,
-            )
-            raise MailboxError(
-                _(
-                    "An %(error_class_name)s: %(error)s occurred during fetching of mail contents!"
-                )
-                % {
-                    "error_class_name": error.__class__.__name__,
-                    "error": error,
-                },
-            ) from error
+            self.logger.exception("Error during fetching of mail contents!")
+            raise MailboxError(error, _("fetching of mail contents")) from error
         self.logger.info(
             "Successfully searched and fetched %s %s messages in %s.",
             len(mail_data_list),
@@ -309,19 +274,8 @@ class ExchangeFetcher(BaseFetcher):
                 and folder.folder_class == "IPF.Note"
             ]
         except exchangelib.errors.EWSError as error:
-            self.logger.exception(
-                "An %s occurred during scan of message_root!",
-                error.__class__.__name__,
-            )
-            raise MailAccountError(
-                _(
-                    "An %(error_class_name)s: %(error)s occurred during scan of message_root!"
-                )
-                % {
-                    "error_class_name": error.__class__.__name__,
-                    "error": error,
-                },
-            ) from error
+            self.logger.exception("Error during scan of message_root!")
+            raise MailAccountError(error, _("scan for mailboxes")) from error
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
         return mailbox_names
 

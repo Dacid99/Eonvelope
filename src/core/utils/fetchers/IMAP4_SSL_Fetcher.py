@@ -24,6 +24,8 @@ import imaplib
 import ssl
 from typing import override
 
+from django.utils.translation import gettext_lazy as _
+
 from ... import constants
 from .exceptions import MailAccountError
 from .IMAP4Fetcher import IMAP4Fetcher
@@ -80,12 +82,6 @@ class IMAP4_SSL_Fetcher(  # noqa: N801  # naming consistent with IMAP4_SSL class
                     ssl_context=ssl_context,
                 )
         except Exception as error:
-            self.logger.exception(
-                "An %s occurred connecting to %s!",
-                error.__class__.__name__,
-                self.account,
-            )
-            raise MailAccountError(
-                f"An {error.__class__.__name__} occurred connecting to {self.account}!"
-            ) from error
+            self.logger.exception("Error connecting to %s!", self.account)
+            raise MailAccountError(error, _("connecting")) from error
         self.logger.info("Successfully connected to %s.", self.account)

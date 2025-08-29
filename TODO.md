@@ -31,9 +31,8 @@
   - tests more implementation agnostic
   - use more of the unittest api
   - replace modeltodict in form and serializer tests with payloads
+  - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
-- shorten redundant exception logging in fetchers, move parts of the messages to the exc classes
-- streamline serializer and form tests
 - use pre-commit
 
 ## To test
@@ -60,6 +59,8 @@
 
 - fetching too many emails leads to browser timeout
 - optics:
+  - no extra cards in conversation, use lists or similar instead
+  - conversation always exists, check for count>1 instead
   - better name for daemon
   - theme toggler dropdown on right (wrong) side in folded mode
   - footer breaks in bad place in folded mode

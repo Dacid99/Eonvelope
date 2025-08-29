@@ -382,12 +382,11 @@ def test_ExchangeFetcher_test_account_ewserror(
 def test_ExchangeFetcher_test_account_other_exception(
     faker, exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
-    fake_error_message = faker.sentence()
     mock_ExchangeAccount.return_value.msg_folder_root.refresh.side_effect = (
-        AssertionError(fake_error_message)
+        AssertionError
     )
 
-    with pytest.raises(AssertionError, match=fake_error_message):
+    with pytest.raises(AssertionError):
         ExchangeFetcher(exchange_mailbox.account).test()
 
     mock_ExchangeAccount.return_value.msg_folder_root.refresh.assert_called_once_with()

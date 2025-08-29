@@ -100,11 +100,18 @@ def test_IMAP4Fetcher_connect_to_host_success(
 
 @pytest.mark.django_db
 def test_IMAP4Fetcher_connect_to_host_exception(
-    imap_ssl_mailbox, mock_ssl_create_default_context, mock_logger, mock_IMAP4_SSL
+    faker,
+    imap_ssl_mailbox,
+    mock_ssl_create_default_context,
+    mock_logger,
+    mock_IMAP4_SSL,
 ):
-    mock_IMAP4_SSL.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_IMAP4_SSL.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occurred"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
     kwargs = {

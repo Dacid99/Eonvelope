@@ -23,6 +23,8 @@ from __future__ import annotations
 import poplib
 from typing import TYPE_CHECKING, override
 
+from django.utils.translation import gettext_lazy as _
+
 from ...constants import EmailFetchingCriterionChoices, EmailProtocolChoices
 from .BaseFetcher import BaseFetcher
 from .exceptions import FetcherError, MailAccountError
@@ -88,13 +90,8 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
             else:
                 self._mail_client = poplib.POP3(host=mail_host)
         except Exception as error:
-            self.logger.exception(
-                "A POP error occurred connecting to %s!",
-                self.account,
-            )
-            raise MailAccountError(
-                f"An {error.__class__.__name__}: {error} occurred connecting to {self.account}!"
-            ) from error
+            self.logger.exception("Error connecting to %s!", self.account)
+            raise MailAccountError(error, _("connecting")) from error
         self.logger.info("Successfully connected to %s.", self.account)
 
     @override

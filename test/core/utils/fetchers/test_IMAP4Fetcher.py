@@ -193,12 +193,13 @@ def test_IMAP4Fetcher___init___login_error(
 
 @pytest.mark.django_db
 def test_IMAP4Fetcher___init___login_bad_response(
-    mocker, imap_mailbox, mock_logger, mock_IMAP4
+    mocker, faker, imap_mailbox, mock_logger, mock_IMAP4
 ):
+    fake_error_message = faker.sentence()
     spy_IMAP4Fetcher_connect_to_host = mocker.spy(IMAP4Fetcher, "connect_to_host")
-    mock_IMAP4.return_value.login.return_value = ("NO", [b""])
+    mock_IMAP4.return_value.login.return_value = ("NO", [fake_error_message.encode()])
 
-    with pytest.raises(MailAccountError, match="Bad server response"):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         IMAP4Fetcher(imap_mailbox.account)
 
     spy_IMAP4Fetcher_connect_to_host.assert_called_once()
@@ -299,10 +300,13 @@ def test_IMAP4Fetcher_test_account_success(imap_mailbox, mock_logger, mock_IMAP4
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_test_account_bad_response(imap_mailbox, mock_logger, mock_IMAP4):
-    mock_IMAP4.return_value.noop.return_value = ("NO", [b""])
+def test_IMAP4Fetcher_test_account_bad_response(
+    faker, imap_mailbox, mock_logger, mock_IMAP4
+):
+    fake_error_message = faker.sentence()
+    mock_IMAP4.return_value.noop.return_value = ("NO", [fake_error_message.encode()])
 
-    with pytest.raises(MailAccountError, match="Bad server response"):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         IMAP4Fetcher(imap_mailbox.account).test()
 
     mock_IMAP4.return_value.noop.assert_called_once_with()
@@ -359,11 +363,15 @@ def test_IMAP4Fetcher_test_mailbox_wrong_mailbox(imap_mailbox, mock_logger, mock
     "raising_function, expected_calls", [("select", (1, 0)), ("check", (1, 1))]
 )
 def test_IMAP4Fetcher_test_mailbox_bad_response(
-    imap_mailbox, mock_logger, mock_IMAP4, raising_function, expected_calls
+    faker, imap_mailbox, mock_logger, mock_IMAP4, raising_function, expected_calls
 ):
-    getattr(mock_IMAP4.return_value, raising_function).return_value = ("NO", [b""])
+    fake_error_message = faker.sentence()
+    getattr(mock_IMAP4.return_value, raising_function).return_value = (
+        "NO",
+        [fake_error_message.encode()],
+    )
 
-    with pytest.raises(MailboxError, match="Bad server response"):
+    with pytest.raises(MailboxError, match=fake_error_message):
         IMAP4Fetcher(imap_mailbox.account).test(imap_mailbox)
 
     mock_IMAP4.return_value.noop.assert_called_once_with()
@@ -523,11 +531,15 @@ def test_IMAP4Fetcher_fetch_emails_bad_criterion(imap_mailbox, mock_logger):
     "raising_function, expected_calls", [("select", (1, 0)), ("uid", (1, 1))]
 )
 def test_IMAP4Fetcher_fetch_emails_bad_response(
-    imap_mailbox, mock_logger, mock_IMAP4, raising_function, expected_calls
+    faker, imap_mailbox, mock_logger, mock_IMAP4, raising_function, expected_calls
 ):
-    getattr(mock_IMAP4.return_value, raising_function).return_value = ("NO", [b""])
+    fake_error_message = faker.sentence()
+    getattr(mock_IMAP4.return_value, raising_function).return_value = (
+        "NO",
+        [fake_error_message.encode()],
+    )
 
-    with pytest.raises(MailboxError, match="Bad server response"):
+    with pytest.raises(MailboxError, match=fake_error_message):
         IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
     assert mock_IMAP4.return_value.select.call_count == expected_calls[0]
@@ -642,11 +654,12 @@ def test_IMAP4Fetcher_fetch_mailboxes_success(imap_mailbox, mock_logger, mock_IM
 
 @pytest.mark.django_db
 def test_IMAP4Fetcher_fetch_mailboxes_bad_response(
-    imap_mailbox, mock_logger, mock_IMAP4
+    faker, imap_mailbox, mock_logger, mock_IMAP4
 ):
-    mock_IMAP4.return_value.list.return_value = ("NO", [b""])
+    fake_error_message = faker.sentence()
+    mock_IMAP4.return_value.list.return_value = ("NO", [fake_error_message.encode()])
 
-    with pytest.raises(MailAccountError, match="Bad server response"):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         IMAP4Fetcher(imap_mailbox.account).fetch_mailboxes()
 
     mock_IMAP4.return_value.list.assert_called_once()

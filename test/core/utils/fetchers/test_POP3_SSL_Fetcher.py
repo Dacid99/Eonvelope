@@ -90,11 +90,14 @@ def test_POP3Fetcher_connect_to_host_success(
 
 @pytest.mark.django_db
 def test_POP3Fetcher_connect_to_host_exception(
-    pop3_ssl_mailbox, mock_ssl_create_default_context, mock_logger, mock_POP3_SSL
+    faker, pop3_ssl_mailbox, mock_ssl_create_default_context, mock_logger, mock_POP3_SSL
 ):
-    mock_POP3_SSL.side_effect = AssertionError
+    fake_error_message = faker.sentence()
+    mock_POP3_SSL.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(MailAccountError, match="AssertionError occurred"):
+    with pytest.raises(
+        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
+    ):
         POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
 
     kwargs = {

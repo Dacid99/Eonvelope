@@ -24,6 +24,8 @@ import poplib
 import ssl
 from typing import override
 
+from django.utils.translation import gettext_lazy as _
+
 from ... import constants
 from .exceptions import MailAccountError
 from .POP3Fetcher import POP3Fetcher
@@ -79,11 +81,6 @@ class POP3_SSL_Fetcher(  # noqa: N801  # naming consistent with POP3_SSL class
                     context=ssl_context,
                 )
         except Exception as error:
-            self.logger.exception(
-                "A POP error occurred connecting to %s!",
-                self.account,
-            )
-            raise MailAccountError(
-                f"An {error.__class__.__name__} occurred connecting to {self.account}!"
-            ) from error
+            self.logger.exception("Error connecting to %s!", self.account)
+            raise MailAccountError(error, _("connecting")) from error
         self.logger.info("Successfully connected to %s.", self.account)

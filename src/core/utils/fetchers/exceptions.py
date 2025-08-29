@@ -18,6 +18,8 @@
 
 """Exceptions for errors during operations on mailservers."""
 
+from django.utils.translation import gettext_lazy as _
+
 
 class FetcherError(Exception):
     """Base exception class for errors during operations on mailservers."""
@@ -26,6 +28,40 @@ class FetcherError(Exception):
 class MailAccountError(FetcherError):
     """Exception for errors concerning the mail account."""
 
+    def __init__(self, error: Exception, command_name: str = _("interaction")) -> None:
+        """Extended for consistent message formatting."""
+        super().__init__(
+            _(
+                "An %(error_class_name)s: %(error)s occurred during %(command_name)s on account!"
+            )
+            % {
+                "error_class_name": error.__class__.__name__,
+                "error": error,
+                "command_name": command_name,
+            }
+        )
+
 
 class MailboxError(FetcherError):
     """Exception for errors concerning the mailbox."""
+
+    def __init__(self, error: Exception, command_name: str = _("interaction")) -> None:
+        """Extended for consistent message formatting."""
+        super().__init__(
+            _(
+                "An %(error_class_name)s: %(error)s occurred during %(command_name)s on mailbox!"
+            )
+            % {
+                "error_class_name": error.__class__.__name__,
+                "error": error,
+                "command_name": command_name,
+            }
+        )
+
+
+class BadServerResponseError(Exception):
+    """Exception for unexpected server responses."""
+
+    def __init__(self, response: str = "") -> None:
+        """Extended for consistent message formatting."""
+        super().__init__(_("Server responded %(response)s!") % {"response": response})

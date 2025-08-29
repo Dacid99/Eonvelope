@@ -63,19 +63,6 @@ def mock_Email_save_eml_to_storage(mocker):
     return mocker.patch("core.models.Email.Email.save_eml_to_storage", autospec=True)
 
 
-@pytest.fixture
-def email_conversation(fake_email):
-    """Fixture creating a conversation around `email`."""
-    reply_mails = baker.make(Email, _quantity=3)
-    for email in reply_mails:
-        email.in_reply_to.add(fake_email)
-    for email in baker.make(Email, _quantity=2):
-        email.in_reply_to.add(reply_mails[1])
-    reply_reply_mail = baker.make(Email)
-    reply_reply_mail.in_reply_to.add(reply_mails[0])
-    baker.make(Email).in_reply_to.add(reply_reply_mail)
-
-
 @pytest.mark.django_db
 def test_Email_fields(fake_email):
     """Tests the fields of :class:`core.models.Email.Email`."""
@@ -323,7 +310,7 @@ def test_save_eml_to_storage_file_path_set(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("start_id", [1, 2, 3, 4, 5, 6, 7, 8])
-def test_Email_conversation(email_conversation, start_id):
+def test_Email_conversation(fake_email_conversation, start_id):
     """Tests :func:`core.models.Email.Email.conversation`."""
     start_email = Email.objects.get(id=start_id)
 

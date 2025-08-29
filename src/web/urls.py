@@ -46,6 +46,7 @@ from .views import (
     DaemonUpdateOrDeleteView,
     DashboardView,
     EmailArchiveIndexView,
+    EmailConversationView,
     EmailDayArchiveView,
     EmailDetailWithDeleteView,
     EmailFilterView,
@@ -155,6 +156,11 @@ urlpatterns = [
         "emails/<int:pk>/",
         EmailDetailWithDeleteView.as_view(),
         name=EmailDetailWithDeleteView.URL_NAME,
+    ),
+    path(
+        "emails/<int:pk>/conversation/",
+        EmailConversationView.as_view(),
+        name=EmailConversationView.URL_NAME,
     ),
     path(
         "emails/archive/",

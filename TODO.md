@@ -19,7 +19,6 @@
 - async parsing, sync saving
 - auto transfer of pdfs to paperless
 - use post-unsubscribe-method to interpret post-unsubscribe as link
-- emailconversation subpage
 - batch download and delete in web
 - download for account
 - mechanism to add missing connections between emails
@@ -43,6 +42,7 @@
 - views customactions for response with updated modeldata
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap,pop)
+- page_obj of list views for correct email content
 
 ## To implement
 

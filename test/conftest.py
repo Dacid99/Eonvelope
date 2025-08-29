@@ -461,6 +461,19 @@ def fake_email_with_file(faker, fake_fs, fake_mailbox) -> Email:
 
 
 @pytest.fixture
+def fake_email_conversation(fake_email):
+    """Fixture creating a conversation around `fake_email`."""
+    reply_mails = baker.make(Email, _quantity=3)
+    for email in reply_mails:
+        email.in_reply_to.add(fake_email)
+    for email in baker.make(Email, _quantity=2):
+        email.in_reply_to.add(reply_mails[1])
+    reply_reply_mail = baker.make(Email)
+    reply_reply_mail.in_reply_to.add(reply_mails[0])
+    baker.make(Email).in_reply_to.add(reply_reply_mail)
+
+
+@pytest.fixture
 def fake_emailcorrespondent(fake_correspondent, fake_email) -> EmailCorrespondent:
     """Fixture creating an :class:`core.models.EmailCorrespondent`.
 

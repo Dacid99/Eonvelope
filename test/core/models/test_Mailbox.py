@@ -23,6 +23,7 @@ from __future__ import annotations
 import datetime
 import mailbox
 import os
+import re
 import shutil
 from io import BytesIO
 from tempfile import NamedTemporaryFile, TemporaryDirectory, gettempdir
@@ -225,9 +226,9 @@ def test_Mailbox_test_bad_protocol(
     in case the account of the mailbox has a bad :attr:`core.models.Account.Account.protocol` field
     and thus get_fetcher raises a :class:`ValueError`.
     """
-    mock_Account_get_fetcher.side_effect = ValueError
+    mock_Account_get_fetcher.side_effect = ValueError("Bad protocol OTHER")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="OTHER"):
         fake_mailbox.test()
 
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
@@ -440,15 +441,16 @@ def test_Mailbox_add_emails_from_file_zip_eml_bad_file(
     file_format,
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
-    in case of .
+    in case of a bad zip of eml.
     """
     assert fake_mailbox.emails.count() == 0
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="zip"):
         fake_mailbox.add_emails_from_file(BytesIO(faker.text().encode()), file_format)
 
     assert fake_mailbox.emails.count() == 0
     assert os.listdir(gettempdir()) == []
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db
@@ -492,6 +494,9 @@ def test_Mailbox_add_emails_from_file_mailbox_file_success(
             message_id=TEST_EMAIL_PARAMETERS[index][1]["message_id"]
         ).exists()
     assert os.listdir(gettempdir()) == []
+    mock_logger.info.assert_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -519,6 +524,9 @@ def test_Mailbox_add_emails_from_file_mailbox_file_bad_file(
 
     assert fake_mailbox.emails.count() == 0
     assert os.listdir(gettempdir()) == []
+    mock_logger.info.assert_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -563,6 +571,9 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_success(
             message_id=TEST_EMAIL_PARAMETERS[index][1]["message_id"]
         ).exists()
     assert os.listdir(gettempdir()) == []
+    mock_logger.info.assert_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -577,15 +588,16 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_zip(
     faker, fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
-    in case of success.
+    in case of bad zip of mailbox directory.
     """
     assert fake_mailbox.emails.count() == 0
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="zip"):
         fake_mailbox.add_emails_from_file(BytesIO(faker.text().encode()), file_format)
 
     assert fake_mailbox.emails.count() == 0
     assert os.listdir(gettempdir()) == []
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db
@@ -593,7 +605,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_maildir(
     fake_fs, fake_mailbox, mock_logger
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
-    in case of success.
+    in case of a bad maildir in the zip.
     """
     with TemporaryDirectory() as tempdirpath:
         parser = mailbox.Maildir(tempdirpath, create=True)
@@ -609,13 +621,16 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_maildir(
 
             assert fake_mailbox.emails.count() == 0
 
-            with pytest.raises(ValueError):
+            with pytest.raises(
+                ValueError, match=re.escape(SupportedEmailUploadFormats.MAILDIR.lower())
+            ):
                 fake_mailbox.add_emails_from_file(
                     tempfile, SupportedEmailUploadFormats.MAILDIR
                 )
 
     assert fake_mailbox.emails.count() == 0
     assert os.listdir(gettempdir()) == []
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db
@@ -623,7 +638,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_mh(
     fake_fs, fake_mailbox, mock_logger
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
-    in case of success.
+    in case of a bad mh in the zip.
     """
     with TemporaryDirectory() as tempdirpath:
         parser = mailbox.MH(tempdirpath, create=True)
@@ -641,6 +656,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_mh(
 
     assert fake_mailbox.emails.count() == 0
     assert os.listdir(gettempdir()) == []
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -650,10 +666,11 @@ def test_Mailbox_add_emails_from_file_bad_format(
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
     in case of the mailbox file format is an unsupported format.
     """
-    with pytest.raises(ValueError):
-        fake_mailbox.add_emails_from_file(fake_file, "unimplemented")
+    with pytest.raises(ValueError, match="unimplemented"):
+        fake_mailbox.add_emails_from_file(fake_file, "unimPLemented")
 
     assert os.listdir(gettempdir()) == []
+    mock_logger.error.assert_called()
 
 
 @pytest.mark.django_db

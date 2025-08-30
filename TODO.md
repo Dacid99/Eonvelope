@@ -32,6 +32,7 @@
   - use more of the unittest api
   - replace modeltodict in form and serializer tests with payloads
   - streamline serializer and form tests
+  - fake_error_message as global fixture
 - emailcorrespondent creation for better integration of mailinglist
 - use pre-commit
 - StorageShard should be in Emailkasten app

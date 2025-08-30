@@ -221,7 +221,7 @@ class Account(DirtyFieldsMixin, URLMixin, FavoriteMixin, models.Model):
         self.is_healthy = False
         self.save(update_fields=["is_healthy"])
         raise ValueError(
-            "The requested protocol is not implemented in a fetcher class!"
+            f"The protocol {self.protocol} is not implemented in a fetcher class!"
         )
 
     def get_fetcher(self) -> BaseFetcher:

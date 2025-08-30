@@ -210,7 +210,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
     fake_account.save(update_fields=["is_healthy"])
     fake_account.protocol = "OTHER"
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="OTHER"):
         fake_account.get_fetcher()
 
     fake_account.refresh_from_db()
@@ -285,7 +285,7 @@ def test_Account_get_fetcher_class_bad_protocol(fake_account, mock_logger):
     fake_account.protocol = "OTHER"
     fake_account.save(update_fields=["is_healthy"])
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="OTHER"):
         fake_account.get_fetcher_class()
 
     fake_account.refresh_from_db()
@@ -315,14 +315,15 @@ def test_Account_test_success(
 
 @pytest.mark.django_db
 def test_Account_test_bad_protocol(
-    fake_account, mock_logger, mock_fetcher, mock_Account_get_fetcher
+    faker, fake_account, mock_logger, mock_fetcher, mock_Account_get_fetcher
 ):
     """Tests :func:`core.models.Account.Account.test`
     in case of the account has a bad :attr:`core.models.Account.Account.protocol` field and raises a :class:`ValueError`.
     """
-    mock_Account_get_fetcher.side_effect = ValueError
+    fake_error_message = faker.sentence()
+    mock_Account_get_fetcher.side_effect = ValueError(fake_error_message)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=fake_error_message):
         fake_account.test()
 
     mock_Account_get_fetcher.assert_called_once_with(fake_account)

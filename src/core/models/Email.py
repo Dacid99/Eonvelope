@@ -601,5 +601,8 @@ class Email(HasDownloadMixin, HasThumbnailMixin, URLMixin, FavoriteMixin, models
                     os.path.splitext(tempfile.name)[0], "zip", tempdirpath
                 )
         else:
-            raise ValueError("The given file format is not supported!")
+            raise ValueError(
+                _("The file format %(file_format)s is not supported.")
+                % {"file_format": file_format}
+            )
         return tempfile

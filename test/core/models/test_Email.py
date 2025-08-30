@@ -503,7 +503,7 @@ def test_Email_queryset_as_file_bad_format(fake_email):
     """
     assert Email.objects.count() == 1
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match="unsupported"):
         Email.queryset_as_file(Email.objects.all(), "unSupPortEd")
 
     assert Email.objects.count() == 1

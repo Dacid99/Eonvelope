@@ -88,7 +88,7 @@ def test_fetch_emails_task_MailboxError(faker, fake_daemon, mock_test_email_fetc
 
     assert fake_daemon.is_healthy is not True
 
-    with pytest.raises(MailboxError):
+    with pytest.raises(MailboxError, match=fake_error_message):
         fetch_emails(str(fake_daemon.uuid))
 
     fake_daemon.refresh_from_db()
@@ -112,7 +112,7 @@ def test_fetch_emails_task_MailAccountError(
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.is_healthy is not True
 
-    with pytest.raises(MailAccountError):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         fetch_emails(str(fake_daemon.uuid))
 
     fake_daemon.refresh_from_db()
@@ -136,7 +136,7 @@ def test_fetch_emails_task_unexpected_error(
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.is_healthy is not True
 
-    with pytest.raises(AssertionError):
+    with pytest.raises(AssertionError, match=fake_error_message):
         fetch_emails(str(fake_daemon.uuid))
 
     fake_daemon.refresh_from_db()
@@ -156,7 +156,7 @@ def test_fetch_emails_task_ValueError(faker, fake_daemon, mock_test_email_fetche
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.is_healthy is not True
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=fake_error_message):
         fetch_emails(str(fake_daemon.uuid))
 
     fake_daemon.refresh_from_db()

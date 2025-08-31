@@ -16,4 +16,27 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test package for the :mod:`core.backends` package of Emailkasten project."""
+"""The apps module for :mod:`Emailkasten`."""
+
+from __future__ import annotations
+
+from typing import override
+
+from django.apps import AppConfig
+from health_check.plugins import plugin_dir
+
+
+class EmailkastenConfig(AppConfig):
+    """App config for :mod:`Emailkasten`."""
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "Emailkasten"
+
+    @override
+    def ready(self) -> None:
+        """Imports all model signals and registers the healthcheck backends."""
+        # ruff: noqa: PLC0415
+        # pylint: disable=import-outside-toplevel  # this is the way it is intended by django-healthcheck
+        from .backends import StorageIntegrityCheckBackend
+
+        plugin_dir.register(StorageIntegrityCheckBackend)

@@ -80,7 +80,7 @@ class StorageShard(models.Model):
     class Meta:
         """Metadata class for the model."""
 
-        db_table = "storage_shards"
+        db_table = "sharded_storage"
         """The name of the database table for the storage status."""
 
     @override

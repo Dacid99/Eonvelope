@@ -35,7 +35,6 @@
   - fake_error_message as global fixture
 - emailcorrespondent creation for better integration of mailinglist
 - use pre-commit
-- StorageShard should be in Emailkasten app
 
 ## To test
 

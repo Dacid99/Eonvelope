@@ -16,24 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""The apps module for :mod:`core`."""
+"""The admin module for :mod:`core`. Registers all models with the admin."""
 
-from __future__ import annotations
+from django.contrib import admin
 
-from typing import override
-
-from django.apps import AppConfig
+from .models import StorageShard
 
 
-class CoreConfig(AppConfig):
-    """App config for :mod:`core`."""
-
-    default_auto_field = "django.db.models.BigAutoField"
-    name = "core"
-
-    @override
-    def ready(self) -> None:
-        """Imports all model signals and registers the healthcheck backends."""
-        # ruff: noqa: F401
-        # pylint: disable=import-outside-toplevel, unused-import  # this is the way it is intended by django
-        import core.signals
+admin.site.register(StorageShard)

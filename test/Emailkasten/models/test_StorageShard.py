@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`core.models.Storage`."""
+"""Test module for :mod:`Emailkasten.models.Storage`."""
 
 from __future__ import annotations
 
@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING
 import pytest
 from health_check.storage.backends import DefaultFileStorageHealthCheck
 
-from core.models import StorageShard
+from Emailkasten.models import StorageShard
 
 
 if TYPE_CHECKING:
@@ -41,7 +41,7 @@ def always_fake_fs(fake_fs):
 @pytest.fixture(autouse=True)
 def mock_logger(mocker) -> MagicMock:
     """The mocked :attr:`core.models.Storage.logger`."""
-    return mocker.patch("core.models.StorageShard.logger", autospec=True)
+    return mocker.patch("Emailkasten.models.StorageShard.logger", autospec=True)
 
 
 @pytest.mark.django_db
@@ -49,7 +49,7 @@ def mock_logger(mocker) -> MagicMock:
     "is_current, expected_status_str", [(True, "Current"), (False, "Archived")]
 )
 def test___str__(faker, is_current, expected_status_str):
-    """Tests :class:`core.models.StorageShard.__str__`
+    """Tests :class:`Emailkasten.models.StorageShard.__str__`
     in cases of different `is_current` stati.
     """
     fake_filename = faker.file_name()

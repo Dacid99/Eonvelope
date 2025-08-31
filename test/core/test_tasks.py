@@ -31,6 +31,7 @@ from .models.test_Email import mock_Email_save_eml_to_storage
 
 @pytest.fixture
 def mock_test_email_fetcher(mock_fetcher):
+    """Extends :func:`test.models.test_Account.mock_fetcher` to return a test-email from `fetch_emails`."""
     with open(TEST_EMAIL_PARAMETERS[0][0], "br") as test_email_file:
         test_email = test_email_file.read()
     mock_fetcher.fetch_emails.return_value = [test_email]
@@ -41,6 +42,7 @@ def mock_test_email_fetcher(mock_fetcher):
 def mock_Account_get_test_email_fetcher(
     mock_Account_get_fetcher, mock_test_email_fetcher
 ):
+    """Patches `core.models.Account.get_fetcher` to return a mocked fetcher."""
     mock_Account_get_fetcher.return_value = mock_test_email_fetcher
     return mock_Account_get_fetcher
 

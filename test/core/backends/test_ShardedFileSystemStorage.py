@@ -29,7 +29,7 @@ from core.models import StorageShard
 
 @pytest.fixture(autouse=True)
 def always_fake_fs(fake_fs):
-    """The following tests all run against a mocked fs."""
+    """All storage tests all run against a mocked fs."""
 
 
 @pytest.mark.django_db

@@ -27,33 +27,36 @@ from email.utils import format_datetime
 import pytest
 
 from core.utils import mail_parsing
-
-from ...conftest import TEST_EMAIL_PARAMETERS
+from test.conftest import TEST_EMAIL_PARAMETERS
 
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
-    """Mocks :attr:`logger` of the module."""
+    """The mocked :attr:`core.utils.mail_parsing.logger`."""
     return mocker.patch("core.utils.mail_parsing.logger", autospec=True)
 
 
 @pytest.fixture
 def fake_single_header(faker):
+    """Fixture providing a header tuple with a single value."""
     return (faker.word(), faker.sentence(nb_words=5))
 
 
 @pytest.fixture
 def fake_date_headervalue(faker):
+    """Fixture providing a datetime value."""
     return faker.date_time(tzinfo=faker.pytimezone())
 
 
 @pytest.fixture
 def fake_unstripped_header(faker):
+    """Fixture providing a header tuple with an unstripped value."""
     return (faker.word(), " " + faker.sentence(nb_words=2) + "  ")
 
 
 @pytest.fixture
 def fake_multi_header(faker):
+    """Fixture providing a header tuple with multiple values."""
     return (
         faker.word(),
         [faker.sentence(nb_words=5), faker.name(), "  " + faker.name() + " "],
@@ -62,7 +65,7 @@ def fake_multi_header(faker):
 
 @pytest.fixture
 def email_message(fake_single_header, fake_unstripped_header, fake_multi_header):
-    """A valid :class:`email.message.EmailMessage`."""
+    """Fixture providing a valid :class:`email.message.EmailMessage` with various headers."""
     test_message = EmailMessage()
     test_message.add_header(*fake_single_header)
     test_message.add_header(*fake_unstripped_header)
@@ -73,7 +76,7 @@ def email_message(fake_single_header, fake_unstripped_header, fake_multi_header)
 
 @pytest.fixture
 def bad_email_message():
-    """A valid :class:`email.message.EmailMessage`."""
+    """Fixture providing an :class:`email.message.EmailMessage` with an invalid header."""
     test_message = EmailMessage()
     test_message.add_header("Date", "not a datetime str")
     return test_message

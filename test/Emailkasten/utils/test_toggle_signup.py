@@ -29,6 +29,7 @@ from Emailkasten.utils.toggle_signup import (
 
 @pytest.fixture
 def mock_request(mocker):
+    """An empty mock :class:`rest_framework.request.Request`."""
     return mocker.patch("rest_framework.request.Request", autospec=True)
 
 

@@ -23,7 +23,7 @@ from django.http import HttpResponse
 from django.urls import reverse
 from rest_framework import status
 
-from ..web.conftest import owner_client
+from test.web.conftest import owner_client
 
 
 @pytest.mark.django_db

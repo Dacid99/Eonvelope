@@ -33,16 +33,19 @@ from test.conftest import fake_mailbox
 
 @pytest.fixture
 def mock_Mailbox_test(mocker):
+    """Patches `core.models.Mailbox.test`."""
     return mocker.patch("api.v1.views.MailboxViewSet.Mailbox.test", autospec=True)
 
 
 @pytest.fixture
 def mock_Mailbox_fetch(mocker):
+    """Patches `core.models.Mailbox.fetch`."""
     return mocker.patch("api.v1.views.MailboxViewSet.Mailbox.fetch", autospec=True)
 
 
 @pytest.fixture
 def mock_Mailbox_add_emails_from_file(mocker):
+    """Patches `core.models.Mailbox.add_email_from_file`, capturing the filestream passed to it."""
     captured_streams = []
 
     def capture_stream(*args, **kwargs):
@@ -63,6 +66,7 @@ def mock_Mailbox_add_emails_from_file(mocker):
 
 @pytest.fixture
 def mock_Email_queryset_as_file(mocker, fake_file):
+    """Patches `core.models.Email.fetch`."""
     return mocker.patch(
         "api.v1.views.MailboxViewSet.Email.queryset_as_file",
         return_value=fake_file,

@@ -62,16 +62,13 @@ if TYPE_CHECKING:
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker) -> MagicMock:
-    """Mocks :attr:`core.models.Mailbox.logger`.
-
-    Returns:
-        The mocked logger instance.
-    """
+    """The mocked :attr:`core.models.Mailbox.logger`."""
     return mocker.patch("core.models.Mailbox.logger", autospec=True)
 
 
 @pytest.fixture
 def mock_parse_mailbox_name(mocker, faker):
+    """Patches `core.utils.mail_parsing.parse_mailbox_name`."""
     fake_name = faker.name()
     return mocker.patch(
         "core.models.Mailbox.parse_mailbox_name",
@@ -82,6 +79,7 @@ def mock_parse_mailbox_name(mocker, faker):
 
 @pytest.fixture
 def mock_Email_create_from_email_bytes(mocker):
+    """Patches `core.models.Email.create_from_email_bytes`."""
     return mocker.patch(
         "core.models.Email.Email.create_from_email_bytes", autospec=True
     )
@@ -158,9 +156,7 @@ def test_Mailbox_get_available_fetching_criteria(
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.get_available_fetching_criteria`.
 
-    Args:
-        protocol: The protocol parameter.
-        expected_fetching_criteria: The expected fetching_criteria result parameter.
+    expected_fetching_criteria: The expected fetching_criteria result parameter.
     """
 
     fake_mailbox.account.protocol = protocol
@@ -184,9 +180,7 @@ def test_Mailbox_get_available_fetching_criterion_choices(
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.get_available_fetching_criteria`.
 
-    Args:
-        protocol: The protocol parameter.
-        expected_fetching_criteria: The expected fetching_criteria result parameter.
+    expected_fetching_criteria: The expected fetching_criteria result parameter.
     """
 
     fake_mailbox.account.protocol = protocol

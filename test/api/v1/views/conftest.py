@@ -38,4 +38,4 @@ def complete_database(
     fake_emailcorrespondent,
     fake_mailbox,
 ):
-    """Fixture providing a complete database setup."""
+    """Use a complete database setup for all view tests."""

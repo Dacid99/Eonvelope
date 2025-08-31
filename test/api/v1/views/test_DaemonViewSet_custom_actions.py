@@ -30,23 +30,15 @@ from api.v1.views import DaemonViewSet
 
 @pytest.fixture
 def mock_open(mocker, fake_file_bytes):
-    """Fixture to mock the builtin :func:`open`."""
+    """Patches the builtin :func:`open` to return random bytes."""
     mock_open = mocker.mock_open(read_data=fake_file_bytes)
     mocker.patch("api.v1.views.DaemonViewSet.open", mock_open)
     return mock_open
 
 
 @pytest.fixture
-def mock_os_path_exists(mocker):
-    return mocker.patch(
-        "api.v1.views.DaemonViewSet.os.path.exists",
-        autospec=True,
-        return_value=True,
-    )
-
-
-@pytest.fixture
 def mock_Daemon_test(mocker):
+    """Patches `core.models.Daemon.test`."""
     return mocker.patch("api.v1.views.DaemonViewSet.Daemon.test", autospec=True)
 
 

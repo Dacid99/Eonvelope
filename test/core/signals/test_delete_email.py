@@ -26,7 +26,7 @@ from core.models import Email
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
-    """Mocks :attr:`core.signals.delete_Email.logger` of the module."""
+    """The mocked :attr:`core.signals.delete_Email.logger`."""
     return mocker.patch("core.signals.delete_Email.logger", autospec=True)
 
 

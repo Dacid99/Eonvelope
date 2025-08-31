@@ -47,21 +47,13 @@ if TYPE_CHECKING:
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker) -> MagicMock:
-    """Mocks the :attr:`core.models.Account.logger`.
-
-    Returns:
-        The mocked logger instance.
-    """
+    """The mocked :attr:`core.models.Account.logger`."""
     return mocker.patch("core.models.Account.logger", autospec=True)
 
 
 @pytest.fixture
 def mock_fetcher(mocker, faker) -> MagicMock:
-    """Fixture mocking a :class:`core.utils.fetchers.BaseFetcher.BaseFetcher` instance.
-
-    Returns:
-        The mocked fetcher instance.
-    """
+    """A mock :class:`core.utils.fetchers.BaseFetcher.BaseFetcher` instance."""
     mock_fetcher = mocker.MagicMock(spec=BaseFetcher)
     mock_fetcher.__enter__.return_value = mock_fetcher
     mock_fetcher.fetch_emails.return_value = [text.encode() for text in faker.texts()]
@@ -73,11 +65,7 @@ def mock_fetcher(mocker, faker) -> MagicMock:
 
 @pytest.fixture
 def mock_Account_get_fetcher(mocker, mock_fetcher) -> MagicMock:
-    """Fixture mocking a :func:`core.models.Account.Account.get_fetcher`.
-
-    Returns:
-        The mocked function.
-    """
+    """Mocked :func:`core.models.Account.Account.get_fetcher` method."""
     return mocker.patch(
         "core.models.Account.Account.get_fetcher",
         autospec=True,
@@ -87,11 +75,7 @@ def mock_Account_get_fetcher(mocker, mock_fetcher) -> MagicMock:
 
 @pytest.fixture
 def spy_Mailbox_create_from_data(mocker):
-    """Fixture spying on :func:`core.models.Account.Mailbox.create_from_data` instance.
-
-    Returns:
-        The spied on function.
-    """
+    """Spy for the :func:`core.models.Account.Mailbox.create_from_data` method."""
     return mocker.spy(Mailbox, "create_from_data")
 
 

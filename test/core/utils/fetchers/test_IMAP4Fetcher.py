@@ -19,7 +19,6 @@
 """Test module for the :class:`IMAP4Fetcher` class."""
 
 import datetime
-import logging
 from imaplib import Time2Internaldate
 
 import pytest
@@ -37,19 +36,9 @@ class FakeIMAP4Error(Exception):
     """Helper exception to patch the IMAP4error member of IMAP4."""
 
 
-@pytest.fixture(autouse=True)
-def mock_logger(mocker):
-    mock_logger = mocker.Mock(spec=logging.Logger)
-    mocker.patch(
-        "core.utils.fetchers.BaseFetcher.logging.getLogger",
-        return_value=mock_logger,
-        autospec=True,
-    )
-    return mock_logger
-
-
 @pytest.fixture
 def imap_mailbox(fake_mailbox):
+    """Extends :func:`test.conftest.fake_mailbox` to have IMAP4 as protocol."""
     fake_mailbox.account.protocol = EmailProtocolChoices.IMAP
     fake_mailbox.account.save(update_fields=["protocol"])
     return fake_mailbox
@@ -57,6 +46,7 @@ def imap_mailbox(fake_mailbox):
 
 @pytest.fixture(autouse=True)
 def mock_IMAP4(mocker, faker):
+    """Mocks an :class:`imaplib.IMAP4` with all positive method responses."""
     mock_IMAP4 = mocker.patch(
         "core.utils.fetchers.IMAP4Fetcher.imaplib.IMAP4", autospec=True
     )

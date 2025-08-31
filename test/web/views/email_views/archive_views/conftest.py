@@ -34,11 +34,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture(scope="package")
 def date_url() -> Callable[[type[ModelViewSet]], str]:
-    """Fixture getting the view url for date based views.
-
-    Returns:
-        The date url.
-    """
+    """Callable getting the view url for date based views."""
     return lambda view_class, date_args=[]: reverse(
         f"web:{view_class.URL_NAME}", args=date_args
     )

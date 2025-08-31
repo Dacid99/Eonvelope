@@ -35,21 +35,19 @@ from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
-    """Mocks the :attr:`core.models.Daemon.logger`.
-
-    Returns:
-        The mocked logger instance.
-    """
+    """The mocked :attr:`core.models.Daemon.logger`."""
     return mocker.patch("core.models.Daemon.logger", autospec=True)
 
 
 @pytest.fixture
 def mock_Mailbox_fetch(mocker):
+    """Patches `core.models.Mailbox.fetch`."""
     return mocker.patch("core.models.Mailbox.Mailbox.fetch")
 
 
 @pytest.fixture
 def mock_celery_app(mocker):
+    """Patches the celery current app."""
     return mocker.patch("core.models.Daemon.current_app", autospec=True)
 
 

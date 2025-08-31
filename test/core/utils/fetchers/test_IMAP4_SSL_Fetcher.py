@@ -24,11 +24,12 @@ from core.constants import EmailProtocolChoices
 from core.utils.fetchers import IMAP4_SSL_Fetcher
 from core.utils.fetchers.exceptions import MailAccountError
 
-from .test_IMAP4Fetcher import FakeIMAP4Error, mock_logger
+from .test_IMAP4Fetcher import FakeIMAP4Error
 
 
 @pytest.fixture
 def imap_ssl_mailbox(fake_mailbox):
+    """Extends :func:`test.conftest.fake_mailbox` to have IMAP4_SSL as protocol."""
     fake_mailbox.account.protocol = EmailProtocolChoices.IMAP4_SSL
     fake_mailbox.account.save(update_fields=["protocol"])
     return fake_mailbox
@@ -36,6 +37,7 @@ def imap_ssl_mailbox(fake_mailbox):
 
 @pytest.fixture(autouse=True)
 def mock_IMAP4_SSL(mocker, faker):
+    """Mocks an :class:`imaplib.IMAP4_SSL` with all positive method responses."""
     mock_IMAP4_SSL = mocker.patch(
         "core.utils.fetchers.IMAP4_SSL_Fetcher.imaplib.IMAP4_SSL", autospec=True
     )
@@ -50,14 +52,6 @@ def mock_IMAP4_SSL(mocker, faker):
     mock_IMAP4_SSL.return_value.uid.return_value = ("OK", [fake_response, b""])
     mock_IMAP4_SSL.return_value.logout.return_value = ("BYE", [fake_response])
     return mock_IMAP4_SSL
-
-
-@pytest.fixture(autouse=True)
-def mock_ssl_create_default_context(mocker):
-    return mocker.patch(
-        "ssl.create_default_context",
-        return_value=mocker.sentinel,
-    )
 
 
 @pytest.mark.django_db

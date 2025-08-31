@@ -26,6 +26,7 @@ from core.backends import StorageIntegrityCheckBackend
 
 @pytest.fixture
 def mock_StorageShard_healthcheck(mocker):
+    """Patches `core.backends.StorageShard.healthcheck`."""
     return mocker.patch(
         "core.backends.StorageIntegrityCheckBackend.StorageShard.healthcheck"
     )

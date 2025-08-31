@@ -50,21 +50,13 @@ def daemon_with_interval_payload(daemon_payload):
 
 @pytest.fixture(scope="package")
 def list_url() -> Callable[[type[ModelViewSet]], str]:
-    """Fixture getting the viewsets url for list actions.
-
-    Returns:
-        The list url.
-    """
+    """Callable getting the viewsets url for list actions."""
     return lambda viewset_class: reverse(f"api:v1:{viewset_class.BASENAME}-list")
 
 
 @pytest.fixture(scope="package")
 def detail_url() -> Callable[[type[ModelViewSet], Model], str]:
-    """Fixture getting the viewsets url for detail actions.
-
-    Returns:
-        The detail url.
-    """
+    """Callable getting the viewsets url for detail actions."""
     return lambda viewset_class, instance: reverse(
         f"api:v1:{viewset_class.BASENAME}-detail", args=[instance.id]
     )
@@ -72,11 +64,7 @@ def detail_url() -> Callable[[type[ModelViewSet], Model], str]:
 
 @pytest.fixture(scope="package")
 def custom_list_action_url() -> Callable[[type[ModelViewSet], str], str]:
-    """Fixture getting the viewsets url for custom list actions.
-
-    Returns:
-        A callable that gets the list url of the viewset from the custom action name.
-    """
+    """Callable getting the viewsets url for custom list actions."""
     return lambda viewset_class, custom_list_action_url_name: (
         reverse(f"api:v1:{viewset_class.BASENAME}-{custom_list_action_url_name}")
     )
@@ -84,11 +72,7 @@ def custom_list_action_url() -> Callable[[type[ModelViewSet], str], str]:
 
 @pytest.fixture(scope="package")
 def custom_detail_action_url() -> Callable[[type[ModelViewSet], str, Model], str]:
-    """Fixture getting the viewsets url for custom detail actions.
-
-    Returns:
-        A callable that gets the detail url of the viewset from the custom action name.
-    """
+    """Callable getting the viewsets url for custom detail actions."""
     return lambda viewset_class, custom_detail_action_url_name, instance: (
         reverse(
             f"api:v1:{viewset_class.BASENAME}-{custom_detail_action_url_name}",

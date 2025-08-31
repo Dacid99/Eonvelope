@@ -30,6 +30,7 @@ from core.models import Correspondent
 
 @pytest.fixture
 def mock_Correspondent_queryset_as_file(mocker, fake_file):
+    """Patches `core.models.Correspondent.queryset_as_file`."""
     return mocker.patch(
         "api.v1.views.CorrespondentViewSet.Correspondent.queryset_as_file",
         return_value=fake_file,

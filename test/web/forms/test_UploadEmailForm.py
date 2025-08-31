@@ -27,6 +27,7 @@ from web.forms.UploadEmailForm import UploadEmailForm
 
 @pytest.fixture
 def file_payload(faker, fake_file):
+    """Random file upload payload."""
     return {
         "file": SimpleUploadedFile(
             faker.name(), fake_file.read(), content_type="text/plain"

@@ -33,8 +33,7 @@ from django.urls import reverse
 from model_bakery import baker
 
 from core.models import Attachment, Email
-
-from ...conftest import TEST_EMAIL_PARAMETERS
+from test.conftest import TEST_EMAIL_PARAMETERS
 
 
 @pytest.fixture(autouse=True)
@@ -45,6 +44,7 @@ def mock_logger(mocker):
 
 @pytest.fixture
 def mock_Attachment_save_to_storage(mocker):
+    """Patches `core.models.Attachment.save_to_storage`."""
     return mocker.patch(
         "core.models.Attachment.Attachment.save_to_storage", autospec=True
     )
@@ -52,6 +52,7 @@ def mock_Attachment_save_to_storage(mocker):
 
 @pytest.fixture
 def spy_save(mocker):
+    """Patches `django.db.models.Model.save`."""
     return mocker.spy(django.db.models.Model, "save")
 
 

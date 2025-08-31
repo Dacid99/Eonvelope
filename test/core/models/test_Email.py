@@ -40,14 +40,14 @@ from core.constants import (
 )
 from core.models import Correspondent, Email, Mailbox
 from Emailkasten.utils.workarounds import get_config
+from test.conftest import TEST_EMAIL_PARAMETERS
 
-from ...conftest import TEST_EMAIL_PARAMETERS
 from .test_Attachment import mock_Attachment_save_to_storage
 
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
-    """Mocks :attr:`core.models.Email.logger` of the module."""
+    """The mocked :attr:`core.models.Email.logger`."""
     return mocker.patch("core.models.Email.logger", autospec=True)
 
 

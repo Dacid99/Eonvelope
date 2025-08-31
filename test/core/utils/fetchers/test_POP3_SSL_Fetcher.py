@@ -24,12 +24,10 @@ from core.constants import EmailProtocolChoices
 from core.utils.fetchers import POP3_SSL_Fetcher
 from core.utils.fetchers.exceptions import MailAccountError
 
-from .test_IMAP4_SSL_Fetcher import mock_ssl_create_default_context
-from .test_POP3Fetcher import mock_logger
-
 
 @pytest.fixture
 def pop3_ssl_mailbox(fake_mailbox):
+    """Extends :func:`test.conftest.fake_mailbox` to have POP3_SSL as protocol."""
     fake_mailbox.account.protocol = EmailProtocolChoices.POP3_SSL
     fake_mailbox.account.save(update_fields=["protocol"])
     return fake_mailbox
@@ -37,6 +35,7 @@ def pop3_ssl_mailbox(fake_mailbox):
 
 @pytest.fixture(autouse=True)
 def mock_POP3_SSL(mocker, faker):
+    """Mocks an :class:`poplib.POP3_SSL` with all positive method responses."""
     mock_POP3_SSL = mocker.patch(
         "core.utils.fetchers.POP3_SSL_Fetcher.poplib.POP3_SSL", autospec=True
     )

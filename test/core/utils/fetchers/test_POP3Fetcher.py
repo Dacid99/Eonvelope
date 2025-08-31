@@ -29,19 +29,9 @@ from core.utils.fetchers import POP3Fetcher
 from core.utils.fetchers.exceptions import MailAccountError
 
 
-@pytest.fixture(autouse=True)
-def mock_logger(mocker):
-    mock_logger = mocker.Mock(spec=logging.Logger)
-    mocker.patch(
-        "core.utils.fetchers.BaseFetcher.logging.getLogger",
-        return_value=mock_logger,
-        autospec=True,
-    )
-    return mock_logger
-
-
 @pytest.fixture
 def pop3_mailbox(fake_mailbox):
+    """Extends :func:`test.conftest.fake_mailbox` to have POP3 as protocol."""
     fake_mailbox.account.protocol = EmailProtocolChoices.POP3
     fake_mailbox.account.save(update_fields=["protocol"])
     return fake_mailbox
@@ -49,6 +39,7 @@ def pop3_mailbox(fake_mailbox):
 
 @pytest.fixture(autouse=True)
 def mock_POP3(mocker, faker):
+    """Mocks an :class:`poplib.POP3` with all positive method responses."""
     mock_POP3 = mocker.patch(
         "core.utils.fetchers.POP3Fetcher.poplib.POP3", autospec=True
     )

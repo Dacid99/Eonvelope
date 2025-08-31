@@ -19,7 +19,6 @@
 """Test module for the :class:`ExchangeFetcher` class."""
 
 import datetime
-import logging
 import os
 
 import exchangelib
@@ -37,19 +36,9 @@ from core.utils.fetchers import ExchangeFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
-@pytest.fixture(autouse=True)
-def mock_logger(mocker):
-    mock_logger = mocker.Mock(spec=logging.Logger)
-    mocker.patch(
-        "core.utils.fetchers.BaseFetcher.logging.getLogger",
-        return_value=mock_logger,
-        autospec=True,
-    )
-    return mock_logger
-
-
 @pytest.fixture
 def exchange_mailbox(fake_mailbox) -> Mailbox:
+    """Extends :func:`test.conftest.fake_mailbox` to have Exchange as protocol."""
     fake_mailbox.account.protocol = EmailProtocolChoices.EXCHANGE
     fake_mailbox.account.save(update_fields=["protocol"])
     return fake_mailbox
@@ -57,6 +46,7 @@ def exchange_mailbox(fake_mailbox) -> Mailbox:
 
 @pytest.fixture
 def mock_Message(mocker, faker):
+    """Mocks an :class:`exchangelib.Message` with random mime_content."""
     mock_Message = mocker.MagicMock(spec=exchangelib.Message)
     mock_Message.mime_content = faker.text().encode()
     return mock_Message
@@ -64,6 +54,7 @@ def mock_Message(mocker, faker):
 
 @pytest.fixture
 def mock_QuerySet(mocker, mock_Message):
+    """Mocks an :class:`exchangelib.queryset.QuerySet` with mocked :class:`exchangelib.Message`s."""
     mock_QuerySet = mocker.MagicMock(spec=exchangelib.queryset.QuerySet)
     queryset_content = [mock_Message, mock_Message]
     mock_QuerySet.__iter__.return_value = queryset_content
@@ -75,6 +66,7 @@ def mock_QuerySet(mocker, mock_Message):
 
 @pytest.fixture
 def mock_Folder(mocker, mock_QuerySet):
+    """Mocks an :class:`exchangelib.Folder` with mocked :class:`exchangelib.queryset.QuerySet` as content."""
     mock_Folder = mocker.MagicMock(spec=exchangelib.Folder)
     mock_Folder.all.return_value = mock_QuerySet
     mock_Folder.folder_class.return_value = "IPF.Note"
@@ -83,6 +75,7 @@ def mock_Folder(mocker, mock_QuerySet):
 
 @pytest.fixture
 def mock_msg_folder_root(mocker, faker, mock_Folder):
+    """Mocks an :class:`exchangelib.folders.known_folders.MsgFolderRoot` with mocked :class:`exchangelib.Folder` as content."""
     fake_msg_folder_root_path = faker.file_path()
     mock_msg_folder_root = mocker.MagicMock(
         spec=exchangelib.folders.known_folders.MsgFolderRoot
@@ -106,6 +99,7 @@ def mock_msg_folder_root(mocker, faker, mock_Folder):
 
 @pytest.fixture(autouse=True)
 def mock_ExchangeAccount(mocker, mock_msg_folder_root):
+    """Mocks an :class:`exchangelib.Account` with mocked :class:`exchangelib.folders.known_folders.MsgFolderRoot` as msg_root."""
     mock_ExchangeAccount = mocker.patch(
         "core.utils.fetchers.ExchangeFetcher.exchangelib.Account", autospec=True
     )

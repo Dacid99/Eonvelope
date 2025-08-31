@@ -40,7 +40,7 @@ def always_fake_fs(fake_fs):
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker) -> MagicMock:
-    """Mocks :attr:`core.models.Storage.logger` of the module."""
+    """The mocked :attr:`core.models.Storage.logger`."""
     return mocker.patch("core.models.StorageShard.logger", autospec=True)
 
 

@@ -34,6 +34,7 @@ from core.models import Email
 
 @pytest.fixture
 def mock_Email_queryset_as_file(mocker, fake_file):
+    """Patches `core.models.Email.queryset_as_file`."""
     return mocker.patch(
         "api.v1.views.EmailViewSet.Email.queryset_as_file",
         return_value=fake_file,

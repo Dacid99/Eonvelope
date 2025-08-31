@@ -29,6 +29,7 @@ from core.utils.fetchers.exceptions import MailAccountError
 
 @pytest.fixture
 def mock_Account_update_mailboxes(mocker):
+    """Patches `core.models.Account.update_mailboxes`."""
     return mocker.patch(
         "api.v1.views.AccountViewSet.Account.update_mailboxes", autospec=True
     )
@@ -36,6 +37,7 @@ def mock_Account_update_mailboxes(mocker):
 
 @pytest.fixture
 def mock_Account_test(mocker):
+    """Patches `core.models.Account.test`."""
     return mocker.patch("api.v1.views.AccountViewSet.Account.test", autospec=True)
 
 

@@ -26,7 +26,7 @@ from core.models import Daemon, Mailbox
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
-    """Mocks :attr:`core.signals.save_Mailbox.logger` of the module."""
+    """The mocked :attr:`core.signals.save_Mailbox.logger`."""
     return mocker.patch("core.signals.save_Mailbox.logger", autospec=True)
 
 

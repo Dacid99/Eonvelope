@@ -22,11 +22,12 @@ import pytest
 from django.conf import settings
 from django.db import OperationalError, connection
 
-from ...web.conftest import owner_client
+from test.web.conftest import owner_client
 
 
 @pytest.fixture
 def mock_time_sleep(mocker):
+    """Patches :func:`time.sleep` to not waste time."""
     return mocker.patch("Emailkasten.middleware.DBReconnectMiddleware.time.sleep")
 
 

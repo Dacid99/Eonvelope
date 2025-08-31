@@ -29,39 +29,19 @@ from rest_framework.test import APIClient
 
 @pytest.fixture
 def noauth_api_client() -> APIClient:
-    """Fixture creating an unauthenticated :class:`rest_framework.test.APIClient` instance.
-
-    Returns:
-        The unauthenticated APIClient.
-    """
+    """An unauthenticated :class:`rest_framework.test.APIClient` instance."""
     return APIClient()
 
 
 @pytest.fixture
 def other_api_client(noauth_api_client, other_user) -> APIClient:
-    """Fixture creating a :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`other_user`.
-
-    Args:
-        noauth_api_client: Depends on :func:`fixture_noauth_api_client`.
-        other_user: Depends on :func:`fixture_other_user`.
-
-    Returns:
-        The authenticated APIClient.
-    """
+    """A :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`other_user`."""
     noauth_api_client.force_authenticate(user=other_user)
     return noauth_api_client
 
 
 @pytest.fixture
 def owner_api_client(noauth_api_client, owner_user) -> APIClient:
-    """Fixture creating a :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`owner_user`.
-
-    Args:
-        noauth_api_client: Depends on :func:`fixture_noauth_api_client`.
-        owner_user: Depends on :func:`fixture_owner_user`.
-
-    Returns:
-        The authenticated APIClient.
-    """
+    """A :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`owner_user`."""
     noauth_api_client.force_authenticate(user=owner_user)
     return noauth_api_client

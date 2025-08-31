@@ -38,16 +38,13 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def fake_correspondent_tuple(faker):
+    """Returns a fake correspondent tuple."""
     return (faker.name(), faker.email())
 
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker) -> MagicMock:
-    """Mocks the :attr:`core.models.Correspondent.logger`.
-
-    Returns:
-        The mocked logger instance.
-    """
+    """The mocked :attr:`core.models.Correspondent.logger`."""
     return mocker.patch("core.models.Correspondent.logger", autospec=True)
 
 

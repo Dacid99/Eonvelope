@@ -26,7 +26,7 @@ from core.models import Attachment
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
-    """Mocks :attr:`core.signals.delete_Attachment.logger` of the module."""
+    """The mocked :attr:`core.signals.delete_Attachment.logger`."""
     return mocker.patch("core.signals.delete_Attachment.logger", autospec=True)
 
 

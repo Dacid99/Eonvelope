@@ -16,16 +16,29 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""File with fixtures and configurations required for :mod:`test.core` tests. Automatically imported to `test_` files."""
+"""Test module for the :class:`ExchangeFetcher` class."""
 
-from __future__ import annotations
-
-from email.message import EmailMessage
+import logging
 
 import pytest
 
 
-@pytest.fixture
-def mock_message(mocker):
-    """A mock :class:`email.message.EmailMessage` instance."""
-    return mocker.MagicMock(spec=EmailMessage)
+@pytest.fixture(autouse=True)
+def mock_logger(mocker):
+    """Mocks :attr:`logger` of the fetcher class."""
+    mock_logger = mocker.Mock(spec=logging.Logger)
+    mocker.patch(
+        "core.utils.fetchers.BaseFetcher.logging.getLogger",
+        return_value=mock_logger,
+        autospec=True,
+    )
+    return mock_logger
+
+
+@pytest.fixture(autouse=True)
+def mock_ssl_create_default_context(mocker):
+    """Mocks :class:`ssl.create_default_context`."""
+    return mocker.patch(
+        "ssl.create_default_context",
+        return_value=mocker.sentinel,
+    )

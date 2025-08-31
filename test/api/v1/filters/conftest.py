@@ -48,7 +48,7 @@ def datetime_quarter(datetime_object: datetime.datetime) -> int:
     """Calculate the quarter of the year for a given datetime.
 
     Args:
-        datetime_object: The datetime to calculate the quarter of.
+        datetime_object: A datetime.
 
     Returns:
         An `int` from 1-4 indicating the datetimes quarter of the year.

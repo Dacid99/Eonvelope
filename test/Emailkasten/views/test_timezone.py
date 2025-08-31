@@ -25,8 +25,7 @@ from rest_framework import status
 
 from Emailkasten.middleware.TimezoneMiddleware import TimezoneMiddleware
 from Emailkasten.views.timezone import SET_TIMEZONE_URL_NAME
-
-from ...web.conftest import other_client, owner_client
+from test.web.conftest import other_client, owner_client
 
 
 @pytest.mark.django_db

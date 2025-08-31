@@ -37,11 +37,7 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def url() -> Callable[[type[ModelViewSet]], str]:
-    """Gets the viewsets url for list actions.
-
-    Returns:
-        The list url.
-    """
+    """Callable getting the viewsets url for list actions."""
     return lambda view_class: reverse(f"api:v1:{view_class.NAME}")
 
 

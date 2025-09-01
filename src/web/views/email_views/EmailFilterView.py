@@ -36,7 +36,7 @@ class EmailFilterView(LoginRequiredMixin, FilterPageView):
     template_name = "web/email/email_filter_list.html"
     context_object_name = "emails"
     filterset_class = EmailFilterSet
-    ordering = ["-created"]
+    ordering = ["-is_favorite", "-created"]
 
     @override
     def get_queryset(self) -> QuerySet[Email]:

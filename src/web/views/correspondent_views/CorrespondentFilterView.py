@@ -36,7 +36,7 @@ class CorrespondentFilterView(LoginRequiredMixin, FilterPageView):
     template_name = "web/correspondent/correspondent_filter_list.html"
     context_object_name = "correspondents"
     filterset_class = CorrespondentFilterSet
-    ordering = ["email_address"]
+    ordering = ["-is_favorite", "email_address"]
 
     @override
     def get_queryset(self) -> QuerySet[Correspondent]:

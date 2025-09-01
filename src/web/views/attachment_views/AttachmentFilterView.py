@@ -36,7 +36,7 @@ class AttachmentFilterView(LoginRequiredMixin, FilterPageView):
     template_name = "web/attachment/attachment_filter_list.html"
     context_object_name = "attachments"
     filterset_class = AttachmentFilterSet
-    ordering = ["file_name"]
+    ordering = ["-is_favorite", "file_name"]
 
     @override
     def get_queryset(self) -> QuerySet[Attachment]:

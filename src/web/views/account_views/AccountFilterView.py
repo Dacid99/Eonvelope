@@ -35,7 +35,7 @@ class AccountFilterView(LoginRequiredMixin, FilterPageView):
     model = Account
     template_name = "web/account/account_filter_list.html"
     filterset_class = AccountFilterSet
-    ordering = ["mail_address"]
+    ordering = ["-is_favorite", "mail_address"]
 
     @override
     def get_queryset(self) -> QuerySet[Account]:

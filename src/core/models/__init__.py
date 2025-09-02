@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""core.models package containing models for the Emailkasten database."""
+"""Emailkasten.models package containing all models for the Emailkasten database."""
 
 from .Account import Account
 from .Attachment import Attachment
@@ -25,6 +25,7 @@ from .Daemon import Daemon
 from .Email import Email
 from .EmailCorrespondent import EmailCorrespondent
 from .Mailbox import Mailbox
+from .StorageShard import StorageShard
 
 
 __all__ = [
@@ -35,4 +36,5 @@ __all__ = [
     "Email",
     "EmailCorrespondent",
     "Mailbox",
+    "StorageShard",
 ]

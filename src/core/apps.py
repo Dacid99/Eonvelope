@@ -23,6 +23,7 @@ from __future__ import annotations
 from typing import override
 
 from django.apps import AppConfig
+from health_check.plugins import plugin_dir
 
 
 class CoreConfig(AppConfig):
@@ -34,6 +35,12 @@ class CoreConfig(AppConfig):
     @override
     def ready(self) -> None:
         """Imports all model signals and registers the healthcheck backends."""
+        # ruff: noqa: PLC0415
+        # pylint: disable=import-outside-toplevel  # this is the way it is intended by django-healthcheck
+        from .backends import StorageIntegrityCheckBackend
+
+        plugin_dir.register(StorageIntegrityCheckBackend)
+
         # ruff: noqa: F401
         # pylint: disable=import-outside-toplevel, unused-import  # this is the way it is intended by django
         import core.signals

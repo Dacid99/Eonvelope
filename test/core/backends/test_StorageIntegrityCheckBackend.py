@@ -16,19 +16,19 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for the :class:`Emailkasten.backends.StorageIntegrityCheckBackend.StorageIntegrityCheckBackend` class."""
+"""Test module for the :class:`core.backends.StorageIntegrityCheckBackend.StorageIntegrityCheckBackend` class."""
 
 import pytest
 from health_check.backends import HealthCheckException
 
-from Emailkasten.backends import StorageIntegrityCheckBackend
+from core.backends import StorageIntegrityCheckBackend
 
 
 @pytest.fixture
 def mock_StorageShard_healthcheck(mocker):
-    """Patches `Emailkasten.backends.StorageShard.healthcheck`."""
+    """Patches `core.backends.StorageShard.healthcheck`."""
     return mocker.patch(
-        "Emailkasten.backends.StorageIntegrityCheckBackend.StorageShard.healthcheck"
+        "core.backends.StorageIntegrityCheckBackend.StorageShard.healthcheck"
     )
 
 

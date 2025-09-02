@@ -16,14 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`Emailkasten.backends.ShardedFileSystemStorage` storage class."""
+"""Module with the :class:`core.backends.ShardedFileSystemStorage` storage class."""
 
 import os
 from typing import override
 
 from django.core.files.storage import FileSystemStorage
 
-from Emailkasten.models import StorageShard
+from core.models import StorageShard
 
 
 class ShardedFileSystemStorage(FileSystemStorage):

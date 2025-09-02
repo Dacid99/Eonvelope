@@ -16,25 +16,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`Emailkasten.backends.StorageIntegrityCheckBackend.StorageIntegrityCheckBackend` class."""
+"""core.backends package containing additional backends for the Emailkasten application."""
 
-from health_check.backends import BaseHealthCheckBackend, HealthCheckException
+from .ShardedFileSystemStorage import ShardedFileSystemStorage
+from .StorageIntegrityCheckBackend import StorageIntegrityCheckBackend
 
-from Emailkasten.models import StorageShard
 
-
-class StorageIntegrityCheckBackend(BaseHealthCheckBackend):
-    """Health check backend for :func:`Emailkasten.models.StorageShard.StorageShard.healthcheck`."""
-
-    critical_service = False
-
-    def check_status(self) -> None:
-        """Implements the healthcheck.
-
-        Raises:
-            HealthCheckException: If :func:`Emailkasten.models.StorageShard.StorageShard.healthcheck` fails.
-        """
-        if not StorageShard.healthcheck():
-            raise HealthCheckException(
-                "The storage integrity is compromised, check the logs for critical level errors!"
-            )
+__all__ = [
+    "ShardedFileSystemStorage",
+    "StorageIntegrityCheckBackend",
+]

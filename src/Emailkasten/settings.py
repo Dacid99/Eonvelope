@@ -142,7 +142,7 @@ STORAGE_PATH = "/mnt/archive"
 
 STORAGES = {
     "default": {
-        "BACKEND": "Emailkasten.backends.ShardedFileSystemStorage.ShardedFileSystemStorage",
+        "BACKEND": "core.backends.ShardedFileSystemStorage.ShardedFileSystemStorage",
         "OPTIONS": {
             "location": STORAGE_PATH,
         },

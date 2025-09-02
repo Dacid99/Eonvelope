@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0043_delete_storageshard"),
+        ("core", "0042_remove_daemon_log_backup_count_and_more"),
     ]
 
     operations = [

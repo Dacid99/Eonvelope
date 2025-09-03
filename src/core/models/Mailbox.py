@@ -80,6 +80,7 @@ class Mailbox(
 
     name = models.CharField(
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("name"),
     )
     """The mailaccount internal name of the mailbox. Unique together with :attr:`account`."""
@@ -88,12 +89,14 @@ class Mailbox(
         "Account",
         related_name="mailboxes",
         on_delete=models.CASCADE,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("account"),
     )
     """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
 
     save_attachments = models.BooleanField(
         default=get_config("DEFAULT_SAVE_ATTACHMENTS"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("save attachments"),
         help_text=_(
             "Whether the attachments from the emails in this mailbox will be saved."
@@ -103,6 +106,7 @@ class Mailbox(
 
     save_to_eml = models.BooleanField(
         default=get_config("DEFAULT_SAVE_TO_EML"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("save as .eml"),
         help_text=_("Whether the emails in this mailbox will be stored in .eml files."),
     )
@@ -113,6 +117,11 @@ class Mailbox(
 
         db_table = "mailboxes"
         """The name of the database table for the mailboxes."""
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name = _("mailbox")
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name_plural = _("mailboxes")
+        get_latest_by = TimestampModelMixin.Meta.get_latest_by
 
         constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(

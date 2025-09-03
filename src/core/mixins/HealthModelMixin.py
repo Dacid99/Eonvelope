@@ -28,19 +28,22 @@ class HealthModelMixin(Model):
 
     is_healthy = BooleanField(
         null=True,
-        verbose_name=_("healthy"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("health status"),
     )
     """Flags whether the model instance is subject to errors. `None` by default."""
 
     last_error = TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("last error"),
     )
     """The latest error in connection with the model instance."""
 
     last_error_occurred_at = DateTimeField(
         null=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("time of last error occurrence"),
     )
     """The time of occurrence of the latest error."""

@@ -43,6 +43,7 @@ class EmailCorrespondent(TimestampModelMixin, models.Model):
         "Email",
         related_name="emailcorrespondents",
         on_delete=models.CASCADE,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("email"),
     )
     """The email :attr:`correspondent` was mentioned in. Unique together with :attr:`correspondent` and :attr:`mention`."""
@@ -51,6 +52,7 @@ class EmailCorrespondent(TimestampModelMixin, models.Model):
         "Correspondent",
         related_name="correspondentemails",
         on_delete=models.CASCADE,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("correspondent"),
     )
     """The correspondent mentioned in :attr:`email`. Unique together with :attr:`email` and :attr:`mention`."""
@@ -58,6 +60,7 @@ class EmailCorrespondent(TimestampModelMixin, models.Model):
     mention = models.CharField(
         choices=HeaderFields.Correspondents.choices,
         max_length=30,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("mention"),
     )
     """The mention of :attr:`correspondent` in :attr:`email`. Unique together with :attr:`email` and :attr:`correspondent`."""
@@ -67,6 +70,9 @@ class EmailCorrespondent(TimestampModelMixin, models.Model):
 
         db_table = "email_correspondents"
         """The name of the database bridge table for emails and correspondents."""
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name = _("email-correspondents")
+        get_latest_by = TimestampModelMixin.Meta.get_latest_by
 
         constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(

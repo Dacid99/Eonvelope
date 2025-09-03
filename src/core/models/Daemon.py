@@ -56,6 +56,7 @@ class Daemon(
     uuid = models.UUIDField(
         default=uuid.uuid4,
         editable=False,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("UUID"),
     )
     """The uuid of this daemon. Used to create a unique logfile."""
@@ -64,6 +65,7 @@ class Daemon(
         "Mailbox",
         related_name="daemons",
         on_delete=models.CASCADE,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("mailbox"),
     )
     """The mailbox this daemon fetches. Unique. Deletion of that :attr:`mailbox` deletes this daemon."""
@@ -72,6 +74,7 @@ class Daemon(
         choices=EmailFetchingCriterionChoices.choices,
         default=EmailFetchingCriterionChoices.ALL,
         max_length=127,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("fetching criterion"),
         help_text=_("The selection criterion for emails to archive."),
     )
@@ -81,6 +84,7 @@ class Daemon(
         PeriodicTask,
         on_delete=models.CASCADE,
         null=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("celery task"),
     )
     """The periodic celery task wrapped by this daemon."""
@@ -88,6 +92,7 @@ class Daemon(
     interval: models.ForeignKey[IntervalSchedule] = models.ForeignKey(
         IntervalSchedule,
         on_delete=models.PROTECT,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("interval"),
         help_text=_("The time between two daemon runs in seconds."),
     )
@@ -98,6 +103,11 @@ class Daemon(
 
         db_table = "daemons"
         """The name of the database table for the daemons."""
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name = _("daemon")
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name_plural = _("daemons")
+        get_latest_by = TimestampModelMixin.Meta.get_latest_by
 
         constraints: Final[list[models.BaseConstraint]] = [
             models.CheckConstraint(

@@ -82,7 +82,7 @@ class EmailFilterSet(filters.FilterSet):
         fields: ClassVar[dict[str, list[str]]] = {
             "message_id": FilterSetups.TEXT,
             "datetime": FilterSetups.DATETIME,
-            "email_subject": FilterSetups.TEXT,
+            "subject": FilterSetups.TEXT,
             "plain_bodytext": FilterSetups.TEXT,
             "html_bodytext": FilterSetups.TEXT,
             "datasize": FilterSetups.INT,
@@ -113,7 +113,7 @@ class EmailFilterSet(filters.FilterSet):
         """
         return queryset.filter(
             Q(message_id__icontains=value)
-            | Q(email_subject__icontains=value)
+            | Q(subject__icontains=value)
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
             | Q(headers__has_any_keys=value)

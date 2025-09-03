@@ -43,7 +43,7 @@ class CorrespondentEmailFilterSet(django_filters.FilterSet):
     order = django_filters.OrderingFilter(
         fields=[
             "email__message_id",
-            "email__email_subject",
+            "email__subject",
             "email__datetime",
             "mention",
             "email__datasize",
@@ -99,7 +99,7 @@ class CorrespondentEmailFilterSet(django_filters.FilterSet):
         """
         return queryset.filter(
             Q(email__message_id__icontains=value)
-            | Q(email__email_subject__icontains=value)
+            | Q(email__subject__icontains=value)
             | Q(email__plain_bodytext__icontains=value)
             | Q(email__html_bodytext__icontains=value)
             | Q(email__headers__has_any_keys=value)

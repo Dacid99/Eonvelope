@@ -123,7 +123,7 @@ class EmailViewSet(
     permission_classes = [IsAuthenticated]
     ordering_fields: Final[list[str]] = [
         "datetime",
-        "email_subject",
+        "subject",
         "datasize",
         "is_favorite",
         "created",

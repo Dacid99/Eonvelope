@@ -37,8 +37,8 @@ def test_output(fake_email, request_context):
     assert serializer_data["message_id"] == fake_email.message_id
     assert "datetime" in serializer_data
     assert datetime.fromisoformat(serializer_data["datetime"]) == fake_email.datetime
-    assert "email_subject" in serializer_data
-    assert serializer_data["email_subject"] == fake_email.email_subject
+    assert "subject" in serializer_data
+    assert serializer_data["subject"] == fake_email.subject
     assert "plain_bodytext" in serializer_data
     assert serializer_data["plain_bodytext"] == fake_email.plain_bodytext
     assert "html_bodytext" in serializer_data
@@ -91,7 +91,7 @@ def test_input(fake_email, request_context):
     assert "id" not in serializer_data
     assert "message_id" not in serializer_data
     assert "datetime" not in serializer_data
-    assert "email_subject" not in serializer_data
+    assert "subject" not in serializer_data
     assert "plain_bodytext" not in serializer_data
     assert "html_bodytext" not in serializer_data
     assert "in_reply_to" not in serializer_data

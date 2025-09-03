@@ -74,6 +74,7 @@ class Attachment(
 
     file_name = models.CharField(
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("filename"),
     )
     """The filename of the attachment."""
@@ -83,6 +84,7 @@ class Attachment(
         unique=True,
         blank=True,
         null=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("filepath"),
     )
     """The path in the storage where the attachment is stored. Unique together with :attr:`email`.
@@ -93,6 +95,7 @@ class Attachment(
         blank=True,
         default="",
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("content disposition"),
     )
     """The disposition of the file. Typically 'attachment', 'inline' or ''."""
@@ -100,6 +103,7 @@ class Attachment(
     content_id = models.CharField(
         max_length=255,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("content ID"),
     )
     """The MIME subtype of the file."""
@@ -107,6 +111,7 @@ class Attachment(
     content_maintype = models.CharField(
         max_length=255,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("content maintype"),
     )
     """The MIME maintype of the file."""
@@ -114,11 +119,13 @@ class Attachment(
     content_subtype = models.CharField(
         max_length=255,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("content subtype"),
     )
     """The MIME subtype of the file."""
 
     datasize = models.PositiveIntegerField(
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("datasize"),
     )
     """The filesize of the attachment."""
@@ -127,6 +134,7 @@ class Attachment(
         "Email",
         related_name="attachments",
         on_delete=models.CASCADE,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("email"),
     )
     """The mail that the attachment was found in.  Deletion of that `email` deletes this attachment."""
@@ -136,6 +144,11 @@ class Attachment(
 
         db_table = "attachments"
         """The name of the database table for the attachments."""
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name = _("attachment")
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name_plural = _("attachments")
+        get_latest_by = "email__datetime"
 
     @override
     def __str__(self) -> str:

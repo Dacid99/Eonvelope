@@ -23,17 +23,19 @@ from django.utils.translation import gettext_lazy as _
 
 
 class TimestampModelMixin(Model):
-    """Mixin adding `created` and `updated` timestamps to a model class."""
+    """Mixin adding `creation` and `update` timestamps to a model class."""
 
     created = DateTimeField(
         auto_now_add=True,
-        verbose_name=_("created"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("time of creation"),
     )
     """The datetime the model instance was created. Is set automatically."""
 
     updated = DateTimeField(
         auto_now=True,
-        verbose_name=_("last updated"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("time of last update"),
     )
     """The datetime the model instance entry was last updated. Is set automatically."""
 
@@ -41,3 +43,4 @@ class TimestampModelMixin(Model):
         """Metadata class for the mixin, abstract to avoid makemigrations picking it up."""
 
         abstract = True
+        get_latest_by = "created"

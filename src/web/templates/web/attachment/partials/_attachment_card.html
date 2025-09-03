@@ -23,7 +23,7 @@
     </div>
     <div class="card-text">
         {% translate "In email" %}: <a href="{{ card_object.email.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ card_object.email.email_subject }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ card_object.email.subject }}</a>
     </div>
     <div class="card-text">{% translate "Date received" %}: {{ card_object.email.datetime }}</div>
 {% endblock card_content %}

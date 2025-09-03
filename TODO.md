@@ -47,7 +47,6 @@
 - fetch only specific errors in fetchers
 - favicon.ico for the icon
 - daemonize celery worker
-- verbose_names back to title format?
 
 ### Work in progress
 
@@ -57,13 +56,9 @@
 
 ## To fix
 
+- filteroptions for existing db entries leak other user data
 - fetching too many emails leads to browser timeout
 - optics:
-  - no extra cards in conversation, use lists or similar instead
-  - conversation always exists, check for count>1 instead
   - better name for daemon
-  - theme toggler dropdown on right (wrong) side in folded mode
-  - footer breaks in bad place in folded mode
-  - footer should be in emailkasten templates
 - ci:
   - djlint has no files to lint

@@ -83,7 +83,7 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/attachmentjson.eml",
         {
             "message_id": "<e047e14d-2397-435b-baf6-8e8b7423f860@bvncmx.com>",
-            "email_subject": "What's up",
+            "subject": "What's up",
             "date": datetime(
                 2024, 8, 7, 11, 41, 29, tzinfo=timezone(timedelta(seconds=7200))
             ),
@@ -125,7 +125,7 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/inlineimage.eml",
         {
             "message_id": "<a634b121-4bc0-457d-a08f-a4579b9bb92a@bvncmx.com>",
-            "email_subject": "more image",
+            "subject": "more image",
             "date": datetime(
                 2024, 10, 5, 14, 43, 21, tzinfo=timezone(timedelta(seconds=7200))
             ),
@@ -162,7 +162,7 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/textplain.eml",
         {
             "message_id": "<622b772d-0839-4ff3-9f31-2313b0b57040@bvncmx.com>",
-            "email_subject": "Testmail",
+            "subject": "Testmail",
             "date": datetime(
                 2024, 8, 1, 15, 35, 52, tzinfo=timezone(timedelta(seconds=7200))
             ),
@@ -192,7 +192,7 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/multipartalternative_basic.eml",
         {
             "message_id": "<320b8a44-3d8c-457d-b590-0d33290ae599@prov.de>",
-            "email_subject": "Welcome back",
+            "subject": "Welcome back",
             "date": datetime(2024, 8, 9, 16, 20, 23, tzinfo=UTC),
             "x_spam": "NO",
             "plain_bodytext": "\r\n\r\nSehr geehrte ,\r\n\r\n\r\n\r\nViele Grüße,\r\nDavid\r\n",
@@ -222,7 +222,7 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/doubleCC.eml",
         {
             "message_id": "<CACjuskUOYbprYYU9-L3CrZ5RjNHdo9c9A4z7pFDC=8JKheDWSQ@mail.bvncmx.com>",
-            "email_subject": "Test for cc header",
+            "subject": "Test for cc header",
             "date": datetime(
                 2024, 10, 18, 17, 11, 50, tzinfo=timezone(timedelta(seconds=7200))
             ),
@@ -256,7 +256,7 @@ TEST_EMAIL_PARAMETERS = [
         "test_emails/message_id_spelling.eml",
         {
             "message_id": "<20250701174450.26ae316c8d2af4a9@notify.docker.com>",
-            "email_subject": "[Docker] A personal access token was created",
+            "subject": "[Docker] A personal access token was created",
             "date": datetime(
                 2025, 7, 1, 17, 44, 50, tzinfo=timezone(timedelta(seconds=0))
             ),
@@ -637,7 +637,7 @@ def email_payload(faker, fake_mailbox):
     email_data = baker.prepare(
         Email,
         mailbox=fake_mailbox,
-        email_subject=faker.sentence(),
+        subject=faker.sentence(),
         plain_bodytext=faker.text(),
         html_bodytext=faker.text(),
         is_favorite=not Email.is_favorite.field.default,

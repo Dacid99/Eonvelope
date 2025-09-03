@@ -57,6 +57,7 @@ class Correspondent(
 
     email_address = models.CharField(
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("email address"),
     )
     """The mail address of the correspondent. Unique."""
@@ -64,6 +65,7 @@ class Correspondent(
     email_name = models.TextField(
         default="",
         blank=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("mailer name"),
         help_text=_("The mailer name of the correspondent."),
     )
@@ -73,6 +75,7 @@ class Correspondent(
         max_length=255,
         default="",
         blank=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("real name"),
         help_text=_("The real name of the correspondent."),
     )
@@ -80,6 +83,7 @@ class Correspondent(
 
     user = models.ForeignKey(
         get_user_model(),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("user"),
         on_delete=models.CASCADE,
     )
@@ -87,6 +91,7 @@ class Correspondent(
     list_id = models.TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("list ID"),
     )
     """The List-ID header of the mailinglist. Unique together with :attr:`correspondent`."""
@@ -94,6 +99,7 @@ class Correspondent(
     list_owner = models.TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("list owner"),
     )
     """The List-Owner header of the mailinglist. Can be blank."""
@@ -101,14 +107,16 @@ class Correspondent(
     list_subscribe = models.TextField(
         blank=True,
         default="",
-        verbose_name=_("list subscribe"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("list-subscribe"),
     )
     """The List-Subscribe header of the mailinglist. Can be blank."""
 
     list_unsubscribe = models.TextField(
         blank=True,
         default="",
-        verbose_name=_("list unsubscribe"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("list-unsubscribe"),
     )
     """The List-Unsubscribe header of the mailinglist. Can be blank."""
 
@@ -116,13 +124,15 @@ class Correspondent(
         max_length=255,
         blank=True,
         default="",
-        verbose_name=_("list unsubscribe post"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("list-unsubscribe method"),
     )
     """The List-Unsubscribe-Post header of the mailinglist. Can be blank."""
 
     list_post = models.TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("list post"),
     )
     """The List-Post header of the mailinglist. Can be blank."""
@@ -130,6 +140,7 @@ class Correspondent(
     list_help = models.TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("list help"),
     )
     """The List-Help header of the mailinglist. Can be blank."""
@@ -137,6 +148,7 @@ class Correspondent(
     list_archive = models.TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("list archive"),
     )
     """The List-Archive header of the mailinglist. Can be blank."""
@@ -146,6 +158,11 @@ class Correspondent(
 
         db_table = "correspondents"
         """The name of the database table for the correspondents."""
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name = _("correspondent")
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name_plural = _("correspondents")
+        get_latest_by = TimestampModelMixin.Meta.get_latest_by
 
         constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(

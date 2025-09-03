@@ -77,6 +77,7 @@ class Account(
 
     mail_address = models.EmailField(
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("email address"),
         help_text=_("The mail address to the account."),
     )
@@ -84,6 +85,7 @@ class Account(
 
     password = models.CharField(
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("password"),
         help_text=_("The password to the account."),
     )
@@ -91,6 +93,7 @@ class Account(
 
     mail_host = models.CharField(
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("mailserver URL"),
         help_text=_("The URL of the mailserver for the chosen protocol."),
     )
@@ -100,6 +103,7 @@ class Account(
         null=True,
         blank=True,
         validators=[MaxValueValidator(MAX_MAIL_HOST_PORT)],
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("mailserver portnumber"),
         help_text=_("The port of the mailserver for the chosen protocol."),
     )
@@ -108,6 +112,7 @@ class Account(
     protocol = models.CharField(
         choices=EmailProtocolChoices.choices,
         max_length=10,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("email protocol"),
         help_text=_("The email protocol implemented by the server."),
     )
@@ -116,6 +121,7 @@ class Account(
     timeout = models.PositiveIntegerField(
         null=True,
         blank=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("connection timeout"),
         help_text=_("Timeout for the connection to the mailserver."),
     )
@@ -125,6 +131,7 @@ class Account(
         get_user_model(),
         related_name="accounts",
         on_delete=models.CASCADE,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("user"),
     )
     """The user this account belongs to. Deletion of that `user` deletes this correspondent."""
@@ -134,6 +141,11 @@ class Account(
 
         db_table = "accounts"
         """The name of the database table for the mail accounts."""
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name = _("account")
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name_plural = _("accounts")
+        get_latest_by = TimestampModelMixin.Meta.get_latest_by
 
         constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(

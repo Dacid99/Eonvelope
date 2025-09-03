@@ -71,8 +71,8 @@ def test_Email_fields(fake_email):
     assert isinstance(fake_email.message_id, str)
     assert fake_email.datetime is not None
     assert isinstance(fake_email.datetime, datetime.datetime)
-    assert fake_email.email_subject is not None
-    assert isinstance(fake_email.email_subject, str)
+    assert fake_email.subject is not None
+    assert isinstance(fake_email.subject, str)
     assert fake_email.plain_bodytext is not None
     assert isinstance(fake_email.plain_bodytext, str)
     assert fake_email.html_bodytext is not None
@@ -847,7 +847,7 @@ def test_Email_create_from_email_bytes_success(
     assert isinstance(result, Email)
     assert result.pk is not None
     assert result.message_id == expected_email_features["message_id"]
-    assert result.email_subject == expected_email_features["email_subject"]
+    assert result.subject == expected_email_features["subject"]
     assert result.x_spam == expected_email_features["x_spam"]
     assert result.plain_bodytext == expected_email_features["plain_bodytext"]
     assert result.html_bodytext == expected_email_features["html_bodytext"]

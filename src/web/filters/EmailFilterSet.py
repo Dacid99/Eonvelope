@@ -41,7 +41,7 @@ class EmailFilterSet(django_filters.FilterSet):
 
     order = django_filters.OrderingFilter(
         fields=[
-            "email_subject",
+            "subject",
             "datetime",
             "datasize",
             "created",
@@ -92,7 +92,7 @@ class EmailFilterSet(django_filters.FilterSet):
         """
         return queryset.filter(
             Q(message_id__icontains=value)
-            | Q(email_subject__icontains=value)
+            | Q(subject__icontains=value)
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
             | Q(headers__has_any_keys=value)

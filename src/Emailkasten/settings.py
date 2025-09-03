@@ -613,7 +613,7 @@ EMAIL_HTML_TEMPLATE_DEFAULT = """{% load i18n %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ email.email_subject }}</title>
+    <title>{{ email.subject }}</title>
     <style>
         {{ email_css }}
     </style>
@@ -622,7 +622,7 @@ EMAIL_HTML_TEMPLATE_DEFAULT = """{% load i18n %}
     <div class="email-container">
         <div class="email-header">
             <div class="email-subject">
-                {{ email.email_subject }}
+                {{ email.subject }}
             </div>
                 <div class="email-datetime">
                 {% translate "Received" %}: {{ email.datetime|date:"DATETIME_FORMAT" }}

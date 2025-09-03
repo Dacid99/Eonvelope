@@ -28,7 +28,8 @@ class FavoriteModelMixin(Model):
 
     is_favorite = BooleanField(
         default=False,
-        verbose_name=_("favorite"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("favorite status"),
     )
     """Flags favorite accounts. False by default."""
 

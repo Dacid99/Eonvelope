@@ -34,7 +34,7 @@ from .conftest import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "searched_field", ["message_id", "email_subject", "plain_bodytext", "html_bodytext"]
+    "searched_field", ["message_id", "subject", "plain_bodytext", "html_bodytext"]
 )
 def test_search_filter(
     faker, emailcorrespondents_queryset, email_queryset, searched_field

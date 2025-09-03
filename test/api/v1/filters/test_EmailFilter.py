@@ -32,7 +32,7 @@ from .conftest import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "searched_field", ["message_id", "email_subject", "plain_bodytext", "html_bodytext"]
+    "searched_field", ["message_id", "subject", "plain_bodytext", "html_bodytext"]
 )
 def test_search_filter(faker, email_queryset, searched_field):
     """Tests :class:`api.v1.filters.EmailFilterSet`'s search filtering."""
@@ -87,13 +87,11 @@ def test_datetime_filter(email_queryset, lookup_expr, filterquery, expected_indi
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
 )
-def test_email_subject_filter(
-    email_queryset, lookup_expr, filterquery, expected_indices
-):
+def test_subject_filter(email_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.EmailFilterSet`'s filtering
-    for the :attr:`core.models.Email.Email.email_subject` field.
+    for the :attr:`core.models.Email.Email.subject` field.
     """
-    query = {"email_subject" + lookup_expr: filterquery}
+    query = {"subject" + lookup_expr: filterquery}
 
     filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
 

@@ -339,7 +339,7 @@ def email_queryset(
                 Email,
                 message_id=text_test_item,
                 datetime=datetime.datetime.now(tz=datetime.UTC),
-                email_subject=text_test_item,
+                subject=text_test_item,
                 plain_bodytext=text_test_item,
                 html_bodytext=text_test_item,
                 datasize=INT_TEST_ITEMS[number],

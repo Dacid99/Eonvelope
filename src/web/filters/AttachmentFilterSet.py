@@ -101,6 +101,6 @@ class AttachmentFilterSet(django_filters.FilterSet):
         return queryset.filter(
             models.Q(file_name__icontains=value)
             | models.Q(content_id__icontains=value)
-            | models.Q(email__email_subject__icontains=value)
+            | models.Q(email__subject__icontains=value)
             | models.Q(email__message_id__icontains=value)
         ).distinct()

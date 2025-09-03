@@ -56,7 +56,7 @@ class BaseEmailSerializer(serializers.ModelSerializer[Email]):
         read_only_fields: Final[list[str]] = [
             "message_id",
             "datetime",
-            "email_subject",
+            "subject",
             "plain_bodytext",
             "html_bodytext",
             "in_reply_to",

@@ -95,19 +95,22 @@ class Email(
 
     message_id = models.CharField(
         max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("message-ID"),
     )
     """The messageID header of the mail. Unique together with :attr:`mailbox`."""
 
     datetime = models.DateTimeField(
-        verbose_name=_("received"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("time received"),
     )
     """The Date header of the mail."""
 
-    email_subject = models.CharField(
+    subject = models.CharField(
         max_length=255,
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("subject"),
     )
     """The subject header of the mail."""
@@ -115,6 +118,7 @@ class Email(
     plain_bodytext = models.TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("plain bodytext"),
     )
     """The plain bodytext of the mail. Can be blank."""
@@ -122,6 +126,7 @@ class Email(
     html_bodytext = models.TextField(
         blank=True,
         default="",
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("HTML bodytext"),
     )
     """The html bodytext of the mail. Can be blank."""
@@ -130,7 +135,8 @@ class Email(
         "self",
         symmetrical=False,
         related_name="replies",
-        verbose_name=_("in reply to"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("in reply to email"),
     )
     """The mails that this mail is a response to.
     Technically just a single mail, but as a mail can exist in multiple mailboxes, this needs to be able to reference multiples."""
@@ -139,11 +145,13 @@ class Email(
         "self",
         symmetrical=False,
         related_name="referenced_by",
-        verbose_name=_("referenced by"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("referencing emails"),
     )
     """The mails that this email references."""
 
     datasize = models.PositiveIntegerField(
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("datasize"),
     )
     """The bytes size of the mail."""
@@ -153,6 +161,7 @@ class Email(
         unique=True,
         blank=True,
         null=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("EML filepath"),
     )
     """The path in the storage where the mail is stored in .eml format.
@@ -165,6 +174,7 @@ class Email(
             "Correspondent",
             through="EmailCorrespondent",
             related_name="emails",
+            # Translators: Do not capitalize the very first letter unless your language requires it.
             verbose_name=_("correspondents"),
         )
     )
@@ -174,12 +184,14 @@ class Email(
         "Mailbox",
         related_name="emails",
         on_delete=models.CASCADE,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("mailbox"),
     )
     """The mailbox that this mail has been found in. Unique together with :attr:`message_id`. Deletion of that `mailbox` deletes this mail."""
 
     headers = models.JSONField(
         null=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("headers"),
     )
     """All other header fields of the mail. Can be null."""
@@ -188,7 +200,8 @@ class Email(
         max_length=255,
         blank=True,
         default="",
-        verbose_name=_("X-Spam"),
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("X-Spam Flag"),
     )
     """The x_spam header of this mail. Can be blank."""
 
@@ -197,6 +210,11 @@ class Email(
 
         db_table = "emails"
         """The name of the database table for the emails."""
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name = _("email")
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name_plural = _("emails")
+        get_latest_by = "datetime"
 
         constraints: Final[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
@@ -456,7 +474,7 @@ class Email(
             message_id=header_dict.get(HeaderFields.MESSAGE_ID)
             or md5(email_bytes).hexdigest(),  # noqa: S324  # no safe hash required here
             datetime=parse_datetime_header(header_dict.get(HeaderFields.DATE)),
-            email_subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
+            subject=header_dict.get(HeaderFields.SUBJECT) or __("No subject"),
             x_spam=header_dict.get(HeaderFields.X_SPAM) or "",
             datasize=len(email_bytes),
             plain_bodytext=bodytexts.get("plain", ""),

@@ -16,10 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Emailkasten.models package containing models for the Emailkasten database."""
 
-"""Emailkasten.views package containing views for the entire Emailkasten project."""
-
-from .UserProfileView import UserProfileView
+from .UserProfile import UserProfile
 
 
-__all__ = ["UserProfileView"]
+__all__ = ["UserProfile"]

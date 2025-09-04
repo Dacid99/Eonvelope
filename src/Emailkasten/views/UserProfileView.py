@@ -16,10 +16,28 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`web.views.AccountUpdateView` view."""
 
-"""Emailkasten.views package containing views for the entire Emailkasten project."""
+from typing import override
 
-from .UserProfileView import UserProfileView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import UpdateView
+
+from Emailkasten.forms import UserProfileForm
+from Emailkasten.models import UserProfile
 
 
-__all__ = ["UserProfileView"]
+class UserProfileView(LoginRequiredMixin, UpdateView):
+    """View for updating the users profile."""
+
+    URL_NAME = "account_profile"
+    model = UserProfile
+    form_class = UserProfileForm
+    success_url = reverse_lazy(URL_NAME)
+    template_name = "account/profile.html"
+
+    @override
+    def get_object(self) -> UserProfile:
+        """Get the requesting users profile."""
+        return self.request.user.profile

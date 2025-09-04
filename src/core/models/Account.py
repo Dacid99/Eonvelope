@@ -24,7 +24,7 @@ import logging
 from typing import TYPE_CHECKING, Final, override
 
 from dirtyfields import DirtyFieldsMixin
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
 from django.db import models
@@ -128,7 +128,7 @@ class Account(
     """The timeout parameter for the connection to the host. Can be null."""
 
     user = models.ForeignKey(
-        get_user_model(),
+        settings.AUTH_USER_MODEL,
         related_name="accounts",
         on_delete=models.CASCADE,
         # Translators: Do not capitalize the very first letter unless your language requires it.

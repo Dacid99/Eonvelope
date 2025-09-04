@@ -16,10 +16,35 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Module with the :class:`BaseAccountSerializer` form class."""
 
-"""Emailkasten.views package containing views for the entire Emailkasten project."""
+from __future__ import annotations
 
-from .UserProfileView import UserProfileView
+from typing import TYPE_CHECKING, ClassVar, Final
+
+from django.forms import ModelForm
+
+from Emailkasten.models import UserProfile
 
 
-__all__ = ["UserProfileView"]
+if TYPE_CHECKING:
+    from django.db.models import Model
+
+
+class UserProfileForm(ModelForm):
+    """The form for :class:`Emailkasten.models.UserProfile`.
+
+    Exposes all fields from the model that may be changed by the user.
+    """
+
+    class Meta:
+        """Metadata class for the form."""
+
+        model: Final[type[Model]] = UserProfile
+        """The model to serialize."""
+
+        exclude: ClassVar[list[str]] = ["user"]
+        """Exposes all fields other than the `user` foreign key."""
+
+        localized_fields = "__all__"
+        """Localize all fields."""

@@ -16,10 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""The admin module for :mod:`core`. Registers all models with the admin."""
 
-"""Emailkasten.views package containing views for the entire Emailkasten project."""
+from django.contrib import admin
 
-from .UserProfileView import UserProfileView
+from .models import UserProfile
 
 
-__all__ = ["UserProfileView"]
+admin.site.register([UserProfile])

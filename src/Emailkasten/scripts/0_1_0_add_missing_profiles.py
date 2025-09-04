@@ -16,10 +16,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""Script adding missing UserProfile related fields to the existing users.
 
-"""Emailkasten.views package containing views for the entire Emailkasten project."""
+Used for migration to 0.1.0 .
+"""
 
-from .UserProfileView import UserProfileView
+from django.contrib.auth import get_user_model
+
+from Emailkasten.models import UserProfile
 
 
-__all__ = ["UserProfileView"]
+def run():
+    print("Adding missing user profiles ...")
+    count = 0
+    for user in get_user_model().objects.all():
+        if not hasattr(user, "profile"):
+            UserProfile.objects.create(user=user)
+            count += 1
+    print(f"Successfully added {count} missing profiles.")

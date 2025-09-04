@@ -16,10 +16,24 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+"""The apps module for :mod:`core`."""
 
-"""Emailkasten.views package containing views for the entire Emailkasten project."""
+from __future__ import annotations
 
-from .UserProfileView import UserProfileView
+from typing import override
+
+from django.apps import AppConfig
 
 
-__all__ = ["UserProfileView"]
+class CoreConfig(AppConfig):
+    """App config for :mod:`Emailkasten`."""
+
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "Emailkasten"
+
+    @override
+    def ready(self) -> None:
+        """Imports all model signals."""
+        # ruff: noqa: F401,PLC0415
+        # pylint: disable=import-outside-toplevel, unused-import  # this is the way it is intended by django
+        import Emailkasten.signals

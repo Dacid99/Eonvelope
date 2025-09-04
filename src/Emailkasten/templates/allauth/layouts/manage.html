@@ -6,6 +6,14 @@
     <div class="flex-grow-1 row">
         <aside class="col-sm-4 col-md-3 col-lg-2 bg-body-tertiary">
             <ul class="p-3 nav nav-pills flex-column">
+                {% url 'account_profile' as profile_url_ %}
+                {% if profile_url_ %}
+                    <li class="nav-item">
+                        <a class="
+                            {% block nav_class_profile %}nav-link{% endblock nav_class_profile %}
+                        " href="{{ profile_url_ }}">{% translate "Profile" %}</a>
+                    </li>
+                {% endif %}
                 {% url 'account_change_password' as change_password_url_ %}
                 {% if change_password_url_ %}
                     <li class="nav-item">

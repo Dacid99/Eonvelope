@@ -115,6 +115,12 @@ parametrize-values-type = "list"
   "N806",  # class names must be allowed as part of mock names
   "TRY003",# error messages can be put directly
 ]
+"/**/scripts/**" = [  # ignores for all script files
+  "ANN", # private accessed
+  "T201", # allow use of print
+  "D103", # no docstring for function needed
+  "TRY003",# error messages can be put directly
+]
 
 [lint.extend-per-file-ignores]
 "/**/test/**/test_**.py" = [  # extend ignores for test_* files, so excluding conftests

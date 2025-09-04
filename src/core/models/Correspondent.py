@@ -24,7 +24,7 @@ import logging
 from io import BytesIO
 from typing import TYPE_CHECKING, Final, override
 
-from django.contrib.auth import get_user_model
+from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from vobject import vCard
@@ -82,7 +82,7 @@ class Correspondent(
     """The real name. Can be blank if the user doesn't set one."""
 
     user = models.ForeignKey(
-        get_user_model(),
+        settings.AUTH_USER_MODEL,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("user"),
         on_delete=models.CASCADE,

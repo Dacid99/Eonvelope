@@ -1,0 +1,30 @@
+{% extends "allauth/layouts/manage.html" %}
+
+{% load allauth i18n django_bootstrap5 %}
+
+{% block nav_class_profile %}
+    {{ block.super }} active
+{% endblock nav_class_profile %}
+
+{% block head_title %}
+    {% translate "Profile" %}
+{% endblock head_title %}
+
+{% block content %}
+    <h1 class="my-4">{% translate "Your Profile" %}</h1>
+    <h3>{% translate "Third Party Integrations" %}</h3>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+            <h4>{% translate "Paperless" %}</h4>
+            <form method="post">
+                {% csrf_token %}
+                {% bootstrap_field form.paperless_url %}
+                {% bootstrap_field form.paperless_api_key %}
+                {% bootstrap_field form.paperless_tika_enabled %}
+                {% element button type="submit" %}
+                {% translate "Save" %}
+            {% endelement %}
+        </form>
+    </li>
+</ul>
+{% endblock content %}

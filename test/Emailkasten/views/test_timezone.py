@@ -40,7 +40,7 @@ def test_get_noauth(client):
 
 
 @pytest.mark.django_db
-def test_get_owner(other_client):
+def test_get_other(other_client):
     """Tests `get` on :func:`Emailkasten.views.timezone` for the authenticated other user client."""
     response = other_client.get(reverse(SET_TIMEZONE_URL_NAME))
 
@@ -51,7 +51,7 @@ def test_get_owner(other_client):
 
 
 @pytest.mark.django_db
-def test_get_other(owner_client):
+def test_get_owner(owner_client):
     """Tests `get` on :func:`Emailkasten.views.timezone` for the authenticated owner user client."""
     response = owner_client.get(reverse(SET_TIMEZONE_URL_NAME))
 

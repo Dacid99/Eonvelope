@@ -50,6 +50,7 @@ from tempfile import gettempdir
 import pytest
 from django.core.files.storage import default_storage
 from django.forms import model_to_dict
+from django.urls import reverse
 from django_celery_beat.models import IntervalSchedule
 from model_bakery import baker
 from pyfakefs.fake_filesystem_unittest import Patcher, Pause
@@ -68,6 +69,7 @@ from core.models import (
     Mailbox,
 )
 from Emailkasten.middleware.TimezoneMiddleware import TimezoneMiddleware
+from Emailkasten.models import UserProfile
 
 
 def pytest_configure(config):
@@ -349,6 +351,12 @@ def fake_fs(settings):
         yield patcher.fs
 
 
+@pytest.fixture(scope="package")
+def login_url():
+    """The login url."""
+    return reverse("account_login")
+
+
 @pytest.fixture
 def owner_user(django_user_model):
     """A user that owns the data."""
@@ -547,6 +555,21 @@ def fake_other_attachment_with_file(faker, fake_file, fake_fs, fake_other_email)
         email=fake_other_email,
         file_path=default_storage.save(faker.file_name(), fake_file),
     )
+
+
+@pytest.fixture
+def profile_payload(faker, owner_user):
+    """Fixture creating clean :class:`Emailkasten.models.UserProfile` payload with data deviating from the defaults."""
+    profile_data = baker.prepare(
+        UserProfile,
+        user=owner_user,
+        paperless_url=faker.url(),
+        paperless_api_key=faker.password(),
+        paperless_tika_enabled=True,
+    )
+    payload = model_to_dict(profile_data)
+    payload.pop("id")
+    return {key: value for key, value in payload.items() if value is not None}
 
 
 @pytest.fixture

@@ -42,12 +42,6 @@ def owner_client(client, owner_user):
 
 
 @pytest.fixture(scope="package")
-def login_url():
-    """The login url."""
-    return reverse("account_login")
-
-
-@pytest.fixture(scope="package")
 def list_url():
     """Callable getting the viewsets url for list actions."""
     return lambda view_class: reverse(f"web:{view_class.URL_NAME}")

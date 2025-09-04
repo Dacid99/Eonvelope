@@ -23,7 +23,6 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 References:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
 """
-
 from __future__ import annotations
 
 from django.contrib import admin
@@ -34,6 +33,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
+from Emailkasten.views import UserProfileView
 from Emailkasten.views.timezone import SET_TIMEZONE_URL_NAME, set_timezone
 
 
@@ -66,4 +66,5 @@ urlpatterns = [
     # web
     path("", include("web.urls")),
     path("users/", include("allauth.urls")),
+    path("users/profile/", UserProfileView.as_view(), name=UserProfileView.URL_NAME),
 ]

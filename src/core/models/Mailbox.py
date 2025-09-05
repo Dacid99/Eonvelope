@@ -95,7 +95,7 @@ class Mailbox(
     """The mailaccount this mailbox was found in. Unique together with :attr:`name`. Deletion of that `account` deletes this mailbox."""
 
     save_attachments = models.BooleanField(
-        default=get_config("DEFAULT_SAVE_ATTACHMENTS"),
+        default=True,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("save attachments"),
         help_text=_(
@@ -105,7 +105,7 @@ class Mailbox(
     """Whether to save attachments of the mails found in this mailbox. :attr:`constance.get_config('DEFAULT_SAVE_ATTACHMENTS')` by default."""
 
     save_to_eml = models.BooleanField(
-        default=get_config("DEFAULT_SAVE_TO_EML"),
+        default=True,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("save as .eml"),
         help_text=_("Whether the emails in this mailbox will be stored in .eml files."),
@@ -359,7 +359,12 @@ class Mailbox(
             new_mailbox = cls.objects.get(account=account, name=mailbox_name)
             logger.debug("%s already exists in db, it is skipped.", new_mailbox)
         except Mailbox.DoesNotExist:
-            new_mailbox = cls(account=account, name=mailbox_name)
+            new_mailbox = cls(
+                account=account,
+                name=mailbox_name,
+                save_to_eml=get_config("DEFAULT_SAVE_TO_EML"),
+                save_attachments=get_config("DEFAULT_SAVE_ATTACHMENTS"),
+            )
             new_mailbox.save()
             logger.debug("Successfully saved mailbox %s to db.", mailbox_name)
         return new_mailbox

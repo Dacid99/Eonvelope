@@ -87,8 +87,8 @@ def test_Mailbox_fields(fake_mailbox):
     assert fake_mailbox.name is not None
     assert fake_mailbox.account is not None
     assert isinstance(fake_mailbox.account, Account)
-    assert fake_mailbox.save_attachments is get_config("DEFAULT_SAVE_ATTACHMENTS")
-    assert fake_mailbox.save_to_eml is get_config("DEFAULT_SAVE_TO_EML")
+    assert fake_mailbox.save_attachments is True
+    assert fake_mailbox.save_to_eml is True
     assert fake_mailbox.is_favorite is False
     assert fake_mailbox.is_healthy is None
     assert isinstance(fake_mailbox.updated, datetime.datetime)
@@ -663,8 +663,18 @@ def test_Mailbox_add_emails_from_file_bad_format(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "DEFAULT_SAVE_ATTACHMENTS, DEFAULT_SAVE_TO_EML",
+    [(True, True), (False, False), (True, False), (False, True)],
+)
 def test_Mailbox_create_from_data_success(
-    faker, fake_account, mock_logger, mock_parse_mailbox_name
+    faker,
+    override_config,
+    fake_account,
+    mock_logger,
+    mock_parse_mailbox_name,
+    DEFAULT_SAVE_ATTACHMENTS,
+    DEFAULT_SAVE_TO_EML,
 ):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of success.
@@ -672,13 +682,18 @@ def test_Mailbox_create_from_data_success(
     fake_name_bytes = faker.name().encode()
 
     assert Mailbox.objects.count() == 0
-
-    new_mailbox = Mailbox.create_from_data(fake_name_bytes, fake_account)
+    with override_config(
+        DEFAULT_SAVE_ATTACHMENTS=DEFAULT_SAVE_ATTACHMENTS,
+        DEFAULT_SAVE_TO_EML=DEFAULT_SAVE_TO_EML,
+    ):
+        new_mailbox = Mailbox.create_from_data(fake_name_bytes, fake_account)
 
     assert Mailbox.objects.count() == 1
     assert new_mailbox.pk is not None
     mock_parse_mailbox_name.assert_called_once_with(fake_name_bytes)
     assert new_mailbox.name == mock_parse_mailbox_name.return_value
+    assert new_mailbox.save_attachments is DEFAULT_SAVE_ATTACHMENTS
+    assert new_mailbox.save_to_eml is DEFAULT_SAVE_TO_EML
     mock_logger.debug.assert_called()
 
 

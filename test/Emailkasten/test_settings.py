@@ -119,3 +119,17 @@ def test_other_logging(capsys, fake_message, production_logging):
         assert fake_message in logfile.read()
     with open(LOG_DIRECTORY_PATH / "django.log") as logfile:
         assert fake_message not in logfile.read()
+
+
+def test_constance_fieldset_setup(settings):
+    """Tests whether the all values, and only these values, of CONSTANCE_CONFIG are in CONSTANCE_CONFIG_FIELDSETS."""
+    config_fieldset_keys = [
+        config_key
+        for _, config_key_tuple in settings.CONSTANCE_CONFIG_FIELDSETS
+        for config_key in config_key_tuple
+    ]
+    config_keys = list(settings.CONSTANCE_CONFIG)
+
+    assert len(set(config_fieldset_keys)) == len(config_fieldset_keys)
+    assert len(set(config_keys)) == len(config_keys)
+    assert set(config_fieldset_keys) == set(settings.CONSTANCE_CONFIG)

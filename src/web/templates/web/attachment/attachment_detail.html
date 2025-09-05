@@ -21,6 +21,12 @@
 
     {% include "web/partials/_download-button.html" %}
 
+    {% if object.is_shareable_to_paperless %}
+
+        {% include "web/attachment/partials/_send_to_third_party_dropdown.html" %}
+
+    {% endif %}
+
 {% endblock action_buttons %}
 
 
@@ -28,9 +34,11 @@
     {{ object.file_name }}
 {% endblock card_title %}
 
+
 {% block card_subtitle %}
     {% translate "MIME Content-Type" %}: {{ object.content_type }}
 {% endblock card_subtitle %}
+
 
 {% block card_content %}
     <ul class="list-group list-group-flush">
@@ -49,11 +57,13 @@
     </ul>
 {% endblock card_content %}
 
+
 {% block thumbnail %}
 
     {% include "web/attachment/partials/_thumbnail.html" with attachment=object %}
 
 {% endblock thumbnail %}
+
 
 {% block card_extras %}
     <div class="card">

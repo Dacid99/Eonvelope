@@ -30,10 +30,13 @@ from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, Any, override
 from zipfile import ZipFile
 
+import httpcore
+import httpx
 from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
+from rest_framework import status
 
 from core.constants import HeaderFields
 from core.mixins import (
@@ -195,6 +198,80 @@ class Attachment(
         self.save(update_fields=["file_path"])
         logger.debug("Successfully stored attachment.")
 
+    def share_to_paperless(self) -> str:
+        """Sends this attachment to the paperless server of its user.
+
+        Returns:
+            The uuid string of the paperless consumer task for the document.
+
+        Raises:
+            FileNotFoundError: If the attachment file was not found in the storage.
+            RuntimeError: If the users paperless URL is not or improperly set.
+            ConnectionError: If connecting to paperless failed.
+            PermissionError: If authentication to paperless failed.
+            ValueError: If uploading the file to paperless resulted in a bad response.
+        """
+        if not self.file_path or not default_storage.exists(self.file_path):
+            raise FileNotFoundError(_("Attachment file not found"))
+        paperless_baseurl = (
+            self.email.mailbox.account.user.profile.paperless_url.rstrip("/")
+        )
+        logger.debug(
+            "Sending %s to Paperless server at %s ...", str(self), paperless_baseurl
+        )
+        post_document_url = paperless_baseurl + "/api/documents/post_document/"
+        headers = {
+            "Authorization": f"Token {self.email.mailbox.account.user.profile.paperless_api_key}".strip()
+        }  # stripping the entire string to create a valid header even if the token is empty
+        with default_storage.open(self.file_path) as document:
+            try:
+                response = httpx.post(
+                    post_document_url,
+                    headers=headers,
+                    data={"title": self.file_name, "created": str(self.created)},
+                    files={"document": (self.file_name, document, self.content_type)},
+                )
+            except (
+                httpcore.UnsupportedProtocol,
+                httpx.UnsupportedProtocol,
+                httpx.InvalidURL,
+            ) as error:
+                logger.info(
+                    "Failed to send attachment to Paperless.",
+                    exc_info=True,
+                )
+                # Translators: Paperless is a brand name.
+                raise RuntimeError(
+                    _("Paperless URL is malformed: %(error)s") % {"error": error}
+                ) from error
+            except httpx.RequestError as error:
+                logger.info("Failed to send attachment to Paperless.", exc_info=True)
+                raise ConnectionError(
+                    # Translators: Paperless is a brand name.
+                    _("Error connecting to the Paperless server: %(error)s")
+                    % {"error": error}
+                ) from error
+            try:
+                response.raise_for_status()
+            except httpx.HTTPStatusError as error:
+                logger.info("Failed to send attachment to Paperless.", exc_info=True)
+                if error.response.status_code in [
+                    status.HTTP_401_UNAUTHORIZED,
+                    status.HTTP_403_FORBIDDEN,
+                ]:
+                    raise PermissionError(
+                        # Translators: Paperless is a brand name.
+                        _("Authentication to Paperless failed: %(response)s")
+                        % {"response": error.response.json()}
+                    ) from error
+                # Translators: Paperless is a brand name.
+                raise ValueError(
+                    _("Uploading to Paperless failed: %(response)s")
+                    % {"response": error.response.json()}
+                ) from error
+            logger.debug("Successfully sent attachment to Paperless.")
+            return response.json()
+
     @override
     @property
     def has_download(self) -> bool:
@@ -246,6 +323,49 @@ class Attachment(
         if self.content_maintype and self.content_subtype:
             return self.content_maintype + "/" + self.content_subtype
         return ""
+
+    @property
+    def is_shareable_to_paperless(self) -> bool:
+        """Whether the attachment has a mimetype that can be processed by a paperless server.
+
+        References:
+            https://docs.paperless-ngx.com/faq/#what-file-types-does-paperless-ngx-support
+        """
+        return self.file_path is not None and (
+            (self.content_maintype == "text" and self.content_subtype == "plain")
+            or (
+                self.content_maintype == "image"
+                and self.content_subtype
+                in ["png", "jpeg", "pjpeg", "tiff", "x-tiff", "gif", "webp"]
+            )
+            or (
+                self.content_maintype == "application"
+                and (
+                    self.content_subtype == "pdf"
+                    or (
+                        self.email.mailbox.account.user.profile.paperless_tika_enabled
+                        and self.content_subtype
+                        in [
+                            "msword",
+                            "vnd.openxmlformats-officedocument.wordprocessingml.document",
+                            "vnd.oasis.opendocument.text",
+                            "powerpoint",
+                            "mspowerpoint",
+                            "vnd.ms-powerpoint",
+                            "vnd.openxmlformats-officedocument.presentationml.presentation",
+                            "vnd.oasis.opendocument.presentation",
+                            "excel",
+                            "msexcel",
+                            "x-excel",
+                            "x-msexcel",
+                            "vnd.ms-excel",
+                            "vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                            "vnd.oasis.opendocument.spreadsheet",
+                        ]
+                    )
+                )
+            )
+        )
 
     @classmethod
     def create_from_email_message(

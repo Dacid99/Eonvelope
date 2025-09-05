@@ -1,0 +1,20 @@
+{% load i18n %}
+
+<form method="post">
+    {% csrf_token %}
+    <div class="dropdown">
+        <button class="btn btn-outline-primary dropdown-toggle"
+                type="button"
+                id="dropdownSendMenuButton"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+            <i class="fa-solid fa-arrow-up-right-from-square mx-1"
+               aria-hidden="Share"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownSendMenuButton">
+            <li>
+                <button class="btn dropdown-item" type="submit" name="share_to_paperless">Paperless</button>
+            </li>
+        </ul>
+    </div>
+</form>

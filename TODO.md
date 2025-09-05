@@ -17,11 +17,11 @@
 - autotagging
 - saving old correspondent mailername info (via fk maybe)
 - async parsing, sync saving
-- auto transfer of pdfs to paperless
 - use post-unsubscribe-method to interpret post-unsubscribe as link
 - batch download and delete in web
 - download for account
 - mechanism to add missing connections between emails
+- restore email to mailbox on mailserver
 
 ## To refactor
 
@@ -59,6 +59,7 @@
 - filteroptions for existing db entries leak other user data
 - fetching too many emails leads to browser timeout
 - optics:
+  - forms in btn-toolbar break optics
   - better name for daemon
 - ci:
   - djlint has no files to lint

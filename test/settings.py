@@ -71,7 +71,7 @@ LOGGING = {
         },
         "Emailkasten": {
             "handlers": ["null"],
-            "level": "DEBUG",
+            "level": "ERROR",
             "propagate": True,
         },
     },

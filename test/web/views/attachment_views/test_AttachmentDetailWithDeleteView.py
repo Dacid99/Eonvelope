@@ -19,6 +19,7 @@
 """Test module for :mod:`web.views.AttachmentDetailWithDeleteView`."""
 
 import pytest
+from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from rest_framework import status
@@ -76,7 +77,10 @@ def test_get_auth_owner(fake_attachment, owner_client, detail_url):
 @pytest.mark.django_db
 def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
-    response = client.post(detail_url(AttachmentDetailWithDeleteView, fake_attachment))
+    response = client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"delete": "Delete"},
+    )
 
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)
@@ -92,7 +96,8 @@ def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
 def test_post_delete_auth_other(fake_attachment, other_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
-        detail_url(AttachmentDetailWithDeleteView, fake_attachment)
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"delete": "Delete"},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -105,7 +110,8 @@ def test_post_delete_auth_other(fake_attachment, other_client, detail_url):
 def test_post_delete_auth_owner(fake_attachment, owner_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
-        detail_url(AttachmentDetailWithDeleteView, fake_attachment)
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"delete": "Delete"},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -113,3 +119,123 @@ def test_post_delete_auth_owner(fake_attachment, owner_client, detail_url):
     assert response.url.startswith(reverse("web:" + AttachmentFilterView.URL_NAME))
     with pytest.raises(Attachment.DoesNotExist):
         fake_attachment.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_share_to_paperless_noauth(
+    fake_attachment, client, detail_url, login_url, mock_Attachment_share_to_paperless
+):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
+    response = client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"share_to_paperless": "Update Mailboxes"},
+    )
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert isinstance(response, HttpResponseRedirect)
+    assert response.url.startswith(login_url)
+    assert response.url.endswith(
+        f"?next={detail_url(AttachmentDetailWithDeleteView, fake_attachment)}"
+    )
+    mock_Attachment_share_to_paperless.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_share_to_paperless_auth_other(
+    fake_attachment, other_client, detail_url, mock_Attachment_share_to_paperless
+):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
+    response = other_client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"share_to_paperless": "Update Mailboxes"},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    mock_Attachment_share_to_paperless.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_share_to_paperless_success_auth_owner(
+    fake_attachment, owner_client, detail_url, mock_Attachment_share_to_paperless
+):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client
+    in case of success.
+    """
+    response = owner_client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"share_to_paperless": "Update Mailboxes"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/attachment/attachment_detail.html" in [
+        template.name for template in response.templates
+    ]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Attachment)
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
+    mock_Attachment_share_to_paperless.assert_called_once()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "error",
+    [
+        FileNotFoundError,
+        ConnectionError,
+        PermissionError,
+        ValueError,
+        RuntimeError,
+    ],
+)
+def test_post_share_to_paperless_failure_auth_owner(
+    fake_error_message,
+    fake_attachment,
+    owner_client,
+    detail_url,
+    mock_Attachment_share_to_paperless,
+    error,
+):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client
+    in case of failure.
+    """
+    mock_Attachment_share_to_paperless.side_effect = error(fake_error_message)
+
+    response = owner_client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"share_to_paperless": "Update Mailboxes"},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/attachment/attachment_detail.html" in [
+        template.name for template in response.templates
+    ]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Attachment)
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.ERROR
+    mock_Attachment_share_to_paperless.assert_called_once()
+    assert fake_error_message in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_post_share_to_paperless_missing_action_auth_owner(
+    faker, fake_attachment, owner_client, detail_url, mock_Attachment_share_to_paperless
+):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client
+    in case the action is missing in the request.
+    """
+    response = owner_client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_Attachment_share_to_paperless.assert_not_called()

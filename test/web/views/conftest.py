@@ -81,3 +81,11 @@ def mock_Mailbox_fetch(mocker):
 def mock_Daemon_test(mocker):
     """Patches :func:`core.models.Daemon.Daemon.test` for testing of the test action."""
     return mocker.patch("core.models.Daemon.Daemon.test", autospec=True)
+
+
+@pytest.fixture
+def mock_Attachment_share_to_paperless(mocker):
+    """Patches `core.models.Attachment.share_to_paperless`."""
+    return mocker.patch(
+        "core.models.Attachment.Attachment.share_to_paperless", autospec=True
+    )

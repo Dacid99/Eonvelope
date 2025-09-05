@@ -26,6 +26,7 @@ from tempfile import gettempdir
 from zipfile import ZipFile
 
 import django.db.models
+import httpx
 import pytest
 from django.core.files.storage import default_storage
 from django.db import IntegrityError
@@ -40,6 +41,17 @@ from test.conftest import TEST_EMAIL_PARAMETERS
 def mock_logger(mocker):
     """Fixture mocking the logger :attr:`core.models.Attachment.logger` of the module."""
     return mocker.patch("core.models.Attachment.logger", autospec=True)
+
+
+@pytest.fixture
+def mock_httpx_post(mocker, faker):
+    """Fixture mocking the post method of :mod:`httpx`."""
+    fake_response = httpx.Response(
+        200,
+        content=f'{{"{faker.word()}": "{faker.uuid4()}"}}',
+        request=httpx.Request("post", faker.url()),
+    )
+    return mocker.patch("httpx.post", autospec=True, return_value=fake_response)
 
 
 @pytest.fixture
@@ -304,6 +316,169 @@ def test_Attachment_queryset_as_file_empty_queryset():
 
 
 @pytest.mark.django_db
+def test_Attachment_share_to_paperless_success(
+    faker, fake_attachment_with_file, mock_logger, mock_httpx_post
+):
+    """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
+    in case of success.
+    """
+    profile = fake_attachment_with_file.email.mailbox.account.user.profile
+    profile.paperless_url = faker.url()
+    profile.paperless_api_key = faker.word()
+    profile.save()
+
+    result = fake_attachment_with_file.share_to_paperless()
+
+    assert result == mock_httpx_post.return_value.json()
+    mock_httpx_post.assert_called_once()
+    assert (
+        mock_httpx_post.call_args.args[0]
+        == profile.paperless_url.strip("/") + "/api/documents/post_document/"
+    )
+    assert mock_httpx_post.call_args.kwargs["data"] == {
+        "title": fake_attachment_with_file.file_name,
+        "created": str(fake_attachment_with_file.created),
+    }
+    assert mock_httpx_post.call_args.kwargs["headers"] == {
+        "Authorization": f"Token {profile.paperless_api_key}"
+    }
+    assert (
+        mock_httpx_post.call_args.kwargs["files"]["document"][0]
+        == fake_attachment_with_file.file_name
+    )
+    assert mock_httpx_post.call_args.kwargs["files"]["document"][
+        1
+    ].name == default_storage.path(fake_attachment_with_file.file_path)
+    assert (
+        mock_httpx_post.call_args.kwargs["files"]["document"][2]
+        == fake_attachment_with_file.content_type
+    )
+    mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
+def test_Attachment_share_to_paperless_no_file(fake_attachment):
+    """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
+    in case the attachment has no file.
+    """
+    with pytest.raises(FileNotFoundError):
+        fake_attachment.share_to_paperless()
+
+
+@pytest.mark.django_db
+def test_Attachment_share_to_paperless_no_api_key(
+    faker, fake_attachment_with_file, mock_logger, mock_httpx_post
+):
+    """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
+    in case there is no apikey.
+    This test makes sure there is no error constructing the header.
+    """
+    fake_attachment_with_file.email.mailbox.account.user.profile.paperless_url = (
+        faker.url()
+    )
+    fake_attachment_with_file.email.mailbox.account.user.profile.save()
+    mock_httpx_post.return_value.status_code = 401
+
+    with pytest.raises(PermissionError):
+        fake_attachment_with_file.share_to_paperless()
+
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("paperless_url", ["test.org", "smb://100.200.051.421", ""])
+def test_Attachment_share_to_paperless_error_request_setup(
+    fake_attachment_with_file, mock_logger, paperless_url
+):
+    """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
+    in case of an error with the request.
+    """
+    fake_attachment_with_file.email.mailbox.account.user.profile.paperless_url = (
+        paperless_url
+    )
+    fake_attachment_with_file.email.mailbox.account.user.profile.save()
+
+    with pytest.raises(RuntimeError):
+        fake_attachment_with_file.share_to_paperless()
+
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+def test_Attachment_share_to_paperless_error_request(
+    fake_error_message,
+    fake_attachment_with_file,
+    mock_logger,
+    mock_httpx_post,
+):
+    """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
+    in case of an error with the request.
+    """
+    mock_httpx_post.side_effect = httpx.RequestError(fake_error_message)
+
+    with pytest.raises(ConnectionError, match=fake_error_message):
+        fake_attachment_with_file.share_to_paperless()
+
+    mock_httpx_post.assert_called_once()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("status_code", [401, 403])
+def test_Attachment_share_to_paperless_unauthorized(
+    fake_error_message,
+    fake_attachment_with_file,
+    mock_httpx_post,
+    mock_logger,
+    status_code,
+):
+    """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
+    in case of an error authenticating.
+    """
+    mock_httpx_post.return_value = httpx.Response(
+        status_code,
+        content=f'{{"detail": "{fake_error_message}"}}',
+        request=mock_httpx_post.return_value.request,
+    )
+
+    with pytest.raises(PermissionError, match=fake_error_message):
+        fake_attachment_with_file.share_to_paperless()
+
+    mock_httpx_post.assert_called_once()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("status_code", [400, 500, 300])
+def test_Attachment_share_to_paperless_error_status(
+    fake_error_message,
+    fake_attachment_with_file,
+    mock_httpx_post,
+    mock_logger,
+    status_code,
+):
+    """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
+    in case of a bad status response.
+    """
+    mock_httpx_post.return_value = httpx.Response(
+        status_code,
+        content=f'{{"detail": "{fake_error_message}"}}',
+        request=mock_httpx_post.return_value.request,
+    )
+
+    with pytest.raises(ValueError, match=fake_error_message):
+        fake_attachment_with_file.share_to_paperless()
+
+    mock_httpx_post.assert_called_once()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "test_email_path, expected_email_features, expected_correspondents_features,expected_attachments_features",
     TEST_EMAIL_PARAMETERS,
@@ -500,6 +675,183 @@ def test_Attachment_has_thumbnail_too_large(
 
     with override_config(WEB_THUMBNAIL_MAX_DATASIZE=0):
         result = fake_attachment.has_thumbnail
+
+    assert result is False
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype, expected_is_shareable_to_paperless",
+    [
+        ("", "", False),
+        ("oo4vuy0s9yn", "a4ueiofdsj", False),
+        ("image", "jpeg", True),
+        ("image", "pjpeg", True),
+        ("image", "png", True),
+        ("image", "tiff", True),
+        ("image", "x-tiff", True),
+        ("image", "gif", True),
+        ("image", "raw", False),
+        ("text", "plain", True),
+        ("text", "html", False),
+        ("font", "woff", False),
+        ("application", "pdf", True),
+        ("application", "json", False),
+        ("application", "msword", False),
+        (
+            "application",
+            "vnd.openxmlformats-officedocument.wordprocessingml.document",
+            False,
+        ),
+        ("application", "vnd.oasis.opendocument.text", False),
+        ("application", "powerpoint", False),
+        ("application", "mspowerpoint", False),
+        ("application", "vnd.ms-powerpoint", False),
+        (
+            "application",
+            "vnd.openxmlformats-officedocument.presentationml.presentation",
+            False,
+        ),
+        ("application", "vnd.oasis.opendocument.presentation", False),
+        ("application", "excel", False),
+        ("application", "msexcel", False),
+        ("application", "x-excel", False),
+        ("application", "x-msexcel", False),
+        ("application", "vnd.ms-excel", False),
+        ("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet", False),
+        ("application", "vnd.oasis.opendocument.spreadsheet", False),
+    ],
+)
+def test_Attachment_is_shareable_to_paperless_with_file_no_tika(
+    fake_attachment_with_file,
+    content_maintype,
+    content_subtype,
+    expected_is_shareable_to_paperless,
+):
+    """Tests :func:`core.models.Attachment.Attachment.is_shareable_to_paperless` in the two relevant cases."""
+    fake_attachment_with_file.content_maintype = content_maintype
+    fake_attachment_with_file.content_subtype = content_subtype
+    fake_attachment_with_file.email.mailbox.account.user.profile.paperless_tika_enabled = (
+        False
+    )
+    fake_attachment_with_file.email.mailbox.account.user.profile.save()
+
+    result = fake_attachment_with_file.is_shareable_to_paperless
+
+    assert result == expected_is_shareable_to_paperless
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype, expected_is_shareable_to_paperless",
+    [
+        ("", "", False),
+        ("oo4vuy0s9yn", "a4ueiofdsj", False),
+        ("image", "jpeg", True),
+        ("image", "pjpeg", True),
+        ("image", "png", True),
+        ("image", "tiff", True),
+        ("image", "x-tiff", True),
+        ("image", "gif", True),
+        ("image", "raw", False),
+        ("text", "plain", True),
+        ("text", "html", False),
+        ("font", "woff", False),
+        ("application", "pdf", True),
+        ("application", "json", False),
+        ("application", "msword", True),
+        (
+            "application",
+            "vnd.openxmlformats-officedocument.wordprocessingml.document",
+            True,
+        ),
+        ("application", "vnd.oasis.opendocument.text", True),
+        ("application", "powerpoint", True),
+        ("application", "mspowerpoint", True),
+        ("application", "vnd.ms-powerpoint", True),
+        (
+            "application",
+            "vnd.openxmlformats-officedocument.presentationml.presentation",
+            True,
+        ),
+        ("application", "vnd.oasis.opendocument.presentation", True),
+        ("application", "excel", True),
+        ("application", "msexcel", True),
+        ("application", "x-excel", True),
+        ("application", "x-msexcel", True),
+        ("application", "vnd.ms-excel", True),
+        ("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet", True),
+        ("application", "vnd.oasis.opendocument.spreadsheet", True),
+    ],
+)
+def test_Attachment_is_shareable_to_paperless_with_file_with_tika(
+    fake_attachment_with_file,
+    content_maintype,
+    content_subtype,
+    expected_is_shareable_to_paperless,
+):
+    """Tests :func:`core.models.Attachment.Attachment.is_shareable_to_paperless` in the two relevant cases."""
+    fake_attachment_with_file.content_maintype = content_maintype
+    fake_attachment_with_file.content_subtype = content_subtype
+    fake_attachment_with_file.email.mailbox.account.user.profile.paperless_tika_enabled = (
+        True
+    )
+    fake_attachment_with_file.email.mailbox.account.user.profile.save()
+
+    result = fake_attachment_with_file.is_shareable_to_paperless
+
+    assert result == expected_is_shareable_to_paperless
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype",
+    [
+        ("", ""),
+        ("oo4vuy0s9yn", "a4ueiofdsj"),
+        ("image", "jpeg"),
+        ("image", "pjpeg"),
+        ("image", "png"),
+        ("image", "tiff"),
+        ("image", "x-tiff"),
+        ("image", "gif"),
+        ("image", "raw"),
+        ("text", "plain"),
+        ("text", "html"),
+        ("font", "woff"),
+        ("application", "pdf"),
+        ("application", "json"),
+        ("application", "msword"),
+        (
+            "application",
+            "vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ),
+        ("application", "vnd.oasis.opendocument.text"),
+        ("application", "powerpoint"),
+        ("application", "mspowerpoint"),
+        ("application", "vnd.ms-powerpoint"),
+        (
+            "application",
+            "vnd.openxmlformats-officedocument.presentationml.presentation",
+        ),
+        ("application", "vnd.oasis.opendocument.presentation"),
+        ("application", "excel"),
+        ("application", "msexcel"),
+        ("application", "x-excel"),
+        ("application", "x-msexcel"),
+        ("application", "vnd.ms-excel"),
+        ("application", "vnd.openxmlformats-officedocument.spreadsheetml.sheet"),
+        ("application", "vnd.oasis.opendocument.spreadsheet"),
+    ],
+)
+def test_Attachment_is_shareable_to_paperless_no_file(
+    fake_attachment, content_maintype, content_subtype
+):
+    """Tests :func:`core.models.Attachment.Attachment.is_shareable_to_paperless` in the two relevant cases."""
+    fake_attachment.content_maintype = content_maintype
+    fake_attachment.content_subtype = content_subtype
+
+    result = fake_attachment.is_shareable_to_paperless
 
     assert result is False
 

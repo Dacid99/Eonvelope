@@ -28,11 +28,12 @@ from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter, OpenApiResponse, OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from api.utils import query_param_list_to_typed_list
 from api.v1.filters import AttachmentFilterSet
@@ -44,7 +45,6 @@ from core.models import Attachment
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request
-    from rest_framework.response import Response
 
 
 @extend_schema_view(
@@ -87,7 +87,19 @@ if TYPE_CHECKING:
                 description="Headers: Content-Disposition=inline, X-Frame-Options = 'SAMEORIGIN', Content-Security-Policy = 'frame-ancestors 'self''",
             )
         },
-        description="Downloads a single emails thumbnail.",
+        description="Downloads a single attachments thumbnail.",
+    ),
+    share_to_paperless=extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response=OpenApiTypes.STR,
+            ),
+            400: OpenApiResponse(
+                response=OpenApiTypes.STR,
+                description="If the request to the Paperless server fails. The reason is given as the response data.",
+            ),
+        },
+        description="Sends the attachment file to Paperless.",
     ),
 )
 class AttachmentViewSet(
@@ -254,3 +266,39 @@ class AttachmentViewSet(
         response.headers["X-Frame-Options"] = "SAMEORIGIN"
         response.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
         return response
+
+    URL_PATH_SHARE_TO_PAPERLESS = "share/Paperless"
+    URL_NAME_SHARE_TO_PAPERLESS = "share-to-Paperless"
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_SHARE_TO_PAPERLESS,
+        url_name=URL_NAME_SHARE_TO_PAPERLESS,
+    )
+    def share_to_paperless(self, request: Request, pk: int | None = None) -> Response:
+        """Action method sending the attachment to the users Paperless server.
+
+        Args:
+            request: The request triggering the action.
+            pk: The private key of the attachment to download. Defaults to None.
+
+        Raises:
+            Http404: If the filepath is not in the database or it doesn't exist.
+
+        Returns:
+            A fileresponse containing the requested file.
+        """
+        attachment = self.get_object()
+        try:
+            task_id = attachment.share_to_paperless()
+        except FileNotFoundError:
+            raise Http404(_("Attachment file not found")) from None
+        except (RuntimeError, ConnectionError, PermissionError, ValueError) as error:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST, data={"detail": str(error)}
+            )
+        return Response(
+            status=status.HTTP_200_OK,
+            data={"detail": _("Upload to Paperless succeeded."), "task_id": task_id},
+        )

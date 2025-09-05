@@ -18,19 +18,26 @@
 
 """Module with the :class:`web.views.AttachmentDetailWithDeleteView` view."""
 
-from typing import override
+from typing import Any, override
 
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import QuerySet
+from django.http import HttpRequest, HttpResponse
 from django.urls import reverse_lazy
+from django.utils.translation import gettext_lazy as _
+from django.views.generic.edit import DeletionMixin
 
 from core.models import Attachment
+from web.mixins import CustomActionMixin
 from web.views.base import DetailWithDeleteView
 
 from .AttachmentFilterView import AttachmentFilterView
 
 
-class AttachmentDetailWithDeleteView(LoginRequiredMixin, DetailWithDeleteView):
+class AttachmentDetailWithDeleteView(
+    LoginRequiredMixin, DetailWithDeleteView, CustomActionMixin
+):
     """View for a single :class:`core.models.Attachment` instance."""
 
     URL_NAME = Attachment.get_detail_web_url_name()
@@ -47,3 +54,34 @@ class AttachmentDetailWithDeleteView(LoginRequiredMixin, DetailWithDeleteView):
             .filter(email__mailbox__account__user=self.request.user)
             .select_related("email")
         )
+
+    @override
+    def post(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        if "delete" in request.POST:
+            return DeletionMixin.post(self, request)
+        return CustomActionMixin.post(self, request)
+
+    def handle_share_to_paperless(self, request: HttpRequest) -> HttpResponse:
+        """Handler function for the `share-to-paperless` action.
+
+        Args:
+            request: The action request to handle.
+
+        Returns:
+            A template response with the updated view after the action.
+        """
+        self.object = self.get_object()
+        try:
+            self.object.share_to_paperless()
+        except (
+            FileNotFoundError,
+            ConnectionError,
+            PermissionError,
+            ValueError,
+            RuntimeError,
+        ) as error:
+            messages.error(request, str(error))
+        else:
+            messages.success(request, _("Sharing to Paperless successful"))
+
+        return self.get(request)

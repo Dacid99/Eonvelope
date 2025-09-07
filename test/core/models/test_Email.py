@@ -39,9 +39,11 @@ from core.constants import (
     file_format_parsers,
 )
 from core.models import Correspondent, Email, Mailbox
+from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from Emailkasten.utils.workarounds import get_config
 from test.conftest import TEST_EMAIL_PARAMETERS
 
+from .test_Account import mock_Account_get_fetcher, mock_fetcher
 from .test_Attachment import mock_Attachment_save_to_storage
 
 
@@ -314,6 +316,48 @@ def test_save_eml_to_storage_file_path_set(
     mock_logger.error.assert_not_called()
 
 
+def test_Email_open_file_success(fake_email_with_file, mock_logger):
+    """Tests :func:`core.models.Email.Email.open_file`
+    in case of success.
+    """
+    result = fake_email_with_file.open_file()
+
+    with default_storage.open(fake_email_with_file.eml_filepath, "rb") as email_file:
+        assert result.read() == email_file.read()
+
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
+
+    result.close()
+
+
+def test_Email_open_file_no_filepath(fake_email_with_file, mock_logger):
+    """Tests :func:`core.models.Email.Email.open_file`
+    in case the filepath on the instance is not set.
+    """
+    fake_email_with_file.eml_filepath = None
+
+    with pytest.raises(FileNotFoundError):
+        fake_email_with_file.open_file()
+
+    mock_logger.warning.assert_not_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
+
+
+def test_Email_open_file_no_file(faker, fake_email, mock_logger):
+    """Tests :func:`core.models.Email.Email.open_file`
+    in case the file can't be found in the storage.
+    """
+    fake_email.eml_filepath = faker.file_name()
+
+    with pytest.raises(FileNotFoundError):
+        fake_email.open_file()
+
+    mock_logger.exception.assert_called()
+
+
 @pytest.mark.django_db
 @pytest.mark.parametrize("start_id", [1, 2, 3, 4, 5, 6, 7, 8])
 def test_Email_conversation(fake_email_conversation, start_id):
@@ -323,6 +367,82 @@ def test_Email_conversation(fake_email_conversation, start_id):
     conversation_emails = start_email.conversation
 
     assert len(conversation_emails) == 8
+
+
+@pytest.mark.django_db
+def test_Email_restore_to_mailbox_success(
+    fake_email, mock_logger, mock_fetcher, mock_Account_get_fetcher
+):
+    """Tests :func:`core.models.Email.Email.restore_to_mailbox`
+    in case of success.
+    """
+    fake_email.restore_to_mailbox()
+
+    fake_email.refresh_from_db()
+    mock_Account_get_fetcher.assert_called_once_with(fake_email.mailbox.account)
+    mock_fetcher.restore.assert_called_with(fake_email)
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_Email_restore_to_mailbox_no_file(
+    fake_error_message,
+    fake_email,
+    mock_logger,
+    mock_fetcher,
+    mock_Account_get_fetcher,
+):
+    """Tests :func:`core.models.Email.Email.restore_to_mailbox`
+    in case of the account has a bad :attr:`core.models.Email.Email.protocol` field and raises a :class:`ValueError`.
+    """
+    mock_Account_get_fetcher.side_effect = ValueError(fake_error_message)
+
+    with pytest.raises(ValueError, match=fake_error_message):
+        fake_email.restore_to_mailbox()
+
+    mock_Account_get_fetcher.assert_called_once_with(fake_email.mailbox.account)
+    mock_fetcher.restore.assert_not_called()
+    mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
+def test_Email_restore_to_mailbox_failure(
+    fake_email, mock_logger, mock_fetcher, mock_Account_get_fetcher
+):
+    """Tests :func:`core.models.Email.Email.restore_to_mailbox`
+    in case of the test fails with a :class:`core.utils.fetchers.exceptions.MailAccountError`.
+    """
+    mock_fetcher.restore.side_effect = MailboxError(Exception())
+
+    with pytest.raises(MailboxError):
+        fake_email.restore_to_mailbox()
+
+    fake_email.refresh_from_db()
+    mock_Account_get_fetcher.assert_called_once_with(fake_email.mailbox.account)
+    mock_fetcher.restore.assert_called_with(fake_email)
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_called()
+
+
+@pytest.mark.django_db
+def test_Email_restore_to_mailbox_get_fetcher_error(
+    fake_email, mock_logger, mock_fetcher, mock_Account_get_fetcher
+):
+    """Tests :func:`core.models.Email.Email.restore_to_mailbox`
+    in case the :func:`core.models.Account.Account.get_fetcher`
+    raises a :class:`core.utils.fetchers.exceptions.MailAccountError`.
+    """
+    mock_Account_get_fetcher.side_effect = MailAccountError(Exception())
+
+    with pytest.raises(MailAccountError):
+        fake_email.restore_to_mailbox()
+
+    fake_email.refresh_from_db()
+    mock_Account_get_fetcher.assert_called_once_with(fake_email.mailbox.account)
+    mock_fetcher.restore.assert_not_called()
+    mock_logger.debug.assert_called()
 
 
 @pytest.mark.django_db

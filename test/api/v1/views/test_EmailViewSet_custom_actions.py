@@ -30,6 +30,8 @@ from rest_framework import status
 from api.v1.views import EmailViewSet
 from core.constants import SupportedEmailDownloadFormats
 from core.models import Email
+from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from test.conftest import fake_error_message
 
 
 @pytest.fixture
@@ -39,6 +41,12 @@ def mock_Email_queryset_as_file(mocker, fake_file):
         "api.v1.views.EmailViewSet.Email.queryset_as_file",
         return_value=fake_file,
     )
+
+
+@pytest.fixture
+def mock_Email_restore_to_mailbox(mocker):
+    """Patches `core.models.Email.restore_to_mailbox`."""
+    return mocker.patch("api.v1.views.EmailViewSet.Email.restore_to_mailbox")
 
 
 @pytest.mark.django_db
@@ -380,6 +388,130 @@ def test_conversation_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     assert response.data["count"] == 8
     assert len(response.data["results"]) == 8
+
+
+@pytest.mark.django_db
+def test_restore_noauth(
+    fake_email,
+    noauth_api_client,
+    custom_detail_action_url,
+    mock_Email_restore_to_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.restore` action with an unauthenticated user client."""
+    response = noauth_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_RESTORE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    mock_Email_restore_to_mailbox.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_restore_auth_other(
+    fake_email,
+    other_api_client,
+    custom_detail_action_url,
+    mock_Email_restore_to_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.restore` action with the authenticated other user client."""
+    response = other_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_RESTORE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Email_restore_to_mailbox.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_restore_auth_owner_success(
+    fake_email,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Email_restore_to_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.restore` action with the authenticated owner user client."""
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_RESTORE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "detail" in response.data
+    mock_Email_restore_to_mailbox.assert_called_once_with()
+
+
+@pytest.mark.django_db
+def test_restore_auth_owner_pop(
+    fake_email,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Email_restore_to_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.restore` action with the authenticated owner user client."""
+    mock_Email_restore_to_mailbox.side_effect = NotImplementedError
+
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_RESTORE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "detail" in response.data
+    mock_Email_restore_to_mailbox.assert_called_once_with()
+
+
+@pytest.mark.django_db
+def test_restore_auth_owner_no_file(
+    fake_error_message,
+    fake_email,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Email_restore_to_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.restore` action with the authenticated owner user client."""
+    mock_Email_restore_to_mailbox.side_effect = FileNotFoundError(fake_error_message)
+
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_RESTORE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "detail" in response.data
+    mock_Email_restore_to_mailbox.assert_called_once_with()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("error", [MailAccountError, MailboxError])
+def test_restore_auth_owner_failure(
+    fake_error_message,
+    fake_email,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Email_restore_to_mailbox,
+    error,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.restore` action with the authenticated owner user client."""
+    mock_Email_restore_to_mailbox.side_effect = error(fake_error_message)
+
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_RESTORE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "detail" in response.data
+    assert "error" in response.data
+    assert fake_error_message in response.data["error"]
+    mock_Email_restore_to_mailbox.assert_called_once_with()
 
 
 @pytest.mark.django_db

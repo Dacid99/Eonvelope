@@ -26,6 +26,7 @@ from typing import TYPE_CHECKING, override
 from django.utils.translation import gettext_lazy as _
 
 from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
+from core.models import Email
 
 from .BaseFetcher import BaseFetcher
 from .exceptions import FetcherError, MailAccountError
@@ -181,6 +182,21 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
             The name of the mailbox in the account in a list.
         """
         return ["INBOX"]
+
+    @override
+    def restore(self, email: Email) -> None:
+        """Places an email in its mailbox.
+
+        Note:
+            POP doesn't offer an action to upload emails.
+
+        Args:
+            email: The email to restore.
+
+        Raises:
+            NotImplementedError: POP can't restore emails.
+        """
+        raise NotImplementedError("Restoring to POP account is not possible.")
 
     @override
     def close(self) -> None:

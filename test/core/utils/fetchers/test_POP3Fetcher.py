@@ -506,6 +506,25 @@ def test_POP3Fetcher_fetch_mailboxes(pop3_mailbox):
 
 
 @pytest.mark.django_db
+def test_POP3Fetcher_restore(fake_email, pop3_mailbox):
+    """Tests :func:`core.utils.fetchers.POP3Fetcher.restore`."""
+    with pytest.raises(NotImplementedError):
+        POP3Fetcher(pop3_mailbox.account).restore(fake_email)
+
+
+@pytest.mark.django_db
+def test_POP3Fetcher_restore_wrong_mailbox(
+    fake_email, pop3_mailbox, fake_other_mailbox
+):
+    """Tests :func:`core.utils.fetchers.POP3Fetcher.restore`."""
+    fake_email.mailbox = fake_other_mailbox
+    fake_email.save()
+
+    with pytest.raises(NotImplementedError):
+        POP3Fetcher(pop3_mailbox.account).restore(fake_email)
+
+
+@pytest.mark.django_db
 def test_POP3Fetcher_close_success(pop3_mailbox, mock_logger, mock_POP3):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.close`
     in case of success.

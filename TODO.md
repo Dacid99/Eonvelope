@@ -34,6 +34,10 @@
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
 - use pre-commit
+- move all file related stuff from email and attachment to mixin
+- use open_file in downloads
+- error in api for share should be in seperate error field
+- log error in set_unhealthy
 
 ## To test
 
@@ -41,6 +45,7 @@
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap,pop)
 - page_obj of list views for correct email content
+- remove values in action test-requests
 
 ## To implement
 

@@ -39,6 +39,7 @@ if TYPE_CHECKING:
     from exchangelib.queryset import QuerySet
 
     from core.models.Account import Account
+    from core.models.Email import Email
     from core.models.Mailbox import Mailbox
 
 
@@ -278,6 +279,31 @@ class ExchangeFetcher(BaseFetcher):
             raise MailAccountError(error, _("scan for mailboxes")) from error
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
         return mailbox_names
+
+    @override
+    def restore(self, email: Email) -> None:
+        """Places an email in its mailbox.
+
+        Args:
+            email: The email to restore.
+
+        Raises:
+            ValueError: If the emails mailbox is not in this fetchers account.
+            FileNotFoundError: If the email has no eml file in storage.
+            MailboxError: If uploading the email to the mailserver fails or returns a bad response.
+        """
+        super().restore(email)
+        self.logger.debug("Restoring email %s to its mailbox ...", email)
+        with email.open_file() as email_file:
+            try:
+                exchangelib.Message(
+                    folder=self.open_mailbox(email.mailbox),
+                    mime_content=email_file.read(),
+                ).save()
+            except exchangelib.errors.EWSError as error:
+                self.logger.exception("Error during restoring of email!")
+                raise MailboxError(error, _("restoring of email")) from error
+        self.logger.debug("Successfully restored email.")
 
     @override
     def close(self) -> None:

@@ -31,7 +31,7 @@ from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter, OpenApiResponse, OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
@@ -44,6 +44,7 @@ from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from api.v1.serializers import BaseEmailSerializer, FullEmailSerializer
 from core.constants import SupportedEmailDownloadFormats
 from core.models import Email, EmailCorrespondent
+from core.utils.fetchers.exceptions import FetcherError
 
 
 if TYPE_CHECKING:
@@ -104,6 +105,20 @@ if TYPE_CHECKING:
     conversation=extend_schema(
         responses=BaseEmailSerializer(many=True),
         description="Lists the conversation involving the email instance.",
+    ),
+    restore=extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response=OpenApiTypes.STR, description="Restoring was successful"
+            ),
+            400: OpenApiResponse(
+                response=OpenApiTypes.STR, description="Restoring failed"
+            ),
+            404: OpenApiResponse(
+                response=OpenApiTypes.STR, description="The eml file was not found"
+            ),
+        },
+        description="Restores the email to its mailbox.",
     ),
 )
 class EmailViewSet(
@@ -330,3 +345,39 @@ class EmailViewSet(
 
         conversation_serializer = BaseEmailSerializer(conversation, many=True)
         return Response(conversation_serializer.data)
+
+    URL_PATH_RESTORE = "restore"
+    URL_NAME_RESTORE = "restore"
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_RESTORE,
+        url_name=URL_NAME_RESTORE,
+    )
+    def restore(self, request: Request, pk: int | None = None) -> Response:
+        """Action method restoring the email to its mailbox.
+
+        Args:
+            request: The request triggering the action.
+            pk: The private key of the email to get the complete conversation it belongs to. Defaults to None.
+
+        Returns:
+            A response detailing the request status.
+        """
+        email = self.get_object()
+        try:
+            email.restore_to_mailbox()
+        except NotImplementedError:
+            return Response(
+                {"detail": _("POP accounts do not support restoring of emails.")},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        except FileNotFoundError:
+            raise Http404(_("eml file not found")) from None
+        except FetcherError as error:
+            return Response(
+                {"detail": _("Restoring of email failed"), "error": str(error)},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response({"detail": _("Email restored successfully")})

@@ -37,6 +37,7 @@ from .BaseFetcher import BaseFetcher
 
 if TYPE_CHECKING:
     from core.models.Account import Account
+    from core.models.Email import Email
     from core.models.Mailbox import Mailbox
 
 
@@ -268,6 +269,24 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
             )
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
         return bytes_mailboxes
+
+    @override
+    def restore(self, email: Email) -> None:
+        """Places an email in its mailbox.
+
+        Args:
+            email: The email to restore.
+
+        Raises:
+            ValueError: If the emails mailbox is not in this fetchers account.
+            FileNotFoundError: If the email has no eml file in storage.
+            MailboxError: If uploading the email to the mailserver fails or returns a bad response.
+        """
+        super().restore(email)
+        self.logger.debug("Restoring email %s to its mailbox ...", email)
+        with email.open_file() as email_file:
+            self.safe_append(email.mailbox.name, None, None, email_file.read())
+        self.logger.debug("Successfully restored email.")
 
     @override
     def close(self) -> None:

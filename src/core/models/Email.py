@@ -41,6 +41,7 @@ from django.utils.translation import gettext as __
 from django.utils.translation import gettext_lazy as _
 
 from core.constants import (
+    EmailProtocolChoices,
     HeaderFields,
     SupportedEmailDownloadFormats,
     file_format_parsers,
@@ -52,6 +53,7 @@ from core.mixins import (
     TimestampModelMixin,
     URLMixin,
 )
+from core.utils.fetchers.exceptions import MailboxError
 from core.utils.mail_parsing import (
     get_bodytexts,
     get_header,
@@ -67,6 +69,7 @@ from .EmailCorrespondent import EmailCorrespondent
 if TYPE_CHECKING:
     from tempfile import _TemporaryFileWrapper
 
+    from django.core.files import File
     from django.db.models import QuerySet
 
     from .Correspondent import Correspondent
@@ -341,6 +344,49 @@ class Email(
                         ):
                             self.references.add(referenced_email)
 
+    def restore_to_mailbox(self) -> None:
+        """Restores the email to its mailbox.
+
+        Raises:
+            NotImplementedError: If the emails account does not allow restoring.
+            FileNotFoundError: If there is no eml file for the email.
+            MailAccountError: If there was an error connected to the account.
+            MailboxError: If there was an error with the mailbox.
+        """
+        logger.debug("Restoring %s to its mailbox.", self)
+        with self.mailbox.account.get_fetcher() as fetcher:
+            try:
+                fetcher.restore(self)
+            except MailboxError as error:
+                logger.exception("Restoring of email %s to its mailbox failed!", self)
+                self.mailbox.set_unhealthy(error)
+                raise
+        logger.debug("Succesfully restored email.")
+
+    def open_file(self, mode: str = "rb") -> File:
+        """Opens and returns the emails file as a filestream.
+
+        Note:
+            Use inside a with block.
+
+        Args:
+            mode: The mode the file is opened in.
+
+        Returns:
+            The filestream of the eml file.
+
+        Raises:
+            FileNotFoundError: If the email has no file_path set or the file is not found in the storage.
+        """
+        if not self.eml_filepath:
+            raise FileNotFoundError("Eml file not in storage.")
+        try:
+            file = default_storage.open(self.eml_filepath, mode=mode)
+        except FileNotFoundError:
+            logger.exception("File for %s not found in storage!", self)
+            raise
+        return file
+
     @cached_property
     def conversation(self) -> QuerySet[Email]:
         """Recursively gets all emails that are part of this emails conversation,
@@ -410,6 +456,24 @@ class Email(
     @property
     def has_thumbnail(self) -> bool:
         return not self.is_spam
+
+    @property
+    def can_be_restored(self) -> bool:
+        """Checks if the email can be restored to its mailbox.
+
+        Returns:
+            Whether the email can be restored.
+        """
+        return (
+            self.eml_filepath is not None
+            and self.mailbox.account.protocol
+            in [
+                EmailProtocolChoices.IMAP,
+                EmailProtocolChoices.IMAP4_SSL,
+                EmailProtocolChoices.EXCHANGE,
+            ]
+            and self.mailbox.is_healthy
+        )
 
     @cached_property
     def html_version(self) -> str:

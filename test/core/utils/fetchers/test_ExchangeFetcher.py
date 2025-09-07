@@ -45,18 +45,24 @@ def exchange_mailbox(fake_mailbox):
 
 
 @pytest.fixture
-def mock_Message(mocker, faker):
+def mock_message(mocker, faker):
     """Mocks an :class:`exchangelib.Message` with random mime_content."""
-    mock_Message = mocker.MagicMock(spec=exchangelib.Message)
-    mock_Message.mime_content = faker.text().encode()
-    return mock_Message
+    mock_message = mocker.MagicMock(spec=exchangelib.Message)
+    mock_message.mime_content = faker.text().encode()
+    return mock_message
 
 
 @pytest.fixture
-def mock_QuerySet(mocker, mock_Message):
+def mock_Message(mocker, mock_message):
+    """Mocks the :class:`exchangelib.Message` class."""
+    return mocker.patch("exchangelib.Message", autospec=True, return_value=mock_message)
+
+
+@pytest.fixture
+def mock_QuerySet(mocker, mock_message):
     """Mocks an :class:`exchangelib.queryset.QuerySet` with mocked :class:`exchangelib.Message`s."""
     mock_QuerySet = mocker.MagicMock(spec=exchangelib.queryset.QuerySet)
-    queryset_content = [mock_Message, mock_Message]
+    queryset_content = [mock_message, mock_message]
     mock_QuerySet.__iter__.return_value = queryset_content
     mock_QuerySet.order_by.return_value = mock_QuerySet
     mock_QuerySet.all.return_value.__iter__.return_value = queryset_content
@@ -693,6 +699,147 @@ def test_ExchangeFetcher_fetch_mailboxes_other_exception_walk(
     mock_msg_folder_root.walk.assert_called_once()
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_restore_success(
+    exchange_mailbox,
+    fake_email_with_file,
+    mock_logger,
+    mock_Message,
+    mock_msg_folder_root,
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.restore`
+    in case of success.
+    """
+    ExchangeFetcher(exchange_mailbox.account).restore(fake_email_with_file)
+
+    with fake_email_with_file.open_file() as email_file:
+        mock_Message.assert_called_once_with(
+            mime_content=email_file.read(),
+            folder=mock_msg_folder_root.__truediv__.return_value,
+        )
+    mock_Message.return_value.save.assert_called_once_with()
+    mock_msg_folder_root.__truediv__.assert_called_once_with(exchange_mailbox.name)
+    mock_msg_folder_root.__truediv__.return_value.__truediv__.assert_not_called()
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_restore_success_subfolder(
+    faker,
+    exchange_mailbox,
+    fake_email_with_file,
+    mock_logger,
+    mock_Message,
+    mock_msg_folder_root,
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.restore`
+    in case of success.
+    """
+    fake_folder_name = exchange_mailbox.name
+    fake_subfolder_name = faker.name()
+    exchange_mailbox.name = fake_folder_name + "/" + fake_subfolder_name
+
+    ExchangeFetcher(exchange_mailbox.account).restore(fake_email_with_file)
+
+    with fake_email_with_file.open_file() as email_file:
+        mock_Message.assert_called_once_with(
+            mime_content=email_file.read(),
+            folder=mock_msg_folder_root.__truediv__.return_value.__truediv__.return_value,
+        )
+    mock_Message.return_value.save.assert_called_once_with()
+    mock_msg_folder_root.__truediv__.assert_called_once_with(fake_folder_name)
+    mock_msg_folder_root.__truediv__.return_value.__truediv__.assert_called_once_with(
+        fake_subfolder_name
+    )
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_restore_no_file(
+    exchange_mailbox, fake_email, mock_logger, mock_Message
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.restore`
+    in case the email has no file.
+    """
+    with pytest.raises(FileNotFoundError):
+        ExchangeFetcher(exchange_mailbox.account).restore(fake_email)
+
+    mock_Message.assert_not_called()
+    mock_logger.debug.assert_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_restore_wrong_mailbox(
+    exchange_mailbox,
+    fake_email_with_file,
+    fake_other_mailbox,
+    mock_logger,
+    mock_Message,
+    mock_ExchangeAccount,
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.restore`
+    in case the email does not belong to a mailbox of the fetchers account.
+    """
+    fake_email_with_file.mailbox = fake_other_mailbox
+    fake_email_with_file.save()
+
+    with pytest.raises(ValueError):
+        ExchangeFetcher(exchange_mailbox.account).restore(fake_email_with_file)
+
+    mock_Message.assert_not_called()
+    mock_logger.error.assert_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_restore_ewserror(
+    fake_error_message,
+    fake_email_with_file,
+    exchange_mailbox,
+    mock_logger,
+    mock_Message,
+    mock_ExchangeAccount,
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.restore`
+    in case of an error.
+    """
+    mock_Message.return_value.save.side_effect = exchangelib.errors.EWSError(
+        fake_error_message
+    )
+
+    with pytest.raises(MailboxError, match=f"EWSError.*?{fake_error_message}"):
+        ExchangeFetcher(exchange_mailbox.account).restore(fake_email_with_file)
+
+    mock_Message.assert_called_once()
+    mock_Message.return_value.save.assert_called_once_with()
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_restore_other_error(
+    fake_email_with_file,
+    exchange_mailbox,
+    mock_logger,
+    mock_Message,
+    mock_ExchangeAccount,
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.restore`
+    in case of an error.
+    """
+    mock_Message.return_value.save.side_effect = AssertionError
+
+    with pytest.raises(AssertionError):
+        ExchangeFetcher(exchange_mailbox.account).restore(fake_email_with_file)
+
+    mock_Message.assert_called_once()
+    mock_Message.return_value.save.assert_called_once_with()
+    mock_logger.debug.assert_called()
 
 
 @pytest.mark.django_db

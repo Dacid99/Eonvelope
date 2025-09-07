@@ -31,6 +31,7 @@ if TYPE_CHECKING:
     from types import TracebackType
 
     from core.models.Account import Account
+    from core.models.Email import Email
     from core.models.Mailbox import Mailbox
 
 
@@ -123,6 +124,20 @@ class BaseFetcher(ABC):
         Returns:
             List of data of all mailboxes in the account. Empty if none are found.
         """
+
+    @abstractmethod
+    def restore(self, email: Email) -> None:
+        """Restores an email to a mailbox.
+
+        Args:
+            email: The email to restore.
+
+        Raises:
+            ValueError: If the emails mailbox is not in this fetchers account.
+        """
+        if email.mailbox.account != self.account:
+            self.logger.error("Mailbox of %s is not in %s!", email, self.account)
+            raise ValueError(f"Mailbox of {email} is not in {self.account}!")
 
     @abstractmethod
     def close(self) -> None:

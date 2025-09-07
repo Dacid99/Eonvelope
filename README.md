@@ -10,6 +10,7 @@ A open-source self-hostable email archive using the [django framework](https://w
 - Indexing of attachments and correspondents
 - Filter and search your emails, attachments, correspondents
 - Identification of related emails
+- Restoring of emails to your mailaccount
 - Mobile-friendly Bootstrap5 webapp
 - Full-fledged API
 - Multi-language and timezone support

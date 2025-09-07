@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit"
+            class="btn btn-outline-primary"
+            name="restore"
+            {% if not email.can_be_restored %}disabled{% endif %}>
+        {% translate "Restore" as button_text %}
+
+        {% include "web/partials/_spinner-text.html" with text=button_text %}
+
+    </button>
+</form>

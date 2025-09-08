@@ -22,7 +22,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, override
 
-from django.core.files.storage import default_storage
 from django.http import FileResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
@@ -165,17 +164,16 @@ class AttachmentViewSet(
             A fileresponse containing the requested file.
         """
         attachment = self.get_object()
-
-        attachment_file_path = attachment.file_path
-        if not attachment_file_path or not default_storage.exists(attachment_file_path):
-            raise Http404(_("Attachment file not found"))
-
-        return FileResponse(
-            default_storage.open(attachment_file_path, "rb"),
-            as_attachment=True,
-            filename=attachment.file_name,
-            content_type=attachment.content_type or None,
-        )
+        try:
+            response = FileResponse(
+                attachment.open_file(),
+                as_attachment=True,
+                filename=attachment.file_name,
+                content_type=attachment.content_type or None,
+            )
+        except FileNotFoundError:
+            raise Http404(_("Attachment file not found")) from None
+        return response
 
     URL_PATH_DOWNLOAD_BATCH = "download"
     URL_NAME_DOWNLOAD_BATCH = "download-batch"
@@ -252,17 +250,15 @@ class AttachmentViewSet(
             A fileresponse containing the requested file.
         """
         attachment = self.get_object()
-
-        attachment_file_path = attachment.file_path
-        if not attachment_file_path or not default_storage.exists(attachment_file_path):
-            raise Http404(_("Attachment file not found"))
-
-        response = FileResponse(
-            default_storage.open(attachment_file_path, "rb"),
-            as_attachment=False,
-            filename=attachment.file_name,
-            content_type=attachment.content_type or None,
-        )
+        try:
+            response = FileResponse(
+                attachment.open_file(),
+                as_attachment=False,
+                filename=attachment.file_name,
+                content_type=attachment.content_type or None,
+            )
+        except FileNotFoundError:
+            raise Http404(_("Attachment file not found")) from None
         response.headers["X-Frame-Options"] = "SAMEORIGIN"
         response.headers["Content-Security-Policy"] = "frame-ancestors 'self'"
         return response

@@ -25,8 +25,6 @@ from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from test.conftest import TEST_EMAIL_PARAMETERS
 
 from .models.test_Account import mock_Account_get_fetcher, mock_fetcher
-from .models.test_Attachment import mock_Attachment_save_to_storage
-from .models.test_Email import mock_Email_save_eml_to_storage
 
 
 @pytest.fixture
@@ -49,9 +47,8 @@ def mock_Account_get_test_email_fetcher(
 
 @pytest.mark.django_db
 def test_fetch_emails_task_success(
+    fake_fs,
     fake_daemon,
-    mock_Attachment_save_to_storage,
-    mock_Email_save_eml_to_storage,
 ):
     """Tests :func:`core.tasks.fetch_emails`
     in case of success.
@@ -62,8 +59,8 @@ def test_fetch_emails_task_success(
     fetch_emails(str(fake_daemon.uuid))
 
     fake_daemon.refresh_from_db()
-    assert fake_daemon.mailbox.emails.count() == 1
     assert fake_daemon.is_healthy is True
+    assert fake_daemon.mailbox.emails.count() == 1
 
 
 @pytest.mark.django_db

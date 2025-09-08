@@ -416,7 +416,7 @@ def fake_email_with_file(faker, fake_fs, fake_mailbox):
     return baker.make(
         Email,
         mailbox=fake_mailbox,
-        eml_filepath=default_storage.save(
+        file_path=default_storage.save(
             faker.file_name(extension="eml"), BytesIO(test_eml_bytes)
         ),
     )
@@ -524,7 +524,7 @@ def fake_other_email_with_file(faker, fake_fs, fake_other_mailbox):
     return baker.make(
         Email,
         mailbox=fake_other_mailbox,
-        eml_filepath=default_storage.save(
+        file_path=default_storage.save(
             faker.file_name(extension="eml"), BytesIO(test_eml_bytes)
         ),
     )

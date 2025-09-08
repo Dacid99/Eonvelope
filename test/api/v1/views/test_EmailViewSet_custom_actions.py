@@ -117,7 +117,7 @@ def test_download_auth_owner(
     assert isinstance(response, FileResponse)
     assert "Content-Disposition" in response.headers
     assert (
-        f'filename="{os.path.basename(fake_email_with_file.eml_filepath)}"'
+        f'filename="{fake_email_with_file.message_id}.eml"'
         in response["Content-Disposition"]
     )
     assert "attachment" in response["Content-Disposition"]
@@ -125,7 +125,7 @@ def test_download_auth_owner(
     assert response.headers["Content-Type"] == "message/rfc822"
     assert (
         b"".join(response.streaming_content)
-        == default_storage.open(fake_email_with_file.eml_filepath).read()
+        == default_storage.open(fake_email_with_file.file_path).read()
     )
 
 

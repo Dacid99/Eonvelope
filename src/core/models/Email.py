@@ -20,7 +20,6 @@
 
 from __future__ import annotations
 
-import contextlib
 import email
 import logging
 import os
@@ -29,12 +28,10 @@ import shutil
 from email import policy
 from functools import cached_property
 from hashlib import md5
-from io import BytesIO
 from tempfile import NamedTemporaryFile, TemporaryDirectory
 from typing import TYPE_CHECKING, Any, Final, override
 from zipfile import ZipFile
 
-from django.core.files.storage import default_storage
 from django.db import connection, models, transaction
 from django.template import engines
 from django.utils.translation import gettext as __
@@ -49,6 +46,7 @@ from core.constants import (
 from core.mixins import (
     DownloadMixin,
     FavoriteModelMixin,
+    FilePathModelMixin,
     ThumbnailMixin,
     TimestampModelMixin,
     URLMixin,
@@ -69,7 +67,6 @@ from .EmailCorrespondent import EmailCorrespondent
 if TYPE_CHECKING:
     from tempfile import _TemporaryFileWrapper
 
-    from django.core.files import File
     from django.db.models import QuerySet
 
     from .Correspondent import Correspondent
@@ -85,6 +82,7 @@ class Email(
     ThumbnailMixin,
     URLMixin,
     FavoriteModelMixin,
+    FilePathModelMixin,
     TimestampModelMixin,
     models.Model,
 ):
@@ -158,19 +156,6 @@ class Email(
         verbose_name=_("datasize"),
     )
     """The bytes size of the mail."""
-
-    eml_filepath = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=True,
-        null=True,
-        # Translators: Do not capitalize the very first letter unless your language requires it.
-        verbose_name=_("EML filepath"),
-    )
-    """The path in the storage where the mail is stored in .eml format.
-    Can be null if the mail has not been saved.
-    When this entry is deleted, the file will be removed by :func:`core.signals.delete_Email.post_delete_email_files`.
-    """
 
     correspondents: models.ManyToManyField[Correspondent, Correspondent] = (
         models.ManyToManyField(
@@ -246,33 +231,16 @@ class Email(
     def save(self, *args: Any, **kwargs: Any) -> None:
         """Extended :django::func:`django.models.Model.save` method.
 
-        Renders and saves the data to eml if configured.
+        Saves the data to eml if configured.
         """
-        email_data = kwargs.pop("email_data", None)
+        if not self.mailbox.save_to_eml:
+            kwargs.pop("file_payload", None)
         super().save(*args, **kwargs)
-        if email_data is not None and self.mailbox.save_to_eml:
-            self.save_eml_to_storage(email_data)
 
-    def save_eml_to_storage(self, email_data: bytes) -> None:
-        """Saves the email to the storage in eml format.
-
-        If the file already exists, does not overwrite.
-
-        Args:
-            email_data: The data of the email to be saved.
-        """
-        if self.eml_filepath:
-            logger.debug("%s is already stored as eml.", self)
-            return
-
-        logger.debug("Storing %s as eml ...", self)
-
-        self.eml_filepath = default_storage.save(
-            str(self.pk) + "_" + self.message_id + ".eml",
-            BytesIO(email_data),
-        )
-        self.save(update_fields=["eml_filepath"])
-        logger.debug("Successfully stored email as eml.")
+    @override
+    def _get_storage_file_name(self) -> str:
+        """Create the filename for the stored eml."""
+        return str(self.pk) + "_" + self.message_id + ".eml"
 
     def add_correspondents(self) -> None:
         """Adds the correspondents from the headerfields to the model."""
@@ -363,30 +331,6 @@ class Email(
                 raise
         logger.debug("Succesfully restored email.")
 
-    def open_file(self, mode: str = "rb") -> File:
-        """Opens and returns the emails file as a filestream.
-
-        Note:
-            Use inside a with block.
-
-        Args:
-            mode: The mode the file is opened in.
-
-        Returns:
-            The filestream of the eml file.
-
-        Raises:
-            FileNotFoundError: If the email has no file_path set or the file is not found in the storage.
-        """
-        if not self.eml_filepath:
-            raise FileNotFoundError("Eml file not in storage.")
-        try:
-            file = default_storage.open(self.eml_filepath, mode=mode)
-        except FileNotFoundError:
-            logger.exception("File for %s not found in storage!", self)
-            raise
-        return file
-
     @cached_property
     def conversation(self) -> QuerySet[Email]:
         """Recursively gets all emails that are part of this emails conversation,
@@ -449,11 +393,6 @@ class Email(
 
     @override
     @property
-    def has_download(self) -> bool:
-        return self.eml_filepath is not None
-
-    @override
-    @property
     def has_thumbnail(self) -> bool:
         return not self.is_spam
 
@@ -465,7 +404,7 @@ class Email(
             Whether the email can be restored.
         """
         return (
-            self.eml_filepath is not None
+            self.file_path is not None
             and self.mailbox.account.protocol
             in [
                 EmailProtocolChoices.IMAP,
@@ -595,7 +534,7 @@ class Email(
         logger.debug("Saving email %s to db...", message_id)
         try:
             with transaction.atomic():
-                new_email.save(email_data=email_bytes)
+                new_email.save(file_payload=email_bytes)
                 new_email.add_correspondents()
                 new_email.add_in_reply_to()
                 new_email.add_references()
@@ -636,16 +575,14 @@ class Email(
         if file_format == SupportedEmailDownloadFormats.ZIP_EML:
             with ZipFile(tempfile.name, "w") as zipfile:
                 for email_item in queryset:
-                    if email_item.eml_filepath is not None:
-                        try:
-                            eml_file = default_storage.open(email_item.eml_filepath)
-                        except FileNotFoundError:
-                            continue
-                        else:
-                            with zipfile.open(
-                                os.path.basename(email_item.eml_filepath), "w"
-                            ) as zipped_file:
-                                zipped_file.write(eml_file.read())
+                    try:
+                        eml_file = email_item.open_file()
+                    except FileNotFoundError:
+                        continue
+                    with eml_file, zipfile.open(
+                        os.path.basename(email_item.file_path), "w"
+                    ) as zipped_file:
+                        zipped_file.write(eml_file.read())
         elif file_format in [
             SupportedEmailDownloadFormats.MBOX,
             SupportedEmailDownloadFormats.BABYL,
@@ -655,9 +592,12 @@ class Email(
             parser = parser_class(tempfile.name, create=True)
             parser.lock()
             for email_item in queryset:
-                if email_item.eml_filepath is not None:
-                    with contextlib.suppress(FileNotFoundError):
-                        parser.add(default_storage.open(email_item.eml_filepath))
+                try:
+                    eml_file = email_item.open_file()
+                except FileNotFoundError:
+                    continue
+                with eml_file:
+                    parser.add(eml_file)
             parser.close()
         elif file_format in [
             SupportedEmailDownloadFormats.MAILDIR,
@@ -669,13 +609,13 @@ class Email(
                 parser = parser_class(mailbox_path, create=True)
                 parser.lock()
                 for email_item in queryset:
-                    if email_item.eml_filepath is not None:
-                        # this construction is necessary as Maildir.add can also raise FileNotFound
-                        # if the directory is incorrectly structured, that warning must not be blocked
-                        try:
-                            eml_file = default_storage.open(email_item.eml_filepath)
-                        except FileNotFoundError:
-                            continue
+                    # this construction is strictly necessary as Maildir.add can also raise FileNotFound
+                    # if the directory is incorrectly structured; that warning must not be blocked
+                    try:
+                        eml_file = email_item.open_file()
+                    except FileNotFoundError:
+                        continue
+                    with eml_file:
                         parser.add(eml_file)
                 parser.close()
                 shutil.make_archive(

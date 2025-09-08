@@ -21,17 +21,16 @@
 import datetime
 import email
 import os
-from io import BytesIO
 from tempfile import gettempdir
 from zipfile import ZipFile
 
-import django.db.models
 import httpx
 import pytest
 from django.core.files.storage import default_storage
 from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
+from pyfakefs.fake_filesystem_unittest import Pause
 
 from core.models import Attachment, Email
 from test.conftest import TEST_EMAIL_PARAMETERS
@@ -52,20 +51,6 @@ def mock_httpx_post(mocker, faker):
         request=httpx.Request("post", faker.url()),
     )
     return mocker.patch("httpx.post", autospec=True, return_value=fake_response)
-
-
-@pytest.fixture
-def mock_Attachment_save_to_storage(mocker):
-    """Patches `core.models.Attachment.save_to_storage`."""
-    return mocker.patch(
-        "core.models.Attachment.Attachment.save_to_storage", autospec=True
-    )
-
-
-@pytest.fixture
-def spy_save(mocker):
-    """Patches `django.db.models.Model.save`."""
-    return mocker.spy(django.db.models.Model, "save")
 
 
 @pytest.mark.django_db
@@ -154,104 +139,126 @@ def test_Attachment_delete_attachmentfile_delete_error(
 
 
 @pytest.mark.django_db
-def test_save_to_storage_success(
+def test_Attachment_save_with_data(
     fake_fs,
+    fake_email,
     fake_file_bytes,
-    fake_attachment,
-    mock_logger,
-):
-    """Tests :func:`core.models.Attachment.Attachment.save_to_storage`
-    in case of success.
-    """
-    fake_attachment.file_path = None
-
-    fake_attachment.save_to_storage(fake_file_bytes)
-
-    fake_attachment.refresh_from_db()
-    assert (
-        os.path.basename(fake_attachment.file_path)
-        == str(fake_attachment.pk) + "_" + fake_attachment.file_name
-    )
-    assert default_storage.exists(fake_attachment.file_path)
-    assert default_storage.open(fake_attachment.file_path).read() == fake_file_bytes
-    mock_logger.debug.assert_called()
-    mock_logger.error.assert_not_called()
-
-
-@pytest.mark.django_db
-def test_save_to_storage_file_path_set(
-    faker, fake_fs, fake_file_bytes, fake_attachment, mock_logger
-):
-    """Tests :func:`core.models.Attachment.Attachment.delete`
-    in case the :attr:`core.models.Attachment.file_path` is already set.
-    """
-    fake_attachment.file_path = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
-    previous_file_path = fake_attachment.file_path
-
-    fake_attachment.save_to_storage(fake_file_bytes)
-
-    assert fake_attachment.file_path == previous_file_path
-    assert default_storage.exists(previous_file_path)
-    mock_logger.debug.assert_called()
-    mock_logger.error.assert_not_called()
-
-
-@pytest.mark.django_db
-@pytest.mark.parametrize("save_attachments, expected_calls", [(True, 1), (False, 0)])
-def test_Attachment_save_with_data_success(
-    fake_attachment,
-    fake_file_bytes,
-    mock_Attachment_save_to_storage,
-    spy_save,
-    save_attachments,
-    expected_calls,
 ):
     """Tests :func:`core.models.Attachment.Attachment.save`
     in case of success with data to be saved.
     """
-    fake_attachment.email.mailbox.save_attachments = save_attachments
+    new_attachment = baker.make(Attachment, email=fake_email)
 
-    fake_attachment.save(attachment_payload=fake_file_bytes)
+    assert fake_email.mailbox.save_to_eml is True
+    assert new_attachment.file_path is None
 
-    assert mock_Attachment_save_to_storage.call_count == expected_calls
-    spy_save.assert_called()
+    new_attachment.save(file_payload=fake_file_bytes)
 
-
-@pytest.mark.django_db
-def test_Attachment_save_no_data(
-    fake_attachment, mock_Attachment_save_to_storage, spy_save
-):
-    """Tests :func:`core.models.Attachment.Attachment.save`
-    in case of success without data to be saved.
-    """
-    fake_attachment.email.mailbox.save_attachment_models = True
-
-    fake_attachment.save()
-
-    spy_save.assert_called_once_with(fake_attachment)
-    mock_Attachment_save_to_storage.assert_not_called()
+    new_attachment.refresh_from_db()
+    assert new_attachment.pk
+    assert new_attachment.file_path is not None
+    assert (
+        os.path.basename(new_attachment.file_path)
+        == str(new_attachment.pk) + "_" + new_attachment.file_name
+    )
+    assert default_storage.open(new_attachment.file_path).read() == fake_file_bytes
 
 
 @pytest.mark.django_db
-def test_Attachment_save_with_data_failure(
-    fake_attachment,
+def test_Attachment_save_with_data_no_save_attachments(
+    fake_fs,
+    fake_email,
     fake_file_bytes,
-    mock_Attachment_save_to_storage,
-    spy_save,
 ):
     """Tests :func:`core.models.Attachment.Attachment.save`
-    in case of the data fails to be saved.
+    in case of success with data to be saved and `save_to_eml` set to False.
     """
-    mock_Attachment_save_to_storage.side_effect = AssertionError
-    fake_attachment.email.mailbox.save_attachment_models = True
+    fake_email.mailbox.save_attachments = False
+    fake_email.mailbox.save(update_fields=["save_attachments"])
+    new_attachment = baker.make(Attachment, email=fake_email)
 
-    with pytest.raises(AssertionError):
-        fake_attachment.save(attachment_payload=fake_file_bytes)
+    assert new_attachment.file_path is None
 
-    spy_save.assert_called()
-    mock_Attachment_save_to_storage.assert_called()
+    new_attachment.save(file_payload=fake_file_bytes)
+
+    new_attachment.refresh_from_db()
+    assert new_attachment.pk
+    assert new_attachment.file_path is None
+
+
+@pytest.mark.django_db
+def test_Attachment_save_with_data_file_path_set(
+    faker,
+    fake_email,
+    fake_file_bytes,
+):
+    """Tests :func:`core.models.Attachment.Attachment.save`
+    in case of success with data to be saved and `save_to_eml` set to False.
+    """
+    fake_file_name = faker.file_name()
+    new_attachment = baker.make(Attachment, email=fake_email, file_path=fake_file_name)
+
+    assert fake_email.mailbox.save_attachments is True
+    assert new_attachment.file_path == fake_file_name
+
+    new_attachment.save(file_payload=fake_file_bytes)
+
+    new_attachment.refresh_from_db()
+    assert new_attachment.pk
+    assert new_attachment.file_path == fake_file_name
+
+
+@pytest.mark.django_db
+def test_Attachment_save_no_data_success(
+    fake_email,
+):
+    """Tests :func:`core.models.Attachment.Attachment.save`
+    in case of success with data to be saved.
+    """
+    new_attachment = baker.make(Attachment, email=fake_email)
+
+    assert fake_email.mailbox.save_attachments is True
+    assert new_attachment.file_path is None
+
+    new_attachment.save()
+
+    new_attachment.refresh_from_db()
+    assert new_attachment.pk
+    assert new_attachment.file_path is None
+
+
+def test_Attachment_open_file_success(fake_attachment_with_file):
+    """Tests :func:`core.models.Attachment.Attachment.open_file`
+    in case of success.
+    """
+    result = fake_attachment_with_file.open_file()
+
+    with default_storage.open(
+        fake_attachment_with_file.file_path, "rb"
+    ) as attachment_file:
+        assert result.read() == attachment_file.read()
+
+    result.close()
+
+
+def test_Attachment_open_file_no_filepath(fake_attachment_with_file):
+    """Tests :func:`core.models.Attachment.Attachment.open_file`
+    in case the filepath on the instance is not set.
+    """
+    fake_attachment_with_file.file_path = None
+
+    with pytest.raises(FileNotFoundError), fake_attachment_with_file.open_file():
+        pass
+
+
+def test_Attachment_open_file_no_file(faker, fake_attachment):
+    """Tests :func:`core.models.Attachment.Attachment.open_file`
+    in case the file can't be found in the storage.
+    """
+    fake_attachment.file_path = faker.file_name()
+
+    with pytest.raises(FileNotFoundError), fake_attachment.open_file():
+        pass
 
 
 @pytest.mark.django_db
@@ -484,8 +491,8 @@ def test_Attachment_share_to_paperless_error_status(
     TEST_EMAIL_PARAMETERS,
 )
 def test_Attachment_from_data(
+    fake_fs,
     fake_email,
-    mock_Attachment_save_to_storage,
     test_email_path,
     expected_email_features,
     expected_correspondents_features,
@@ -494,7 +501,7 @@ def test_Attachment_from_data(
     """Tests :func:`core.models.Attachment.Attachment.from_data`
     in case of success.
     """
-    with open(test_email_path, "br") as test_email_file:
+    with Pause(fake_fs), open(test_email_path, "br") as test_email_file:
         test_email_bytes = test_email_file.read()
     test_email_message = email.message_from_bytes(test_email_bytes)
 
@@ -522,9 +529,7 @@ def test_Attachment_from_data(
             item.content_id
             == expected_attachments_features[item.file_name]["content_id"]
         )
-    assert mock_Attachment_save_to_storage.call_count == len(
-        expected_attachments_features
-    )
+        assert item.file_path is not None
 
 
 @pytest.mark.django_db

@@ -22,12 +22,15 @@ from django.urls import reverse
 
 
 class ThumbnailMixin:
-    """Mixin providing a property to check whether a model instance provides a thumbail image."""
+    """Mixin providing a property to check whether a model instance provides a thumbail image.
+
+    Designed for use in combination with :class:`core.mixins.FilePathModelMixin`.
+    """
 
     @property
     def has_thumbnail(self) -> bool:
         """Checks whether a thumbnail download is possible for the instance."""
-        return True
+        return bool(self.file_path)
 
     def get_absolute_thumbnail_url(self) -> str:
         """Returns the url of the thumbail download api endpoint."""

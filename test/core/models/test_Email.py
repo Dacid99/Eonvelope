@@ -22,16 +22,15 @@ from __future__ import annotations
 
 import datetime
 import os
-from io import BytesIO
 from tempfile import TemporaryDirectory, gettempdir
 from zipfile import ZipFile
 
-import django.db.models
 import pytest
 from django.core.files.storage import default_storage
 from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
+from pyfakefs.fake_filesystem_unittest import Pause
 
 from core.constants import (
     HeaderFields,
@@ -44,25 +43,12 @@ from Emailkasten.utils.workarounds import get_config
 from test.conftest import TEST_EMAIL_PARAMETERS
 
 from .test_Account import mock_Account_get_fetcher, mock_fetcher
-from .test_Attachment import mock_Attachment_save_to_storage
 
 
 @pytest.fixture(autouse=True)
 def mock_logger(mocker):
     """The mocked :attr:`core.models.Email.logger`."""
     return mocker.patch("core.models.Email.logger", autospec=True)
-
-
-@pytest.fixture
-def spy_save(mocker):
-    """Fixture spying on :func:`django.db.models.Model.save`."""
-    return mocker.spy(django.db.models.Model, "save")
-
-
-@pytest.fixture
-def mock_Email_save_eml_to_storage(mocker):
-    """Fixture patching :func:`core.models.Email.Email.save_eml_to_storage`."""
-    return mocker.patch("core.models.Email.Email.save_eml_to_storage", autospec=True)
 
 
 @pytest.mark.django_db
@@ -81,7 +67,7 @@ def test_Email_fields(fake_email):
     assert isinstance(fake_email.html_bodytext, str)
     assert fake_email.datasize is not None
     assert isinstance(fake_email.datasize, int)
-    assert fake_email.eml_filepath is None
+    assert fake_email.file_path is None
     assert fake_email.html_version is not None
     assert isinstance(fake_email.html_version, str)
     assert fake_email.is_favorite is False
@@ -172,13 +158,13 @@ def test_Email_delete_emailfiles_success(fake_email_with_file, mock_logger):
     """Tests :func:`core.models.Email.Email.delete`
     if the file removal is successful.
     """
-    previous_eml_filepath = fake_email_with_file.eml_filepath
+    previous_file_path = fake_email_with_file.file_path
 
     fake_email_with_file.delete()
 
     with pytest.raises(Email.DoesNotExist):
         fake_email_with_file.refresh_from_db()
-    assert not default_storage.exists(previous_eml_filepath)
+    assert not default_storage.exists(previous_file_path)
 
 
 @pytest.mark.django_db
@@ -195,167 +181,130 @@ def test_Email_delete_email_delete_error(mocker, fake_email_with_file, mock_logg
     with pytest.raises(AssertionError):
         fake_email_with_file.delete()
 
-    assert default_storage.exists(fake_email_with_file.eml_filepath)
+    assert default_storage.exists(fake_email_with_file.file_path)
     mock_delete.assert_called_once()
     mock_logger.debug.assert_not_called()
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize(
-    "save_to_eml, expected_save_eml_to_storage_call",
-    [
-        (True, True),
-        (False, False),
-    ],
-)
-def test_Email_save_with_data_success(
-    fake_email,
-    mock_message,
-    spy_save,
-    mock_Email_save_eml_to_storage,
-    save_to_eml,
-    expected_save_eml_to_storage_call,
+def test_Email_save_with_data(
+    fake_fs,
+    fake_mailbox,
+    fake_file_bytes,
 ):
     """Tests :func:`core.models.Email.Email.save`
     in case of success with data to be saved.
     """
-    fake_email.mailbox.save_to_eml = save_to_eml
+    new_email = baker.make(Email, mailbox=fake_mailbox)
 
-    fake_email.save(email_data=mock_message)
+    assert fake_mailbox.save_to_eml is True
+    assert new_email.file_path is None
 
-    spy_save.assert_called_once_with(fake_email)
-    if expected_save_eml_to_storage_call:
-        mock_Email_save_eml_to_storage.assert_called_with(fake_email, mock_message)
-    else:
-        mock_Email_save_eml_to_storage.assert_not_called()
+    new_email.save(file_payload=fake_file_bytes)
 
-
-@pytest.mark.django_db
-def test_Email_save_no_data(
-    fake_email,
-    spy_save,
-    mock_Email_save_eml_to_storage,
-):
-    """Tests :func:`core.models.Email.Email.save`
-    in case of success without data to be saved.
-    """
-    fake_email.mailbox.save_to_eml = True
-
-    fake_email.save()
-
-    spy_save.assert_called_once_with(fake_email)
-    mock_Email_save_eml_to_storage.assert_not_called()
-
-
-@pytest.mark.django_db
-def test_Email_save_with_data_failure(
-    fake_email,
-    mock_message,
-    spy_save,
-    mock_Email_save_eml_to_storage,
-):
-    """Tests :func:`core.models.Email.Email.save`
-    in case of success saving data fails with an exception.
-    """
-    mock_Email_save_eml_to_storage.side_effect = AssertionError
-    fake_email.mailbox.save_to_eml = True
-
-    with pytest.raises(AssertionError):
-        fake_email.save(email_data=mock_message)
-
-    spy_save.assert_called()
-    mock_Email_save_eml_to_storage.assert_called()
-
-
-@pytest.mark.django_db
-def test_save_eml_to_storage_success(
-    fake_fs,
-    fake_file_bytes,
-    fake_email,
-    mock_logger,
-):
-    """Tests :func:`core.models.Email.Email.save_eml_to_storage`
-    in case of success.
-    """
-    fake_email.eml_filepath = None
-
-    fake_email.save_eml_to_storage(fake_file_bytes)
-
-    fake_email.refresh_from_db()
+    new_email.refresh_from_db()
+    assert new_email.pk
+    assert new_email.file_path is not None
     assert (
-        os.path.basename(fake_email.eml_filepath)
-        == str(fake_email.pk) + "_" + fake_email.message_id + ".eml"
+        os.path.basename(new_email.file_path)
+        == str(new_email.pk) + "_" + new_email.message_id + ".eml"
     )
-    assert default_storage.exists(fake_email.eml_filepath)
-    assert default_storage.open(fake_email.eml_filepath).read() == fake_file_bytes
-    mock_logger.debug.assert_called()
-    mock_logger.error.assert_not_called()
+    assert default_storage.open(new_email.file_path).read() == fake_file_bytes
 
 
 @pytest.mark.django_db
-def test_save_eml_to_storage_file_path_set(
-    faker,
+def test_Email_save_with_data_no_save_to_eml(
     fake_fs,
+    fake_mailbox,
     fake_file_bytes,
-    fake_email,
-    mock_logger,
 ):
-    """Tests :func:`core.models.Email.Email.save_eml_to_storage`
-    in case :attr:`core.models.Email.eml_filepath` is already set.
+    """Tests :func:`core.models.Email.Email.save`
+    in case of success with data to be saved and `save_to_eml` set to False.
     """
-    fake_email.eml_filepath = default_storage.save(
-        faker.file_name(), BytesIO(fake_file_bytes)
-    )
-    previous_file_path = fake_email.eml_filepath
+    fake_mailbox.save_to_eml = False
+    fake_mailbox.save(update_fields=["save_to_eml"])
+    new_email = baker.make(Email, mailbox=fake_mailbox)
 
-    fake_email.save_eml_to_storage(fake_file_bytes)
+    assert new_email.file_path is None
 
-    assert fake_email.eml_filepath == previous_file_path
-    assert default_storage.exists(previous_file_path)
-    mock_logger.debug.assert_called()
-    mock_logger.error.assert_not_called()
+    new_email.save(file_payload=fake_file_bytes)
+
+    new_email.refresh_from_db()
+    assert new_email.pk
+    assert new_email.file_path is None
 
 
-def test_Email_open_file_success(fake_email_with_file, mock_logger):
+@pytest.mark.django_db
+def test_Email_save_with_data_file_path_set(
+    faker,
+    fake_mailbox,
+    fake_file_bytes,
+):
+    """Tests :func:`core.models.Email.Email.save`
+    in case of success with data to be saved and `save_to_eml` set to False.
+    """
+    fake_file_name = faker.file_name()
+    new_email = baker.make(Email, mailbox=fake_mailbox, file_path=fake_file_name)
+
+    assert fake_mailbox.save_to_eml is True
+    assert new_email.file_path == fake_file_name
+
+    new_email.save(file_payload=fake_file_bytes)
+
+    new_email.refresh_from_db()
+    assert new_email.pk
+    assert new_email.file_path == fake_file_name
+
+
+@pytest.mark.django_db
+def test_Email_save_no_data_success(
+    fake_mailbox,
+):
+    """Tests :func:`core.models.Email.Email.save`
+    in case of success with data to be saved.
+    """
+    new_email = baker.make(Email, mailbox=fake_mailbox)
+
+    assert fake_mailbox.save_to_eml is True
+    assert new_email.file_path is None
+
+    new_email.save()
+
+    new_email.refresh_from_db()
+    assert new_email.pk
+    assert new_email.file_path is None
+
+
+def test_Email_open_file_success(fake_email_with_file):
     """Tests :func:`core.models.Email.Email.open_file`
     in case of success.
     """
     result = fake_email_with_file.open_file()
 
-    with default_storage.open(fake_email_with_file.eml_filepath, "rb") as email_file:
+    with default_storage.open(fake_email_with_file.file_path, "rb") as email_file:
         assert result.read() == email_file.read()
-
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
-    mock_logger.exception.assert_not_called()
 
     result.close()
 
 
-def test_Email_open_file_no_filepath(fake_email_with_file, mock_logger):
+def test_Email_open_file_no_filepath(fake_email_with_file):
     """Tests :func:`core.models.Email.Email.open_file`
     in case the filepath on the instance is not set.
     """
-    fake_email_with_file.eml_filepath = None
+    fake_email_with_file.file_path = None
 
     with pytest.raises(FileNotFoundError):
         fake_email_with_file.open_file()
 
-    mock_logger.warning.assert_not_called()
-    mock_logger.error.assert_not_called()
-    mock_logger.exception.assert_not_called()
 
-
-def test_Email_open_file_no_file(faker, fake_email, mock_logger):
+def test_Email_open_file_no_file(faker, fake_email):
     """Tests :func:`core.models.Email.Email.open_file`
     in case the file can't be found in the storage.
     """
-    fake_email.eml_filepath = faker.file_name()
+    fake_email.file_path = faker.file_name()
 
     with pytest.raises(FileNotFoundError):
         fake_email.open_file()
-
-    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db
@@ -516,15 +465,13 @@ def test_Email_queryset_as_file_zip_eml(fake_file, fake_email, fake_email_with_f
     assert Email.objects.count() == 2
     assert hasattr(result, "read")
     with ZipFile(result) as zipfile:
-        assert zipfile.namelist() == [
-            os.path.basename(fake_email_with_file.eml_filepath)
-        ]
+        assert zipfile.namelist() == [os.path.basename(fake_email_with_file.file_path)]
         with zipfile.open(
-            os.path.basename(fake_email_with_file.eml_filepath)
+            os.path.basename(fake_email_with_file.file_path)
         ) as zipped_file:
             assert (
                 zipped_file.read().replace(b"\r", b"").strip()
-                == default_storage.open(fake_email_with_file.eml_filepath)
+                == default_storage.open(fake_email_with_file.file_path)
                 .read()
                 .replace(b"\r", b"")
                 .strip()
@@ -565,7 +512,7 @@ def test_Email_queryset_as_file_mailbox_file(
     for key in parser.iterkeys():
         assert (
             parser.get_bytes(key).replace(b"\r", b"").strip()
-            == default_storage.open(fake_email_with_file.eml_filepath)
+            == default_storage.open(fake_email_with_file.file_path)
             .read()
             .replace(b"\r", b"")
             .strip()
@@ -606,7 +553,7 @@ def test_Email_queryset_as_file_mailbox_zip(
         for key in parser.iterkeys():
             assert (
                 parser.get_bytes(key).replace(b"\r", b"").strip()
-                == default_storage.open(fake_email_with_file.eml_filepath)
+                == default_storage.open(fake_email_with_file.file_path)
                 .read()
                 .replace(b"\r", b"")
                 .strip()
@@ -946,10 +893,9 @@ def test_Email_add_correspondents_multi(faker, fake_email):
 )
 def test_Email_create_from_email_bytes_success(
     override_config,
+    fake_fs,
     fake_mailbox,
     mock_logger,
-    mock_Email_save_eml_to_storage,
-    mock_Attachment_save_to_storage,
     test_email_path,
     expected_email_features,
     expected_correspondents_features,
@@ -958,8 +904,11 @@ def test_Email_create_from_email_bytes_success(
     """Tests :func:`core.models.Email.Email.create_from_email_bytes`
     in case of success.
     """
-    with open(test_email_path, "br") as test_email_file:
+    with Pause(fake_fs), open(test_email_path, "br") as test_email_file:
         test_email_bytes = test_email_file.read()
+
+    assert fake_mailbox.save_to_eml is True
+    assert fake_mailbox.save_attachments is True
 
     with override_config(THROW_OUT_SPAM=False):
         result = Email.create_from_email_bytes(test_email_bytes, mailbox=fake_mailbox)
@@ -990,6 +939,7 @@ def test_Email_create_from_email_bytes_success(
             item.content_id
             == expected_attachments_features[item.file_name]["content_id"]
         )
+        assert item.file_path
     assert result.emailcorrespondents.count() == sum(
         [
             len(correspondents)
@@ -1004,9 +954,10 @@ def test_Email_create_from_email_bytes_success(
         )
     assert len(result.headers) == expected_email_features["header_count"]
     assert result.mailbox == fake_mailbox
-    if expected_attachments_features:
-        mock_Attachment_save_to_storage.assert_called()
-    mock_Email_save_eml_to_storage.assert_called()
+    assert result.file_path
+    with default_storage.open(result.file_path) as email_file:
+        assert email_file.read() == test_email_bytes
+
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
@@ -1016,22 +967,25 @@ def test_Email_create_from_email_bytes_success(
 @pytest.mark.django_db
 def test_Email_create_from_email_bytes_duplicate(
     override_config,
+    fake_fs,
     fake_email,
     mock_logger,
-    mock_Email_save_eml_to_storage,
-    mock_Attachment_save_to_storage,
 ):
     """Tests :func:`core.models.Email.Email.create_from_email_bytes`
     in case the email to be parsed is already in the database.
     """
+    previous_email_count = fake_email.mailbox.emails.count()
+
+    assert fake_email.mailbox.save_to_eml is True
+    assert fake_email.mailbox.save_attachments is True
+
     with override_config(THROW_OUT_SPAM=False):
         result = Email.create_from_email_bytes(
             f"Message-ID: {fake_email.message_id}".encode(), fake_email.mailbox
         )
 
     assert result is None
-    mock_Attachment_save_to_storage.assert_not_called()
-    mock_Email_save_eml_to_storage.assert_not_called()
+    assert fake_email.mailbox.emails.count() == previous_email_count
     mock_logger.debug.assert_called()
     mock_logger.warning.assert_not_called()
     mock_logger.error.assert_not_called()
@@ -1059,10 +1013,9 @@ def test_Email_create_from_email_bytes_duplicate(
 )
 def test_Email_create_from_email_bytes_spam(
     override_config,
+    fake_fs,
     fake_mailbox,
     mock_logger,
-    mock_Email_save_eml_to_storage,
-    mock_Attachment_save_to_storage,
     X_Spam_Flag,
     THROW_OUT_SPAM,
     expected_is_none,
@@ -1118,15 +1071,15 @@ def test_Email_html_version(fake_email, fake_attachment, fake_correspondent):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "eml_filepath, expected_has_download",
+    "file_path, expected_has_download",
     [
         (None, False),
         ("some/file/path", True),
     ],
 )
-def test_Email_has_download(fake_email, eml_filepath, expected_has_download):
+def test_Email_has_download(fake_email, file_path, expected_has_download):
     """Tests :func:`core.models.Email.Email.has_download` in the two relevant cases."""
-    fake_email.eml_filepath = eml_filepath
+    fake_email.file_path = file_path
 
     result = fake_email.has_download
 

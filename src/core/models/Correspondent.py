@@ -209,6 +209,12 @@ class Correspondent(
         """
         return self.real_name or self.email_name or self.email_address.split("@")[0]
 
+    @override
+    @property
+    def has_download(self) -> bool:
+        """Correspondent can always be downloaded."""
+        return True
+
     @classmethod
     def create_from_correspondent_tuple(
         cls, correspondent_tuple: tuple[str, str], user: User

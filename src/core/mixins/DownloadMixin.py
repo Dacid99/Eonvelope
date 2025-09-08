@@ -22,12 +22,15 @@ from django.urls import reverse
 
 
 class DownloadMixin:
-    """Mixin providing a property to check whether a model instance provides a download."""
+    """Mixin providing a property to check whether a model instance provides a download.
+
+    Designed for use in combination with :class:`core.mixins.FilePathModelMixin`.
+    """
 
     @property
     def has_download(self) -> bool:
         """Checks whether a download is possible for the instance."""
-        return True
+        return bool(self.file_path)
 
     def get_absolute_download_url(self) -> str:
         """Returns the url of the download api endpoint."""

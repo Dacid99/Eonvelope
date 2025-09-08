@@ -58,7 +58,7 @@ def test_output(fake_email, request_context):
     assert serializer_data["datasize"] == fake_email.datasize
     assert "is_favorite" in serializer_data
     assert serializer_data["is_favorite"] == fake_email.is_favorite
-    assert "eml_filepath" not in serializer_data
+    assert "file_path" not in serializer_data
     assert "mailbox" in serializer_data
     assert serializer_data["mailbox"] == fake_email.mailbox.id
     assert "headers" in serializer_data
@@ -104,7 +104,7 @@ def test_input(fake_email, request_context):
     assert "datasize" not in serializer_data
     assert "is_favorite" in serializer_data
     assert serializer_data["is_favorite"] == fake_email.is_favorite
-    assert "eml_filepath" not in serializer_data
+    assert "file_path" not in serializer_data
     assert "mailbox" not in serializer_data
     assert "headers" not in serializer_data
     assert "x_spam" not in serializer_data

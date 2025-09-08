@@ -20,11 +20,9 @@
 
 from __future__ import annotations
 
-import os
 from io import BytesIO
 from typing import TYPE_CHECKING, Final, override
 
-from django.core.files.storage import default_storage
 from django.db.models import Prefetch
 from django.http import FileResponse, Http404
 from django.utils.translation import gettext_lazy as _
@@ -207,17 +205,16 @@ class EmailViewSet(
         """
         email = self.get_object()
 
-        file_path = email.eml_filepath
-        if not file_path or not default_storage.exists(file_path):
-            raise Http404(_("eml file not found"))
-
-        file_name = os.path.basename(file_path)
-        return FileResponse(
-            default_storage.open(file_path, "rb"),
-            as_attachment=True,
-            filename=file_name,
-            content_type="message/rfc822",
-        )
+        try:
+            response = FileResponse(
+                email.open_file(),
+                as_attachment=True,
+                filename=email.message_id + ".eml",
+                content_type="message/rfc822",
+            )
+        except FileNotFoundError:
+            raise Http404(_("eml file not found")) from None
+        return response
 
     URL_PATH_DOWNLOAD_BATCH = "download"
     URL_NAME_DOWNLOAD_BATCH = "download-batch"

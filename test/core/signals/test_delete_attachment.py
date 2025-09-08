@@ -24,14 +24,8 @@ from django.core.files.storage import default_storage
 from core.models import Attachment
 
 
-@pytest.fixture(autouse=True)
-def mock_logger(mocker):
-    """The mocked :attr:`core.signals.delete_Attachment.logger`."""
-    return mocker.patch("core.signals.delete_Attachment.logger", autospec=True)
-
-
 @pytest.mark.django_db
-def test_delete_attachment_no_file(fake_attachment, mock_logger):
+def test_delete_attachment_no_file(fake_attachment):
     """Test individual deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is not set.
     """
@@ -42,29 +36,25 @@ def test_delete_attachment_no_file(fake_attachment, mock_logger):
     with pytest.raises(Attachment.DoesNotExist):
         fake_attachment.refresh_from_db()
 
-    mock_logger.debug.assert_not_called()
-
 
 @pytest.mark.django_db
-def test_delete_attachment_with_file(fake_attachment_with_file, mock_logger):
+def test_delete_attachment_with_file(fake_attachment_with_file):
     """Test individual deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is set.
     """
-    assert default_storage.exists(fake_attachment_with_file.file_path)
+    previous_file_path = fake_attachment_with_file.file_path
+
+    assert default_storage.exists(previous_file_path)
 
     fake_attachment_with_file.delete()
 
-    assert not default_storage.exists(fake_attachment_with_file.file_path)
+    assert not default_storage.exists(previous_file_path)
     with pytest.raises(Attachment.DoesNotExist):
         fake_attachment_with_file.refresh_from_db()
 
-    mock_logger.debug.assert_called()
-
 
 @pytest.mark.django_db
-def test_cascade_delete_attachment_with_file(
-    fake_attachment_with_file, fake_mailbox, mock_logger
-):
+def test_cascade_delete_attachment_with_file(fake_attachment_with_file, fake_mailbox):
     """Test cascade deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is set.
     """
@@ -76,11 +66,9 @@ def test_cascade_delete_attachment_with_file(
     with pytest.raises(Attachment.DoesNotExist):
         fake_attachment_with_file.refresh_from_db()
 
-    mock_logger.debug.assert_called()
-
 
 @pytest.mark.django_db
-def test_bulk_delete_attachment_with_file(fake_attachment_with_file, mock_logger):
+def test_bulk_delete_attachment_with_file(fake_attachment_with_file):
     """Test bulk deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is not set.
     """
@@ -91,5 +79,3 @@ def test_bulk_delete_attachment_with_file(fake_attachment_with_file, mock_logger
     assert not default_storage.exists(fake_attachment_with_file.file_path)
     with pytest.raises(Attachment.DoesNotExist):
         fake_attachment_with_file.refresh_from_db()
-
-    mock_logger.debug.assert_called()

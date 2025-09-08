@@ -20,6 +20,7 @@
 
 from .DownloadMixin import DownloadMixin
 from .FavoriteModelMixin import FavoriteModelMixin
+from .FilePathModelMixin import FilePathModelMixin
 from .HealthModelMixin import HealthModelMixin
 from .ThumbnailMixin import ThumbnailMixin
 from .TimestampModelMixin import TimestampModelMixin
@@ -30,6 +31,7 @@ from .URLMixin import URLMixin
 __all__ = [
     "DownloadMixin",
     "FavoriteModelMixin",
+    "FilePathModelMixin",
     "HealthModelMixin",
     "ThumbnailMixin",
     "TimestampModelMixin",

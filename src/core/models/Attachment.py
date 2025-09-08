@@ -20,19 +20,16 @@
 
 from __future__ import annotations
 
-import contextlib
 import logging
 import os
 from functools import cached_property
 from hashlib import md5
-from io import BytesIO
 from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, Any, override
 from zipfile import ZipFile
 
 import httpcore
 import httpx
-from django.core.files.storage import default_storage
 from django.db import models
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
@@ -42,6 +39,7 @@ from core.constants import HeaderFields
 from core.mixins import (
     DownloadMixin,
     FavoriteModelMixin,
+    FilePathModelMixin,
     ThumbnailMixin,
     TimestampModelMixin,
     URLMixin,
@@ -66,6 +64,7 @@ class Attachment(
     ThumbnailMixin,
     URLMixin,
     FavoriteModelMixin,
+    FilePathModelMixin,
     TimestampModelMixin,
     models.Model,
 ):
@@ -81,18 +80,6 @@ class Attachment(
         verbose_name=_("filename"),
     )
     """The filename of the attachment."""
-
-    file_path = models.CharField(
-        max_length=255,
-        unique=True,
-        blank=True,
-        null=True,
-        # Translators: Do not capitalize the very first letter unless your language requires it.
-        verbose_name=_("filepath"),
-    )
-    """The path in the storage where the attachment is stored. Unique together with :attr:`email`.
-    Can be null if the attachment has not been saved (null does not collide with the unique constraint.).
-    When this entry is deleted, the file will be removed by :func:`core.signals.delete_Attachment.post_delete_attachment`."""
 
     content_disposition = models.CharField(
         blank=True,
@@ -172,31 +159,14 @@ class Attachment(
         Saves the data to storage if configured.
         """
         self.file_name = get_valid_filename(self.file_name)
-        attachment_payload = kwargs.pop("attachment_payload", None)
+        if not self.email.mailbox.save_attachments:
+            kwargs.pop("file_payload", None)
         super().save(*args, **kwargs)
-        if attachment_payload is not None and self.email.mailbox.save_attachments:
-            self.save_to_storage(attachment_payload)
 
-    def save_to_storage(self, attachment_payload: bytes) -> None:
-        """Saves the attachment file to the storage.
-
-        If the file already exists, does not overwrite.
-
-        Args:
-            attachment_payload: The data of the attachment to be saved.
-        """
-        if self.file_path:
-            logger.debug("%s is already stored.", self)
-            return
-
-        logger.debug("Storing %s ...", self)
-
-        self.file_path = default_storage.save(
-            str(self.pk) + "_" + self.file_name,
-            BytesIO(attachment_payload),
-        )
-        self.save(update_fields=["file_path"])
-        logger.debug("Successfully stored attachment.")
+    @override
+    def _get_storage_file_name(self) -> str:
+        """Create the filename for the stored attachment."""
+        return str(self.pk) + "_" + self.file_name
 
     def share_to_paperless(self) -> str:
         """Sends this attachment to the paperless server of its user.
@@ -211,8 +181,6 @@ class Attachment(
             PermissionError: If authentication to paperless failed.
             ValueError: If uploading the file to paperless resulted in a bad response.
         """
-        if not self.file_path or not default_storage.exists(self.file_path):
-            raise FileNotFoundError(_("Attachment file not found"))
         paperless_baseurl = (
             self.email.mailbox.account.user.profile.paperless_url.rstrip("/")
         )
@@ -223,7 +191,7 @@ class Attachment(
         headers = {
             "Authorization": f"Token {self.email.mailbox.account.user.profile.paperless_api_key}".strip()
         }  # stripping the entire string to create a valid header even if the token is empty
-        with default_storage.open(self.file_path) as document:
+        with self.open_file() as document:
             try:
                 response = httpx.post(
                     post_document_url,
@@ -273,11 +241,6 @@ class Attachment(
             return response.json()
 
     @override
-    @property
-    def has_download(self) -> bool:
-        return self.file_path is not None
-
-    @override
     @cached_property
     def has_thumbnail(self) -> bool:
         """Whether the attachment has a mimetype that can be embedded into html.
@@ -286,7 +249,7 @@ class Attachment(
             https://stackoverflow.com/questions/51107683/which-mime-types-can-be-displayed-in-browser
         """
         return (
-            self.file_path is not None
+            super().has_thumbnail
             and not self.email.is_spam
             and (self.datasize <= get_config("WEB_THUMBNAIL_MAX_DATASIZE"))
             and (
@@ -423,7 +386,7 @@ class Attachment(
                         email=email,
                     )
                     logger.debug("Saving attachment %s to db ...", part.get_filename())
-                    new_attachment.save(attachment_payload=part_payload)
+                    new_attachment.save(file_payload=part_payload)
                     new_attachments.append(new_attachment)
         logger.debug("Successfully parsed and saved attachments.")
         return new_attachments
@@ -448,14 +411,15 @@ class Attachment(
         )  #  the file must not be closed as it is returned later
         with ZipFile(tempfile.name, "w") as zipfile:
             for attachment_item in queryset:
-                if attachment_item.file_path is not None:
-                    with (
-                        zipfile.open(
-                            os.path.basename(attachment_item.file_path), "w"
-                        ) as zipped_file,
-                        contextlib.suppress(FileNotFoundError),
-                    ):
-                        zipped_file.write(
-                            default_storage.open(attachment_item.file_path).read()
-                        )
+                try:
+                    attachment_file = attachment_item.open_file()
+                except FileNotFoundError:
+                    continue
+                with (
+                    attachment_file,
+                    zipfile.open(
+                        os.path.basename(attachment_item.file_path), "w"
+                    ) as zipped_file,
+                ):
+                    zipped_file.write(attachment_file.read())
         return tempfile

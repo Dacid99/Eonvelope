@@ -23,7 +23,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from django.core.files.storage import default_storage
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
@@ -44,7 +43,4 @@ def post_delete_attachment(
         instance: The instance that has been saved.
         **kwargs: Other keyword arguments.
     """
-    if instance.file_path:
-        logger.debug("Removing file for %s from storage ...", instance)
-        default_storage.delete(str(instance.file_path))
-        logger.debug("Successfully removed the attachment file from storage.")
+    instance.delete_file()

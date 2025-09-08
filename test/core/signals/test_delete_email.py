@@ -24,72 +24,57 @@ from django.core.files.storage import default_storage
 from core.models import Email
 
 
-@pytest.fixture(autouse=True)
-def mock_logger(mocker):
-    """The mocked :attr:`core.signals.delete_Email.logger`."""
-    return mocker.patch("core.signals.delete_Email.logger", autospec=True)
-
-
 @pytest.mark.django_db
-def test_delete_email_no_file(fake_email, mock_logger):
+def test_delete_email_no_file(fake_email):
     """Test individual deletion of an :class:`core.models.Email` instance
-    in case its `eml_filepath` is not set.
+    in case its `file_path` is not set.
     """
-    assert not fake_email.eml_filepath
+    assert not fake_email.file_path
 
     fake_email.delete()
 
     with pytest.raises(Email.DoesNotExist):
         fake_email.refresh_from_db()
 
-    mock_logger.debug.assert_not_called()
-
 
 @pytest.mark.django_db
-def test_delete_email_with_file(fake_email_with_file, mock_logger):
+def test_delete_email_with_file(fake_email_with_file):
     """Test individual deletion of an :class:`core.models.Email` instance
-    in case its `eml_filepath` is set.
+    in case its `file_path` is set.
     """
-    assert default_storage.exists(fake_email_with_file.eml_filepath)
+    previous_file_path = fake_email_with_file.file_path
+    assert default_storage.exists(previous_file_path)
 
     fake_email_with_file.delete()
 
-    assert not default_storage.exists(fake_email_with_file.eml_filepath)
+    assert not default_storage.exists(previous_file_path)
     with pytest.raises(Email.DoesNotExist):
         fake_email_with_file.refresh_from_db()
 
-    mock_logger.debug.assert_called()
-
 
 @pytest.mark.django_db
-def test_cascade_delete_email_with_file(
-    fake_email_with_file, fake_mailbox, mock_logger
-):
+def test_cascade_delete_email_with_file(fake_email_with_file, fake_mailbox):
     """Test cascade deletion of an :class:`core.models.Email` instance
-    in case its `eml_filepath` is set.
+    in case its `file_path` is set.
     """
-    assert default_storage.exists(fake_email_with_file.eml_filepath)
+    assert default_storage.exists(fake_email_with_file.file_path)
 
     fake_mailbox.delete()
 
-    assert not default_storage.exists(fake_email_with_file.eml_filepath)
+    assert not default_storage.exists(fake_email_with_file.file_path)
     with pytest.raises(Email.DoesNotExist):
         fake_email_with_file.refresh_from_db()
-
-    mock_logger.debug.assert_called()
 
 
 @pytest.mark.django_db
-def test_bulk_delete_email_with_file(fake_email_with_file, mock_logger):
+def test_bulk_delete_email_with_file(fake_email_with_file):
     """Test bulk deletion of an :class:`core.models.Email` instance
-    in case its `eml_filepath` is not set.
+    in case its `file_path` is not set.
     """
-    assert default_storage.exists(fake_email_with_file.eml_filepath)
+    assert default_storage.exists(fake_email_with_file.file_path)
 
     Email.objects.all().delete()
 
-    assert not default_storage.exists(fake_email_with_file.eml_filepath)
+    assert not default_storage.exists(fake_email_with_file.file_path)
     with pytest.raises(Email.DoesNotExist):
         fake_email_with_file.refresh_from_db()
-
-    mock_logger.debug.assert_called()

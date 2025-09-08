@@ -34,8 +34,6 @@
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
 - use pre-commit
-- move all file related stuff from email and attachment to mixin
-- use open_file in downloads
 - error in api for share should be in seperate error field
 - log error in set_unhealthy
 
@@ -61,6 +59,8 @@
 
 ## To fix
 
+- logging test fails
+- constance default values should not have been deleted
 - filteroptions for existing db entries leak other user data
 - fetching too many emails leads to browser timeout
 - optics:

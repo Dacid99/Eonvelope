@@ -6,6 +6,19 @@ from django.conf import settings
 from django.db import migrations, models
 
 
+def add_missing_profiles(apps, schema_editor):
+    UserProfile = apps.get_model("Emailkasten", "UserProfile")
+    User = apps.get_model(*settings.AUTH_USER_MODEL.split("."))
+
+    for user in User.objects.all():
+        if not hasattr(user, "profile"):
+            UserProfile.objects.create(user=user)
+
+
+def reverse_add_missing_profiles(apps, schema_editor):
+    pass  # profiles are removed automatically when their table is dropped
+
+
 class Migration(migrations.Migration):
 
     initial = True
@@ -76,5 +89,8 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "user profiles",
                 "db_table": "user_profiles",
             },
+        ),
+        migrations.RunPython(
+            code=add_missing_profiles, reverse_code=reverse_add_missing_profiles
         ),
     ]

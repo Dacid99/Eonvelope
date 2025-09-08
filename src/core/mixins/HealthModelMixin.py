@@ -18,9 +18,14 @@
 
 """Module with the :class:`HealthMixin`."""
 
+import logging
+
 from django.db.models import BooleanField, DateTimeField, Model, TextField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+
+logger = logging.getLogger(__name__)
 
 
 class HealthModelMixin(Model):
@@ -59,6 +64,7 @@ class HealthModelMixin(Model):
         Args:
             error: The error causing the health change.
         """
+        logger.info("Setting %s to unhealthy because of error: %s", self, errormessage)
         self.last_error = errormessage
         self.last_error_occurred_at = timezone.now()
         self.is_healthy = False

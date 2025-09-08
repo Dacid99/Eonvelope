@@ -33,7 +33,6 @@
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
 - use pre-commit
-- log error in set_unhealthy
 
 ## To test
 

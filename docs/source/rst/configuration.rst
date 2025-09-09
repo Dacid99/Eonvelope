@@ -165,7 +165,7 @@ For a secure setup:
 User Settings
 -------------
 
-The users have seperate settings that they can configure via their profile page.
+The users have separate settings that they can configure via their profile page.
 These settings mostly concern third-party integrations.
 
 All defaults are empty.

@@ -39,7 +39,10 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def post_create_user(
-    sender: User, instance: User, created: bool, **kwargs: Any
+    sender: User,
+    instance: User,
+    created: bool,  # noqa: FBT001  # signature is defined by django, not this project
+    **kwargs: Any,
 ) -> None:
     """Receiver function deleting the file of the attachment from storage.
 

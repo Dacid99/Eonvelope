@@ -329,7 +329,7 @@ class Email(
                 logger.exception("Restoring of email %s to its mailbox failed!", self)
                 self.mailbox.set_unhealthy(error)
                 raise
-        logger.debug("Succesfully restored email.")
+        logger.debug("Successfully restored email.")
 
     @cached_property
     def conversation(self) -> QuerySet[Email]:
@@ -339,7 +339,7 @@ class Email(
         Returns:
             Queryset of all mails in the conversation.
         """
-        CONVERSATION_SQL = """
+        conversation_sql = """
         WITH RECURSIVE
         emails_links AS (
             SELECT from_email_id, to_email_id FROM emails_in_reply_to
@@ -382,7 +382,7 @@ class Email(
         FROM conversation_thread;
         """
         with connection.cursor() as cursor:
-            cursor.execute(CONVERSATION_SQL, [self.id])
+            cursor.execute(conversation_sql, [self.id])
             conversation_rows = cursor.fetchall()
         conversation_ids = [
             conversation_row[0] for conversation_row in conversation_rows

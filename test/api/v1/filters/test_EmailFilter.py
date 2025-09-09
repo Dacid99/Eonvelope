@@ -177,21 +177,6 @@ def test_is_favorite_filter(email_queryset, lookup_expr, filterquery, expected_i
         assert data.id - 1 in expected_indices
 
 
-# @pytest.mark.django_db
-# @pytest.mark.parametrize(
-#     "lookup_expr, filterquery, expected_indices", JSON_TEST_PARAMETERS
-# )
-# def test_headers_filter(email_queryset, lookup_expr, filterquery, expected_indices):
-#     query = {"headers" + lookup_expr: filterquery}
-
-#     filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
-
-#     assert filtered_data.distinct().count() == filtered_data.count()
-#     assert filtered_data.count() == len(expected_indices)
-#     for data in filtered_data:
-#         assert data.id - 1 in expected_indices
-
-
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS

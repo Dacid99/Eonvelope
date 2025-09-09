@@ -38,6 +38,6 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
     template_name = "account/profile.html"
 
     @override
-    def get_object(self) -> UserProfile:
+    def get_object(self, queryset=None) -> UserProfile:
         """Get the requesting users profile."""
         return self.request.user.profile

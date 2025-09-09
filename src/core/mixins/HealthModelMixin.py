@@ -62,7 +62,7 @@ class HealthModelMixin(Model):
         """Sets the `is_healthy` flag to `False` and adds the `last_error` and its time.
 
         Args:
-            error: The error causing the health change.
+            errormessage: The message of the error causing the health change.
         """
         logger.info("Setting %s to unhealthy because of error: %s", self, errormessage)
         self.last_error = errormessage

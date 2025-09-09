@@ -45,7 +45,7 @@ def mock_logger(mocker):
 )
 def test___str__(faker, is_current, expected_status_str):
     """Tests :class:`core.models.StorageShard.__str__`
-    in cases of different `is_current` stati.
+    in cases of different `is_current` states.
     """
     fake_filename = faker.file_name()
 

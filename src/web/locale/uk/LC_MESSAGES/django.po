@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-10 17:12+0000\n"
-"PO-Revision-Date: 2025-08-23 13:02+0000\n"
+"PO-Revision-Date: 2025-09-11 18:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "web/uk/>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.13\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -89,35 +89,20 @@ msgid "Pick a file for upload."
 msgstr "Виберіть файл для завантаження."
 
 #: src/web/mixins/TestActionMixin.py:47
-#, fuzzy, python-format
-#| msgid ""
-#| "Test failed, there is something wrong with this objects setup\n"
-#| "%(error)s"
+#, python-format
 msgid ""
 "Test failed, there is something wrong with this objects setup: %(error)s"
-msgstr ""
-"Тест не вдався, щось не так з налаштуванням цього об'єкта\n"
-"%(error)s"
+msgstr "Тест не вдався, щось не так з налаштуванням цього об'єкта: %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:52
-#, fuzzy, python-format
-#| msgid ""
-#| "Test failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Test failed: %(error)s"
-msgstr ""
-"Тест не вдався\n"
-"%(error)s"
+msgstr "Тест не вдався: %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:56
-#, fuzzy, python-format
-#| msgid ""
-#| "Test failed due to an unexpected error\n"
-#| "%(error)s"
+#, python-format
 msgid "Test failed due to an unexpected error: %(error)s"
-msgstr ""
-"Тест не пройшов через неочікувану помилку\n"
-"%(error)s"
+msgstr "Тест не пройшов через неочікувану помилку: %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:60
 msgid "Test was successful"
@@ -227,7 +212,7 @@ msgstr "Тайм-аут"
 
 #: src/web/templates/web/account/account_detail.html:56
 msgid "None"
-msgstr ""
+msgstr "Жоден"
 
 #: src/web/templates/web/account/account_detail.html:61
 #: src/web/templates/web/daemon/daemon_detail.html:57
@@ -239,15 +224,11 @@ msgstr "Остання помилка"
 #: src/web/templates/web/daemon/daemon_detail.html:61
 #: src/web/templates/web/mailbox/mailbox_detail.html:72
 msgid "Occurred At"
-msgstr ""
+msgstr "Сталося о"
 
 #: src/web/templates/web/account/account_detail.html:66
-#, fuzzy
-#| msgid "Test this account to make sure it can be accessed."
 msgid "Test the account to see if this error persists."
-msgstr ""
-"Перевірте цей обліковий запис, щоб переконатися, що до нього можна отримати "
-"доступ."
+msgstr "Перевірте обліковий запис, щоб побачити, чи ця помилка не зникає."
 
 #: src/web/templates/web/account/account_detail.html:77
 #: src/web/templates/web/bases/base.html:64
@@ -432,7 +413,7 @@ msgstr "Кореспонденти"
 #: src/web/templates/web/daemon/daemon_filter_list.html:14
 #: src/web/templates/web/mailbox/mailbox_detail.html:84
 msgid "Routines"
-msgstr ""
+msgstr "Рутини"
 
 #: src/web/templates/web/bases/base_create.html:13
 #: src/web/templates/web/bases/base_detail.html:21
@@ -443,27 +424,19 @@ msgstr "Панель інструментів із групами кнопок"
 #: src/web/templates/web/bases/base_create.html:16
 #: src/web/templates/web/bases/base_detail.html:42
 #: src/web/templates/web/bases/base_detail_with_thumbnail.html:40
-#, fuzzy
-#| msgid "Close button group"
 msgid "Close-buttons group"
-msgstr "Закрити групу кнопок"
+msgstr "Група кнопок закриття"
 
 #: src/web/templates/web/bases/base_detail.html:24
-#, fuzzy
-#| msgid "Action button group"
 msgid "Action-buttons groups"
-msgstr "Група кнопок дій"
+msgstr "Групи кнопок дій"
 
 #: src/web/templates/web/bases/base_detail.html:32
 #: src/web/templates/web/bases/base_detail_with_thumbnail.html:30
-#, fuzzy
-#| msgid "Edit button group"
 msgid "Edit-buttons group"
-msgstr "Групу кнопок редагування"
+msgstr "Група кнопок редагування"
 
 #: src/web/templates/web/bases/base_detail_with_thumbnail.html:22
-#, fuzzy
-#| msgid "Action button group"
 msgid "Action-buttons group"
 msgstr "Група кнопок дій"
 
@@ -537,16 +510,12 @@ msgstr ""
 "поштових скриньок."
 
 #: src/web/templates/web/daemon/daemon_create.html:6
-#, fuzzy
-#| msgid "Add Account"
 msgid "Add Routine"
-msgstr "Додати обліковий запис"
+msgstr "Додати процедуру"
 
 #: src/web/templates/web/daemon/daemon_detail.html:6
-#, fuzzy
-#| msgid "Account Details"
 msgid "Routine Details"
-msgstr "Дані облікового запису"
+msgstr "Деталі розпорядку"
 
 #: src/web/templates/web/daemon/daemon_detail.html:38
 #: src/web/templates/web/daemon/daemon_detail.html:72
@@ -586,16 +555,12 @@ msgid "Total Run Count"
 msgstr "Загальна кількість пробіжок"
 
 #: src/web/templates/web/daemon/daemon_detail.html:62
-#, fuzzy
-#| msgid "Test the daemon to see what is going wrong."
 msgid "Test the routine to see if this error persists."
-msgstr "Перевірте демона, щоб побачити, що йде не так."
+msgstr "Перевірте процедуру, щоб побачити, чи ця помилка не зникає."
 
 #: src/web/templates/web/daemon/daemon_edit.html:6
-#, fuzzy
-#| msgid "Edit Account"
 msgid "Edit Routine"
-msgstr "Редагувати обліковий запис"
+msgstr "Редагувати процедуру"
 
 #: src/web/templates/web/daemon/partials/_add_button.html:6
 msgid "Add daemon"
@@ -608,10 +573,8 @@ msgid "Download"
 msgstr "Завантажити"
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:7
-#, fuzzy
-#| msgid "No daemons found."
 msgid "No routines found."
-msgstr "Демонів не знайдено."
+msgstr "Не знайдено жодних підпрограм."
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:11
 msgid "Add one to a mailbox to fetch its contents on a regular basis."
@@ -656,11 +619,11 @@ msgstr "Кількість"
 #: src/web/templates/web/email/archive/base_archive.html:6
 #: src/web/templates/web/email/email_filter_list.html:20
 msgid "Timeline"
-msgstr ""
+msgstr "Хронологія"
 
 #: src/web/templates/web/email/archive/base_archive.html:18
 msgid "Email Timeline"
-msgstr ""
+msgstr "Хронологія електронної пошти"
 
 #: src/web/templates/web/email/archive/day.html:6
 #: src/web/templates/web/email/archive/day.html:10
@@ -771,7 +734,7 @@ msgstr "Ви можете отримати деякі з поштових скр
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:7
 msgid "Restore"
-msgstr ""
+msgstr "Відновити"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:6
 msgid "Add Daemon"
@@ -808,12 +771,8 @@ msgid "Save mails as .eml"
 msgstr "Зберігати листи у форматі .eml"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:73
-#, fuzzy
-#| msgid "Test this mailbox to make sure it can be accessed."
 msgid "Test the mailbox to see if this error persists."
-msgstr ""
-"Перевірте цю поштову скриньку, щоб переконатися, що до неї можна отримати "
-"доступ."
+msgstr "Перевірте поштову скриньку, щоб побачити, чи ця помилка не зникає."
 
 #: src/web/templates/web/mailbox/mailbox_edit.html:6
 msgid "Edit Mailbox"
@@ -824,10 +783,8 @@ msgid "of"
 msgstr "з"
 
 #: src/web/templates/web/mailbox/partials/_add_daemon_button.html:7
-#, fuzzy
-#| msgid "Add Account"
 msgid "Add routine"
-msgstr "Додати обліковий запис"
+msgstr "Додати розпорядок дня"
 
 #: src/web/templates/web/mailbox/partials/_daemons_list_alternative.html:8
 msgid ""
@@ -941,15 +898,15 @@ msgstr "Фільтр"
 
 #: src/web/templates/web/partials/_footer.html:7
 msgid "2025 David Aderbauer"
-msgstr ""
+msgstr "2025 Девід Адербауер"
 
 #: src/web/templates/web/partials/_footer.html:9
 msgid "&amp; The Emailkasten Contributors."
-msgstr ""
+msgstr "&amp; Автори Emailkasten."
 
 #: src/web/templates/web/partials/_footer.html:10
 msgid "Licensed under the AGPLv3."
-msgstr ""
+msgstr "Ліцензовано за ліцензією AGPLv3."
 
 #: src/web/templates/web/partials/_footer.html:15
 msgid "Gitlab"
@@ -1016,24 +973,17 @@ msgid " *"
 msgstr " *"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:95
-#, fuzzy, python-format
-#| msgid ""
-#| "Updating mailboxes failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Updating mailboxes failed: %(error)s"
-msgstr ""
-"Не вдалося оновити поштові скриньки\n"
-"%(error)s"
+msgstr "Не вдалося оновити поштові скриньки: %(error)s"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:98
 msgid "Updating mailboxes successful"
 msgstr "Оновлення поштових скриньок успішно завершено"
 
 #: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:85
-#, fuzzy
-#| msgid "Updating mailboxes successful"
 msgid "Sharing to Paperless successful"
-msgstr "Оновлення поштових скриньок успішно завершено"
+msgstr "Передача до безпаперового доступу успішна"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:80
 msgid "Daemon started successfully"
@@ -1054,36 +1004,26 @@ msgstr "Демон не працював"
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:89
 msgid "POP accounts do not support restoring of emails to mailbox."
 msgstr ""
+"Облікові записи POP не підтримують відновлення електронних листів у поштовій "
+"скриньці."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:94
-#, fuzzy, python-format
-#| msgid ""
-#| "Updating mailboxes failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Restoring of email failed: %(error)s"
-msgstr ""
-"Не вдалося оновити поштові скриньки\n"
-"%(error)s"
+msgstr "Не вдалося відновити електронну пошту: %(error)s"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:95
-#, fuzzy
-#| msgid "No email accounts found."
 msgid "eml file not found."
-msgstr "Облікових записів електронної пошти не знайдено."
+msgstr "eml-файл не знайдено."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:100
-#, fuzzy, python-format
-#| msgid ""
-#| "Updating mailboxes failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Restoring of email to mailbox failed: %(error)s"
-msgstr ""
-"Не вдалося оновити поштові скриньки\n"
-"%(error)s"
+msgstr "Не вдалося відновити електронну пошту в поштовій скриньці: %(error)s"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:104
 msgid "Email successfully restored to mailbox."
-msgstr ""
+msgstr "Електронну пошту успішно відновлено у поштовій скриньці."
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:97
 #, python-format
@@ -1092,14 +1032,9 @@ msgstr ""
 "Вибраний критерій %(criterion)s недоступний для цієї поштової скриньки."
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:106
-#, fuzzy, python-format
-#| msgid ""
-#| "Fetching failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Fetching failed: %(error)s"
-msgstr ""
-"Не вдалося отримати дані\n"
-"%(error)s"
+msgstr "Не вдалося отримати дані: %(error)s"
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:109
 msgid "Fetching successful"

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-10 17:12+0000\n"
-"PO-Revision-Date: 2025-08-23 13:02+0000\n"
+"PO-Revision-Date: 2025-09-11 18:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/uk/>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.13\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:726
 msgid "Received"
@@ -49,47 +49,47 @@ msgstr "Вкладення"
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:45
 msgid "Paperless server URL"
-msgstr ""
+msgstr "Paperless сервер URL"
 
 #. Translators: Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:47
 msgid "URL of your Paperless server."
-msgstr ""
+msgstr "URL-адреса вашого Paperless сервера."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:54
 msgid "Paperless server API key"
-msgstr ""
+msgstr "Paperless ключ API сервера"
 
 #. Translators: Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:56
 msgid "API key for your Paperless server."
-msgstr ""
+msgstr "Ключ API для вашого Paperless сервера."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless and Tika are brand names.
 #: src/Emailkasten/models/UserProfile.py:62
 msgid "Paperless Tika support enabled"
-msgstr ""
+msgstr "Paperless Підтримка Tika увімкнена"
 
 #. Translators: Paperless and Tika are brand names.
 #: src/Emailkasten/models/UserProfile.py:64
 msgid "Whether Tika support is enabled on your Paperless server."
-msgstr ""
+msgstr "Чи ввімкнено підтримку Tika на вашому Paperless сервері."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/Emailkasten/models/UserProfile.py:72
 msgid "user profile"
-msgstr ""
+msgstr "профіль користувача"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/Emailkasten/models/UserProfile.py:74
 msgid "user profiles"
-msgstr ""
+msgstr "профілі користувачів"
 
 #: src/Emailkasten/models/UserProfile.py:83
 #, python-format
 msgid "Profile for user %(username)s "
-msgstr ""
+msgstr "Профіль користувача %(username)s "
 
 #: src/Emailkasten/settings.py:588
 msgid "Emailkasten API"
@@ -139,16 +139,13 @@ msgid "Whether or not to ignore emails that have a spam flag"
 msgstr "Чи ігнорувати електронні листи з позначкою спаму"
 
 #: src/Emailkasten/settings.py:758
-#, fuzzy
-#| msgid ""
-#| "List of mailboxes that are ignored when looking up mailboxes in an "
-#| "account."
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
 msgstr ""
-"Список поштових скриньок, які ігноруються під час пошуку поштових скриньок в "
-"обліковому записі."
+"Шаблон регулярних виразів (без урахування регістру) для імен поштових "
+"скриньок, які ігноруються під час пошуку поштових скриньок в обліковому "
+"записі."
 
 #: src/Emailkasten/settings.py:764
 msgid "List of content types prefixes to not parse as files."
@@ -239,23 +236,23 @@ msgstr "Ви надсилаєте забагато запитів."
 #: src/Emailkasten/templates/account/profile.html:10
 #: src/Emailkasten/templates/allauth/layouts/manage.html:14
 msgid "Profile"
-msgstr ""
+msgstr "Профіль"
 
 #: src/Emailkasten/templates/account/profile.html:14
 msgid "Your Profile"
-msgstr ""
+msgstr "Ваш профіль"
 
 #: src/Emailkasten/templates/account/profile.html:15
 msgid "Third Party Integrations"
-msgstr ""
+msgstr "Інтеграції зі сторонніми розробниками"
 
 #: src/Emailkasten/templates/account/profile.html:18
 msgid "Paperless"
-msgstr ""
+msgstr "'Paperless"
 
 #: src/Emailkasten/templates/account/profile.html:25
 msgid "Save"
-msgstr ""
+msgstr "Зберегти"
 
 #: src/Emailkasten/templates/allauth/elements/language_dropdown.html:8
 #: src/Emailkasten/templates/allauth/elements/language_dropdown.html:12
@@ -305,7 +302,7 @@ msgstr "Змінити пароль"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:30
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Двофакторна автентифікація"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:38
 msgid "Sessions"

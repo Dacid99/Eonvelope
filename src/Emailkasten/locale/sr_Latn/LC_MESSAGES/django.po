@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-22 09:37+0000\n"
+"POT-Creation-Date: 2025-09-10 17:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,62 +19,132 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: src/Emailkasten/settings.py:511
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:726
+msgid "Received"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:730
+msgid "From"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:733
+msgid "To"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:736
+msgid "CC"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:739
+msgid "BCC"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:752
+msgid "Attachments"
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
+#: src/Emailkasten/models/UserProfile.py:45
+msgid "Paperless server URL"
+msgstr ""
+
+#. Translators: Paperless is a brand name.
+#: src/Emailkasten/models/UserProfile.py:47
+msgid "URL of your Paperless server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
+#: src/Emailkasten/models/UserProfile.py:54
+msgid "Paperless server API key"
+msgstr ""
+
+#. Translators: Paperless is a brand name.
+#: src/Emailkasten/models/UserProfile.py:56
+msgid "API key for your Paperless server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Paperless and Tika are brand names.
+#: src/Emailkasten/models/UserProfile.py:62
+msgid "Paperless Tika support enabled"
+msgstr ""
+
+#. Translators: Paperless and Tika are brand names.
+#: src/Emailkasten/models/UserProfile.py:64
+msgid "Whether Tika support is enabled on your Paperless server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it.
+#: src/Emailkasten/models/UserProfile.py:72
+msgid "user profile"
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it.
+#: src/Emailkasten/models/UserProfile.py:74
+msgid "user profiles"
+msgstr ""
+
+#: src/Emailkasten/models/UserProfile.py:83
+#, python-format
+msgid "Profile for user %(username)s "
+msgstr ""
+
+#: src/Emailkasten/settings.py:588
 msgid "Emailkasten API"
 msgstr ""
 
-#: src/Emailkasten/settings.py:512
+#: src/Emailkasten/settings.py:589
 msgid "The API schema for the Emailkasten server."
 msgstr ""
 
-#: src/Emailkasten/settings.py:534
+#: src/Emailkasten/settings.py:718
 msgid "Default page size for paginated API response data"
 msgstr ""
 
-#: src/Emailkasten/settings.py:539
+#: src/Emailkasten/settings.py:723
 msgid "Maximum page size for paginated API response data"
 msgstr ""
 
-#: src/Emailkasten/settings.py:544
+#: src/Emailkasten/settings.py:728
 msgid "Default page size for pagination in the webapp."
 msgstr ""
 
-#: src/Emailkasten/settings.py:550
+#: src/Emailkasten/settings.py:734
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
 
-#: src/Emailkasten/settings.py:557
+#: src/Emailkasten/settings.py:741
 msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
 msgstr ""
 
-#: src/Emailkasten/settings.py:563
+#: src/Emailkasten/settings.py:747
 msgid "Maximum numbers of files in one storage unit."
 msgstr ""
 
-#: src/Emailkasten/settings.py:568
+#: src/Emailkasten/settings.py:752
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr ""
 
-#: src/Emailkasten/settings.py:574
+#: src/Emailkasten/settings.py:758
 msgid ""
-"List of mailboxes that are ignored when looking up mailboxes in an account."
+"Regex pattern (case-insensitive) for mailbox names that are ignored when "
+"looking up mailboxes in an account."
 msgstr ""
 
-#: src/Emailkasten/settings.py:580
+#: src/Emailkasten/settings.py:764
 msgid "List of content types prefixes to not parse as files."
 msgstr ""
 
-#: src/Emailkasten/settings.py:586
+#: src/Emailkasten/settings.py:770
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
 msgstr ""
 
-#: src/Emailkasten/settings.py:650
+#: src/Emailkasten/settings.py:777
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
@@ -82,47 +152,47 @@ msgid ""
 "thumbnails, so be careful."
 msgstr ""
 
-#: src/Emailkasten/settings.py:692
+#: src/Emailkasten/settings.py:784
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
 msgstr ""
 
-#: src/Emailkasten/settings.py:698
+#: src/Emailkasten/settings.py:790
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr ""
 
-#: src/Emailkasten/settings.py:703
+#: src/Emailkasten/settings.py:795
 msgid "Default mailbox setting whether to store attachments."
 msgstr ""
 
-#: src/Emailkasten/settings.py:709
+#: src/Emailkasten/settings.py:801
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
 msgstr ""
 
-#: src/Emailkasten/settings.py:716
+#: src/Emailkasten/settings.py:808
 msgid "Server Configurations"
 msgstr ""
 
-#: src/Emailkasten/settings.py:718
+#: src/Emailkasten/settings.py:810
 msgid "Default Values"
 msgstr ""
 
-#: src/Emailkasten/settings.py:725
+#: src/Emailkasten/settings.py:817
 msgid "Processing Settings"
 msgstr ""
 
-#: src/Emailkasten/settings.py:736
+#: src/Emailkasten/settings.py:828
 msgid "Storage Settings"
 msgstr ""
 
-#: src/Emailkasten/settings.py:740
+#: src/Emailkasten/settings.py:832
 msgid "API Settings"
 msgstr ""
 
-#: src/Emailkasten/settings.py:747
+#: src/Emailkasten/settings.py:839
 msgid "Web Settings"
 msgstr ""
 
@@ -132,6 +202,27 @@ msgstr ""
 
 #: src/Emailkasten/templates/429.html:13
 msgid "You are sending too many requests."
+msgstr ""
+
+#: src/Emailkasten/templates/account/profile.html:10
+#: src/Emailkasten/templates/allauth/layouts/manage.html:14
+msgid "Profile"
+msgstr ""
+
+#: src/Emailkasten/templates/account/profile.html:14
+msgid "Your Profile"
+msgstr ""
+
+#: src/Emailkasten/templates/account/profile.html:15
+msgid "Third Party Integrations"
+msgstr ""
+
+#: src/Emailkasten/templates/account/profile.html:18
+msgid "Paperless"
+msgstr ""
+
+#: src/Emailkasten/templates/account/profile.html:25
+msgid "Save"
 msgstr ""
 
 #: src/Emailkasten/templates/allauth/elements/language_dropdown.html:8
@@ -176,18 +267,18 @@ msgstr ""
 msgid "Sign Up"
 msgstr ""
 
-#: src/Emailkasten/templates/allauth/layouts/manage.html:14
-msgid "Change Email"
-msgstr ""
-
 #: src/Emailkasten/templates/allauth/layouts/manage.html:22
 msgid "Change Password"
 msgstr ""
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:30
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: src/Emailkasten/templates/allauth/layouts/manage.html:38
 msgid "Sessions"
 msgstr ""
 
-#: src/Emailkasten/templates/allauth/layouts/manage.html:37
+#: src/Emailkasten/templates/allauth/layouts/manage.html:45
 msgid "Admin panel"
 msgstr ""

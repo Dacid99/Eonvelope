@@ -10,23 +10,12 @@ Webapp Instructions
 Getting started
 ---------------
 
-When you start Emailkasten for the first time, an admin account is created.
-The username is set to ``admin`` and the password
-is set from the ``DJANGO_SUPERUSER_PASSWORD`` environment variable.
-You should use this admin account for administrative purposes only.
-
 To log in, open the webapp by opening the IP address of your server
 with the port of the application, by default ``1122``.
 Emailkasten will force you to use HTTPS using its certificate, so the url must start with *https://*.
 
-After you have logged in, you can add other user accounts in the django-admin panel.
-
-
-User registration
------------------
-
-User
-^^^^
+Registration
+------------
 
 If your administrator has activated the self registration,
 you can register yourself via the login page
@@ -34,29 +23,15 @@ you can register yourself via the login page
 
 Alternatively you can also do so via the API.
 
+If not, please contact your admin so they can create an user account for you.
 
-Administrator
-^^^^^^^^^^^^^
+Setting up a new mailaccount
+----------------------------
 
-You can create new users with the admin user.
+Adding a new mailaccount
+^^^^^^^^^^^^^^^^^^^^^^^^
 
-To do so go to the
-
-*/admin*
-
-page of Emailkasten and log in if necessary.
-In the *users* menu you can add new users to the database.
-
-
-Setting up a new account
-------------------------
-
-Adding a new account
-^^^^^^^^^^^^^^^^^^^^
-
-You can add a new account at */accounts/create/*
-
-which you can also reach via the button on the dashboard or the accounts page.
+You can add a new mailaccount at */accounts/create/*, which you can also reach via the button on the dashboard or the accounts page.
 
 Fill out the form with the credentials of the account, the fields marked with a * are mandatory.
 In case you have set up two-factor-authentication for your mailaccount,
@@ -100,7 +75,6 @@ to reduce random connection errors.
 Don't use larger values as this may significantly impact
 the runtime of individual requests to the server.
 
-
 After you have added the account, you can test the configuration via the test button.
 If the service is unknown, check the email server URL.
 In case of a failed authentication, check the credentials.
@@ -109,7 +83,7 @@ In case of a failed authentication, check the credentials.
 Mailbox setup
 ^^^^^^^^^^^^^
 
-When the account is set up successfully, you can collect the names of all mailboxes in the account.
+When the account is set up successfully, you can collect the names of all mailboxes in the mailaccount.
 You can use the fetch mailboxes button in the overview of the account
 or the equivalent API endpoint.
 
@@ -148,13 +122,13 @@ Depending on the number of mailboxes this may take a while.
     Doing so most certainly leads to a timeout and an error.
 
 
-Daemon setup
-^^^^^^^^^^^^
+Routine setup
+^^^^^^^^^^^^^
 
-For every mailbox you can set up daemons that continuously query and fetch the mailboxes.
-The add-daemon button on the mailbox detail page creates a new daemon configuration
+For every mailbox you can set up routines that continuously query and fetch the mailboxes.
+The add-routine button on the mailbox detail page creates a new routine configuration
 and lets you modify it.
-Most important is the criterion setting and the period time of the daemon.
+Most important is the criterion setting and the period time of this routine.
 
 The following criteria are available:
 
@@ -200,13 +174,13 @@ The following criteria are available:
 
 .. note::
     For a complete coverage of all emails that enter and exit a mailaccount,
-    set up a daemon for both the INBOX and the Sent mailbox.
+    set up a routine for both the INBOX and the Sent mailbox.
     That way you can make use of Emailkasten's feature to capture, archive and map complete conversations.
     Additionally you can archive your drafts by fetching that mailbox repeatedly.
 
 .. note::
     For mailboxes with a sizeable number of emails (e.g. because you rarely clean out your INBOX),
-    avoid using the ALL criterion as it will fetch all emails every time the daemon runs,
+    avoid using the ALL criterion as it will fetch all emails every time the routine runs,
     causing a large workload for the server.
 
 .. note::
@@ -219,72 +193,83 @@ The following criteria are available:
     Just use the time-based filters instead.
     Emailkasten with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
 
-The *interval-period* setting defines the time unit that lies between two daemon runs.
+The *interval-period* setting defines the time unit that lies between two routine jobs runs.
 The *interval-every* parameter defines
-how much many *interval-period*'s pass between two runs of the daemon.
+how much many *interval-period*'s pass between two runs of the routine job.
 This should be set depending on the criterion.
 
 There are other parameters that can be changed.
 
-- restart-time: defines how long the daemon waits before restarting after being crashed.
-
-The logging behaviour of the daemon can be altered as well.
-
-- log_backup_count: how many historical logfiles to store.
-- logfile_size: the maximum size of a logfile.
+- restart-time: defines how long the routine waits before restarting after being crashed.
 
 .. note::
     The smaller the cycle-period, the larger the number of logfiles and/or the maximum size should be.
 
-The daemon is automatically started when you save it, but runs the first time only after one cycle-period.
+The routine is automatically started when you save it, but runs the first time only after one cycle-period.
 If you want it to run right away, you can use the test action in the menu, which triggers a single run.
 You can also stop it at any time if necessary.
 
-To troubleshoot and get information about what the daemon is doing,
-check the last error message of the daemon and attempt a test run.
-If the issue lies with the mailbox or account that the daemon is fetching from, they will be marked as unhealthy as well.
+To troubleshoot and get information about what the routine is doing,
+check the last error message of the routine and attempt a test run.
+If the issue lies with the mailbox or account that the routine is fetching from, they will be marked as unhealthy as well.
 
 
-Favorites
-^^^^^^^^^
+Archived data
+-------------
 
-You can mark individual emails, accounts, mailboxes, etc. as favorites.
-This makes it easier to find them when filtering.
-Just click the star icon in the card of the item to toggle the favorite status.
+Once data from your emails has been collected and archived, you can view it using the web interface.
 
+Emailkasten gathers data about three types of information in your emails. Attachments, correspondents and of course the emails themselves.
 
-Lists and filtering
-^^^^^^^^^^^^^^^^^^^
+Each of these can be search and filtered by various criteria. Every single item can be viewed individually as well.
+Items that are important to you can marked as favorites. Just click the star icon in the card of the item to toggle the favorite status.
+Favorite items are sorted to the top of lists so they are easily found.
 
-For every category of data there is a list of all items in the database.
-These can be filtered and ordered by various attributes to get only the items you are looking for.
+Emails
+^^^^^^
 
-For emails there is a separate overview in form of a timeline
-that can be reached via the *archive* button in the email list.
-The url is */emails/archive*.
-
-You can see the emails received within a specific timeframe
-that can be chosen from specific days to entire year.
-
-Archive overview
-""""""""""""""""
-
-For emails there is an additional special list view.
-The email archive pages allow to view your archived emails in chronological order.
-Select the timespan you are interested in and the emails from that period of time will be listed for you.
-If you wish you can then make the timeframe more fine-grain and get an even better history of your mail traffic and activity.
-
+For IMAP and Exchange email accounts, emails can be restored to the mailbox that they were found in.
 
 Conversations
--------------
+"""""""""""""
 
 Emails contains headers linking them with other emails.
 Using this data allows Emailkasten to reconstruct complete conversations, given that all emails in it are present.
 Otherwise the conversations may only be fragmentary.
 We try to make sure to fetch emails in the correct chronological order to be able to resolve all links.
 Nonetheless it may happen that a single fetch of many connected mails does not find all conversations.
-The safest way to allow this feature to play out is to set up daemons both for you INBOX and OUTBOX mailboxes,
+The safest way to allow this feature to play out is to set up routines both for you INBOX and OUTBOX mailboxes,
 that fetch multiple times a day, as described above.
+
+Timeline overview
+"""""""""""""""""
+
+For emails there are additional special listing pages.
+These allow you to view your archived emails in chronological order.
+
+You can see the emails received within a specific timeframe
+that can be chosen from specific days to entire year.
+
+Select the timespan you are interested in and the emails from that period of time will be listed for you.
+If you wish you can then make the timeframe more fine-grain and get an even better history of your mail traffic and activity.
+
+Individual emails can be downloaded in eml format, if they were saved as such.
+
+
+Attachments
+^^^^^^^^^^^
+
+If you have set up third-party services in your profile, you can share them with these services.
+
+Like emails, attachments can be downloaded, if they were archived as files.
+
+
+Correspondents
+^^^^^^^^^^^^^^
+
+Correspondents can be downloaded as vcard files with emailaddress and name inside.
+This file can be imported to other digital contacts and addressbooks.
+
 
 
 Import and Export
@@ -350,14 +335,8 @@ plenty of these are available on github and other platforms.
 Export
 ^^^^^^
 
-Exporting can be done either by downloading entire mailboxes via their detail pages download option
+Exporting can be done either by downloading entire mailboxes via the download option on the mailbox item page
 or by handpicking and downloading these emails in a bunch.
 The second option is currently only available via the API.
 Please refer to the :doc:`API documentation for instructions <api-instructions>` on the usage of these endpoints.
 The same formats as above are accepted.
-
-You can also download single emails via that emails detail page using the download button.
-
-Additionally, you can also download attachments and correspondents.
-Naturally, the attachment downloads are the attachment files
-and the correspondent downloads vcard files containing the contact data.

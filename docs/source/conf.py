@@ -252,10 +252,6 @@ intersphinx_mapping = {
         "https://django-crispy-forms.readthedocs.io/en/stable/",
         None,
     ),
-    "dj_rest_auth": (
-        "https://dj-rest-auth.readthedocs.io/en/stable/",
-        None,
-    ),
     "drf_spectacular": (
         "https://drf-spectacular.readthedocs.io/en/stable/",
         None,

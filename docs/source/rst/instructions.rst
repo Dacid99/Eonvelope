@@ -21,3 +21,4 @@ which offers endpoints for analogous actions.
 
    web-instructions
    api-instructions
+   admin-instructions

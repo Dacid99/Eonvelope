@@ -4,6 +4,9 @@
    Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
+Licensing
+=========
+
 Project License
 ---------------
 
@@ -21,5 +24,5 @@ Documentation License
 Third-Party-Licenses
 --------------------
 
-.. include:: ../../../THIRD-PARTY-LICENSES
+.. include:: ../../../THIRD_PARTY_LICENSES
     :parser: myst_parser.sphinx_

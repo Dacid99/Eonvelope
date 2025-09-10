@@ -12,10 +12,12 @@ to get started with the API is via the redoc and swagger interfaces.
 
 These can be found under */api/schema/redoc* and */api/schema/swagger*.
 
-Alternatively you can also download a raw OpenAPI schema from */api/schema*.
-You can render it to any API overview using one of the existing webtools.
+Alternatively you can also get a raw OpenAPI schema from */api/schema*.
+You can render it to any API overview using one of the existing webtools or the docker image provided by swagger
 
-If you have no capability to run the server, you can use the `API schema`_linked below.
+.. code-block:: bash
+
+    docker run -p 8080:8080 -e SWAGGER_JSON=/schema.yml -v /path/to/schema.yml:/schema.yml swaggerapi/swagger-ui
 
 In general the URLs of the API endpoints are designed in parallel to
 the webapps URLs with a prefix */api/v1/*.
@@ -43,25 +45,21 @@ The API version of the django-allauth user management is not documented in this 
 Please refer to `its own OpenAPI schema <https://django-allauth.readthedocs.io/en/latest/headless/openapi-specification/>`_ for full information.
 Replace ``_allauth`` in their URLs with ``api/auth`` to map it to the Emailkasten endpoints.
 
+
 Authentication
 --------------
 
 To authenticate via the API you have 4 options:
 
-- Basic auth: Authenticate directly at every endpoint with your credentials
+- Basic auth: Authenticate directly at every endpoint with your credentials.
+    This option is only available if you don't have multi-factor-authentication turned on.
 
     .. code-block:: bash
 
         curl -kX 'GET' -u user:password https://emailkasten.mydomain.tld/api/v1/emails/1/
 
 - Token authentication: Authenticate via an API token.
-    You can either get a persistent one from the admin panel or a temporary one from the API login via
-
-    .. code-block:: bash
-
-        curl -kX 'POST' -d '{"username": "myname", "password": "mypwd"}' https://emailkasten.mydomain.tld/api/auth/login/
-
-    This will return a key that you can then use in further requests.
+    You can get a persistent one from the admin panel.
 
     .. code-block:: bash
 
@@ -76,7 +74,6 @@ To authenticate via the API you have 4 options:
 
 - Session Token Authentication: Authenticate using a session token.
     This option is implemented by the API of headless django-allauth and is mostly intended for use by alternative frontends.
-    It works similar to the Token authentication, just with a different URL and header.
 
     .. code-block:: bash
 

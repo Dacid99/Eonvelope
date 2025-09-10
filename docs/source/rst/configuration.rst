@@ -79,7 +79,7 @@ Optional
 Admin User Settings
 -------------------
 
-These settings can be found and managed in the Django admin interface at */admin*.
+These settings can be found and managed in the Django admin interface at */admin* under *constance - Configuration*.
 They are sorted into categories:
 
 +------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -87,13 +87,13 @@ They are sorted into categories:
 +====================================+=========================+=============================================================================================================================================================================================================================+
 | **Server Configurations**          |                         |                                                                                                                                                                                                                             |
 +------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| REGISTRATION_ENABLED               | `True`                  | Set this to `True` to allow new users to sign up themselves. This setting only takes effect if the ``REGISTRATION_ENABLED`` environment setting is not `False`.                                                             |
++------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Default Values**                 |                         |                                                                                                                                                                                                                             |
 +------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DEFAULT_SAVE_TO_EML                | `True`                  | The default mailbox setting whether to store mails as eml.                                                                                                                                                                  |
 +------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DEFAULT_SAVE_ATTACHMENTS           | `True`                  | The default mailbox setting whether to store attachments.                                                                                                                                                                   |
-+------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| REGISTRATION_ENABLED               | `True`                  | Set this to `True` to allow new users to sign up themselves. This setting only takes effect if the ``REGISTRATION_ENABLED`` environment setting is not `False`.                                                             |
 +------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | **Processing Settings**            |                         |                                                                                                                                                                                                                             |
 +------------------------------------+-------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -131,22 +131,14 @@ They are sorted into categories:
 If the default for one of these settings changes, your already set up instance will not be affected by that change.
 To set the new default, go to the admin panel and use the reset to default option for that setting.
 
-Robots.txt
-^^^^^^^^^^
+Over time old settings that are no longer used by the application may accumulate in the database.
+If you wish to get rid of them, you can run the following command in your servers terminal.
 
-Since the rise of AI, uncounted numbers of webcrawlers are out and about online.
-The robots.txt file served by many web services (including your Emailkasten instance)
-is intended to tell them which pages they may access (if they care).
+.. code-block:: bash
 
-You can set up rules on what parts of Emailkasten crawlers are actively invited to access
-and which not in the admin panel under ``Robots - Rules``.
+  docker exec -it emailkasten-web poetry run python3 manage.py constance remove_stale_keys
 
-By default all pages are allowed.
-To reverse this and disallow all pages, add a rule with
 
-- robot: `*`
-- website: `your-domain.tld`
-- disallowed url pattern: `/`
 
 Security-relevant Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -182,5 +174,5 @@ All defaults are empty.
 
 More details can be found in the :doc:`integrations page<integrations>`.
 
-There are some more user-defined settings to configure the behaviour of individual objects like mailboxes and daemons.
+There are some more user-defined settings to configure the behaviour of individual objects like mailboxes and routines.
 You can read about them in the :doc:`user manual<web-instructions>`.

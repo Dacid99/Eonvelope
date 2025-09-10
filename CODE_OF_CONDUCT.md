@@ -1,6 +1,6 @@
 # Code Of Conduct
 
-This repository is governed by Mozilla's code of conduct and etiquette guidelines.
+This project is governed by Mozilla's code of conduct and etiquette guidelines.
 
 They promote
 

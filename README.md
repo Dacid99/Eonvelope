@@ -4,19 +4,22 @@ A open-source self-hostable email archive using the [django framework](https://w
 
 ## Features
 
+As a user you may like this application because of
+
 - Automated continuous email fetching
 - Support for IMAP, POP and Exchange
-- Import and export of emails
-- Indexing of attachments and correspondents
-- Filter and search your emails, attachments, correspondents
+- Import and export of emails in various formats
 - Identification of related emails
 - Restoring of emails to your mailaccount
-- Mobile-friendly Bootstrap5 webapp
-- Full-fledged API
-- Multi-language and timezone support
 - Cross integrations with other self-hosted projects like Paperless-ngx and Searxng
-- Easy docker setup and configuration
+- Mobile-friendly Bootstrap5 webapp
+- Easy filtering and searching options for your archived emails, attachments and correspondents
+
+As an admin you may choose this project because of its
+
+- Quick and easy setup and configuration via container (docker, podman, kubernetes, etc.)
 - SSL certificate out of the box
+- Full-fledged API
 
 Your emails are serious business, so this projects codebase has > 95% test-coverage!
 
@@ -39,31 +42,19 @@ If you encounter an issue please let us know via an issue or direct message!
 
 ## Installation
 
-### Recommended
-
 The project is intended to be run with the container image provided at [dockerhub](https://hub.docker.com/repository/docker/dacid99/emailkasten/general).
 
-**Docker**
+### Docker
 
 Use *docker compose* using [the compose file](docker/docker-compose.minimal.yml) or an equivalent *docker run* command.
 
-**Podman**
+### Podman
 
 Do the same thing as above, just using *podman* instead of *docker*.
 
-**Kubernetes**
+### Kubernetes
 
 You can use [the example kubernetes cluster setup](docker/kubernetes/minimal/) and launch it, for example via *minikube*.
-
-### Advanced
-
-Alternatively, you can run the application bare metal.
-
-1. Clone this repo.
-1. Install the dependencies for python and the system as described in [the development guide](DEVELOPMENT.md).
-1. Spin up a mysql db server matching the configurations in [the django application settings](Emailkasten/settings.py) on your machine.
-
-Finally the Emailkasten server is started via [the entrypoint script](docker/entrypoint.sh).
 
 ## Docs
 
@@ -83,7 +74,7 @@ Everybody should be able to use Emailkasten. Please don't hesitate to report any
 
 ## Contributing
 
-If you want to help us improving this project that is great! Please don't hesitate to approach us with ideas. And of course we are looking forward to your pull requests!
+If you want to help with improving this project that is great! Please don't hesitate to approach us with ideas. And of course we are looking forward to your pull requests!
 
 To get you started smoothly just follow [the development guide](DEVELOPMENT.md). This will help you set up a workspace for working with this project conveniently!
 

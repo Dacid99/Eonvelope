@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-10 17:12+0000\n"
-"PO-Revision-Date: 2025-08-23 13:01+0000\n"
+"PO-Revision-Date: 2025-09-11 18:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "core/uk/>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.13\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: src/core/constants.py:38
 msgid "All RECENT emails"
@@ -208,10 +208,8 @@ msgstr ".eml"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/FavoriteModelMixin.py:32
-#, fuzzy
-#| msgid "favorite"
 msgid "favorite status"
-msgstr "улюблений"
+msgstr "статус улюбленого"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/FilePathModelMixin.py:43
@@ -220,10 +218,8 @@ msgstr "шлях до файлу"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:37
-#, fuzzy
-#| msgid "healthy"
 msgid "health status"
-msgstr "здоровий"
+msgstr "стан здоров'я"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:45
@@ -233,19 +229,17 @@ msgstr "остання помилка"
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:52
 msgid "time of last error occurrence"
-msgstr ""
+msgstr "час останньої появи помилки"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:31
 msgid "time of creation"
-msgstr ""
+msgstr "час створення"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:38
-#, fuzzy
-#| msgid "last updated"
 msgid "time of last update"
-msgstr "останнє оновлення"
+msgstr "час останнього оновлення"
 
 #: src/core/models/Account.py:73
 msgid ""
@@ -321,10 +315,8 @@ msgstr "обліковий запис"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:147
-#, fuzzy
-#| msgid "account"
 msgid "accounts"
-msgstr "обліковий запис"
+msgstr "обліковий записи"
 
 #: src/core/models/Account.py:171
 #, python-format
@@ -336,10 +328,9 @@ msgid "This account already exists."
 msgstr "Цей обліковий запис вже існує."
 
 #: src/core/models/Account.py:219 src/core/models/Account.py:222
-#, fuzzy, python-format
-#| msgid "The email protocol implemented by the server."
+#, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
-msgstr "Протокол електронної пошти, реалізований сервером."
+msgstr "Протокол %s не реалізовано в класі fetcher!"
 
 #: src/core/models/Attachment.py:75
 msgid "This will only delete this attachment, not the email."
@@ -383,17 +374,13 @@ msgstr "електронна пошта"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:138
-#, fuzzy
-#| msgid "save attachments"
 msgid "attachment"
-msgstr "зберігати вкладення"
+msgstr "вкладення"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:140
-#, fuzzy
-#| msgid "save attachments"
 msgid "attachments"
-msgstr "зберігати вкладення"
+msgstr "вкладенням"
 
 #: src/core/models/Attachment.py:150
 #, python-format
@@ -403,24 +390,24 @@ msgstr "Вкладення %(file_name)s від %(email)s"
 #: src/core/models/Attachment.py:213
 #, python-format
 msgid "Paperless URL is malformed: %(error)s"
-msgstr ""
+msgstr "URL-адреса без паперу має неправильний формат: %(error)s"
 
 #. Translators: Paperless is a brand name.
 #: src/core/models/Attachment.py:219
 #, python-format
 msgid "Error connecting to the Paperless server: %(error)s"
-msgstr ""
+msgstr "Помилка підключення до сервера Paperless: %(error)s"
 
 #. Translators: Paperless is a brand name.
 #: src/core/models/Attachment.py:232
 #, python-format
 msgid "Authentication to Paperless failed: %(response)s"
-msgstr ""
+msgstr "Не вдалося автентифікацію для Paperless доступу: %(response)s"
 
 #: src/core/models/Attachment.py:237
 #, python-format
 msgid "Uploading to Paperless failed: %(response)s"
-msgstr ""
+msgstr "Не вдалося завантажити на Paperless архів: %(response)s"
 
 #: src/core/models/Correspondent.py:56
 msgid "This will only delete this correspondent, not its emails."
@@ -456,24 +443,18 @@ msgstr "власник списку"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:111
-#, fuzzy
-#| msgid "list subscribe"
 msgid "list-subscribe"
-msgstr "підписатися на список"
+msgstr "список-підписок"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:119
-#, fuzzy
-#| msgid "list unsubscribe"
 msgid "list-unsubscribe"
-msgstr "список відписок"
+msgstr "список-відписок"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:128
-#, fuzzy
-#| msgid "list unsubscribe post"
 msgid "list-unsubscribe method"
-msgstr "список публікацій зі скасування підписки"
+msgstr "метод-відписки від списку"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:136
@@ -547,12 +528,12 @@ msgstr "Час між двома демонами вимірюється в се
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:107
 msgid "daemon"
-msgstr ""
+msgstr "демон"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:109
 msgid "daemons"
-msgstr ""
+msgstr "демони"
 
 #: src/core/models/Daemon.py:135
 #, python-format
@@ -582,10 +563,8 @@ msgstr "ідентифікатор повідомлення"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:106
-#, fuzzy
-#| msgid "received"
 msgid "time received"
-msgstr "отримано"
+msgstr "час отримання"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:115
@@ -604,15 +583,13 @@ msgstr "Основний текст HTML"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:140
-#, fuzzy
-#| msgid "in reply to"
 msgid "in reply to email"
-msgstr "у відповідь на"
+msgstr "у відповідь на електронний лист"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:150
 msgid "referencing emails"
-msgstr ""
+msgstr "посилання на електронні листи"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:183
@@ -621,17 +598,13 @@ msgstr "заголовки"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:192
-#, fuzzy
-#| msgid "X-Spam"
 msgid "X-Spam Flag"
-msgstr "X-Спам"
+msgstr "Позначка X-Spam"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:204
-#, fuzzy
-#| msgid "email"
 msgid "emails"
-msgstr "електронна пошта"
+msgstr "електронні листи"
 
 #: src/core/models/Email.py:223
 #, python-format
@@ -641,10 +614,9 @@ msgstr ""
 "від %(mailbox)s"
 
 #: src/core/models/Email.py:626 src/core/models/Mailbox.py:288
-#, fuzzy, python-format
-#| msgid "The given file format is not supported."
+#, python-format
 msgid "The file format %(file_format)s is not supported."
-msgstr "Вказаний формат файлу не підтримується."
+msgstr "Формат Файлу %(file_format)s не підтримується."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/EmailCorrespondent.py:64
@@ -653,10 +625,8 @@ msgstr "згадка"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/EmailCorrespondent.py:74
-#, fuzzy
-#| msgid "correspondents"
 msgid "email-correspondents"
-msgstr "кореспонденти"
+msgstr "кореспонденти електронної пошти"
 
 #: src/core/models/EmailCorrespondent.py:99
 #, python-format
@@ -701,10 +671,8 @@ msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Mailbox.py:124
-#, fuzzy
-#| msgid "mailbox"
 msgid "mailboxes"
-msgstr "поштова скринька"
+msgstr "поштові скриньки"
 
 #: src/core/models/Mailbox.py:141
 #, python-format
@@ -730,17 +698,17 @@ msgstr "кількість файлів"
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:67
 msgid "status"
-msgstr ""
+msgstr "статус"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:78
 msgid "storage shard"
-msgstr ""
+msgstr "фрагмент сховища"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:80
 msgid "storage shards"
-msgstr ""
+msgstr "осколки сховища"
 
 #: src/core/models/StorageShard.py:89
 msgid "Current"
@@ -758,62 +726,51 @@ msgstr "%(state)s каталог сховища %(name)s"
 #: src/core/utils/fetchers/ExchangeFetcher.py:188
 #: src/core/utils/fetchers/ExchangeFetcher.py:200
 msgid "refresh"
-msgstr ""
+msgstr "освіжити"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:242
-#, fuzzy
-#| msgid "fetching criterion"
 msgid "fetching of mail contents"
-msgstr "критерій отримання"
+msgstr "отримання вмісту пошти"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:279
 msgid "scan for mailboxes"
-msgstr ""
+msgstr "сканування поштових скриньок"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:305
 msgid "restoring of email"
-msgstr ""
+msgstr "відновлення електронної пошти"
 
 #: src/core/utils/fetchers/IMAP4Fetcher.py:136
 #: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:87
 #: src/core/utils/fetchers/POP3Fetcher.py:96
 #: src/core/utils/fetchers/POP3_SSL_Fetcher.py:86
-#, fuzzy
-#| msgid "connection timeout"
 msgid "connecting"
-msgstr "час очікування з'єднання"
+msgstr "з'єднання"
 
 #: src/core/utils/fetchers/exceptions.py:31
 #: src/core/utils/fetchers/exceptions.py:48
-#, fuzzy
-#| msgid "interval"
 msgid "interaction"
-msgstr "інтервал"
+msgstr "взаємодія"
 
 #: src/core/utils/fetchers/exceptions.py:35
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "A %(error_class_name)s: %(error)s occurred during %(command_name)s on "
 "account!"
 msgstr ""
-"Помилка %(error_class_name)s: %(error)s сталася під час %(action_name)s!"
+"A %(error_class_name)s: Виникла помилка %(error)s під час виконання команди "
+"%(command_name)s на обліковому записі!"
 
 #: src/core/utils/fetchers/exceptions.py:52
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "A %(error_class_name)s: %(error)s occurred during %(command_name)s on "
 "mailbox!"
 msgstr ""
-"Помилка %(error_class_name)s: %(error)s сталася під час %(action_name)s!"
+"A %(error_class_name)s: Виникла помилка %(error)s під час виконання команди "
+"%(command_name)s на поштовій скриньці!"
 
 #: src/core/utils/fetchers/exceptions.py:67
-#, fuzzy, python-format
-#| msgid ""
-#| "Bad server response for %(command_name)s:\n"
-#| "%(response)s"
+#, python-format
 msgid "Server responded %(response)s!"
-msgstr ""
-"Неправильна відповідь сервера для %(command_name)s:\n"
-"%(response)s"
+msgstr "Сервер відповів %(response)s!"

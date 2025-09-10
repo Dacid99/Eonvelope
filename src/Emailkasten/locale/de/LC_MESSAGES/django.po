@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-10 17:12+0000\n"
-"PO-Revision-Date: 2025-09-05 12:01+0000\n"
-"Last-Translator: \"Mirko P.\" <michoo@outlook.de>\n"
+"PO-Revision-Date: 2025-09-11 18:01+0000\n"
+"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13.1-rc\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:726
 msgid "Received"
@@ -46,47 +46,47 @@ msgstr "Anhänge"
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:45
 msgid "Paperless server URL"
-msgstr ""
+msgstr "Paperless Server URL"
 
 #. Translators: Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:47
 msgid "URL of your Paperless server."
-msgstr ""
+msgstr "URL deines Paperless Servers."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:54
 msgid "Paperless server API key"
-msgstr ""
+msgstr "Paperless Server API Token"
 
 #. Translators: Paperless is a brand name.
 #: src/Emailkasten/models/UserProfile.py:56
 msgid "API key for your Paperless server."
-msgstr ""
+msgstr "API Token für deinen Paperless Server."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless and Tika are brand names.
 #: src/Emailkasten/models/UserProfile.py:62
 msgid "Paperless Tika support enabled"
-msgstr ""
+msgstr "Paperless Tika Unterstützung aktiviert"
 
 #. Translators: Paperless and Tika are brand names.
 #: src/Emailkasten/models/UserProfile.py:64
 msgid "Whether Tika support is enabled on your Paperless server."
-msgstr ""
+msgstr "Ob Tika Unterstützung für deinen Paperless Server aktiviert ist."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/Emailkasten/models/UserProfile.py:72
 msgid "user profile"
-msgstr ""
+msgstr "benutzerprofil"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/Emailkasten/models/UserProfile.py:74
 msgid "user profiles"
-msgstr ""
+msgstr "benutzerprofile"
 
 #: src/Emailkasten/models/UserProfile.py:83
 #, python-format
 msgid "Profile for user %(username)s "
-msgstr ""
+msgstr "Profil für Benutzer %(username)s "
 
 #: src/Emailkasten/settings.py:588
 msgid "Emailkasten API"
@@ -133,16 +133,13 @@ msgid "Whether or not to ignore emails that have a spam flag"
 msgstr "Ob als Spam markierte E-Mails ignoriert werden"
 
 #: src/Emailkasten/settings.py:758
-#, fuzzy
-#| msgid ""
-#| "List of mailboxes that are ignored when looking up mailboxes in an "
-#| "account."
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
 msgstr ""
-"Liste der Postfächer, die beim Suchen nach Postfächern in einem Konto "
-"ignoriert werden."
+"Regex-Muster (ohne Unterscheidung von Groß- und Kleinschreibung) für "
+"Postfachnamen, die beim Suchen nach Postfächern in einem Konto ignoriert "
+"werden."
 
 #: src/Emailkasten/settings.py:764
 msgid "List of content types prefixes to not parse as files."
@@ -229,23 +226,23 @@ msgstr "Du schickst zu viele Anfragen."
 #: src/Emailkasten/templates/account/profile.html:10
 #: src/Emailkasten/templates/allauth/layouts/manage.html:14
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: src/Emailkasten/templates/account/profile.html:14
 msgid "Your Profile"
-msgstr ""
+msgstr "Dein Profil"
 
 #: src/Emailkasten/templates/account/profile.html:15
 msgid "Third Party Integrations"
-msgstr ""
+msgstr "Drittanbieter Integrationen"
 
 #: src/Emailkasten/templates/account/profile.html:18
 msgid "Paperless"
-msgstr ""
+msgstr "Paperless"
 
 #: src/Emailkasten/templates/account/profile.html:25
 msgid "Save"
-msgstr ""
+msgstr "Speichern"
 
 #: src/Emailkasten/templates/allauth/elements/language_dropdown.html:8
 #: src/Emailkasten/templates/allauth/elements/language_dropdown.html:12
@@ -295,7 +292,7 @@ msgstr "Passwort ändern"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:30
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Zwei-Faktor-Authentifizierung"
 
 #: src/Emailkasten/templates/allauth/layouts/manage.html:38
 msgid "Sessions"

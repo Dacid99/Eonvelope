@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-22 09:37+0000\n"
-"PO-Revision-Date: 2025-08-15 10:02+0000\n"
-"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
+"PO-Revision-Date: 2025-09-05 12:01+0000\n"
+"Last-Translator: \"Mirko P.\" <michoo@outlook.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/api/"
 "de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.13.1-rc\n"
 
 #: src/api/v1/mixins/NoCreateMixin.py:34
 msgid "POST method is not allowed on this endpoint."
@@ -55,30 +55,24 @@ msgid "Attachment ids missing in request."
 msgstr "Anhangs-IDs fehlen in der Anfrage."
 
 #: src/api/v1/views/AttachmentViewSet.py:163
-#, fuzzy
-#| msgid "Attachment ids missing in request."
 msgid "Attachment ids given in invalid format."
-msgstr "Anhangs-IDs fehlen in der Anfrage."
+msgstr "Anhang-IDs in ungültigem Format angegeben."
 
 #: src/api/v1/views/AttachmentViewSet.py:171
 msgid "No attachments found"
 msgstr "Keine Anhänge gefunden"
 
 #: src/api/v1/views/CorrespondentViewSet.py:168
-#, fuzzy
-#| msgid "Attachment ids missing in request."
 msgid "Correspondent ids missing in request."
-msgstr "Anhangs-IDs fehlen in der Anfrage."
+msgstr "Korrespondenz-IDs fehlen in der Anfrage."
 
 #: src/api/v1/views/CorrespondentViewSet.py:177
 msgid "Correspondent ids given in invalid format."
-msgstr ""
+msgstr "Die angegebenen Korrespondenz-IDs haben ein ungültiges Format."
 
 #: src/api/v1/views/CorrespondentViewSet.py:185
-#, fuzzy
-#| msgid "No attachments found"
 msgid "No correspondents found"
-msgstr "Keine Anhänge gefunden"
+msgstr "Keine Korrespondenten gefunden"
 
 #: src/api/v1/views/DaemonViewSet.py:107
 msgid "Tested daemon"
@@ -113,10 +107,8 @@ msgid "Email ids missing in request."
 msgstr "E-Mail-IDs fehlen in der Anfrage."
 
 #: src/api/v1/views/EmailViewSet.py:190
-#, fuzzy
-#| msgid "Email ids missing in request."
 msgid "Email ids given in invalid format."
-msgstr "E-Mail-IDs fehlen in der Anfrage."
+msgstr "E-Mail-IDs in ungültigem Format angegeben."
 
 #: src/api/v1/views/EmailViewSet.py:200 src/api/v1/views/MailboxViewSet.py:235
 #: src/api/v1/views/MailboxViewSet.py:272
@@ -133,14 +125,12 @@ msgid "Tested mailbox"
 msgstr "Mailbox getestet"
 
 #: src/api/v1/views/MailboxViewSet.py:170
-#, fuzzy
-#| msgid "File missing in request."
 msgid "Fetching criterion missing in request."
-msgstr "Datei fehlt in der Anfrage."
+msgstr "Abrufkriterium fehlt in der Anfrage."
 
 #: src/api/v1/views/MailboxViewSet.py:177
 msgid "The given fetching criterion is not available for this mailbox."
-msgstr ""
+msgstr "Das angegebene Abrufkriterium ist für dieses Postfach nicht verfügbar."
 
 #: src/api/v1/views/MailboxViewSet.py:187
 msgid "Error with mailaccount or mailbox occurred."

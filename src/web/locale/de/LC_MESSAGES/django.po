@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-10 17:12+0000\n"
-"PO-Revision-Date: 2025-09-11 18:01+0000\n"
-"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
+"PO-Revision-Date: 2025-09-14 20:01+0000\n"
+"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/web/"
 "de/>\n"
 "Language: de\n"
@@ -998,7 +998,7 @@ msgstr "Daemon war nicht aktiv"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:89
 msgid "POP accounts do not support restoring of emails to mailbox."
-msgstr "POP Konten unterstützen das Wiederherstellen von E-Mails nicht."
+msgstr "POP-Konten unterstützen das Wiederherstellen von E-Mails nicht."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:94
 #, python-format

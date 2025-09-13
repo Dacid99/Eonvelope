@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-10 17:12+0000\n"
-"PO-Revision-Date: 2025-08-15 11:01+0000\n"
+"PO-Revision-Date: 2025-09-14 20:02+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/emailkasten/web/"
 "fr/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.13\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -1061,10 +1061,8 @@ msgstr ""
 "%(error)s"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:95
-#, fuzzy
-#| msgid "No email accounts found."
 msgid "eml file not found."
-msgstr "Aucun compte de messagerie trouvé."
+msgstr "Fichier eml introuvable."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:100
 #, fuzzy, python-format
@@ -1078,7 +1076,7 @@ msgstr ""
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:104
 msgid "Email successfully restored to mailbox."
-msgstr ""
+msgstr "Courriel restauré avec succès dans la boîte de réception."
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:97
 #, python-format

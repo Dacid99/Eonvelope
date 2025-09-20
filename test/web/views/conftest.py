@@ -100,6 +100,14 @@ def mock_Attachment_share_to_immich(mocker):
 
 
 @pytest.fixture
+def mock_Correspondent_share_to_nextcloud(mocker):
+    """Patches `core.models.Correspondent.share_to_nextcloud`."""
+    return mocker.patch(
+        "core.models.Correspondent.Correspondent.share_to_nextcloud", autospec=True
+    )
+
+
+@pytest.fixture
 def mock_Email_restore_to_mailbox(mocker):
     """Patches `core.models.Email.restore_to_mailbox`."""
     return mocker.patch("core.models.Email.Email.restore_to_mailbox")

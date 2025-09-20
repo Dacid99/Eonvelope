@@ -82,6 +82,43 @@ class UserProfile(models.Model):
         # Translators: Immich is a brand name.
         help_text=_("API key for your Immich server."),
     )
+    nextcloud_url = models.URLField(
+        default="",
+        blank=True,
+        max_length=255,
+        validators=[URLValidator(schemes=["http", "https"])],
+        # Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+        verbose_name=_("Nextcloud server URL"),
+        # Translators: Nextcloud is a brand name.
+        help_text=_("URL of your Nextcloud server."),
+    )
+    nextcloud_username = models.CharField(
+        default="",
+        blank=True,
+        max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+        verbose_name=_("Nextcloud server username"),
+        # Translators: Nextcloud is a brand name.
+        help_text=_("Username for your Nextcloud account."),
+    )
+    nextcloud_password = models.CharField(
+        default="",
+        blank=True,
+        max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+        verbose_name=_("Nextcloud server password"),
+        # Translators: Nextcloud is a brand name.
+        help_text=_("Password for your Nextcloud account."),
+    )
+    nextcloud_addressbook = models.CharField(
+        default="contacts",
+        blank=True,
+        max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+        verbose_name=_("Nextcloud server addressbook"),
+        # Translators: Nextcloud is a brand name.
+        help_text=_("Main addressbook of your Nextcloud account."),
+    )
 
     class Meta:
         """Metadata class for the model."""

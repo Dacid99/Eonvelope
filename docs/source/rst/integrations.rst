@@ -38,6 +38,16 @@ The persistent API key can be created in the Immich admin webinterface.
 You can then trigger the action via the button in the webpage showing a single attachment or the related API endpoint.
 
 
+Nextcloud
+---------
+
+Emailkasten can put selected correspondent data into your Nextcloud addressbook.
+
+You can set the URL of your Nextcloud server as well as your username and password/app-password in your profile settings.
+
+You can then trigger the action via the button in the webpage showing a single correspondent or the related API endpoint.
+
+
 Searxng
 -------
 

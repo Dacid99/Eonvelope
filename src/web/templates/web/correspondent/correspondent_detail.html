@@ -20,6 +20,8 @@
 
     {% include "web/partials/_download-button.html" %}
 
+    {% include "web/correspondent/partials/_send_to_third_party_dropdown.html" with correspondent=object %}
+
 {% endblock action_buttons %}
 
 {% block card_title %}

@@ -28,11 +28,12 @@ from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter, OpenApiResponse, OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from api.utils import query_param_list_to_typed_list
 from api.v1.filters import CorrespondentFilterSet
@@ -44,7 +45,6 @@ from core.models import Correspondent, EmailCorrespondent
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request
-    from rest_framework.response import Response
     from rest_framework.serializers import BaseSerializer
 
 
@@ -56,7 +56,7 @@ if TYPE_CHECKING:
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=attachment",
+                description="Headers: Content-Disposition=correspondent",
             )
         },
         description="Downloads the correspondent instance as vcard.",
@@ -76,10 +76,22 @@ if TYPE_CHECKING:
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=attachment",
+                description="Headers: Content-Disposition=correspondent",
             )
         },
         description="Downloads multiple correspondents as one vcard.",
+    ),
+    share_to_nextcloud=extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response=OpenApiTypes.STR,
+            ),
+            400: OpenApiResponse(
+                response=OpenApiTypes.STR,
+                description="If the request to the Nextcloud server fails. The reason is given as the response data.",
+            ),
+        },
+        description="Sends the correspondents data to Nextclouds addressbook.",
     ),
 )
 class CorrespondentViewSet(
@@ -215,4 +227,40 @@ class CorrespondentViewSet(
             as_attachment=True,
             filename="correspondents.vcf",
             content_type="text/vcard",
+        )
+
+    URL_PATH_SHARE_TO_NEXTCLOUD = "share/nextcloud"
+    URL_NAME_SHARE_TO_NEXTCLOUD = "share-to-nextcloud"
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_SHARE_TO_NEXTCLOUD,
+        url_name=URL_NAME_SHARE_TO_NEXTCLOUD,
+    )
+    def share_to_nextcloud(self, request: Request, pk: int | None = None) -> Response:
+        """Action method sending the correspondent to the users Immich server.
+
+        Args:
+            request: The request triggering the action.
+            pk: The private key of the correspondent to upload. Defaults to None.
+
+        Returns:
+            A fileresponse containing the requested file.
+        """
+        correspondent = self.get_object()
+        try:
+            correspondent.share_to_nextcloud()
+        except (RuntimeError, ConnectionError, PermissionError, ValueError) as error:
+            return Response(
+                status=status.HTTP_400_BAD_REQUEST,
+                # Translators: Nextcloud is a brand name.
+                data={"detail": _("Upload to Nextcloud failed."), "error": str(error)},
+            )
+        return Response(
+            status=status.HTTP_200_OK,
+            data={
+                # Translators: Nextcloud is a brand name.
+                "detail": _("Uploaded correspondent to Nextcloud."),
+            },
         )

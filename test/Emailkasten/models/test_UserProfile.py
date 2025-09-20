@@ -36,6 +36,13 @@ def test_UserProfile_fields(owner_user):
     assert isinstance(owner_user.profile.immich_url, str)
     assert owner_user.profile.immich_api_key is not None
     assert isinstance(owner_user.profile.immich_api_key, str)
+    assert owner_user.profile.nextcloud_url is not None
+    assert isinstance(owner_user.profile.nextcloud_url, str)
+    assert owner_user.profile.nextcloud_username is not None
+    assert isinstance(owner_user.profile.nextcloud_username, str)
+    assert owner_user.profile.nextcloud_password is not None
+    assert isinstance(owner_user.profile.nextcloud_addressbook, str)
+    assert owner_user.profile.nextcloud_addressbook == "contacts"
 
 
 @pytest.mark.django_db

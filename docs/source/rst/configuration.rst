@@ -162,17 +162,28 @@ User Settings
 The users have separate settings that they can configure via their profile page.
 These settings mostly concern third-party integrations.
 
-All defaults are empty.
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Setting                | Description                                                                                                                                           |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Paperless-URL          | The URL of the Paperless-ngx server that the user wants to share attachments with.                                                                    |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Paperless-API-Key      | The users API key to the upper Paperless-ngx server.                                                                                                  |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Paperless-Tika-enabled | Whether the Paperless-ngx server has Tika enabled for additional filetype support.                                                                    |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Immich-URL             | The URL of the Paperless-ngx server that the user wants to share attachments with.                                                                    |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Immich-API-Key         | The users API key to the upper Paperless-ngx server.                                                                                                  |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Nextcloud-URL          | The URL of the Nextcloud server that the user wants to share data with.                                                                               |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Nextcloud-Username     | The users Nextcloud account username.                                                                                                                 |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Nextcloud-Password     | The users Nextcloud account password or app-password.                                                                                                 |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Nextcloud-Addressbook  | The name of the Nextcloud addressbook that the user wants to share correspondent data with. Defaults to `contacts` the default Nextcloud addressbook. |
++------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-+------------------------+------------------------------------------------------------------------------------+
-| Setting                | Description                                                                        |
-+------------------------+------------------------------------------------------------------------------------+
-| Paperless-URL          | The URL of the Paperless-ngx server that the user wants to share attachments with. |
-+------------------------+------------------------------------------------------------------------------------+
-| Paperless-API-Key      | The users API key to the upper Paperless-ngx server.                               |
-+------------------------+------------------------------------------------------------------------------------+
-| Paperless-Tika-enabled | Whether the Paperless-ngx server has Tika enabled for additional filetype support. |
-+------------------------+------------------------------------------------------------------------------------+
 
 More details can be found in the :doc:`integrations page<integrations>`.
 

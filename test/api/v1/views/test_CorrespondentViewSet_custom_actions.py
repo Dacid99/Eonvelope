@@ -37,6 +37,15 @@ def mock_Correspondent_queryset_as_file(mocker, fake_file):
     )
 
 
+@pytest.fixture
+def mock_Correspondent_share_to_nextcloud(mocker):
+    """Patches `core.models.Correspondent.share_to_nextcloud`."""
+    return mocker.patch(
+        "core.models.Correspondent.Correspondent.share_to_nextcloud",
+        autospec=True,
+    )
+
+
 @pytest.mark.django_db
 def test_download_noauth(
     fake_correspondent,
@@ -291,3 +300,108 @@ def test_toggle_favorite_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     fake_correspondent.refresh_from_db()
     assert fake_correspondent.is_favorite is True
+
+
+@pytest.mark.django_db
+def test_share_to_nextcloud_noauth(
+    fake_correspondent,
+    noauth_api_client,
+    custom_detail_action_url,
+    mock_Correspondent_share_to_nextcloud,
+):
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.share_to_nextcloud` action
+    with an unauthenticated user client.
+    """
+    response = noauth_api_client.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_SHARE_TO_NEXTCLOUD,
+            fake_correspondent,
+        )
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    fake_correspondent.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_share_to_nextcloud_auth_other(
+    fake_correspondent,
+    other_api_client,
+    custom_detail_action_url,
+    mock_Correspondent_share_to_nextcloud,
+):
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.share_to_nextcloud` action
+    with the authenticated other user client.
+    """
+    response = other_api_client.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_SHARE_TO_NEXTCLOUD,
+            fake_correspondent,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_correspondent.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_share_to_nextcloud_auth_owner_success(
+    fake_correspondent,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Correspondent_share_to_nextcloud,
+):
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.share_to_nextcloud` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_SHARE_TO_NEXTCLOUD,
+            fake_correspondent,
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    fake_correspondent.refresh_from_db()
+    mock_Correspondent_share_to_nextcloud.assert_called_once_with(fake_correspondent)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "error",
+    [
+        ConnectionError,
+        PermissionError,
+        ValueError,
+        RuntimeError,
+    ],
+)
+def test_share_to_nextcloud_auth_owner_failure(
+    fake_error_message,
+    fake_correspondent,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Correspondent_share_to_nextcloud,
+    error,
+):
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.share_to_nextcloud` action
+    with the authenticated owner user client.
+    """
+    mock_Correspondent_share_to_nextcloud.side_effect = error(fake_error_message)
+
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_SHARE_TO_NEXTCLOUD,
+            fake_correspondent,
+        )
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "detail" in response.data
+    assert "error" in response.data
+    assert fake_error_message in response.data["error"]
+    mock_Correspondent_share_to_nextcloud.assert_called_once_with(fake_correspondent)

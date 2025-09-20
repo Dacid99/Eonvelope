@@ -24,9 +24,12 @@ import logging
 from io import BytesIO
 from typing import TYPE_CHECKING, Final, override
 
+import httpcore
+import httpx
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from rest_framework import status
 from vobject import vCard
 
 from core.mixins import (
@@ -182,6 +185,86 @@ class Correspondent(
         return _("Correspondent with address %(email_address)s") % {
             "email_address": self.email_address
         }
+
+    def share_to_nextcloud(self) -> None:
+        """Sends this attachment to the Nextcloud server of its user.
+
+        Note:
+            Nextcloud returns 201 on success.
+
+        Raises:
+            RuntimeError: If the users Nextcloud URL is not or improperly set.
+            ConnectionError: If connecting to Nextcloud failed.
+            PermissionError: If authentication to Nextcloud failed.
+            ValueError: If uploading the file to Nextcloud resulted in a bad response.
+        """
+        nextcloud_baseurl = self.user.profile.nextcloud_url.rstrip("/")
+        logger.debug(
+            "Sending %s to Nextcloud server at %s ...", str(self), nextcloud_baseurl
+        )
+        put_contact_url = (
+            nextcloud_baseurl
+            + "/remote.php/dav/addressbooks/users/"
+            + f"{self.user.profile.nextcloud_username.lower()}/{self.user.profile.nextcloud_addressbook.lower()}/{self.id}_emailkasten.vcf"
+        )
+        headers = {
+            "Depth": "0",
+            "Content-Type": "text/vcard; charset=utf-8;",
+            "DNT": "1",
+        }
+        auth = httpx.BasicAuth(
+            username=self.user.profile.nextcloud_username,
+            password=self.user.profile.nextcloud_password,
+        )
+        try:
+            response = httpx.put(
+                put_contact_url,
+                headers=headers,
+                content=Correspondent.queryset_as_file(
+                    Correspondent.objects.filter(id=self.id)
+                ),
+                auth=auth,
+            )
+        except (
+            httpcore.UnsupportedProtocol,
+            httpx.UnsupportedProtocol,
+            httpx.InvalidURL,
+        ) as error:
+            logger.info(
+                "Failed to send attachment to Nextcloud.",
+                exc_info=True,
+            )
+            raise RuntimeError(
+                # Translators: Nextcloud is a brand name.
+                _("Nextcloud URL is malformed: %(error)s")
+                % {"error": error}
+            ) from error
+        except httpx.RequestError as error:
+            logger.info("Failed to send attachment to Nextcloud.", exc_info=True)
+            raise ConnectionError(
+                # Translators: Nextcloud is a brand name.
+                _("Error connecting to the Nextcloud server: %(error)s")
+                % {"error": error}
+            ) from error
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as error:
+            logger.info("Failed to send attachment to Nextcloud.", exc_info=True)
+            if error.response.status_code in [
+                status.HTTP_401_UNAUTHORIZED,
+                status.HTTP_403_FORBIDDEN,
+            ]:
+                raise PermissionError(
+                    # Translators: Nextcloud is a brand name.
+                    _("Authentication to Nextcloud failed: %(response)s")
+                    % {"response": error.response.text}
+                ) from error
+            raise ValueError(
+                # Translators: Nextcloud is a brand name.
+                _("Uploading to Nextcloud failed: %(response)s")
+                % {"response": error.response.text}
+            ) from error
+        logger.debug("Successfully sent attachment to Nextcloud.")
 
     @property
     def is_mailinglist(self) -> bool:

@@ -14,35 +14,38 @@
                 {% endblock badges %}
 
             </div>
-            <div class="btn-toolbar align-items-center"
-                 role="toolbar"
-                 aria-label="{% translate 'Toolbar with button groups' %}">
-                <div class="btn-group me-3"
-                     role="group"
-                     aria-label="{% translate 'Action-buttons group' %}">
+            <form method="post">
+                {% csrf_token %}
+                <div class="btn-toolbar align-items-center"
+                     role="toolbar"
+                     aria-label="{% translate 'Toolbar with button groups' %}">
+                    <div class="btn-group me-3"
+                         role="group"
+                         aria-label="{% translate 'Action-buttons group' %}">
 
-                    {% block action_buttons %}
-                    {% endblock action_buttons %}
+                        {% block action_buttons %}
+                        {% endblock action_buttons %}
 
+                    </div>
+                    <div class="btn-group me-3"
+                         role="group"
+                         aria-label="{% translate 'Edit-buttons group' %}">
+
+                        {% block edit_buttons %}
+                        {% endblock edit_buttons %}
+
+                        {% include "web/partials/_delete-button.html" %}
+
+                    </div>
+                    <div class="btn-group ms-3"
+                         role="group"
+                         aria-label="{% translate 'Close-buttons group' %}">
+
+                        {% include "web/partials/_close_to_list-button.html" %}
+
+                    </div>
                 </div>
-                <div class="btn-group me-3"
-                     role="group"
-                     aria-label="{% translate 'Edit-buttons group' %}">
-
-                    {% block edit_buttons %}
-                    {% endblock edit_buttons %}
-
-                    {% include "web/partials/_delete-button.html" %}
-
-                </div>
-                <div class="btn-group ms-3"
-                     role="group"
-                     aria-label="{% translate 'Close-buttons group' %}">
-
-                    {% include "web/partials/_close_to_list-button.html" %}
-
-                </div>
-            </div>
+            </form>
         </div>
         {% if object.has_thumbnail %}
             <div class="row g-0">

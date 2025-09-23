@@ -120,7 +120,7 @@ def test_post_restore_noauth(
     """Tests :class:`web.views.EmailDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(EmailDetailWithDeleteView, fake_email),
-        {"restore": "Restore email"},
+        {"restore": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -139,7 +139,7 @@ def test_post_restore_auth_other(
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email),
-        {"restore": "Restore email"},
+        {"restore": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -156,7 +156,7 @@ def test_post_restore_auth_owner_success(
     """
     response = owner_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email),
-        {"restore": "Restore email"},
+        {"restore": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -187,7 +187,7 @@ def test_post_restore_auth_owner_pop(
 
     response = owner_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email),
-        {"restore": "Restore email"},
+        {"restore": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -218,7 +218,7 @@ def test_post_restore_auth_owner_no_file(
 
     response = owner_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email),
-        {"restore": "Restore email"},
+        {"restore": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -252,7 +252,7 @@ def test_post_restore_auth_owner_failure(
 
     response = owner_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email),
-        {"restore": "Restore email"},
+        {"restore": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK

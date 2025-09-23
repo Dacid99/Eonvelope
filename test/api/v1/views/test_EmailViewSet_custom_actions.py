@@ -20,8 +20,6 @@
 
 from __future__ import annotations
 
-import os
-
 import pytest
 from django.core.files.storage import default_storage
 from django.http import FileResponse
@@ -31,7 +29,6 @@ from api.v1.views import EmailViewSet
 from core.constants import SupportedEmailDownloadFormats
 from core.models import Email
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from test.conftest import fake_error_message
 
 
 @pytest.fixture

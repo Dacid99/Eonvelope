@@ -79,7 +79,7 @@ def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -97,7 +97,7 @@ def test_post_delete_auth_other(fake_attachment, other_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -111,7 +111,7 @@ def test_post_delete_auth_owner(fake_attachment, owner_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND

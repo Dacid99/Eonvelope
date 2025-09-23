@@ -21,7 +21,6 @@
 from datetime import datetime
 
 import pytest
-from django.forms.models import model_to_dict
 
 from api.v1.serializers import EmailSerializer
 
@@ -80,11 +79,9 @@ def test_output(fake_email, request_context):
 
 
 @pytest.mark.django_db
-def test_input(fake_email, request_context):
+def test_input(email_payload, request_context):
     """Tests for the expected input of the serializer."""
-    serializer = EmailSerializer(
-        data=model_to_dict(fake_email), context=request_context
-    )
+    serializer = EmailSerializer(data=email_payload, context=request_context)
     assert serializer.is_valid()
     serializer_data = serializer.validated_data
 
@@ -99,7 +96,7 @@ def test_input(fake_email, request_context):
     assert "referenced_by" not in serializer_data
     assert "datasize" not in serializer_data
     assert "is_favorite" in serializer_data
-    assert serializer_data["is_favorite"] == fake_email.is_favorite
+    assert serializer_data["is_favorite"] == email_payload["is_favorite"]
     assert "file_path" not in serializer_data
     assert "mailbox" not in serializer_data
     assert "headers" not in serializer_data

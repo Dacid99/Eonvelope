@@ -73,7 +73,7 @@ def test_post_delete_noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -91,7 +91,7 @@ def test_post_delete_auth_other(fake_daemon, other_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -106,7 +106,7 @@ def test_post_delete_auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -121,7 +121,7 @@ def test_post_test_noauth(fake_daemon, client, detail_url, login_url, mock_Daemo
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -138,7 +138,7 @@ def test_post_test_auth_other(fake_daemon, other_client, detail_url, mock_Daemon
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -155,7 +155,7 @@ def test_post_test_success_auth_owner(
     """
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -183,7 +183,7 @@ def test_post_test_failure_auth_owner(
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -225,7 +225,7 @@ def test_post_start_noauth(fake_daemon, client, detail_url, login_url):
 
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"start_daemon": "Start"},
+        {"start_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -248,7 +248,7 @@ def test_post_start_auth_other(fake_daemon, other_client, detail_url):
 
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"start_daemon": "Start"},
+        {"start_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -270,7 +270,7 @@ def test_post_start_success_auth_owner(fake_daemon, owner_client, detail_url):
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"start_daemon": "Start"},
+        {"start_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -295,7 +295,7 @@ def test_post_start_failure_auth_owner(fake_daemon, owner_client, detail_url):
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"start_daemon": "Start"},
+        {"start_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -338,7 +338,7 @@ def test_post_stop_noauth(fake_daemon, client, detail_url, login_url):
 
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"stop_daemon": "Stop"},
+        {"stop_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -358,7 +358,7 @@ def test_post_stop_auth_other(fake_daemon, other_client, detail_url):
 
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"stop_daemon": "Stop"},
+        {"stop_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -377,7 +377,7 @@ def test_post_stop_success_auth_owner(fake_daemon, owner_client, detail_url):
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"stop_daemon": "Stop"},
+        {"stop_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -407,7 +407,7 @@ def test_post_stop_failure_auth_owner(fake_daemon, owner_client, detail_url):
 
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
-        {"stop_daemon": "Stop"},
+        {"stop_daemon": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK

@@ -19,7 +19,6 @@
 """Test module for the :class:`web.forms.BaseMailboxForm` form class."""
 
 import pytest
-from django.forms.models import model_to_dict
 
 from web.forms import BaseMailboxForm
 

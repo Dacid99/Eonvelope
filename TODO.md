@@ -6,7 +6,6 @@
 - combined filter for correspondent with mention
 - extensive database statistics
 - toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/)
-- reprocess mail action
 - mechanism to remove all correspondents without emails
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
@@ -27,7 +26,6 @@
   - disable all signals in tests
   - tests more implementation agnostic
   - use more of the unittest api
-  - replace modeltodict in form and serializer tests with payloads
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
 - use pre-commit
@@ -38,13 +36,11 @@
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap,pop)
 - page_obj of list views for correct email content
-- remove values in action test-requests
 - add test email with references
 - postgres instead of mariadb
 
 ## To implement
 
-- fetch only specific errors in fetchers
 - favicon.ico for the icon
 - daemonize celery worker
 

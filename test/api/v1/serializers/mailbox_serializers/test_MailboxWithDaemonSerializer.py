@@ -21,7 +21,6 @@
 from datetime import datetime
 
 import pytest
-from django.forms.models import model_to_dict
 
 from api.v1.serializers.mailbox_serializers.MailboxWithDaemonSerializer import (
     MailboxWithDaemonSerializer,
@@ -67,10 +66,10 @@ def test_output(fake_mailbox, request_context):
 
 
 @pytest.mark.django_db
-def test_input(fake_mailbox, request_context):
+def test_input(mailbox_payload, request_context):
     """Tests for the expected input of the serializer."""
     serializer = MailboxWithDaemonSerializer(
-        data=model_to_dict(fake_mailbox), context=request_context
+        data=mailbox_payload, context=request_context
     )
     assert serializer.is_valid()
     serializer_data = serializer.validated_data
@@ -80,11 +79,11 @@ def test_input(fake_mailbox, request_context):
     assert "name" not in serializer_data
     assert "account" not in serializer_data
     assert "save_attachments" in serializer_data
-    assert serializer_data["save_attachments"] == fake_mailbox.save_attachments
+    assert serializer_data["save_attachments"] == mailbox_payload["save_attachments"]
     assert "save_to_eml" in serializer_data
-    assert serializer_data["save_to_eml"] == fake_mailbox.save_to_eml
+    assert serializer_data["save_to_eml"] == mailbox_payload["save_to_eml"]
     assert "is_favorite" in serializer_data
-    assert serializer_data["is_favorite"] == fake_mailbox.is_favorite
+    assert serializer_data["is_favorite"] == mailbox_payload["is_favorite"]
     assert "is_healthy" not in serializer_data
     assert "last_error" not in serializer_data
     assert "last_error_occurred_at" not in serializer_data

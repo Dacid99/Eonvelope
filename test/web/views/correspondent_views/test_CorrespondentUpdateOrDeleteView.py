@@ -133,7 +133,7 @@ def test_post_delete_noauth(fake_correspondent, client, detail_url, login_url):
     """Tests :class:`web.views.CorrespondentUpdateOrDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(CorrespondentUpdateOrDeleteView, fake_correspondent),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -151,7 +151,7 @@ def test_post_delete_auth_other(fake_correspondent, other_client, detail_url):
     """Tests :class:`web.views.CorrespondentUpdateOrDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(CorrespondentUpdateOrDeleteView, fake_correspondent),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -165,7 +165,7 @@ def test_post_delete_auth_owner(fake_correspondent, owner_client, detail_url):
     """Tests :class:`web.views.CorrespondentUpdateOrDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(CorrespondentUpdateOrDeleteView, fake_correspondent),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND

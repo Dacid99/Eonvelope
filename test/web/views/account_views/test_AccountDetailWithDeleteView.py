@@ -79,7 +79,7 @@ def test_post_delete_noauth(fake_account, client, detail_url, login_url):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -97,7 +97,7 @@ def test_post_delete_auth_other(fake_account, other_client, detail_url):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -111,7 +111,7 @@ def test_post_delete_auth_owner(fake_account, owner_client, detail_url):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"delete": "Delete"},
+        {"delete": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -128,7 +128,7 @@ def test_post_test_noauth(
     """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -147,7 +147,7 @@ def test_post_test_auth_other(
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -162,7 +162,7 @@ def test_post_test_success_auth_owner(
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -189,7 +189,7 @@ def test_post_test_failure_auth_owner(
 
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"test": "Test"},
+        {"test": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -229,7 +229,7 @@ def test_post_update_mailboxes_noauth(
     """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"update_mailboxes": "Update Mailboxes"},
+        {"update_mailboxes": ""},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -248,7 +248,7 @@ def test_post_update_mailboxes_auth_other(
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"update_mailboxes": "Update Mailboxes"},
+        {"update_mailboxes": ""},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -265,7 +265,7 @@ def test_post_update_mailboxes_success_auth_owner(
     """
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"update_mailboxes": "Update Mailboxes"},
+        {"update_mailboxes": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -300,7 +300,7 @@ def test_post_update_mailboxes_failure_auth_owner(
 
     response = owner_client.post(
         detail_url(AccountDetailWithDeleteView, fake_account),
-        {"update_mailboxes": "Update Mailboxes"},
+        {"update_mailboxes": ""},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -321,7 +321,7 @@ def test_post_update_mailboxes_failure_auth_owner(
 
 @pytest.mark.django_db
 def test_post_update_mailboxes_missing_action_auth_owner(
-    faker, fake_account, owner_client, detail_url, mock_Account_update_mailboxes
+    fake_account, owner_client, detail_url, mock_Account_update_mailboxes
 ):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client
     in case the action is missing in the request.

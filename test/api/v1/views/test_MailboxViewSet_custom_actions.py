@@ -23,12 +23,10 @@ from __future__ import annotations
 import pytest
 from django.http import FileResponse
 from rest_framework import status
-from rest_framework.response import Response
 
 from api.v1.views import MailboxViewSet
 from core.constants import EmailFetchingCriterionChoices, SupportedEmailUploadFormats
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from test.conftest import fake_mailbox
 
 
 @pytest.fixture

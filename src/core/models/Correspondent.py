@@ -382,6 +382,8 @@ class Correspondent(
             return None
         try:
             correspondent = cls.objects.get(email_address=address.strip(), user=user)
+            correspondent.email_name = name
+            correspondent.save()
             logger.debug("Correspondent %s already exists in db.", address)
         except cls.DoesNotExist:
             correspondent = cls(

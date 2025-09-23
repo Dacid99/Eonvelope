@@ -359,6 +359,7 @@ def test_Correspondent_create_from_correspondent_tuple_duplicate(
     )
 
     assert result == fake_correspondent
+    assert result.email_name == fake_correspondent_tuple[0]
     assert Correspondent.objects.count() == 1
 
 

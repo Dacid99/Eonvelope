@@ -14,7 +14,6 @@
 - notes field for models
 - more tags
 - autotagging
-- saving old correspondent mailername info (via fk maybe)
 - async parsing, sync saving
 - batch download and delete in web
 - download for account

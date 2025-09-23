@@ -126,13 +126,13 @@ class EmailCorrespondent(TimestampModelMixin, models.Model):
             raise ValueError("Email is not in the db!")
         new_email_correspondent_models = []
         for correspondent_tuple in getaddresses([header]):
-            new_correspondent = Correspondent.create_from_correspondent_tuple(
+            correspondent = Correspondent.create_from_correspondent_tuple(
                 correspondent_tuple, email.mailbox.account.user
             )
-            if new_correspondent is None:
+            if correspondent is None:
                 continue
             new_email_correspondent = cls(
-                correspondent=new_correspondent, email=email, mention=header_name
+                correspondent=correspondent, email=email, mention=header_name
             )
             new_email_correspondent.save()
             new_email_correspondent_models.append(new_email_correspondent)

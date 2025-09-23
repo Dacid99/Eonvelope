@@ -273,6 +273,27 @@ def test_get_bodytexts(
 
 
 @pytest.mark.parametrize(
+    "header, expected_href",
+    [
+        ("", ""),
+        ("https://test.list.com", "https://test.list.com"),
+        ("<https://usub.maillist.io>", "https://usub.maillist.io"),
+        ("<mailto:getridofthe@list.us>, <http://other.way.us>,", "http://other.way.us"),
+        ("<mailto:one@mail.it>, <mailto:other@mail.it>,", "mailto:one@mail.it"),
+        ("<https://firstref.ca>, https://secondref.ca,", "https://firstref.ca"),
+        ("http://insecure.ru, https://sslftw.org,", "https://sslftw.org"),
+    ],
+)
+def test_find_best_href_in_header(header, expected_href):
+    """Tests :func:`core.utils.mail_parsing.find_best_href_in_header`
+    for different typical cases of header.
+    """
+    result = mail_parsing.find_best_href_in_header(header)
+
+    assert result == expected_href
+
+
+@pytest.mark.parametrize(
     "x_spam, expected_result",
     [
         (None, False),

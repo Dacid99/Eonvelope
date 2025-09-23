@@ -25,7 +25,6 @@ import datetime
 import httpx
 import pytest
 import vobject
-from django.core.files.storage import default_storage
 from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker

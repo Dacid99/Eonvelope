@@ -38,6 +38,7 @@ from core.mixins import (
     TimestampModelMixin,
     URLMixin,
 )
+from core.utils.mail_parsing import find_best_href_in_header
 
 
 if TYPE_CHECKING:
@@ -282,6 +283,65 @@ class Correspondent(
             or self.list_subscribe
             or self.list_unsubscribe
         )
+
+    @property
+    def list_unsubscribe_post_name(self) -> str:
+        """Gets the name of the list unsubscribe method from `list_unsubscribe`.
+
+        Returns:
+            The name of the list unsubscribe method.
+        """
+        return self.list_unsubscribe_post.removeprefix("List-Unsubscribe=")
+
+    @property
+    def list_archive_href(self) -> str:
+        """Parses the href for subscribing to the correspondents list.
+
+        Returns:
+            The correspondents subscribe hyperref.
+            The empty string if list_unsubscribe is empty.
+        """
+        return find_best_href_in_header(self.list_archive)
+
+    @property
+    def list_help_href(self) -> str:
+        """Parses the href for subscribing to the correspondents list.
+
+        Returns:
+            The correspondents subscribe hyperref.
+            The empty string if list_unsubscribe is empty.
+        """
+        return find_best_href_in_header(self.list_help)
+
+    @property
+    def list_post_href(self) -> str:
+        """Parses the href for subscribing to the correspondents list.
+
+        Returns:
+            The correspondents subscribe hyperref.
+            The empty string if list_unsubscribe is empty.
+        """
+        return find_best_href_in_header(self.list_post)
+
+    @property
+    def list_subscribe_href(self) -> str:
+        """Parses the href for subscribing to the correspondents list.
+
+        Returns:
+            The correspondents subscribe hyperref.
+            The empty string if list_unsubscribe is empty.
+        """
+        return find_best_href_in_header(self.list_subscribe)
+
+    @property
+    def list_unsubscribe_href(self) -> str:
+        """Parses the href for unsubscribing from the correspondents list.
+
+        Returns:
+            The correspondents unsubscribe hyperref.
+            The empty string if list_unsubscribe is empty.
+        """
+        return find_best_href_in_header(self.list_unsubscribe)
 
     @property
     def name(self) -> str:

@@ -44,24 +44,37 @@
                 <span class="me-3">{% translate "Mailinglist" %}:</span>
                 <ul class="list-group-flush">
                     {% if object.list_subscribe %}
-                        <li class="list-group-item">{% translate "Subscribe" %}: {{ object.list_subscribe }}</li>
+                        <li class="list-group-item">
+                            <a href="{{ object.list_subscribe_href }}"
+                               class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Subscribe" %}</a>: {{ object.list_subscribe }}
+                        </li>
                     {% endif %}
                     {% if object.list_unsubscribe %}
-                        <li class="list-group-item">{% translate "Unsubscribe" %}: {{ object.list_unsubscribe }}"</li>
-                    {% endif %}
-                    {% if object.list_unsubscribe_post %}
                         <li class="list-group-item">
-                            {% translate "Unsubscribe Method" %}: {{ object.list_unsubscribe_post }}
+                            <a href="{{ object.list_unsubscribe_href }}"
+                               class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+                                {% translate "Unsubscribe" %}
+                                {% if object.list_unsubscribe_post %}({{ object.list_unsubscribe_post_name }}){% endif %}
+                            </a>: {{ object.list_unsubscribe }}"
                         </li>
                     {% endif %}
                     {% if object.list_post %}
-                        <li class="list-group-item">{% translate "Post" %}: {{ object.list_post }}</li>
+                        <li class="list-group-item">
+                            <a href="{{ object.list_post_href }}"
+                               class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Post" %}</a>: {{ object.list_post }}
+                        </li>
                     {% endif %}
                     {% if object.list_archive %}
-                        <li class="list-group-item">{% translate "Archive" %}: {{ object.list_archive }}</li>
+                        <li class="list-group-item">
+                            <a href="{{ object.list_archive_href }}"
+                               class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Archive" %}</a>: {{ object.list_archive }}
+                        </li>
                     {% endif %}
                     {% if object.list_help %}
-                        <li class="list-group-item">{% translate "Help" %}: {{ object.list_help }}</li>
+                        <li class="list-group-item">
+                            <a href="{{ object.list_help_href }}"
+                               class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Help" %}</a>: {{ object.list_help }}
+                        </li>
                     {% endif %}
                 </ul>
             </li>

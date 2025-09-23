@@ -17,7 +17,6 @@
 - autotagging
 - saving old correspondent mailername info (via fk maybe)
 - async parsing, sync saving
-- use post-unsubscribe-method to interpret post-unsubscribe as link
 - batch download and delete in web
 - download for account
 

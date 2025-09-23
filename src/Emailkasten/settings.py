@@ -114,9 +114,13 @@ DATABASES = {
         "USER": env("DATABASE_USER", default="user"),
         "PASSWORD": env("DATABASE_PASSWORD", default="passwd"),
         "HOST": "db",
-        "OPTIONS": {
-            "charset": "utf8mb4",
-        },
+        "OPTIONS": (
+            {
+                "charset": "utf8mb4",
+            }
+            if env("DATABASE_TYPE", default="mysql") == "mysql"
+            else {}
+        ),
     }
 }
 DATABASE_RECONNECT_RETRIES_DEFAULT = 10

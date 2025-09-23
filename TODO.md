@@ -37,7 +37,6 @@
 - test failing single message fetch (imap,pop)
 - page_obj of list views for correct email content
 - add test email with references
-- postgres instead of mariadb
 
 ## To implement
 

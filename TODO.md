@@ -41,7 +41,6 @@
 
 - favicon.ico for the icon
 - daemonize celery worker
-- ditch trailing slashes in api urls
 
 ### Work in progress
 

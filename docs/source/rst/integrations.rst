@@ -59,7 +59,7 @@ The API endpoint for the email search is:
 
 .. code-block:: text
 
-    /api/v1/emails/?search=
+    /api/v1/emails?search=
 
 The search results are listed under ``'results'``.
 
@@ -68,7 +68,7 @@ For instance, to search the attachments data, use:
 
 .. code-block:: text
 
-    /api/v1/attachments/?search=
+    /api/v1/attachments?search=
 
 Similar patterns apply for correspondents, accounts, mailboxes, etc.
 Check the API schema or the browsable API for more details.
@@ -87,7 +87,7 @@ Here is an exemplary configuration:
       disabled: false
       paging: true
       content_html_to_text: true
-      search_url: https://<emailkasten.mydomain.tld>/api/v1/emails/?search={query}&page={pageno}
+      search_url: https://<emailkasten.mydomain.tld>/api/v1/emails?search={query}&page={pageno}
       verify: false
       url_query: id
       url_prefix: https://<emailkasten.mydomain.tld>/emails/

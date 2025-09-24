@@ -13,7 +13,7 @@
         {% for format, format_name in page_obj.0.mailbox.available_download_formats %}
             <li>
                 <button class="dropdown-item"
-                        data-url="/api/v1/emails/download/?file_format={{ format }}"
+                        data-url="/api/v1/emails/download?file_format={{ format }}"
                         onclick="multiDownload(this)">{{ format_name }}</button>
             </li>
         {% endfor %}

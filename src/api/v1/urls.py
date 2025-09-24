@@ -41,7 +41,9 @@ from api.v1.views import (
 
 app_name = "v1"
 
-router = DefaultRouter()
+router = DefaultRouter(
+    trailing_slash=False
+)  # no slash for data endpoints for consistency with allauth headless api
 router.register("accounts", AccountViewSet, basename=AccountViewSet.BASENAME)
 router.register("mailboxes", MailboxViewSet, basename=MailboxViewSet.BASENAME)
 router.register("daemons", DaemonViewSet, basename=DaemonViewSet.BASENAME)
@@ -60,7 +62,7 @@ router.register("emails", EmailViewSet, basename=EmailViewSet.BASENAME)
 urlpatterns = [
     path("", include(router.urls)),
     path(
-        "stats/",
+        "stats",
         DatabaseStatsView.as_view(),
         name=DatabaseStatsView.NAME,
     ),

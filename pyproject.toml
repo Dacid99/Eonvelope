@@ -17,7 +17,6 @@ dependencies = [
     "django-dirtyfields (>=1.9.7,<2.0.0)",
     "django-allauth[mfa] (>=65.11.1,<66.0.0)",
     "django-constance (>=4.3.2,<5.0.0)",
-    "dj-rest-auth (>=7.0.1,<8.0.0)",
     "drf-spectacular (>=0.28.0,<0.29.0)",
     "exchangelib (>=5.5.1,<6.0.0)",
     "imap-tools (>=1.10.0,<2.0.0)",

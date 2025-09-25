@@ -15,7 +15,6 @@
 - more tags
 - autotagging
 - async parsing, sync saving
-- use post-unsubscribe-method to interpret post-unsubscribe as link
 - download for account and batchdownload for mailbox
 
 ## To refactor

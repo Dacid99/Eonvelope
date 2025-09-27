@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-10 17:12+0000\n"
-"PO-Revision-Date: 2025-09-11 18:01+0000\n"
+"PO-Revision-Date: 2025-09-28 22:01+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/core/"
 "de/>\n"
@@ -21,19 +21,19 @@ msgstr ""
 
 #: src/core/constants.py:38
 msgid "All RECENT emails"
-msgstr "Alle AKTUELLEN Emails"
+msgstr "Alle AKTUELLEN E-Mails"
 
 #: src/core/constants.py:41
 msgid "All UNSEEN emails"
-msgstr "Alle UNLESENEN Emails"
+msgstr "Alle UNGELESENEN E-Mails"
 
 #: src/core/constants.py:44
 msgid "All SEEN emails"
-msgstr "Alle GELESENEN Emails"
+msgstr "Alle GELESENEN E-Mails"
 
 #: src/core/constants.py:47
 msgid "All emails"
-msgstr "Alle E-Mails"
+msgstr "ALLE E-Mails"
 
 #: src/core/constants.py:50
 msgid "All RECENT and UNSEEN emails"
@@ -274,7 +274,7 @@ msgstr "Die URL des E-Mail-Servers für das gewählte Protokoll."
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:107
 msgid "mailserver portnumber"
-msgstr "emailserver portnummer"
+msgstr "mailserver Portnummer"
 
 #: src/core/models/Account.py:108
 msgid "The port of the mailserver for the chosen protocol."
@@ -283,7 +283,7 @@ msgstr "Die Portnummer des E-Mail-Servers für das gewählte Protokoll."
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:116
 msgid "email protocol"
-msgstr "email protokoll"
+msgstr "e-mail Protokoll"
 
 #: src/core/models/Account.py:117
 msgid "The email protocol implemented by the server."
@@ -349,12 +349,12 @@ msgstr "inhalts ID"
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:105
 msgid "content maintype"
-msgstr "inhalts haupttyp"
+msgstr "inhalts Haupttyp"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:113
 msgid "content subtype"
-msgstr "inhalts untertyp"
+msgstr "inhalts Untertyp"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:119 src/core/models/Email.py:156
@@ -365,7 +365,7 @@ msgstr "datengröße"
 #: src/core/models/Attachment.py:128 src/core/models/Email.py:202
 #: src/core/models/EmailCorrespondent.py:47
 msgid "email"
-msgstr "email"
+msgstr "e-mail"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:138
@@ -504,7 +504,7 @@ msgstr "abfrage kriterium"
 
 #: src/core/models/Daemon.py:79
 msgid "The selection criterion for emails to archive."
-msgstr "Das Kriterium nach dem Emails abgrufen werden."
+msgstr "Das Kriterium nach dem Emails abgerufen werden."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:88

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: 2025-09-29 21:21+0000\n"
+"PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/web/"
 "de/>\n"
@@ -236,7 +236,7 @@ msgstr "Teste dieses Konto um zu überprüfen ob der Fehler weiter auftritt."
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:14
 msgid "Mailboxes"
-msgstr "Mailboxen"
+msgstr "Postfächer"
 
 #: src/web/templates/web/account/account_detail.html:100
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
@@ -274,7 +274,7 @@ msgstr "Konto hinzufügen"
 
 #: src/web/templates/web/account/partials/_emails_list_alternative.html:6
 msgid "You can fetch emails from one of this accounts mailboxes."
-msgstr "Du kannst E-Mails aus einer Mailbox dieses Kontos abrufen."
+msgstr "Du kannst E-Mails aus einem Postfach dieses Kontos abrufen."
 
 #: src/web/templates/web/account/partials/_filter_list_alternative.html:7
 msgid "No email accounts found."
@@ -287,7 +287,7 @@ msgstr "Leg los und füge einige hinzu."
 #: src/web/templates/web/account/partials/_mailboxes_list_alternative.html:6
 msgid "You can add mailboxes for this account by fetching them from the server"
 msgstr ""
-"Du kannst Mailboxen für dieses Konto hinzufügen, indem du sie vom Server "
+"Du kannst Postfächer für dieses Konto hinzufügen, indem du sie vom Server "
 "abfrufst"
 
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
@@ -296,7 +296,7 @@ msgstr "Teste dieses Konto um zu überprüfen dass der Zugriff funktioniert."
 
 #: src/web/templates/web/account/partials/_update_mailboxes-button.html:7
 msgid "Update Mailboxes"
-msgstr "Mailboxen aktualisieren"
+msgstr "Postfächer aktualisieren"
 
 #: src/web/templates/web/attachment/attachment_detail.html:6
 msgid "Attachment Details"
@@ -357,20 +357,16 @@ msgid "No attachments found."
 msgstr "Keine Anhänge gefunden."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:11
-#, fuzzy
-#| msgid ""
-#| "You can fetching some along with emails from the mailboxes you have set "
-#| "up."
 msgid ""
 "You can fetch some along with emails from the mailboxes you have set up."
 msgstr ""
-"Du kannst einige hinzufügen, indem du E-Mails aus deinen Mailboxen abrufst."
+"Du kannst einige hinzufügen, indem du E-Mails aus deinen Postfächern abrufst."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:17
 #: src/web/templates/web/correspondent/partials/_filter_list_alternative.html:17
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:17
 msgid "Go to mailboxes"
-msgstr "Zu den Mailboxen"
+msgstr "Zu den Postfächern"
 
 #: src/web/templates/web/attachment/partials/_multi_download-button.html:4
 #: src/web/templates/web/correspondent/partials/_multi_download-button.html:4
@@ -466,13 +462,11 @@ msgstr "Schließen"
 
 #: src/web/templates/web/bases/base_list.html:36
 msgid "Select All"
-msgstr ""
+msgstr "Alle auswählen"
 
 #: src/web/templates/web/bases/base_list.html:53
-#, fuzzy
-#| msgid "Action-buttons groups"
 msgid "Multi-actions-buttons groups"
-msgstr "Aktionen-Knöpfe-Gruppe"
+msgstr "Multi-Aktionen-Knöpfe-Gruppe"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
@@ -523,7 +517,8 @@ msgstr "Keine Korrespondenten gefunden."
 msgid ""
 "You can add some by fetching the emails from the mailboxes you have set up."
 msgstr ""
-"Du kannst einige hinzufügen, indem du E-Mails aus deinen Mailboxen abrufst."
+"Du kannst einige hinzufügen, indem du sie zusammen mit E-Mails aus deinen "
+"Postfächern abrufst."
 
 #: src/web/templates/web/daemon/daemon_create.html:6
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:6
@@ -541,7 +536,7 @@ msgstr "Routinen Details"
 #: src/web/templates/web/email/email_detail.html:57
 #: src/web/templates/web/email/partials/_email_card.html:17
 msgid "Mailbox"
-msgstr "Mailbox"
+msgstr "Postfach"
 
 #: src/web/templates/web/daemon/daemon_detail.html:41
 #: src/web/templates/web/daemon/daemon_edit.html:21
@@ -590,7 +585,7 @@ msgstr "Keine Routinen gefunden."
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:11
 msgid "Add one to a mailbox to fetch its contents on a regular basis."
-msgstr "Füge eine zu einer Mailbox hinzu um ihre Inhalte regelmäßig abzurufen."
+msgstr "Füge eine zu einem Postfach hinzu um ihre Inhalte regelmäßig abzurufen."
 
 #: src/web/templates/web/daemon/partials/_is_running-badge.html:4
 msgid "Running"
@@ -742,17 +737,15 @@ msgstr "Keine E-Mails gefunden."
 
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:11
 msgid "You can fetch some from the mailboxes you have set up."
-msgstr "Du kannst einige aus Mailboxen, die du eingerichtet hast, abrufen."
+msgstr "Du kannst einige aus Postfächern, die du eingerichtet hast, abrufen."
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:7
 msgid "Restore"
 msgstr "Wiederherstellen"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:18
-#, fuzzy
-#| msgid "Routines"
 msgid "New Routine"
-msgstr "Routinen"
+msgstr "Neue Routine"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:22
 msgid "for"
@@ -760,7 +753,7 @@ msgstr "für"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:6
 msgid "Mailbox Details"
-msgstr "Mailbox Details"
+msgstr "Postfach Details"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:51
 msgid "Save attachments"
@@ -786,35 +779,27 @@ msgstr "Teste dieses Postfach, um zu überprüfen ob der Fehler weiter auftritt.
 
 #: src/web/templates/web/mailbox/mailbox_edit.html:6
 msgid "Edit Mailbox"
-msgstr "Mailbox bearbeiten"
+msgstr "Postfach bearbeiten"
 
 #: src/web/templates/web/mailbox/mailbox_email_filter_list.html:7
 msgid "of"
 msgstr "von"
 
 #: src/web/templates/web/mailbox/partials/_daemons_list_alternative.html:8
-#, fuzzy
-#| msgid ""
-#| "You can set up daemons for this mailbox to fetch its contents on a "
-#| "regular schedule."
 msgid ""
 "You can set up routines for this mailbox to fetch its contents on a regular "
 "schedule."
 msgstr ""
-"Du kannst Routinen für diese Mailbox einrichten, um ihre Inhalte regelmäßig "
-"abzurufen."
+"Du kannst Routinen für dieses Postfach einrichten, um seine Inhalte "
+"regelmäßig abzurufen."
 
 #: src/web/templates/web/mailbox/partials/_emails_list_alternative.html:7
-#, fuzzy
-#| msgid ""
-#| "Fetch emails from this mailbox by setting up a daemon or fetching the "
-#| "content once."
 msgid ""
 "Fetch emails from this mailbox by setting up a routine or fetching the "
 "content once."
 msgstr ""
-"Rufe E-Mails aus dieser Mailbox ab, indem du einen Daemon einrichtest oder "
-"ihren Inhalt einmalig abrufst."
+"Rufe E-Mails aus diesem Postfach ab, indem du eine Routine einrichtest oder "
+"seinen Inhalt einmalig abrufst."
 
 #: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:9
 msgid "Fetch"
@@ -822,14 +807,14 @@ msgstr "Abrufen"
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:7
 msgid "No mailboxes found."
-msgstr "Keine Mailboxen gefunden."
+msgstr "Keine Postfächer gefunden."
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:11
 msgid ""
 "You can add some by fetching the mailboxes from an account you have set up."
 msgstr ""
-"Du kannst einige hinzufügen, indem du sie aus den Mailboxen eines deiner "
-"Accounts abfragst."
+"Du kannst einige hinzufügen, indem du sie aus den Postfächern eines deiner "
+"Konten abfragst."
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:17
 msgid "Go to accounts"
@@ -843,7 +828,7 @@ msgstr "Hochladen"
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:6
 msgid "Test this mailbox to make sure it can be accessed."
 msgstr ""
-"Teste diese Mailbox, um sicherzustellen, dass auf sie zugegriffen werden "
+"Teste dieses Postfach, um sicherzustellen, dass auf es zugegriffen werden "
 "kann."
 
 #: src/web/templates/web/mailbox/partials/_upload_email-button.html:6
@@ -856,11 +841,11 @@ msgstr "E-Mail hochladen"
 
 #: src/web/templates/web/mailbox/upload_email.html:20
 msgid "Back to mailbox"
-msgstr "Zurück zur Mailbox"
+msgstr "Zurück zum Postfach"
 
 #: src/web/templates/web/mailbox/upload_email.html:25
 msgid "Upload emails to the mailbox"
-msgstr "E-Mails in die Mailbox hochladen"
+msgstr "E-Mails in das Postfach hochladen"
 
 #: src/web/templates/web/partials/_clear_and_submit_filter-button.html:4
 msgid "& Submit"
@@ -926,7 +911,7 @@ msgstr "Lizensiert unter AGPLv3."
 
 #: src/web/templates/web/partials/_footer.html:15
 msgid "Website"
-msgstr ""
+msgstr "Webseite"
 
 #: src/web/templates/web/partials/_footer.html:18
 msgid "Gitlab"
@@ -961,10 +946,8 @@ msgid "Health unknown"
 msgstr "Zustand unbekannt"
 
 #: src/web/templates/web/partials/_multi_delete-modal.html:19
-#, fuzzy
-#| msgid "Are you sure you want to delete %(object)s?"
 msgid "Are you sure you want to delete the selected items?"
-msgstr "Bist du sicher, dass du %(object)s löschen willst?"
+msgstr "Bist du sicher, dass du die ausgewählten Objekte löschen willst?"
 
 #: src/web/templates/web/partials/_pagination.html:4
 msgid "Results"
@@ -1005,36 +988,32 @@ msgstr "Aktualisierung der Postfächer fehlgeschlagen: %(error)s"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:98
 msgid "Updating mailboxes successful"
-msgstr "Mailboxen erfolgreich aktualisiert"
+msgstr "Postfächer erfolgreich aktualisiert"
 
 #: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:92
 #: src/web/views/correspondent_views/CorrespondentDetailWithDeleteView.py:100
-#, fuzzy
-#| msgid "Fetching successful"
 msgid "Sharing successful"
-msgstr "Abrufen erfolgreich"
+msgstr "Teilen erfolgreich"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:80
 msgid "Daemon started successfully"
-msgstr "Daemon erfolgreich gestartet"
+msgstr "Routine erfolgreich gestartet"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:82
 msgid "Daemon was already running"
-msgstr "Daemon läuft bereits"
+msgstr "Routine läuft bereits"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:98
 msgid "Daemon stopped successfully"
-msgstr "Daemon erfolgreich gestoppt"
+msgstr "Routine erfolgreich gestoppt"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:100
 msgid "Daemon was not running"
-msgstr "Daemon war nicht aktiv"
+msgstr "Routine war nicht aktiv"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:85
-#, fuzzy
-#| msgid "Email successfully restored to mailbox."
 msgid "Email successfully reprocessed."
-msgstr "E-Mail wurde erfolgreich im Postfach wiederhergestellt."
+msgstr "E-Mail erfolgreich neu verarbeitet."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:103
 msgid "POP accounts do not support restoring of emails to mailbox."
@@ -1052,7 +1031,7 @@ msgstr "eml-Datei nicht gefunden."
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:114
 #, python-format
 msgid "Restoring of email to mailbox failed: %(error)s"
-msgstr "Wiederherstellen der E-Mail fehlgeschlagen: %(error)s"
+msgstr "Wiederherstellen der E-Mail im Postfach fehlgeschlagen: %(error)s"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:118
 msgid "Email successfully restored to mailbox."

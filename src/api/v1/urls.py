@@ -46,7 +46,7 @@ router = DefaultRouter(
 )  # no slash for data endpoints for consistency with allauth headless api
 router.register("accounts", AccountViewSet, basename=AccountViewSet.BASENAME)
 router.register("mailboxes", MailboxViewSet, basename=MailboxViewSet.BASENAME)
-router.register("daemons", DaemonViewSet, basename=DaemonViewSet.BASENAME)
+router.register("routines", DaemonViewSet, basename=DaemonViewSet.BASENAME)
 router.register(
     "correspondents",
     CorrespondentViewSet,

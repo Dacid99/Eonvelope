@@ -47,13 +47,19 @@ logger = logging.getLogger(__name__)
 class Daemon(
     DirtyFieldsMixin, URLMixin, HealthModelMixin, TimestampModelMixin, models.Model
 ):
-    """Database model for the daemon fetching a mailbox."""
+    """Database model for the daemon fetching a mailbox.
+
+    Note:
+        The internal name of this object is ``daemon``, the external name for the user interface is ``routine``.
+    """
 
     BASENAME = "daemon"
 
-    DELETE_NOTICE = _("This will only delete this daemon, not its mailbox.")
+    DELETE_NOTICE = _("This will only delete this routine, not its mailbox.")
 
-    DELETE_NOTICE_PLURAL = _("This will only delete these daemon, not their mailboxes.")
+    DELETE_NOTICE_PLURAL = _(
+        "This will only delete these routine, not their mailboxes."
+    )
 
     uuid = models.UUIDField(
         default=uuid.uuid4,
@@ -96,7 +102,7 @@ class Daemon(
         on_delete=models.PROTECT,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("interval"),
-        help_text=_("The time between two daemon runs in seconds."),
+        help_text=_("The time between two routine runs in seconds."),
     )
     """The period with which the daemon is running."""
 
@@ -106,9 +112,9 @@ class Daemon(
         db_table = "daemons"
         """The name of the database table for the daemons."""
         # Translators: Do not capitalize the very first letter unless your language requires it.
-        verbose_name = _("daemon")
+        verbose_name = _("routine")
         # Translators: Do not capitalize the very first letter unless your language requires it.
-        verbose_name_plural = _("daemons")
+        verbose_name_plural = _("routines")
         get_latest_by = TimestampModelMixin.Meta.get_latest_by
 
         constraints: Final[list[models.BaseConstraint]] = [
@@ -134,7 +140,7 @@ class Daemon(
         Returns:
             The string representation of the daemon, using :attr:`uuid` and :attr:`mailbox`.
         """
-        return _("Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s") % {
+        return _("Emailfetching routine %(uuid)s for mailbox %(mailbox)s") % {
             "uuid": self.uuid,
             "mailbox": self.mailbox,
         }
@@ -186,7 +192,7 @@ class Daemon(
         Raises:
             Exception: Any exception raised by the task.
         """
-        logger.info("Testing daemon %s ...", self)
+        logger.info("Testing routine %s ...", self)
 
         daemon_task = self.celery_task.task
         args = json.loads(self.celery_task.args or "[]")
@@ -194,9 +200,9 @@ class Daemon(
         try:
             current_app.send_task(daemon_task, args=args, kwargs=kwargs).get()
         except Exception:
-            logger.exception("Failed testing daemon %s!", self)
+            logger.exception("Failed testing routine %s!", self)
             raise
-        logger.info("Successfully tested daemon %s ...", self)
+        logger.info("Successfully tested routine %s ...", self)
 
     def start(self) -> bool:
         """Start the daemons :attr:`celery_task`.
@@ -208,7 +214,7 @@ class Daemon(
         if not self.celery_task.enabled:
             self.celery_task.enabled = True
             self.celery_task.save(update_fields=["enabled"])
-            logger.debug("Successfully started daemon.")
+            logger.debug("Successfully started routine.")
             return True
         logger.debug("%s was already running.", self)
         return False
@@ -223,7 +229,7 @@ class Daemon(
         if self.celery_task.enabled:
             self.celery_task.enabled = False
             self.celery_task.save(update_fields=["enabled"])
-            logger.debug("Successfully stopped daemon.")
+            logger.debug("Successfully stopped routine.")
             return True
         logger.debug("%s was not running.", self)
         return False

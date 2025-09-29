@@ -32,10 +32,14 @@
 
         </h6>
 
-        {% block card_content %}
-        {% endblock card_content %}
+        <div class="mt-auto">
 
-        <div class="card-text d-flex justify-content-between">
+            {% block card_content %}
+            {% endblock card_content %}
+
+        </div>
+
+        <div class="card-text d-flex justify-content-between mt-auto">
             <div class="form-check d-flex flex-column-reverse flex-lg-row">
                 <label for="select-{{ card_object.id }}"
                        class="form-check-label visually-hidden">Select</label>

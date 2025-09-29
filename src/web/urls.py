@@ -128,22 +128,22 @@ urlpatterns = [
         name=CorrespondentUpdateOrDeleteView.URL_NAME,
     ),
     path(
-        "daemons/",
+        "routines/",
         DaemonFilterView.as_view(),
         name=DaemonFilterView.URL_NAME,
     ),
     path(
-        "daemons/<int:pk>/",
+        "routines/<int:pk>/",
         DaemonDetailWithDeleteView.as_view(),
         name=DaemonDetailWithDeleteView.URL_NAME,
     ),
     path(
-        "daemons/<int:pk>/edit/",
+        "routines/<int:pk>/edit/",
         DaemonUpdateOrDeleteView.as_view(),
         name=DaemonUpdateOrDeleteView.URL_NAME,
     ),
     path(
-        "daemon/add/",
+        "routines/add/",
         DaemonCreateView.as_view(),
         name=DaemonCreateView.URL_NAME,
     ),
@@ -208,7 +208,7 @@ urlpatterns = [
         name=MailboxUpdateOrDeleteView.URL_NAME,
     ),
     path(
-        "mailboxes/<int:pk>/add-daemon/",
+        "mailboxes/<int:pk>/add-routine/",
         MailboxCreateDaemonView.as_view(),
         name=MailboxCreateDaemonView.URL_NAME,
     ),

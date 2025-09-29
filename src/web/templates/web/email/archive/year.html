@@ -23,7 +23,7 @@
 {% endblock previous_date_name %}
 
 {% block next_date_url %}
-    {% url 'web:email-archive-year' previous_year.year %}
+    {% url 'web:email-archive-year' next_year.year %}
 {% endblock next_date_url %}
 
 {% block next_date_name %}

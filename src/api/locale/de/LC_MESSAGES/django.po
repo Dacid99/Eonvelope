@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: 2025-09-11 18:01+0000\n"
+"PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/api/"
 "de/>\n"
@@ -72,17 +72,13 @@ msgstr "Anhangsdokument zu Paperless hochgeladen."
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:351
-#, fuzzy
-#| msgid "Upload to Paperless failed."
 msgid "Upload to Immich failed."
-msgstr "Hochladen zu Paperless fehlgeschlagen."
+msgstr "Hochladen zu Immich fehlgeschlagen."
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:357
-#, fuzzy
-#| msgid "Uploaded attachment document to Paperless."
 msgid "Uploaded attachment document to Immich."
-msgstr "Anhangsdokument zu Paperless hochgeladen."
+msgstr "Bildanhang zu Immich hochgeladen."
 
 #: src/api/v1/views/CorrespondentViewSet.py:210
 msgid "Correspondent ids are required."
@@ -98,17 +94,13 @@ msgstr "Keine Korrespondenten gefunden"
 
 #. Translators: Nextcloud is a brand name.
 #: src/api/v1/views/CorrespondentViewSet.py:258
-#, fuzzy
-#| msgid "Upload to Paperless failed."
 msgid "Upload to Nextcloud failed."
-msgstr "Hochladen zu Paperless fehlgeschlagen."
+msgstr "Hochladen zu Nextcloud fehlgeschlagen."
 
 #. Translators: Nextcloud is a brand name.
 #: src/api/v1/views/CorrespondentViewSet.py:264
-#, fuzzy
-#| msgid "No correspondents found"
 msgid "Uploaded correspondent to Nextcloud."
-msgstr "Keine Korrespondenten gefunden"
+msgstr "Korrespondent zu Nextcloud hochgeladen."
 
 #: src/api/v1/views/DaemonViewSet.py:138
 msgid "Tested routine"
@@ -168,10 +160,8 @@ msgid "Email successfully restored to mailbox."
 msgstr "E-Mail wurde erfolgreich im Postfach wiederhergestellt."
 
 #: src/api/v1/views/EmailViewSet.py:406
-#, fuzzy
-#| msgid "Email successfully restored to mailbox."
 msgid "Email successfully reprocessed."
-msgstr "E-Mail wurde erfolgreich im Postfach wiederhergestellt."
+msgstr "E-Mail erfolgreich neu verarbeitet."
 
 #: src/api/v1/views/MailboxViewSet.py:190
 msgid "Tested mailbox"

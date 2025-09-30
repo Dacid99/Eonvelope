@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: 2025-09-11 18:02+0000\n"
+"PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "emailkasten/uk/>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:730
@@ -79,72 +79,62 @@ msgstr "Чи ввімкнено підтримку Tika на вашому Paperl
 #. Translators: Do not capitalize the very first letter unless your language requires it. Immich is a brand name.
 #: src/Emailkasten/models/UserProfile.py:72
 msgid "Immich server URL"
-msgstr ""
+msgstr "URL-адреса сервера Імміч"
 
 #. Translators: Immich is a brand name.
 #: src/Emailkasten/models/UserProfile.py:74
-#, fuzzy
-#| msgid "URL of your Paperless server."
 msgid "URL of your Immich server."
-msgstr "URL-адреса вашого Paperless сервера."
+msgstr "URL-адреса вашого сервера Immich."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Immich is a brand name.
 #: src/Emailkasten/models/UserProfile.py:81
-#, fuzzy
-#| msgid "Paperless server API key"
 msgid "Immich server API key"
-msgstr "Paperless ключ API сервера"
+msgstr "Ключ API сервера Immich"
 
 #. Translators: Immich is a brand name.
 #: src/Emailkasten/models/UserProfile.py:83
-#, fuzzy
-#| msgid "API key for your Paperless server."
 msgid "API key for your Immich server."
-msgstr "Ключ API для вашого Paperless сервера."
+msgstr "Ключ API для вашого сервера Immich."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:91
-#, fuzzy
-#| msgid "Paperless server URL"
 msgid "Nextcloud server URL"
-msgstr "Paperless сервер URL"
+msgstr "URL-адреса сервера Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:93
-#, fuzzy
-#| msgid "URL of your Paperless server."
 msgid "URL of your Nextcloud server."
-msgstr "URL-адреса вашого Paperless сервера."
+msgstr "URL-адреса вашого сервера Nextcloud."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:100
 msgid "Nextcloud server username"
-msgstr ""
+msgstr "Ім'я користувача сервера Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:102
 msgid "Username for your Nextcloud account."
-msgstr ""
+msgstr "Ім'я користувача для вашого облікового запису Nextcloud."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:109
 msgid "Nextcloud server password"
-msgstr ""
+msgstr "Пароль сервера Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:111
 msgid "Password for your Nextcloud account."
-msgstr ""
+msgstr "Пароль для вашого облікового запису Nextcloud."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:118
 msgid "Nextcloud server addressbook"
-msgstr ""
+msgstr "Адресна книга сервера Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/Emailkasten/models/UserProfile.py:120
 msgid "Main addressbook of your Nextcloud account."
-msgstr ""
+msgstr "Головна адресна книга вашого облікового запису Nextcloud."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/Emailkasten/models/UserProfile.py:128

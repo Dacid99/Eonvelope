@@ -1,28 +1,35 @@
 * Finnish
 
-    * J. Lavoie (Edanas) <j.lavoie@net-c.ca> - 39
+    * J. Lavoie (Edanas) - 35
 
 
 * French
 
-    * J. Lavoie (Edanas) <j.lavoie@net-c.ca> - 349
+    * J. Lavoie (Edanas) - 315
 
 
 * German
 
-    * J. Lavoie (Edanas) <j.lavoie@net-c.ca> - 127
+    * Dacid99 (Dacid99) - 343
+    * J. Lavoie (Edanas) - 108
+    * Mirko P. (Mirekon) - 11
 
 
 * Italian
 
-    * J. Lavoie (Edanas) <j.lavoie@net-c.ca> - 219
+    * J. Lavoie (Edanas) - 196
 
 
 * Portuguese (Portugal)
 
-    * Manuela Silva (mansil_alfalb) <mmsrs@sky.com> - 7
+    * Manuela Silva (mansil_alfalb) - 6
+
+
+* Russian
+
+    * Puuur (Puuur) - 36
 
 
 * Ukrainian
 
-    * Максим Горпиніч (Maksim2005UKR) <gorpinicmaksim0@gmail.com> - 428
+    * Максим Горпиніч (Maksim2005UKR) - 468

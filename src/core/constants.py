@@ -99,7 +99,7 @@ class EmailProtocolChoices(TextChoices):
     POP3_SSL = "POP3_SSL", _("POP3")
     """The POP3 protocol over SSL"""
 
-    POP3 = "POP3", _("POP3  (unencrypted)")
+    POP3 = "POP3", _("POP3 (unencrypted)")
     """The POP3 protocol"""
 
     EXCHANGE = "EXCHANGE", _("Microsoft Exchange")

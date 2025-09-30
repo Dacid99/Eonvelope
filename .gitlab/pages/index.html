@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Emailkasten</title>
+        <link href="style.css" rel="stylesheet" />
+
+    </head>
+
+    <body>
+        <div class="geometric-bg"></div>
+
+        <!-- Header -->
+        <header>
+            <nav>
+                <a href="#hero" class="logo">
+                    <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                        <!-- djlint:off -->
+                                                                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                        <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                                                        <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                                                                        </linearGradient>
+                        <!-- djlint:on -->
+                        </defs>
+                        <circle cx="20" cy="20" r="18" fill="none" stroke="url(#logoGradient)" stroke-width="2" />
+                        <circle cx="20" cy="20" r="14" fill="none" stroke="url(#logoGradient)" stroke-width="1.5" opacity="0.7" />
+                        <circle cx="20" cy="20" r="10" fill="none" stroke="url(#logoGradient)" stroke-width="1" opacity="0.5" />
+                        <circle cx="20" cy="20" r="6" fill="none" stroke="url(#logoGradient)" stroke-width="0.5" opacity="0.3" />
+                        <circle cx="20" cy="20" r="3" fill="url(#logoGradient)" />
+                    </svg>
+                    <span class="logo-text">Emailkasten</span>
+                </a>
+                <div class="menu-toggle" onclick="toggleMenu()"></div>
+                <ul class="nav-links">
+                    <li>
+                        <a href="#hero" class="nav-link active">Project</a>
+                    </li>
+                    <li>
+                        <a href="#about" class="nav-link">Features</a>
+                    </li>
+                    <li>
+                        <a href="#practices" class="nav-link">Screenshots</a>
+                    </li>
+                    <li>
+                        <a href="#resources" class="nav-link">Resources</a>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- Hero Section with Enhanced Background -->
+        <section id="hero">
+            <!-- Network Background -->
+            <div class="network-bg">
+                <div class="network-line"></div>
+                <div class="network-line"></div>
+                <div class="network-line"></div>
+                <div class="network-line"></div>
+                <div class="network-line"></div>
+                <div class="network-line"></div>
+                <div class="network-line"></div>
+                <div class="network-line"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+                <div class="network-dot"></div>
+            </div>
+
+            <div class="peace-bg">
+                <div class="breathing-circle"></div>
+                <div class="breathing-circle"></div>
+                <div class="breathing-circle"></div>
+                <div class="breathing-circle"></div>
+            </div>
+            <div class="floating-elements">
+                <div class="zen-stone"></div>
+                <div class="zen-stone"></div>
+                <div class="zen-stone"></div>
+            </div>
+            <div class="mandala-bg">
+                <div class="mandala-circle"></div>
+                <div class="mandala-circle"></div>
+                <div class="mandala-circle"></div>
+            </div>
+            <div class="hero-content">
+                <h1>A safe and productive place for your emails</h1>
+                <p>Easily archive your emails on your own server!</p>
+                <a href="#about" class="cta-button">Get started</a>
+            </div>
+        </section>
+
+        <!-- About Section - Complete Redesign -->
+        <section id="about">
+            <h2 class="section-title">A Project for the Community</h2>
+            <p class="section-subtitle">Emailkasten was built for the open-source self-hosted community</p>
+
+            <!-- Floating Cards Design -->
+            <div class="about-floating-cards">
+                <div class="floating-card">
+                    <div class="card-icon">
+                        <div class="icon-wrapper">🧡</div>
+                    </div>
+                    <h3>For Users</h3>
+                    <ul>
+                        <li>Easy to use with a mobile-friendly webapp</li>
+                        <li>Integrates with other self-hosted applications like Paperless-ngx and Immich</li>
+                        <li>Translations for all major languages</li>
+                        <li>Full control over your data</li>
+                    </ul>
+                </div>
+
+                <div class="floating-card">
+                    <div class="card-icon">
+                        <div class="icon-wrapper">⚡</div>
+                    </div>
+                    <h3>For Admins</h3>
+                    <ul>
+                        <li>Super easy set up</li>
+                        <li>Configurations via docker env and in-app admin interface</li>
+                        <li>Slim docker stack with only 2 containers</li>
+                        <li>SSL-certificate out of the box</li>
+                    </ul>
+                </div>
+
+                <div class="floating-card">
+                    <div class="card-icon">
+                        <div class="icon-wrapper">🚀</div>
+                    </div>
+                    <h3>For Contributors</h3>
+                    <ul>
+                        <li>Codebase of python and html that is easy to read and write</li>
+                        <li>
+                            Preconfigured linters and checks for the
+                            project
+                        </li>
+                        <li>Unit- and integrationtests to ensure consistency</li>
+                        <li>Full-fledged API for alternative frontends and mobile development</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Stats Banner -->
+            <div class="stats-banner">
+                <div class="stat-block">
+                    <div class="stat-value">AGPLv3</div>
+                    <div class="stat-desc">License</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-value">&gt; 95%</div>
+                    <div class="stat-desc">Test Coverage</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-value">&lt; 5 min</div>
+                    <div class="stat-desc">Setup Time</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-value">1 billion</div>
+                    <div class="stat-desc">Email Storage Capacity</div>
+                </div>
+            </div>
+
+            <!-- Feature Showcase -->
+            <div class="feature-showcase">
+                <div class="showcase-content">
+                    <h3>Why Choose Emailkasten?</h3>
+                    <ul class="feature-list">
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <div>
+                                <p>
+                                    <b>Support for all major email protocols:</b>
+                                </p>
+                                <span>IMAP, POP and Microsoft Exchange</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <div>
+                                <p>
+                                    <b>Flexibility:</b>
+                                </p>
+                                <span>Automatically archive mail traffic in single folders or entire mail
+                                accounts or fetch content manually.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <div>
+                                <p>
+                                    <b>Full context:</b>
+                                </p>
+                                <span>Stores emails, attachments and correspondents separately.
+                                    Recognizes and shows entire threads of conversations in your mails.
+                                Filter, search and access them via the web frontend.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <div>
+                                <p>
+                                    <b>Import and Export:</b>
+                                </p>
+                                <span>Import and export options for emails in various formats. Restore them directly to your mailaccount if
+                                needed.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <div>
+                                <p>
+                                    <b>Cross-Integrations:</b>
+                                </p>
+                                <span>Integrates with your other favorite self-hosted projects like Paperless-ngx.</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <div>
+                                <p>
+                                    <b>Security:</b>
+                                </p>
+                                <span>Support for multi-factor-authentication, https by default and various settings to keep spam out of your archive!</span>
+                            </div>
+                        </li>
+                        <li>
+                            <span class="feature-check">✓</span>
+                            <div>
+                                <p>
+                                    <b>Maintainability:</b>
+                                </p>
+                                <span>This projects clean-code and test-based approach makes maintainance and support as well as community contributions easy.</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Practices Section - Enhanced Timeline Design -->
+        <section id="practices">
+            <div class="practices-container">
+                <h2 class="section-title">Screenshots</h2>
+                <p class="section-subtitle">Check out the Emailkasten webinterface and its powerful features!</p>
+
+                <div class="practice-layout">
+                    <!-- Futuristic Left Timeline -->
+                    <div class="timeline-track">
+                        <div class="timeline-progress"></div>
+                        <div class="timeline-points">
+                            <div class="timeline-point active">
+                                <div class="futuristic-label">
+                                    <span class="label-text">Dashboard</span>
+                                </div>
+                                <div class="timeline-indicator"></div>
+                            </div>
+                            <div class="timeline-point">
+                                <div class="futuristic-label">
+                                    <span class="label-text">Emails</span>
+                                </div>
+                                <div class="timeline-indicator"></div>
+                            </div>
+                            <div class="timeline-point">
+                                <div class="futuristic-label">
+                                    <span class="label-text">Filter and Search</span>
+                                </div>
+                                <div class="timeline-indicator"></div>
+                            </div>
+                            <div class="timeline-point">
+                                <div class="futuristic-label">
+                                    <span class="label-text">Integrations</span>
+                                </div>
+                                <div class="timeline-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Content Area -->
+                    <div class="practice-content-area">
+                        <div class="practice-card-new">
+                            <div class="practice-header">
+                                <div class="practice-icon-new">🚀</div>
+                                <div class="practice-info">
+                                    <h3>Dashboard</h3>
+                                </div>
+                            </div>
+                            <p class="practice-description">
+                                Get a first look at all your recently archived emails and an overview of the database.
+                            </p>
+                            <div class="practice-image weblate"></div>
+                        </div>
+
+                        <div class="practice-card-new">
+                            <div class="practice-header">
+                                <div class="practice-icon-new">✉️</div>
+                                <div class="practice-info">
+                                    <h3>Email Details</h3>
+                                </div>
+                            </div>
+                            <p class="practice-description">
+                                Check out all the information contained in each individual email.
+                                The thumbnails style and layout can be adapted to your personal preferences!
+                                All attachments and correspondents of an email are indexed as well for optimal searchability.
+                                Emails can be restored to your mailbox too if you need it!
+                            </p>
+                            <div class="practice-image email"></div>
+                        </div>
+
+                        <div class="practice-card-new">
+                            <div class="practice-header">
+                                <div class="practice-icon-new">🗃️</div>
+                                <div class="practice-info">
+                                    <h3>Filter and Search</h3>
+                                </div>
+                            </div>
+                            <p class="practice-description">
+                                Filter and search by various attributes of an email, attachment or correspondent to find the one specific item you are looking for!
+                                Your archived emails can also be viewed in a special chronological listing.
+                            </p>
+                            <div class="practice-image filter"></div>
+                        </div>
+
+                        <div class="practice-card-new">
+                            <div class="practice-header">
+                                <div class="practice-icon-new">🔗</div>
+                                <div class="practice-info">
+                                    <h3>Integrations</h3>
+                                </div>
+                            </div>
+                            <p class="practice-description">
+                                Easily use other self-hosted application in combination with Emailkasten.
+                                You want to upload an attachment to your Paperless-ngx instance?
+                                You need a correspondent from your emails in your Nextcloud addressbook?
+                                Just click the button and its done!
+                            </p>
+                            <div class="practice-image integrations"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Resources Section - Tab Structure -->
+        <section id="resources">
+            <h2 class="section-title">Resources</h2>
+            <p class="section-subtitle">Everything you need to set up and work with Emailkasten</p>
+
+            <div class="resource-tabs">
+                <button class="tab-btn active" onclick="showTab('user')">User</button>
+                <button class="tab-btn" onclick="showTab('admin')">Admin</button>
+                <button class="tab-btn" onclick="showTab('contributor')">Contributor</button>
+            </div>
+
+            <div id="user" class="tab-content active">
+                <div class="resource-list">
+                    <div class="resource-card">
+                        <a href="https://hosted.weblate.org/emailkasten" target="_plain">
+                            <div class="resource-image">
+                                <div class="resource-thumbnail readthedocs"></div>
+                            </div>
+                        </a>
+                        <div class="resource-body">
+                            <h3>Documentation</h3>
+                            <p>
+                                Read our documentation for instructions on how to use
+                                Emailkasten.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <a href="https://github.com/Dacid99/Emailkasten/issues" target="_plain">
+                            <div class="resource-image">
+                                <div class="resource-thumbnail issues"></div>
+                            </div>
+                        </a>
+                        <div class="resource-body">
+                            <h3>Issue Trackers</h3>
+                            <p>
+                                Submit issue reports and feature ideas via one of the issue trackers for this project. One is
+                                hosted on <a href="https://github.com/Dacid99/Emailkasten/issues" target="_blank">Github</a>, the other on <a href="https://gitlab.com/Dacid99/emailkasten/-/issues"
+    target="_blank">Gitlab</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="admin" class="tab-content">
+                <div class="resource-list">
+                    <div class="resource-card">
+                        <a href="https://hosted.weblate.org/emailkasten" target="_plain">
+                            <div class="resource-image">
+                                <div class="resource-thumbnail readthedocs"></div>
+                            </div>
+                        </a>
+                        <div class="resource-body">
+                            <h3>Documentation</h3>
+                            <p>
+                                Get instructions on how to set up and manage various configurations of Emailkasten from our ReadTheDocs-hosted documentation.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <a href="https://github.com/Dacid99/Emailkasten" target="_plain">
+                            <div class="resource-image">
+                                <div class="resource-thumbnail issues"></div>
+                            </div>
+                        </a>
+                        <div class="resource-body">
+                            <h3>Issue Trackers</h3>
+                            <p>Develop presence and emotional intelligence for effective leadership.</p>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <a href="https://hub.docker.com/repository/docker/dacid99/emailkasten/general"
+                           target="_plain">
+                            <div class="resource-image">
+                                <div class="resource-thumbnail dockerhub"></div>
+                            </div>
+                        </a>
+                        <div class="resource-body">
+                            <h3>Docker Repository</h3>
+                            <p>
+                                You can get the official docker images for Emailkasten from dockerhub. To always be up to
+                                date, use the 'latest' tag.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contributor" class="tab-content">
+                <div class="resource-list">
+                    <div class="resource-card">
+                        <a href="https://gitlab.com/emailkasten" target="_plain">
+                            <div class="resource-image">
+                                <div class="resource-thumbnail source-code"></div>
+                            </div>
+                        </a>
+                        <div class="resource-body">
+                            <h3>Source Code</h3>
+                            <p>
+                                The source code for Emailkasten is hosted in the main repo on gitlab. There is also a mirror
+                                repo on github.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="resource-card">
+                        <a href="https://hosted.weblate.org/emailkasten" target="_plain">
+                            <div class="resource-image">
+                                <div class="resource-thumbnail weblate"></div>
+                            </div>
+                        </a>
+                        <div class="resource-body">
+                            <h3>Translation</h3>
+                            <p>
+                                Emailkasten is continuously translated with weblate. Please don't hesitate to add your
+                                language if it is missing.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="https://gitlab.com/Dacid99/Emailkasten"
+                       target="_blank"
+                       aria-label="Gitlab">
+                        <svg aria-hidden="true"
+                             role="img"
+                             class="tanuki-logo"
+                             width="25"
+                             height="25"
+                             viewBox="0 0 25 24"
+                             fill="none"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="m24.507 9.5-.034-.09L21.082.562a.896.896 0 0 0-1.694.091l-2.29 7.01H7.825L5.535.653a.898.898 0 0 0-1.694-.09L.451 9.411.416 9.5a6.297 6.297 0 0 0 2.09 7.278l.012.01.03.022 5.16 3.867 2.56 1.935 1.554 1.176a1.051 1.051 0 0 0 1.268 0l1.555-1.176 2.56-1.935 5.197-3.89.014-.01A6.297 6.297 0 0 0 24.507 9.5Z" fill="#E24329">
+                            </path>
+                            <path d="m24.507 9.5-.034-.09a11.44 11.44 0 0 0-4.56 2.051l-7.447 5.632 4.742 3.584 5.197-3.89.014-.01A6.297 6.297 0 0 0 24.507 9.5Z" fill="#FC6D26">
+                            </path>
+                            <path d="m7.707 20.677 2.56 1.935 1.555 1.176a1.051 1.051 0 0 0 1.268 0l1.555-1.176 2.56-1.935-4.743-3.584-4.755 3.584Z" fill="#FCA326">
+                            </path>
+                            <path d="M5.01 11.461a11.43 11.43 0 0 0-4.56-2.05L.416 9.5a6.297 6.297 0 0 0 2.09 7.278l.012.01.03.022 5.16 3.867 4.745-3.584-7.444-5.632Z" fill="#FC6D26">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="https://github.com/Dacid99/Emailkasten"
+                       target="_blank"
+                       aria-label="Github">
+                        <svg height="25"
+                             width="25"
+                             aria-hidden="true"
+                             viewBox="0 0 24 24"
+                             version="1.1"
+                             width="25"
+                             data-view-component="true"
+                             class="octicon octicon-mark-github">
+                            <path d="M12 1C5.923 1 1 5.923 1 12c0 4.867 3.149 8.979 7.521 10.436.55.096.756-.233.756-.522 0-.262-.013-1.128-.013-2.049-2.764.509-3.479-.674-3.699-1.292-.124-.317-.66-1.293-1.127-1.554-.385-.207-.936-.715-.014-.729.866-.014 1.485.797 1.691 1.128.99 1.663 2.571 1.196 3.204.907.096-.715.385-1.196.701-1.471-2.448-.275-5.005-1.224-5.005-5.432 0-1.196.426-2.186 1.128-2.956-.111-.275-.496-1.402.11-2.915 0 0 .921-.288 3.024 1.128a10.193 10.193 0 0 1 2.75-.371c.936 0 1.871.123 2.75.371 2.104-1.43 3.025-1.128 3.025-1.128.605 1.513.221 2.64.111 2.915.701.77 1.127 1.747 1.127 2.956 0 4.222-2.571 5.157-5.019 5.432.399.344.743 1.004.743 2.035 0 1.471-.014 2.654-.014 3.025 0 .289.206.632.756.522C19.851 20.979 23 16.854 23 12c0-6.077-4.922-11-11-11Z">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="https://hub.docker.com/repository/docker/dacid99/emailkasten/general"
+                       target="_blank"
+                       aria-label="Dockerhub">
+                        <svg height="25" width="25" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.6096 7.78281C23.0211 7.38668 21.4751 7.21752 20.3513 7.52051C20.291 6.40098 19.7132 5.45739 18.6572 4.63407L18.2664 4.37177L18.0059 4.7654C17.4937 5.54269 17.2778 6.5787 17.3542 7.52051C17.4145 8.10079 17.6162 8.75281 18.0059 9.22603C16.543 10.0747 15.1944 9.88197 9.22236 9.88197H0.00204151C-0.0247244 11.2306 0.191901 13.8244 1.84139 15.9361C2.02376 16.1695 2.22326 16.395 2.44024 16.6124C3.78139 17.9553 5.80775 18.9403 8.83765 18.9428C13.4603 18.9471 17.4206 16.4482 19.8299 10.4069C20.6225 10.4198 22.7152 10.549 23.7395 8.57009C23.7645 8.5369 24 8.04548 24 8.04548L23.6096 7.78317V7.78281ZM6.01938 6.5498H3.42665V9.14252H6.01938V6.5498ZM9.36868 6.5498H6.77596V9.14252H9.36868V6.5498ZM12.7183 6.5498H10.1256V9.14252H12.7183V6.5498ZM16.068 6.5498H13.4753V9.14252H16.068V6.5498ZM2.66971 6.5498H0.0769861V9.14252H2.66971V6.5498ZM6.01938 3.27508H3.42665V5.8678H6.01938V3.27508ZM9.36868 3.27508H6.77596V5.8678H9.36868V3.27508ZM12.7183 3.27508H10.1256V5.8678H12.7183V3.27508ZM12.7183 0H10.1256V2.59272H12.7183V0Z">
+                            </path>
+                        </svg>
+                    </a>
+                    <a href="https://emailkasten.readthedocs.io/latest/" target="_blank">
+                        <img height="25"
+                             width="25"
+                             class="logo"
+                             alt="Read the Docs"
+                             src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmc6c3ZnCiAgIHZlcnNpb249IjEuMSIKICAgaWQ9InN2ZyIKICAgeD0iMHB4IgogICB5PSIwcHgiCiAgIHZpZXdCb3g9IjY5NCAxOTcgMzQ2LjY5ODU1IDM5OS45ODQ3NyIKICAgc29kaXBvZGk6ZG9jbmFtZT0ibG9nby1saWdodC5zdmciCiAgIHdpZHRoPSIzNDYuNjk4NTUiCiAgIGhlaWdodD0iMzk5Ljk4NDc3IgogICBpbmtzY2FwZTp2ZXJzaW9uPSIxLjMuMiAoMDkxZTIwZWYwZiwgMjAyMy0xMS0yNSwgY3VzdG9tKSIKICAgeG1sbnM6aW5rc2NhcGU9Imh0dHA6Ly93d3cuaW5rc2NhcGUub3JnL25hbWVzcGFjZXMvaW5rc2NhcGUiCiAgIHhtbG5zOnNvZGlwb2RpPSJodHRwOi8vc29kaXBvZGkuc291cmNlZm9yZ2UubmV0L0RURC9zb2RpcG9kaS0wLmR0ZCIKICAgeG1sbnM6c3ZnPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPHN2ZzpkZWZzCiAgICAgaWQ9ImRlZnMxMiIgLz4KICA8c29kaXBvZGk6bmFtZWR2aWV3CiAgICAgaWQ9Im5hbWVkdmlldzEyIgogICAgIHBhZ2Vjb2xvcj0iI2ZmZmZmZiIKICAgICBib3JkZXJjb2xvcj0iIzAwMDAwMCIKICAgICBib3JkZXJvcGFjaXR5PSIwLjI1IgogICAgIGlua3NjYXBlOnNob3dwYWdlc2hhZG93PSIyIgogICAgIGlua3NjYXBlOnBhZ2VvcGFjaXR5PSIwLjAiCiAgICAgaW5rc2NhcGU6cGFnZWNoZWNrZXJib2FyZD0iMCIKICAgICBpbmtzY2FwZTpkZXNrY29sb3I9IiNkMWQxZDEiCiAgICAgaW5rc2NhcGU6em9vbT0iMS4yNTIiCiAgICAgaW5rc2NhcGU6Y3g9Ijk5OC40MDI1NiIKICAgICBpbmtzY2FwZTpjeT0iMTk5LjY4MDUxIgogICAgIGlua3NjYXBlOndpbmRvdy13aWR0aD0iMzQ0MCIKICAgICBpbmtzY2FwZTp3aW5kb3ctaGVpZ2h0PSIxMzg5IgogICAgIGlua3NjYXBlOndpbmRvdy14PSIwIgogICAgIGlua3NjYXBlOndpbmRvdy15PSIyNyIKICAgICBpbmtzY2FwZTp3aW5kb3ctbWF4aW1pemVkPSIxIgogICAgIGlua3NjYXBlOmN1cnJlbnQtbGF5ZXI9InN2ZyIgLz4KICA8c3ZnOmcKICAgICBpZD0ibG9nbyIKICAgICB0cmFuc2Zvcm09Im1hdHJpeCgwLjU1NzUzNjQ0LDAsMCwwLjU1NzUzNjQ0LDY2LjUzMTgxMiwxMDUwLjEyNjIpIj4KICAgIDxzdmc6cGF0aAogICAgICAgc3R5bGU9ImZpbGw6I2ZjZmNmYyIKICAgICAgIGQ9Im0gMTQwOC4xLC0xMTgxLjcgYyAtNy41LDEgLTEyLjcsNy44IC0xMS43LDE1LjMgMC43LDUuNCA0LjYsOS45IDkuOSwxMS4zIDAsMCAzMy4yLDExIDg5LjcsMTUuNiA0NS40LDMuNyA5Ni45LC0zLjIgOTYuOSwtMy4yIDcuNSwtMC4yIDEzLjUsLTYuNSAxMy4yLC0xNCAtMC4zLC03LjUgLTYuNSwtMTMuNSAtMTQsLTEzLjIgLTAuOSwwIC0xLjgsMC4xIC0yLjYsMC4zIDAsMCAtNTAuNCw2LjIgLTkxLjMsMi45IC01NCwtNC40IC04My40LC0xNC4zIC04My40LC0xNC4zIC0yLjIsLTAuNyAtNC41LC0xIC02LjcsLTAuNyB6IG0gMCwtNjcuNiBjIC03LjUsMSAtMTIuNyw3LjggLTExLjcsMTUuMyAwLjcsNS40IDQuNiw5LjkgOS45LDExLjMgMCwwIDMzLjIsMTEgODkuNywxNS42IDQ1LjQsMy43IDk2LjksLTMuMiA5Ni45LC0zLjIgNy41LC0wLjIgMTMuNSwtNi41IDEzLjIsLTE0IC0wLjMsLTcuNSAtNi41LC0xMy41IC0xNCwtMTMuMiAtMC45LDAgLTEuOCwwLjEgLTIuNiwwLjMgMCwwIC01MC40LDYuMiAtOTEuMywyLjkgLTU0LC00LjQgLTgzLjQsLTE0LjMgLTgzLjQsLTE0LjMgLTIuMiwtMC43IC00LjUsLTEgLTYuNywtMC43IHogbSAwLC02Ny42IGMgLTcuNSwxIC0xMi43LDcuOCAtMTEuNywxNS4zIDAuNyw1LjQgNC42LDkuOSA5LjksMTEuMyAwLDAgMzMuMiwxMSA4OS43LDE1LjYgNDUuNCwzLjcgOTYuOSwtMy4yIDk2LjksLTMuMiA3LjUsLTAuMiAxMy41LC02LjUgMTMuMiwtMTQgLTAuMywtNy41IC02LjUsLTEzLjUgLTE0LC0xMy4yIC0wLjksMCAtMS44LDAuMSAtMi42LDAuMyAwLDAgLTUwLjQsNi4yIC05MS4zLDIuOSAtNTQsLTQuNCAtODMuNCwtMTQuMyAtODMuNCwtMTQuMyAtMi4yLC0wLjcgLTQuNSwtMSAtNi43LC0wLjcgeiBtIDAsLTY3LjUgYyAtNy41LDEgLTEyLjcsNy44IC0xMS43LDE1LjMgMC43LDUuNCA0LjYsOS45IDkuOSwxMS4zIDAsMCAzMy4yLDExIDg5LjcsMTUuNiA0NS40LDMuNyA5Ni45LC0zLjIgOTYuOSwtMy4yIDcuNSwtMC4yIDEzLjUsLTYuNSAxMy4yLC0xNCAtMC4zLC03LjUgLTYuNSwtMTMuNSAtMTQsLTEzLjIgLTAuOSwwIC0xLjgsMC4xIC0yLjYsMC4zIDAsMCAtNTAuNCw2LjIgLTkxLjMsMi45IC01NCwtNC40IC04My40LC0xNC4zIC04My40LC0xNC4zIC0yLjIsLTAuOCAtNC41LC0xIC02LjcsLTAuNyB6IG0gLTk0LjcsLTcxLjMgYyAtNzEsMC41IC05Ny41LDIyLjMgLTk3LjUsMjIuMyB2IDUzMC4zIGMgMCwwIDI1LjgsLTIyLjMgMTA5LC0xOC45IDgzLjIsMy40IDEwMC4zLDMyLjYgMjAyLjUsMzQuNiAxMDIuMiwyLjEgMTI3LjksLTE1LjcgMTI3LjksLTE1LjcgbCAxLjUsLTU0MC42IGMgMCwwIC00NiwxMyAtMTM1LjUsMTMuNyAtODkuNSwwLjcgLTExMSwtMjIuOCAtMTkzLjIsLTI1LjUgLTUuMSwtMC4xIC0xMCwtMC4yIC0xNC43LC0wLjIgeiBtIDU5LjQsMzQuNiBjIDAsMCA0MywxNC4yIDEyMi41LDE4LjIgNjcuMiwzLjMgMTM0LjUsLTYuNiAxMzQuNSwtNi42IFYgLTkyOSBjIDAsMCAtMzQuMSwxNy45IC0xMTkuMywxMS44IC02NiwtNC43IC0xMzguNywtMjkuNyAtMTM4LjcsLTI5LjcgeiBtIC00MS41LDEyLjUgYyA3LjYsMCAxMy43LDYuMiAxMy43LDEzLjcgMCw3LjUgLTYuMiwxMy43IC0xMy43LDEzLjcgMCwwIC0yMi4zLDAuMSAtMzUuOCwxLjUgLTIyLjgsMi4zIC0zOC4zLDEwLjYgLTM4LjMsMTAuNiAtNi43LDMuNSAtMTUsMSAtMTguNSwtNS43IC0zLjUsLTYuNyAtMSwtMTUgNS43LC0xOC41IDAsMCAwLDAgMCwwIDAsMCAyMC4yLC0xMC43IDQ4LjQsLTEzLjUgMTYuMywtMS43IDM4LjUsLTEuOCAzOC41LC0xLjggeiBtIC0xMy4yLDY3LjggYyA3LjYsLTAuMiAxMy4zLDAgMTMuMywwIDcuNSwwLjkgMTIuOSw3LjggMTIsMTUuMyAtMC44LDYuMyAtNS43LDExLjIgLTEyLDEyIDAsMCAtMjIuMywwLjEgLTM1LjgsMS41IC0yMi44LDIuMyAtMzguMywxMC42IC0zOC4zLDEwLjYgLTYuNywzLjUgLTE1LDAuOSAtMTguNSwtNS44IC0zLjUsLTYuNyAtMC45LC0xNSA1LjgsLTE4LjUgMCwwIDIwLjIsLTEwLjcgNDguNCwtMTMuNSA3LjksLTAuOSAxNy41LC0xLjQgMjUuMSwtMS42IHogbSAxMy4yLDY3LjUgYyA3LjYsMCAxMy43LDYuMiAxMy43LDEzLjcgMCw3LjYgLTYuMiwxMy43IC0xMy43LDEzLjcgMCwwIC0yMi4zLC0wLjEgLTM1LjgsMS4yIC0yMi44LDIuMyAtMzguMywxMC42IC0zOC4zLDEwLjYgLTYuNywzLjUgLTE1LDAuOSAtMTguNSwtNS44IC0zLjUsLTYuNyAtMC45LC0xNSA1LjgsLTE4LjUgMCwwIDIwLjIsLTEwLjcgNDguNCwtMTMuNSAxNi4yLC0xLjUgMzguNCwtMS40IDM4LjQsLTEuNCB6IgogICAgICAgaWQ9InBhdGgxIiAvPgogIDwvc3ZnOmc+CiAgPGRpdgogICAgIGlkPSJzYWthLWd1aS1yb290Ij4KICAgIDxkaXY+CiAgICAgIDxkaXY+CiAgICAgICAgPHN0eWxlIC8+CiAgICAgIDwvZGl2PgogICAgPC9kaXY+CiAgPC9kaXY+Cjwvc3ZnOnN2Zz4K" />
+                    </a>
+                    <a href="https://hosted.weblate.org/projects/emailkasten"
+                       target="_blank"
+                       aria-label="Weblate">
+                        <svg width="25"
+                             height="25"
+                             version="1.1"
+                             viewBox="0 0 27 20"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="m13.505 4.028c-0.0017-4e-5 -0.0034-7.5e-5 -5e-3 -1.05e-4 -0.0017 3e-5 -0.0034 6.5e-5 -5e-3 1.05e-4 -0.11025-0.0015-0.22073 0.01793-0.32591 0.06238-0.59671 0.25261-0.9728 0.90036-1.2087 1.5476-0.20481 0.56175-0.29546 1.1651-0.29679 1.7605l-0.0016 0.07791c-0.0019 0.03033-0.0043 0.06055-0.0075 0.09067 0.02191 1.5184 0.30756 3.048 0.90819 4.445 0.67267 1.5645 1.7419 3.0037 3.2516 3.6616 1.1389 0.49637 2.4014 0.37928 3.4336-0.20534 1.2816-0.72588 2.2062-2.0094 2.8114-3.3878 1.2572-2.8648 1.2874-6.3574 0.03289-9.2972 1.2227-0.63339 1.22-1.8963 1.22-1.8963s1.1453 0.82078 2.4332 0.30544c1.715 4.0186 1.6736 8.75-0.13474 12.708-1.0572 2.3139-2.7738 4.3411-5.0202 5.384-1.9998 0.9286-4.3513 0.9518-6.3527 0.07963-1.7985-0.78402-3.2613-2.1966-4.3137-3.839-1.5242-2.3788-2.246-5.2748-2.2492-8.1286h0.01183c-9.01e-4 -0.03006-0.0013-0.06012-9.54e-4 -0.09024 0.02318-2.5663 1.0748-5.18 3.1841-6.5213 0.77462-0.49257 1.6798-0.77459 2.5936-0.78467 0.01046-8.1e-5 0.02122-1.32e-4 0.03183-1.51e-4 0.01379-1e-5 0.02811 4.4e-5 0.04191 1.51e-4 0.91371 0.01007 1.8189 0.2921 2.5936 0.78467 2.1093 1.3413 3.1609 3.9551 3.1841 6.5213 3.18e-4 0.03012-5.3e-5 0.06018-9.55e-4 0.09024h0.01183c-0.0031 2.7121-0.65515 5.4624-2.0282 7.7706-0.39383-2e-3 -0.78628-0.08215-1.1562-0.24339-0.83333-0.36312-1.5671-1.0489-2.1641-1.9768 0.17024-0.30266 0.32367-0.61606 0.46065-0.93466 0.60064-1.3969 0.88629-2.9266 0.90819-4.445-0.0032-0.03012-0.0057-0.06034-0.0075-0.09067l-0.0016-0.07792c-0.0013-0.59534-0.09198-1.1987-0.29679-1.7605-0.23595-0.64722-0.61204-1.295-1.2087-1.5476-0.10522-0.04446-0.21573-0.06389-0.32591-0.06255v1.8e-4zm-0.88468 15.396c-1.97 0.81042-4.258 0.76693-6.2107-0.13979-2.2465-1.043-3.963-3.0701-5.0202-5.384-1.8083-3.9579-1.8497-8.6893-0.13474-12.708 1.2879 0.51534 2.4332-0.30544 2.4332-0.30544s-0.0027 1.2629 1.22 1.8963c-1.2545 2.9398-1.2243 6.4325 0.03289 9.2972 0.60525 1.3784 1.5298 2.662 2.8114 3.3878 0.45742 0.25906 0.96005 0.42632 1.4771 0.48907 0.0019 3e-3 0.0038 6e-3 0.0057 9e-3 0.91308 1.425 2.0633 2.6126 3.3853 3.4577z" fill="#70bfae">
+                            </path>
+                        </svg>
+                    </a>
+                </div>
+                <div class="copyright">
+                    <p>© 2025 David Aderbauer &amp; The Emailkasten Contributors.</p>
+                </div>
+            </div>
+        </footer>
+        <script src="scripts.js"></script>
+    </body>
+
+</html>

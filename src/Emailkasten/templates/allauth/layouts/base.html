@@ -8,6 +8,17 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="author" content="David Aderbauer" />
+        <meta name="copyright"
+              content="© 2025 David Aderbauer &amp; The Emailkasten Contributors." />
+        <meta name="license" content="AGPLv3" />
+        <title>
+
+            {% block head_title %}
+            {% endblock head_title %}
+
+            - {% translate "Emailkasten" %}
+        </title>
         {% bootstrap_css %}
         <link href="{% static 'fontawesomefree/css/fontawesome.css' %}"
               rel="stylesheet"
@@ -20,13 +31,6 @@
               type="text/css" />
         <script src="{% static 'web/js/bs_theme-toggler.js' %}"></script>
 
-        <title>
-
-            {% block head_title %}
-            {% endblock head_title %}
-
-            - {% translate "Emailkasten" %}
-        </title>
     </head>
     <body class="min-vh-100 d-flex flex-shrink-0 flex-column">
         <a class="visually-hidden-focusable" href="#content">{% translate "Go to Emailkasten" %}</a>

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: 2025-09-11 18:02+0000\n"
+"PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "api/uk/>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:71
@@ -75,17 +75,13 @@ msgstr "Завантажено вкладений документ до Paperles
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:351
-#, fuzzy
-#| msgid "Upload to Paperless failed."
 msgid "Upload to Immich failed."
-msgstr "Не вдалося завантажити на Paperless архів."
+msgstr "Завантаження до Immich не вдалося."
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:357
-#, fuzzy
-#| msgid "Uploaded attachment document to Paperless."
 msgid "Uploaded attachment document to Immich."
-msgstr "Завантажено вкладений документ до Paperless."
+msgstr "Завантажено вкладений документ до Immich."
 
 #: src/api/v1/views/CorrespondentViewSet.py:210
 msgid "Correspondent ids are required."
@@ -101,17 +97,13 @@ msgstr "Кореспондентів не знайдено"
 
 #. Translators: Nextcloud is a brand name.
 #: src/api/v1/views/CorrespondentViewSet.py:258
-#, fuzzy
-#| msgid "Upload to Paperless failed."
 msgid "Upload to Nextcloud failed."
-msgstr "Не вдалося завантажити на Paperless архів."
+msgstr "Не вдалося завантажити на Nextcloud."
 
 #. Translators: Nextcloud is a brand name.
 #: src/api/v1/views/CorrespondentViewSet.py:264
-#, fuzzy
-#| msgid "No correspondents found"
 msgid "Uploaded correspondent to Nextcloud."
-msgstr "Кореспондентів не знайдено"
+msgstr "Завантажено кореспондента до Nextcloud."
 
 #: src/api/v1/views/DaemonViewSet.py:138
 msgid "Tested routine"
@@ -171,10 +163,8 @@ msgid "Email successfully restored to mailbox."
 msgstr "Електронну пошту успішно відновлено у поштовій скриньці."
 
 #: src/api/v1/views/EmailViewSet.py:406
-#, fuzzy
-#| msgid "Email successfully restored to mailbox."
 msgid "Email successfully reprocessed."
-msgstr "Електронну пошту успішно відновлено у поштовій скриньці."
+msgstr "Електронний лист успішно оброблено повторно."
 
 #: src/api/v1/views/MailboxViewSet.py:190
 msgid "Tested mailbox"

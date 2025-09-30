@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: 2025-09-11 18:02+0000\n"
+"PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "core/uk/>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: src/core/constants.py:38
@@ -250,16 +250,12 @@ msgstr ""
 "вкладення, знайдені в ньому!"
 
 #: src/core/models/Account.py:76
-#, fuzzy
-#| msgid ""
-#| "This will delete this account and all mailboxes, emails and attachments "
-#| "found in it!"
 msgid ""
 "This will delete these accounts and all mailboxes, emails and attachments "
 "found in them!"
 msgstr ""
-"Це видалить цей обліковий запис та всі поштові скриньки, електронні листи та "
-"вкладення, знайдені в ньому!"
+"Це видалить ці облікові записи та всі поштові скриньки, електронні листи та "
+"вкладення, знайдені в них!"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:84 src/core/models/Correspondent.py:69
@@ -349,10 +345,8 @@ msgid "This will only delete this attachment, not the email."
 msgstr "Це видалить лише це вкладення, а не електронний лист."
 
 #: src/core/models/Attachment.py:87
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid "This will only delete these attachments, not their emails."
-msgstr "Це видалить лише це вкладення, а не електронний лист."
+msgstr "Це видалить лише ці вкладення, а не їхні електронні листи."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:93
@@ -431,41 +425,35 @@ msgstr "Не вдалося завантажити на Paperless архів: %(
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:306
-#, fuzzy, python-format
-#| msgid "Paperless URL is malformed: %(error)s"
+#, python-format
 msgid "Immich URL is malformed: %(error)s"
-msgstr "URL-адреса без паперу має неправильний формат: %(error)s"
+msgstr "URL-адреса Immich має неправильний формат: %(error)s"
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:313
-#, fuzzy, python-format
-#| msgid "Error connecting to the Paperless server: %(error)s"
+#, python-format
 msgid "Error connecting to the Immich server: %(error)s"
-msgstr "Помилка підключення до сервера Paperless: %(error)s"
+msgstr "Помилка підключення до сервера Immich: %(error)s"
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:326
-#, fuzzy, python-format
-#| msgid "Authentication to Paperless failed: %(response)s"
+#, python-format
 msgid "Authentication to Immich failed: %(response)s"
-msgstr "Не вдалося автентифікацію для Paperless доступу: %(response)s"
+msgstr "Автентифікація в Іммічі не вдалася: %(response)s"
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:331
-#, fuzzy, python-format
-#| msgid "Uploading to Paperless failed: %(response)s"
+#, python-format
 msgid "Uploading to Immich failed: %(response)s"
-msgstr "Не вдалося завантажити на Paperless архів: %(response)s"
+msgstr "Завантаження до Immich не вдалося: %(response)s"
 
 #: src/core/models/Correspondent.py:60
 msgid "This will only delete this correspondent, not its emails."
 msgstr "Це видалить лише цього кореспондента, а не його електронні листи."
 
 #: src/core/models/Correspondent.py:63
-#, fuzzy
-#| msgid "This will only delete this correspondent, not its emails."
 msgid "This will only delete these correspondents, not their emails."
-msgstr "Це видалить лише цього кореспондента, а не його електронні листи."
+msgstr "Це видалить лише цих кореспондентів, а не їхні електронні листи."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:77
@@ -543,43 +531,35 @@ msgstr "Кореспондент з адресою %(email_address)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:244
-#, fuzzy, python-format
-#| msgid "Paperless URL is malformed: %(error)s"
+#, python-format
 msgid "Nextcloud URL is malformed: %(error)s"
-msgstr "URL-адреса без паперу має неправильний формат: %(error)s"
+msgstr "URL-адреса Nextcloud має неправильний формат: %(error)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:251
-#, fuzzy, python-format
-#| msgid "Error connecting to the Paperless server: %(error)s"
+#, python-format
 msgid "Error connecting to the Nextcloud server: %(error)s"
-msgstr "Помилка підключення до сервера Paperless: %(error)s"
+msgstr "Помилка підключення до сервера Nextcloud: %(error)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:264
-#, fuzzy, python-format
-#| msgid "Authentication to Paperless failed: %(response)s"
+#, python-format
 msgid "Authentication to Nextcloud failed: %(response)s"
-msgstr "Не вдалося автентифікацію для Paperless доступу: %(response)s"
+msgstr "Помилка автентифікації в Nextcloud: %(response)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:269
-#, fuzzy, python-format
-#| msgid "Uploading to Paperless failed: %(response)s"
+#, python-format
 msgid "Uploading to Nextcloud failed: %(response)s"
-msgstr "Не вдалося завантажити на Paperless архів: %(response)s"
+msgstr "Не вдалося завантажити до Nextcloud: %(response)s"
 
 #: src/core/models/Daemon.py:58
-#, fuzzy
-#| msgid "This will only delete this daemon, not its mailbox."
 msgid "This will only delete this routine, not its mailbox."
-msgstr "Це видалить лише цей демон, а не його поштову скриньку."
+msgstr "Це видалить лише цю процедуру, а не її поштову скриньку."
 
 #: src/core/models/Daemon.py:61
-#, fuzzy
-#| msgid "This will only delete this daemon, not its mailbox."
 msgid "This will only delete these routine, not their mailboxes."
-msgstr "Це видалить лише цей демон, а не його поштову скриньку."
+msgstr "Це видалить лише ці процедури, а не їхні поштові скриньки."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:68
@@ -612,26 +592,25 @@ msgid "interval"
 msgstr "інтервал"
 
 #: src/core/models/Daemon.py:105
-#, fuzzy
-#| msgid "The time between two daemon runs in seconds."
 msgid "The time between two routine runs in seconds."
-msgstr "Час між двома демонами вимірюється в секундах."
+msgstr "Час між двома підпрограмами виконується в секундах."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:115
 msgid "routine"
-msgstr ""
+msgstr "рутина"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:117
 msgid "routines"
-msgstr ""
+msgstr "розпорядки"
 
 #: src/core/models/Daemon.py:143
-#, fuzzy, python-format
-#| msgid "Emailfetcherdaemon %(uuid)s for mailbox %(mailbox)s"
+#, python-format
 msgid "Emailfetching routine %(uuid)s for mailbox %(mailbox)s"
-msgstr "Демон Emailfetcher %(uuid)s для поштової скриньки %(mailbox)s"
+msgstr ""
+"Процедура отримання електронної пошти %(uuid)s для поштової скриньки "
+"%(mailbox)s"
 
 #: src/core/models/Daemon.py:177
 msgid "This fetching criterion is not available for this mailbox!"
@@ -650,15 +629,11 @@ msgstr ""
 "кореспондентів."
 
 #: src/core/models/Email.py:99
-#, fuzzy
-#| msgid ""
-#| "This will delete this email and all its attachments but not its "
-#| "correspondents."
 msgid ""
 "This will delete these emails and all their attachments but not their "
 "correspondents."
 msgstr ""
-"Це видалить цей електронний лист та всі його вкладення, але не його "
+"Це видалить ці електронні листи та всі їхні вкладення, але не їхніх "
 "кореспондентів."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
@@ -750,15 +725,12 @@ msgstr ""
 "знайдені в ній!"
 
 #: src/core/models/Mailbox.py:83
-#, fuzzy
-#| msgid ""
-#| "This will delete this mailbox and all emails and attachments found in it!"
 msgid ""
 "This will delete these mailboxes and all emails and attachments found in "
 "them!"
 msgstr ""
-"Це видалить цю поштову скриньку та всі електронні листи й вкладення, "
-"знайдені в ній!"
+"Це видалить ці поштові скриньки та всі електронні листи й вкладення, "
+"знайдені в них!"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Mailbox.py:89

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: 2025-09-11 18:02+0000\n"
+"PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "web/uk/>\n"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
@@ -361,10 +361,6 @@ msgid "No attachments found."
 msgstr "Вкладень не знайдено."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:11
-#, fuzzy
-#| msgid ""
-#| "You can fetching some along with emails from the mailboxes you have set "
-#| "up."
 msgid ""
 "You can fetch some along with emails from the mailboxes you have set up."
 msgstr ""
@@ -471,13 +467,11 @@ msgstr "Закрити"
 
 #: src/web/templates/web/bases/base_list.html:36
 msgid "Select All"
-msgstr ""
+msgstr "Вибрати все"
 
 #: src/web/templates/web/bases/base_list.html:53
-#, fuzzy
-#| msgid "Action-buttons groups"
 msgid "Multi-actions-buttons groups"
-msgstr "Групи кнопок дій"
+msgstr "Групи кнопок з кількома діями"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
@@ -755,10 +749,8 @@ msgid "Restore"
 msgstr "Відновити"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:18
-#, fuzzy
-#| msgid "Routines"
 msgid "New Routine"
-msgstr "Рутини"
+msgstr "Нова рутина"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:22
 msgid "for"
@@ -799,28 +791,20 @@ msgid "of"
 msgstr "з"
 
 #: src/web/templates/web/mailbox/partials/_daemons_list_alternative.html:8
-#, fuzzy
-#| msgid ""
-#| "You can set up daemons for this mailbox to fetch its contents on a "
-#| "regular schedule."
 msgid ""
 "You can set up routines for this mailbox to fetch its contents on a regular "
 "schedule."
 msgstr ""
-"Ви можете налаштувати демони для цієї поштової скриньки, щоб вони регулярно "
-"завантажували її вміст."
+"Ви можете налаштувати для цієї поштової скриньки процедури, щоб отримувати "
+"її вміст за регулярним розкладом."
 
 #: src/web/templates/web/mailbox/partials/_emails_list_alternative.html:7
-#, fuzzy
-#| msgid ""
-#| "Fetch emails from this mailbox by setting up a daemon or fetching the "
-#| "content once."
 msgid ""
 "Fetch emails from this mailbox by setting up a routine or fetching the "
 "content once."
 msgstr ""
-"Отримувати електронні листи з цієї поштової скриньки, налаштувавши демон або "
-"отримавши вміст один раз."
+"Отримуйте електронні листи з цієї поштової скриньки, налаштувавши процедуру "
+"або отримавши вміст один раз."
 
 #: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:9
 msgid "Fetch"
@@ -932,7 +916,7 @@ msgstr "Ліцензовано за ліцензією AGPLv3."
 
 #: src/web/templates/web/partials/_footer.html:15
 msgid "Website"
-msgstr ""
+msgstr "Вебсайт"
 
 #: src/web/templates/web/partials/_footer.html:18
 msgid "Gitlab"
@@ -967,10 +951,8 @@ msgid "Health unknown"
 msgstr "Стан здоров'я невідомий"
 
 #: src/web/templates/web/partials/_multi_delete-modal.html:19
-#, fuzzy
-#| msgid "Are you sure you want to delete %(object)s?"
 msgid "Are you sure you want to delete the selected items?"
-msgstr "Ви впевнені, що хочете видалити %(object)s?"
+msgstr "Ви впевнені, що хочете видалити вибрані елементи?"
 
 #: src/web/templates/web/partials/_pagination.html:4
 msgid "Results"
@@ -1015,10 +997,8 @@ msgstr "Оновлення поштових скриньок успішно за
 
 #: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:92
 #: src/web/views/correspondent_views/CorrespondentDetailWithDeleteView.py:100
-#, fuzzy
-#| msgid "Fetching successful"
 msgid "Sharing successful"
-msgstr "Отримання успішне"
+msgstr "Поділ успішний"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:80
 msgid "Daemon started successfully"
@@ -1037,10 +1017,8 @@ msgid "Daemon was not running"
 msgstr "Демон не працював"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:85
-#, fuzzy
-#| msgid "Email successfully restored to mailbox."
 msgid "Email successfully reprocessed."
-msgstr "Електронну пошту успішно відновлено у поштовій скриньці."
+msgstr "Електронний лист успішно оброблено повторно."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:103
 msgid "POP accounts do not support restoring of emails to mailbox."

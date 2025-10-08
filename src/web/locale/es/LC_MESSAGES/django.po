@@ -3,21 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-10-09 19:07+0000\n"
+"Last-Translator: Adrián Gelmotto Ruiz <adriangelmotto@gmail.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/emailkasten/web/"
+"es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
-"1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
+" ? 1 : 2);\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -27,15 +28,16 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:55
 #: src/web/filters/EmailFilterSet.py:53 src/web/filters/MailboxFilterSet.py:53
 msgid "Search"
-msgstr ""
+msgstr "Buscar"
 
 #: src/web/filters/AccountFilterSet.py:66
 #: src/web/filters/CorrespondentFilterSet.py:61
 #: src/web/filters/DaemonFilterSet.py:84
 #: src/web/filters/EmailCorrespondentFilterSet.py:65
 #: src/web/filters/MailboxFilterSet.py:67
+#, fuzzy
 msgid "Created before"
-msgstr ""
+msgstr "Creado antes"
 
 #: src/web/filters/AccountFilterSet.py:72
 #: src/web/filters/CorrespondentFilterSet.py:67
@@ -43,23 +45,25 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:71
 #: src/web/filters/MailboxFilterSet.py:73
 msgid "Created after"
-msgstr ""
+msgstr "Creado después"
 
 #: src/web/filters/AttachmentFilterSet.py:78
 #: src/web/filters/CorrespondentEmailFilterSet.py:74
 #: src/web/filters/EmailFilterSet.py:67
+#, fuzzy
 msgid "Received before"
-msgstr ""
+msgstr "Recibido antes"
 
 #: src/web/filters/AttachmentFilterSet.py:84
 #: src/web/filters/CorrespondentEmailFilterSet.py:80
 #: src/web/filters/EmailFilterSet.py:73
+#, fuzzy
 msgid "Received after"
-msgstr ""
+msgstr "Recibido después"
 
 #: src/web/filters/DaemonFilterSet.py:68
 msgid "Number of intervals"
-msgstr ""
+msgstr "Número de intervalos"
 
 #: src/web/filters/DaemonFilterSet.py:74
 msgid "Interval period"
@@ -67,39 +71,41 @@ msgstr ""
 
 #: src/web/filters/DaemonFilterSet.py:79
 msgid "Enabled"
-msgstr ""
+msgstr "Habilitado"
 
 #: src/web/forms/UploadEmailForm.py:34
 msgid "File format"
-msgstr ""
+msgstr "Formato del archivo"
 
 #: src/web/forms/UploadEmailForm.py:35
 msgid "Select the format of the email file you want to upload."
-msgstr ""
+msgstr "Selecciona el formato del archivo que quieres añadir al correo."
 
 #: src/web/forms/UploadEmailForm.py:40
 msgid "Email or Mailbox file"
 msgstr ""
 
 #: src/web/forms/UploadEmailForm.py:41
+#, fuzzy
 msgid "Pick a file for upload."
-msgstr ""
+msgstr "Selecciona un fichero que subir."
 
 #: src/web/mixins/TestActionMixin.py:47
 #, python-format
 msgid ""
 "Test failed, there is something wrong with this objects setup: %(error)s"
 msgstr ""
+"Test fallido, hay algo mal con estos objetos de configuración: %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:52
 #, python-format
 msgid "Test failed: %(error)s"
-msgstr ""
+msgstr "Test fallido: %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:56
 #, python-format
 msgid "Test failed due to an unexpected error: %(error)s"
-msgstr ""
+msgstr "Test fallido por un error inesperado: %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:60
 msgid "Test was successful"
@@ -334,7 +340,7 @@ msgstr ""
 #: src/web/templates/web/dashboard.html:61
 #: src/web/templates/web/email/email_detail.html:129
 msgid "Attachments"
-msgstr ""
+msgstr "Archivos adjuntados"
 
 #: src/web/templates/web/attachment/partials/_attachment_card.html:22
 #: src/web/templates/web/email/email_detail.html:54
@@ -719,7 +725,7 @@ msgstr ""
 
 #: src/web/templates/web/email/partials/_email_card.html:27
 msgid "Received"
-msgstr ""
+msgstr "Recibido"
 
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:7
 msgid "No emails found."

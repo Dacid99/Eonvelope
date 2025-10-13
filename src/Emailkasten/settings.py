@@ -93,7 +93,6 @@ INSTALLED_APPS = [
     "health_check.contrib.migrations",
     "health_check.contrib.psutil",
     "health_check.contrib.rabbitmq",
-    "health_check.contrib.celery",
     "health_check.contrib.celery_ping",
     "django_celery_results",
     "django_celery_beat",

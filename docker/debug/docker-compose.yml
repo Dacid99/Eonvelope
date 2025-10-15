@@ -32,6 +32,7 @@ services:
       - /path/to/emailkasten/debug/log:/var/log/emailkasten
     ports:
       - 1122:8000
+      - 5555:5555
     environment:
       - DATABASE=email_archive_django # must match db:MARIADB_DATABASE
       - DATABASE_USER=user # must match db:MARIADB_USER

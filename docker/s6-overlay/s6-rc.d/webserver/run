@@ -1,0 +1,6 @@
+#!/command/with-contenv sh
+if [ $DEBUG = 'True']; then
+    poetry run -C /opt python3 manage.py runserver 0.0.0.0:443 --insecure
+else
+    poetry run -C /opt gunicorn src.Emailkasten.wsgi --bind 0.0.0.0:443 --keyfile=key.pem --certfile=cert.pem --workers=${GUNICORN_WORKER_NUMBER:-1} --access-logfile "/var/log/gunicorn_access.log"
+fi

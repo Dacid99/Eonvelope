@@ -40,7 +40,8 @@
 ## To implement
 
 - favicon.ico for the icon
-- daemonize celery worker
+- slim down docker image
+- more docker env variables for settings.py
 
 ### Work in progress
 

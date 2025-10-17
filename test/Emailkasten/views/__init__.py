@@ -16,4 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test package for the :mod:`core.views` package of Emailkasten project."""
+"""Test package for the :mod:`Emailkasten.views` package of Emailkasten project."""

@@ -21,6 +21,7 @@
 from typing import override
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import QuerySet
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 
@@ -38,6 +39,13 @@ class UserProfileView(LoginRequiredMixin, UpdateView):
     template_name = "account/profile.html"
 
     @override
-    def get_object(self, queryset=None) -> UserProfile:
-        """Get the requesting users profile."""
+    def get_object(self, queryset: QuerySet[UserProfile] | None = None) -> UserProfile:
+        """Get the requesting users profile.
+
+        Args:
+            queryset: The queryset to select from. Unused here.
+
+        Returns:
+            The request users profile model.
+        """
         return self.request.user.profile

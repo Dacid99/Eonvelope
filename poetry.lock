@@ -1511,18 +1511,6 @@ cryptography = ">=2.6,<35 || >35,<48"
 pcsc = ["pyscard (>=1.9,<3)"]
 
 [[package]]
-name = "filelock"
-version = "3.19.1"
-description = "A platform independent file lock."
-optional = false
-python-versions = ">=3.9"
-groups = ["dev"]
-files = [
-    {file = "filelock-3.19.1-py3-none-any.whl", hash = "sha256:d38e30481def20772f5baf097c122c3babc4fcdb7e14e57049eb9d88c6dc017d"},
-    {file = "filelock-3.19.1.tar.gz", hash = "sha256:66eda1888b0171c998b35be2bcc0f6d75c388a7ce20c3f3f37aa8e96c2dddf58"},
-]
-
-[[package]]
 name = "flower"
 version = "2.0.1"
 description = "Celery Flower"
@@ -2956,23 +2944,6 @@ pytest = ">=6.2.5"
 dev = ["pre-commit", "pytest-asyncio", "tox"]
 
 [[package]]
-name = "pytest-mypy"
-version = "1.0.1"
-description = "A Pytest Plugin for Mypy"
-optional = false
-python-versions = ">=3.8"
-groups = ["dev"]
-files = [
-    {file = "pytest_mypy-1.0.1-py3-none-any.whl", hash = "sha256:ad7133c9b92c802e032f2596590ebede7eea7c418e61d60d5cdd571b55c72056"},
-    {file = "pytest_mypy-1.0.1.tar.gz", hash = "sha256:3f5fcaff75c80dccc6b68cf5ecc28e1bbe71e95309469eb7a28bf408ce55c074"},
-]
-
-[package.dependencies]
-filelock = ">=3.0"
-mypy = ">=1.0"
-pytest = ">=7.0"
-
-[[package]]
 name = "python-crontab"
 version = "3.3.0"
 description = "Python Crontab API"
@@ -4152,4 +4123,4 @@ test = ["build (==1.2.1)", "pytest", "pytest-cov", "responses (>=0.10.1,<0.26.0)
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "8c876811eab62a3a8c91f56c6ae3ac0cb6cb75fab22b603a26b4ab42b73a5193"
+content-hash = "ad877bdf2610e686fcc07b47947e389bf3081b6a1eef5811dd8c042dd77752dc"

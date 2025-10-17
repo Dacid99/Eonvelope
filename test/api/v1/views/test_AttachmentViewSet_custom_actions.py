@@ -145,9 +145,8 @@ def test_download_auth_owner(
     )
     assert "attachment" in response["Content-Disposition"]
     assert "Content-Type" in response.headers
-    assert (
-        response.headers["Content-Type"] == fake_attachment_with_file.content_type
-        or "application/octet-stream"
+    assert response.headers["Content-Type"] == (
+        fake_attachment_with_file.content_type or "application/octet-stream"
     )
     assert (
         b"".join(response.streaming_content)
@@ -366,9 +365,8 @@ def test_download_thumbnail_auth_owner(
     )
     assert "inline" in response["Content-Disposition"]
     assert "Content-Type" in response.headers
-    assert (
-        response.headers["Content-Type"] == fake_attachment_with_file.content_type
-        or "application/octet-stream"
+    assert response.headers["Content-Type"] == (
+        fake_attachment_with_file.content_type or "application/octet-stream"
     )
     assert "X-Frame-Options" in response.headers
     assert response.headers["X-Frame-Options"] == "SAMEORIGIN"
@@ -382,11 +380,15 @@ def test_download_thumbnail_auth_owner(
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(
-    fake_attachment, noauth_api_client, custom_detail_action_url
+    faker, fake_attachment, noauth_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with an unauthenticated user client.
     """
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_attachment.is_favorite = previous_is_favorite
+    fake_attachment.save(update_fields=["is_favorite"])
+
     response = noauth_api_client.post(
         custom_detail_action_url(
             AttachmentViewSet,
@@ -397,16 +399,20 @@ def test_toggle_favorite_noauth(
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     fake_attachment.refresh_from_db()
-    assert fake_attachment.is_favorite is False
+    assert fake_attachment.is_favorite is previous_is_favorite
 
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(
-    fake_attachment, other_api_client, custom_detail_action_url
+    faker, fake_attachment, other_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with the authenticated other user client.
     """
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_attachment.is_favorite = previous_is_favorite
+    fake_attachment.save(update_fields=["is_favorite"])
+
     response = other_api_client.post(
         custom_detail_action_url(
             AttachmentViewSet,
@@ -417,16 +423,20 @@ def test_toggle_favorite_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     fake_attachment.refresh_from_db()
-    assert fake_attachment.is_favorite is False
+    assert fake_attachment.is_favorite is previous_is_favorite
 
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(
-    fake_attachment, owner_api_client, custom_detail_action_url
+    faker, fake_attachment, owner_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
     with the authenticated owner user client.
     """
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_attachment.is_favorite = previous_is_favorite
+    fake_attachment.save(update_fields=["is_favorite"])
+
     response = owner_api_client.post(
         custom_detail_action_url(
             AttachmentViewSet,
@@ -437,7 +447,7 @@ def test_toggle_favorite_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     fake_attachment.refresh_from_db()
-    assert fake_attachment.is_favorite is True
+    assert fake_attachment.is_favorite is not previous_is_favorite
 
 
 @pytest.mark.django_db

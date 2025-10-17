@@ -65,6 +65,7 @@ $RECYCLE.BIN/
 .netrwhist
 .nfs*
 .nox/
+.poetry/
 .pytest_cache/
 .ruff_cache/
 .swp.*

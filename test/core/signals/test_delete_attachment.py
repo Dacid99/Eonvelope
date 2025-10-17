@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Attachmentkasten - a open-source self-hostable attachment archiving server
+# Emailkasten - a open-source self-hostable email archiving server
 # Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
 #
 # This program is free software: you can redistribute it and/or modify

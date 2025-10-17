@@ -574,9 +574,13 @@ def test_reprocess_auth_owner(
 
 @pytest.mark.django_db
 def test_toggle_favorite_noauth(
-    fake_email, noauth_api_client, custom_detail_action_url
+    faker, fake_email, noauth_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with an unauthenticated user client."""
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_email.is_favorite = previous_is_favorite
+    fake_email.save(update_fields=["is_favorite"])
+
     response = noauth_api_client.post(
         custom_detail_action_url(
             EmailViewSet, EmailViewSet.URL_NAME_TOGGLE_FAVORITE, fake_email
@@ -585,14 +589,18 @@ def test_toggle_favorite_noauth(
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
     fake_email.refresh_from_db()
-    assert fake_email.is_favorite is False
+    assert fake_email.is_favorite is previous_is_favorite
 
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_other(
-    fake_email, other_api_client, custom_detail_action_url
+    faker, fake_email, other_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with the authenticated other user client."""
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_email.is_favorite = previous_is_favorite
+    fake_email.save(update_fields=["is_favorite"])
+
     response = other_api_client.post(
         custom_detail_action_url(
             EmailViewSet, EmailViewSet.URL_NAME_TOGGLE_FAVORITE, fake_email
@@ -601,14 +609,18 @@ def test_toggle_favorite_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     fake_email.refresh_from_db()
-    assert fake_email.is_favorite is False
+    assert fake_email.is_favorite is previous_is_favorite
 
 
 @pytest.mark.django_db
 def test_toggle_favorite_auth_owner(
-    fake_email, owner_api_client, custom_detail_action_url
+    faker, fake_email, owner_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with the authenticated owner user client."""
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_email.is_favorite = previous_is_favorite
+    fake_email.save(update_fields=["is_favorite"])
+
     response = owner_api_client.post(
         custom_detail_action_url(
             EmailViewSet, EmailViewSet.URL_NAME_TOGGLE_FAVORITE, fake_email
@@ -617,4 +629,4 @@ def test_toggle_favorite_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     fake_email.refresh_from_db()
-    assert fake_email.is_favorite is True
+    assert fake_email.is_favorite is not previous_is_favorite

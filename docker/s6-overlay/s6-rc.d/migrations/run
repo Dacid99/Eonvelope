@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-poetry run -C /opt python manage.py migrate --no-input
+python3 /opt/manage.py migrate --no-input

@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-poetry run -C /opt celery -A src.Emailkasten worker --loglevel=${CELERY_LOG_LEVEL:-INFO} --without-gossip --without-mingle
+celery -A Emailkasten worker --loglevel=${CELERY_LOG_LEVEL:-INFO} --without-gossip --without-mingle

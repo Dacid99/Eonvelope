@@ -1,6 +1,6 @@
 #!/command/with-contenv sh
-if [ $DEBUG = 'True']; then
-    poetry run -C /opt python3 manage.py runserver 0.0.0.0:443 --insecure  # route this via 443 to match port in dockerfile and docker-compose
+if [ ${DEBUG} = 'True' ]; then
+    python3 /opt/manage.py runserver 0.0.0.0:443 --insecure  # route this via 443 to match port in dockerfile and docker-compose
 else
-    poetry run -C /opt gunicorn src.Emailkasten.wsgi --bind 0.0.0.0:443 --keyfile=key.pem --certfile=cert.pem --workers=${GUNICORN_WORKER_NUMBER:-1} --access-logfile "/var/log/gunicorn_access.log"
+    gunicorn Emailkasten.wsgi --bind 0.0.0.0:443 --keyfile=/opt/key.pem --certfile=/opt/cert.pem --workers=${GUNICORN_WORKER_NUMBER:-1} --access-logfile "/var/log/gunicorn_access.log"
 fi

@@ -1,2 +1,3 @@
 #!/command/with-contenv sh
-poetry run -C /opt python manage.py createsuperuser --username=admin --email=  --noinput
+python3 /opt/manage.py createsuperuser --username=admin --email=  --noinput
+s6-svc -Od . # needed to cover up failure if user already exists

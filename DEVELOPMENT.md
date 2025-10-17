@@ -58,9 +58,10 @@ The projects tests are in the test/ directory. You can run them from the project
 pytest test
 ```
 
-If you want to test your changes manually, you can use the files in docker/debug/ to build and create a debug docker image.
+If you want to test your changes manually, you can use test your docker image by setting *DEBUG=True*.
 
-It uses djangos runserver instead of gunicorn, allowing you to manipulate the source and static files while the server is running, e.g. via docker exec.
+In that case the container uses djangos runserver instead of gunicorn, allowing you to manipulate the source and static files while the server is running, e.g. via docker exec. Additionally, all internal errors will surface as error webpages with full context of the error.
+
 To test the webui on other devices, like your phone or tablet, add your machines IP to ALLOWED_HOSTS and you will be able to access the debug application from other devices as well.
 
 ## Validation and Linting

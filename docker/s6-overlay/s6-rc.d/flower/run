@@ -1,6 +1,6 @@
 #!/command/with-contenv sh
-if [[ -n "${ENABLE_FLOWER}" ]]; then
-    poetry run -C /opt celery --broker=amqp://guest:guest@localhost:5672// flower
+if [ ${ENABLE_FLOWER} = 'True' ]; then
+    celery --broker=amqp://guest:guest@localhost:5672// flower
 else
     # https://skarnet.org/software/s6/s6-svc.html
 	s6-svc -Od .

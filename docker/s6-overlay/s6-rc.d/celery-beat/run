@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-poetry run -C /opt celery -A src.Emailkasten beat --loglevel=${CELERY_LOG_LEVEL:-INFO} -S django
+celery -A Emailkasten beat --loglevel=${CELERY_LOG_LEVEL:-INFO} -S django

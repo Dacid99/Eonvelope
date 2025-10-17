@@ -46,6 +46,9 @@ package-mode = false
 [tool.poetry.dependencies]
 python = ">=3.13,<4.0"
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 [tool.poetry.group.dev]
 optional=true
 

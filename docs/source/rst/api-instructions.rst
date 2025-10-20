@@ -11,10 +11,11 @@ If you run a Emailkasten server or have access to one, the easiest way
 to get started with the API is via the redoc and swagger interfaces.
 
 These can be found under */api/schema/redoc* and */api/schema/swagger*.
+The redoc interface for the user management API can be found under */api/auth/openapi.html*.
 
-The schemas for the user management API can be found under */_allauth/openapi.yaml*, */_allauth/openapi.json* and */_allauth/openapi.html*.
+Alternatively you can also get a raw yaml OpenAPI schema from */api/schema*.
+The raw user management API schema is available under */api/auth/openapi.yaml* or */api/auth/openapi.json*.
 
-Alternatively you can also get a raw OpenAPI schema from */api/schema*.
 If you have no option to run Emailkasten, you can refer to :ref:`API Schema` for the same schema file.
 You can render it to any API overview using one of the existing webtools or the docker image provided by swagger
 

@@ -1,6 +1,6 @@
 [project]
 name = "emailkasten"
-version = "0.0.1"
+version = "0.1.0"
 description = "A open-source self-hosted mail archive using the django framework."
 authors = [
     {name = "David Aderbauer & The Emailkasten Contributors", email = "18516197-Dacid99@users.noreply.gitlab.com"}

@@ -35,6 +35,18 @@ class EmailFetchingCriterionChoices(TextChoices):
     POP does not support queries at all, so everything will be fetched.
     """
 
+    DAILY = "DAILY", _("All emails received the last DAY")
+    """Filter using "SENTSINCE" for mails sent the previous day."""
+
+    WEEKLY = "WEEKLY", _("All emails received the last WEEK")
+    """Filter using "SENTSINCE" for mails sent the previous week."""
+
+    MONTHLY = "MONTHLY", _("All emails receiced the last MONTH")
+    """Filter using "SENTSINCE" for mails sent the previous 4 weeks."""
+
+    ANNUALLY = "ANNUALLY", _("All emails received the last YEAR")
+    """Filter using "SENTSINCE" for mails sent the previous 52 weeks."""
+
     RECENT = "RECENT", _("All RECENT emails")
     """Filter by "RECENT" flag."""
 
@@ -73,18 +85,6 @@ class EmailFetchingCriterionChoices(TextChoices):
 
     UNDELETED = "UNDELETED", _("All UNDELETED emails")
     """Filter by "UNDELETED" flag."""
-
-    DAILY = "DAILY", _("All emails received the last DAY")
-    """Filter using "SENTSINCE" for mails sent the previous day."""
-
-    WEEKLY = "WEEKLY", _("All emails received the last WEEK")
-    """Filter using "SENTSINCE" for mails sent the previous week."""
-
-    MONTHLY = "MONTHLY", _("All emails receiced the last MONTH")
-    """Filter using "SENTSINCE" for mails sent the previous 4 weeks."""
-
-    ANNUALLY = "ANNUALLY", _("All emails received the last YEAR")
-    """Filter using "SENTSINCE" for mails sent the previous 52 weeks."""
 
 
 class EmailProtocolChoices(TextChoices):

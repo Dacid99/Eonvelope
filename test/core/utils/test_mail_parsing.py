@@ -243,6 +243,10 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
             b'(\\HasNoChildren) "/" Archive/2024',
             "Archive/2024",
         ),
+        (
+            b'() ";" Trash',
+            "Trash",
+        ),
     ],
 )
 def test_parse_mailbox_name(name_data, expected_name):

@@ -28,6 +28,7 @@ import email
 import email.header
 import email.utils
 import logging
+import re
 from typing import TYPE_CHECKING
 
 import imap_tools.imap_utf7
@@ -160,9 +161,16 @@ def parse_mailbox_name(mailbox_data: bytes | str) -> str:
         if isinstance(mailbox_data, bytes)
         else mailbox_data
     )
-    return (
-        mailbox_str.rsplit('"/"', maxsplit=1)[-1].rsplit('"."', maxsplit=1)[-1].strip()
-    )
+    match = re.search(
+        r"\([\S ]*?\) [\S]+ (.+)", mailbox_str
+    )  # regex taken from imap_tools.folder.MailBoxFolderManager.list
+    if not match:
+        return (
+            mailbox_str.rsplit('"/"', maxsplit=1)[-1]
+            .rsplit('"."', maxsplit=1)[-1]
+            .strip()
+        )
+    return match.group(1)
 
 
 def find_best_href_in_header(header: str) -> str:

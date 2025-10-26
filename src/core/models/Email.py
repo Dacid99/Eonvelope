@@ -112,8 +112,7 @@ class Email(
     )
     """The Date header of the mail."""
 
-    subject = models.CharField(
-        max_length=255,
+    subject = models.TextField(
         blank=True,
         default="",
         # Translators: Do not capitalize the very first letter unless your language requires it.

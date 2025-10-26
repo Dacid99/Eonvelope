@@ -352,11 +352,7 @@ class Mailbox(
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")
-        mailbox_name = (
-            parse_mailbox_name(mailbox_data)
-            if isinstance(mailbox_data, bytes)
-            else mailbox_data
-        )
+        mailbox_name = parse_mailbox_name(mailbox_data)
         if re.compile(
             get_config("IGNORED_MAILBOXES_REGEX"), flags=re.IGNORECASE
         ).search(mailbox_name):

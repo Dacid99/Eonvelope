@@ -215,9 +215,10 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
 
 
 @pytest.mark.parametrize(
-    "name_bytes, expected_name",
+    "name_data, expected_name",
     [
         (b"INBOX", "INBOX"),
+        ("INBOX", "INBOX"),
         (
             b'Dr&AOc-. Bianka "/" F&APY-rste&BBk-r',
             "FörsteЙr",
@@ -231,8 +232,12 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
             "明美",
         ),
         (
-            b'(\\Sent \\HasNoChildren) "/" "Gesendete Objekte"',
+            '(\\Sent \\HasNoChildren) "/" "Gesendete Objekte"',
             '"Gesendete Objekte"',
+        ),
+        (
+            b'(\\Sent \\HasChildren) "." INBOX.Sent',
+            "INBOX.Sent",
         ),
         (
             b'(\\HasNoChildren) "/" Archive/2024',
@@ -240,9 +245,9 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
         ),
     ],
 )
-def test_parse_mailbox_name(name_bytes, expected_name):
+def test_parse_mailbox_name(name_data, expected_name):
     """Tests :func:`core.utils.mail_parsing.parse_mailbox_name`."""
-    result = mail_parsing.parse_mailbox_name(name_bytes)
+    result = mail_parsing.parse_mailbox_name(name_data)
 
     assert result == expected_name
 

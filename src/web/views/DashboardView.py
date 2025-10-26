@@ -43,7 +43,9 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             created__gte=timezone.now() - timedelta(days=1),
         ).order_by(
             "-created"
-        )
+        )[
+            :50
+        ]
         context["emails_count"] = Email.objects.filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
             mailbox__account__user=self.request.user
         ).count()

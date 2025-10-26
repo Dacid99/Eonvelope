@@ -143,3 +143,7 @@ In principle it is possible to migrate to Emailkasten from another service fetch
 The main part is required for this is a migration that rewrites that services database into one compatible with Emailkasten.
 
 If you are interested in providing such a program for the application you are using right now, please get in touch!
+
+Alternatively, you can also export all emails from the other application and import them into Emailkasten.
+The import supports various formats for collections of emails, including the popular mbox format.
+For details please refer to the :doc:`instructions <web-instructions>`.

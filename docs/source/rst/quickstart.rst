@@ -22,12 +22,18 @@ Or you use a container management platform like  `portainer <https://www.portain
 
 After the container is up you can access the webapp at *https://localhost:1122/*.
 
+The credentials for the default admin account are `admin` and the `DJANGO_SUPERUSER_PASSWORD` you set in the docker-compose file.
+Using this account you can then create the user accounts and configure the instance.
+If you want users to sign up themselves, set the docker environment variable `REGISTRATION_ENABLED` to `True`.
+
+For a full information about the administration of the instance and how to create user accounts
+check out the :doc:`admin instructions <admin-instructions>`.
 
 For a detailed overview of the available settings
 see the :doc:`configurations documentation <configuration>`.
 
 If you need help with how to use the application refer
-to the :doc:`instructions overview <instructions>`.
+to the :doc:`user manual <instructions>`.
 
 There are other ways you can run Emailkasten,
 please see :doc:`the installation guide <installation>` for details.

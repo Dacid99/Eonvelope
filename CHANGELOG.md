@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 0.1.1
+
+- Fixes:
+  - mailbox names for some servers were parsed incorrectly
+  - accepting subject lines of length > 255 chars
+  - limit on current emails on the dashboard
+  - clarified deletion notes
+
 ## Version 0.1.0
 
 - Features

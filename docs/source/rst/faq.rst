@@ -26,6 +26,40 @@ Essentially, everything that can run containers is viable to deploy Emailkasten.
 That includes every modern Linux, Windows, MacOS, FreeBSD, etc.
 
 
+Do I need a license to use this application?
+--------------------------------------------
+
+This project is licensed under the :doc:`AGPLv3 license <license>`.
+That means that everyone can freely use this software.
+
+There is only a restriction if you want to alter and publish the source code.
+In that case your version of the program has to be released under the same license,
+so the project remains free software.
+
+
+I can't access my instance using the port I assigned to it.
+-----------------------------------------------------------
+
+Emailkasten is served over https exclusively. Please make sure that the URL you use starts with https://.
+If that doesn't work, please check the logs to see if the webserver in the container has trouble starting.
+
+
+After setting up my instance, I don't know how to sign up or log in.
+--------------------------------------------------------------------
+
+You can login with the default admin account, which is automatically created.
+The credentials are `admin` and the `DJANGO_SUPERUSER_PASSWORD` that you set in the docker-compose file.
+Using this account and the admin interface, you can create other users.
+If users should be able to sign up themselves, set `REGISTRATION_ENABLED` to `True`.
+
+
+If I delete an account in Emailkasten, does that delete the account on the mailserver too?
+------------------------------------------------------------------------------------------
+
+No, only the data in the Emailkasten database will be deleted.
+Emailkasten will never destroy data on your mailserver!
+
+
 I have found a problem with the application, what should I do?
 --------------------------------------------------------------
 
@@ -66,14 +100,3 @@ Everyone is welcome to help with the development of Emailkasten!
 
 To get you off to a good start please check out the quickstart and codestyle guidelines.
 You can find them and the source code documentation in the :doc:`developers section <developers>`.
-
-
-Do I need a license to use this application?
---------------------------------------------
-
-This project is licensed under the :doc:`AGPLv3 license <license>`.
-That means that everyone can freely use this software.
-
-There is only a restriction if you want to alter and publish the source code.
-In that case your version of the program has to be released under the same license,
-so the project remains free software.

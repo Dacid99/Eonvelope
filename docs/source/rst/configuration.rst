@@ -192,7 +192,7 @@ If you wish to get rid of them, you can run the following command in your server
 
 .. code-block:: bash
 
-  docker exec -it emailkasten-web poetry run python3 manage.py constance remove_stale_keys
+  docker exec -it emailkasten-web python3 manage.py constance remove_stale_keys
 
 
 

@@ -110,7 +110,7 @@ It can be run from the terminal of your server with
 
 .. code-block:: bash
 
-   docker exec -it emailkasten-web poetry run python3 manage.py runscript scriptname
+   docker exec -it emailkasten-web python3 manage.py runscript scriptname
 
 Swap in the name of the specific script for the migration fix.
 Just the name is required, drop the .py suffix.

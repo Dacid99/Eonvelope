@@ -61,7 +61,7 @@ Otherwise you can create another admin account by running
 
 .. code-block:: bash
 
-    docker exec -it emailkasten-web poetry run python3 manage.py createsuperuser --username=rescueadmin --email=  --noinput
+    docker exec -it emailkasten-web python3 manage.py createsuperuser --username=rescueadmin --email=  --noinput
 
 in the servers terminal.
 This ``rescueadmin`` account can be accessed with the password from the ``docker-compose.yml``.

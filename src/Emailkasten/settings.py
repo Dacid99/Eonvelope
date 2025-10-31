@@ -616,8 +616,11 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 ##### django_tables2 #####
 # https://django-tables2.readthedocs.io/en/latest/
 
-DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
-
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5-responsive.html"
+DJANGO_TABLES2_TABLE_ATTRS = {
+    "class": "table table-hover align-middle",
+    "tbody": {"class": "table-group-divider"},
+}
 
 ##### drf_spectacular #####
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings

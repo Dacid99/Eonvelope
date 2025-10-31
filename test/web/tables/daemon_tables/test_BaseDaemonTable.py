@@ -30,7 +30,8 @@ def test_output(fake_daemon):
     fields = table.columns
     assert "checkbox" in fields
     assert "uuid" in fields
+    assert "mailbox" in fields
     assert "fetching_criterion" in fields
     assert "interval__period" in fields
     assert "interval__every" in fields
-    assert len(fields) == 5
+    assert len(fields) == 6

@@ -27,12 +27,23 @@ from web.utils.columns import CheckboxColumn
 class BaseEmailTable(Table):
     checkbox = CheckboxColumn()
     subject = Column(linkify=True)
+    mailbox = Column(
+        linkify=lambda record: record.mailbox.get_absolute_url(),
+        accessor="mailbox__name",
+    )
+    mailbox__account = Column(
+        linkify=lambda record: record.mailbox.account.get_absolute_url(),
+        accessor="mailbox__account__mail_address",
+    )
 
     class Meta:
         model = Email
         fields = (
             "subject",
             "datetime",
+            "mailbox",
+            "mailbox__account",
+            "x_spam",
             "datasize",
         )
         sequence = ("checkbox", *fields)

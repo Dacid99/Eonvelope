@@ -27,11 +27,16 @@ from web.utils.columns import CheckboxColumn
 class BaseDaemonTable(Table):
     checkbox = CheckboxColumn()
     uuid = Column(linkify=True)
+    mailbox = Column(
+        linkify=lambda record: record.mailbox.get_absolute_url(),
+        accessor="mailbox__name",
+    )
 
     class Meta:
         model = Daemon
         fields = (
             "uuid",
+            "mailbox",
             "fetching_criterion",
             "interval__period",
             "interval__every",

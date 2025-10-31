@@ -27,11 +27,16 @@ from web.utils.columns import CheckboxColumn
 class BaseMailboxTable(Table):
     checkbox = CheckboxColumn()
     name = Column(linkify=True)
+    account = Column(
+        lambda record: record.account.get_absolute_url(),
+        accessor="account__mail_address",
+    )
 
     class Meta:
         model = Mailbox
         fields = (
             "name",
+            "account",
             "save_attachments",
             "save_to_eml",
         )

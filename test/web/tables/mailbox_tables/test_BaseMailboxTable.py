@@ -30,6 +30,7 @@ def test_output(fake_mailbox):
     fields = table.columns
     assert "checkbox" in fields
     assert "name" in fields
+    assert "account" in fields
     assert "save_attachments" in fields
     assert "save_to_eml" in fields
-    assert len(fields) == 4
+    assert len(fields) == 5

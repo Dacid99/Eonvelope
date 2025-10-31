@@ -30,8 +30,9 @@ def test_output(fake_attachment):
     fields = table.columns
     assert "checkbox" in fields
     assert "file_name" in fields
+    assert "email" in fields
     assert "content_disposition" in fields
     assert "content_id" in fields
     assert "content_type" in fields
     assert "datasize" in fields
-    assert len(fields) == 6
+    assert len(fields) == 7

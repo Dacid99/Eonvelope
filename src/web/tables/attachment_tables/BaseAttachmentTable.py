@@ -27,11 +27,16 @@ from web.utils.columns import CheckboxColumn
 class BaseAttachmentTable(Table):
     file_name = Column(linkify=True)
     checkbox = CheckboxColumn()
+    email = Column(
+        linkify=lambda record: record.email.get_absolute_url(),
+        accessor="email__subject",
+    )
 
     class Meta:
         model = Attachment
         fields = (
             "file_name",
+            "email",
             "content_disposition",
             "content_id",
             "content_type",

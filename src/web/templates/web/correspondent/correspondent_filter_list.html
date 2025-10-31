@@ -1,6 +1,6 @@
 {% extends "web/bases/base_filter_list.html" %}
 
-{% load i18n %}
+{% load translate from i18n %}
 
 {% block title %}
     {% translate "Correspondents" %} -
@@ -13,6 +13,14 @@
 {% block header_title %}
     {% translate "Correspondents" %}
 {% endblock header_title %}
+
+{% block header_buttons %}
+
+    <a role="button"
+       class="btn btn-outline-primary"
+       href="{% url 'web:correspondent-table' %}"><i class="fa-solid fa-table-list" aria-hidden="true"></i> {% translate "Table" %}</a>
+
+{% endblock header_buttons %}
 
 {% block action_buttons %}
 

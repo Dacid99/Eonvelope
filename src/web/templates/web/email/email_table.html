@@ -1,6 +1,17 @@
 {% extends "web/email/email_filter_list.html" %}
 
+{% load translate from i18n %}
+
 {% load render_table from django_tables2 %}
+
+{% block header_buttons %}
+    <a role="button"
+       class="btn btn-outline-primary"
+       href="{% url 'web:email-archive-index' %}"><i class="fa-solid fa-timeline" aria-hidden="true"></i> {% translate "Timeline" %}</a>
+    <a role="button"
+       class="btn btn-outline-primary"
+       href="{% url 'web:email-filter-list' %}"><i class="fa-solid fa-list" aria-hidden="true"></i> {% translate "List" %}</a>
+{% endblock header_buttons %}
 
 {% block list %}
 

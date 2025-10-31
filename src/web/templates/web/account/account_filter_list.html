@@ -1,6 +1,6 @@
 {% extends "web/bases/base_filter_list.html" %}
 
-{% load i18n %}
+{% load translate from i18n %}
 
 {% block title %}
     {% translate "Accounts" %} -
@@ -17,6 +17,10 @@
 {% block header_buttons %}
 
     {% include "web/account/partials/_add_button.html" %}
+
+    <a role="button"
+       class="btn btn-outline-primary"
+       href="{% url 'web:account-table' %}"><i class="fa-solid fa-table-list" aria-hidden="true"></i> {% translate "Table" %}</a>
 
 {% endblock header_buttons %}
 

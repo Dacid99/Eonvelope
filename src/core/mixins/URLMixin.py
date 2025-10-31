@@ -53,6 +53,14 @@ class URLMixin:
         """
         return reverse("web:" + self.get_list_web_url_name())
 
+    def get_absolute_table_url(self) -> str:
+        """Gets the table webview url for the model instance.
+
+        Returns:
+            The table webview url for the model instance.
+        """
+        return reverse("web:" + self.get_table_web_url_name())
+
     def get_absolute_api_list_url(self) -> str:
         """Gets the list api url for the model instance.
 
@@ -69,6 +77,15 @@ class URLMixin:
             The list webview urlname for the model.
         """
         return cls.BASENAME + "-filter-list"
+
+    @classmethod
+    def get_table_web_url_name(cls) -> str:
+        """Gets the list webview urlname for the model.
+
+        Returns:
+            The list webview urlname for the model.
+        """
+        return cls.BASENAME + "-table"
 
     @classmethod
     def get_detail_web_url_name(cls) -> str:

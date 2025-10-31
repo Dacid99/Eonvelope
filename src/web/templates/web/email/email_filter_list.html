@@ -1,6 +1,6 @@
 {% extends "web/bases/base_filter_list.html" %}
 
-{% load i18n %}
+{% load translate from i18n %}
 
 {% block title %}
     {% translate "Emails" %} -
@@ -18,6 +18,9 @@
     <a role="button"
        class="btn btn-outline-primary"
        href="{% url 'web:email-archive-index' %}"><i class="fa-solid fa-timeline" aria-hidden="true"></i> {% translate "Timeline" %}</a>
+    <a role="button"
+       class="btn btn-outline-primary"
+       href="{% url 'web:email-table' %}"><i class="fa-solid fa-table-list" aria-hidden="true"></i> {% translate "Table" %}</a>
 {% endblock header_buttons %}
 
 {% block action_buttons %}

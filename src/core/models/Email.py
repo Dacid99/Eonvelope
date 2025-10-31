@@ -592,9 +592,12 @@ class Email(
                         eml_file = email_item.open_file()
                     except FileNotFoundError:
                         continue
-                    with eml_file, zipfile.open(
-                        os.path.basename(email_item.file_path), "w"
-                    ) as zipped_file:
+                    with (
+                        eml_file,
+                        zipfile.open(
+                            os.path.basename(email_item.file_path), "w"
+                        ) as zipped_file,
+                    ):
                         zipped_file.write(eml_file.read())
         elif file_format in [
             SupportedEmailDownloadFormats.MBOX,

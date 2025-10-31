@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_extensions",
     "django_filters",
+    "django_tables2",
     "rest_framework",
     "rest_framework.authtoken",
     "drf_spectacular",
@@ -610,6 +611,12 @@ MFA_TRUST_COOKIE_SAMESITE = env("MFA_TRUST_COOKIE_SAMESITE", cast=str, default="
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_FAIL_SILENTLY = not DEBUG
+
+
+##### django_tables2 #####
+# https://django-tables2.readthedocs.io/en/latest/
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap.html"
 
 
 ##### drf_spectacular #####

@@ -15,7 +15,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-"""URL configuration for api app.
+"""URL configuration for web app.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -23,6 +23,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 References:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
 """
+
 from __future__ import annotations
 
 from django.urls import path
@@ -33,16 +34,20 @@ from .views import (
     AccountDetailWithDeleteView,
     AccountEmailsFilterView,
     AccountFilterView,
+    AccountTableView,
     AccountUpdateOrDeleteView,
     AttachmentDetailWithDeleteView,
     AttachmentFilterView,
+    AttachmentTableView,
     CorrespondentDetailWithDeleteView,
     CorrespondentEmailsFilterView,
     CorrespondentFilterView,
+    CorrespondentTableView,
     CorrespondentUpdateOrDeleteView,
     DaemonCreateView,
     DaemonDetailWithDeleteView,
     DaemonFilterView,
+    DaemonTableView,
     DaemonUpdateOrDeleteView,
     DashboardView,
     EmailArchiveIndexView,
@@ -51,12 +56,14 @@ from .views import (
     EmailDetailWithDeleteView,
     EmailFilterView,
     EmailMonthArchiveView,
+    EmailTableView,
     EmailWeekArchiveView,
     EmailYearArchiveView,
     MailboxCreateDaemonView,
     MailboxDetailWithDeleteView,
     MailboxEmailsFilterView,
     MailboxFilterView,
+    MailboxTableView,
     MailboxUpdateOrDeleteView,
     UploadEmailView,
 )
@@ -76,6 +83,11 @@ urlpatterns = [
         "accounts/",
         AccountFilterView.as_view(),
         name=AccountFilterView.URL_NAME,
+    ),
+    path(
+        "accounts/table/",
+        AccountTableView.as_view(),
+        name=AccountTableView.URL_NAME,
     ),
     path(
         "accounts/<int:pk>/",
@@ -103,6 +115,11 @@ urlpatterns = [
         name=AttachmentFilterView.URL_NAME,
     ),
     path(
+        "attachments/table/",
+        AttachmentTableView.as_view(),
+        name=AttachmentTableView.URL_NAME,
+    ),
+    path(
         "attachments/<int:pk>/",
         AttachmentDetailWithDeleteView.as_view(),
         name=AttachmentDetailWithDeleteView.URL_NAME,
@@ -111,6 +128,11 @@ urlpatterns = [
         "correspondents/",
         CorrespondentFilterView.as_view(),
         name=CorrespondentFilterView.URL_NAME,
+    ),
+    path(
+        "correspondents/table/",
+        CorrespondentTableView.as_view(),
+        name=CorrespondentTableView.URL_NAME,
     ),
     path(
         "correspondents/<int:pk>/",
@@ -133,6 +155,11 @@ urlpatterns = [
         name=DaemonFilterView.URL_NAME,
     ),
     path(
+        "routines/table/",
+        DaemonTableView.as_view(),
+        name=DaemonTableView.URL_NAME,
+    ),
+    path(
         "routines/<int:pk>/",
         DaemonDetailWithDeleteView.as_view(),
         name=DaemonDetailWithDeleteView.URL_NAME,
@@ -151,6 +178,11 @@ urlpatterns = [
         "emails/",
         EmailFilterView.as_view(),
         name=EmailFilterView.URL_NAME,
+    ),
+    path(
+        "emails/table/",
+        EmailTableView.as_view(),
+        name=EmailTableView.URL_NAME,
     ),
     path(
         "emails/<int:pk>/",
@@ -191,6 +223,11 @@ urlpatterns = [
         "mailboxes/",
         MailboxFilterView.as_view(),
         name=MailboxFilterView.URL_NAME,
+    ),
+    path(
+        "mailboxes/table/",
+        MailboxTableView.as_view(),
+        name=MailboxTableView.URL_NAME,
     ),
     path(
         "mailboxes/<int:pk>/",

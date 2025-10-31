@@ -22,6 +22,7 @@ from .AccountCreateView import AccountCreateView
 from .AccountDetailWithDeleteView import AccountDetailWithDeleteView
 from .AccountEmailsFilterView import AccountEmailsFilterView
 from .AccountFilterView import AccountFilterView
+from .AccountTableView import AccountTableView
 from .AccountUpdateOrDeleteView import AccountUpdateOrDeleteView
 
 
@@ -30,5 +31,6 @@ __all__ = [
     "AccountDetailWithDeleteView",
     "AccountEmailsFilterView",
     "AccountFilterView",
+    "AccountTableView",
     "AccountUpdateOrDeleteView",
 ]

@@ -22,6 +22,7 @@ from .MailboxCreateDaemonView import MailboxCreateDaemonView
 from .MailboxDetailWithDeleteView import MailboxDetailWithDeleteView
 from .MailboxEmailsFilterView import MailboxEmailsFilterView
 from .MailboxFilterView import MailboxFilterView
+from .MailboxTableView import MailboxTableView
 from .MailboxUpdateOrDeleteView import MailboxUpdateOrDeleteView
 from .UploadEmailView import UploadEmailView
 
@@ -31,6 +32,7 @@ __all__ = [
     "MailboxDetailWithDeleteView",
     "MailboxEmailsFilterView",
     "MailboxFilterView",
+    "MailboxTableView",
     "MailboxUpdateOrDeleteView",
     "UploadEmailView",
 ]

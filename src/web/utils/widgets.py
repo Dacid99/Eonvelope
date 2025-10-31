@@ -18,7 +18,6 @@
 
 """Module with the adapted widget classes."""
 
-
 from typing import Any
 
 from django.forms import SelectDateWidget
@@ -33,9 +32,9 @@ class AdaptedSelectDateWidget(SelectDateWidget):
         kwargs.pop("empty_label", None)
         super().__init__(
             empty_label=[
-                f"--- {_("Year")} ---",
-                f"--- {_("Month")} ---",
-                f"--- {_("Day")} ---",
+                f"--- {_('Year')} ---",
+                f"--- {_('Month')} ---",
+                f"--- {_('Day')} ---",
             ],
             **kwargs,
         )

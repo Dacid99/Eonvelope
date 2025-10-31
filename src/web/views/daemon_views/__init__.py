@@ -21,6 +21,7 @@
 from .DaemonCreateView import DaemonCreateView
 from .DaemonDetailWithDeleteView import DaemonDetailWithDeleteView
 from .DaemonFilterView import DaemonFilterView
+from .DaemonTableView import DaemonTableView
 from .DaemonUpdateOrDeleteView import DaemonUpdateOrDeleteView
 
 
@@ -28,5 +29,6 @@ __all__ = [
     "DaemonCreateView",
     "DaemonDetailWithDeleteView",
     "DaemonFilterView",
+    "DaemonTableView",
     "DaemonUpdateOrDeleteView",
 ]

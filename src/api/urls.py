@@ -23,6 +23,7 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 References:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
 """
+
 from __future__ import annotations
 
 from django.urls import include, path

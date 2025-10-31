@@ -1,0 +1,9 @@
+{% extends "web/mailbox/mailbox_filter_list.html" %}
+
+{% load render_table from django_tables2 %}
+
+{% block list %}
+
+    {% render_table table %}
+
+{% endblock list %}

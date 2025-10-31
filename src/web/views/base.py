@@ -18,7 +18,6 @@
 
 """Module with baseviews for the Emailkasten webapp."""
 
-
 from typing import Any, override
 
 from django.core.exceptions import ImproperlyConfigured

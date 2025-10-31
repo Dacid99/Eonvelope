@@ -1292,6 +1292,24 @@ django = "*"
 typing-extensions = "*"
 
 [[package]]
+name = "django-tables2"
+version = "2.7.5"
+description = "Table/data-grid framework for Django"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "django_tables2-2.7.5-py3-none-any.whl", hash = "sha256:d9338937797207ffb6f481be2125c5ec3a0bb1858d409c672cc25fc5d654cb22"},
+    {file = "django_tables2-2.7.5.tar.gz", hash = "sha256:fb5dcaa09379cf3947598ec7e1bd5f26ed63aafdee3b23963446763bbeac37bf"},
+]
+
+[package.dependencies]
+django = ">=4.2"
+
+[package.extras]
+tablib = ["tablib"]
+
+[[package]]
 name = "django-timezone-field"
 version = "7.1"
 description = "A Django app providing DB, form, and REST framework fields for zoneinfo and pytz timezone objects."
@@ -4299,4 +4317,4 @@ types = ["mypy (==1.18.2)", "types-python-dateutil (==2.9.0.20251008)", "types-r
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "b3ada53733eed9c0c85436942612f29e76b4cf868be15484197d59a58c220503"
+content-hash = "fd809eda6ad0a30661528e991b2a1a9ffddb3f65a663dc6d75c3d78de2b1e99d"

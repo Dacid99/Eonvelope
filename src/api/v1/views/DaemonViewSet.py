@@ -114,7 +114,11 @@ class DaemonViewSet(viewsets.ModelViewSet[Daemon]):
         """
         if getattr(self, "swagger_fake_view", False):
             return Daemon.objects.none()
-        return Daemon.objects.filter(mailbox__account__user=self.request.user).select_related("interval", "celery_task")  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+        return Daemon.objects.filter(
+            mailbox__account__user=self.request.user
+        ).select_related(
+            "interval", "celery_task"
+        )  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
 
     URL_PATH_TEST = "test"
     URL_NAME_TEST = "test"

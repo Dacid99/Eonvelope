@@ -23,19 +23,26 @@ from .account_views import (
     AccountDetailWithDeleteView,
     AccountEmailsFilterView,
     AccountFilterView,
+    AccountTableView,
     AccountUpdateOrDeleteView,
 )
-from .attachment_views import AttachmentDetailWithDeleteView, AttachmentFilterView
+from .attachment_views import (
+    AttachmentDetailWithDeleteView,
+    AttachmentFilterView,
+    AttachmentTableView,
+)
 from .correspondent_views import (
     CorrespondentDetailWithDeleteView,
     CorrespondentEmailsFilterView,
     CorrespondentFilterView,
+    CorrespondentTableView,
     CorrespondentUpdateOrDeleteView,
 )
 from .daemon_views import (
     DaemonCreateView,
     DaemonDetailWithDeleteView,
     DaemonFilterView,
+    DaemonTableView,
     DaemonUpdateOrDeleteView,
 )
 from .DashboardView import DashboardView
@@ -46,6 +53,7 @@ from .email_views import (
     EmailDetailWithDeleteView,
     EmailFilterView,
     EmailMonthArchiveView,
+    EmailTableView,
     EmailWeekArchiveView,
     EmailYearArchiveView,
 )
@@ -54,6 +62,7 @@ from .mailbox_views import (
     MailboxDetailWithDeleteView,
     MailboxEmailsFilterView,
     MailboxFilterView,
+    MailboxTableView,
     MailboxUpdateOrDeleteView,
     UploadEmailView,
 )
@@ -64,16 +73,20 @@ __all__ = [
     "AccountDetailWithDeleteView",
     "AccountEmailsFilterView",
     "AccountFilterView",
+    "AccountTableView",
     "AccountUpdateOrDeleteView",
     "AttachmentDetailWithDeleteView",
     "AttachmentFilterView",
+    "AttachmentTableView",
     "CorrespondentDetailWithDeleteView",
     "CorrespondentEmailsFilterView",
     "CorrespondentFilterView",
+    "CorrespondentTableView",
     "CorrespondentUpdateOrDeleteView",
     "DaemonCreateView",
     "DaemonDetailWithDeleteView",
     "DaemonFilterView",
+    "DaemonTableView",
     "DaemonUpdateOrDeleteView",
     "DashboardView",
     "EmailArchiveIndexView",
@@ -82,12 +95,14 @@ __all__ = [
     "EmailDetailWithDeleteView",
     "EmailFilterView",
     "EmailMonthArchiveView",
+    "EmailTableView",
     "EmailWeekArchiveView",
     "EmailYearArchiveView",
     "MailboxCreateDaemonView",
     "MailboxDetailWithDeleteView",
     "MailboxEmailsFilterView",
     "MailboxFilterView",
+    "MailboxTableView",
     "MailboxUpdateOrDeleteView",
     "UploadEmailView",
 ]

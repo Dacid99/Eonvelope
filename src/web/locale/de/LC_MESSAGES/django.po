@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-01 22:05+0000\n"
-"PO-Revision-Date: 2025-09-30 23:02+0000\n"
+"PO-Revision-Date: 2025-11-02 22:51+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/web/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -310,10 +310,8 @@ msgstr "in"
 #: src/web/templates/web/email/email_filter_list.html:23
 #: src/web/templates/web/mailbox/mailbox_email_filter_list.html:15
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:21
-#, fuzzy
-#| msgid "Enabled"
 msgid "Table"
-msgstr "Aktiviert"
+msgstr "Tabelle"
 
 #: src/web/templates/web/account/account_email_table.html:11
 #: src/web/templates/web/account/account_table.html:13
@@ -326,7 +324,7 @@ msgstr "Aktiviert"
 #: src/web/templates/web/mailbox/mailbox_email_table.html:11
 #: src/web/templates/web/mailbox/mailbox_table.html:11
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 #: src/web/templates/web/account/account_filter_list.html:6
 #: src/web/templates/web/account/account_filter_list.html:10
@@ -725,20 +723,16 @@ msgid "Message Id"
 msgstr "Nachrichten-ID"
 
 #: src/web/templates/web/email/email_detail.html:53
-#, fuzzy
-#| msgid "X-Spam"
 msgid "Spam"
-msgstr "X-Spam"
+msgstr "Spam"
 
 #: src/web/templates/web/email/email_detail.html:55
-#, fuzzy
-#| msgid "bytes"
 msgid "yes"
-msgstr "Bytes"
+msgstr "Ja"
 
 #: src/web/templates/web/email/email_detail.html:57
 msgid "no"
-msgstr ""
+msgstr "Nein"
 
 #: src/web/templates/web/email/email_detail.html:79
 msgid "Plain bodytext"
@@ -791,7 +785,7 @@ msgstr "Du kannst einige aus Postfächern, die du eingerichtet hast, abrufen."
 
 #: src/web/templates/web/email/partials/_reprocess_email-button.html:5
 msgid "Reprocess"
-msgstr ""
+msgstr "Aktualisieren"
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:7
 msgid "Restore"
@@ -1035,10 +1029,8 @@ msgid "Test"
 msgstr "Test"
 
 #: src/web/utils/columns.py:59
-#, fuzzy
-#| msgid "Select All"
 msgid "Select"
-msgstr "Alle auswählen"
+msgstr "Auswählen"
 
 #: src/web/utils/forms.py:30 src/web/utils/forms.py:46
 msgid " *"

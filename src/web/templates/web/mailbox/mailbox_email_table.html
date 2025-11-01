@@ -1,0 +1,19 @@
+{% extends "web/mailbox/mailbox_email_filter_list.html" %}
+
+{% load translate from i18n %}
+
+{% load render_table from django_tables2 %}
+
+{% block header_buttons %}
+
+    <a role="button"
+       class="btn btn-outline-primary"
+       href="{% url 'web:mailbox-filter-list' %}"><i class="fa-solid fa-list" aria-hidden="true"></i> {% translate "List" %}</a>
+
+{% endblock header_buttons %}
+
+{% block list %}
+
+    {% render_table table %}
+
+{% endblock list %}

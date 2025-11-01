@@ -20,6 +20,7 @@
 
 from .CorrespondentDetailWithDeleteView import CorrespondentDetailWithDeleteView
 from .CorrespondentEmailsFilterView import CorrespondentEmailsFilterView
+from .CorrespondentEmailsTableView import CorrespondentEmailsTableView
 from .CorrespondentFilterView import CorrespondentFilterView
 from .CorrespondentTableView import CorrespondentTableView
 from .CorrespondentUpdateOrDeleteView import CorrespondentUpdateOrDeleteView
@@ -28,6 +29,7 @@ from .CorrespondentUpdateOrDeleteView import CorrespondentUpdateOrDeleteView
 __all__ = [
     "CorrespondentDetailWithDeleteView",
     "CorrespondentEmailsFilterView",
+    "CorrespondentEmailsTableView",
     "CorrespondentFilterView",
     "CorrespondentTableView",
     "CorrespondentUpdateOrDeleteView",

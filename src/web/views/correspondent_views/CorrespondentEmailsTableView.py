@@ -16,25 +16,22 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.mailbox_views package containing views for the :class:`core.models.Mailbox` data."""
+"""Module with the :class:`web.views.CorrespondentEmailsFilterView` view."""
+from typing import override
 
-from .MailboxCreateDaemonView import MailboxCreateDaemonView
-from .MailboxDetailWithDeleteView import MailboxDetailWithDeleteView
-from .MailboxEmailsFilterView import MailboxEmailsFilterView
-from .MailboxEmailsTableView import MailboxEmailsTableView
-from .MailboxFilterView import MailboxFilterView
-from .MailboxTableView import MailboxTableView
-from .MailboxUpdateOrDeleteView import MailboxUpdateOrDeleteView
-from .UploadEmailView import UploadEmailView
+from django_tables2.views import SingleTableMixin
+
+from web.tables import BaseEmailTable
+from web.views.correspondent_views import CorrespondentEmailsFilterView
 
 
-__all__ = [
-    "MailboxCreateDaemonView",
-    "MailboxDetailWithDeleteView",
-    "MailboxEmailsFilterView",
-    "MailboxEmailsTableView",
-    "MailboxFilterView",
-    "MailboxTableView",
-    "MailboxUpdateOrDeleteView",
-    "UploadEmailView",
-]
+class CorrespondentEmailsTableView(SingleTableMixin, CorrespondentEmailsFilterView):
+    """View for tabling :class:`core.models.Email` instances belonging to a certain correspondent."""
+
+    URL_NAME = "correspondent-emails-table"
+    template_name = "web/correspondent/correspondent_email_table.html"
+    table_class = BaseEmailTable
+
+    @override
+    def get_paginate_by(self, table_data) -> int | None:
+        return CorrespondentEmailsFilterView.get_paginate_by(self, table_data)

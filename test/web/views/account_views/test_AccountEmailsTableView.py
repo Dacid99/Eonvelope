@@ -16,54 +16,54 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Test module for :mod:`web.views.EmailTableView`."""
+"""Test module for :mod:`web.views.AccountEmailsTableView`."""
 
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
-from web.views import EmailTableView
+from core.models import Account
+from web.views import AccountEmailsTableView
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, list_url, login_url):
-    """Tests :class:`web.views.EmailTableView` with an unauthenticated user client."""
-    response = client.get(list_url(EmailTableView))
+def test_get_noauth(fake_account, client, detail_url, login_url):
+    """Tests :class:`web.views.AccountEmailsTableView` with an unauthenticated user client."""
+    response = client.get(detail_url(AccountEmailsTableView, fake_account))
 
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(login_url)
-    assert response.url.endswith(f"?next={list_url(EmailTableView)}")
+    assert response.url.endswith(
+        f"?next={detail_url(AccountEmailsTableView, fake_account)}"
+    )
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, list_url):
-    """Tests :class:`web.views.EmailTableView` with the authenticated other user client."""
-    response = other_client.get(list_url(EmailTableView))
+def test_get_auth_other(fake_account, other_client, detail_url):
+    """Tests :class:`web.views.AccountEmailsTableView` with the authenticated other user client."""
+    response = other_client.get(detail_url(AccountEmailsTableView, fake_account))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_account.mail_address not in response.content.decode()
+
+
+@pytest.mark.django_db
+def test_get_auth_owner(fake_account, owner_client, detail_url):
+    """Tests :class:`web.views.AccountEmailsTableView` with the authenticated owner user client."""
+    response = owner_client.get(detail_url(AccountEmailsTableView, fake_account))
 
     assert response.status_code == status.HTTP_200_OK
     assert isinstance(response, HttpResponse)
-    assert "web/email/email_filter_list.html" in [
+    assert "web/account/account_email_table.html" in [
         template.name for template in response.templates
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
     assert "page_size" in response.context
     assert "query" in response.context
-
-
-@pytest.mark.django_db
-def test_get_auth_owner(owner_client, list_url):
-    """Tests :class:`web.views.EmailTableView` with the authenticated owner user client."""
-    response = owner_client.get(list_url(EmailTableView))
-
-    assert response.status_code == status.HTTP_200_OK
-    assert isinstance(response, HttpResponse)
-    assert "web/email/email_filter_list.html" in [
-        template.name for template in response.templates
-    ]
-    assert "table" in response.context
-    assert "page_obj" in response.context
-    assert "page_size" in response.context
-    assert "query" in response.context
-    assert 'srcdoc="' not in response.content.decode()
+    assert "account" in response.context
+    assert isinstance(response.context["account"], Account)
+    with open("table.html", "w") as f:
+        f.write(response.content.decode())

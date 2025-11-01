@@ -33,6 +33,7 @@ from .views import (
     AccountCreateView,
     AccountDetailWithDeleteView,
     AccountEmailsFilterView,
+    AccountEmailsTableView,
     AccountFilterView,
     AccountTableView,
     AccountUpdateOrDeleteView,
@@ -41,6 +42,7 @@ from .views import (
     AttachmentTableView,
     CorrespondentDetailWithDeleteView,
     CorrespondentEmailsFilterView,
+    CorrespondentEmailsTableView,
     CorrespondentFilterView,
     CorrespondentTableView,
     CorrespondentUpdateOrDeleteView,
@@ -62,6 +64,7 @@ from .views import (
     MailboxCreateDaemonView,
     MailboxDetailWithDeleteView,
     MailboxEmailsFilterView,
+    MailboxEmailsTableView,
     MailboxFilterView,
     MailboxTableView,
     MailboxUpdateOrDeleteView,
@@ -98,6 +101,11 @@ urlpatterns = [
         "accounts/<int:pk>/emails/",
         AccountEmailsFilterView.as_view(),
         name=AccountEmailsFilterView.URL_NAME,
+    ),
+    path(
+        "accounts/<int:pk>/emails/table/",
+        AccountEmailsTableView.as_view(),
+        name=AccountEmailsTableView.URL_NAME,
     ),
     path(
         "accounts/<int:pk>/edit/",
@@ -143,6 +151,11 @@ urlpatterns = [
         "correspondents/<int:pk>/emails/",
         CorrespondentEmailsFilterView.as_view(),
         name=CorrespondentEmailsFilterView.URL_NAME,
+    ),
+    path(
+        "correspondents/<int:pk>/emails/table/",
+        CorrespondentEmailsTableView.as_view(),
+        name=CorrespondentEmailsTableView.URL_NAME,
     ),
     path(
         "correspondents/<int:pk>/edit/",
@@ -238,6 +251,11 @@ urlpatterns = [
         "mailboxes/<int:pk>/emails/",
         MailboxEmailsFilterView.as_view(),
         name=MailboxEmailsFilterView.URL_NAME,
+    ),
+    path(
+        "mailboxes/<int:pk>/emails/table/",
+        MailboxEmailsTableView.as_view(),
+        name=MailboxEmailsTableView.URL_NAME,
     ),
     path(
         "mailboxes/<int:pk>/edit/",

@@ -67,5 +67,3 @@ def test_get_auth_owner(owner_client, list_url):
     assert "page_size" in response.context
     assert "query" in response.context
     assert 'srcdoc="' not in response.content.decode()
-    with open("table.html", "w") as f:
-        f.write(response.content.decode())

@@ -23,7 +23,7 @@ from typing import override
 from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
-from web.tables import BaseEmailTable
+from web.tables import BaseCorrespondentEmailTable
 from web.views.correspondent_views import CorrespondentEmailsFilterView
 
 
@@ -32,7 +32,7 @@ class CorrespondentEmailsTableView(SingleTableMixin, CorrespondentEmailsFilterVi
 
     URL_NAME = "correspondent-emails-table"
     template_name = "web/correspondent/correspondent_email_table.html"
-    table_class = BaseEmailTable
+    table_class = BaseCorrespondentEmailTable
 
     @override
     def get_paginate_by(self, table_data: QuerySet) -> int | None:

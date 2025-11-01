@@ -69,3 +69,6 @@ def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
     assert "query" in response.context
     assert "correspondent" in response.context
     assert isinstance(response.context["correspondent"], Correspondent)
+
+    with open("table.html", "w") as f:
+        f.write(response.content.decode())

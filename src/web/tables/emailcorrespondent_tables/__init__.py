@@ -16,23 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-""":mod:`web.tables package` containing all tables for the Emailkasten webapp."""
+""":mod:`web.tables.emailcorrespondent_tables` package containing all tables for the emailcorrespondents in Emailkasten webapp."""
 
-from .account_tables import BaseAccountTable
-from .attachment_tables import BaseAttachmentTable
-from .correspondent_tables import BaseCorrespondentTable
-from .daemon_tables import BaseDaemonTable
-from .email_tables import BaseEmailTable
-from .emailcorrespondent_tables import BaseCorrespondentEmailTable
-from .mailbox_tables import BaseMailboxTable
+from .BaseCorrespondentEmailTable import BaseCorrespondentEmailTable
 
 
-__all__ = [
-    "BaseAccountTable",
-    "BaseAttachmentTable",
-    "BaseCorrespondentEmailTable",
-    "BaseCorrespondentTable",
-    "BaseDaemonTable",
-    "BaseEmailTable",
-    "BaseMailboxTable",
-]
+__all__ = ["BaseCorrespondentEmailTable"]

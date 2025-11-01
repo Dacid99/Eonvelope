@@ -29,3 +29,6 @@ class DaemonTableView(SingleTableMixin, DaemonFilterView):
     URL_NAME = "daemon-table"
     template_name = "web/daemon/daemon_table.html"
     table_class = BaseDaemonTable
+
+    def get_paginate_by(self, table_data) -> int | None:
+        return DaemonFilterView.get_paginate_by(self, table_data)

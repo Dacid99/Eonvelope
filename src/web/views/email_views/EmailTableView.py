@@ -29,3 +29,6 @@ class EmailTableView(SingleTableMixin, EmailFilterView):
     URL_NAME = "email-table"
     template_name = "web/email/email_table.html"
     table_class = BaseEmailTable
+
+    def get_paginate_by(self, table_data) -> int | None:
+        return EmailFilterView.get_paginate_by(self, table_data)

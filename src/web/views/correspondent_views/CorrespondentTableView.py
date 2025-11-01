@@ -31,3 +31,6 @@ class CorrespondentTableView(SingleTableMixin, CorrespondentFilterView):
     URL_NAME = "correspondent-table"
     template_name = "web/correspondent/correspondent_table.html"
     table_class = BaseCorrespondentTable
+
+    def get_paginate_by(self, table_data) -> int | None:
+        return CorrespondentFilterView.get_paginate_by(self, table_data)

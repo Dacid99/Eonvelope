@@ -29,3 +29,6 @@ class AttachmentTableView(SingleTableMixin, AttachmentFilterView):
     URL_NAME = "attachment-table"
     template_name = "web/attachment/attachment_table.html"
     table_class = BaseAttachmentTable
+
+    def get_paginate_by(self, table_data) -> int | None:
+        return AttachmentFilterView.get_paginate_by(self, table_data)

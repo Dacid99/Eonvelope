@@ -29,3 +29,6 @@ class MailboxTableView(SingleTableMixin, MailboxFilterView):
     URL_NAME = "mailbox-table"
     template_name = "web/mailbox/mailbox_table.html"
     table_class = BaseMailboxTable
+
+    def get_paginate_by(self, table_data) -> int | None:
+        return MailboxFilterView.get_paginate_by(self, table_data)

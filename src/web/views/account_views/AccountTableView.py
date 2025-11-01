@@ -29,3 +29,6 @@ class AccountTableView(SingleTableMixin, AccountFilterView):
     URL_NAME = "account-table"
     template_name = "web/account/account_table.html"
     table_class = BaseAccountTable
+
+    def get_paginate_by(self, table_data) -> int | None:
+        return AccountFilterView.get_paginate_by(self, table_data)

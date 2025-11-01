@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-09-29 21:34+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-10-09 18:07+0000\n"
+"Last-Translator: anukadszep <m1csibor6552@proton.me>\n"
+"Language-Team: Hungarian <https://hosted.weblate.org/projects/emailkasten/"
+"emailkasten/hu/>\n"
+"Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:730
 msgid "Received"
@@ -24,19 +25,19 @@ msgstr ""
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:734
 msgid "From"
-msgstr ""
+msgstr "Honnan"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:737
 msgid "To"
-msgstr ""
+msgstr "Hova"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:740
 msgid "CC"
-msgstr ""
+msgstr "CC"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:743
 msgid "BCC"
-msgstr ""
+msgstr "BCC"
 
 #: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:756
 msgid "Attachments"

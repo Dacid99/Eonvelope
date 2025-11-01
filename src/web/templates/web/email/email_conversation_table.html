@@ -1,0 +1,17 @@
+{% extends "web/email/email_conversation_filter_list.html" %}
+
+{% load render_table from django_tables2 %}
+
+{% load translate from i18n %}
+
+{% block header_buttons %}
+    <a role="button"
+       class="btn btn-outline-primary"
+       href="{% url 'web:email-conversation' email.id %}"><i class="fa-solid fa-list" aria-hidden="true"></i> {% translate "List" %}</a>
+{% endblock header_buttons %}
+
+{% block list %}
+
+    {% render_table table %}
+
+{% endblock list %}

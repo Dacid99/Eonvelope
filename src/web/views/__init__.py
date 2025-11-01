@@ -50,6 +50,7 @@ from .daemon_views import (
 from .DashboardView import DashboardView
 from .email_views import (
     EmailArchiveIndexView,
+    EmailConversationTableView,
     EmailConversationView,
     EmailDayArchiveView,
     EmailDetailWithDeleteView,
@@ -95,6 +96,7 @@ __all__ = [
     "DaemonUpdateOrDeleteView",
     "DashboardView",
     "EmailArchiveIndexView",
+    "EmailConversationTableView",
     "EmailConversationView",
     "EmailDayArchiveView",
     "EmailDetailWithDeleteView",

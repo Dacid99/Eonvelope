@@ -16,31 +16,26 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.email_views package containing views for the :class:`core.models.Email` data."""
+"""Module with the :class:`web.views.EmailConversationView` view."""
 
-from .archive_views import (
-    EmailArchiveIndexView,
-    EmailDayArchiveView,
-    EmailMonthArchiveView,
-    EmailWeekArchiveView,
-    EmailYearArchiveView,
-)
-from .EmailConversationTableView import EmailConversationTableView
+from typing import override
+
+from django.db.models import QuerySet
+from django_tables2.views import SingleTableMixin
+
+from web.tables import BaseEmailTable
+
 from .EmailConversationView import EmailConversationView
-from .EmailDetailWithDeleteView import EmailDetailWithDeleteView
-from .EmailFilterView import EmailFilterView
-from .EmailTableView import EmailTableView
 
 
-__all__ = [
-    "EmailArchiveIndexView",
-    "EmailConversationTableView",
-    "EmailConversationView",
-    "EmailDayArchiveView",
-    "EmailDetailWithDeleteView",
-    "EmailFilterView",
-    "EmailMonthArchiveView",
-    "EmailTableView",
-    "EmailWeekArchiveView",
-    "EmailYearArchiveView",
-]
+class EmailConversationTableView(SingleTableMixin, EmailConversationView):
+    """View for tabling :class:`core.models.Email` instances belonging to an emails conversation."""
+
+    URL_NAME = "email-conversation-table"
+    template_name = "web/email/email_conversation_table.html"
+    table_class = BaseEmailTable
+
+    @override
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
+        return EmailConversationView.get_paginate_by(self, table_data)

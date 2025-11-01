@@ -1,4 +1,24 @@
 {% extends 'django_tables2/bootstrap5-responsive.html' %}
 
+{% load django_tables2 %}
+
 {% block pagination %}
 {% endblock pagination %}
+
+{% block table.tfoot %}
+    {% if table.show_header %}
+        <tfoot {{ table.attrs.tfoot.as_html }}>
+            <tr>
+                {% for column in table.columns %}
+                    <th {{ column.attrs.th.as_html }} scope="col">
+                        {% if column.orderable %}
+                            <a href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">{{ column.header }}</a>
+                        {% else %}
+                            {{ column.header }}
+                        {% endif %}
+                    </th>
+                {% endfor %}
+            </tr>
+        </tfoot>
+    {% endif %}
+{% endblock table.tfoot %}

@@ -18,20 +18,24 @@
 
 """test.web.tables.email_tables package containing email tables of the Emailkasten webapp."""
 
+from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
 
 from core.models import Email
-from web.utils.columns import CheckboxColumn
+from web.utils.columns import CheckboxColumn, IsFavoriteColumn
 
 
 class BaseEmailTable(Table):
     checkbox = CheckboxColumn()
+    is_favorite = IsFavoriteColumn()
     subject = Column(linkify=True)
     mailbox = Column(
+        verbose_name=_("Mailbox"),
         linkify=lambda record: record.mailbox.get_absolute_url(),
         accessor="mailbox__name",
     )
     mailbox__account = Column(
+        verbose_name=_("Account"),
         linkify=lambda record: record.mailbox.account.get_absolute_url(),
         accessor="mailbox__account__mail_address",
     )
@@ -39,6 +43,7 @@ class BaseEmailTable(Table):
     class Meta:
         model = Email
         fields = (
+            "is_favorite",
             "subject",
             "datetime",
             "mailbox",
@@ -47,3 +52,6 @@ class BaseEmailTable(Table):
             "datasize",
         )
         sequence = ("checkbox", *fields)
+
+    def render_datasize(self, value):
+        return str(value) + " " + _("bytes")

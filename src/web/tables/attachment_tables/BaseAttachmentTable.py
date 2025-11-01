@@ -18,23 +18,28 @@
 
 """test.web.tables.attachment_tables package containing attachment tables of the Emailkasten webapp."""
 
+from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
 
 from core.models import Attachment
-from web.utils.columns import CheckboxColumn
+from web.utils.columns import CheckboxColumn, IsFavoriteColumn
 
 
 class BaseAttachmentTable(Table):
     file_name = Column(linkify=True)
     checkbox = CheckboxColumn()
+    is_favorite = IsFavoriteColumn()
     email = Column(
+        verbose_name=_("Email"),
         linkify=lambda record: record.email.get_absolute_url(),
         accessor="email__subject",
     )
+    content_type = Column(order_by=("content_maintype", "content_subtype"))
 
     class Meta:
         model = Attachment
         fields = (
+            "is_favorite",
             "file_name",
             "email",
             "content_disposition",
@@ -43,3 +48,6 @@ class BaseAttachmentTable(Table):
             "datasize",
         )
         sequence = ("checkbox", *fields)
+
+    def render_datasize(self, value):
+        return str(value) + " " + _("bytes")

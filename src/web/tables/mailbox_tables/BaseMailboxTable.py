@@ -18,26 +18,32 @@
 
 """test.web.tables.mailbox_tables package containing mailbox tables of the Emailkasten webapp."""
 
+from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
 
 from core.models import Mailbox
-from web.utils.columns import CheckboxColumn
+from web.utils.columns import CheckboxColumn, IsFavoriteColumn, IsHealthyColumn
 
 
 class BaseMailboxTable(Table):
     checkbox = CheckboxColumn()
+    is_favorite = IsFavoriteColumn()
+    is_healthy = IsHealthyColumn()
     name = Column(linkify=True)
     account = Column(
-        lambda record: record.account.get_absolute_url(),
+        verbose_name=_("Account"),
+        linkify=lambda record: record.account.get_absolute_url(),
         accessor="account__mail_address",
     )
 
     class Meta:
         model = Mailbox
         fields = (
+            "is_favorite",
             "name",
             "account",
             "save_attachments",
             "save_to_eml",
+            "is_healthy",
         )
         sequence = ("checkbox", *fields)

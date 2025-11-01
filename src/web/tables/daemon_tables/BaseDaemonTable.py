@@ -18,19 +18,22 @@
 
 """test.web.tables.daemon_tables package containing daemon tables of the Emailkasten webapp."""
 
+from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
 
 from core.models import Daemon
-from web.utils.columns import CheckboxColumn
+from web.utils.columns import CheckboxColumn, IsHealthyColumn
 
 
 class BaseDaemonTable(Table):
     checkbox = CheckboxColumn()
     uuid = Column(linkify=True)
     mailbox = Column(
+        verbose_name=_("Mailbox"),
         linkify=lambda record: record.mailbox.get_absolute_url(),
         accessor="mailbox__name",
     )
+    is_healthy = IsHealthyColumn()
 
     class Meta:
         model = Daemon
@@ -40,5 +43,6 @@ class BaseDaemonTable(Table):
             "fetching_criterion",
             "interval__period",
             "interval__every",
+            "is_healthy",
         )
         sequence = ("checkbox", *fields)

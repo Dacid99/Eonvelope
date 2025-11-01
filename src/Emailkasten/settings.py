@@ -618,8 +618,9 @@ CRISPY_FAIL_SILENTLY = not DEBUG
 
 DJANGO_TABLES2_TEMPLATE = "web/partials/_table.html"
 DJANGO_TABLES2_TABLE_ATTRS = {
-    "class": "table table-hover align-middle",
+    "class": "table table-hover table-bordered table-striped-columns align-middle",
     "tbody": {"class": "table-group-divider"},
+    "tfoot": {"class": "table-group-divider"},
 }
 
 

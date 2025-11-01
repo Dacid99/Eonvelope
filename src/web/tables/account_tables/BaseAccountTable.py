@@ -21,20 +21,24 @@
 from django_tables2 import Column, Table
 
 from core.models import Account
-from web.utils.columns import CheckboxColumn
+from web.utils.columns import CheckboxColumn, IsFavoriteColumn, IsHealthyColumn
 
 
 class BaseAccountTable(Table):
     checkbox = CheckboxColumn()
+    is_favorite = IsFavoriteColumn()
+    is_healthy = IsHealthyColumn()
     mail_address = Column(linkify=True)
 
     class Meta:
         model = Account
         fields = (
+            "is_favorite",
             "mail_address",
             "mail_host",
             "mail_host_port",
             "protocol",
             "timeout",
+            "is_healthy",
         )
         sequence = ("checkbox", *fields)

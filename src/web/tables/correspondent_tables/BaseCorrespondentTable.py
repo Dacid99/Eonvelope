@@ -21,16 +21,18 @@
 from django_tables2 import Column, Table
 
 from core.models import Correspondent
-from web.utils.columns import CheckboxColumn
+from web.utils.columns import CheckboxColumn, IsFavoriteColumn
 
 
 class BaseCorrespondentTable(Table):
     checkbox = CheckboxColumn()
+    is_favorite = IsFavoriteColumn()
     email_address = Column(linkify=True)
 
     class Meta:
         model = Correspondent
         fields = (
+            "is_favorite",
             "email_address",
             "email_name",
             "real_name",

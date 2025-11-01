@@ -29,9 +29,11 @@ def test_output(fake_account):
     assert len(values) == 1
     fields = table.columns
     assert "checkbox" in fields
+    assert "is_favorite" in fields
     assert "mail_address" in fields
     assert "mail_host" in fields
     assert "mail_host_port" in fields
     assert "protocol" in fields
     assert "timeout" in fields
-    assert len(fields) == 6
+    assert "is_healthy" in fields
+    assert len(fields) == 8

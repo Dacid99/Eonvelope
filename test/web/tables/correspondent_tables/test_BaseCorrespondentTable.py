@@ -29,7 +29,8 @@ def test_output(fake_correspondent):
     assert len(values) == 1
     fields = table.columns
     assert "checkbox" in fields
+    assert "is_favorite" in fields
     assert "email_address" in fields
     assert "email_name" in fields
     assert "real_name" in fields
-    assert len(fields) == 4
+    assert len(fields) == 5

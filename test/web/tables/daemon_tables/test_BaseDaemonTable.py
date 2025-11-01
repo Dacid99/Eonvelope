@@ -34,4 +34,5 @@ def test_output(fake_daemon):
     assert "fetching_criterion" in fields
     assert "interval__period" in fields
     assert "interval__every" in fields
-    assert len(fields) == 6
+    assert "is_healthy" in fields
+    assert len(fields) == 7

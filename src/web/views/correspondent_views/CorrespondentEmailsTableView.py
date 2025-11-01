@@ -17,8 +17,10 @@
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """Module with the :class:`web.views.CorrespondentEmailsFilterView` view."""
+
 from typing import override
 
+from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
 from web.tables import BaseEmailTable
@@ -33,5 +35,6 @@ class CorrespondentEmailsTableView(SingleTableMixin, CorrespondentEmailsFilterVi
     table_class = BaseEmailTable
 
     @override
-    def get_paginate_by(self, table_data) -> int | None:
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
         return CorrespondentEmailsFilterView.get_paginate_by(self, table_data)

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.mailbox_tables package containing mailbox tables of the Emailkasten webapp."""
+"""Module with the :class:`web.tables.BaseAccountTable` table class."""
 
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
@@ -26,6 +26,8 @@ from web.utils.columns import CheckboxColumn, IsFavoriteColumn, IsHealthyColumn
 
 
 class BaseMailboxTable(Table):
+    """Table class for :class:`core.models.Mailbox.Mailbox`."""
+
     checkbox = CheckboxColumn()
     is_favorite = IsFavoriteColumn()
     is_healthy = IsHealthyColumn()
@@ -37,6 +39,8 @@ class BaseMailboxTable(Table):
     )
 
     class Meta:
+        """Metadata class for the table."""
+
         model = Mailbox
         fields = (
             "is_favorite",

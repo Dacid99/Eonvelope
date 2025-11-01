@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.daemon_tables package containing daemon tables of the Emailkasten webapp."""
+"""Module with the :class:`web.tables.BaseDaemonTable` table class."""
 
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
@@ -26,6 +26,8 @@ from web.utils.columns import CheckboxColumn, IsHealthyColumn
 
 
 class BaseDaemonTable(Table):
+    """Table class for :class:`core.models.Daemon.Daemon`."""
+
     checkbox = CheckboxColumn()
     uuid = Column(linkify=True)
     mailbox = Column(
@@ -36,6 +38,8 @@ class BaseDaemonTable(Table):
     is_healthy = IsHealthyColumn()
 
     class Meta:
+        """Metadata class for the table."""
+
         model = Daemon
         fields = (
             "uuid",

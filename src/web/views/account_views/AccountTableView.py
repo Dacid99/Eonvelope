@@ -16,8 +16,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.account_views.AccountTableView module containing all the account table view for the Emailkasten webapp."""
+"""Module with the :class:`web.views.AccountTableView` view."""
 
+from typing import override
+
+from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
 from web.tables.account_tables.BaseAccountTable import BaseAccountTable
@@ -26,9 +29,13 @@ from .AccountFilterView import AccountFilterView
 
 
 class AccountTableView(SingleTableMixin, AccountFilterView):
+    """View for filtering a table of :class:`core.models.Account` instances."""
+
     URL_NAME = "account-table"
     template_name = "web/account/account_table.html"
     table_class = BaseAccountTable
 
-    def get_paginate_by(self, table_data) -> int | None:
+    @override
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
         return AccountFilterView.get_paginate_by(self, table_data)

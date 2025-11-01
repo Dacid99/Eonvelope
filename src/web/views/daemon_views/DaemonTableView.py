@@ -16,8 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.daemon_views.DaemonTableView module containing all the daemon table view for the Emailkasten webapp."""
+"""Module with the :class:`web.views.DaemonTableView` view."""
 
+from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
 from web.tables.daemon_tables.BaseDaemonTable import BaseDaemonTable
@@ -26,9 +27,12 @@ from .DaemonFilterView import DaemonFilterView
 
 
 class DaemonTableView(SingleTableMixin, DaemonFilterView):
+    """View for filtering a table of :class:`core.models.Daemon` instances."""
+
     URL_NAME = "daemon-table"
     template_name = "web/daemon/daemon_table.html"
     table_class = BaseDaemonTable
 
-    def get_paginate_by(self, table_data) -> int | None:
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
         return DaemonFilterView.get_paginate_by(self, table_data)

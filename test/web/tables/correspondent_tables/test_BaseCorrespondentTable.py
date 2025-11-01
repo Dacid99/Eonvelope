@@ -16,13 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.correspondent_tables module containing tests for the BaseCorrespondentTable class of the Emailkasten webapp."""
+"""Test module for the :class:`web.tables.correspondent_tables.BaseCorrespondentTable` class."""
 
 from core.models import Correspondent
 from web.tables import BaseCorrespondentTable
 
 
 def test_output(fake_correspondent):
+    """Test the data present in the table."""
     table = BaseCorrespondentTable(Correspondent.objects.all())
 
     values = table.rows

@@ -147,7 +147,7 @@ git config core.hooksPath tools/githooks/
 - reStructuredText (lextudio.restructuredtext) for docs, with config
 
 ```json
-    "restructuredtext.linter.doc8.extraArgs": ["--config /path/to/tools/doc8.ini"]
+    "restructuredtext.linter.doc8.extraArgs": ["--config tools/doc8.ini"]
 ```
 
 - bootstrap 5 intellisense etc.

@@ -16,8 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.correspondent_views.CorrespondentTableView module containing all the correspondent table view for the Emailkasten webapp."""
+"""Module with the :class:`web.views.CorrespondentTableView` view."""
 
+from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
 from web.tables.correspondent_tables.BaseCorrespondentTable import (
@@ -28,9 +29,12 @@ from .CorrespondentFilterView import CorrespondentFilterView
 
 
 class CorrespondentTableView(SingleTableMixin, CorrespondentFilterView):
+    """View for filtering a table of :class:`core.models.Correspondent` instances."""
+
     URL_NAME = "correspondent-table"
     template_name = "web/correspondent/correspondent_table.html"
     table_class = BaseCorrespondentTable
 
-    def get_paginate_by(self, table_data) -> int | None:
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
         return CorrespondentFilterView.get_paginate_by(self, table_data)

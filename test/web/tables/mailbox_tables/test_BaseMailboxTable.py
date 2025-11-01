@@ -16,13 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.mailbox_tables module containing tests for the BaseMailboxTable class of the Emailkasten webapp."""
+"""Test module for the :class:`web.tables.mailbox_tables.BaseMailboxTable` class."""
 
 from core.models import Mailbox
 from web.tables import BaseMailboxTable
 
 
 def test_output(fake_mailbox):
+    """Test the data present in the table."""
     table = BaseMailboxTable(Mailbox.objects.all())
 
     values = table.rows

@@ -16,13 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.attachment_tables module containing tests for the BaseAttachmentTable class of the Emailkasten webapp."""
+"""Test module for the :class:`web.tables.attachment_tables.BaseAttachmentTable` class."""
 
 from core.models import Attachment
 from web.tables import BaseAttachmentTable
 
 
 def test_output(fake_attachment):
+    """Test the data present in the table."""
     table = BaseAttachmentTable(Attachment.objects.all())
 
     values = table.rows

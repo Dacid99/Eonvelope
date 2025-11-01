@@ -20,6 +20,7 @@
 
 from typing import override
 
+from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
 from web.tables import BaseEmailTable
@@ -34,5 +35,6 @@ class MailboxEmailsTableView(SingleTableMixin, MailboxEmailsFilterView):
     table_class = BaseEmailTable
 
     @override
-    def get_paginate_by(self, table_data) -> int | None:
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
         return MailboxEmailsFilterView.get_paginate_by(self, table_data)

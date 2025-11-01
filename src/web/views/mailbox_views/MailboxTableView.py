@@ -16,8 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.mailbox_views.MailboxTableView module containing all the mailbox table view for the Emailkasten webapp."""
+"""Module with the :class:`web.views.MailboxTableView` view."""
 
+from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
 from web.tables.mailbox_tables.BaseMailboxTable import BaseMailboxTable
@@ -26,9 +27,12 @@ from .MailboxFilterView import MailboxFilterView
 
 
 class MailboxTableView(SingleTableMixin, MailboxFilterView):
+    """View for filtering a table of :class:`core.models.Mailbox` instances."""
+
     URL_NAME = "mailbox-table"
     template_name = "web/mailbox/mailbox_table.html"
     table_class = BaseMailboxTable
 
-    def get_paginate_by(self, table_data) -> int | None:
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
         return MailboxFilterView.get_paginate_by(self, table_data)

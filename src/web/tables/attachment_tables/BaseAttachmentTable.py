@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.attachment_tables package containing attachment tables of the Emailkasten webapp."""
+"""Module with the :class:`web.tables.BaseAttachmentTable` table class."""
 
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
@@ -26,6 +26,8 @@ from web.utils.columns import CheckboxColumn, IsFavoriteColumn
 
 
 class BaseAttachmentTable(Table):
+    """Table class for :class:`core.models.Attachment.Attachment`."""
+
     file_name = Column(linkify=True)
     checkbox = CheckboxColumn()
     is_favorite = IsFavoriteColumn()
@@ -37,6 +39,8 @@ class BaseAttachmentTable(Table):
     content_type = Column(order_by=("content_maintype", "content_subtype"))
 
     class Meta:
+        """Metadata class for the table."""
+
         model = Attachment
         fields = (
             "is_favorite",
@@ -49,5 +53,13 @@ class BaseAttachmentTable(Table):
         )
         sequence = ("checkbox", *fields)
 
-    def render_datasize(self, value):
+    def render_datasize(self, value: int) -> str:
+        """Renders the datasize value by adding the bytes unit.
+
+        Args:
+            value: The datasize value
+
+        Returns:
+            The string shown for datasize in the table.
+        """
         return str(value) + " " + _("bytes")

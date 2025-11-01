@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.correspondent_tables package containing correspondent tables of the Emailkasten webapp."""
+"""Module with the :class:`web.tables.BaseCorrespondentTable` table class."""
 
 from django_tables2 import Column, Table
 
@@ -25,11 +25,15 @@ from web.utils.columns import CheckboxColumn, IsFavoriteColumn
 
 
 class BaseCorrespondentTable(Table):
+    """Table class for :class:`core.models.Correspondent.Correspondent`."""
+
     checkbox = CheckboxColumn()
     is_favorite = IsFavoriteColumn()
     email_address = Column(linkify=True)
 
     class Meta:
+        """Metadata class for the table."""
+
         model = Correspondent
         fields = (
             "is_favorite",

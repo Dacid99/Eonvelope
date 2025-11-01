@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.tables.attachment_tables package containing all tables for the attachments in Emailkasten webapp."""
+""":mod:`web.tables.attachment_tables` package containing all tables for the attachments in Emailkasten webapp."""
 
 from .BaseAttachmentTable import BaseAttachmentTable
 

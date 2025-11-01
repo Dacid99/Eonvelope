@@ -16,4 +16,4 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.correspondent_tables package containing all tests for email tables of the Emailkasten webapp."""
+""":mod:`test.web.tables.correspondent_tables` package containing all tests for email tables of the Emailkasten webapp."""

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.email_tables package containing email tables of the Emailkasten webapp."""
+"""Module with the :class:`web.tables.BasDaemonTable` table class."""
 
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table
@@ -26,6 +26,8 @@ from web.utils.columns import CheckboxColumn, IsFavoriteColumn
 
 
 class BaseEmailTable(Table):
+    """Table class for :class:`core.models.Email.Email`."""
+
     checkbox = CheckboxColumn()
     is_favorite = IsFavoriteColumn()
     subject = Column(linkify=True)
@@ -41,6 +43,8 @@ class BaseEmailTable(Table):
     )
 
     class Meta:
+        """Metadata class for the table."""
+
         model = Email
         fields = (
             "is_favorite",
@@ -53,5 +57,13 @@ class BaseEmailTable(Table):
         )
         sequence = ("checkbox", *fields)
 
-    def render_datasize(self, value):
+    def render_datasize(self, value: int) -> str:
+        """Renders the datasize value by adding the bytes unit.
+
+        Args:
+            value: The datasize value
+
+        Returns:
+            The string shown for datasize in the table.
+        """
         return str(value) + " " + _("bytes")

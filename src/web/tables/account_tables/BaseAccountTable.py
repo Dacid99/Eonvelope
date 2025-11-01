@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.account_tables package containing account tables of the Emailkasten webapp."""
+"""Module with the :class:`web.tables.BaseAccountTable` table class."""
 
 from django_tables2 import Column, Table
 
@@ -25,12 +25,16 @@ from web.utils.columns import CheckboxColumn, IsFavoriteColumn, IsHealthyColumn
 
 
 class BaseAccountTable(Table):
+    """Table class for :class:`core.models.Account.Account`."""
+
     checkbox = CheckboxColumn()
     is_favorite = IsFavoriteColumn()
     is_healthy = IsHealthyColumn()
     mail_address = Column(linkify=True)
 
     class Meta:
+        """Metadata class for the table."""
+
         model = Account
         fields = (
             "is_favorite",

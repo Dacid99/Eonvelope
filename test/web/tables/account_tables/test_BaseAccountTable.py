@@ -16,13 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.account_tables module containing tests for the BaseAccountTable class of the Emailkasten webapp."""
+"""Test module for the :class:`web.tables.account_tables.BaseAccountTable` class."""
 
 from core.models import Account
 from web.tables import BaseAccountTable
 
 
 def test_output(fake_account):
+    """Test the data present in the table."""
     table = BaseAccountTable(Account.objects.all())
 
     values = table.rows

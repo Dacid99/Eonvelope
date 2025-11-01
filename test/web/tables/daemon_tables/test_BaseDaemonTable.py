@@ -16,13 +16,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""test.web.tables.daemon_tables module containing tests for the BaseDaemonTable class of the Emailkasten webapp."""
+"""Test module for the :class:`web.tables.daemon_tables.BaseDaemonTable` class."""
 
 from core.models import Daemon
 from web.tables import BaseDaemonTable
 
 
 def test_output(fake_daemon):
+    """Test the data present in the table."""
     table = BaseDaemonTable(Daemon.objects.all())
 
     values = table.rows

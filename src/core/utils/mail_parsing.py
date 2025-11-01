@@ -151,7 +151,7 @@ def parse_mailbox_name(mailbox_data: bytes | str) -> str:
         The result must not be changed afterwards, otherwise opening the mailbox via this name is not possible!
 
     Args:
-        mailbox_bytes: The mailbox name in bytes or as str as received from the mail server.
+        mailbox_data: The mailbox name in bytes or as str as received from the mail server.
 
     Returns:
         The serverside name of the mailbox

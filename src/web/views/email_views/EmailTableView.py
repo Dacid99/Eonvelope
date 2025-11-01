@@ -16,8 +16,9 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.views.email_views.EmailTableView module containing all the email table view for the Emailkasten webapp."""
+"""Module with the :class:`web.views.EmailTableView` view."""
 
+from django.db.models import QuerySet
 from django_tables2.views import SingleTableMixin
 
 from web.tables.email_tables.BaseEmailTable import BaseEmailTable
@@ -26,9 +27,12 @@ from .EmailFilterView import EmailFilterView
 
 
 class EmailTableView(SingleTableMixin, EmailFilterView):
+    """View for filtering a table of :class:`core.models.Email` instances."""
+
     URL_NAME = "email-table"
     template_name = "web/email/email_table.html"
     table_class = BaseEmailTable
 
-    def get_paginate_by(self, table_data) -> int | None:
+    def get_paginate_by(self, table_data: QuerySet) -> int | None:
+        """Overridden to reconcile mixin and view."""
         return EmailFilterView.get_paginate_by(self, table_data)

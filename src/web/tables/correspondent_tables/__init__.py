@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""web.tables.correspondent_tables package containing all tables for the correspondents in Emailkasten webapp."""
+""":mod:`web.tables.correspondent_tables` package containing all tables for the correspondents in Emailkasten webapp."""
 
 from .BaseCorrespondentTable import BaseCorrespondentTable
 

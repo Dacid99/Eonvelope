@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-29 21:34+0000\n"
+"POT-Creation-Date: 2025-11-01 22:05+0000\n"
 "PO-Revision-Date: 2025-10-09 19:07+0000\n"
 "Last-Translator: Adrián Gelmotto Ruiz <adriangelmotto@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/emailkasten/api/"
@@ -16,8 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
-" ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
+"0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:71
@@ -104,23 +104,23 @@ msgstr ""
 msgid "Uploaded correspondent to Nextcloud."
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:138
+#: src/api/v1/views/DaemonViewSet.py:142
 msgid "Tested routine"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:171
+#: src/api/v1/views/DaemonViewSet.py:175
 msgid "Routine started"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:174
+#: src/api/v1/views/DaemonViewSet.py:178
 msgid "Routine is already running"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:201
+#: src/api/v1/views/DaemonViewSet.py:205
 msgid "Routine stopped"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:204
+#: src/api/v1/views/DaemonViewSet.py:208
 msgid "Routine not running"
 msgstr ""
 

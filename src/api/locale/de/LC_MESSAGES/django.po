@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-29 21:34+0000\n"
+"POT-Creation-Date: 2025-11-01 22:05+0000\n"
 "PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/api/"
@@ -102,23 +102,23 @@ msgstr "Hochladen zu Nextcloud fehlgeschlagen."
 msgid "Uploaded correspondent to Nextcloud."
 msgstr "Korrespondent zu Nextcloud hochgeladen."
 
-#: src/api/v1/views/DaemonViewSet.py:138
+#: src/api/v1/views/DaemonViewSet.py:142
 msgid "Tested routine"
 msgstr "Routine getestet"
 
-#: src/api/v1/views/DaemonViewSet.py:171
+#: src/api/v1/views/DaemonViewSet.py:175
 msgid "Routine started"
 msgstr "Routine gestartet"
 
-#: src/api/v1/views/DaemonViewSet.py:174
+#: src/api/v1/views/DaemonViewSet.py:178
 msgid "Routine is already running"
 msgstr "Routine war bereits aktiviert"
 
-#: src/api/v1/views/DaemonViewSet.py:201
+#: src/api/v1/views/DaemonViewSet.py:205
 msgid "Routine stopped"
 msgstr "Routine gestoppt"
 
-#: src/api/v1/views/DaemonViewSet.py:204
+#: src/api/v1/views/DaemonViewSet.py:208
 msgid "Routine not running"
 msgstr "Routine nicht aktiv"
 

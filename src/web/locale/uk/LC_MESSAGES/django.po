@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-01 22:05+0000\n"
-"PO-Revision-Date: 2025-09-30 23:02+0000\n"
+"PO-Revision-Date: 2025-11-04 06:51+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
 "web/uk/>\n"
@@ -16,11 +16,12 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && "
+"(n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && "
+"(n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 ))"
+" ? 2: 3);\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -310,10 +311,8 @@ msgstr "в"
 #: src/web/templates/web/email/email_filter_list.html:23
 #: src/web/templates/web/mailbox/mailbox_email_filter_list.html:15
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:21
-#, fuzzy
-#| msgid "Enabled"
 msgid "Table"
-msgstr "Увімкнено"
+msgstr "Таблиця"
 
 #: src/web/templates/web/account/account_email_table.html:11
 #: src/web/templates/web/account/account_table.html:13
@@ -326,7 +325,7 @@ msgstr "Увімкнено"
 #: src/web/templates/web/mailbox/mailbox_email_table.html:11
 #: src/web/templates/web/mailbox/mailbox_table.html:11
 msgid "List"
-msgstr ""
+msgstr "Список"
 
 #: src/web/templates/web/account/account_filter_list.html:6
 #: src/web/templates/web/account/account_filter_list.html:10
@@ -729,20 +728,16 @@ msgid "Message Id"
 msgstr "Ідентифікатор повідомлення"
 
 #: src/web/templates/web/email/email_detail.html:53
-#, fuzzy
-#| msgid "X-Spam"
 msgid "Spam"
-msgstr "X-Спам"
+msgstr "Спам"
 
 #: src/web/templates/web/email/email_detail.html:55
-#, fuzzy
-#| msgid "bytes"
 msgid "yes"
-msgstr "байти"
+msgstr "так"
 
 #: src/web/templates/web/email/email_detail.html:57
 msgid "no"
-msgstr ""
+msgstr "ні"
 
 #: src/web/templates/web/email/email_detail.html:79
 msgid "Plain bodytext"
@@ -795,7 +790,7 @@ msgstr "Ви можете отримати деякі з поштових скр
 
 #: src/web/templates/web/email/partials/_reprocess_email-button.html:5
 msgid "Reprocess"
-msgstr ""
+msgstr "Повторна обробка"
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:7
 msgid "Restore"
@@ -1039,10 +1034,8 @@ msgid "Test"
 msgstr "Тест"
 
 #: src/web/utils/columns.py:59
-#, fuzzy
-#| msgid "Select All"
 msgid "Select"
-msgstr "Вибрати все"
+msgstr "Виберіть"
 
 #: src/web/utils/forms.py:30 src/web/utils/forms.py:46
 msgid " *"

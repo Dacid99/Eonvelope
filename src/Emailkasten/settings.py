@@ -29,6 +29,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from __future__ import annotations
 
 import re
+import socket
 import sys
 from pathlib import Path
 
@@ -70,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "debug_toolbar",
     "django_filters",
     "django_tables2",
     "rest_framework",
@@ -372,9 +374,14 @@ LANGUAGE_CODE = "en"
 
 WSGI_APPLICATION = "Emailkasten.wsgi.application"
 
+# https://knasmueller.net/fix-djangos-debug-toolbar-not-showing-inside-docker
+hostname, __, ips = socket.gethostbyname_ex(socket.gethostname())
+INTERNAL_IPS = [".".join([*ip.split(".")[:-1], "1"]) for ip in ips]
+
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -388,9 +395,15 @@ MIDDLEWARE = [
 ]
 
 # Security
-ALLOWED_HOSTS = env("ALLOWED_HOSTS", cast=list, default=["localhost"])
+ALLOWED_HOSTS = env("ALLOWED_HOSTS", cast=list, default=["localhost", "127.0.0.1"])
 if "localhost" not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append("localhost")
+if "127.0.0.1" not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append("127.0.0.1")
+if "0.0.0.0" not in ALLOWED_HOSTS and DEBUG:
+    ALLOWED_HOSTS.append(
+        "0.0.0.0"  # noqa: S104 ; allow access from inside the docker container
+    )
 
 DISALLOWED_USER_AGENTS = [
     re.compile(pattern)
@@ -519,6 +532,14 @@ SITE_ID = 1
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+##### django-debug-toolbar #####
+# https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html
+
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar_with_docker",
+}
 
 
 ##### restframework #####

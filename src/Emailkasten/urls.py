@@ -23,9 +23,9 @@ The `urlpatterns` list routes URLs to views. For more information please see:
 References:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
 """
-
 from __future__ import annotations
 
+from debug_toolbar.toolbar import debug_toolbar_urls
 from django.contrib import admin
 from django.urls import include, path, re_path
 from drf_spectacular.views import (
@@ -65,4 +65,5 @@ urlpatterns = [
     path("", include("web.urls")),
     path("users/", include("allauth.urls")),
     path("users/profile/", UserProfileView.as_view(), name=UserProfileView.URL_NAME),
+    *debug_toolbar_urls(),
 ]

@@ -1138,6 +1138,22 @@ files = [
 django = ">=4.2"
 
 [[package]]
+name = "django-debug-toolbar"
+version = "6.1.0"
+description = "A configurable set of panels that display various debug information about the current request/response."
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "django_debug_toolbar-6.1.0-py3-none-any.whl", hash = "sha256:e214dea4494087e7cebdcea84223819c5eb97f9de3110a3665ad673f0ba98413"},
+    {file = "django_debug_toolbar-6.1.0.tar.gz", hash = "sha256:e962ec350c9be8bdba918138e975a9cdb193f60ec396af2bb71b769e8e165519"},
+]
+
+[package.dependencies]
+django = ">=4.2.9"
+sqlparse = ">=0.2"
+
+[[package]]
 name = "django-dirtyfields"
 version = "1.9.7"
 description = "Tracking dirty fields on a Django model instance."
@@ -4317,4 +4333,4 @@ types = ["mypy (==1.18.2)", "types-python-dateutil (==2.9.0.20251008)", "types-r
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "fd809eda6ad0a30661528e991b2a1a9ffddb3f65a663dc6d75c3d78de2b1e99d"
+content-hash = "76babd2156b87a602b21a9febc8ae2a0150f38f7303569ae8125bec9d16695e4"

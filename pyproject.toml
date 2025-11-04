@@ -41,6 +41,7 @@ dependencies = [
     "django-tables2 (>=2.7.5,<3.0.0)",
     "django-debug-toolbar (>=6.1.0,<7.0.0)",
     "django-import-export[all] (>=4.3.13,<5.0.0)",
+    "django-schema-viewer (>=0.5.3,<0.6.0)",
 ]
 
 [tool.poetry]

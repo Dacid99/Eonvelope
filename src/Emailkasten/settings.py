@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "debug_toolbar",
     "import_export",
+    "schema_viewer",
     "django_filters",
     "django_tables2",
     "rest_framework",

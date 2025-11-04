@@ -1315,6 +1315,21 @@ files = [
 ]
 
 [[package]]
+name = "django-schema-viewer"
+version = "0.5.3"
+description = "Visualizes a DB schema based on Django models"
+optional = false
+python-versions = ">=3.10"
+groups = ["main"]
+files = [
+    {file = "django_schema_viewer-0.5.3-py3-none-any.whl", hash = "sha256:f6385d74c6e2c5e204fc7b2b8d7d25affe63f9f6b96b03e79e5b094b5012588a"},
+    {file = "django_schema_viewer-0.5.3.tar.gz", hash = "sha256:d5bdaa7cfec0827d1232f1d79f746ea5a7f42bf6abf2359615084acb230b2d1c"},
+]
+
+[package.dependencies]
+django = ">=4.0"
+
+[[package]]
 name = "django-stubs"
 version = "5.2.7"
 description = "Mypy stubs for Django"
@@ -4674,4 +4689,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "f0d11b5f6339658ce90ca51fb7c9549e1c4ff2353a0e8575b22841f243eb6ac9"
+content-hash = "deae7703a6112ed1de16fadf1f6d0f3e44bda9ce925b5b98810c30344464ed60"

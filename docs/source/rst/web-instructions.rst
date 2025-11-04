@@ -341,6 +341,8 @@ If you have a file in a proprietary format like .msg or .ost,
 please convert it to one of the upper formats using a conversion tool,
 plenty of these are available on github and other platforms.
 
+You can also import data in various tabular formats into the database via the admin panel.
+
 
 Export
 ^^^^^^
@@ -350,3 +352,6 @@ or by handpicking and downloading these emails in a bunch.
 The second option is currently only available via the API.
 Please refer to the :doc:`API documentation for instructions <api-instructions>` on the usage of these endpoints.
 The same formats as above are accepted.
+
+You can also export data from the database in various tabular formats via the admin panel.
+The supported formats are csv, xls, xlsx, tsv, ods, json, yaml, html.

@@ -29,3 +29,8 @@ there is also always a link to the relevant source code position in the bottom r
 
 Please do not use AI tools or other types of computer translation.
 We want translations that are created by real people with a feel for context and intent.
+
+
+It is important to note that some translations in this project come from third-party packages.
+If a language is missing in their source, it will be missing in this project as well.
+To add that language you may have to refer to the translation setup of that third-party.

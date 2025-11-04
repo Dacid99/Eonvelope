@@ -55,7 +55,10 @@ Programs that migrate databases from other applications to the Emailkasten datab
 
 If you are interested in such an endeavour, please get in touch.
 
-You can find a graphical representation of the Emailkasten database layout :doc:`on this page <db-graph>`.
+
+You can find an interactive graphical representation of the Emailkasten database layout
+under the `/db-schema/` url of your instance
+or :doc:`on this page <db-graph>`.
 We are always happy to help and give additional detailed information about the database layout.
 
 

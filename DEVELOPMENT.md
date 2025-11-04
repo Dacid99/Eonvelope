@@ -60,7 +60,7 @@ pytest test
 
 If you want to test your changes manually, you can use test your docker image by setting *DEBUG=True*.
 
-In that case the container uses djangos runserver instead of gunicorn, allowing you to manipulate the source and static files while the server is running, e.g. via docker exec. Additionally, all internal errors will surface as error webpages with full context of the error.
+In that case the container uses djangos runserver instead of gunicorn, allowing you to manipulate the source and static files while the server is running, e.g. via docker exec. Additionally, all internal errors will surface as error webpages with full context of the error and the django-debug toolbar will be shown on webpages.
 
 To test the webui on other devices, like your phone or tablet, add your machines IP to ALLOWED_HOSTS and you will be able to access the debug application from other devices as well.
 

@@ -191,7 +191,7 @@ docstring-min-length=-1
 #function-rgx=
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=_,__,pk,OK,CC,TO,ID,id,Id,MH,mh
+good-names=_,__,pk,OK,CC,TO,ID,id,Id,MH,mh,ip,IP
 
 # Good variable names regexes, separated by a comma. If names match any regex,
 # they will always be accepted
@@ -301,7 +301,7 @@ ignored-parents=django.db.models.enums.Choices,
 max-args=5
 
 # Maximum number of attributes for a class (see R0902).
-max-attributes=7
+max-attributes=10
 
 # Maximum number of boolean expressions in an if statement (see R0916).
 max-bool-expr=5

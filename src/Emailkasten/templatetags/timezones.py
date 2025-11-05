@@ -71,7 +71,7 @@ def do_get_available_timezones(parser, token) -> GetAvailableTimezonesNode:
     # token.split_contents() isn't useful here because this tag doesn't accept
     # variable as arguments.
     args = token.contents.split()
-    if len(args) != 3 or args[1] != "as":
+    if len(args) != 3 or args[1] != "as":  # noqa: PLR2004 ; just checking for length
         # pylint: disable=consider-using-f-string  # does not need to be evaluated early
         raise TemplateSyntaxError(
             "'get_available_timezones' requires 'as variable' (got %r)"  # noqa: UP031

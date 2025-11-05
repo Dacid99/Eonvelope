@@ -31,7 +31,7 @@ from Emailkasten.settings import CONSTANCE_CONFIG
 logger = logging.getLogger(__name__)
 
 
-def get_config(setting: str) -> Any:
+def get_config(setting: str) -> Any:  # noqa: ANN401 ; can truly return anything
     """A dirty workaround to enable constance to do the initial migration.
 
     Initial migrations fail otherwise because the models depend on constance that is not initialized yet.

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-06 18:26+0000\n"
-"PO-Revision-Date: 2025-11-02 22:51+0000\n"
+"PO-Revision-Date: 2025-11-06 19:18+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/web/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -113,10 +113,8 @@ msgid "Email"
 msgstr "E-Mail"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:40
-#, fuzzy
-#| msgid "Content Id"
 msgid "Content type"
-msgstr "Inhalt-ID"
+msgstr "Inhaltstyp"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:68
 #: src/web/tables/email_tables/BaseEmailTable.py:69
@@ -646,7 +644,7 @@ msgstr "Stoppen"
 
 #: src/web/templates/web/dashboard.html:6
 msgid "Dashboard"
-msgstr "Startseite"
+msgstr "Dashboard"
 
 #: src/web/templates/web/dashboard.html:10
 msgid "Welcome to Emailkasten"

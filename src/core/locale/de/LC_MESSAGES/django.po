@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-06 18:26+0000\n"
-"PO-Revision-Date: 2025-11-02 22:51+0000\n"
+"PO-Revision-Date: 2025-11-06 19:18+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/emailkasten/core/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: src/core/constants.py:38
 msgid "All emails received the last DAY"
@@ -100,8 +100,6 @@ msgid "POP3"
 msgstr "POP3"
 
 #: src/core/constants.py:102
-#, fuzzy
-#| msgid "POP3  (unencrypted)"
 msgid "POP3 (unencrypted)"
 msgstr "POP3 (unverschlüsselt)"
 

@@ -43,6 +43,7 @@ SCHEMA_NAME = "schema"
 urlpatterns = [
     # root
     path("admin/", admin.site.urls),
+    path("", include("pwa.urls")),
     path("db-schema/", include("schema_viewer.urls")),
     path("health/", include("health_check.urls")),
     path("", include("django_prometheus.urls")),

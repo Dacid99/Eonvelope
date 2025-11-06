@@ -21,7 +21,7 @@ As a user you may like this application because of
 - Identification of related emails
 - Restoring of emails to your mailaccount
 - Cross integrations with other self-hosted projects like Paperless-ngx, Searxng and Grafana
-- Mobile-friendly Bootstrap5 webapp
+- Mobile-friendly Bootstrap5 webapp with PWA support
 - Easy filtering and searching options for your archived emails, attachments and correspondents
 
 As an admin you may choose this project because of its

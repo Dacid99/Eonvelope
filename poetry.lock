@@ -1322,6 +1322,21 @@ Django = ">=4.2,<6.0"
 prometheus-client = ">=0.7"
 
 [[package]]
+name = "django-pwa"
+version = "2.0.1"
+description = "A Django app to include a manifest.json and Service Worker instance to enable progressive web app behavior"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "django_pwa-2.0.1-py3-none-any.whl", hash = "sha256:41dc931c645c6125c556bd753205ca051aa48e5d46edbf281003594f3d76d4a3"},
+    {file = "django_pwa-2.0.1.tar.gz", hash = "sha256:5539fabb41fe189cc2a82cb1f0f889b45671a8144d7b5bb5206a9ddd0fddb3c2"},
+]
+
+[package.dependencies]
+django = ">=3.2"
+
+[[package]]
 name = "django-robots"
 version = "6.1"
 description = "Robots exclusion application for Django, complementing Sitemaps."
@@ -4701,4 +4716,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "01d07e6285e4c725ec9f205a7564631424d75b1f59c4b9e0e212041afa09b6ca"
+content-hash = "3fbd4513feb9a134e986adb7e5780b308ddd68e3dbe45dfa5aad3286932f7f50"

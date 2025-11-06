@@ -34,6 +34,7 @@ import sys
 from pathlib import Path
 
 import tomli
+from django.utils.translation import get_language, get_language_bidi
 from django.utils.translation import gettext_lazy as _
 from environ import FileAwareEnv
 
@@ -70,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "pwa",
     "django_extensions",
     "django_prometheus",
     "debug_toolbar",
@@ -547,6 +549,44 @@ SITE_ID = 1
 
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+##### django-pwa #####
+# https://pypi.org/project/django-pwa/
+
+PWA_APP_NAME = _("Emailkasten")
+PWA_APP_DESCRIPTION = _("Your email archiving server")
+PWA_APP_THEME_COLOR = "#0d6efd"
+PWA_APP_BACKGROUND_COLOR = "#ffffff"
+PWA_APP_DISPLAY = "standalone"
+PWA_APP_SCOPE = "/"
+PWA_APP_ORIENTATION = "any"
+PWA_APP_START_URL = "/dashboard/"
+PWA_APP_STATUS_BAR_COLOR = "default"
+PWA_APP_ICONS = [{"src": STATIC_URL + "favicon.ico", "sizes": "512x512"}]
+PWA_APP_ICONS_APPLE = [{"src": STATIC_URL + "favicon.ico", "sizes": "512x512"}]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        "src": STATIC_URL + "favicon.ico",
+        "media": "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
+    }
+]
+PWA_APP_DIR = "rtl" if get_language_bidi() else "ltr"
+PWA_APP_LANG = get_language()
+PWA_APP_SHORTCUTS = [
+    {
+        "name": _("Dashboard"),
+        "url": "/dashboard/",
+        "description": _("Shortcut to the dashboard"),
+    },
+    {
+        "name": _("Timeline"),
+        "url": "/emails/archive/",
+        "description": _("Shortcut to the email timeline"),
+    },
+]
+PWA_APP_SCREENSHOTS = []
+PWA_APP_DEBUG_MODE = DEBUG
 
 
 ##### django-debug-toolbar #####

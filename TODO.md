@@ -41,6 +41,7 @@
 ## To implement
 
 - favicon.ico for the icon
+- staticfiles subfolder for icons
 
 ### Work in progress
 
@@ -50,6 +51,7 @@
 
 ## To fix
 
+- automerge weblate
 - filteroptions for existing db entries leak other user data
 - fetching too many emails leads to browser timeout
 - ci:

@@ -14,6 +14,9 @@ To log in, open the webapp by opening the IP address of your server
 with the port of the application, by default ``1122``.
 Emailkasten will force you to use HTTPS using its certificate, so the url must start with *https://*.
 
+You can install Emailkasten as a progressive-webapp on your device to use it like a regular app.
+The way you can do this depends on your browser.
+
 Registration
 ------------
 

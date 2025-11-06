@@ -1,6 +1,7 @@
 {% load static allauth %}
 {% load bootstrap_css bootstrap_field bootstrap_javascript from django_bootstrap5 %}
 {% load translate get_current_language from i18n %}
+{% load progressive_web_app_meta from pwa %}
 
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
@@ -12,6 +13,7 @@
         <meta name="copyright"
               content="© 2025 David Aderbauer &amp; The Emailkasten Contributors." />
         <meta name="license" content="AGPLv3" />
+        {% progressive_web_app_meta %}
         <title>
 
             {% block head_title %}

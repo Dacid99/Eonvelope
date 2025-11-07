@@ -19,6 +19,7 @@
 """Test module for :mod:`web.views.DashboardView`."""
 
 import pytest
+from django.conf import settings
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 from rest_framework import status
@@ -48,6 +49,12 @@ def test_get_auth_other(other_client, list_url):
     assert "emails_count" in response.context
     assert "attachments_count" in response.context
     assert "correspondents_count" in response.context
+    assert "settings" in response.context
+    assert "VERSION" in response.context["settings"]
+    assert "DEBUG" in response.context["settings"]
+    assert "SECRET_KEY" not in response.context["settings"]
+    assert response.context["settings"]["VERSION"] == settings.VERSION
+    assert response.context["settings"]["DEBUG"] == settings.DEBUG
 
 
 @pytest.mark.django_db
@@ -65,3 +72,9 @@ def test_get_auth_owner(owner_client, list_url):
     assert isinstance(response.context["attachments_count"], int)
     assert "correspondents_count" in response.context
     assert isinstance(response.context["correspondents_count"], int)
+    assert "settings" in response.context
+    assert "VERSION" in response.context["settings"]
+    assert "DEBUG" in response.context["settings"]
+    assert "SECRET_KEY" not in response.context["settings"]
+    assert response.context["settings"]["VERSION"] == settings.VERSION
+    assert response.context["settings"]["DEBUG"] == settings.DEBUG

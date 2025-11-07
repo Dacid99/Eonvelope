@@ -10,6 +10,12 @@
             <span class="me-1">{% translate "Licensed under the AGPLv3." %}</span>
         </p>
         <p>
+            {% translate "Version" %} {{ settings.VERSION }}
+            {% if settings.DEBUG %}
+                {% translate "DEBUG" %}
+            {% endif %}
+        </p>
+        <p>
             <a class="link-primary"
                href="https://dacid99.gitlab.io/emailkasten"
                target="_blank"

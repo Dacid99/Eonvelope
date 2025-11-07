@@ -460,6 +460,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django_settings_export.settings_export",
             ],
         },
     },
@@ -598,6 +599,15 @@ PWA_APP_DEBUG_MODE = DEBUG
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar_with_docker",
 }
+
+##### django-settings-export #####
+# https://github.com/jkbrzt/django-settings-export/blob/master/README.md
+# !! package is quite old but very small; it may break at some point !!
+
+SETTINGS_EXPORT = [
+    "DEBUG",
+    "VERSION",
+]
 
 
 ##### django_prometheus ######

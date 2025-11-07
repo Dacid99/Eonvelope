@@ -1339,6 +1339,20 @@ files = [
 django = ">=4.0"
 
 [[package]]
+name = "django-settings-export"
+version = "1.2.1"
+description = "This Django app allows you to export certain settings to your templates."
+optional = false
+python-versions = "*"
+groups = ["main"]
+files = [
+    {file = "django-settings-export-1.2.1.tar.gz", hash = "sha256:fceeae49fc597f654c1217415d8e049fc81c930b7154f5d8f28c432db738ff79"},
+]
+
+[package.dependencies]
+django = "*"
+
+[[package]]
 name = "django-stubs"
 version = "5.2.7"
 description = "Mypy stubs for Django"
@@ -4691,4 +4705,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<4.0"
-content-hash = "3fbd4513feb9a134e986adb7e5780b308ddd68e3dbe45dfa5aad3286932f7f50"
+content-hash = "91d6358e98cbe2c3881c0e4d7c57ac3a06b7da5ae3f1952e7fa00eae8b4d9eac"

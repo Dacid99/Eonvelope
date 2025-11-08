@@ -2122,7 +2122,6 @@ files = [
 ]
 
 [package.dependencies]
-pyyaml = {version = ">=6.0.3", markers = "python_version >= \"3.14\""}
 pyyaml-ft = {version = ">=8.0.0", markers = "python_version == \"3.13\""}
 
 [[package]]
@@ -3576,7 +3575,6 @@ description = "YAML parser and emitter for Python with support for free-threadin
 optional = false
 python-versions = ">=3.13"
 groups = ["dev"]
-markers = "python_version == \"3.13\""
 files = [
     {file = "pyyaml_ft-8.0.0-cp313-cp313-macosx_10_13_x86_64.whl", hash = "sha256:8c1306282bc958bfda31237f900eb52c9bedf9b93a11f82e1aab004c9a5657a6"},
     {file = "pyyaml_ft-8.0.0-cp313-cp313-macosx_11_0_arm64.whl", hash = "sha256:30c5f1751625786c19de751e3130fc345ebcba6a86f6bddd6e1285342f4bbb69"},
@@ -4704,5 +4702,5 @@ files = [
 
 [metadata]
 lock-version = "2.1"
-python-versions = ">=3.13,<4.0"
-content-hash = "91d6358e98cbe2c3881c0e4d7c57ac3a06b7da5ae3f1952e7fa00eae8b4d9eac"
+python-versions = ">=3.13,<3.14"
+content-hash = "82604fd317624559996a09f39a2f9b72216fe471138fce06b1ec10e6e36a61b1"

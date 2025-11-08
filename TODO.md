@@ -19,6 +19,11 @@
 - show pwd button
 - table and list as nav-dropdown options in main navbar
 
+## Notes
+
+- migration to py3.14
+  - mailbox package behaves differently
+
 ## To refactor
 
 - safeimap and pop classes

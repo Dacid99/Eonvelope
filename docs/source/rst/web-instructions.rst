@@ -1,7 +1,7 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Webapp Instructions
@@ -12,9 +12,9 @@ Getting started
 
 To log in, open the webapp by opening the IP address of your server
 with the port of the application, by default ``1122``.
-Emailkasten will force you to use HTTPS using its certificate, so the url must start with *https://*.
+Eonvelope will force you to use HTTPS using its certificate, so the url must start with *https://*.
 
-You can install Emailkasten as a progressive-webapp on your device to use it like a regular app.
+You can install Eonvelope as a progressive-webapp on your device to use it like a regular app.
 The way you can do this depends on your browser.
 
 Registration
@@ -177,7 +177,7 @@ The following criteria are available:
 .. note::
     For a complete coverage of all emails that enter and exit a mailaccount,
     set up a routine for both the INBOX and the Sent mailbox.
-    That way you can make use of Emailkasten's feature to capture, archive and map complete conversations.
+    That way you can make use of Eonvelope's feature to capture, archive and map complete conversations.
     Additionally you can archive your drafts by fetching that mailbox repeatedly.
 
 .. note::
@@ -193,7 +193,7 @@ The following criteria are available:
     If you use a different emailarchive server as backup, you may not be able to use filtering by RECENT or UNSEEN,
     since that may lead to race conditions between the two servers.
     Just use the time-based filters instead.
-    Emailkasten with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
+    Eonvelope with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
 
 The *interval-period* setting defines the time unit that lies between two routine jobs runs.
 The *interval-every* parameter defines
@@ -221,7 +221,7 @@ Archived data
 
 Once data from your emails has been collected and archived, you can view it using the web interface.
 
-Emailkasten gathers data about three types of information in your emails. Attachments, correspondents and of course the emails themselves.
+Eonvelope gathers data about three types of information in your emails. Attachments, correspondents and of course the emails themselves.
 
 Each of these can be search and filtered by various criteria. Every single item can be viewed individually as well.
 Items that are important to you can marked as favorites. Just click the star icon in the card of the item to toggle the favorite status.
@@ -246,7 +246,7 @@ Conversations
 """""""""""""
 
 Emails contains headers linking them with other emails.
-Using this data allows Emailkasten to reconstruct complete conversations, given that all emails in it are present.
+Using this data allows Eonvelope to reconstruct complete conversations, given that all emails in it are present.
 Otherwise the conversations may only be fragmentary.
 We try to make sure to fetch emails in the correct chronological order to be able to resolve all links.
 Nonetheless it may happen that a single fetch of many connected mails does not find all conversations.

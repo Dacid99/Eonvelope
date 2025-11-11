@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -24,7 +24,7 @@ from typing import TYPE_CHECKING, Final
 
 from rest_framework import serializers
 
-from Emailkasten.models import UserProfile
+from eonvelope.models import UserProfile
 
 
 if TYPE_CHECKING:
@@ -32,10 +32,10 @@ if TYPE_CHECKING:
 
 
 class UserProfileSerializer(serializers.ModelSerializer[UserProfile]):
-    """The serializer for :class:`Emailkasten.models.UserProfile`."""
+    """The serializer for :class:`eonvelope.models.UserProfile`."""
 
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    """The :attr:`Emailkasten.models.UserProfile.user` field is included but hidden."""
+    """The :attr:`eonvelope.models.UserProfile.user` field is included but hidden."""
 
     class Meta:
         """Metadata class for the serializer."""

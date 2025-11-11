@@ -1,18 +1,18 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Import Graphs
 =============
 
-A graphical overview of the internal and external dependencies of the Emailkasten package
+A graphical overview of the internal and external dependencies of the Eonvelope package
 
-Emailkasten package
+Eonvelope package
 -------------------
 
-.. image:: ../Emailkasten_import_graph.svg
+.. image:: ../Eonvelope_import_graph.svg
 
 
 core package

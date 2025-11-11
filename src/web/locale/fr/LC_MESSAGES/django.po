@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2025-11-06 18:26+0000\n"
 "PO-Revision-Date: 2025-09-14 20:02+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/emailkasten/web/"
+"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/web/"
 "fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -477,8 +477,8 @@ msgstr "Contenu du fichier en pièce jointe"
 
 #: src/web/templates/web/bases/base.html:22
 #: src/web/templates/web/bases/base.html:44
-msgid "Emailkasten"
-msgstr "Emailkasten"
+msgid "Eonvelope"
+msgstr "Eonvelope"
 
 #: src/web/templates/web/bases/base.html:51
 msgid "Toggle navigation"
@@ -697,8 +697,8 @@ msgid "Dashboard"
 msgstr "Tableau de bord"
 
 #: src/web/templates/web/dashboard.html:10
-msgid "Welcome to Emailkasten"
-msgstr "Bienvenue dans Emailkasten"
+msgid "Welcome to Eonvelope"
+msgstr "Bienvenue dans Eonvelope"
 
 #: src/web/templates/web/dashboard.html:34
 msgid "Statistics"
@@ -1020,7 +1020,7 @@ msgid "2025 David Aderbauer"
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:9
-msgid "&amp; The Emailkasten Contributors."
+msgid "&amp; The Eonvelope Contributors."
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:10

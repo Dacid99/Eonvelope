@@ -1,7 +1,7 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Quickstart
@@ -35,7 +35,7 @@ see the :doc:`configurations documentation <configuration>`.
 If you need help with how to use the application refer
 to the :doc:`user manual <instructions>`.
 
-There are other ways you can run Emailkasten,
+There are other ways you can run Eonvelope,
 please see :doc:`the installation guide <installation>` for details.
 
 In case you encounter a problem or have further questions, check the :doc:`FAQ <faq>`.

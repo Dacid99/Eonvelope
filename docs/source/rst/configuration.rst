@@ -1,16 +1,16 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Configuration
 =============
 
-The configuration for Emailkasten is divided into 3 levels:
+The configuration for Eonvelope is divided into 3 levels:
 
-- **Server admin**: Can only be changed by the server admin hosting the Emailkasten instance
-- **Admin user**: Can only be changed by an admin or staff user in the Emailkasten instance
+- **Server admin**: Can only be changed by the server admin hosting the Eonvelope instance
+- **Admin user**: Can only be changed by an admin or staff user in the Eonvelope instance
 - **Any user**: Can be changed by and for any individual user
 
 The more people have access to the settings, the less security-relevant they are.
@@ -33,13 +33,13 @@ Mandatory
 +===========================+=========================================================================================================================================================================================================================+
 | SECRET_KEY                | A random string, the longer the better. This is the essential unit of Django's cryptography functionalities and must not be disclosed ever!                                                                             |
 +---------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DATABASE                  | The name of the database for Emailkasten. Must match the ``MARIADB_DATABASE`` value of the MariaDB config.                                                                                                               |
+| DATABASE                  | The name of the database for Eonvelope. Must match the ``MARIADB_DATABASE`` value of the MariaDB config.                                                                                                               |
 +---------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DATABASE_USER             | The username for the DB. Must match the ``MARIADB_USER`` value of the MariaDB config.                                                                                                                              |
 +---------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DATABASE_PASSWORD         | The user's password for the DB. Must match the ``MARIADB_PASSWORD`` value of the MariaDB config.                                                                                                                   |
 +---------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DJANGO_SUPERUSER_PASSWORD | The password of the Emailkasten admin user that is created by default. Pick a secure password and keep it safe. Access to the admin allows access to the database so if an attacker gets a hold of this it's game over. |
+| DJANGO_SUPERUSER_PASSWORD | The password of the Eonvelope admin user that is created by default. Pick a secure password and keep it safe. Access to the admin allows access to the database so if an attacker gets a hold of this it's game over. |
 +---------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | ALLOWED_HOSTS             | The hostnames that the application is served from, as a comma separated list. Select this restrictively, it guards against man-in-the-middle type attacks. *localhost* is always included.                              |
 +---------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -50,7 +50,7 @@ Optional
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Setting                           | Default       | Description                                                                                                                                                                                                                                 |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| APP_LOG_LEVEL                     | `INFO`        | The log level of the Emailkasten logger. It logs to Emailkasten.log in the logs docker volume and contains information about events in the Emailkasten application components.                                                              |
+| APP_LOG_LEVEL                     | `INFO`        | The log level of the Eonvelope logger. It logs to Eonvelope.log in the logs docker volume and contains information about events in the Eonvelope application components.                                                              |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DJANGO_LOG_LEVEL                  | `INFO`        | The log level of the Django logger. It logs to django.log in the logs docker volume and contains information about events in the Django library components.                                                                                 |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -72,9 +72,9 @@ Optional
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DEBUG                             | `False`       | Set this to `True` to run the application in debug mode. Do not activate this unless you're trying to debug an issue and are not exposing the debug instance.                                                                               |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ENABLE_FLOWER                     | `False`       | Set this to `True` to run a flower interface for managing background tasks in the Emailkasten server. If you want to use this, you also need to map port 5555 in your docker-compose.yml file.                                              |
+| ENABLE_FLOWER                     | `False`       | Set this to `True` to run a flower interface for managing background tasks in the Eonvelope server. If you want to use this, you also need to map port 5555 in your docker-compose.yml file.                                              |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DISALLOWED_USER_AGENTS            | ``            | A collection of regex patterns for user agent strings that must not visit any page of this Emailkasten instance, as a comma separated list                                                                                                  |
+| DISALLOWED_USER_AGENTS            | ``            | A collection of regex patterns for user agent strings that must not visit any page of this Eonvelope instance, as a comma separated list                                                                                                  |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | CSRF_TRUSTED_ORIGINS              | ``            | All URLs that are trusted with unsafe requests, as a comma separated list. Must start with a scheme like http:// or https://                                                                                                                |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -112,7 +112,7 @@ Optional
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | USERSESSIONS_KEEP_UPDATED         | `True`        | Whether or not user sessions are kept updated. Enabling this setting makes sure that the usersession is kept track of, meaning, the IP address, user agent and last seen timestamp are all kept up to date.                                 |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| MFA_TOTP_ISSUER                   | `Emailkasten` | The issuer appearing in the MFA TOTP QR code.                                                                                                                                                                                               |
+| MFA_TOTP_ISSUER                   | `eonvelope` | The issuer appearing in the MFA TOTP QR code.                                                                                                                                                                                               |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | MFA_TOTP_TOLERANCE                | `1`           | The timespan after expiration in seconds during which the old MFA code is still accepted. Lower values are more secure, but more likely to fail due to clock drift.                                                                         |
 +-----------------------------------+---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -192,7 +192,7 @@ If you wish to get rid of them, you can run the following command in your server
 
 .. code-block:: bash
 
-  docker exec -it emailkasten-web python3 manage.py constance remove_stale_keys
+  docker exec -it eonvelope-web python3 manage.py constance remove_stale_keys
 
 
 
@@ -200,7 +200,7 @@ Security-relevant Settings
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Emails can contain malicious content.
-Therefore security when setting up Emailkasten is of the essence.
+Therefore security when setting up Eonvelope is of the essence.
 
 For a secure setup:
 

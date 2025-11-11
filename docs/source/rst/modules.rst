@@ -1,10 +1,10 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
-Emailkasten source code documentation
+Eonvelope source code documentation
 =====================================
 
 
@@ -12,7 +12,7 @@ Emailkasten source code documentation
    :maxdepth: 1
    :caption: Packages:
 
-   ../apidoc-rst/Emailkasten/modules
+   ../apidoc-rst/Eonvelope/modules
    ../apidoc-rst/core/modules
    ../apidoc-rst/api/modules
    ../apidoc-rst/web/modules

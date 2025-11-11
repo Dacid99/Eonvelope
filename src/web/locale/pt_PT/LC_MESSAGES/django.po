@@ -11,7 +11,7 @@ msgstr ""
 "PO-Revision-Date: 2025-08-12 15:02+0000\n"
 "Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
-"emailkasten/web/pt_PT/>\n"
+"eonvelope/web/pt_PT/>\n"
 "Language: pt_PT\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -440,7 +440,7 @@ msgstr ""
 
 #: src/web/templates/web/bases/base.html:22
 #: src/web/templates/web/bases/base.html:44
-msgid "Emailkasten"
+msgid "Eonvelope"
 msgstr ""
 
 #: src/web/templates/web/bases/base.html:51
@@ -636,7 +636,7 @@ msgid "Dashboard"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:10
-msgid "Welcome to Emailkasten"
+msgid "Welcome to Eonvelope"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:34
@@ -935,7 +935,7 @@ msgid "2025 David Aderbauer"
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:9
-msgid "&amp; The Emailkasten Contributors."
+msgid "&amp; The Eonvelope Contributors."
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:10

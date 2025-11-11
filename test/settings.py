@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -32,7 +32,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent / "src"))
 Env.read_env()
 environ["DEBUG"] = "True"
 
-from Emailkasten.settings import *  # noqa: F403,E402 ; pylint: disable=wildcard-import, unused-wildcard-import, wrong-import-position ; all settings need to be imported and environment needs to be set beforehand
+from eonvelope.settings import *  # noqa: F403,E402 ; pylint: disable=wildcard-import, unused-wildcard-import, wrong-import-position ; all settings need to be imported and environment needs to be set beforehand
 
 
 DATABASES = {

@@ -7,12 +7,12 @@ build_docker:
     - echo "Skip installing dependencies"
   script:
     - echo "Building docker image ..."
-    - docker build -f docker/Dockerfile -t emailkasten .
+    - docker build -f docker/Dockerfile -t eonvelope .
     - echo "Successfully built docker image."
     - echo "Releasing docker image ..."
-    - docker tag emailkasten dacid99/emailkasten:latest
-    - docker tag emailkasten dacid99/emailkasten:$CI_COMMIT_TAG
+    - docker tag eonvelope dacid99/eonvelope:latest
+    - docker tag eonvelope dacid99/eonvelope:$CI_COMMIT_TAG
     - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u $DOCKER_HUB_USER --password-stdin
-    - docker push dacid99/emailkasten:latest
-    - docker push dacid99/emailkasten:$CI_COMMIT_TAG
+    - docker push dacid99/eonvelope:latest
+    - docker push dacid99/eonvelope:$CI_COMMIT_TAG
     - echo "Successfully released docker image."

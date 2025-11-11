@@ -41,7 +41,7 @@ spec:
             initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
-          name: emailkasten-db
+          name: eonvelope-db
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: db-claim0

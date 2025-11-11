@@ -25,7 +25,7 @@ spec:
       containers:
         - env:
             - name: ALLOWED_HOSTS
-              value: localhost,emailkasten.mydomain.tld
+              value: localhost,eonvelope.mydomain.tld
             - name: APP_LOG_LEVEL
               value: DEBUG
             - name: CELERY_LOG_LEVEL
@@ -58,15 +58,15 @@ spec:
               value: '''PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'''
             - name: STRICT_PASSWORDS
               value: "True"
-          image: emailkasten
-          name: emailkasten-web
+          image: eonvelope
+          name: eonvelope-web
           ports:
             - containerPort: 443
               protocol: TCP
           volumeMounts:
             - mountPath: /mnt/archive
               name: web-claim0
-            - mountPath: /var/log/emailkasten
+            - mountPath: /var/log/eonvelope
               name: web-claim1
       restartPolicy: Always
       volumes:

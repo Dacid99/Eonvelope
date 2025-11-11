@@ -1,11 +1,11 @@
-# Emailkasten
+# Eonvelope
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/emailkasten)](https://hub.docker.com/repository/docker/dacid99/emailkasten/general)
-[![Docker Image Version](https://img.shields.io/docker/v/dacid99/emailkasten)](https://hub.docker.com/repository/docker/dacid99/emailkasten/general)
-[![Read the Docs](https://img.shields.io/readthedocs/emailkasten/latest)](https://emailkasten.readthedocs.io/latest/)
-[![Translation status](https://img.shields.io/weblate/progress/emailkasten)](https://hosted.weblate.org/projects/emailkasten/)
-[![Coverage](https://gitlab.com/Dacid99/emailkasten/badges/master/coverage.svg?job=test_codebase)](https://gitlab.com/Dacid99/emailkasten/)
-[![Pipeline](https://gitlab.com/Dacid99/emailkasten/badges/master/pipeline.svg)](https://gitlab.com/Dacid99/emailkasten/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/eonvelope)](https://hub.docker.com/repository/docker/dacid99/eonvelope/general)
+[![Docker Image Version](https://img.shields.io/docker/v/dacid99/eonvelope)](https://hub.docker.com/repository/docker/dacid99/eonvelope/general)
+[![Read the Docs](https://img.shields.io/readthedocs/eonvelope/latest)](https://eonvelope.readthedocs.io/latest/)
+[![Translation status](https://img.shields.io/weblate/progress/eonvelope)](https://hosted.weblate.org/projects/eonvelope/)
+[![Coverage](https://gitlab.com/Dacid99/eonvelope/badges/master/coverage.svg?job=test_codebase)](https://gitlab.com/Dacid99/eonvelope/)
+[![Pipeline](https://gitlab.com/Dacid99/eonvelope/badges/master/pipeline.svg)](https://gitlab.com/Dacid99/eonvelope/)
 [![Framework](https://pypi-camo.freetls.fastly.net/beb496af0833573259d4094b1fe3b0a3ea831607/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6672616d65776f726b2d446a616e676f2d3043334332362e737667)](https://www.djangoproject.com/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
@@ -51,7 +51,7 @@ If you encounter an issue please let us know via an issue or direct message!
 
 ## Installation
 
-The project is intended to be run with the container image provided at [dockerhub](https://hub.docker.com/repository/docker/dacid99/emailkasten/general).
+The project is intended to be run with the container image provided at [dockerhub](https://hub.docker.com/repository/docker/dacid99/eonvelope/general).
 
 ### Docker
 
@@ -67,7 +67,7 @@ You can use [the example kubernetes cluster setup](docker/kubernetes/minimal/) a
 
 ## Docs
 
-The full documentation is available on [ReadTheDocs](https://emailkasten.readthedocs.io/latest/).
+The full documentation is available on [ReadTheDocs](https://eonvelope.readthedocs.io/latest/).
 
 Check it out for details on configuration and instructions on how to use the running server.
 
@@ -75,11 +75,11 @@ Check it out for details on configuration and instructions on how to use the run
 
 We are striving to support as many languages as possible to make the application accessible to everyone!
 
-Translation is done via [weblate](https://hosted.weblate.org/projects/emailkasten/). If you want to add a language that is missing, go check it out! If the language is missing on [weblate](https://hosted.weblate.org/projects/emailkasten/) too, please file an [issue](https://gitlab.com/Dacid99/emailkasten/-/issues) using the missing-language template.
+Translation is done via [weblate](https://hosted.weblate.org/projects/eonvelope/). If you want to add a language that is missing, go check it out! If the language is missing on [weblate](https://hosted.weblate.org/projects/eonvelope/) too, please file an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues) using the missing-language template.
 
 ## Accessibility
 
-Everybody should be able to use Emailkasten. Please don't hesitate to report any problem related to accessibility via an [issue](https://gitlab.com/Dacid99/emailkasten/-/issues).
+Everybody should be able to use Eonvelope. Please don't hesitate to report any problem related to accessibility via an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues).
 
 ## Contributing
 
@@ -89,7 +89,7 @@ To get you started smoothly just follow [the development guide](DEVELOPMENT.md).
 
 In order to keep the code maintainable and in a consistent style please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
 
-The complete source code documentation is part of the docs on [ReadTheDocs](https://emailkasten.readthedocs.io/latest/rst/developers.html)
+The complete source code documentation is part of the docs on [ReadTheDocs](https://eonvelope.readthedocs.io/latest/rst/developers.html)
 
 Thank you to [everybody who helped with advancing this project](CONTRIBUTORS.md)
 and [who helped with translation](TRANSLATORS.rst)!

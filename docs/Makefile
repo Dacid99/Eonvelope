@@ -17,7 +17,7 @@ help:
 source: Makefile
 	python3 ../manage.py graph_models -a -g -o $(SOURCEDIR)/db_graph.svg
 	python3 ../manage.py spectacular --validate --file $(SOURCEDIR)/api-schema.yml
-	pydeps ../Emailkasten --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/Emailkasten_import_graph.svg
+	pydeps ../eonvelope --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/eonvelope_import_graph.svg
 	pydeps ../core --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/core_import_graph.svg
 	pydeps ../api --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/api_import_graph.svg
 	pydeps ../web --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o $(SOURCEDIR)/web_import_graph.svg

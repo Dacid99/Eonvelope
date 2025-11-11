@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -30,7 +30,7 @@ from api.v1.serializers import UserProfileSerializer
 
 
 if TYPE_CHECKING:
-    from Emailkasten.models import UserProfile
+    from eonvelope.models import UserProfile
 
 
 @extend_schema_view(
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
     update=extend_schema(description="Updates the user profile data."),
 )
 class UserProfileView(RetrieveUpdateAPIView):
-    """View for retrieving and updating the users :class:`Emailkasten.models.UserProfile`."""
+    """View for retrieving and updating the users :class:`eonvelope.models.UserProfile`."""
 
     NAME = "profile"
     serializer_class = UserProfileSerializer

@@ -439,7 +439,7 @@ msgstr ""
 
 #: src/web/templates/web/bases/base.html:22
 #: src/web/templates/web/bases/base.html:44
-msgid "Emailkasten"
+msgid "Eonvelope"
 msgstr ""
 
 #: src/web/templates/web/bases/base.html:51
@@ -635,7 +635,7 @@ msgid "Dashboard"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:10
-msgid "Welcome to Emailkasten"
+msgid "Welcome to Eonvelope"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:34
@@ -934,7 +934,7 @@ msgid "2025 David Aderbauer"
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:9
-msgid "&amp; The Emailkasten Contributors."
+msgid "&amp; The Eonvelope Contributors."
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:10

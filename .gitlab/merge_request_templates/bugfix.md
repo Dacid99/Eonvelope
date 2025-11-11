@@ -1,4 +1,4 @@
-**Thank you for your effort to contribute a bug fix to the Emailkasten project!**
+**Thank you for your effort to contribute a bug fix to the Eonvelope project!**
 
 ## Checklist
 
@@ -34,7 +34,7 @@ If you need help to get to your code to check all boxes, please submit the pull 
 
 *If you can't check one of these please explain why the change was necessary in the  Explanations section.*
 
-[] I have not changed the main configuration file (Emailkasten/settings.py) of the project.
+[] I have not changed the main configuration file (Eonvelope/settings.py) of the project.
 
 [] I have not changed the docker related files in docker/*.
 

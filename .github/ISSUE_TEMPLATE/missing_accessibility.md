@@ -3,7 +3,7 @@ name: Missing Accessibility
 about: Use this template to report on inaccessible parts of the user interface.
 labels: accessibility
 ---
-**Thank you for taking the time to report missing accessibility in the Emailkasten frontend!**
+**Thank you for taking the time to report missing accessibility in the Eonvelope frontend!**
 
 - [ ] I have checked that there is no existing issue dealing with this problem.
 
@@ -22,7 +22,7 @@ labels: accessibility
 *On what device or software does the inaccessibility appear?*
 
 
-## Emailkasten version *
+## Eonvelope version *
 
 *The version of the application you used to find the bug. Ideally a docker image tag (not 'latest').*
 

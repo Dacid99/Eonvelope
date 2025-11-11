@@ -1,7 +1,7 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Developers Section
@@ -50,13 +50,13 @@ If you are looking for a thing to help with please check out the ToDo list for i
 Migrations
 ^^^^^^^^^^
 
-Maybe you are using Emailkasten in parallel to another similar service.
-Programs that migrate databases from other applications to the Emailkasten database layout are always welcome.
+Maybe you are using Eonvelope in parallel to another similar service.
+Programs that migrate databases from other applications to the Eonvelope database layout are always welcome.
 
 If you are interested in such an endeavour, please get in touch.
 
 
-You can find an interactive graphical representation of the Emailkasten database layout
+You can find an interactive graphical representation of the Eonvelope database layout
 under the `/db-schema/` url of your instance
 or :doc:`on this page <db-graph>`.
 We are always happy to help and give additional detailed information about the database layout.
@@ -65,7 +65,7 @@ We are always happy to help and give additional detailed information about the d
 Frontend development
 ^^^^^^^^^^^^^^^^^^^^
 
-If you are interested in implementing a frontend option for Emailkasten, you are invited to do so.
+If you are interested in implementing a frontend option for Eonvelope, you are invited to do so.
 
 Especially mobile development is very welcome!
 

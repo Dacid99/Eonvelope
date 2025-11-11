@@ -2,7 +2,7 @@
 set -o pipefail
 
 export PYTHONPATH=$PWD'/src/'
-export DJANGO_SETTINGS_MODULE='Emailkasten.settings'
+export DJANGO_SETTINGS_MODULE='eonvelope.settings'
 
 CONFIG_PATH="tools/"
 REPORT_PATH="tools/reports/"

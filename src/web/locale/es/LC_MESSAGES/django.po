@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2025-11-06 18:26+0000\n"
 "PO-Revision-Date: 2025-10-09 19:07+0000\n"
 "Last-Translator: Adrián Gelmotto Ruiz <adriangelmotto@gmail.com>\n"
-"Language-Team: Spanish <https://hosted.weblate.org/projects/emailkasten/web/"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/eonvelope/web/"
 "es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -448,7 +448,7 @@ msgstr ""
 
 #: src/web/templates/web/bases/base.html:22
 #: src/web/templates/web/bases/base.html:44
-msgid "Emailkasten"
+msgid "Eonvelope"
 msgstr ""
 
 #: src/web/templates/web/bases/base.html:51
@@ -644,7 +644,7 @@ msgid "Dashboard"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:10
-msgid "Welcome to Emailkasten"
+msgid "Welcome to Eonvelope"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:34
@@ -943,7 +943,7 @@ msgid "2025 David Aderbauer"
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:9
-msgid "&amp; The Emailkasten Contributors."
+msgid "&amp; The Eonvelope Contributors."
 msgstr ""
 
 #: src/web/templates/web/partials/_footer.html:10

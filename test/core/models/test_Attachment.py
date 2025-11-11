@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -508,8 +508,8 @@ def test_Attachment_share_to_immich_success(
     )
     assert mock_httpx_post.call_args.kwargs["data"] == {
         "assetId": fake_attachment_with_file.file_name,
-        "deviceAssetId": "emailkasten",
-        "deviceId": "emailkasten",
+        "deviceAssetId": "eonvelope",
+        "deviceId": "eonvelope",
         "fileCreatedAt": str(fake_attachment_with_file.created.date()),
         "fileModifiedAt": str(fake_attachment_with_file.created.date()),
         "metadata": [],

@@ -1,17 +1,17 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright 2011-2025 David Aderbauer & The Emailkasten Contributors
+   Copyright 2011-2025 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
-Emailkasten documentation
+Eonvelope documentation
 =========================
 
 
-Welcome to the documentation of Emailkasten!
+Welcome to the documentation of Eonvelope!
 ----------------------------------------------------
 
-Emailkasten is an open-source self-hostable email archive built using the django framework.
+Eonvelope is an open-source self-hostable email archive built using the django framework.
 
 
 We need your opinion

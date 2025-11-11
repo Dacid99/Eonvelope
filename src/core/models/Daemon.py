@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -92,7 +92,7 @@ class Daemon(
         verbose_name=_("fetching criterion"),
         help_text=_("The selection criterion for emails to archive."),
     )
-    """The fetching criterion for this mailbox. :attr:`Emailkasten.constants.EmailFetchingCriterionChoices.ALL` by default."""
+    """The fetching criterion for this mailbox. :attr:`eonvelope.constants.EmailFetchingCriterionChoices.ALL` by default."""
 
     celery_task: models.OneToOneField[PeriodicTask] = models.OneToOneField(
         PeriodicTask,

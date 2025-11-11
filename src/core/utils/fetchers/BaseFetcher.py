@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -95,7 +95,7 @@ class BaseFetcher(ABC):
         Args:
             mailbox: The model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails by.
-                Defaults to :attr:`Emailkasten.MailFetchingCriteria.ALL`.
+                Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.

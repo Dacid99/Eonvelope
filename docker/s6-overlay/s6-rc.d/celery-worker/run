@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-celery -A Emailkasten worker --loglevel=${CELERY_LOG_LEVEL:-INFO} --without-gossip --without-mingle
+celery -A eonvelope worker --loglevel=${CELERY_LOG_LEVEL:-INFO} --without-gossip --without-mingle

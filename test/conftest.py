@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -68,8 +68,8 @@ from core.models import (
     EmailCorrespondent,
     Mailbox,
 )
-from Emailkasten.middleware.TimezoneMiddleware import TimezoneMiddleware
-from Emailkasten.models import UserProfile
+from eonvelope.middleware.TimezoneMiddleware import TimezoneMiddleware
+from eonvelope.models import UserProfile
 
 
 def pytest_configure(config):
@@ -559,7 +559,7 @@ def fake_other_attachment_with_file(faker, fake_file, fake_fs, fake_other_email)
 
 @pytest.fixture
 def profile_payload(faker):
-    """Fixture creating clean :class:`Emailkasten.models.UserProfile` payload with data deviating from the defaults."""
+    """Fixture creating clean :class:`eonvelope.models.UserProfile` payload with data deviating from the defaults."""
     profile_data = baker.prepare(
         UserProfile,
         paperless_url=faker.url(),

@@ -10,7 +10,7 @@ msgstr ""
 "POT-Creation-Date: 2025-11-06 18:26+0000\n"
 "PO-Revision-Date: 2025-11-06 19:18+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/emailkasten/web/"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/"
 "de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -448,8 +448,8 @@ msgstr "Anhangdatei-Inhalt"
 
 #: src/web/templates/web/bases/base.html:22
 #: src/web/templates/web/bases/base.html:44
-msgid "Emailkasten"
-msgstr "Emailkasten"
+msgid "Eonvelope"
+msgstr "Eonvelope"
 
 #: src/web/templates/web/bases/base.html:51
 msgid "Toggle navigation"
@@ -647,8 +647,8 @@ msgid "Dashboard"
 msgstr "Dashboard"
 
 #: src/web/templates/web/dashboard.html:10
-msgid "Welcome to Emailkasten"
-msgstr "Willkommen bei Emailkasten"
+msgid "Welcome to Eonvelope"
+msgstr "Willkommen bei Eonvelope"
 
 #: src/web/templates/web/dashboard.html:34
 msgid "Statistics"
@@ -954,8 +954,8 @@ msgid "2025 David Aderbauer"
 msgstr "2025 David Aderbauer"
 
 #: src/web/templates/web/partials/_footer.html:9
-msgid "&amp; The Emailkasten Contributors."
-msgstr "&amp; die Beitragenden zu Emailkasten."
+msgid "&amp; The Eonvelope Contributors."
+msgstr "&amp; die Beitragenden zu Eonvelope."
 
 #: src/web/templates/web/partials/_footer.html:10
 msgid "Licensed under the AGPLv3."

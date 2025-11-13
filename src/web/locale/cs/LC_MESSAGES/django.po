@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 18:26+0000\n"
+"POT-Creation-Date: 2025-11-13 23:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -269,7 +269,7 @@ msgid "Test the account to see if this error persists."
 msgstr ""
 
 #: src/web/templates/web/account/account_detail.html:77
-#: src/web/templates/web/bases/base.html:72
+#: src/web/templates/web/bases/base.html:88
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:14
 msgid "Mailboxes"
@@ -327,7 +327,7 @@ msgstr ""
 
 #: src/web/templates/web/account/account_filter_list.html:6
 #: src/web/templates/web/account/account_filter_list.html:10
-#: src/web/templates/web/bases/base.html:69
+#: src/web/templates/web/bases/base.html:85
 msgid "Accounts"
 msgstr ""
 
@@ -388,7 +388,7 @@ msgstr ""
 
 #: src/web/templates/web/attachment/attachment_filter_list.html:6
 #: src/web/templates/web/attachment/attachment_filter_list.html:14
-#: src/web/templates/web/bases/base.html:61
+#: src/web/templates/web/bases/base.html:77
 #: src/web/templates/web/dashboard.html:61
 #: src/web/templates/web/email/email_detail.html:136
 msgid "Attachments"
@@ -438,23 +438,23 @@ msgstr ""
 msgid "Attachment file content"
 msgstr ""
 
-#: src/web/templates/web/bases/base.html:22
-#: src/web/templates/web/bases/base.html:44
+#: src/web/templates/web/bases/base.html:31
+#: src/web/templates/web/bases/base.html:56
 msgid "Eonvelope"
 msgstr ""
 
-#: src/web/templates/web/bases/base.html:51
+#: src/web/templates/web/bases/base.html:67
 msgid "Toggle navigation"
 msgstr ""
 
-#: src/web/templates/web/bases/base.html:58
+#: src/web/templates/web/bases/base.html:74
 #: src/web/templates/web/dashboard.html:47
 #: src/web/templates/web/email/email_filter_list.html:6
 #: src/web/templates/web/email/email_filter_list.html:14
 msgid "Emails"
 msgstr ""
 
-#: src/web/templates/web/bases/base.html:64
+#: src/web/templates/web/bases/base.html:80
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:6
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:14
 #: src/web/templates/web/dashboard.html:54
@@ -462,7 +462,7 @@ msgstr ""
 msgid "Correspondents"
 msgstr ""
 
-#: src/web/templates/web/bases/base.html:75
+#: src/web/templates/web/bases/base.html:91
 #: src/web/templates/web/daemon/daemon_filter_list.html:6
 #: src/web/templates/web/daemon/daemon_filter_list.html:14
 #: src/web/templates/web/mailbox/mailbox_detail.html:84
@@ -636,7 +636,7 @@ msgid "Dashboard"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:10
-msgid "Welcome to Eonvelope"
+msgid "Welcome to E⚬nvelope"
 msgstr ""
 
 #: src/web/templates/web/dashboard.html:34
@@ -662,7 +662,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10
+#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
 msgid "Day"
 msgstr ""
 
@@ -681,6 +681,7 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
+#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -694,7 +695,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10
+#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
 msgid "Year"
 msgstr ""
 
@@ -922,6 +923,7 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
+#: src/web/utils/columns.py:85
 msgid "Favorite"
 msgstr ""
 
@@ -942,27 +944,35 @@ msgstr ""
 msgid "Licensed under the AGPLv3."
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:16
+#: src/web/templates/web/partials/_footer.html:13
+msgid "Version"
+msgstr ""
+
+#: src/web/templates/web/partials/_footer.html:15
+msgid "DEBUG"
+msgstr ""
+
+#: src/web/templates/web/partials/_footer.html:22
 msgid "Website"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:20
+#: src/web/templates/web/partials/_footer.html:26
 msgid "Gitlab"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:24
+#: src/web/templates/web/partials/_footer.html:30
 msgid "Github"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:28
+#: src/web/templates/web/partials/_footer.html:34
 msgid "Dockerhub"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:32
+#: src/web/templates/web/partials/_footer.html:38
 msgid "Documentation"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:36
+#: src/web/templates/web/partials/_footer.html:42
 msgid "Translating"
 msgstr ""
 

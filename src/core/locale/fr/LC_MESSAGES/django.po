@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 18:26+0000\n"
+"POT-Creation-Date: 2025-11-13 23:05+0000\n"
 "PO-Revision-Date: 2025-08-15 11:01+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/core/"
-"fr/>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/core/fr/"
+">\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -314,41 +314,41 @@ msgid "The email protocol implemented by the server."
 msgstr "Le protocole de courriel implémenté par le serveur."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:130
+#: src/core/models/Account.py:131
 msgid "connection timeout"
 msgstr "délai d'attente de connexion"
 
-#: src/core/models/Account.py:131
+#: src/core/models/Account.py:132
 msgid "Timeout for the connection to the mailserver."
 msgstr "Délai d'attente pour la connexion au serveur de messagerie."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:140 src/core/models/Correspondent.py:103
+#: src/core/models/Account.py:141 src/core/models/Correspondent.py:103
 msgid "user"
 msgstr "utilisateur"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:150 src/core/models/Mailbox.py:100
+#: src/core/models/Account.py:151 src/core/models/Mailbox.py:100
 msgid "account"
 msgstr "compte"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:152
+#: src/core/models/Account.py:153
 #, fuzzy
 #| msgid "account"
 msgid "accounts"
 msgstr "compte"
 
-#: src/core/models/Account.py:176
+#: src/core/models/Account.py:177
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr "Compte %(mail_address)s avec le protocole %(protocol)s"
 
-#: src/core/models/Account.py:197
+#: src/core/models/Account.py:198
 msgid "This account already exists."
 msgstr "Ce compte existe déjà."
 
-#: src/core/models/Account.py:224 src/core/models/Account.py:227
+#: src/core/models/Account.py:225 src/core/models/Account.py:228
 #, fuzzy, python-format
 #| msgid "The email protocol implemented by the server."
 msgid "The protocol %s is not implemented in a fetcher class!"
@@ -728,7 +728,7 @@ msgstr "courriel"
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
 
-#: src/core/models/Email.py:644 src/core/models/Mailbox.py:294
+#: src/core/models/Email.py:644 src/core/models/Mailbox.py:295
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr ""
@@ -809,8 +809,8 @@ msgstr ""
 msgid "Mailbox %(name)s of %(account)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:236 src/core/models/Mailbox.py:269
-#: src/core/models/Mailbox.py:287
+#: src/core/models/Mailbox.py:236 src/core/models/Mailbox.py:270
+#: src/core/models/Mailbox.py:288
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr ""
@@ -853,27 +853,27 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:188
-#: src/core/utils/fetchers/ExchangeFetcher.py:200
+#: src/core/utils/fetchers/ExchangeFetcher.py:184
+#: src/core/utils/fetchers/ExchangeFetcher.py:196
 msgid "refresh"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:242
+#: src/core/utils/fetchers/ExchangeFetcher.py:238
 msgid "fetching of mail contents"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:279
+#: src/core/utils/fetchers/ExchangeFetcher.py:275
 msgid "scan for mailboxes"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:305
+#: src/core/utils/fetchers/ExchangeFetcher.py:301
 msgid "restoring of email"
 msgstr ""
 
-#: src/core/utils/fetchers/IMAP4Fetcher.py:136
-#: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:87
-#: src/core/utils/fetchers/POP3Fetcher.py:96
-#: src/core/utils/fetchers/POP3_SSL_Fetcher.py:86
+#: src/core/utils/fetchers/IMAP4Fetcher.py:132
+#: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:76
+#: src/core/utils/fetchers/POP3Fetcher.py:92
+#: src/core/utils/fetchers/POP3_SSL_Fetcher.py:75
 #, fuzzy
 #| msgid "connection timeout"
 msgid "connecting"

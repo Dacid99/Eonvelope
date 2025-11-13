@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 18:26+0000\n"
+"POT-Creation-Date: 2025-11-13 23:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -296,39 +296,39 @@ msgid "The email protocol implemented by the server."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:130
+#: src/core/models/Account.py:131
 msgid "connection timeout"
 msgstr ""
 
-#: src/core/models/Account.py:131
+#: src/core/models/Account.py:132
 msgid "Timeout for the connection to the mailserver."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:140 src/core/models/Correspondent.py:103
+#: src/core/models/Account.py:141 src/core/models/Correspondent.py:103
 msgid "user"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:150 src/core/models/Mailbox.py:100
+#: src/core/models/Account.py:151 src/core/models/Mailbox.py:100
 msgid "account"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:152
+#: src/core/models/Account.py:153
 msgid "accounts"
 msgstr ""
 
-#: src/core/models/Account.py:176
+#: src/core/models/Account.py:177
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr ""
 
-#: src/core/models/Account.py:197
+#: src/core/models/Account.py:198
 msgid "This account already exists."
 msgstr ""
 
-#: src/core/models/Account.py:224 src/core/models/Account.py:227
+#: src/core/models/Account.py:225 src/core/models/Account.py:228
 #, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
 msgstr ""
@@ -682,7 +682,7 @@ msgstr ""
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
 
-#: src/core/models/Email.py:644 src/core/models/Mailbox.py:294
+#: src/core/models/Email.py:644 src/core/models/Mailbox.py:295
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr ""
@@ -749,8 +749,8 @@ msgstr ""
 msgid "Mailbox %(name)s of %(account)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:236 src/core/models/Mailbox.py:269
-#: src/core/models/Mailbox.py:287
+#: src/core/models/Mailbox.py:236 src/core/models/Mailbox.py:270
+#: src/core/models/Mailbox.py:288
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr ""
@@ -793,27 +793,27 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:188
-#: src/core/utils/fetchers/ExchangeFetcher.py:200
+#: src/core/utils/fetchers/ExchangeFetcher.py:184
+#: src/core/utils/fetchers/ExchangeFetcher.py:196
 msgid "refresh"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:242
+#: src/core/utils/fetchers/ExchangeFetcher.py:238
 msgid "fetching of mail contents"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:279
+#: src/core/utils/fetchers/ExchangeFetcher.py:275
 msgid "scan for mailboxes"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:305
+#: src/core/utils/fetchers/ExchangeFetcher.py:301
 msgid "restoring of email"
 msgstr ""
 
-#: src/core/utils/fetchers/IMAP4Fetcher.py:136
-#: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:87
-#: src/core/utils/fetchers/POP3Fetcher.py:96
-#: src/core/utils/fetchers/POP3_SSL_Fetcher.py:86
+#: src/core/utils/fetchers/IMAP4Fetcher.py:132
+#: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:76
+#: src/core/utils/fetchers/POP3Fetcher.py:92
+#: src/core/utils/fetchers/POP3_SSL_Fetcher.py:75
 msgid "connecting"
 msgstr ""
 

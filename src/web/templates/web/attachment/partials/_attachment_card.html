@@ -31,6 +31,6 @@
 
 {% block thumbnail %}
 
-    {% include "web/attachment/partials/_thumbnail.html" with attachment=card_object %}
+    {{ card_object.thumbnail }}
 
 {% endblock thumbnail %}

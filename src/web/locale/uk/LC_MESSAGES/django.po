@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-13 23:05+0000\n"
-"PO-Revision-Date: 2025-11-08 11:51+0000\n"
+"PO-Revision-Date: 2025-11-15 06:51+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/web/"
 "uk/>\n"
@@ -16,10 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && "
+"(n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && "
+"(n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 ))"
+" ? 2: 3);\n"
 "X-Generator: Weblate 5.15-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
@@ -651,10 +652,8 @@ msgid "Dashboard"
 msgstr "Інформаційна панель"
 
 #: src/web/templates/web/dashboard.html:10
-#, fuzzy
-#| msgid "Welcome to Eonvelope"
 msgid "Welcome to E⚬nvelope"
-msgstr "Ласкаво просимо до Eonvelope"
+msgstr "Ласкаво просимо до E⚬nvelope"
 
 #: src/web/templates/web/dashboard.html:34
 msgid "Statistics"
@@ -971,11 +970,11 @@ msgstr "Ліцензовано за ліцензією AGPLv3."
 
 #: src/web/templates/web/partials/_footer.html:13
 msgid "Version"
-msgstr ""
+msgstr "Версія"
 
 #: src/web/templates/web/partials/_footer.html:15
 msgid "DEBUG"
-msgstr ""
+msgstr "НАЛАГОДЖЕННЯ"
 
 #: src/web/templates/web/partials/_footer.html:22
 msgid "Website"

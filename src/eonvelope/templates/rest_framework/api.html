@@ -1,0 +1,10 @@
+{% extends "rest_framework/base.html" %}
+
+{% block branding %}
+    <a class="navbar-brand" href="{% url 'web:dashboard' %}">E∘nvelope API</a>
+{% endblock branding %}
+
+{% block title %}
+    {% if name %}{{ name }} –{% endif %}
+    Eonvelope API
+{% endblock title %}

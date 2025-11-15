@@ -1,8 +1,10 @@
 // https://getbootstrap.com/docs/5.3/customize/sass/
+// https://stackoverflow.com/questions/38792005/how-to-change-the-bootstrap-primary-color
 // workflow:
 //   npm install bootstrap
 //   npx --yes sass eonvelope.scss src/eonvelope/static/eonvelope/css/eonvelope.css --no-source-map
 
-$primary: #3e7bb6ff;
+$primary: #3e7bb6;
+$min-contrast-ratio: 4.4; //deviate slightly from recommended 4.5 to make text on the primary-bg appear white
 
 @import "node_modules/bootstrap/scss/bootstrap";

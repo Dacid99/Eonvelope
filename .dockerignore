@@ -10,6 +10,7 @@ $RECYCLE.BIN/
 *.egg
 *.egg-info/
 *.gif
+*.ics
 *.iml
 *.ini
 *.iws
@@ -33,6 +34,7 @@ $RECYCLE.BIN/
 *.tif
 *.tiff
 *.txt
+*.vcf
 *.vsix
 *~
 .*.kate-swp
@@ -138,6 +140,7 @@ reports/
 sdist/
 share/python-wheels/
 tags
+test.html
 test.py
 test/
 tools/

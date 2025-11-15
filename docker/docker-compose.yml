@@ -26,16 +26,16 @@ services:
     ports:
       - 1122:443
     environment:
-    # see the docs for all details  https://eonvelope.readthedocs.io/latest/rst/configuration.html#server-admin-settings
-    # mandatory
+      # see the docs for all details  https://eonvelope.readthedocs.io/latest/rst/configuration.html#server-admin-settings
+      # mandatory
       - DATABASE=email_archive_django # must match db:MARIADB_DATABASE
       - DATABASE_USER=user # must match db:MARIADB_USER
       - DATABASE_PASSWORD=passwd # must match db:MARIADB_PASSWORD
-      - DATABASE_TYPE=mysql # possible values: mysql, postgresql, sqlite3; must match the database type of the db container
       - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
       - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
       - ALLOWED_HOSTS=localhost,eonvelope.mydomain.tld # all allowed host URLs separated by ,
-    # optional
+      # optional
+      - DATABASE_TYPE=mysql # possible values: mysql, postgresql, sqlite3; must match the database type of the db container
       - REGISTRATION_ENABLED=False
       - STRICT_PASSWORDS=True
       - ACCOUNT_LOGIN_TIMEOUT=900

@@ -569,13 +569,13 @@ PWA_APP_START_URL = "/dashboard/"
 PWA_APP_STATUS_BAR_COLOR = "default"
 PWA_APP_ICONS = [
     {
-        "src": STATIC_URL + "icons/eonvelope/favicon-512x512.png",
+        "src": STATIC_URL + "eonvelope/icons/favicon-512x512.png",
         "sizes": "512x512",
         "type": "image/png",
         "purpose": "maskable",
     },
     {
-        "src": STATIC_URL + "icons/eonvelope/favicon-192x192.png",
+        "src": STATIC_URL + "eonvelope/icons/favicon-192x192.png",
         "sizes": "192x192",
         "type": "image/png",
         "purpose": "maskable",
@@ -583,14 +583,14 @@ PWA_APP_ICONS = [
 ]
 PWA_APP_ICONS_APPLE = [
     {
-        "src": STATIC_URL + "icons/eonvelope/apple-touch-icon.png",
+        "src": STATIC_URL + "eonvelope/icons/apple-touch-icon.png",
         "sizes": "180x180",
         "type": "image/png",
     }
 ]
 PWA_APP_SPLASH_SCREEN = [
     {
-        "src": STATIC_URL + "icons/eonvelope/favicon-512x512.png",
+        "src": STATIC_URL + "eonvelope/icons/favicon-512x512.png",
         "sizes": "512x512",
         "type": "image/png",
         "purpose": "maskable",

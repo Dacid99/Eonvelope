@@ -56,6 +56,15 @@ If users should be able to sign up themselves, set `REGISTRATION_ENABLED` to `Tr
 More details are available on the :doc:`installation page <installation>`.
 
 
+I can't access my Eonvelopes webapp, I always land on the no internet connection page.
+--------------------------------------------------------------------------------------
+
+This can happen if you have the PWA offline page cached and have not yet accepted the self-signed certificate.
+Open your browsers developer bar and delete all files cached by django-pwa. 
+Now when you refresh, you should be prompted to accept the certificate.
+To solve this issue long-term, reverse-proxy your instance.
+
+
 If I delete an account in Eonvelope, does that delete the account on the mailserver too?
 ------------------------------------------------------------------------------------------
 

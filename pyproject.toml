@@ -1,7 +1,7 @@
 [project]
 name = "eonvelope"
-version = "0.2.0"
-description = "A open-source self-hosted mail archive using the django framework."
+version = "0.2.1"
+description = "Preserve your emails with this open-source self-hosted email archive."
 authors = [
     {name = "David Aderbauer & The Eonvelope Contributors", email = "18516197-Dacid99@users.noreply.gitlab.com"}
 ]

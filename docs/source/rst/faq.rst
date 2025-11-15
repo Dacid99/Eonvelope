@@ -41,7 +41,9 @@ I can't access my instance using the port I assigned to it.
 -----------------------------------------------------------
 
 Eonvelope is served exclusively over https. Please make sure that the URL you use starts with https://.
-If that doesn't work, please check the logs to see if the webserver (gunicorn) in the container has trouble starting.
+Perhaps you are trying to access Eonvelope via an address that is not in the ALLOWED_HOSTS docker environment variable.
+If none of these fixes work, please check the logs to see if the webserver (gunicorn) in the container has trouble starting.
+Its logs should give you a hint of what is going on.
 
 
 After setting up my instance, I don't know how to sign up or log in.

@@ -1,2 +1,2 @@
 #!/command/with-contenv sh
-celery -A Emailkasten beat --loglevel=${CELERY_LOG_LEVEL:-INFO} -S django
+celery -A eonvelope beat --loglevel=${CELERY_LOG_LEVEL:-INFO} -S django

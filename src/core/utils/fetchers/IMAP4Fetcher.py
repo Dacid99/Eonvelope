@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -121,16 +121,12 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         mail_host_port = self.account.mail_host_port
         timeout = self.account.timeout
         try:
-            if mail_host_port and timeout:
+            if mail_host_port:
                 self._mail_client = imaplib.IMAP4(
                     host=mail_host, port=mail_host_port, timeout=timeout
                 )
-            elif mail_host_port:
-                self._mail_client = imaplib.IMAP4(host=mail_host, port=mail_host_port)
-            elif timeout:
-                self._mail_client = imaplib.IMAP4(host=mail_host, timeout=timeout)
             else:
-                self._mail_client = imaplib.IMAP4(host=mail_host)
+                self._mail_client = imaplib.IMAP4(host=mail_host, timeout=timeout)
         except Exception as error:
             self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error, _("connecting")) from error
@@ -175,7 +171,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         Args:
             mailbox: Database model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails in the IMAP request.
-                Defaults to :attr:`Emailkasten.MailFetchingCriteria.ALL`.
+                Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.

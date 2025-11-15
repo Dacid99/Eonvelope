@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -31,6 +31,7 @@ from zipfile import ZipFile
 import httpcore
 import httpx
 from django.db import models
+from django.utils.html import format_html
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
 from django_prometheus.models import ExportModelOperationsMixin
@@ -54,7 +55,7 @@ from core.mixins import (
     TimestampModelMixin,
     URLMixin,
 )
-from Emailkasten.utils.workarounds import get_config
+from eonvelope.utils.workarounds import get_config
 
 
 if TYPE_CHECKING:
@@ -286,8 +287,8 @@ class Attachment(
                     headers=headers,
                     data={
                         "assetId": self.file_name,
-                        "deviceAssetId": "emailkasten",
-                        "deviceId": "emailkasten",
+                        "deviceAssetId": "eonvelope",
+                        "deviceId": "eonvelope",
                         "fileCreatedAt": str(self.created.date()),
                         "fileModifiedAt": str(self.created.date()),
                         "metadata": [],
@@ -373,6 +374,81 @@ class Attachment(
                 )
             )
         )
+
+    @cached_property
+    def thumbnail(self) -> str:
+        """Builds the html thumbnail for the attachment.
+
+        Returns:
+            The html for the thumbnail. The empty string if the attachment has no thumbnail.
+        """
+        if self.content_maintype == "audio":
+            return format_html(
+                """<div class="d-flex justify-content-center m-5">
+                <audio controls src="{src}"></audio>
+                          </div>
+                          """,
+                src=self.get_absolute_thumbnail_url(),
+            )
+        if self.content_maintype == "video":
+            return format_html(
+                """<video controls
+                preload="metadata"
+                class="img-thumbnail"
+                src="{src}">
+            </video>
+            """,
+                src=self.get_absolute_thumbnail_url(),
+            )
+        if self.content_maintype == "image":
+            return format_html(
+                """<img src="{src}"
+                class="img-thumbnail"
+                alt="{alt}" />
+                """,
+                src=self.get_absolute_thumbnail_url(),
+                alt=_("Attachment image"),
+            )
+        if self.content_maintype == "text":
+            return format_html(
+                """<iframe sandbox
+                    class="w-100 h-100 p-1 rounded"
+                    title="{alt}"
+                    src="{src}"></iframe>
+                    """,
+                src=self.get_absolute_thumbnail_url(),
+                alt=_("Attachment text"),
+            )
+        if self.content_maintype == "application":
+            return format_html(
+                """<embed class="w-100 h-100 p-1 rounded"
+                title={title}"
+                src="{src}" />
+                """,
+                src=self.get_absolute_thumbnail_url(),
+                title=_("Attachment file content"),
+            )
+        if self.content_maintype == "font":
+            return format_html(
+                """<style>
+                @font-face {{
+                    font-family: attachment_{id};
+                    src: url({src});
+                }}
+            </style>
+            <h1 class="text-center p-2"
+                style="font-family: attachment_{id}">
+                Aa
+                <br />
+                Zz
+                <br />
+                12
+            </h1>
+            """,
+                src=self.get_absolute_thumbnail_url(),
+                id=self.id,
+            )
+        return ""
 
     @property
     def content_type(self) -> str:

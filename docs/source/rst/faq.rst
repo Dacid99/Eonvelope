@@ -1,7 +1,7 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 FAQ
@@ -14,15 +14,15 @@ and quick solutions to common problems.
 I am new to self-hosting, how can I set up an instance the easiest?
 -------------------------------------------------------------------
 
-Setting up an Emailkasten server is quick and straightforward.
+Setting up an Eonvelope server is quick and straightforward.
 The simplest path is described on :doc:`the quickstart page <quickstart>`.
 
 
-Do I need special hard- or software to run Emailkasten?
+Do I need special hard- or software to run Eonvelope?
 -------------------------------------------------------
 
 One goal of this project is to be easily available across many platforms.
-Essentially, everything that can run containers is viable to deploy Emailkasten.
+Essentially, everything that can run containers is viable to deploy Eonvelope.
 That includes every modern Linux, Windows, MacOS, FreeBSD, etc.
 
 
@@ -40,8 +40,10 @@ so the project remains free software.
 I can't access my instance using the port I assigned to it.
 -----------------------------------------------------------
 
-Emailkasten is served over https exclusively. Please make sure that the URL you use starts with https://.
-If that doesn't work, please check the logs to see if the webserver in the container has trouble starting.
+Eonvelope is served exclusively over https. Please make sure that the URL you use starts with https://.
+Perhaps you are trying to access Eonvelope via an address that is not in the ALLOWED_HOSTS docker environment variable.
+If none of these fixes work, please check the logs to see if the webserver (gunicorn) in the container has trouble starting.
+Its logs should give you a hint of what is going on.
 
 
 After setting up my instance, I don't know how to sign up or log in.
@@ -51,13 +53,14 @@ You can login with the default admin account, which is automatically created.
 The credentials are `admin` and the `DJANGO_SUPERUSER_PASSWORD` that you set in the docker-compose file.
 Using this account and the admin interface, you can create other users.
 If users should be able to sign up themselves, set `REGISTRATION_ENABLED` to `True`.
+More details are available on the :doc:`installation page <installation>`.
 
 
-If I delete an account in Emailkasten, does that delete the account on the mailserver too?
+If I delete an account in Eonvelope, does that delete the account on the mailserver too?
 ------------------------------------------------------------------------------------------
 
-No, only the data in the Emailkasten database will be deleted.
-Emailkasten will never destroy data on your mailserver!
+No, only the data in the Eonvelope database will be deleted.
+Eonvelope will never destroy data on your mailserver!
 
 
 I have found a problem with the application, what should I do?
@@ -76,18 +79,18 @@ If the problem is security-related please contact one of the developers privatel
 My language is missing in the translations, can I help to add it?
 -----------------------------------------------------------------
 
-Yes of course, we are always happy to include missing languages!
+Yes of course, we are always happy to include new languages!
 
-Translation is done via `weblate <https://hosted.weblate.org/projects/emailkasten/>`_.
+Translation is done via `weblate <https://hosted.weblate.org/projects/eonvelope/>`_.
 To get a quickstart look at :doc:`the translations instruction <translations>`.
-If your language is also missing on `weblate <https://hosted.weblate.org/projects/emailkasten/>`_,
+If your language is also missing on `weblate <https://hosted.weblate.org/projects/eonvelope/>`_,
 please file an issue using the missing-language template.
 
 
 Parts of the user interface are not accessible on my device, what can I do?
 ---------------------------------------------------------------------------
 
-It is important to us that everyone can use Emailkasten with as few barriers as possible.
+It is important to us that everyone can use Eonvelope with as few barriers as possible.
 
 If you find a part of the frontend that lacks accessibility or is confusing or flawd in this regard
 please don't hesitate to let us know via an issue using the missing-accessibility template.
@@ -96,7 +99,7 @@ please don't hesitate to let us know via an issue using the missing-accessibilit
 How can I contribute to this project?
 -------------------------------------
 
-Everyone is welcome to help with the development of Emailkasten!
+Everyone is welcome to help with the development of Eonvelope!
 
 To get you off to a good start please check out the quickstart and codestyle guidelines.
-You can find them and the source code documentation in the :doc:`developers section <developers>`.
+You can find them alongside the source code documentation in the :doc:`developers section <developers>`.

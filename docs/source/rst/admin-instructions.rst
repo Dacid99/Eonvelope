@@ -1,21 +1,21 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Admin Instructions
 ==================
 
-This is a collection of guidelines for the Emailkasten admin user and the server admin.
+This is a collection of guidelines for the Eonvelope admin user and the server admin.
 Typically that will be one an the same person.
 
-When you start Emailkasten for the first time, an admin user account is created.
+When you start Eonvelope for the first time, an admin user account is created.
 The username is set to ``admin`` and the password
 is set from the ``DJANGO_SUPERUSER_PASSWORD`` environment variable.
 You should use this account for administrative purposes only.
 
-This document focuses on management tasks after setup of the Emailkasten instance.
+This document focuses on management tasks after setup of the Eonvelope instance.
 Information for the setup can found in the pages about :doc:`installation <installation>`.
 
 
@@ -31,7 +31,7 @@ Go to the users section and use the add function.
 Generate API token for a user
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Every user can have a persistent token for authentication to the Emailkasten API.
+Every user can have a persistent token for authentication to the Eonvelope API.
 These are generated in the token section of the admin panel.
 Tokens can also be deleted there.
 
@@ -68,7 +68,7 @@ Alternatively, you can create another admin account by running
 
 .. code-block:: bash
 
-    docker exec -it emailkasten-web python3 manage.py createsuperuser --username=rescueadmin --email=  --noinput
+    docker exec -it eonvelope-web python3 manage.py createsuperuser --username=rescueadmin --email=  --noinput
 
 in the servers terminal.
 This ``rescueadmin`` account can be accessed with the password from the ``docker-compose.yml``.
@@ -109,10 +109,10 @@ Robots.txt
 ----------
 
 Since the rise of AI, uncounted numbers of webcrawlers are out and about online.
-The robots.txt file served by many web services (including your Emailkasten instance)
+The robots.txt file served by many web services (including your Eonvelope instance)
 is intended to tell them which pages they may access (if they care).
 
-You can set up rules on what parts of Emailkasten crawlers are actively invited to access
+You can set up rules on what parts of Eonvelope crawlers are actively invited to access
 and which not in the admin panel under ``Robots - Rules``.
 
 By default all pages are allowed.

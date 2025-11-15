@@ -1,5 +1,5 @@
 function getAllSelected() {
-  return selectedCheckboxes = document.querySelectorAll('input[data-id]:checked')
+  return selectedCheckboxes = document.querySelectorAll('input[data-id]:checked');
 }
 
 function setAllSelectionsTo(checked) {
@@ -10,7 +10,7 @@ function setAllSelectionsTo(checked) {
 
 function multiDelete(button) {
   const url = new URL(button.dataset.url, window.location.origin);
-  const selected = Array.from(getAllSelected())
+  const selected = Array.from(getAllSelected());
   const deleteRequests = selected.map(input => {
     const id = input.dataset.id;
     if (id) {
@@ -25,7 +25,7 @@ function multiDelete(button) {
           mode: 'same-origin'
         }
       );
-      return fetch(request).catch(error => { console.log(error.message) });
+      return fetch(request).catch(error => { console.log(error.message); });
     }
     return null;
   }).filter(Boolean);
@@ -39,12 +39,12 @@ function multiDelete(button) {
 
 function multiDownload(button) {
   const url = new URL(button.dataset.url, window.location.origin);
-  selected = getAllSelected()
+  selected = getAllSelected();
   if (selected) {
     selected.forEach(input => {
       url.searchParams.append('id', input.dataset.id);
-    })
-    window.open(url, target = "_blank")
+    });
+    window.open(url, target = '_blank');
     setAllSelectionsTo(false);
   }
 }
@@ -53,11 +53,11 @@ function multiPost(button) {
   const baseurl = new URL(button.dataset.url, window.location.origin);
   const action = button.dataset.action;
 
-  const selected = Array.from(getAllSelected())
+  const selected = Array.from(getAllSelected());
   const requests = selected.map(input => {
     const id = input.dataset.id;
     if (id && action) {
-      const url = buildApiDetailActionUrl(baseurl, id, action)
+      const url = buildApiDetailActionUrl(baseurl, id, action);
       const request = new Request(url,
         {
           method: 'POST',
@@ -68,7 +68,7 @@ function multiPost(button) {
           mode: 'same-origin'
         }
       );
-      return fetch(request).catch(error => { console.log(error.message) });
+      return fetch(request).catch(error => { console.log(error.message); });
     }
     return null;
   }).filter(Boolean);

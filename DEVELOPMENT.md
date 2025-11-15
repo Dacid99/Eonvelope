@@ -11,13 +11,13 @@ Make sure to also install the **python-dev** version!
 First install the packages required for the build environment, on debian based distros:
 
 ```bash
-sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client libmysqlclient-dev pkg-config
+sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client libmysqlclient-dev pkg-config npx
 ```
 
 and on redhat distros:
 
 ```bash
-sudo dnf -y update && dnf -y install gcc gettext mysql-devel pkgconf
+sudo dnf -y update && dnf -y install gcc gettext mysql-devel pkgconf npx
 ```
 
 Then to install the python dependencies start a new virtual environment and activate it:
@@ -52,15 +52,30 @@ Depending on your OS, the mysqlclient package may cause problems, this can usual
 
 ## Testing
 
+### Unittests
+
 The projects tests are in the test/ directory. You can run them from the project root with
 
 ```bash
 pytest test
 ```
 
-If you want to test your changes manually, you can use test your docker image by setting *DEBUG=True*.
+### Debug build
 
-In that case the container uses djangos runserver instead of gunicorn, allowing you to manipulate the source and static files while the server is running, e.g. via docker exec. Additionally, all internal errors will surface as error webpages with full context of the error and the django-debug toolbar will be shown on webpages.
+If you want to test your changes manually, you can build the docker image
+
+```bash
+docker build -f docker/Dockerfile . -t eonvelope-debug
+```
+
+and run it with the docker-compose.debug.yml.
+
+```bash
+docker compose -f docker/docker-compose.debug.yml up -d
+```
+
+In debug mode, the container uses djangos runserver instead of gunicorn, allowing you to manipulate the source and static files while the server is running, e.g. via docker exec. Additionally, all internal errors will surface as error webpages with full context of the error and the django-debug toolbar will be shown on webpages. For direct database access, you can go to port 9999, where the adminer service of the stack is available.
+To surveil the celery tasks, there is also a flower service running and available under port 5555.
 
 To test the webui on other devices, like your phone or tablet, add your machines IP to ALLOWED_HOSTS and you will be able to access the debug application from other devices as well.
 

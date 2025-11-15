@@ -11,25 +11,25 @@ function clearFormElement(formElement) {
 
         switch (field_type) {
 
-            case "text":
-            case "search":
-            case "password":
-            case "textarea":
-            case "hidden":
-            case "number":
-            case "date":
-                elements[i].value = "";
+            case 'text':
+            case 'search':
+            case 'password':
+            case 'textarea':
+            case 'hidden':
+            case 'number':
+            case 'date':
+                elements[i].value = '';
                 break;
 
-            case "radio":
-            case "checkbox":
+            case 'radio':
+            case 'checkbox':
                 if (elements[i].checked) {
                     elements[i].checked = false;
                 }
                 break;
 
-            case "select-one":
-            case "select-multi":
+            case 'select-one':
+            case 'select-multi':
                 elements[i].selectedIndex = 0;
                 break;
 

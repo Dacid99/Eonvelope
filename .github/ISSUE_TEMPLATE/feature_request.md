@@ -3,7 +3,7 @@ name: Feature Request
 about: Use this template for proposing improvements and new features.
 labels: feature request
 ---
-**Thank you for your effort to provide a feature idea for the Emailkasten project!**
+**Thank you for your effort to provide a feature idea for the Eonvelope project!**
 
 - [ ] I have checked that there is no existing issue discussing this feature.
 

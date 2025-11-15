@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -508,8 +508,8 @@ def test_Attachment_share_to_immich_success(
     )
     assert mock_httpx_post.call_args.kwargs["data"] == {
         "assetId": fake_attachment_with_file.file_name,
-        "deviceAssetId": "emailkasten",
-        "deviceId": "emailkasten",
+        "deviceAssetId": "eonvelope",
+        "deviceId": "eonvelope",
         "fileCreatedAt": str(fake_attachment_with_file.created.date()),
         "fileModifiedAt": str(fake_attachment_with_file.created.date()),
         "metadata": [],
@@ -720,6 +720,8 @@ def test_Attachment_has_download(fake_attachment, file_path, expected_has_downlo
 @pytest.mark.parametrize(
     "content_maintype, content_subtype, expected_has_thumbnail",
     [
+        ("audio", "mpeg", True),
+        ("audio", "ruyuals", False),
         ("", "", False),
         ("oo4vuy0s9yn", "a4ueiofdsj", False),
         ("image", "734reoj", True),
@@ -755,6 +757,8 @@ def test_Attachment_has_thumbnail_with_file(
 @pytest.mark.parametrize(
     "content_maintype, content_subtype",
     [
+        ("audio", "mpeg"),
+        ("audio", "ruyuals"),
         ("image", "734reoj"),
         ("font", "asdfr"),
         ("video", "mp4"),
@@ -787,6 +791,8 @@ def test_Attachment_has_thumbnail_no_file(
 @pytest.mark.parametrize(
     "content_maintype, content_subtype",
     [
+        ("audio", "mpeg"),
+        ("audio", "ruyuals"),
         ("image", "734reoj"),
         ("font", "asdfr"),
         ("video", "mp4"),
@@ -822,8 +828,9 @@ def test_Attachment_has_thumbnail_spam(
 @pytest.mark.parametrize(
     "content_maintype, content_subtype",
     [
-        ("image", "734reoj"),
-        ("font", "asdfr"),
+        ("audio", "mpeg"),
+        ("image", "png"),
+        ("font", "woff"),
         ("video", "mp4"),
         ("video", "45rtyghj"),
         ("text", "html"),
@@ -849,6 +856,46 @@ def test_Attachment_has_thumbnail_too_large(
         result = fake_attachment.has_thumbnail
 
     assert result is False
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype",
+    [
+        ("audio", "mpeg"),
+        ("image", "png"),
+        ("font", "woff"),
+        ("video", "mp4"),
+        ("text", "html"),
+        ("text", "calendar"),
+        ("application", "pdf"),
+        ("application", "json"),
+    ],
+)
+def test_Attachment_thumbnail(fake_attachment, content_maintype, content_subtype):
+    """Tests :func:`core.models.Attachment.Attachment.thumbnail` for all types that have an html thumbnail."""
+    fake_attachment.content_maintype = content_maintype
+    fake_attachment.content_subtype = content_subtype
+
+    assert fake_attachment.thumbnail
+    assert fake_attachment.thumbnail.strip().startswith("<")
+    assert fake_attachment.thumbnail.strip().endswith(">")
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype",
+    [
+        ("example", "test"),
+        ("adjtepot", "asdf"),
+    ],
+)
+def test_Attachment_thumbnail_empty(fake_attachment, content_maintype, content_subtype):
+    """Tests :func:`core.models.Attachment.Attachment.thumbnail` for all types that don't have an html thumbnail."""
+    fake_attachment.content_maintype = content_maintype
+    fake_attachment.content_subtype = content_subtype
+
+    assert not fake_attachment.thumbnail
 
 
 @pytest.mark.django_db

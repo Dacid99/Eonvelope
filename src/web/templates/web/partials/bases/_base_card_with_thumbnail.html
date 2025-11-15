@@ -1,4 +1,6 @@
-<div class="card">
+<div class="card shadow-sm 
+    {% block card_class %}{% endblock card_class %}
+     ">
     {% if card_object.has_thumbnail %}
         <div class="row g-0">
             <div class="col-lg-8 d-flex flex-column order-2 order-lg-1">

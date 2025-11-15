@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 18:26+0000\n"
+"POT-Creation-Date: 2025-11-15 16:39+0000\n"
 "PO-Revision-Date: 2025-09-26 20:01+0000\n"
 "Last-Translator: Puuur <unicodechanviola@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/emailkasten/core/"
+"Language-Team: Russian <https://hosted.weblate.org/projects/eonvelope/core/"
 "ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -300,149 +300,161 @@ msgid "The email protocol implemented by the server."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:130
+#: src/core/models/Account.py:131
 msgid "connection timeout"
 msgstr ""
 
-#: src/core/models/Account.py:131
+#: src/core/models/Account.py:132
 msgid "Timeout for the connection to the mailserver."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:140 src/core/models/Correspondent.py:103
+#: src/core/models/Account.py:141 src/core/models/Correspondent.py:103
 msgid "user"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:150 src/core/models/Mailbox.py:100
+#: src/core/models/Account.py:151 src/core/models/Mailbox.py:100
 msgid "account"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:152
+#: src/core/models/Account.py:153
 msgid "accounts"
 msgstr ""
 
-#: src/core/models/Account.py:176
+#: src/core/models/Account.py:177
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr ""
 
-#: src/core/models/Account.py:197
+#: src/core/models/Account.py:198
 msgid "This account already exists."
 msgstr ""
 
-#: src/core/models/Account.py:224 src/core/models/Account.py:227
+#: src/core/models/Account.py:225 src/core/models/Account.py:228
 #, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
 msgstr ""
 
-#: src/core/models/Attachment.py:87
+#: src/core/models/Attachment.py:88
 msgid "This will only delete the record of this attachment, not of the email."
 msgstr ""
 
-#: src/core/models/Attachment.py:91
+#: src/core/models/Attachment.py:92
 msgid ""
 "This will only delete the records of these attachments, not of their emails."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:97
+#: src/core/models/Attachment.py:98
 msgid "filename"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:106
+#: src/core/models/Attachment.py:107
 msgid "content disposition"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:114
+#: src/core/models/Attachment.py:115
 msgid "content ID"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:122
+#: src/core/models/Attachment.py:123
 msgid "content maintype"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:130
+#: src/core/models/Attachment.py:131
 msgid "content subtype"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:136 src/core/models/Email.py:162
+#: src/core/models/Attachment.py:137 src/core/models/Email.py:162
 msgid "datasize"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:145 src/core/models/Email.py:208
+#: src/core/models/Attachment.py:146 src/core/models/Email.py:208
 #: src/core/models/EmailCorrespondent.py:50
 msgid "email"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:155
+#: src/core/models/Attachment.py:156
 msgid "attachment"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:157
+#: src/core/models/Attachment.py:158
 msgid "attachments"
 msgstr ""
 
-#: src/core/models/Attachment.py:167
+#: src/core/models/Attachment.py:168
 #, python-format
 msgid "Attachment %(file_name)s from %(email)s"
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:231
+#: src/core/models/Attachment.py:232
 #, python-format
 msgid "Paperless URL is malformed: %(error)s"
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:238
+#: src/core/models/Attachment.py:239
 #, python-format
 msgid "Error connecting to the Paperless server: %(error)s"
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:251
+#: src/core/models/Attachment.py:252
 #, python-format
 msgid "Authentication to Paperless failed: %(response)s"
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:256
+#: src/core/models/Attachment.py:257
 #, python-format
 msgid "Uploading to Paperless failed: %(response)s"
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:310
+#: src/core/models/Attachment.py:311
 #, python-format
 msgid "Immich URL is malformed: %(error)s"
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:317
+#: src/core/models/Attachment.py:318
 #, python-format
 msgid "Error connecting to the Immich server: %(error)s"
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:330
+#: src/core/models/Attachment.py:331
 #, python-format
 msgid "Authentication to Immich failed: %(response)s"
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:335
+#: src/core/models/Attachment.py:336
 #, python-format
 msgid "Uploading to Immich failed: %(response)s"
+msgstr ""
+
+#: src/core/models/Attachment.py:410
+msgid "Attachment image"
+msgstr ""
+
+#: src/core/models/Attachment.py:420
+msgid "Attachment text"
+msgstr ""
+
+#: src/core/models/Attachment.py:429
+msgid "Attachment file content"
 msgstr ""
 
 #: src/core/models/Correspondent.py:67
@@ -686,7 +698,7 @@ msgstr ""
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
 
-#: src/core/models/Email.py:644 src/core/models/Mailbox.py:294
+#: src/core/models/Email.py:644 src/core/models/Mailbox.py:295
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr ""
@@ -753,8 +765,8 @@ msgstr ""
 msgid "Mailbox %(name)s of %(account)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:236 src/core/models/Mailbox.py:269
-#: src/core/models/Mailbox.py:287
+#: src/core/models/Mailbox.py:236 src/core/models/Mailbox.py:270
+#: src/core/models/Mailbox.py:288
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr ""
@@ -797,27 +809,27 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:188
-#: src/core/utils/fetchers/ExchangeFetcher.py:200
+#: src/core/utils/fetchers/ExchangeFetcher.py:184
+#: src/core/utils/fetchers/ExchangeFetcher.py:196
 msgid "refresh"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:242
+#: src/core/utils/fetchers/ExchangeFetcher.py:238
 msgid "fetching of mail contents"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:279
+#: src/core/utils/fetchers/ExchangeFetcher.py:275
 msgid "scan for mailboxes"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:305
+#: src/core/utils/fetchers/ExchangeFetcher.py:301
 msgid "restoring of email"
 msgstr ""
 
-#: src/core/utils/fetchers/IMAP4Fetcher.py:136
-#: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:87
-#: src/core/utils/fetchers/POP3Fetcher.py:96
-#: src/core/utils/fetchers/POP3_SSL_Fetcher.py:86
+#: src/core/utils/fetchers/IMAP4Fetcher.py:132
+#: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:76
+#: src/core/utils/fetchers/POP3Fetcher.py:92
+#: src/core/utils/fetchers/POP3_SSL_Fetcher.py:75
 msgid "connecting"
 msgstr ""
 

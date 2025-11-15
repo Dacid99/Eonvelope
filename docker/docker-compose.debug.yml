@@ -1,9 +1,9 @@
 services:
   db:
     image: mariadb:latest
-    container_name: emailkasten-db
+    container_name: eonvelope-db
     volumes:
-      - /path/to/emailkasten/debug/mysql:/var/lib/mysql
+      - /path/to/eonvelope/debug/mysql:/var/lib/mysql
     environment:
       - MARIADB_DATABASE=email_archive_django # must match web:DATABASE_NAME
       - MARIADB_USER=user # must match web:DATABASE_USER
@@ -19,17 +19,17 @@ services:
 
   adminer:
     image: adminer:latest
-    container_name: emailkasten-adminer
+    container_name: eonvelope-adminer
     restart: unless-stopped
     ports:
       - 9999:8080
 
   web:
-    image: emailkasten-debug
-    container_name: emailkasten-web
+    image: eonvelope-debug
+    container_name: eonvelope-web
     volumes:
-      - /path/to/emailkasten/debug/archive:/mnt/archive
-      - /path/to/emailkasten/debug/log:/var/log/emailkasten
+      - /path/to/eonvelope/debug/archive:/mnt/archive
+      - /path/to/eonvelope/debug/log:/var/log/eonvelope
     ports:
       - 1122:443
       - 5555:5555

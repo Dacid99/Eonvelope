@@ -3,7 +3,7 @@ name: Bugreport
 about: Use this template for reporting bugs.
 labels: bug
 ---
-**Thank you for your effort to report a bug in the Emailkasten project!**
+**Thank you for your effort to report a bug in the Eonvelope project!**
 
 The time to maintain and advance this project is precious, so we need to focus and filter what time is spent on.
 
@@ -22,7 +22,7 @@ If your problem doesn't fall in one of these categories, please go ahead and fil
 *Summarize the bug and how you discovered it. This gives us a first idea of what may be going on.*
 
 
-## Emailkasten version
+## Eonvelope version
 
 *The version of the application you used to find the bug. Ideally a docker image tag (not 'latest').*
 
@@ -47,7 +47,7 @@ If your problem doesn't fall in one of these categories, please go ahead and fil
 
 ## Logs *
 
-*Please put the relevant parts of the logfile(s) here. You can find the logfiles in the */var/log/emailkasten/* docker volume. This is crucial, without this information we will have to produce the bug ourselves, which may be consuming a lot of time.*
+*Please put the relevant parts of the logfile(s) here. You can find the logfiles in the */var/log/eonvelope/* docker volume. This is crucial, without this information we will have to produce the bug ourselves, which may be consuming a lot of time.*
 
 
 ## Screenshots
@@ -57,9 +57,14 @@ If your problem doesn't fall in one of these categories, please go ahead and fil
 
 ## Files/Emails
 
-*If the bug occurs when processing a specific email or file, please send them to ``email`` if possible. This can help to improve Emailkasten's capabilities of parsing emails correctly and completely and guard against similar bugs in the future.*
+*If the bug occurs when processing a specific email or file, please send them to *18516197-Dacid99@users.noreply.gitlab.com* if possible. This can help to improve Eonvelope's capabilities of parsing emails correctly and completely and guard against similar bugs in the future.*
 
 
 ## Possible diagnosis
 
 *If you have an idea what may be causing the bug please let us know.*
+
+
+## Fix it yourself?
+
+*What you be interested in fixing this problem yourself? If you do we are happy to support you on the way.*

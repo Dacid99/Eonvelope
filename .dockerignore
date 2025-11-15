@@ -1,12 +1,16 @@
 # alphanumeric order
+# blacklist
 $RECYCLE.BIN/
+*$py.class
 *.ansi
 *.cab
+*.css.map
 *.code-workspace
 *.diff
 *.egg
 *.egg-info/
 *.gif
+*.ics
 *.iml
 *.ini
 *.iws
@@ -30,6 +34,7 @@ $RECYCLE.BIN/
 *.tif
 *.tiff
 *.txt
+*.vcf
 *.vsix
 *~
 .*.kate-swp
@@ -120,9 +125,12 @@ fabric.properties
 htmlcov/
 lib/
 lib64/
+node_modules/
 nohup.out
 nosetests.xml
 out/
+package.json
+package-lock.json
 parts/
 pip-selfcheck.json
 pytest-cov/
@@ -132,6 +140,7 @@ reports/
 sdist/
 share/python-wheels/
 tags
+test.html
 test.py
 test/
 tools/
@@ -139,3 +148,5 @@ var/
 venv/
 wheels/
 xcuserdata/
+# whitelist
+!src/eonvelope/static/eonvelope/icons/*

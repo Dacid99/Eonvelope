@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -23,7 +23,7 @@ from model_bakery import baker
 
 from api.v1.views import EmailViewSet
 from core.models import Email
-from Emailkasten.utils.workarounds import get_config
+from eonvelope.utils.workarounds import get_config
 
 
 @pytest.fixture(autouse=True)

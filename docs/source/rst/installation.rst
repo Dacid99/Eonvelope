@@ -1,7 +1,7 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Installation
@@ -10,13 +10,11 @@ Installation
 General
 -------
 
-**This project is currently still in active development.**
-
 While the general functionalities are stable, there may be breaking changes nonetheless.
 If you need to archive your emails for a critical purpose, it is not recommended to solely
 rely on this application.
 
-The docker image comes with a SSL certificate issued and signed by the Emailkasten project.
+The docker image comes with a SSL certificate issued and signed by the Eonvelope project.
 It ensures safe communication between your server and your reverse proxy
 as well as within your local network.
 
@@ -24,20 +22,27 @@ It is not safe or intended for use on the open web.
 
 Therefore, do not expose this application to the web without a reverse proxy like `nginx <https://nginx.org>`_.
 
+.. note::
+   The SSL certificate is a different one for every version of Eonvelope.
+
+.. note::
+   If you reverse proxy, make sure to add the address to the ALLOWED_HOSTS environment variable in the docker-compose file.
 
 Recommended
 -----------
 
 The project is intended to be run with the container image
-provided at `dockerhub <https://hub.docker.com/repository/docker/dacid99/emailkasten/general>`_.
+provided at `dockerhub <https://hub.docker.com/repository/docker/dacid99/eonvelope/general>`_.
 
-The emailkasten service mounts 2 volumes,
-one for the logfiles of Emailkasten and one for the files that Emailkasten archives.
+The Eonvelope service mounts 2 volumes,
+one for the logfiles of Eonvelope and one for the files that Eonvelope archives.
 
 .. Note::
     You can also mount all logfiles of the container by changing the path in the docker-compose.yml to /var/log.
     In that case you will have to give the directory 777 permissions, otherwise services will fail to start and log properly.
 
+It is recommeneded to use the minimal version of the docker-compose for the first time you deploy Eonvelope
+and to skim the docker settings section of the :doc:`configuration reference <configurations page>` beforehand.
 
 Docker
 ^^^^^^
@@ -73,8 +78,8 @@ Alternatively, you can run the application bare metal.
 2. Install the dependencies for python and the system
    as described in :doc:`development <development>`.
 3. Spin up a mysql db server matching the configurations
-   in the django application settings ``Emailkasten/settings.py`` on your machine.
-4. Finally the Emailkasten server is started via the docker entrypoint script
+   in the django application settings ``eonvelope/settings.py`` on your machine.
+4. Finally the Eonvelope server is started via the docker entrypoint script
    ``docker/docker-compose.yml``.
 
 Other database type
@@ -86,7 +91,7 @@ In that case you can set the type of database you want to use in the docker-comp
 See :doc:`configuration` for more details on this.
 
 It is crucial that the name of the database service in the stack is `db`!
-Otherwise the connection from the Emailkasten container to the database will fail.
+Otherwise the connection from the Eonvelope container to the database will fail.
 
 .. note::
    Using a database other than the default mysql can lead to issues.
@@ -95,31 +100,33 @@ Otherwise the connection from the Emailkasten container to the database will fai
 Updating
 ========
 
-You can update your Emailkasten server by getting and deploying the latest version from `dockerhub <https://hub.docker.com/repository/docker/dacid99/emailkasten/general>`_.
+You can update your Eonvelope server by getting and deploying the latest version from `dockerhub <https://hub.docker.com/repository/docker/dacid99/eonvelope/general>`_.
 
 Database migrations
 -------------------
 
-If there are structural changes to the database of Emailkasten,
-these changes will be implemented and mitigated by migrations applied before the Emailkasten container starts.
+If there are structural changes to the database of Eonvelope,
+these changes will be implemented and mitigated by migrations applied before the Eonvelope container starts.
 This ensures continuity of the data.
 Sometimes there are changes that may not be easy to mitigate with a migration alone.
-In that case a script for this purpose to be applied manually in the Emailkasten will be supplied.
+In that case a script for this purpose to be applied manually in the Eonvelope will be supplied.
 
 It can be run from the terminal of your server with
 
 .. code-block:: bash
 
-   docker exec -it emailkasten-web python3 manage.py runscript scriptname
+   docker exec -it eonvelope-web python3 manage.py runscript scriptname
 
 Swap in the name of the specific script for the migration fix.
 Just the name is required, drop the .py suffix.
-If your containers have different names, you may have to exchange the `emailkasten-web` part.
+If your containers have different names, you may have to exchange the `eonvelope-web` part.
 
 For more details see `the django docs on this topic <https://django-extensions.readthedocs.io/en/latest/runscript.html>`_.
 
-
-
+.. note::
+   If you are migrating from version 0.2.0 or lower to a version above 0.2.0,
+   you will have to add an adminer container (see the docker-compose.debug.yml for reference) to the stack
+   and change the ``app`` column of all rows in the migrations table that have emailkasten as value to eonvelope.
 
 
 Migration
@@ -128,7 +135,7 @@ Migration
 To new server
 -------------
 
-If you already have a running Emailkasten instance and want to move it to a new server there are 4 steps you can go through to do so in a save manner.
+If you already have a running Eonvelope instance and want to move it to a new server there are 4 steps you can go through to do so in a save manner.
 
 1. Locate and docker volumes of all containers in the docker stack in the old servers storage.
 2. Copy these complete folders to the new server to the locations of the volumes on the new server.
@@ -139,11 +146,11 @@ If you already have a running Emailkasten instance and want to move it to a new 
 From other service
 ------------------
 
-In principle it is possible to migrate to Emailkasten from another service fetching emails.
-The main part is required for this is a migration that rewrites that services database into one compatible with Emailkasten.
+In principle it is possible to migrate to Eonvelope from another service fetching emails.
+The main part is required for this is a migration that rewrites that services database into one compatible with Eonvelope.
 
 If you are interested in providing such a program for the application you are using right now, please get in touch!
 
-Alternatively, you can also export all emails from the other application and import them into Emailkasten.
+Alternatively, you can also export all emails from the other application and import them into Eonvelope.
 The import supports various formats for collections of emails, including the popular mbox format.
 For details please refer to the :doc:`instructions <web-instructions>`.

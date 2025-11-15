@@ -6,7 +6,7 @@ const TOGGLE_CLASSES = {
     off: {
         class: 'bg-secondary',
     }
-}
+};
 document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.favorite-badge').forEach(function (badge) {
         badge.addEventListener('click', function () {

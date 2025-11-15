@@ -1,9 +1,9 @@
 services:
   db:  # this service name must not be changed!!
     image: mariadb:latest
-    container_name: emailkasten-db
+    container_name: eonvelope-db
     volumes:
-      - /path/to/emailkasten/mysql:/var/lib/mysql
+      - /path/to/eonvelope/mysql:/var/lib/mysql
     environment:
       - MARIADB_DATABASE=email_archive_django # must match web:DATABASE_NAME
       - MARIADB_USER=user # must match web:DATABASE_USER
@@ -18,11 +18,11 @@ services:
       start_period: 10s
 
   web:
-    image: dacid99/emailkasten:latest
-    container_name: emailkasten-web
+    image: dacid99/eonvelope:latest
+    container_name: eonvelope-web
     volumes:
-      - /path/to/emailkasten/archive:/mnt/archive
-      - /path/to/emailkasten/log:/var/log/emailkasten
+      - /path/to/eonvelope/archive:/mnt/archive
+      - /path/to/eonvelope/log:/var/log/eonvelope
     ports:
       - 1122:443
     environment:
@@ -31,7 +31,7 @@ services:
       - DATABASE_PASSWORD=passwd # must match db:MARIADB_PASSWORD
       - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
       - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
-      - ALLOWED_HOSTS=localhost,emailkasten.mydomain.tld # all allowed host URLs separated by ,
+      - ALLOWED_HOSTS=localhost,eonvelope.mydomain.tld # all allowed host URLs separated by ,
     restart: unless-stopped
     depends_on:
       db:

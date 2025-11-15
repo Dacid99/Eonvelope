@@ -1,4 +1,4 @@
-**Thank you for your effort to contribute an improvement to the documentation of the Emailkasten project!**
+**Thank you for your effort to contribute an improvement to the documentation of the Eonvelope project!**
 
 ## Checklist
 

@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - image: adminer:latest
-          name: emailkasten-adminer
+          name: eonvelope-adminer
           ports:
             - containerPort: 8080
               protocol: TCP

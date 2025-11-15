@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -49,7 +49,7 @@ from core.mixins import (
 )
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from core.utils.mail_parsing import parse_mailbox_name
-from Emailkasten.utils.workarounds import get_config
+from eonvelope.utils.workarounds import get_config
 
 from .Email import Email
 
@@ -244,6 +244,7 @@ class Mailbox(
             parser_class = file_format_parsers[file_format]
             with NamedTemporaryFile() as tempfile:
                 tempfile.write(file.read())
+                tempfile.seek(0)
                 parser = parser_class(tempfile.name, create=False)
                 parser.lock()
                 for key in parser.iterkeys():

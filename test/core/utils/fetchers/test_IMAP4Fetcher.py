@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -251,30 +251,28 @@ def test_IMAP4Fetcher___init__success_utf_8_credentials(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "mail_host_port, timeout",
+    "mail_host_port",
     [
-        (123, 300),
-        (123, None),
-        (None, 300),
-        (None, None),
+        123,
+        None,
     ],
 )
 def test_IMAP4Fetcher_connect_to_host_success(
-    imap_mailbox, mock_logger, mock_IMAP4, mail_host_port, timeout
+    imap_mailbox, mock_logger, mock_IMAP4, mail_host_port
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.connect_to_host`
     in case of success.
     """
     imap_mailbox.account.mail_host_port = mail_host_port
-    imap_mailbox.account.timeout = timeout
 
     IMAP4Fetcher(imap_mailbox.account)
 
-    kwargs = {"host": imap_mailbox.account.mail_host}
+    kwargs = {
+        "host": imap_mailbox.account.mail_host,
+        "timeout": imap_mailbox.account.timeout,
+    }
     if mail_host_port:
         kwargs["port"] = mail_host_port
-    if timeout:
-        kwargs["timeout"] = timeout
     mock_IMAP4.assert_called_with(**kwargs)
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()

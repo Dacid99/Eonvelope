@@ -1,7 +1,7 @@
 (() => {
-    'use strict'
+    'use strict';
 
-    const TIMEZONE_STORAGE_KEY = 'timezone'
+    const TIMEZONE_STORAGE_KEY = 'timezone';
 
     const getTimezone = () => {
         try {

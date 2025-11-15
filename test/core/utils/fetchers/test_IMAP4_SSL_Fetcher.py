@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -56,12 +56,10 @@ def mock_IMAP4_SSL(mocker, faker):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "mail_host_port, timeout",
+    "mail_host_port",
     [
-        (123, 300),
-        (123, None),
-        (None, 300),
-        (None, None),
+        123,
+        None,
     ],
 )
 def test_IMAP4Fetcher_connect_to_host_success(
@@ -70,24 +68,21 @@ def test_IMAP4Fetcher_connect_to_host_success(
     mock_logger,
     mock_IMAP4_SSL,
     mail_host_port,
-    timeout,
 ):
     """Tests :func:`core.utils.fetchers.IMAP4_SSL_Fetcher.connect_to_host`
     in case of success.
     """
     imap_ssl_mailbox.account.mail_host_port = mail_host_port
-    imap_ssl_mailbox.account.timeout = timeout
 
     IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
     kwargs = {
         "host": imap_ssl_mailbox.account.mail_host,
         "ssl_context": mock_ssl_create_default_context.return_value,
+        "timeout": imap_ssl_mailbox.account.timeout,
     }
     if mail_host_port:
         kwargs["port"] = mail_host_port
-    if timeout:
-        kwargs["timeout"] = timeout
     mock_IMAP4_SSL.assert_called_once_with(**kwargs)
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()

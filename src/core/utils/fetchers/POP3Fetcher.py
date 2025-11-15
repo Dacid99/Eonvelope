@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -81,16 +81,12 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         mail_host_port = self.account.mail_host_port
         timeout = self.account.timeout
         try:
-            if mail_host_port and timeout:
+            if mail_host_port:
                 self._mail_client = poplib.POP3(
                     host=mail_host, port=mail_host_port, timeout=timeout
                 )
-            elif mail_host_port:
-                self._mail_client = poplib.POP3(host=mail_host, port=mail_host_port)
-            elif timeout:
-                self._mail_client = poplib.POP3(host=mail_host, timeout=timeout)
             else:
-                self._mail_client = poplib.POP3(host=mail_host)
+                self._mail_client = poplib.POP3(host=mail_host, timeout=timeout)
         except Exception as error:
             self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error, _("connecting")) from error
@@ -129,7 +125,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         Args:
             mailbox: Database model of the mailbox to fetch data from.
             criterion: POP only supports ALL lookups.
-                Defaults to :attr:`Emailkasten.MailFetchingCriteria.ALL`.
+                Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
                 This arg ensures compatibility with the other fetchers.
 
         Returns:
@@ -137,7 +133,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
 
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
-                If :attr:`criterion` is not :attr:`Emailkasten.MailFetchingCriteria.ALL`.
+                If :attr:`criterion` is not :attr:`eonvelope.MailFetchingCriteria.ALL`.
             MailAccountError: If an error occurs or a bad response is returned.
         """
         self.logger.debug("Fetching all messages in %s ...", mailbox)

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -57,28 +57,17 @@ class POP3_SSL_Fetcher(  # noqa: N801  # naming consistent with POP3_SSL class
         timeout = self.account.timeout
         ssl_context = ssl.create_default_context()
         try:
-            if mail_host_port and timeout:
+            if mail_host_port:
                 self._mail_client = poplib.POP3_SSL(
                     host=mail_host,
                     port=mail_host_port,
-                    timeout=timeout,
-                    context=ssl_context,
-                )
-            elif mail_host_port:
-                self._mail_client = poplib.POP3_SSL(
-                    host=mail_host,
-                    port=mail_host_port,
-                    context=ssl_context,
-                )
-            elif timeout:
-                self._mail_client = poplib.POP3_SSL(
-                    host=mail_host,
                     timeout=timeout,
                     context=ssl_context,
                 )
             else:
                 self._mail_client = poplib.POP3_SSL(
                     host=mail_host,
+                    timeout=timeout,
                     context=ssl_context,
                 )
         except Exception as error:

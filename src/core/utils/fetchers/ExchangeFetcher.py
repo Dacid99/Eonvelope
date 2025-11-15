@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -124,11 +124,7 @@ class ExchangeFetcher(BaseFetcher):
         credentials = exchangelib.Credentials(
             self.account.mail_address, self.account.password
         )
-        retry_policy = (
-            exchangelib.FaultTolerance(max_wait=self.account.timeout)
-            if self.account.timeout
-            else None
-        )
+        retry_policy = exchangelib.FaultTolerance(max_wait=self.account.timeout)
         config = (
             exchangelib.Configuration(
                 service_endpoint=self.account.mail_host,
@@ -214,7 +210,7 @@ class ExchangeFetcher(BaseFetcher):
         Args:
             mailbox: Database model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails in the Exchange server.
-                Defaults to :attr:`Emailkasten.MailFetchingCriteria.ALL`.
+                Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.

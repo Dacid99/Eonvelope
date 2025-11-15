@@ -6,32 +6,38 @@
             <span class="me-1">
                 <i class="fa fa-copyright mx-1" aria-hidden="true"></i>{% translate "2025 David Aderbauer" %}
             </span>
-            <span class="me-1">{% translate "&amp; The Emailkasten Contributors." %}</span>
+            <span class="me-1">{% translate "&amp; The Eonvelope Contributors." %}</span>
             <span class="me-1">{% translate "Licensed under the AGPLv3." %}</span>
         </p>
         <p>
+            {% translate "Version" %} {{ settings.VERSION }}
+            {% if settings.DEBUG %}
+                {% translate "DEBUG" %}
+            {% endif %}
+        </p>
+        <p>
             <a class="link-primary"
-               href="https://dacid99.gitlab.io/emailkasten"
+               href="https://dacid99.gitlab.io/eonvelope"
                target="_blank"
                aria-label="{% translate 'Website' %}"><i class="fa-solid fa-globe mx-1" aria-hidden="true"></i></a>
             <a class="link-primary"
-               href="https://gitlab.com/Dacid99/Emailkasten"
+               href="https://gitlab.com/Dacid99/Eonvelope"
                target="_blank"
                aria-label="{% translate 'Gitlab' %}"><i class="fa-brands fa-gitlab mx-1" aria-hidden="true"></i></a>
             <a class="link-primary"
-               href="https://github.com/Dacid99/Emailkasten"
+               href="https://github.com/Dacid99/Eonvelope"
                target="_blank"
                aria-label="{% translate 'Github' %}"><i class="fa-brands fa-github mx-1" aria-hidden="true"></i></a>
             <a class="link-primary"
-               href="https://hub.docker.com/repository/docker/dacid99/emailkasten/general"
+               href="https://hub.docker.com/repository/docker/dacid99/eonvelope/general"
                target="_blank"
                aria-label="{% translate 'Dockerhub' %}"><i class="fa-brands fa-docker mx-1" aria-hidden="true"></i></a>
             <a class="link-primary"
-               href="https://emailkasten.readthedocs.io/latest/"
+               href="https://eonvelope.readthedocs.io/latest/"
                target="_blank"
                aria-label="{% translate 'Documentation' %}"><i class="fa-solid fa-book mx-1" aria-hidden="true"></i></a>
             <a class="link-primary"
-               href="https://hosted.weblate.org/projects/emailkasten"
+               href="https://hosted.weblate.org/projects/eonvelope"
                target="_blank"
                aria-label="{% translate 'Translating' %}"><i class="fa-solid fa-language mx-1" aria-hidden="true"></i></a>
         </p>

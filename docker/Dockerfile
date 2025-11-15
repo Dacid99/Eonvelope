@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Copyright © 2024 David Aderbauer & The Emailkasten Contributors
+# Copyright © 2024 David Aderbauer & The Eonvelope Contributors
 
 ##    stage 1    ##
 ## build python dependencies ##
@@ -41,22 +41,22 @@ RUN apk add --no-cache ${BUILD_S6_APK_DEPENDENCIES} && \
 
 ##   stage 3   ##
 ##  final image  ##
-FROM s6-overlay-base AS emailkasten
+FROM s6-overlay-base AS eonvelope
 
 ### general config
 
 # labels
-LABEL org.opencontainers.image.authors="David Aderbauer & The Emailkasten Contributors <18516197-Dacid99@users.noreply.gitlab.com>"
-LABEL org.opencontainers.image.documentation="https://emailkasten.readthedocs.io"
-LABEL org.opencontainers.image.source="https://gitlab.com/Dacid99/emailkasten"
-LABEL org.opencontainers.image.url="https://gitlab.com/Dacid99/emailkasten"
+LABEL org.opencontainers.image.authors="David Aderbauer & The Eonvelope Contributors <18516197-Dacid99@users.noreply.gitlab.com>"
+LABEL org.opencontainers.image.documentation="https://eonvelope.readthedocs.io"
+LABEL org.opencontainers.image.source="https://gitlab.com/Dacid99/eonvelope"
+LABEL org.opencontainers.image.url="https://gitlab.com/Dacid99/eonvelope"
 LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
 LABEL org.opencontainers.image.description="An email-archiving server using the django framework"
-LABEL org.opencontainers.image.title="Emailkasten Server"
+LABEL org.opencontainers.image.title="Eonvelope Server"
 
 ARG SRC_PATH=/opt/
 ARG STORAGE_PATH=/mnt/archive/  # must match STORAGE_PATH in settings.py
-ARG LOG_PATH=/var/log/emailkasten/  # must match LOG_DIRECTORY_PATH in settings.py
+ARG LOG_PATH=/var/log/eonvelope/  # must match LOG_DIRECTORY_PATH in settings.py
 ARG S6_OVERLAY_PATH=/etc/s6-overlay/
 
 WORKDIR ${SRC_PATH}
@@ -66,11 +66,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONPATH=${SRC_PATH}'src/' \
     PYTHONUNBUFFERED=1 \
     XDG_RUNTIME_DIR=/tmp/xdg_runtime \
-    DJANGO_SETTINGS_MODULE=Emailkasten.settings
+    DJANGO_SETTINGS_MODULE=eonvelope.settings
 
 # create ssl cert
 RUN apk add --no-cache openssl && \
-    openssl req -x509 -newkey rsa:4096 -keyout ${SRC_PATH}'key.pem' -out ${SRC_PATH}'cert.pem' -days 365 -nodes -subj "/C=DE/ST=Bavaria/L=Munich/O=SBV/OU=Emailkasten/CN=emailkasten.org" && \
+    openssl req -x509 -newkey rsa:4096 -keyout ${SRC_PATH}'key.pem' -out ${SRC_PATH}'cert.pem' -days 365 -nodes -subj "/C=DE/ST=Bavaria/L=Munich/O=SBV/OU=Eonvelope/CN=eonvelope.org" && \
     apk del openssl && \
     rm -rf /var/cache/apk/*
 

@@ -2,5 +2,5 @@
 if [ ${DEBUG} = 'True' ]; then
     python3 /opt/manage.py runserver 0.0.0.0:443 --insecure  # route this via 443 to match port in dockerfile and docker-compose
 else
-    gunicorn Emailkasten.wsgi --bind 0.0.0.0:443 --keyfile=/opt/key.pem --certfile=/opt/cert.pem --workers=${GUNICORN_WORKER_NUMBER:-1} --access-logfile "/var/log/gunicorn_access.log"
+    gunicorn eonvelope.wsgi --bind 0.0.0.0:443 --keyfile=/opt/key.pem --certfile=/opt/cert.pem --workers=${GUNICORN_WORKER_NUMBER:-1} --access-logfile "/var/log/gunicorn_access.log"
 fi

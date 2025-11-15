@@ -11,15 +11,24 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="author" content="David Aderbauer" />
         <meta name="copyright"
-              content="© 2025 David Aderbauer &amp; The Emailkasten Contributors." />
+              content="© 2025 David Aderbauer &amp; The Eonvelope Contributors." />
         <meta name="license" content="AGPLv3" />
         {% progressive_web_app_meta %}
+        <link rel="icon" href="{% static 'eonvelope/icons/favicon.ico' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'eonvelope/icons/favicon-32x32.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'eonvelope/icons/favicon-16x16.png' %}" />
         <title>
 
             {% block title %}
             {% endblock title %}
 
-            {% translate "Emailkasten" %}
+            Eonvelope
         </title>
         {% bootstrap_css %}
         <link href="{% static 'fontawesomefree/css/fontawesome.css' %}"
@@ -37,11 +46,17 @@
 
     <body>
 
-        <header class="sticky-top">
-            <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top"
-                 role="navigation">
+        <header class="sticky-top shadow">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary" role="navigation">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="{% url 'web:dashboard' %}">{% translate "Emailkasten" %}</a>
+                    <a class="navbar-brand" href="{% url 'web:dashboard' %}">
+                        <img class="me-1"
+                             src="{% static 'eonvelope/icons/favicon.svg' %}"
+                             alt="Eonvelope"
+                             height="26"
+                             width="26" />
+                        E∘nvelope
+                    </a>
                     <button class="navbar-toggler"
                             type="button"
                             data-bs-toggle="collapse"

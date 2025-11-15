@@ -86,8 +86,8 @@ mccabe.max-complexity = 6
 convention = "google"
 
 [lint.isort]
-known-first-party = ['core', 'api', 'web', 'Emailkasten']
-known-local-folder = ['core', 'api', 'web', 'Emailkasten']
+known-first-party = ['core', 'api', 'web', 'eonvelope']
+known-local-folder = ['core', 'api', 'web', 'eonvelope']
 lines-after-imports = 2
 
 [lint.flake8-annotations]
@@ -98,7 +98,7 @@ mypy-init-return = true
 allow-dict-calls-with-keyword-arguments = true
 
 [lint.flake8-copyright]
-notice-rgx = "# SPDX-License-Identifier: AGPL-3\\.0-or-later\n#\n# Emailkasten - a open-source self-hostable email archiving server\n# Copyright \\(C\\) 2024  David & Philipp Aderbauer\n#\n# This program is free software: you can redistribute it and/or modify\n# it under the terms of the GNU Affero General Public License as\n# published by the Free Software Foundation, either version 3 of the\n# License, or \\(at your option\\) any later version\\.\n#\n# This program is distributed in the hope that it will be useful,\n# but WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\\.  See the\n# GNU Affero General Public License for more details\\.\n#\n# You should have received a copy of the GNU Affero General Public License\n# along with this program\\. If not, see <https://www\\.gnu\\.org/licenses/>\\.\n"
+notice-rgx = "# SPDX-License-Identifier: AGPL-3\\.0-or-later\n#\n# Eonvelope - a open-source self-hostable email archiving server\n# Copyright \\(C\\) 2024  David & Philipp Aderbauer\n#\n# This program is free software: you can redistribute it and/or modify\n# it under the terms of the GNU Affero General Public License as\n# published by the Free Software Foundation, either version 3 of the\n# License, or \\(at your option\\) any later version\\.\n#\n# This program is distributed in the hope that it will be useful,\n# but WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE\\.  See the\n# GNU Affero General Public License for more details\\.\n#\n# You should have received a copy of the GNU Affero General Public License\n# along with this program\\. If not, see <https://www\\.gnu\\.org/licenses/>\\.\n"
 
 [lint.flake8-pytest-style]
 parametrize-names-type = "csv"

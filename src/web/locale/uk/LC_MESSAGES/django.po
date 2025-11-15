@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 18:26+0000\n"
-"PO-Revision-Date: 2025-11-04 06:51+0000\n"
+"POT-Creation-Date: 2025-11-15 16:39+0000\n"
+"PO-Revision-Date: 2025-11-15 06:51+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
-"Language-Team: Ukrainian <https://hosted.weblate.org/projects/emailkasten/"
-"web/uk/>\n"
+"Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/web/"
+"uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +20,7 @@ msgstr ""
 "11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
 "100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
 "(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -114,10 +114,8 @@ msgid "Email"
 msgstr "Електронна пошта"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:40
-#, fuzzy
-#| msgid "Content Id"
 msgid "Content type"
-msgstr "Ідентифікатор вмісту"
+msgstr "Тип контенту"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:68
 #: src/web/tables/email_tables/BaseEmailTable.py:69
@@ -276,7 +274,7 @@ msgid "Test the account to see if this error persists."
 msgstr "Перевірте обліковий запис, щоб побачити, чи ця помилка не зникає."
 
 #: src/web/templates/web/account/account_detail.html:77
-#: src/web/templates/web/bases/base.html:72
+#: src/web/templates/web/bases/base.html:87
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:14
 msgid "Mailboxes"
@@ -284,14 +282,14 @@ msgstr "Поштові скриньки"
 
 #: src/web/templates/web/account/account_detail.html:100
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
-#: src/web/templates/web/dashboard.html:16
+#: src/web/templates/web/dashboard.html:17
 #: src/web/templates/web/mailbox/mailbox_detail.html:108
 msgid "Latest Emails"
 msgstr "Останні електронні листи"
 
 #: src/web/templates/web/account/account_detail.html:105
 #: src/web/templates/web/correspondent/correspondent_detail.html:94
-#: src/web/templates/web/dashboard.html:21
+#: src/web/templates/web/dashboard.html:22
 #: src/web/templates/web/email/email_detail.html:179
 #: src/web/templates/web/mailbox/mailbox_detail.html:113
 msgid "View all"
@@ -334,7 +332,7 @@ msgstr "Список"
 
 #: src/web/templates/web/account/account_filter_list.html:6
 #: src/web/templates/web/account/account_filter_list.html:10
-#: src/web/templates/web/bases/base.html:69
+#: src/web/templates/web/bases/base.html:84
 msgid "Accounts"
 msgstr "Облікові записи"
 
@@ -401,8 +399,8 @@ msgstr "Дата отримання"
 
 #: src/web/templates/web/attachment/attachment_filter_list.html:6
 #: src/web/templates/web/attachment/attachment_filter_list.html:14
-#: src/web/templates/web/bases/base.html:61
-#: src/web/templates/web/dashboard.html:61
+#: src/web/templates/web/bases/base.html:76
+#: src/web/templates/web/dashboard.html:62
 #: src/web/templates/web/email/email_detail.html:136
 msgid "Attachments"
 msgstr "Вкладення"
@@ -441,43 +439,26 @@ msgstr "Перейти до поштових скриньок"
 msgid "Download"
 msgstr "Завантажити"
 
-#: src/web/templates/web/attachment/partials/_thumbnail.html:17
-msgid "Attachment image"
-msgstr "Вкладене зображення"
-
-#: src/web/templates/web/attachment/partials/_thumbnail.html:21
-msgid "Attachment text"
-msgstr "Текст вкладення"
-
-#: src/web/templates/web/attachment/partials/_thumbnail.html:25
-msgid "Attachment file content"
-msgstr "Вміст вкладеного файлу"
-
-#: src/web/templates/web/bases/base.html:22
-#: src/web/templates/web/bases/base.html:44
-msgid "Emailkasten"
-msgstr "Emailkasten"
-
-#: src/web/templates/web/bases/base.html:51
+#: src/web/templates/web/bases/base.html:66
 msgid "Toggle navigation"
 msgstr "Перемикання навігації"
 
-#: src/web/templates/web/bases/base.html:58
-#: src/web/templates/web/dashboard.html:47
+#: src/web/templates/web/bases/base.html:73
+#: src/web/templates/web/dashboard.html:48
 #: src/web/templates/web/email/email_filter_list.html:6
 #: src/web/templates/web/email/email_filter_list.html:14
 msgid "Emails"
 msgstr "Електронні листи"
 
-#: src/web/templates/web/bases/base.html:64
+#: src/web/templates/web/bases/base.html:79
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:6
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:14
-#: src/web/templates/web/dashboard.html:54
+#: src/web/templates/web/dashboard.html:55
 #: src/web/templates/web/email/email_detail.html:125
 msgid "Correspondents"
 msgstr "Кореспонденти"
 
-#: src/web/templates/web/bases/base.html:75
+#: src/web/templates/web/bases/base.html:90
 #: src/web/templates/web/daemon/daemon_filter_list.html:6
 #: src/web/templates/web/daemon/daemon_filter_list.html:14
 #: src/web/templates/web/mailbox/mailbox_detail.html:84
@@ -652,19 +633,20 @@ msgstr "Стій"
 msgid "Dashboard"
 msgstr "Інформаційна панель"
 
-#: src/web/templates/web/dashboard.html:10
-msgid "Welcome to Emailkasten"
-msgstr "Ласкаво просимо до Emailkasten"
+#. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
+#: src/web/templates/web/dashboard.html:11
+msgid "Welcome to E∘nvelope"
+msgstr "Ласкаво просимо до E∘nvelope"
 
-#: src/web/templates/web/dashboard.html:34
+#: src/web/templates/web/dashboard.html:35
 msgid "Statistics"
 msgstr "Статистика"
 
-#: src/web/templates/web/dashboard.html:40
+#: src/web/templates/web/dashboard.html:41
 msgid "Data"
 msgstr "Дані"
 
-#: src/web/templates/web/dashboard.html:41
+#: src/web/templates/web/dashboard.html:42
 msgid "Count"
 msgstr "Кількість"
 
@@ -960,34 +942,42 @@ msgid "2025 David Aderbauer"
 msgstr "2025 Девід Адербауер"
 
 #: src/web/templates/web/partials/_footer.html:9
-msgid "&amp; The Emailkasten Contributors."
-msgstr "&amp; Автори Emailkasten."
+msgid "&amp; The Eonvelope Contributors."
+msgstr "&amp; Автори Eonvelope."
 
 #: src/web/templates/web/partials/_footer.html:10
 msgid "Licensed under the AGPLv3."
 msgstr "Ліцензовано за ліцензією AGPLv3."
 
-#: src/web/templates/web/partials/_footer.html:16
+#: src/web/templates/web/partials/_footer.html:13
+msgid "Version"
+msgstr "Версія"
+
+#: src/web/templates/web/partials/_footer.html:15
+msgid "DEBUG"
+msgstr "НАЛАГОДЖЕННЯ"
+
+#: src/web/templates/web/partials/_footer.html:22
 msgid "Website"
 msgstr "Вебсайт"
 
-#: src/web/templates/web/partials/_footer.html:20
+#: src/web/templates/web/partials/_footer.html:26
 msgid "Gitlab"
 msgstr "Gitlab"
 
-#: src/web/templates/web/partials/_footer.html:24
+#: src/web/templates/web/partials/_footer.html:30
 msgid "Github"
 msgstr "Github"
 
-#: src/web/templates/web/partials/_footer.html:28
+#: src/web/templates/web/partials/_footer.html:34
 msgid "Dockerhub"
 msgstr "Dockerhub'"
 
-#: src/web/templates/web/partials/_footer.html:32
+#: src/web/templates/web/partials/_footer.html:38
 msgid "Documentation"
 msgstr "Документація"
 
-#: src/web/templates/web/partials/_footer.html:36
+#: src/web/templates/web/partials/_footer.html:42
 msgid "Translating"
 msgstr "Переклад"
 

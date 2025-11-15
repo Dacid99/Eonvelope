@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -26,7 +26,7 @@ from typing import TYPE_CHECKING, ClassVar, override
 from dirtyfields import DirtyFieldsMixin
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_prometheus.models import ExportModelOperationsMixin
@@ -124,13 +124,14 @@ class Account(
     """The mail protocol of the mail server."""
 
     timeout = models.PositiveIntegerField(
-        null=True,
+        default=10,
         blank=True,
+        validators=[MinValueValidator(0.1)],
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("connection timeout"),
         help_text=_("Timeout for the connection to the mailserver."),
     )
-    """The timeout parameter for the connection to the host. Can be null."""
+    """The timeout parameter for the connection to the host, defaults to 10s."""
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

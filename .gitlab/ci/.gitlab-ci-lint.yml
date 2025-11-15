@@ -16,6 +16,8 @@ lint_codebase:
     - poetry run pylint test/ --rcfile=$CHECK_CONFIG_PATH'pylintrc_test' | tee $CHECK_REPORT_PATH'pylint_test_check.ansi'
     - poetry run djlint src/ --lint --configuration $CHECK_CONFIG_PATH'djlintrc' | tee $CHECK_REPORT_PATH'djlint_check.ansi'
     - poetry run django-admin validate_templates | tee $CHECK_REPORT_PATH'validate_templates_check.ansi'
+    - apk add npm
+    - npx --yes eslint@latest --no-config-lookup | tee $CHECK_REPORT_PATH'eslint_check.ansi'
     - echo "Successfully checked codebase."
   artifacts:
     paths:

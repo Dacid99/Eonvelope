@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -32,14 +32,16 @@ import tomli
 
 sys.path.insert(0, os.path.abspath("../../src/"))
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "Emailkasten.settings"
+os.environ["DJANGO_SETTINGS_MODULE"] = "eonvelope.settings"
 django.setup()
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "Emailkasten"
-copyright = "2024-%Y, David Aderbauer & The Emailkasten Contributors; Licensed under CC BY-SA 4.0"
+project = "Eonvelope"
+copyright = (
+    "2024-%Y, David Aderbauer & The Eonvelope Contributors; Licensed under CC BY-SA 4.0"
+)
 author = "David Aderbauer"
 year = datetime.date.today().year
 
@@ -136,14 +138,14 @@ html_theme_options = {
     # "logo_name": ,
     "touch_icon": "",
     "github_button": True,
-    "github_repo": "Emailkasten",
+    "github_repo": "eonvelope",
     "github_user": "Dacid99",
     "show_powered_by": True,
     "show_relbars": True,
     "fixed_sidebar": True,
 }
-html_title = "Emailkasten Docs"
-html_short_title = "Emailkasten Docs"
+html_title = "Eonvelope Docs"
+html_short_title = "Eonvelope Docs"
 html_logo = ""
 html_favicon = ""
 html_static_path = ["_static"]
@@ -180,7 +182,7 @@ autodoc_inherit_docstrings = True
 # https://www.sphinx-doc.org/en/master/usage/extensions/apidoc.html#configuration
 
 apidoc_modules = [
-    {"path": "../../src/Emailkasten", "destination": "apidoc-rst/Emailkasten"},
+    {"path": "../../src/eonvelope", "destination": "apidoc-rst/eonvelope"},
     {"path": "../../src/core", "destination": "apidoc-rst/core"},
     {"path": "../../src/api", "destination": "apidoc-rst/api"},
     {"path": "../../src/web", "destination": "apidoc-rst/web"},

@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -218,7 +218,7 @@ class Correspondent(
         put_contact_url = (
             nextcloud_baseurl
             + "/remote.php/dav/addressbooks/users/"
-            + f"{self.user.profile.nextcloud_username.lower()}/{self.user.profile.nextcloud_addressbook.lower()}/{self.id}_emailkasten.vcf"
+            + f"{self.user.profile.nextcloud_username.lower()}/{self.user.profile.nextcloud_addressbook.lower()}/{self.id}_eonvelope.vcf"
         )
         headers = {
             "Depth": "0",

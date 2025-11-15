@@ -1,7 +1,7 @@
 ..
    SPDX-License-Identifier: CC-BY-SA 4.0
 
-   Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+   Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
 Webapp Instructions
@@ -12,9 +12,9 @@ Getting started
 
 To log in, open the webapp by opening the IP address of your server
 with the port of the application, by default ``1122``.
-Emailkasten will force you to use HTTPS using its certificate, so the url must start with *https://*.
+Eonvelope will force you to use HTTPS using its certificate, so the url must start with *https://*.
 
-You can install Emailkasten as a progressive-webapp on your device to use it like a regular app.
+You can install Eonvelope as a progressive-webapp on your device to use it like a regular app.
 The way you can do this depends on your browser.
 
 Registration
@@ -66,17 +66,16 @@ If you don't set the mailserver port, the default port of the protocol is used.
     If you use Exchange you can specify a full URL path starting with http(s):// to the service endpoint as mailserver-URL.
     In that case the port setting is not used as the port should already be part of that URL.
 
-If you don't set a timeout value when using IMAP and POP,
-the connection to the mailserver doesn't time out.
-That is the intended behaviour as the fetching of emails is quick
-and the connection is closed afterwards anyway.
+If you don't set a timeout value, the default value of 10 seconds is used.
+For IMAP and POP this means that if a request to the mailserver takes longer than the timeout value,
+the request is treated as if the server was unavailable.
+If you know the mailserver of an account to be slow, you can set a larger value.
 
-For Exchange this setting behaves a bit differently.
-Setting a value enables a retry and faulttolerance logic timing out after the given value.
-It is encouraged to use this option with a value of a few seconds
-to reduce random connection errors.
-Don't use larger values as this may significantly impact
-the runtime of individual requests to the server.
+For Exchange this enables a retry and faulttolerance logic timing out after the given value.
+
+Don't use larger timeout values than 60 seconds, as this may significantly impact
+the runtime of individual fetch operations and may at worst delay the archiving schedule.
+The minimal accepted timeout value is 0.1.
 
 After you have added the account, you can test the configuration via the test button.
 If the service is unknown, check the email server URL.
@@ -178,7 +177,7 @@ The following criteria are available:
 .. note::
     For a complete coverage of all emails that enter and exit a mailaccount,
     set up a routine for both the INBOX and the Sent mailbox.
-    That way you can make use of Emailkasten's feature to capture, archive and map complete conversations.
+    That way you can make use of Eonvelope's feature to capture, archive and map complete conversations.
     Additionally you can archive your drafts by fetching that mailbox repeatedly.
 
 .. note::
@@ -194,7 +193,7 @@ The following criteria are available:
     If you use a different emailarchive server as backup, you may not be able to use filtering by RECENT or UNSEEN,
     since that may lead to race conditions between the two servers.
     Just use the time-based filters instead.
-    Emailkasten with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
+    Eonvelope with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
 
 The *interval-period* setting defines the time unit that lies between two routine jobs runs.
 The *interval-every* parameter defines
@@ -222,7 +221,7 @@ Archived data
 
 Once data from your emails has been collected and archived, you can view it using the web interface.
 
-Emailkasten gathers data about three types of information in your emails. Attachments, correspondents and of course the emails themselves.
+Eonvelope gathers data about three types of information in your emails. Attachments, correspondents and of course the emails themselves.
 
 Each of these can be search and filtered by various criteria. Every single item can be viewed individually as well.
 Items that are important to you can marked as favorites. Just click the star icon in the card of the item to toggle the favorite status.
@@ -247,7 +246,7 @@ Conversations
 """""""""""""
 
 Emails contains headers linking them with other emails.
-Using this data allows Emailkasten to reconstruct complete conversations, given that all emails in it are present.
+Using this data allows Eonvelope to reconstruct complete conversations, given that all emails in it are present.
 Otherwise the conversations may only be fragmentary.
 We try to make sure to fetch emails in the correct chronological order to be able to resolve all links.
 Nonetheless it may happen that a single fetch of many connected mails does not find all conversations.

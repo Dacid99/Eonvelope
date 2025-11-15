@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -89,7 +89,9 @@ def test_Account_fields(django_user_model, fake_account):
     assert any(
         fake_account.protocol == protocol for protocol in EmailProtocolChoices.values
     )
-    assert fake_account.timeout is None
+    assert fake_account.timeout is not None
+    assert isinstance(fake_account.timeout, int)
+    assert fake_account.timeout == 10
     assert fake_account.is_healthy is None
     assert fake_account.is_favorite is False
     assert fake_account.user is not None

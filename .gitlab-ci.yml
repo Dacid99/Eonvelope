@@ -6,7 +6,7 @@ default:
     - set -o pipefail
     - export SECRET_KEY='HELPER_KEY'
     - export PYTHONPATH='src'
-    - export DJANGO_SETTINGS_MODULE='Emailkasten.settings'
+    - export DJANGO_SETTINGS_MODULE='eonvelope.settings'
     - apk update && apk add --no-cache ${APK_DEPENDENCIES}
     - pip install poetry
     - poetry install --with dev

@@ -1,9 +1,9 @@
 services:
   db:
     image: mariadb:latest
-    container_name: emailkasten-db
+    container_name: eonvelope-db
     volumes:
-      - /path/to/emailkasten/mysql:/var/lib/mysql
+      - /path/to/eonvelope/mysql:/var/lib/mysql
     environment:
       - MARIADB_DATABASE=email_archive_django # must match web:DATABASE_NAME
       - MARIADB_USER=user # must match web:DATABASE_USER
@@ -18,24 +18,24 @@ services:
       start_period: 10s
 
   web:
-    image: dacid99/emailkasten
-    container_name: emailkasten-web
+    image: dacid99/eonvelope
+    container_name: eonvelope-web
     volumes:
-      - /path/to/emailkasten/archive:/mnt/archive
-      - /path/to/emailkasten/log:/var/log/emailkasten
+      - /path/to/eonvelope/archive:/mnt/archive
+      - /path/to/eonvelope/log:/var/log/eonvelope
     ports:
       - 1122:443
     environment:
-    # see the docs for all details  https://emailkasten.readthedocs.io/latest/rst/configuration.html#server-admin-settings
-    # mandatory
+      # see the docs for all details  https://eonvelope.readthedocs.io/latest/rst/configuration.html#server-admin-settings
+      # mandatory
       - DATABASE=email_archive_django # must match db:MARIADB_DATABASE
       - DATABASE_USER=user # must match db:MARIADB_USER
       - DATABASE_PASSWORD=passwd # must match db:MARIADB_PASSWORD
-      - DATABASE_TYPE=mysql # possible values: mysql, postgresql, sqlite3; must match the database type of the db container
       - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
       - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
-      - ALLOWED_HOSTS=localhost,emailkasten.mydomain.tld # all allowed host URLs separated by ,
-    # optional
+      - ALLOWED_HOSTS=localhost,eonvelope.mydomain.tld # all allowed host URLs separated by ,
+      # optional
+      - DATABASE_TYPE=mysql # possible values: mysql, postgresql, sqlite3; must match the database type of the db container
       - REGISTRATION_ENABLED=False
       - STRICT_PASSWORDS=True
       - ACCOUNT_LOGIN_TIMEOUT=900
@@ -46,7 +46,7 @@ services:
       - ACCOUNT_REAUTHENTICATION_TIMEOUT=300
       - ACCOUNT_REAUTHENTICATION_REQUIRED=False
       - USERSESSIONS_KEEP_UPDATED=True
-      - MFA_TOTP_ISSUER=Emailkasten
+      - MFA_TOTP_ISSUER=Eonvelope
       - MFA_TOTP_TOLERANCE=1
       - MFA_TOTP_PERIOD=30
       - MFA_TOTP_DIGITS=6
@@ -63,7 +63,7 @@ services:
       - LOGFILE_BACKUP_NUMBER=5
       - CACHE_MIDDLEWARE_SECONDS=600
       - SECURE_HSTS_SECONDS=31536000
-      - DISALLOWED_USER_AGENTS=.*Trident/.* # collection of regex patterns for user agent strings that must not visit any page of this Emailkasten instance seperated by ,
+      - DISALLOWED_USER_AGENTS=.*Trident/.* # collection of regex patterns for user agent strings that must not visit any page of this Eonvelope instance seperated by ,
       - CSRF_TRUSTED_ORIGINS=https://subdomain.mydomain.tld # all URLs that can be trusted with unsafe requests separated by , . Must start with http:// or https:// each.
       - CSRF_COOKIE_AGE=31449600
       - CSRF_COOKIE_SAMESITE=Lax # the samesite value on the csrf-cookie. See https://docs.djangoproject.com/en/5.1/ref/settings/#session-cookie-samesite for more info.

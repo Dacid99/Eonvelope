@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 #
-# Emailkasten - a open-source self-hostable email archiving server
-# Copyright (C) 2024 David Aderbauer & The Emailkasten Contributors
+# Eonvelope - a open-source self-hostable email archiving server
+# Copyright (C) 2024 David Aderbauer & The Eonvelope Contributors
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from rest_framework.pagination import PageNumberPagination
 
-from Emailkasten.utils.workarounds import get_config
+from eonvelope.utils.workarounds import get_config
 
 
 class Pagination(PageNumberPagination):

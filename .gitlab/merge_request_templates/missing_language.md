@@ -1,4 +1,4 @@
-**Thank you for your effort to contribute an improvement to the documentation of the Emailkasten project!**
+**Thank you for your effort to contribute an improvement to the documentation of the Eonvelope project!**
 
 ## Checklist
 
@@ -14,7 +14,7 @@ If you need help to get to your code to check all boxes, please submit the pull 
 
 *If you can't check one of these please explain why the change was necessary in the  Explanations section.*
 
-[] My only change is to add an entry to the LANGUAGE_CODES dict in the Emailkasten/settings.py file.
+[] My only change is to add an entry to the LANGUAGE_CODES dict in the Eonvelope/settings.py file.
 
 *If you have added the translation .po files, please remove them before submitting the merge request.*
 *Otherwise merging this MR may lead to loss of synchronization with weblate.*

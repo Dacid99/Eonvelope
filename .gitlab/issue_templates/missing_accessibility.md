@@ -1,4 +1,4 @@
-**Thank you for taking the time to report missing accessibility in the Emailkasten frontend!**
+**Thank you for taking the time to report missing accessibility in the Eonvelope frontend!**
 
 - [ ] I have checked that there is no existing issue dealing with this problem.
 
@@ -17,7 +17,7 @@
 *On what device or software does the inaccessibility appear?*
 
 
-## Emailkasten version *
+## Eonvelope version *
 
 *The version of the application you used to find the bug. Ideally a docker image tag (not 'latest').*
 
@@ -30,3 +30,8 @@
 ## Possible diagnosis
 
 *If you have an idea what could be causing the inaccessibility please let us know.*
+
+
+## Fix it yourself?
+
+*What you be interested in fixing this problem yourself? If you do we are happy to support you on the way.*

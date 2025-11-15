@@ -1,0 +1,349 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-15 16:39+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:864
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:892
+msgid "Received"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:868
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:896
+msgid "From"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:871
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:899
+msgid "To"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:874
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:902
+msgid "CC"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:877
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:905
+msgid "BCC"
+msgstr ""
+
+#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:890
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:918
+msgid "Attachments"
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
+#: src/eonvelope/models/UserProfile.py:45
+msgid "Paperless server URL"
+msgstr ""
+
+#. Translators: Paperless is a brand name.
+#: src/eonvelope/models/UserProfile.py:47
+msgid "URL of your Paperless server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
+#: src/eonvelope/models/UserProfile.py:54
+msgid "Paperless server API key"
+msgstr ""
+
+#. Translators: Paperless is a brand name.
+#: src/eonvelope/models/UserProfile.py:56
+msgid "API key for your Paperless server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Paperless and Tika are brand names.
+#: src/eonvelope/models/UserProfile.py:62
+msgid "Paperless Tika support enabled"
+msgstr ""
+
+#. Translators: Paperless and Tika are brand names.
+#: src/eonvelope/models/UserProfile.py:64
+msgid "Whether Tika support is enabled on your Paperless server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Immich is a brand name.
+#: src/eonvelope/models/UserProfile.py:72
+msgid "Immich server URL"
+msgstr ""
+
+#. Translators: Immich is a brand name.
+#: src/eonvelope/models/UserProfile.py:74
+msgid "URL of your Immich server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Immich is a brand name.
+#: src/eonvelope/models/UserProfile.py:81
+msgid "Immich server API key"
+msgstr ""
+
+#. Translators: Immich is a brand name.
+#: src/eonvelope/models/UserProfile.py:83
+msgid "API key for your Immich server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:91
+msgid "Nextcloud server URL"
+msgstr ""
+
+#. Translators: Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:93
+msgid "URL of your Nextcloud server."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:100
+msgid "Nextcloud server username"
+msgstr ""
+
+#. Translators: Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:102
+msgid "Username for your Nextcloud account."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:109
+msgid "Nextcloud server password"
+msgstr ""
+
+#. Translators: Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:111
+msgid "Password for your Nextcloud account."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:118
+msgid "Nextcloud server addressbook"
+msgstr ""
+
+#. Translators: Nextcloud is a brand name.
+#: src/eonvelope/models/UserProfile.py:120
+msgid "Main addressbook of your Nextcloud account."
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it.
+#: src/eonvelope/models/UserProfile.py:128
+msgid "user profile"
+msgstr ""
+
+#. Translators: Do not capitalize the very first letter unless your language requires it.
+#: src/eonvelope/models/UserProfile.py:130
+msgid "user profiles"
+msgstr ""
+
+#: src/eonvelope/models/UserProfile.py:139
+#, python-format
+msgid "Profile for user %(username)s "
+msgstr ""
+
+#: src/eonvelope/settings.py:562
+msgid "Your email archiving server"
+msgstr ""
+
+#: src/eonvelope/settings.py:604
+msgid "Dashboard"
+msgstr ""
+
+#: src/eonvelope/settings.py:606
+msgid "Shortcut to the dashboard"
+msgstr ""
+
+#: src/eonvelope/settings.py:609
+msgid "Timeline"
+msgstr ""
+
+#: src/eonvelope/settings.py:611
+msgid "Shortcut to the email timeline"
+msgstr ""
+
+#: src/eonvelope/settings.py:884
+msgid "Default page size for paginated API response data"
+msgstr ""
+
+#: src/eonvelope/settings.py:889
+msgid "Maximum page size for paginated API response data"
+msgstr ""
+
+#: src/eonvelope/settings.py:894
+msgid "Default page size for pagination in the webapp."
+msgstr ""
+
+#: src/eonvelope/settings.py:900
+msgid ""
+"Page size options for pagination in the webapp. Should contain the "
+"WEB_DEFAULT_PAGE_SIZE value."
+msgstr ""
+
+#: src/eonvelope/settings.py:907
+msgid ""
+"Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
+"will not be loaded."
+msgstr ""
+
+#: src/eonvelope/settings.py:913
+msgid "Maximum numbers of files in one storage unit."
+msgstr ""
+
+#: src/eonvelope/settings.py:918
+msgid "Whether or not to ignore emails that have a spam flag"
+msgstr ""
+
+#: src/eonvelope/settings.py:924
+msgid ""
+"Regex pattern (case-insensitive) for mailbox names that are ignored when "
+"looking up mailboxes in an account."
+msgstr ""
+
+#: src/eonvelope/settings.py:930
+msgid "List of content types prefixes to not parse as files."
+msgstr ""
+
+#: src/eonvelope/settings.py:936
+msgid ""
+"List of content types prefixes to not parse as files. Plain and HTML text is "
+"always ignored as its the bodytext."
+msgstr ""
+
+#: src/eonvelope/settings.py:943
+msgid ""
+"Html template used to render emails to html. Uses the django template syntax "
+"and has access to all fields of the email database table. Removing template "
+"tag imports may result in 500 responses when requesting pages with email "
+"thumbnails, so be careful."
+msgstr ""
+
+#: src/eonvelope/settings.py:950
+msgid ""
+"Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
+"on the classes."
+msgstr ""
+
+#: src/eonvelope/settings.py:956
+msgid "Default mailbox setting whether to store mails as eml."
+msgstr ""
+
+#: src/eonvelope/settings.py:961
+msgid "Default mailbox setting whether to store attachments."
+msgstr ""
+
+#: src/eonvelope/settings.py:967
+msgid ""
+"Set this to True to allow new users to sign up themselves. This setting only "
+"takes effect if the REGISTRATION_ENABLED environment setting is not 0."
+msgstr ""
+
+#: src/eonvelope/settings.py:974
+msgid "Server Configurations"
+msgstr ""
+
+#: src/eonvelope/settings.py:976
+msgid "Default Values"
+msgstr ""
+
+#: src/eonvelope/settings.py:983
+msgid "Processing Settings"
+msgstr ""
+
+#: src/eonvelope/settings.py:994
+msgid "Storage Settings"
+msgstr ""
+
+#: src/eonvelope/settings.py:998
+msgid "API Settings"
+msgstr ""
+
+#: src/eonvelope/settings.py:1005
+msgid "Web Settings"
+msgstr ""
+
+#: src/eonvelope/templates/429.html:8 src/eonvelope/templates/429.html:13
+msgid "Too Many Requests"
+msgstr ""
+
+#: src/eonvelope/templates/429.html:15
+msgid "You are sending too many requests."
+msgstr ""
+
+#: src/eonvelope/templates/account/profile.html:14
+#: src/eonvelope/templates/allauth/layouts/manage.html:16
+msgid "Profile"
+msgstr ""
+
+#: src/eonvelope/templates/account/profile.html:18
+msgid "Your Profile"
+msgstr ""
+
+#: src/eonvelope/templates/account/profile.html:19
+msgid "Third Party Integrations"
+msgstr ""
+
+#: src/eonvelope/templates/account/profile.html:47
+msgid "Save"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/elements/language_dropdown.html:8
+#: src/eonvelope/templates/allauth/elements/language_dropdown.html:12
+msgid "Select Language"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/elements/theme_dropdown.html:21
+msgid "Light"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/elements/theme_dropdown.html:30
+msgid "Dark"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/elements/theme_dropdown.html:39
+msgid "Auto"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/base.html:65
+msgid "Toggle navigation"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/base.html:83
+msgid "Sign Out"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/base.html:87
+msgid "Sign In"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/base.html:90
+msgid "Sign Up"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/manage.html:24
+msgid "Change Password"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/manage.html:32
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/manage.html:40
+msgid "Sessions"
+msgstr ""
+
+#: src/eonvelope/templates/allauth/layouts/manage.html:47
+msgid "Admin panel"
+msgstr ""

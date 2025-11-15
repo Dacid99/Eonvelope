@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 0.2.1
+
+- Features:
+  - rebranded to Eonvelope
+  - added icons
+
+- Fixes:
+  - PWA is working now
+
+- Updates:
+  - translations
+  - dependencies
+
 ## Version 0.2.0
 
 - Features:

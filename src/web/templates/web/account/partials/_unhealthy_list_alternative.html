@@ -8,6 +8,10 @@
 
 {% block instruction_buttons %}
 
-    {% include "web/partials/_test-button.html" %}
+    <form method="post">
+        {% csrf_token %}
 
+        {% include "web/partials/_test-button.html" %}
+
+    </form>
 {% endblock instruction_buttons %}

@@ -8,6 +8,11 @@
 
 {% block instruction_buttons %}
 
-    {% include "web/account/partials/_update_mailboxes-button.html" with account=object %}
+    <form method="post">
+        {% csrf_token %}
+
+        {% include "web/account/partials/_update_mailboxes-button.html" with account=object %}
+
+    </form>
 
 {% endblock instruction_buttons %}

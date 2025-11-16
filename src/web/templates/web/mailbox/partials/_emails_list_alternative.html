@@ -9,7 +9,12 @@
 
 {% block instruction_buttons %}
 
-    {% include "web/mailbox/partials/_fetch_dropdown.html" with mailbox=object %}
+    <form method="post">
+        {% csrf_token %}
+
+        {% include "web/mailbox/partials/_fetch_dropdown.html" with mailbox=object %}
+
+    </form>
 
     {% include "web/daemon/partials/_add_button.html" %}
 

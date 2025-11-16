@@ -6,10 +6,11 @@
 {% block instruction_text %}
 
     {% translate "You can set up routines for this mailbox to fetch its contents on a regular schedule." %}
+
 {% endblock instruction_text %}
 
 {% block instruction_buttons %}
 
-    {% include "web/daemon/partials/_add_button.html" %}
+    {% include "web/mailbox/partials/_add_daemon_button.html" with mailbox=object %}
 
 {% endblock instruction_buttons %}

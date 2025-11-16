@@ -1,6 +1,6 @@
 {% load translate from i18n %}
 
-<a href="{% url 'web:mailbox-create-daemon' object.pk %}"
+<a href="{% url 'web:mailbox-create-daemon' mailbox.pk %}"
    class="btn btn-outline-primary {% if not mailbox.is_healthy %}disabled{% endif %}"
    {% if not mailbox.is_healthy %}aria-disabled="true"{% endif %}
    role="button">

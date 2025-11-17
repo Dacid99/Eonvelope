@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-15 16:39+0000\n"
-"PO-Revision-Date: 2025-11-08 11:51+0000\n"
+"PO-Revision-Date: 2025-11-18 10:51+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/core/"
 "uk/>\n"
@@ -16,10 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && "
+"(n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && "
+"(n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 ))"
+" ? 2: 3);\n"
 "X-Generator: Weblate 5.15-dev\n"
 
 #: src/core/constants.py:38
@@ -449,22 +450,16 @@ msgid "Uploading to Immich failed: %(response)s"
 msgstr "Завантаження до Immich не вдалося: %(response)s"
 
 #: src/core/models/Attachment.py:410
-#, fuzzy
-#| msgid "attachment"
 msgid "Attachment image"
-msgstr "вкладення"
+msgstr "Вкладене зображення"
 
 #: src/core/models/Attachment.py:420
-#, fuzzy
-#| msgid "attachment"
 msgid "Attachment text"
-msgstr "вкладення"
+msgstr "Текст вкладення"
 
 #: src/core/models/Attachment.py:429
-#, fuzzy
-#| msgid "fetching of mail contents"
 msgid "Attachment file content"
-msgstr "отримання вмісту пошти"
+msgstr "Вміст вкладеного файлу"
 
 #: src/core/models/Correspondent.py:67
 msgid ""

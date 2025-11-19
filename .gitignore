@@ -135,4 +135,5 @@ venv/
 wheels/
 xcuserdata/
 # whitelist
+!.gitlab/pages/images/*
 !src/eonvelope/static/eonvelope/icons/*

@@ -892,7 +892,7 @@ nav {
 
 .practice-layout {
 	display: grid;
-	grid-template-columns: 280px 1fr;
+	grid-template-columns: 200px 1fr;
 	gap: 3rem;
 	margin-top: 3rem;
 }
@@ -957,7 +957,7 @@ nav {
 	transition: all 0.3s ease;
 	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
 	z-index: 5;
-	min-width: 200px;
+	min-width: 100px;
 	text-align: center;
 }
 
@@ -1109,10 +1109,9 @@ nav {
 }
 
 .practice-image {
-	height: 200px;
-	background: var(--white);
+	width: 880px;
 	position: relative;
-	overflow: hidden;
+	overflow: scroll;
 	background-size: cover;
 	background-position: center;
 	background-repeat: no-repeat;
@@ -1275,6 +1274,10 @@ nav {
 
 .issues_wide {
 	background-image: url('images/github_wide.png');
+}
+
+.email {
+	background-image: url('images/emaildetail_small.png');
 }
 
 .resource-image::before {

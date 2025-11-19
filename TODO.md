@@ -40,6 +40,8 @@
 
 ## To implement
 
+- migration to py3.14
+
 ### Work in progress
 
 - tests
@@ -48,7 +50,7 @@
 
 ## To fix
 
-- buttons in list-alts are disconnected
+- icons for third-parties
 - filteroptions for existing db entries leak other user data
 - fetching too many emails leads to browser timeout
 - ci:

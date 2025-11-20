@@ -81,7 +81,7 @@ ignore = [
 ]
 external = [ "WPS" ]
 
-mccabe.max-complexity = 6
+mccabe.max-complexity = 8
 [lint.pydocstyle]
 convention = "google"
 

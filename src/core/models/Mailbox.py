@@ -209,6 +209,81 @@ class Mailbox(
 
         logger.info("Successfully saved fetched emails.")
 
+    def _add_email_from_eml(self, file: BinaryIO) -> None:
+        """Reads emails from a zipped mailbox dir."""
+        Email.create_from_email_bytes(file.read(), mailbox=self)
+
+    def _add_emails_from_zip_eml(self, file: BinaryIO) -> None:
+        """Reads emails from a zip of eml files."""
+        try:
+            with ZipFile(file) as zipfile:
+                for zipped_file in zipfile.namelist():
+                    Email.create_from_email_bytes(
+                        zipfile.read(zipped_file), mailbox=self
+                    )
+        except BadZipFile as error:
+            logger.exception("Error parsing file as zip!")
+            raise ValueError(
+                _("The given file is not a valid %(file_format)s.")
+                % {"file_format": "zip"}
+            ) from error
+
+    def _add_emails_from_mailbox_file(self, file: BinaryIO, file_format: str) -> None:
+        """Reads emails from a mailbox file.
+
+        Note:
+            Does not validate file_format! This has to be done beforehand.
+        """
+        parser_class = file_format_parsers[file_format]
+        with NamedTemporaryFile() as tempfile:
+            tempfile.write(file.read())
+            tempfile.seek(0)
+            parser = parser_class(tempfile.name, create=False)
+            parser.lock()
+            for key in parser.iterkeys():
+                with contextlib.suppress(
+                    AssertionError
+                ):  # Babyl.get_bytes can raise AssertionError for a bad message
+                    Email.create_from_email_bytes(parser.get_bytes(key), mailbox=self)
+            parser.close()
+
+    def _add_emails_from_mailbox_zip(self, file: BinaryIO, file_format: str) -> None:
+        """Reads emails from a zipped mailbox dir.
+
+        Note:
+            Does not validate file_format! This has to be done beforehand.
+        """
+        parser_class = file_format_parsers[file_format]
+        with TemporaryDirectory() as tempdirpath:
+            try:
+                with ZipFile(file) as zipfile:
+                    zipfile.extractall(tempdirpath)
+            except BadZipFile as error:
+                logger.exception("Error parsing file as zip!")
+                raise ValueError(
+                    _("The given file is not a valid %(file_format)s.")
+                    % {"file_format": "zip"}
+                ) from error
+            for name in os.listdir(tempdirpath):
+                path = os.path.join(tempdirpath, name)
+                if os.path.isdir(path):
+                    parser = parser_class(path, create=False)
+                    parser.lock()
+                    try:
+                        for key in parser.iterkeys():
+                            Email.create_from_email_bytes(
+                                parser.get_bytes(key), mailbox=self
+                            )
+                    except (
+                        FileNotFoundError
+                    ) as error:  # raised if the given maildir doesn't have the expected structure
+                        logger.exception("Error parsing file as %s!", file_format)
+                        raise ValueError(
+                            _("The given file is not a valid %(file_format)s.")
+                            % {"file_format": file_format}
+                        ) from error
+                    parser.close()
+
     def add_emails_from_file(self, file: BinaryIO, file_format: str) -> None:
         """Adds emails from a file to the db.
 
@@ -222,73 +297,20 @@ class Mailbox(
         file_format = file_format.lower()
         logger.info("Adding emails from %s file to %s ...", file_format, self)
         if file_format == SupportedEmailUploadFormats.EML:
-            Email.create_from_email_bytes(file.read(), mailbox=self)
+            self._add_email_from_eml(file)
         elif file_format == SupportedEmailUploadFormats.ZIP_EML:
-            try:
-                with ZipFile(file) as zipfile:
-                    for zipped_file in zipfile.namelist():
-                        Email.create_from_email_bytes(
-                            zipfile.read(zipped_file), mailbox=self
-                        )
-            except BadZipFile as error:
-                logger.exception("Error parsing file as %s!", file_format)
-                raise ValueError(
-                    _("The given file is not a valid %(file_format)s.")
-                    % {"file_format": "zip"}
-                ) from error
+            self._add_emails_from_zip_eml(file)
         elif file_format in [
             SupportedEmailUploadFormats.MBOX,
             SupportedEmailUploadFormats.MMDF,
             SupportedEmailUploadFormats.BABYL,
         ]:
-            parser_class = file_format_parsers[file_format]
-            with NamedTemporaryFile() as tempfile:
-                tempfile.write(file.read())
-                tempfile.seek(0)
-                parser = parser_class(tempfile.name, create=False)
-                parser.lock()
-                for key in parser.iterkeys():
-                    with contextlib.suppress(
-                        AssertionError
-                    ):  # Babyl.get_bytes can raise AssertionError for a bad message
-                        Email.create_from_email_bytes(
-                            parser.get_bytes(key), mailbox=self
-                        )
-                parser.close()
+            self._add_emails_from_mailbox_file(file, file_format)
         elif file_format in [
             SupportedEmailUploadFormats.MAILDIR,
             SupportedEmailUploadFormats.MH,
         ]:
-            parser_class = file_format_parsers[file_format]
-            with TemporaryDirectory() as tempdirpath:
-                try:
-                    with ZipFile(file) as zipfile:
-                        zipfile.extractall(tempdirpath)
-                except BadZipFile as error:
-                    logger.exception("Error parsing file as %s!", file_format)
-                    raise ValueError(
-                        _("The given file is not a valid %(file_format)s.")
-                        % {"file_format": "zip"}
-                    ) from error
-                for name in os.listdir(tempdirpath):
-                    path = os.path.join(tempdirpath, name)
-                    if os.path.isdir(path):
-                        parser = parser_class(path, create=False)
-                        parser.lock()
-                        try:
-                            for key in parser.iterkeys():
-                                Email.create_from_email_bytes(
-                                    parser.get_bytes(key), mailbox=self
-                                )
-                        except (
-                            FileNotFoundError
-                        ) as error:  # raised if the given maildir doesn't have the expected structure
-                            logger.exception("Error parsing file as %s!", file_format)
-                            raise ValueError(
-                                _("The given file is not a valid %(file_format)s.")
-                                % {"file_format": file_format}
-                            ) from error
-                        parser.close()
+            self._add_emails_from_mailbox_zip(file, file_format)
         else:
             logger.error("Unsupported fileformat for uploaded file.")
             raise ValueError(

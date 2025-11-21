@@ -30,7 +30,7 @@ Recommended
 -----------
 
 The project is intended to be run with the container image
-provided at `dockerhub <https://hub.docker.com/repository/docker/dacid99/eonvelope/general>`_.
+provided at `dockerhub <https://hub.docker.com/r/dacid99/eonvelope>`_.
 
 The Eonvelope service mounts 2 volumes,
 one for the logfiles of Eonvelope and one for the files that Eonvelope archives.
@@ -116,7 +116,7 @@ to your nginx config.
 Updating
 ========
 
-You can update your Eonvelope server by getting and deploying the latest version from `dockerhub <https://hub.docker.com/repository/docker/dacid99/eonvelope/general>`_.
+You can update your Eonvelope server by getting and deploying the latest version from `dockerhub <https://hub.docker.com/r/dacid99/eonvelope>`_.
 
 Database migrations
 -------------------

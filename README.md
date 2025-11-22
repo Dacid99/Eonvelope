@@ -30,6 +30,8 @@ As an admin you may choose this project because of its
 - SSL certificate out of the box
 - Full-fledged API
 
+*Check out the [project website](https://dacid99.gitlab.io/eonvelope) for screenshots and more information.*
+
 Your emails are serious business, so this projects codebase has > 95% test-coverage!
 
 ### Roadmap

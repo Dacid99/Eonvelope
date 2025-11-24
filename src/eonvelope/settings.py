@@ -612,6 +612,9 @@ PWA_APP_SHORTCUTS = [
     },
 ]
 PWA_APP_SCREENSHOTS = []
+PWA_SERVICE_WORKER_PATH = (
+    BASE_DIR / "src" / "eonvelope" / "templates" / "serviceworker.js"
+)
 PWA_APP_DEBUG_MODE = DEBUG
 
 

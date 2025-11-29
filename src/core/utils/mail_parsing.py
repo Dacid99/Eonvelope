@@ -24,11 +24,13 @@ Global variables:
 
 from __future__ import annotations
 
+import contextlib
 import email
 import email.header
 import email.utils
 import logging
 import re
+from base64 import b64encode
 from datetime import datetime, time
 from typing import TYPE_CHECKING, TextIO
 
@@ -223,40 +225,85 @@ def make_icalendar_readout(
         A list with the calendar events main features in tuples.
     """
     calendar_readout = []
-    for calendar in vobject.readComponents(icalendar_file):
-        for event in calendar.vevent_list:
-            if "dtstart" not in event.contents:
-                continue
-            dtstart = event.dtstart.value
-            dtstart = (
-                dtstart.astimezone(get_current_timezone())
-                if isinstance(dtstart, datetime)
-                else datetime.combine(
-                    dtstart,
-                    time.min,
-                    tzinfo=get_current_timezone(),
-                )
-            )
-            if "dtend" in event.contents:
-                dtend = event.dtend.value
-                dtend = (
-                    dtend.astimezone(get_current_timezone())
-                    if isinstance(dtend, datetime)
+    with contextlib.suppress(vobject.base.VObjectError):
+        for calendar in vobject.readComponents(icalendar_file):
+            for event in calendar.vevent_list:
+                if "dtstart" not in event.contents:
+                    continue
+                dtstart = event.dtstart.value
+                dtstart = (
+                    dtstart.astimezone(get_current_timezone())
+                    if isinstance(dtstart, datetime)
                     else datetime.combine(
-                        dtend,
+                        dtstart,
                         time.min,
                         tzinfo=get_current_timezone(),
                     )
                 )
-            elif "duration" in event.contents:
-                dtend = dtstart + event.duration.value
-            else:
-                dtend = datetime.combine(
-                    dtstart.date(),
-                    time.max,
-                    dtstart.tzinfo,
+                if "dtend" in event.contents:
+                    dtend = event.dtend.value
+                    dtend = (
+                        dtend.astimezone(get_current_timezone())
+                        if isinstance(dtend, datetime)
+                        else datetime.combine(
+                            dtend,
+                            time.min,
+                            tzinfo=get_current_timezone(),
+                        )
+                    )
+                elif "duration" in event.contents:
+                    dtend = dtstart + event.duration.value
+                else:
+                    dtend = datetime.combine(
+                        dtstart.date(),
+                        time.max,
+                        dtstart.tzinfo,
+                    )
+                summary = (
+                    str(event.summary.value).strip()
+                    if "summary" in event.contents
+                    else ""
                 )
-            summary = event.summary.value if "summary" in event.contents else ""
-            location = event.location.value if "location" in event.contents else ""
-            calendar_readout.append((dtstart, dtend, summary, location))
+                location = (
+                    str(event.location.value).strip()
+                    if "location" in event.contents
+                    else ""
+                )
+                calendar_readout.append((dtstart, dtend, summary, location))
+    return calendar_readout
+
+
+def make_vcard_readout(
+    vcard_file: TextIO,
+) -> list[tuple[datetime, datetime, str, str]]:
+    """Parses the main features of a vcard file into a list.
+
+    References:
+        https://www.rfc-editor.org/rfc/rfc5545.html#page-52
+
+    Args:
+        vcard_file: The vcard file to parse.
+
+    Returns:
+        A list with the cards main features in tuples.
+    """
+    calendar_readout = []
+    with contextlib.suppress(vobject.base.VObjectError):
+        for contact in vobject.readComponents(vcard_file):
+            full_name = contact.fn.value if "fn" in contact.contents else ""
+            photo_data = (
+                b64encode(
+                    contact.photo.value
+                ).decode()  # to get a string for use in img src
+                if "photo" in contact.contents
+                else ""
+            )
+            email = (
+                str(contact.email.value).strip() if "email" in contact.contents else ""
+            )
+            address = (
+                str(contact.adr.value).strip() if "adr" in contact.contents else ""
+            )
+            tel = str(contact.tel.value).strip() if "tel" in contact.contents else ""
+            calendar_readout.append((full_name, photo_data, email, address, tel))
     return calendar_readout

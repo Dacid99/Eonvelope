@@ -47,6 +47,7 @@ from core.constants import (
     IMMICH_SUPPORTED_VIDEO_TYPES,
     PAPERLESS_SUPPORTED_IMAGE_TYPES,
     PAPERLESS_TIKA_SUPPORTED_MIMETYPES,
+    VCARD_TEMPLATE,
     HeaderFields,
 )
 from core.mixins import (
@@ -57,7 +58,7 @@ from core.mixins import (
     TimestampModelMixin,
     URLMixin,
 )
-from core.utils.mail_parsing import make_icalendar_readout
+from core.utils.mail_parsing import make_icalendar_readout, make_vcard_readout
 from eonvelope.utils.workarounds import get_config
 
 
@@ -417,10 +418,22 @@ class Attachment(
                     return ""
                 with icalendar_file:
                     engine = engines["django"]
-                    return engine.from_string(ICALENDAR_TEMPLATE).render(
+                    template = engine.from_string(ICALENDAR_TEMPLATE)
+                    return template.render(
                         context={
                             "icalendar_readout": make_icalendar_readout(icalendar_file)
                         }
+                    )
+            if self.content_subtype in ["vcard", "vcf", "x-vcard"]:
+                try:
+                    vcard_file = self.open_file(mode="r")
+                except FileNotFoundError:
+                    return ""
+                with vcard_file:
+                    engine = engines["django"]
+                    template = engine.from_string(VCARD_TEMPLATE)
+                    return template.render(
+                        context={"vcard_readout": make_vcard_readout(vcard_file)}
                     )
             return format_html(
                 """<iframe sandbox

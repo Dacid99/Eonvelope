@@ -9,6 +9,8 @@
   - small extensions of some api endpoints
 
 - Fixes:
+  - improved mobile interface
+  - fixed pwa getting stuck on offline page
   - email x-spam data is now easier to filter by
   - autohiding apikey and passwords in profile settings
   - ordering of mailboxes by account first, name second to get a less confusing list

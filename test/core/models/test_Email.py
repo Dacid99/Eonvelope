@@ -1106,6 +1106,7 @@ def test_Email_html_version(fake_email, fake_attachment, fake_correspondent):
     result = fake_email.html_version
 
     assert result
+    print(result)
     assert get_config("EMAIL_CSS") in result
 
 

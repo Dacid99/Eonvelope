@@ -868,21 +868,22 @@ def test_Attachment_has_thumbnail_too_large(
         ("video", "mp4"),
         ("text", "html"),
         ("text", "calendar"),
+        ("text", "x-vcard"),
+        ("text", "vcf"),
         ("application", "pdf"),
         ("application", "json"),
     ],
 )
-def test_Attachment_thumbnail(fake_attachment, content_maintype, content_subtype):
+def test_Attachment_thumbnail(
+    fake_attachment_with_file, content_maintype, content_subtype
+):
     """Tests :func:`core.models.Attachment.Attachment.thumbnail` for all types that have an html thumbnail."""
-    fake_attachment.content_maintype = content_maintype
-    fake_attachment.content_subtype = content_subtype
+    fake_attachment_with_file.content_maintype = content_maintype
+    fake_attachment_with_file.content_subtype = content_subtype
 
-    assert fake_attachment.thumbnail
-    assert fake_attachment.thumbnail.strip().startswith("<")
-    assert fake_attachment.thumbnail.strip().endswith(">")
-    if content_subtype == "calendar":
-        with open("thumb.html", "w") as f:
-            f.write(fake_attachment.thumbnail)
+    assert fake_attachment_with_file.thumbnail
+    assert fake_attachment_with_file.thumbnail.strip().startswith("<")
+    assert fake_attachment_with_file.thumbnail.strip().endswith(">")
 
 
 @pytest.mark.django_db

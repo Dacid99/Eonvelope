@@ -45,8 +45,10 @@ import contextlib
 import os
 from datetime import UTC, datetime, timedelta, timezone
 from io import BytesIO
+from pathlib import Path
 from tempfile import gettempdir
 
+import django
 import pytest
 from django.core.files.storage import default_storage
 from django.forms import model_to_dict
@@ -335,6 +337,8 @@ def fake_bad_timezone_client(client):
 def fake_fs(settings):
     """A mock Linux filesystem for realistic testing.
 
+    Preserves the original paths for django.
+
     Contains a directory at the STORAGE_PATH setting to allow for testing without patching the storage backend.
     Contains a directory at the LOG_DIRECTORY_PATH setting.
     Contains a tempdir at the location requested by tempfile.
@@ -342,6 +346,9 @@ def fake_fs(settings):
     with Patcher() as patcher:
         if not patcher.fs:
             raise OSError("Generator could not create a fakefs!")
+
+        django_path = Path(django.__file__).parent
+        patcher.fs.add_real_directory(str(django_path))
 
         patcher.fs.create_dir(settings.STORAGE_PATH)
         patcher.fs.create_dir(settings.LOG_DIRECTORY_PATH)

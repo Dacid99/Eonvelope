@@ -23,123 +23,157 @@
             </button>
             <div class="collapse navbar-collapse nav-pills" id="navbarNav">
                 <div class="navbar-nav me-auto">
-                    <div class="nav-item">
-                        <div class="dropdown"
-                             onmouseover="new bootstrap.Dropdown(this).toggle()"
-                             onmouseout="new bootstrap.Dropdown(this).toggle()">
-                            <a class="nav-link 
-                                {% block nav_class_emails %}link-body-emphasis{% endblock nav_class_emails %}
-                             " href="{% url 'web:email-filter-list' %}">{% translate "Emails" %}<i class="fa-regular fa-envelope mx-1" aria-hidden="true"></i></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:email-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:email-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:email-archive-index' %}"><i class="fa-solid fa-timeline mx-1" aria-hidden="true"></i>{% translate "Timeline" %}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="nav-item btn-group">
+                        <button type="button"
+                                class="btn dropdown-toggle-split pe-0 nav-link {% if 'email' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            {% translate "Emails" %}
+                            <span class="visually-hidden">{% translate "Toggle Dropdown" %}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:email-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:email-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:email-archive-index' %}"><i class="fa-solid fa-timeline mx-1" aria-hidden="true"></i>{% translate "Timeline" %}</a>
+                            </li>
+                        </ul>
+                        <a role="button"
+                           class="btn nav-link {% if 'email' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %} "
+                           href="{% url 'web:email-filter-list' %}">
+                            <i class="fa-regular fa-envelope" aria-hidden="true"></i>
+                        </a>
                     </div>
-                    <div class="nav-item">
-                        <div class="dropdown"
-                             onmouseover="new bootstrap.Dropdown(this).toggle()"
-                             onmouseout="new bootstrap.Dropdown(this).toggle()">
-                            <a class="nav-link 
-                                {% block nav_class_attachments %}link-body-emphasis{% endblock nav_class_attachments %}
-                             " href="{% url 'web:attachment-filter-list' %}">{% translate "Attachments" %}<i class="fa-solid fa-paperclip mx-1" aria-hidden="true"></i></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:attachment-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:attachment-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="nav-item btn-group">
+                        <button type="button"
+                                class="btn dropdown-toggle-split pe-0 nav-link {% if 'attachment' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            {% translate "Attachments" %}
+
+                            <span class="visually-hidden">{% translate "Toggle Dropdown" %}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:attachment-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:attachment-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
+                            </li>
+                        </ul>
+                        <a role="button"
+                           class="btn nav-link {% if 'attachment' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %} "
+                           href="{% url 'web:attachment-filter-list' %}">
+                            <i class="fa-solid fa-paperclip" aria-hidden="true"></i>
+                        </a>
                     </div>
-                    <div class="nav-item">
-                        <div class="dropdown"
-                             onmouseover="new bootstrap.Dropdown(this).toggle()"
-                             onmouseout="new bootstrap.Dropdown(this).toggle()">
-                            <a class="nav-link 
-                                {% block nav_class_correspondents %}link-body-emphasis{% endblock nav_class_correspondents %}
-                             " href="{% url 'web:correspondent-filter-list' %}">{% translate "Correspondents" %}<i class="fa-solid fa-address-book mx-1" aria-hidden="true"></i></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item"
-                                       href="{% url 'web:correspondent-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:correspondent-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="nav-item btn-group">
+                        <button type="button"
+                                class="btn dropdown-toggle-split pe-0 nav-link {% if 'correspondent' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            {% translate "Correspondents" %}
+                            <span class="visually-hidden">{% translate "Toggle Dropdown" %}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{% url 'web:correspondent-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:correspondent-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
+                            </li>
+                        </ul>
+                        <a role="button"
+                           class="btn nav-link {% if 'correspondent' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %} "
+                           href="{% url 'web:correspondent-filter-list' %}">
+                            <i class="fa-solid fa-address-book" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="navbar-nav me-auto">
-                    <div class="nav-item">
-                        <div class="dropdown"
-                             onmouseover="new bootstrap.Dropdown(this).toggle()"
-                             onmouseout="new bootstrap.Dropdown(this).toggle()">
-                            <a class="nav-link 
-                                {% block nav_class_accounts %}link-body-emphasis{% endblock nav_class_accounts %}
-                             " href="{% url 'web:account-filter-list' %}">{% translate "Accounts" %}<i class="fa-solid fa-at mx-1"></i></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:account-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:account-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="nav-item btn-group">
+                        <button type="button"
+                                class="btn dropdown-toggle-split pe-0 nav-link {% if 'account' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            {% translate "Accounts" %}
+                            <span class="visually-hidden">{% translate "Toggle Dropdown" %}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:account-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:account-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
+                            </li>
+                        </ul>
+                        <a role="button"
+                           class="btn nav-link {% if 'account' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %} "
+                           href="{% url 'web:account-filter-list' %}">
+                            <i class="fa-solid fa-at"></i>
+                        </a>
                     </div>
-                    <div class="nav-item">
-                        <div class="dropdown"
-                             onmouseover="new bootstrap.Dropdown(this).toggle()"
-                             onmouseout="new bootstrap.Dropdown(this).toggle()">
-                            <a class="nav-link 
-                                {% block nav_class_mailboxes %}link-body-emphasis{% endblock nav_class_mailboxes %}
-                             " href="{% url 'web:mailbox-filter-list' %}">{% translate "Mailboxes" %}<i class="fa-solid fa-inbox mx-1" aria-hidden="true"></i></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:mailbox-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:mailbox-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="nav-item btn-group">
+                        <button type="button"
+                                class="btn dropdown-toggle-split pe-0 nav-link {% if 'mailbox' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            {% translate "Mailboxes" %}
+                            <span class="visually-hidden">{% translate "Toggle Dropdown" %}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:mailbox-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:mailbox-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
+                            </li>
+                        </ul>
+                        <a role="button"
+                           class="btn nav-link {% if 'mailbox' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %} "
+                           href="{% url 'web:mailbox-filter-list' %}">
+                            <i class="fa-solid fa-inbox" aria-hidden="true"></i>
+                        </a>
                     </div>
-                    <div class="nav-item">
-                        <div class="dropdown"
-                             onmouseover="new bootstrap.Dropdown(this).toggle()"
-                             onmouseout="new bootstrap.Dropdown(this).toggle()">
-                            <a class="nav-link 
-                                {% block nav_class_daemons %}link-body-emphasis{% endblock nav_class_daemons %}
-                             " href="{% url 'web:daemon-filter-list' %}">{% translate "Routines" %}<i class="fa-solid fa-calendar-days mx-1" aria-hidden="true"></i></a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:daemon-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{% url 'web:daemon-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="nav-item btn-group">
+                        <button type="button"
+                                class="btn dropdown-toggle-split pe-0 nav-link {% if 'daemon' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %}"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            {% translate "Routines" %}
+                            <span class="visually-hidden">{% translate "Toggle Dropdown" %}</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:daemon-filter-list' %}"><i class="fa-solid fa-list mx-1" aria-hidden="true"></i>{% translate "List" %}</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{% url 'web:daemon-table' %}"><i class="fa-solid fa-table-list mx-1" aria-hidden="true"></i>{% translate "Table" %}</a>
+                            </li>
+                        </ul>
+                        <a role="button"
+                           class="btn nav-link {% if 'daemon' in request.resolver_match.url_name %}link-light active{% else %}link-body-emphasis{% endif %} "
+                           href="{% url 'web:daemon-filter-list' %}">
+                            <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                        </a>
                     </div>
                 </div>
                 <div class="navbar-nav align-items-end">
                     {% if user.is_authenticated %}
-                        <a class="nav-link link-body-emphasis text-capitalize"
+                        <a role="button"
+                           class="nav-link link-body-emphasis text-capitalize"
                            href="{% url 'account_logout' %}">
                             {{ user.username }}<i class="fa fa-user-circle mx-1" aria-hidden="true"></i>
                         </a>
                     {% else %}
-                        <a class="nav-link link-body-emphasis" href="{% url 'account_login' %}">
+                        <a role="button"
+                           class="nav-link link-body-emphasis"
+                           href="{% url 'account_login' %}">
                             Login<i class="fa fa-user-circle mx-1" aria-hidden="true"></i>
                         </a>
                     {% endif %}

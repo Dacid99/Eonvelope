@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 22:05+0000\n"
+"POT-Creation-Date: 2025-11-30 15:30+0000\n"
 "PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/"
@@ -122,44 +122,44 @@ msgstr "Routine gestoppt"
 msgid "Routine not running"
 msgstr "Routine nicht aktiv"
 
-#: src/api/v1/views/EmailViewSet.py:216 src/api/v1/views/EmailViewSet.py:374
+#: src/api/v1/views/EmailViewSet.py:230 src/api/v1/views/EmailViewSet.py:388
 msgid "eml file not found."
 msgstr "eml-Datei nicht gefunden."
 
-#: src/api/v1/views/EmailViewSet.py:247 src/api/v1/views/MailboxViewSet.py:306
+#: src/api/v1/views/EmailViewSet.py:261 src/api/v1/views/MailboxViewSet.py:306
 msgid "File format is required."
 msgstr "Dateiformat wird benötigt."
 
-#: src/api/v1/views/EmailViewSet.py:252
+#: src/api/v1/views/EmailViewSet.py:266
 msgid "Email ids are required."
 msgstr "E-Mail-IDs werden benötigt."
 
-#: src/api/v1/views/EmailViewSet.py:260
+#: src/api/v1/views/EmailViewSet.py:274
 msgid "Email ids given in invalid format."
 msgstr "E-Mail-IDs in ungültigem Format angegeben."
 
-#: src/api/v1/views/EmailViewSet.py:269 src/api/v1/views/MailboxViewSet.py:314
+#: src/api/v1/views/EmailViewSet.py:283 src/api/v1/views/MailboxViewSet.py:314
 #, python-format
 msgid "File format %(file_format)s is not supported."
 msgstr "Dateiformat %(file_format)s wird nicht unterstützt."
 
-#: src/api/v1/views/EmailViewSet.py:274
+#: src/api/v1/views/EmailViewSet.py:288
 msgid "No emails found"
 msgstr "Keine E-Mails gefunden"
 
-#: src/api/v1/views/EmailViewSet.py:370
+#: src/api/v1/views/EmailViewSet.py:384
 msgid "POP accounts do not support restoring of emails."
 msgstr "POP Konten unterstützen das Wiederherstellen von E-Mails nicht."
 
-#: src/api/v1/views/EmailViewSet.py:378
+#: src/api/v1/views/EmailViewSet.py:392
 msgid "Restoring of email to mailbox failed."
 msgstr "Wiederherstellen der E-Mail im Postfach fehlgeschlagen."
 
-#: src/api/v1/views/EmailViewSet.py:383
+#: src/api/v1/views/EmailViewSet.py:397
 msgid "Email successfully restored to mailbox."
 msgstr "E-Mail wurde erfolgreich im Postfach wiederhergestellt."
 
-#: src/api/v1/views/EmailViewSet.py:406
+#: src/api/v1/views/EmailViewSet.py:422
 msgid "Email successfully reprocessed."
 msgstr "E-Mail erfolgreich neu verarbeitet."
 

@@ -51,7 +51,7 @@ services:
       - CELERY_LOG_LEVEL=DEBUG
       - AMQP_LOG_LEVEL=DEBUG
       - ENABLE_FLOWER=True
-      - DEBUG=False
+      - DEBUG=True
     restart: unless-stopped
     depends_on:
       db:

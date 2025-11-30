@@ -108,7 +108,8 @@ RUN apk add --no-cache ${BUILD_PYTHON_APK_DEPENDENCIES} && \
     pip install --no-cache-dir -r requirements.txt && \
     apk del ${BUILD_PYTHON_APK_DEPENDENCIES} && \
     rm -rf /var/cache/apk/* && \
-    rm -rf /tmp/*
+    rm -rf /tmp/* && \
+    rm -f requirements.txt
 
 
 ### move source files

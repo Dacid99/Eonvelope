@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 16:39+0000\n"
-"PO-Revision-Date: 2025-11-08 11:51+0000\n"
+"POT-Creation-Date: 2025-11-30 15:30+0000\n"
+"PO-Revision-Date: 2025-12-01 16:00+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/"
 "eonvelope/uk/>\n"
@@ -16,39 +16,53 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.15-dev\n"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:864
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:892
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:450
+msgid "Contact picture"
+msgstr "Зображення контакту"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:453
+msgid "Contact picture placeholder"
+msgstr "Заповнювач для зображення контакту"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:458
+msgid "Address"
+msgstr "Адреса"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:461
+msgid "Email"
+msgstr "Електронна пошта"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:464
+msgid "Tel"
+msgstr "Тел."
+
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:895
 msgid "Received"
 msgstr "Отримано"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:868
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:896
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:899
 msgid "From"
 msgstr "Від"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:871
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:899
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:902
 msgid "To"
 msgstr "До"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:874
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:902
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:905
 msgid "CC"
 msgstr "CC"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:877
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:905
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:908
 msgid "BCC"
 msgstr "BCC"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:890
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:918
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:921
 msgid "Attachments"
 msgstr "Вкладення"
 
@@ -177,22 +191,22 @@ msgstr "Хронологія"
 msgid "Shortcut to the email timeline"
 msgstr "Скорочення до часової шкали електронної пошти"
 
-#: src/eonvelope/settings.py:884
+#: src/eonvelope/settings.py:887
 msgid "Default page size for paginated API response data"
 msgstr ""
 "Розмір сторінки за замовчуванням для даних відповідей API з посторінковою "
 "структурою"
 
-#: src/eonvelope/settings.py:889
+#: src/eonvelope/settings.py:892
 msgid "Maximum page size for paginated API response data"
 msgstr ""
 "Максимальний розмір сторінки для даних відповідей API з розбивкою на сторінки"
 
-#: src/eonvelope/settings.py:894
+#: src/eonvelope/settings.py:897
 msgid "Default page size for pagination in the webapp."
 msgstr "Розмір сторінки за замовчуванням для пагінації у вебзастосунку."
 
-#: src/eonvelope/settings.py:900
+#: src/eonvelope/settings.py:903
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
@@ -200,7 +214,7 @@ msgstr ""
 "Параметри розміру сторінки для пагінації у вебзастосунку. Повинні містити "
 "значення WEB_DEFAULT_PAGE_SIZE."
 
-#: src/eonvelope/settings.py:907
+#: src/eonvelope/settings.py:910
 msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
@@ -208,15 +222,15 @@ msgstr ""
 "Максимальний розмір даних для мініатюри у вебзастосунку. Мініатюри, більші "
 "за цей розмір, не завантажуватимуться."
 
-#: src/eonvelope/settings.py:913
+#: src/eonvelope/settings.py:916
 msgid "Maximum numbers of files in one storage unit."
 msgstr "Максимальна кількість файлів в одному сховищі."
 
-#: src/eonvelope/settings.py:918
+#: src/eonvelope/settings.py:921
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr "Чи ігнорувати електронні листи з позначкою спаму"
 
-#: src/eonvelope/settings.py:924
+#: src/eonvelope/settings.py:927
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
@@ -225,11 +239,11 @@ msgstr ""
 "скриньок, які ігноруються під час пошуку поштових скриньок в обліковому "
 "записі."
 
-#: src/eonvelope/settings.py:930
+#: src/eonvelope/settings.py:933
 msgid "List of content types prefixes to not parse as files."
 msgstr "Список префіксів типів контенту, які не слід розбирати як файли."
 
-#: src/eonvelope/settings.py:936
+#: src/eonvelope/settings.py:939
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
@@ -237,7 +251,7 @@ msgstr ""
 "Список префіксів типів контенту, які не слід розбирати як файли. Звичайний "
 "текст і текст HTML завжди ігноруються, оскільки це основний текст."
 
-#: src/eonvelope/settings.py:943
+#: src/eonvelope/settings.py:946
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
@@ -250,7 +264,7 @@ msgstr ""
 "може призвести до 500 відповідей під час запиту сторінок із мініатюрами "
 "електронних листів, тому будьте обережні."
 
-#: src/eonvelope/settings.py:950
+#: src/eonvelope/settings.py:953
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
@@ -258,19 +272,19 @@ msgstr ""
 "Стиль CSS, що використовується для відображення електронних листів у форматі "
 "html. Зверніться до HTML_TEMPLATE для ознайомлення з контекстом класів."
 
-#: src/eonvelope/settings.py:956
+#: src/eonvelope/settings.py:959
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr ""
 "Налаштування поштової скриньки за замовчуванням, яке визначає, чи зберігати "
 "листи у форматі EML."
 
-#: src/eonvelope/settings.py:961
+#: src/eonvelope/settings.py:964
 msgid "Default mailbox setting whether to store attachments."
 msgstr ""
 "Налаштування поштової скриньки за замовчуванням, яке визначає, чи зберігати "
 "вкладення."
 
-#: src/eonvelope/settings.py:967
+#: src/eonvelope/settings.py:970
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
@@ -279,27 +293,27 @@ msgstr ""
 "реєструватися самостійно. Цей параметр діє, лише якщо параметр середовища "
 "REGISTRATION_ENABLED не має значення 0."
 
-#: src/eonvelope/settings.py:974
+#: src/eonvelope/settings.py:977
 msgid "Server Configurations"
 msgstr "Конфігурації сервера"
 
-#: src/eonvelope/settings.py:976
+#: src/eonvelope/settings.py:979
 msgid "Default Values"
 msgstr "Значення за замовчуванням"
 
-#: src/eonvelope/settings.py:983
+#: src/eonvelope/settings.py:986
 msgid "Processing Settings"
 msgstr "Налаштування обробки"
 
-#: src/eonvelope/settings.py:994
+#: src/eonvelope/settings.py:997
 msgid "Storage Settings"
 msgstr "Налаштування пам'яті"
 
-#: src/eonvelope/settings.py:998
+#: src/eonvelope/settings.py:1001
 msgid "API Settings"
 msgstr "Налаштування API"
 
-#: src/eonvelope/settings.py:1005
+#: src/eonvelope/settings.py:1008
 msgid "Web Settings"
 msgstr "Веб-налаштування"
 
@@ -324,7 +338,7 @@ msgstr "Ваш профіль"
 msgid "Third Party Integrations"
 msgstr "Інтеграції зі сторонніми розробниками"
 
-#: src/eonvelope/templates/account/profile.html:47
+#: src/eonvelope/templates/account/profile.html:62
 msgid "Save"
 msgstr "Зберегти"
 

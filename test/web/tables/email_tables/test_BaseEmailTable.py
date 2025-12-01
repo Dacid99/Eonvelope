@@ -36,5 +36,5 @@ def test_output(fake_email):
     assert "subject" in fields
     assert "datetime" in fields
     assert "datasize" in fields
-    assert "x_spam" in fields
+    assert "x_spam_flag" in fields
     assert len(fields) == 8

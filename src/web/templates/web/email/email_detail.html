@@ -1,4 +1,4 @@
-{% extends "web/bases/base_detail_with_thumbnail.html" %}
+{% extends "web/layouts/base_detail_with_thumbnail.html" %}
 
 {% load translate from i18n %}
 
@@ -6,9 +6,6 @@
     {% translate "Email Details" %} -
 {% endblock title %}
 
-{% block nav_class_emails %}
-    link-light active
-{% endblock nav_class_emails %}
 
 {% block card_class %}
     {% if object.is_spam %}border-danger bg-danger-subtle{% endif %}

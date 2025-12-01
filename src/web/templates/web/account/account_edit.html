@@ -1,4 +1,4 @@
-{% extends "web/bases/base_edit.html" %}
+{% extends "web/layouts/base_edit.html" %}
 
 {% load bootstrap_field from django_bootstrap5 %}
 
@@ -7,10 +7,6 @@
 {% block title %}
     {% translate "Edit Account" %} -
 {% endblock title %}
-
-{% block nav_class_accounts %}
-    link-light active
-{% endblock nav_class_accounts %}
 
 {% block badges %}
 

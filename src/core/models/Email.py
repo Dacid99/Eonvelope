@@ -190,14 +190,13 @@ class Email(
     )
     """All other header fields of the mail. Can be null."""
 
-    x_spam = models.CharField(
-        max_length=255,
+    x_spam_flag = models.BooleanField(
+        null=True,
         blank=True,
-        default="",
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("X-Spam Flag"),
     )
-    """The x_spam header of this mail. Can be blank."""
+    """The x_spam header of this mail. Can be null."""
 
     class Meta:
         """Metadata class for the model."""
@@ -270,7 +269,7 @@ class Email(
         )
         self.datetime = parse_datetime_header(header_dict.get(HeaderFields.DATE))
         self.subject = header_dict.get(HeaderFields.SUBJECT) or __("No subject")
-        self.x_spam = header_dict.get(HeaderFields.X_SPAM) or ""
+        self.x_spam_flag = is_x_spam(header_dict.get(HeaderFields.X_SPAM))
         self.datasize = len(email_bytes)
         self.plain_bodytext = bodytexts.get("plain", "")
         self.html_bodytext = bodytexts.get("html", "")
@@ -498,7 +497,7 @@ class Email(
         Returns:
             Whether the mail is considered spam.
         """
-        return is_x_spam(self.x_spam)
+        return bool(self.x_spam_flag)
 
     @classmethod
     def create_from_email_bytes(
@@ -526,8 +525,8 @@ class Email(
             or md5(email_bytes).hexdigest()  # noqa: S324  # no safe hash required here
         )
         logger.debug("Parsed email %s ...", message_id)
-        x_spam = get_header(email_message, HeaderFields.X_SPAM) or ""
-        if is_x_spam(x_spam) and get_config("THROW_OUT_SPAM"):
+        x_spam = is_x_spam(get_header(email_message, HeaderFields.X_SPAM))
+        if x_spam and get_config("THROW_OUT_SPAM"):
             logger.debug(
                 "Skipping email with Message-ID %s in %s, it is flagged as spam.",
                 message_id,
@@ -563,6 +562,88 @@ class Email(
         return new_email
 
     @staticmethod
+    def _queryset_as_zip_eml(queryset: QuerySet[Email]) -> _TemporaryFileWrapper:
+        """Parses a queryset of emails into a zip of eml files.
+
+        Note:
+            Does not validate args! This has to be done beforehand.
+        """
+        tempfile = (
+            NamedTemporaryFile()
+        )  # pylint: disable=consider-using-with ; the file must not be closed as it is returned later
+        with ZipFile(tempfile.name, "w") as zipfile:
+            for email_item in queryset:
+                try:
+                    eml_file = email_item.open_file()
+                except FileNotFoundError:
+                    continue
+                with (
+                    eml_file,
+                    zipfile.open(
+                        os.path.basename(email_item.file_path), "w"
+                    ) as zipped_file,
+                ):
+                    zipped_file.write(eml_file.read())
+        return tempfile
+
+    @staticmethod
+    def _queryset_as_mailbox_file(
+        queryset: QuerySet[Email], file_format: str
+    ) -> _TemporaryFileWrapper:
+        """Parses a queryset of emails into a mailbox file.
+
+        Note:
+            Does not validate args! This has to be done beforehand.
+        """
+        tempfile = (
+            NamedTemporaryFile()
+        )  # pylint: disable=consider-using-with ; the file must not be closed as it is returned later
+        parser_class = file_format_parsers[file_format]
+        parser = parser_class(tempfile.name, create=True)
+        parser.lock()
+        for email_item in queryset:
+            try:
+                eml_file = email_item.open_file()
+            except FileNotFoundError:
+                continue
+            with eml_file:
+                parser.add(eml_file)
+        parser.close()
+        return tempfile
+
+    @staticmethod
+    def _queryset_as_mailbox_zip(
+        queryset: QuerySet[Email], file_format: str
+    ) -> _TemporaryFileWrapper:
+        """Parses a queryset of emails into a zipped mailbox dir.
+
+        Note:
+            Does not validate args! This has to be done beforehand.
+        """
+        tempfile = (
+            NamedTemporaryFile(  # noqa: SIM115  # pylint: disable=consider-using-with
+                suffix=".zip"  # the suffix allows zipping to this file with shutil
+            )
+        )  # the file must not be closed as it is returned later
+        with TemporaryDirectory() as tempdirpath:
+            mailbox_path = os.path.join(tempdirpath, file_format)
+            parser_class = file_format_parsers[file_format]
+            parser = parser_class(mailbox_path, create=True)
+            parser.lock()
+            for email_item in queryset:
+                # this construction is strictly necessary as Maildir.add can also raise FileNotFound
+                # if the directory is incorrectly structured; that warning must not be blocked
+                try:
+                    eml_file = email_item.open_file()
+                except FileNotFoundError:
+                    continue
+                with eml_file:
+                    parser.add(eml_file)
+            parser.close()
+            shutil.make_archive(os.path.splitext(tempfile.name)[0], "zip", tempdirpath)
+        return tempfile
+
+    @staticmethod
     def queryset_as_file(
         queryset: QuerySet[Email], file_format: str
     ) -> _TemporaryFileWrapper:
@@ -581,67 +662,23 @@ class Email(
         """
         if not queryset.exists():
             raise Email.DoesNotExist("The queryset is empty!")
-        tempfile = (
-            NamedTemporaryFile(  # noqa: SIM115  # pylint: disable=consider-using-with
-                suffix=".zip"  # the suffix allows zipping to this file with shutil
-            )
-        )  # the file must not be closed as it is returned later
+
         file_format = file_format.lower()
         if file_format == SupportedEmailDownloadFormats.ZIP_EML:
-            with ZipFile(tempfile.name, "w") as zipfile:
-                for email_item in queryset:
-                    try:
-                        eml_file = email_item.open_file()
-                    except FileNotFoundError:
-                        continue
-                    with (
-                        eml_file,
-                        zipfile.open(
-                            os.path.basename(email_item.file_path), "w"
-                        ) as zipped_file,
-                    ):
-                        zipped_file.write(eml_file.read())
-        elif file_format in [
+            return Email._queryset_as_zip_eml(queryset)
+        if file_format in [
             SupportedEmailDownloadFormats.MBOX,
             SupportedEmailDownloadFormats.BABYL,
             SupportedEmailDownloadFormats.MMDF,
         ]:
-            parser_class = file_format_parsers[file_format]
-            parser = parser_class(tempfile.name, create=True)
-            parser.lock()
-            for email_item in queryset:
-                try:
-                    eml_file = email_item.open_file()
-                except FileNotFoundError:
-                    continue
-                with eml_file:
-                    parser.add(eml_file)
-            parser.close()
-        elif file_format in [
+            return Email._queryset_as_mailbox_file(queryset, file_format)
+        if file_format in [
             SupportedEmailDownloadFormats.MAILDIR,
             SupportedEmailDownloadFormats.MH,
         ]:
-            with TemporaryDirectory() as tempdirpath:
-                mailbox_path = os.path.join(tempdirpath, file_format)
-                parser_class = file_format_parsers[file_format]
-                parser = parser_class(mailbox_path, create=True)
-                parser.lock()
-                for email_item in queryset:
-                    # this construction is strictly necessary as Maildir.add can also raise FileNotFound
-                    # if the directory is incorrectly structured; that warning must not be blocked
-                    try:
-                        eml_file = email_item.open_file()
-                    except FileNotFoundError:
-                        continue
-                    with eml_file:
-                        parser.add(eml_file)
-                parser.close()
-                shutil.make_archive(
-                    os.path.splitext(tempfile.name)[0], "zip", tempdirpath
-                )
-        else:
-            raise ValueError(
-                _("The file format %(file_format)s is not supported.")
-                % {"file_format": file_format}
-            )
-        return tempfile
+            return Email._queryset_as_mailbox_zip(queryset, file_format)
+
+        raise ValueError(
+            _("The file format %(file_format)s is not supported.")
+            % {"file_format": file_format}
+        )

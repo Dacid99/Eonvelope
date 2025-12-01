@@ -52,7 +52,7 @@ class BaseEmailTable(Table):
             "datetime",
             "mailbox",
             "mailbox__account",
-            "x_spam",
+            "x_spam_flag",
             "datasize",
         )
         sequence = ("checkbox", *fields)

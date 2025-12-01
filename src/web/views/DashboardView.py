@@ -25,7 +25,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils import timezone
 from django.views.generic import TemplateView
 
-from core.models import Attachment, Correspondent, Email
+from core.models import Account, Attachment, Correspondent, Daemon, Email, Mailbox
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -55,9 +55,16 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context["correspondents_count"] = (
             Correspondent.objects.filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
                 user=self.request.user
-            )
-            .distinct()
-            .count()
+            ).count()
         )
+        context["accounts_count"] = Account.objects.filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+            user=self.request.user
+        ).count()
+        context["mailboxes_count"] = Mailbox.objects.filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+            account__user=self.request.user
+        ).count()
+        context["daemons_count"] = Daemon.objects.filter(  # type: ignore[misc]  # user auth is checked by LoginRequiredMixin, we also test for this
+            mailbox__account__user=self.request.user
+        ).count()
 
         return context

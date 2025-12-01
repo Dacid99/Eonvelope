@@ -45,6 +45,8 @@ def test_list_auth_other(fake_email, other_api_client, url):
     assert response.data["correspondent_count"] == 0
     assert response.data["attachment_count"] == 0
     assert response.data["account_count"] == 0
+    assert response.data["mailbox_count"] == 0
+    assert response.data["daemon_count"] == 0
 
 
 @pytest.mark.django_db
@@ -57,6 +59,8 @@ def test_list_auth_owner(fake_email, owner_api_client, url):
     assert response.data["correspondent_count"] == 1
     assert response.data["attachment_count"] == 1
     assert response.data["account_count"] == 1
+    assert response.data["mailbox_count"] == 1
+    assert response.data["daemon_count"] == 1
 
 
 @pytest.mark.django_db

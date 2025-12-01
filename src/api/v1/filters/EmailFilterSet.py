@@ -86,7 +86,7 @@ class EmailFilterSet(filters.FilterSet):
             "plain_bodytext": FilterSetups.TEXT,
             "html_bodytext": FilterSetups.TEXT,
             "datasize": FilterSetups.INT,
-            "x_spam": FilterSetups.TEXT,
+            "x_spam_flag": FilterSetups.BOOL,
             "is_favorite": FilterSetups.BOOL,
             "created": FilterSetups.DATETIME,
             "updated": FilterSetups.DATETIME,

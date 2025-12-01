@@ -1,4 +1,4 @@
-{% extends "web/bases/base_filter_list.html" %}
+{% extends "web/layouts/base_filter_list.html" %}
 
 {% load translate from i18n %}
 
@@ -6,22 +6,10 @@
     {% translate "Emails" %} -
 {% endblock title %}
 
-{% block nav_class_emails %}
-    link-light active
-{% endblock nav_class_emails %}
 
 {% block header_title %}
     {% translate "Emails" %}
 {% endblock header_title %}
-
-{% block header_buttons %}
-    <a role="button"
-       class="btn btn-outline-primary"
-       href="{% url 'web:email-archive-index' %}"><i class="fa-solid fa-timeline" aria-hidden="true"></i> {% translate "Timeline" %}</a>
-    <a role="button"
-       class="btn btn-outline-primary"
-       href="{% url 'web:email-table' %}"><i class="fa-solid fa-table-list" aria-hidden="true"></i> {% translate "Table" %}</a>
-{% endblock header_buttons %}
 
 {% block action_buttons %}
 

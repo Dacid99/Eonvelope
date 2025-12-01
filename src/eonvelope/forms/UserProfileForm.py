@@ -22,7 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Final
 
-from django.forms import ModelForm
+from django.forms import ModelForm, PasswordInput, Widget
 
 from eonvelope.models import UserProfile
 
@@ -48,3 +48,9 @@ class UserProfileForm(ModelForm):
 
         localized_fields = "__all__"
         """Localize all fields."""
+
+        widgets: ClassVar[dict[str, type[Widget] | Widget]] = {
+            "paperless_api_key": PasswordInput(render_value=True),
+            "immich_api_key": PasswordInput(render_value=True),
+            "nextcloud_password": PasswordInput(render_value=True),
+        }

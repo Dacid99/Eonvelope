@@ -45,8 +45,10 @@ import contextlib
 import os
 from datetime import UTC, datetime, timedelta, timezone
 from io import BytesIO
+from pathlib import Path
 from tempfile import gettempdir
 
+import django
 import pytest
 from django.core.files.storage import default_storage
 from django.forms import model_to_dict
@@ -89,7 +91,7 @@ TEST_EMAIL_PARAMETERS = [
             "date": datetime(
                 2024, 8, 7, 11, 41, 29, tzinfo=timezone(timedelta(seconds=7200))
             ),
-            "x_spam": "NO",
+            "x_spam_flag": False,
             "plain_bodytext": "this a test to see how ur doing\r\n\r\n\r\n\r\n\r\n",
             "html_bodytext": "",
             "references": [],
@@ -131,7 +133,7 @@ TEST_EMAIL_PARAMETERS = [
             "date": datetime(
                 2024, 10, 5, 14, 43, 21, tzinfo=timezone(timedelta(seconds=7200))
             ),
-            "x_spam": "NO",
+            "x_spam_flag": False,
             "plain_bodytext": "\r\ntry this\r\n",
             "html_bodytext": '<!DOCTYPE html>\r\n<html>\r\n  <head>\r\n\r\n    <meta http-equiv="content-type" content="text/html; charset=UTF-8">\r\n  </head>\r\n  <body>\r\n    <p><img src="cid:part1.DePPID0S.dKVK0mlg@bvncmx.com" alt=""></p>\r\n    <p><br>\r\n    </p>\r\n    <p>try this<br>\r\n    </p>\r\n  </body>\r\n</html>',
             "references": [],
@@ -168,7 +170,7 @@ TEST_EMAIL_PARAMETERS = [
             "date": datetime(
                 2024, 8, 1, 15, 35, 52, tzinfo=timezone(timedelta(seconds=7200))
             ),
-            "x_spam": "NO",
+            "x_spam_flag": False,
             "plain_bodytext": "Hi\r\n\r\nThis is a test!\r\n\r\näöü\r\n\r\nViele Grüße,\r\n\r\nQNfjq\r\n",
             "html_bodytext": "",
             "references": [],
@@ -196,7 +198,7 @@ TEST_EMAIL_PARAMETERS = [
             "message_id": "<320b8a44-3d8c-457d-b590-0d33290ae599@prov.de>",
             "subject": "Welcome back",
             "date": datetime(2024, 8, 9, 16, 20, 23, tzinfo=UTC),
-            "x_spam": "NO",
+            "x_spam_flag": False,
             "plain_bodytext": "\r\n\r\nSehr geehrte ,\r\n\r\n\r\n\r\nViele Grüße,\r\nDavid\r\n",
             "html_bodytext": '<html>\r\n<head>\r\n<meta http-equiv="Content-Type" content="text/html; charset=utf-8">\r\n</head>\r\n<body>\r\n<div dir="auto"><br>\r\n<br>\r\n</div>\r\n<div dir="auto"><!-- tmjah_g_1299s -->Sehr geehrte ,<!-- tmjah_g_1299e --><br>\r\n<br>\r\n<br>\r\n<br>\r\n</div>\r\n<div dir="auto"><!-- tmjah_g_1299s -->Viele Grüße,<!-- tmjah_g_1299e --><br>\r\n</div>\r\n<div dir="auto"><!-- tmjah_g_1299s -->David<!-- tmjah_g_1299e --></div>\r\n</body>\r\n</html>\r\n',
             "references": [],
@@ -228,7 +230,7 @@ TEST_EMAIL_PARAMETERS = [
             "date": datetime(
                 2024, 10, 18, 17, 11, 50, tzinfo=timezone(timedelta(seconds=7200))
             ),
-            "x_spam": "NO",
+            "x_spam_flag": False,
             "plain_bodytext": "another test for the correspondents ..\r\n",
             "html_bodytext": '<div dir="ltr">another test for the correspondents ..<br></div>\r\n',
             "references": [],
@@ -262,7 +264,7 @@ TEST_EMAIL_PARAMETERS = [
             "date": datetime(
                 2025, 7, 1, 17, 44, 50, tzinfo=timezone(timedelta(seconds=0))
             ),
-            "x_spam": "NO",
+            "x_spam_flag": False,
             "plain_bodytext": "Hello user!\n\n\nA personal access token was just created now for the Docker account user.\nAccess token description: test\n\nThis access token will now function as a password for the Docker CLI. If you created this personal access token, no more action is required. If you did not create this access token, please go to Personal Access Tokens Settings at <no value>. Delete the token, then change your password.\n\nThank you,\nThe Docker Team\n\nThis email was sent to your mail to notify you of an update that was made to your Docker Account.\n\n© 2025 Docker Inc.\n3790 El Camino Real #1052, Palo Alto, CA 94306\n",
             "html_bodytext": "",
             "references": [],
@@ -335,6 +337,8 @@ def fake_bad_timezone_client(client):
 def fake_fs(settings):
     """A mock Linux filesystem for realistic testing.
 
+    Preserves the original paths for django.
+
     Contains a directory at the STORAGE_PATH setting to allow for testing without patching the storage backend.
     Contains a directory at the LOG_DIRECTORY_PATH setting.
     Contains a tempdir at the location requested by tempfile.
@@ -342,6 +346,9 @@ def fake_fs(settings):
     with Patcher() as patcher:
         if not patcher.fs:
             raise OSError("Generator could not create a fakefs!")
+
+        django_path = Path(django.__file__).parent
+        patcher.fs.add_real_directory(str(django_path))
 
         patcher.fs.create_dir(settings.STORAGE_PATH)
         patcher.fs.create_dir(settings.LOG_DIRECTORY_PATH)
@@ -669,7 +676,7 @@ def email_payload(faker, fake_mailbox):
         plain_bodytext=faker.text(),
         html_bodytext=faker.text(),
         is_favorite=not Email.is_favorite.field.default,
-        x_spam="NO",
+        x_spam_flag=False,
     )
     payload = model_to_dict(email_data)
     payload.pop("id")

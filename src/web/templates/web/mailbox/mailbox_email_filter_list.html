@@ -7,11 +7,3 @@
     href="{{ mailbox.get_absolute_url }}">{{ mailbox.name }}</a> {% translate "of" %} <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
     href="{{ mailbox.account.get_absolute_url }}">{{ mailbox.account.mail_address }}</a>
 {% endblock header_subtitle %}
-
-{% block header_buttons %}
-
-    <a role="button"
-       class="btn btn-outline-primary"
-       href="{% url 'web:mailbox-emails-table' mailbox.id %}"><i class="fa-solid fa-table-list" aria-hidden="true"></i> {% translate "Table" %}</a>
-
-{% endblock header_buttons %}

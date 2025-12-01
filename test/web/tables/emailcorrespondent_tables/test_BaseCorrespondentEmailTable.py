@@ -36,6 +36,6 @@ def test_output(fake_emailcorrespondent):
     assert "email__datetime" in fields
     assert "email__mailbox" in fields
     assert "email__mailbox__account" in fields
-    assert "email__x_spam" in fields
+    assert "email__x_spam_flag" in fields
     assert "email__datasize" in fields
     assert len(fields) == 9

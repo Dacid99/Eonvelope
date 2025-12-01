@@ -20,7 +20,7 @@
 
 from rest_framework import serializers
 
-from core.models import Account, Attachment, Correspondent, Email, Mailbox
+from core.models import Account, Attachment, Correspondent, Daemon, Email, Mailbox
 
 
 class DatabaseStatsSerializer(serializers.Serializer):
@@ -31,6 +31,7 @@ class DatabaseStatsSerializer(serializers.Serializer):
     attachment_count = serializers.SerializerMethodField(read_only=True)
     account_count = serializers.SerializerMethodField(read_only=True)
     mailbox_count = serializers.SerializerMethodField(read_only=True)
+    daemon_count = serializers.SerializerMethodField(read_only=True)
 
     def get_email_count(self, value: dict) -> int:
         """Gets the count of emails for the user.
@@ -81,3 +82,13 @@ class DatabaseStatsSerializer(serializers.Serializer):
         request = self.context.get("request")
         user = getattr(request, "user", None)
         return Mailbox.objects.filter(account__user=user).count()
+
+    def get_daemon_count(self, value: dict) -> int:
+        """Gets the count of daemons for the user.
+
+        Returns:
+            The number of daemons belonging to the user.
+        """
+        request = self.context.get("request")
+        user = getattr(request, "user", None)
+        return Daemon.objects.filter(mailbox__account__user=user).count()

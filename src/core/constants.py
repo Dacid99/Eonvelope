@@ -308,3 +308,75 @@ file_format_parsers: Final[
     SupportedEmailUploadFormats.MH.value: mailbox.MH,
 }
 """Mapping of supported file formats to their parser classes."""
+
+ICALENDAR_TEMPLATE = """<div class="row g-0 overflow-y-scroll">
+                            <div class="d-flex flex-column align-items-start">
+                                {% for dtstart, dtend, summary, location in icalendar_readout %}
+                                    <div class="card shadow-sm">
+                                        <div class="card-body d-flex align-items-center justify-content-center gap-3">
+                                            <div class="text-center border rounded p-2 fw-bold">
+                                                <div class="text-bg-success px-2 py-1 fs-5">
+                                                    {{ dtstart | date:"M" }}
+                                                </div>
+                                                <div class="fs-2">
+                                                    {{ dtstart | date:"j"}}
+                                                </div>
+                                                <div class="text-muted">
+                                                    {{ dtstart |date:"Y" }}
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow">
+                                                <h5 class="card-title">{{ summary }}</h5>
+                                                <p class="card-text text-muted d-flex flex-column">
+                                                    <span>{{ dtstart | time }}</span>
+                                                    <span class="mx-1">–</span>
+                                                    {% if dtend.date != dtstart.date %}<span class="fw-bold me-1">{{dtend |date }}</span>{% endif %}
+                                                    <span>{{ dtend | time }}</span>
+                                                </p>
+                                                <p class="card-text text-muted">
+                                                    {{ location }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>"""
+
+
+VCARD_TEMPLATE = """{% load i18n %}
+
+                    <div class="row g-0 overflow-y-scroll">
+                        <div class="d-flex flex-column align-items-start">
+                            {% for full_name, photo_data, email, address, tel in vcard_readout %}
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                        <h5 class="card-title m-1">
+                                            {{ fname }}
+                                        </h5>
+                                            {% if photo_data %}
+                                                <img class="img-thumbnail"
+                                                        src="data:image/jpeg;base64,{{ photo_data }}"
+                                                        alt={% translate "Contact picture" %}
+                                                        width="32px">
+                                            {% else %}
+                                                <i class="fa-regular fa-id-badge fa-2xl" ><span class="visually-hidden">{% translate "Contact picture placeholder" %}</span></i>
+                                            {% endif %}
+                                        </div>
+                                        <div class="card-text text-muted d-flex flex-column">
+                                            {% if address %}
+                                                <span>{% translate "Address" %}: {{ address }}</span>
+                                            {% endif %}
+                                            {% if email %}
+                                                <span>{% translate "Email" %}: <a href="mailto:{{ email }}" class="link-info link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ email }}</span>
+                                            {% endif %}
+                                            {% if tel %}
+                                                <span>{% translate "Tel" %}: <a href="tel:{{ tel }}" class="link-success link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ tel }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>"""

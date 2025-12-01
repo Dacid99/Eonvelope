@@ -345,7 +345,7 @@ def email_queryset(
                 datasize=INT_TEST_ITEMS[number],
                 is_favorite=BOOL_TEST_ITEMS[number],
                 mailbox=mailbox_queryset.get(id=number + 1),
-                x_spam=text_test_item,
+                x_spam_flag=BOOL_TEST_ITEMS[number],
             )
             baker.make(
                 EmailCorrespondent,

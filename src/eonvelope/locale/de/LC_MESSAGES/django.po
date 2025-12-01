@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 16:39+0000\n"
-"PO-Revision-Date: 2025-11-06 19:18+0000\n"
+"POT-Creation-Date: 2025-11-30 15:30+0000\n"
+"PO-Revision-Date: 2025-12-01 16:00+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/"
 "eonvelope/de/>\n"
@@ -19,33 +19,47 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.15-dev\n"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:864
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:892
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:450
+msgid "Contact picture"
+msgstr "Kontaktfoto"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:453
+msgid "Contact picture placeholder"
+msgstr "Kontaktfoto-Platzhalter"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:458
+msgid "Address"
+msgstr "Adresse"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:461
+msgid "Email"
+msgstr "E-Mail"
+
+#: test/reports/cov/z_0618756b1ff51bca_constants_py.html:464
+msgid "Tel"
+msgstr "Tel"
+
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:895
 msgid "Received"
 msgstr "Erhalten"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:868
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:896
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:899
 msgid "From"
 msgstr "Von"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:871
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:899
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:902
 msgid "To"
 msgstr "An"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:874
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:902
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:905
 msgid "CC"
 msgstr "CC"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:877
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:905
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:908
 msgid "BCC"
 msgstr "BCC"
 
-#: test/reports/cov/z_6ac22c25bf7159a4_settings_py.html:890
-#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:918
+#: test/reports/cov/z_7ec8bdc87900f1b3_settings_py.html:921
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -174,19 +188,19 @@ msgstr "Chronik"
 msgid "Shortcut to the email timeline"
 msgstr "Abkürzung zur E-Mail Chronik"
 
-#: src/eonvelope/settings.py:884
+#: src/eonvelope/settings.py:887
 msgid "Default page size for paginated API response data"
 msgstr "Standard-Seitengröße für API-Anwortdaten"
 
-#: src/eonvelope/settings.py:889
+#: src/eonvelope/settings.py:892
 msgid "Maximum page size for paginated API response data"
 msgstr "Maximale Seitengröße für API-Antwortdaten"
 
-#: src/eonvelope/settings.py:894
+#: src/eonvelope/settings.py:897
 msgid "Default page size for pagination in the webapp."
 msgstr "Standard-Seitengröße für die Webapp."
 
-#: src/eonvelope/settings.py:900
+#: src/eonvelope/settings.py:903
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
@@ -194,7 +208,7 @@ msgstr ""
 "Seitengrößen-Optionen in der Webapp. Sollte den Wert von "
 "WEB_DEFAULT_PAGE_SIZE enthalten."
 
-#: src/eonvelope/settings.py:907
+#: src/eonvelope/settings.py:910
 msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
@@ -202,15 +216,15 @@ msgstr ""
 "Maximal Dateigröße einer Vorschau in der Webapp. Dateien größer als dieser "
 "Wert werden nicht geladen."
 
-#: src/eonvelope/settings.py:913
+#: src/eonvelope/settings.py:916
 msgid "Maximum numbers of files in one storage unit."
 msgstr "Maximale Anzahl von Dateien in einer Speichereinheit."
 
-#: src/eonvelope/settings.py:918
+#: src/eonvelope/settings.py:921
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr "Ob als Spam markierte E-Mails ignoriert werden"
 
-#: src/eonvelope/settings.py:924
+#: src/eonvelope/settings.py:927
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
@@ -219,11 +233,11 @@ msgstr ""
 "Postfachnamen, die beim Suchen nach Postfächern in einem Konto ignoriert "
 "werden."
 
-#: src/eonvelope/settings.py:930
+#: src/eonvelope/settings.py:933
 msgid "List of content types prefixes to not parse as files."
 msgstr "Liste der Inhaltstypenpräfixe, um nicht als Dateien zu analysieren."
 
-#: src/eonvelope/settings.py:936
+#: src/eonvelope/settings.py:939
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
@@ -231,7 +245,7 @@ msgstr ""
 "Liste von Inhalt-Untertypen die nicht als Datei gespeichert werden. Plain- "
 "und HTML-Text werden immer ignoriert und als Haupttext behandelt."
 
-#: src/eonvelope/settings.py:943
+#: src/eonvelope/settings.py:946
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
@@ -244,7 +258,7 @@ msgstr ""
 "Fehlermeldungen führen wenn auf Seiten mit E-Mail-Vorschauen zugegriffen "
 "wird, also sei vorsichtig."
 
-#: src/eonvelope/settings.py:950
+#: src/eonvelope/settings.py:953
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
@@ -252,15 +266,15 @@ msgstr ""
 "Der CSS-Stil, mit dem E-Mails in HTML dargestellt werden. Kontext zu den "
 "einzelnen Klassen findet sich in HTML_TEMPLATE."
 
-#: src/eonvelope/settings.py:956
+#: src/eonvelope/settings.py:959
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr "Standard-Postfacheinstellung, ob E-Mails als .eml gespeichert werden."
 
-#: src/eonvelope/settings.py:961
+#: src/eonvelope/settings.py:964
 msgid "Default mailbox setting whether to store attachments."
 msgstr "Standard-Postfacheinstellung, ob Anhänge gespeichert werden."
 
-#: src/eonvelope/settings.py:967
+#: src/eonvelope/settings.py:970
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
@@ -269,27 +283,27 @@ msgstr ""
 "Diese Einstellung ist nur relevant wenn die REGISTRATION_ENABLED "
 "Umgebungsvariable wahr ist."
 
-#: src/eonvelope/settings.py:974
+#: src/eonvelope/settings.py:977
 msgid "Server Configurations"
 msgstr "Server-Konfiguration"
 
-#: src/eonvelope/settings.py:976
+#: src/eonvelope/settings.py:979
 msgid "Default Values"
 msgstr "Standardwerte"
 
-#: src/eonvelope/settings.py:983
+#: src/eonvelope/settings.py:986
 msgid "Processing Settings"
 msgstr "Verarbeitungseinstellungen"
 
-#: src/eonvelope/settings.py:994
+#: src/eonvelope/settings.py:997
 msgid "Storage Settings"
 msgstr "Speichereinstellungen"
 
-#: src/eonvelope/settings.py:998
+#: src/eonvelope/settings.py:1001
 msgid "API Settings"
 msgstr "API Einstellungen"
 
-#: src/eonvelope/settings.py:1005
+#: src/eonvelope/settings.py:1008
 msgid "Web Settings"
 msgstr "Web-Einstellungen"
 
@@ -314,7 +328,7 @@ msgstr "Dein Profil"
 msgid "Third Party Integrations"
 msgstr "Drittanbieter-Integrationen"
 
-#: src/eonvelope/templates/account/profile.html:47
+#: src/eonvelope/templates/account/profile.html:62
 msgid "Save"
 msgstr "Speichern"
 

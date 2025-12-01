@@ -91,7 +91,7 @@ def test_Attachment_foreign_key_deletion(fake_attachment):
 @pytest.mark.django_db
 def test_Attachment_unique_constraints():
     """Tests the unique constraints of :class:`core.models.Attachment.Attachment`."""
-    email = baker.make(Email, x_spam="NO")
+    email = baker.make(Email, x_spam_flag=False)
 
     baker.make(Attachment, file_path="test", email=email)
     with pytest.raises(IntegrityError):
@@ -730,7 +730,7 @@ def test_Attachment_has_download(fake_attachment, file_path, expected_has_downlo
         ("video", "45rtyghj", False),
         ("text", "html", True),
         ("text", "8549c", True),
-        ("text", "calendar", False),
+        ("text", "calendar", True),
         ("application", "pdf", True),
         ("application", "json", True),
         ("application", "xml", True),
@@ -816,7 +816,7 @@ def test_Attachment_has_thumbnail_spam(
     fake_attachment_with_file.content_maintype = content_maintype
     fake_attachment_with_file.content_subtype = content_subtype
     fake_attachment_with_file.datasize = 0
-    fake_attachment_with_file.email.x_spam = "YES"
+    fake_attachment_with_file.email.x_spam_flag = True
     fake_attachment_with_file.email.save()
 
     result = fake_attachment_with_file.has_thumbnail
@@ -868,18 +868,22 @@ def test_Attachment_has_thumbnail_too_large(
         ("video", "mp4"),
         ("text", "html"),
         ("text", "calendar"),
+        ("text", "x-vcard"),
+        ("text", "vcf"),
         ("application", "pdf"),
         ("application", "json"),
     ],
 )
-def test_Attachment_thumbnail(fake_attachment, content_maintype, content_subtype):
+def test_Attachment_thumbnail(
+    fake_attachment_with_file, content_maintype, content_subtype
+):
     """Tests :func:`core.models.Attachment.Attachment.thumbnail` for all types that have an html thumbnail."""
-    fake_attachment.content_maintype = content_maintype
-    fake_attachment.content_subtype = content_subtype
+    fake_attachment_with_file.content_maintype = content_maintype
+    fake_attachment_with_file.content_subtype = content_subtype
 
-    assert fake_attachment.thumbnail
-    assert fake_attachment.thumbnail.strip().startswith("<")
-    assert fake_attachment.thumbnail.strip().endswith(">")
+    assert fake_attachment_with_file.thumbnail
+    assert fake_attachment_with_file.thumbnail.strip().startswith("<")
+    assert fake_attachment_with_file.thumbnail.strip().endswith(">")
 
 
 @pytest.mark.django_db

@@ -65,7 +65,7 @@ class BaseEmailSerializer(serializers.ModelSerializer[Email]):
             "correspondents",
             "mailbox",
             "headers",
-            "x_spam",
+            "x_spam_flag",
             "created",
             "updated",
         ]

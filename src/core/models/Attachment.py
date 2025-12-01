@@ -31,6 +31,7 @@ from zipfile import ZipFile
 import httpcore
 import httpx
 from django.db import models
+from django.template import engines
 from django.utils.html import format_html
 from django.utils.text import get_valid_filename
 from django.utils.translation import gettext_lazy as _
@@ -40,11 +41,13 @@ from rest_framework import status
 from core.constants import (
     HTML_SUPPORTED_AUDIO_TYPE,
     HTML_SUPPORTED_VIDEO_TYPES,
+    ICALENDAR_TEMPLATE,
     IMMICH_SUPPORTED_APPLICATION_TYPES,
     IMMICH_SUPPORTED_IMAGE_TYPES,
     IMMICH_SUPPORTED_VIDEO_TYPES,
     PAPERLESS_SUPPORTED_IMAGE_TYPES,
     PAPERLESS_TIKA_SUPPORTED_MIMETYPES,
+    VCARD_TEMPLATE,
     HeaderFields,
 )
 from core.mixins import (
@@ -55,6 +58,7 @@ from core.mixins import (
     TimestampModelMixin,
     URLMixin,
 )
+from core.utils.mail_parsing import make_icalendar_readout, make_vcard_readout
 from eonvelope.utils.workarounds import get_config
 
 
@@ -353,10 +357,7 @@ class Attachment(
             and (self.datasize <= get_config("WEB_THUMBNAIL_MAX_DATASIZE"))
             and (
                 self.content_maintype in ["image", "font"]
-                or (
-                    self.content_maintype == "text"
-                    and not self.content_subtype.endswith("calendar")
-                )
+                or self.content_maintype == "text"
                 or (
                     self.content_maintype == "audio"
                     and self.content_subtype in HTML_SUPPORTED_AUDIO_TYPE
@@ -410,6 +411,30 @@ class Attachment(
                 alt=_("Attachment image"),
             )
         if self.content_maintype == "text":
+            if self.content_subtype.endswith("calendar"):
+                try:
+                    icalendar_file = self.open_file(mode="r")
+                except FileNotFoundError:
+                    return ""
+                with icalendar_file:
+                    engine = engines["django"]
+                    template = engine.from_string(ICALENDAR_TEMPLATE)
+                    return template.render(
+                        context={
+                            "icalendar_readout": make_icalendar_readout(icalendar_file)
+                        }
+                    )
+            if self.content_subtype in ["vcard", "vcf", "x-vcard"]:
+                try:
+                    vcard_file = self.open_file(mode="r")
+                except FileNotFoundError:
+                    return ""
+                with vcard_file:
+                    engine = engines["django"]
+                    template = engine.from_string(VCARD_TEMPLATE)
+                    return template.render(
+                        context={"vcard_readout": make_vcard_readout(vcard_file)}
+                    )
             return format_html(
                 """<iframe sandbox
                     class="w-100 h-100 p-1 rounded"

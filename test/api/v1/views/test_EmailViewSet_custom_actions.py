@@ -568,6 +568,8 @@ def test_reprocess_auth_owner(
     )
 
     assert response.status_code == status.HTTP_200_OK
+    fake_email.refresh_from_db()
+    assert response.data["data"] == EmailViewSet.serializer_class(fake_email).data
     assert "detail" in response.data
     mock_Email_reprocess.assert_called_once_with()
 

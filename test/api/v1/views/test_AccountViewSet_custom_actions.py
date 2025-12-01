@@ -101,6 +101,7 @@ def test_update_mailboxes_success_auth_owner(
     )
 
     assert response.status_code == status.HTTP_200_OK
+    fake_account.refresh_from_db()
     assert response.data["data"] == AccountViewSet.serializer_class(fake_account).data
     assert "error" not in response.data
     mock_Account_update_mailboxes.assert_called_once_with(fake_account)
@@ -129,6 +130,7 @@ def test_update_mailboxes_failure_auth_owner(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    fake_account.refresh_from_db()
     assert response.data["data"] == AccountViewSet.serializer_class(fake_account).data
     assert "error" in response.data
     assert fake_error_message in response.data["error"]
@@ -205,6 +207,7 @@ def test_test_success_auth_owner(
     )
 
     assert response.status_code == status.HTTP_200_OK
+    fake_account.refresh_from_db()
     assert response.data["data"] == AccountViewSet.serializer_class(fake_account).data
     assert response.data["result"] is True
     assert "error" not in response.data
@@ -232,6 +235,7 @@ def test_test_failure_auth_owner(
     )
 
     assert response.status_code == status.HTTP_200_OK
+    fake_account.refresh_from_db()
     assert response.data["data"] == AccountViewSet.serializer_class(fake_account).data
     assert response.data["result"] is False
     assert "error" in response.data

@@ -17,7 +17,7 @@
 - async parsing, sync saving
 - download for account and batchdownload for mailbox
 - show pwd button
-- table and list as nav-dropdown options in main navbar
+- add jmap protocol
 
 ## To refactor
 
@@ -29,10 +29,10 @@
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
 - use pre-commit
+- split up long functions that are marked as too complex by ruff
 
 ## To test
 
-- views customactions for response with updated modeldata
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap,pop)
 - page_obj of list views for correct email content
@@ -50,7 +50,6 @@
 
 ## To fix
 
-- icons for third-parties
 - filteroptions for existing db entries leak other user data
 - fetching too many emails leads to browser timeout
 - ci:

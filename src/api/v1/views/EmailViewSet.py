@@ -28,7 +28,7 @@ from django.http import FileResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.openapi import OpenApiParameter, OpenApiResponse, OpenApiTypes
-from drf_spectacular.utils import extend_schema, extend_schema_view
+from drf_spectacular.utils import extend_schema, extend_schema_view, inline_serializer
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
@@ -101,7 +101,7 @@ if TYPE_CHECKING:
         description="Downloads a single emails thumbnail.",
     ),
     conversation=extend_schema(
-        responses=BaseEmailSerializer(many=True),
+        responses={200: BaseEmailSerializer(many=True)},
         description="Lists the conversation involving the email instance.",
     ),
     restore=extend_schema(
@@ -117,6 +117,20 @@ if TYPE_CHECKING:
             ),
         },
         description="Restores the email to its mailbox.",
+    ),
+    reprocess=extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response=inline_serializer(
+                    name="test_mailbox_response",
+                    fields={
+                        "detail": OpenApiTypes.STR,
+                        "data": FullEmailSerializer,
+                    },
+                )
+            )
+        },
+        description="Reprocesses the email using the stored data.",
     ),
 )
 class EmailViewSet(
@@ -403,4 +417,9 @@ class EmailViewSet(
         """
         email = self.get_object()
         email.reprocess()
-        return Response({"detail": _("Email successfully reprocessed.")})
+        return Response(
+            {
+                "detail": _("Email successfully reprocessed."),
+                "data": self.get_serializer(email).data,
+            }
+        )

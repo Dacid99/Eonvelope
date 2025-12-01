@@ -1,0 +1,71 @@
+{% load static %}
+{% load bootstrap_css bootstrap_javascript bootstrap_messages from django_bootstrap5 %}
+{% load translate get_current_language from i18n %}
+{% load progressive_web_app_meta from pwa %}
+
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}" data-bs-theme="auto">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="David Aderbauer" />
+        <meta name="copyright"
+              content="© 2025 David Aderbauer &amp; The Eonvelope Contributors." />
+        <meta name="license" content="AGPLv3" />
+        {% progressive_web_app_meta %}
+        <link rel="icon" href="{% static 'eonvelope/icons/favicon.ico' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="32x32"
+              href="{% static 'eonvelope/icons/favicon-32x32.png' %}" />
+        <link rel="icon"
+              type="image/png"
+              sizes="16x16"
+              href="{% static 'eonvelope/icons/favicon-16x16.png' %}" />
+        <title>
+
+            {% block title %}
+            {% endblock title %}
+
+            Eonvelope
+        </title>
+        {% bootstrap_css %}
+        <link href="{% static 'fontawesomefree/css/fontawesome.css' %}"
+              rel="stylesheet"
+              type="text/css" />
+        <link href="{% static 'fontawesomefree/css/brands.css' %}"
+              rel="stylesheet"
+              type="text/css" />
+        <link href="{% static 'fontawesomefree/css/solid.css' %}"
+              rel="stylesheet"
+              type="text/css" />
+        <script src="{% static 'web/js/bs_theme-toggler.js' %}"></script>
+
+    </head>
+
+    <body>
+
+        {% include "web/partials/_header.html" %}
+
+        {% bootstrap_messages %}
+
+        <main class="container my-3">
+
+            {% block content %}
+            {% endblock content %}
+
+            {% block overlay_elements %}
+            {% endblock overlay_elements %}
+
+        </main>
+
+        {% include "web/partials/_footer.html" %}
+
+        {% bootstrap_javascript %}
+
+        {% block scripts %}
+        {% endblock scripts %}
+
+    </body>
+</html>

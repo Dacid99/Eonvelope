@@ -80,8 +80,9 @@ class CorrespondentEmailFilterSet(django_filters.FilterSet):
         label=_("Received after"),
         widget=AdaptedSelectDateWidget,
     )
-    x_spam = django_filters.AllValuesMultipleFilter(
-        field_name="email__x_spam",
+    x_spam_flag = django_filters.BooleanFilter(
+        field_name="email__x_spam_flag",
+        widget=widgets.NullBooleanSelect,
     )
 
     def filter_text_fields(

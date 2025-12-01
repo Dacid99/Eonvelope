@@ -46,9 +46,19 @@ def test_get_auth_other(other_client, list_url):
     assert response.status_code == status.HTTP_200_OK
     assert "web/dashboard.html" in [template.name for template in response.templates]
     assert "latest_emails" in response.context
+    assert isinstance(response.context["latest_emails"], QuerySet)
     assert "emails_count" in response.context
+    assert isinstance(response.context["emails_count"], int)
     assert "attachments_count" in response.context
+    assert isinstance(response.context["attachments_count"], int)
     assert "correspondents_count" in response.context
+    assert isinstance(response.context["correspondents_count"], int)
+    assert "accounts_count" in response.context
+    assert isinstance(response.context["accounts_count"], int)
+    assert "mailboxes_count" in response.context
+    assert isinstance(response.context["mailboxes_count"], int)
+    assert "daemons_count" in response.context
+    assert isinstance(response.context["daemons_count"], int)
     assert "settings" in response.context
     assert "VERSION" in response.context["settings"]
     assert "DEBUG" in response.context["settings"]
@@ -72,6 +82,12 @@ def test_get_auth_owner(owner_client, list_url):
     assert isinstance(response.context["attachments_count"], int)
     assert "correspondents_count" in response.context
     assert isinstance(response.context["correspondents_count"], int)
+    assert "accounts_count" in response.context
+    assert isinstance(response.context["accounts_count"], int)
+    assert "mailboxes_count" in response.context
+    assert isinstance(response.context["mailboxes_count"], int)
+    assert "daemons_count" in response.context
+    assert isinstance(response.context["daemons_count"], int)
     assert "settings" in response.context
     assert "VERSION" in response.context["settings"]
     assert "DEBUG" in response.context["settings"]

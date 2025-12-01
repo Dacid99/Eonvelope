@@ -287,7 +287,7 @@ def test_Correspondent_queryset_as_file(fake_correspondent):
     result = Correspondent.queryset_as_file(Correspondent.objects.all())
 
     assert hasattr(result, "read")
-    for correspondent_vcard in vobject.readComponents(result.read().decode()):
+    for correspondent_vcard in vobject.readComponents(result.read().decode("utf-8")):
         correspondent_vcard.fn = fake_correspondent.name
         correspondent_vcard.email = fake_correspondent.email_address
     assert hasattr(result, "close")

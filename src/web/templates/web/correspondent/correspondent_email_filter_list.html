@@ -7,14 +7,6 @@
     href="{{ correspondent.get_absolute_url }}">{{ correspondent.email_address }}</a>
 {% endblock header_subtitle %}
 
-{% block header_buttons %}
-
-    <a role="button"
-       class="btn btn-outline-primary"
-       href="{% url 'web:correspondent-emails-table' correspondent.id %}"><i class="fa-solid fa-table-list" aria-hidden="true"></i> {% translate "Table" %}</a>
-
-{% endblock header_buttons %}
-
 {% block list %}
 
     {% include "web/emailcorrespondents/partials/_correspondentemails_list.html" with correspondentemails=page_obj %}

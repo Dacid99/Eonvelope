@@ -1,4 +1,4 @@
-{% extends "web/bases/base.html" %}
+{% extends "web/layouts/base.html" %}
 
 {% load translate from i18n %}
 
@@ -62,6 +62,27 @@
                                        class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Attachments" %}</a>
                                 </td>
                                 <td>{{ attachments_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:account-filter-list' %}"
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Accounts" %}</a>
+                                </td>
+                                <td>{{ accounts_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:mailbox-filter-list' %}"
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Mailboxes" %}</a>
+                                </td>
+                                <td>{{ mailboxes_count }}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a href="{% url 'web:daemon-filter-list' %}"
+                                       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{% translate "Routines" %}</a>
+                                </td>
+                                <td>{{ daemons_count }}</td>
                             </tr>
                         </tbody>
                     </table>

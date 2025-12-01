@@ -48,7 +48,7 @@ def test_get_auth_other(fake_correspondent, other_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    assert fake_correspondent.email_address not in response.content.decode()
+    assert fake_correspondent.email_address not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -71,4 +71,4 @@ def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
     assert isinstance(response.context["correspondent"], Correspondent)
 
     with open("table.html", "w") as f:
-        f.write(response.content.decode())
+        f.write(response.content.decode("utf-8"))

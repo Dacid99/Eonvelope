@@ -47,7 +47,7 @@ def test_get_noauth(fake_correspondent, client, detail_url, login_url):
     assert response.url.endswith(
         f"?next={detail_url(CorrespondentDetailWithDeleteView, fake_correspondent)}"
     )
-    assert fake_correspondent.email_address not in response.content.decode()
+    assert fake_correspondent.email_address not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -59,7 +59,7 @@ def test_get_auth_other(fake_correspondent, other_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    assert fake_correspondent.email_address not in response.content.decode()
+    assert fake_correspondent.email_address not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -78,7 +78,7 @@ def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
     assert isinstance(response.context["object"], Correspondent)
     assert "latest_correspondentemails" in response.context
     assert isinstance(response.context["latest_correspondentemails"], QuerySet)
-    assert fake_correspondent.email_address in response.content.decode()
+    assert fake_correspondent.email_address in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -232,7 +232,7 @@ def test_post_share_to_nextcloud_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Correspondent_share_to_nextcloud.assert_called_once()
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

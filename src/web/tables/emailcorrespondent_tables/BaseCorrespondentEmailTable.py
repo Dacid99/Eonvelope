@@ -56,7 +56,7 @@ class BaseCorrespondentEmailTable(Table):
             "email__datetime",
             "email__mailbox",
             "email__mailbox__account",
-            "email__x_spam",
+            "email__x_spam_flag",
             "email__datasize",
         )
         sequence = ("checkbox", *fields)

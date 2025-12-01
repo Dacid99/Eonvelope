@@ -39,7 +39,7 @@ def test_get_noauth(fake_daemon, client, detail_url, login_url):
     assert response.url.endswith(
         f"?next={detail_url(DaemonDetailWithDeleteView, fake_daemon)}"
     )
-    assert fake_daemon.mailbox.name not in response.content.decode()
+    assert fake_daemon.mailbox.name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -50,7 +50,7 @@ def test_get_auth_other(fake_daemon, other_client, detail_url):
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
     assert isinstance(response, HttpResponse)
-    assert fake_daemon.mailbox.name not in response.content.decode()
+    assert fake_daemon.mailbox.name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -65,7 +65,7 @@ def test_get_auth_owner(fake_daemon, owner_client, detail_url):
     ]
     assert "object" in response.context
     assert isinstance(response.context["object"], Daemon)
-    assert fake_daemon.mailbox.name in response.content.decode()
+    assert fake_daemon.mailbox.name in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -198,7 +198,7 @@ def test_post_test_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Daemon_test.assert_called_once()
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

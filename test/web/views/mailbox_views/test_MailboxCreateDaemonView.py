@@ -48,7 +48,7 @@ def test_get_auth_other(other_client, fake_mailbox, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    assert fake_mailbox.name not in response.content.decode()
+    assert fake_mailbox.name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -130,7 +130,7 @@ def test_post_auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    assert fake_mailbox.name not in response.content.decode()
+    assert fake_mailbox.name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

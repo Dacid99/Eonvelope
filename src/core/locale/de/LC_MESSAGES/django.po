@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-15 16:39+0000\n"
+"POT-Creation-Date: 2025-11-30 15:30+0000\n"
 "PO-Revision-Date: 2025-11-15 16:49+0000\n"
 "Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/core/de/"
@@ -337,123 +337,123 @@ msgstr "Dieses Konto existiert schon."
 msgid "The protocol %s is not implemented in a fetcher class!"
 msgstr "Das E-Mail-Protokoll %s ist nicht implementiert!"
 
-#: src/core/models/Attachment.py:88
+#: src/core/models/Attachment.py:92
 msgid "This will only delete the record of this attachment, not of the email."
 msgstr "Dies löscht nur den Eintrag für diesen Anhang, nicht seine E-Mail."
 
-#: src/core/models/Attachment.py:92
+#: src/core/models/Attachment.py:96
 msgid ""
 "This will only delete the records of these attachments, not of their emails."
 msgstr "Dies löscht nur die Einträge für diese Anhänge, nicht ihre E-Mails."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:98
+#: src/core/models/Attachment.py:102
 msgid "filename"
 msgstr "Dateiname"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:107
+#: src/core/models/Attachment.py:111
 msgid "content disposition"
 msgstr "Inhaltsbestimmung"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:115
+#: src/core/models/Attachment.py:119
 msgid "content ID"
 msgstr "Inhalts ID"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:123
+#: src/core/models/Attachment.py:127
 msgid "content maintype"
 msgstr "Inhalts Haupttyp"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:131
+#: src/core/models/Attachment.py:135
 msgid "content subtype"
 msgstr "Inhalts Untertyp"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:137 src/core/models/Email.py:162
+#: src/core/models/Attachment.py:141 src/core/models/Email.py:162
 msgid "datasize"
 msgstr "Datengröße"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:146 src/core/models/Email.py:208
+#: src/core/models/Attachment.py:150 src/core/models/Email.py:207
 #: src/core/models/EmailCorrespondent.py:50
 msgid "email"
 msgstr "E-Mail"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:156
+#: src/core/models/Attachment.py:160
 msgid "attachment"
 msgstr "Anhang"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Attachment.py:158
+#: src/core/models/Attachment.py:162
 msgid "attachments"
 msgstr "Anhänge"
 
-#: src/core/models/Attachment.py:168
+#: src/core/models/Attachment.py:172
 #, python-format
 msgid "Attachment %(file_name)s from %(email)s"
 msgstr "Anhang %(file_name)s in %(email)s"
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:232
+#: src/core/models/Attachment.py:236
 #, python-format
 msgid "Paperless URL is malformed: %(error)s"
 msgstr "Paperless URL ist ungültig aufgebaut: %(error)s"
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:239
+#: src/core/models/Attachment.py:243
 #, python-format
 msgid "Error connecting to the Paperless server: %(error)s"
 msgstr "Fehler beim Verbinden mit dem Paperless Server: %(error)s"
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:252
+#: src/core/models/Attachment.py:256
 #, python-format
 msgid "Authentication to Paperless failed: %(response)s"
 msgstr "Authentifizierung bei Paperless fehlgeschlagen: %(response)s"
 
 #. Translators: Paperless is a brand name.
-#: src/core/models/Attachment.py:257
+#: src/core/models/Attachment.py:261
 #, python-format
 msgid "Uploading to Paperless failed: %(response)s"
 msgstr "Hochladen zu Paperless fehlgeschlagen: %(response)s"
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:311
+#: src/core/models/Attachment.py:315
 #, python-format
 msgid "Immich URL is malformed: %(error)s"
 msgstr "Immich URL ist ungültig aufgebaut: %(error)s"
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:318
+#: src/core/models/Attachment.py:322
 #, python-format
 msgid "Error connecting to the Immich server: %(error)s"
 msgstr "Fehler beim Verbinden mit dem Immich Server: %(error)s"
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:331
+#: src/core/models/Attachment.py:335
 #, python-format
 msgid "Authentication to Immich failed: %(response)s"
 msgstr "Authentifizierung bei Immich fehlgeschlagen: %(response)s"
 
 #. Translators: Immich is a brand name.
-#: src/core/models/Attachment.py:336
+#: src/core/models/Attachment.py:340
 #, python-format
 msgid "Uploading to Immich failed: %(response)s"
 msgstr "Hochladen zu Immich fehlgeschlagen: %(response)s"
 
-#: src/core/models/Attachment.py:410
+#: src/core/models/Attachment.py:411
 msgid "Attachment image"
 msgstr "Bildanhang"
 
-#: src/core/models/Attachment.py:420
+#: src/core/models/Attachment.py:445
 msgid "Attachment text"
 msgstr "Textanhang"
 
-#: src/core/models/Attachment.py:429
+#: src/core/models/Attachment.py:454
 msgid "Attachment file content"
 msgstr "Anhangsdateiinhalt"
 
@@ -690,21 +690,21 @@ msgid "headers"
 msgstr "Kopfzeilen"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Email.py:198
+#: src/core/models/Email.py:197
 msgid "X-Spam Flag"
 msgstr "X-Spam Markierung"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Email.py:210
+#: src/core/models/Email.py:209
 msgid "emails"
 msgstr "E-Mails"
 
-#: src/core/models/Email.py:229
+#: src/core/models/Email.py:228
 #, python-format
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr "Email mit ID %(message_id)s, erhalten am %(datetime)s von %(mailbox)s"
 
-#: src/core/models/Email.py:644 src/core/models/Mailbox.py:295
+#: src/core/models/Email.py:682 src/core/models/Mailbox.py:317
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr "Das gegebene Dateiformat %(file_format)s wird nicht unterstützt."
@@ -777,8 +777,8 @@ msgstr "Postfächer"
 msgid "Mailbox %(name)s of %(account)s"
 msgstr "Mailbox %(name)s in %(account)s"
 
-#: src/core/models/Mailbox.py:236 src/core/models/Mailbox.py:270
-#: src/core/models/Mailbox.py:288
+#: src/core/models/Mailbox.py:227 src/core/models/Mailbox.py:264
+#: src/core/models/Mailbox.py:282
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr "Die angegebene Datei ist kein gültiges %(file_format)s."

@@ -179,13 +179,13 @@ def test_is_favorite_filter(email_queryset, lookup_expr, filterquery, expected_i
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
 )
 def test_x_spam_filter(email_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.EmailFilterSet`'s filtering
-    for the :attr:`core.models.Email.Email.x_spam` field.
+    for the :attr:`core.models.Email.Email.x_spam_flag` field.
     """
-    query = {"x_spam" + lookup_expr: filterquery}
+    query = {"x_spam_flag" + lookup_expr: filterquery}
 
     filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
 

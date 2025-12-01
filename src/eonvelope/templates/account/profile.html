@@ -21,7 +21,12 @@
         {% csrf_token %}
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-                <h4>Paperless</h4>
+                <h4>
+                    Paperless
+                    <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/paperless-ngx.svg"
+                         alt="Paperless-ngx icon"
+                         height="24" />
+                </h4>
                 {% bootstrap_field form.paperless_url %}
                 {% bootstrap_field form.paperless_api_key %}
                 {% bootstrap_field form.paperless_tika_enabled %}
@@ -29,14 +34,24 @@
         </ul>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-                <h4>Immich</h4>
+                <h4>
+                    Immich
+                    <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/immich.svg"
+                         alt="Immich icon"
+                         height="24" />
+                </h4>
                 {% bootstrap_field form.immich_url %}
                 {% bootstrap_field form.immich_api_key %}
             </li>
         </ul>
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
-                <h4>Nextcloud</h4>
+                <h4>
+                    Nextcloud
+                    <img src="https://cdn.jsdelivr.net/gh/selfhst/icons/svg/nextcloud.svg"
+                         alt="Nextcloud icon"
+                         height="24" />
+                </h4>
                 {% bootstrap_field form.nextcloud_url %}
                 {% bootstrap_field form.nextcloud_username %}
                 {% bootstrap_field form.nextcloud_password %}

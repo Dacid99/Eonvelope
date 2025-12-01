@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-01 22:05+0000\n"
+"POT-Creation-Date: 2025-11-30 15:30+0000\n"
 "PO-Revision-Date: 2025-09-30 23:02+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/api/"
@@ -125,44 +125,44 @@ msgstr "Рутину зупинено"
 msgid "Routine not running"
 msgstr "Рутина не виконується"
 
-#: src/api/v1/views/EmailViewSet.py:216 src/api/v1/views/EmailViewSet.py:374
+#: src/api/v1/views/EmailViewSet.py:230 src/api/v1/views/EmailViewSet.py:388
 msgid "eml file not found."
 msgstr "eml-файл не знайдено."
 
-#: src/api/v1/views/EmailViewSet.py:247 src/api/v1/views/MailboxViewSet.py:306
+#: src/api/v1/views/EmailViewSet.py:261 src/api/v1/views/MailboxViewSet.py:306
 msgid "File format is required."
 msgstr "Потрібно вказати формат файлу."
 
-#: src/api/v1/views/EmailViewSet.py:252
+#: src/api/v1/views/EmailViewSet.py:266
 msgid "Email ids are required."
 msgstr "Ідентифікатори електронної пошти обов'язкові."
 
-#: src/api/v1/views/EmailViewSet.py:260
+#: src/api/v1/views/EmailViewSet.py:274
 msgid "Email ids given in invalid format."
 msgstr "Ідентифікатори електронної пошти надано в недійсному форматі."
 
-#: src/api/v1/views/EmailViewSet.py:269 src/api/v1/views/MailboxViewSet.py:314
+#: src/api/v1/views/EmailViewSet.py:283 src/api/v1/views/MailboxViewSet.py:314
 #, python-format
 msgid "File format %(file_format)s is not supported."
 msgstr "Формат файлу %(file_format)s не підтримується."
 
-#: src/api/v1/views/EmailViewSet.py:274
+#: src/api/v1/views/EmailViewSet.py:288
 msgid "No emails found"
 msgstr "Електронних листів не знайдено"
 
-#: src/api/v1/views/EmailViewSet.py:370
+#: src/api/v1/views/EmailViewSet.py:384
 msgid "POP accounts do not support restoring of emails."
 msgstr "Облікові записи POP не підтримують відновлення електронних листів."
 
-#: src/api/v1/views/EmailViewSet.py:378
+#: src/api/v1/views/EmailViewSet.py:392
 msgid "Restoring of email to mailbox failed."
 msgstr "Не вдалося відновити електронну пошту в поштовій скриньці."
 
-#: src/api/v1/views/EmailViewSet.py:383
+#: src/api/v1/views/EmailViewSet.py:397
 msgid "Email successfully restored to mailbox."
 msgstr "Електронну пошту успішно відновлено у поштовій скриньці."
 
-#: src/api/v1/views/EmailViewSet.py:406
+#: src/api/v1/views/EmailViewSet.py:422
 msgid "Email successfully reprocessed."
 msgstr "Електронний лист успішно оброблено повторно."
 

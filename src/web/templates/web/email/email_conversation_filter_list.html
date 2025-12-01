@@ -10,9 +10,3 @@
     {% translate "with" %} <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
     href="{{ email.get_absolute_url }}">{{ email.subject }}</a>
 {% endblock header_subtitle %}
-
-{% block header_buttons %}
-    <a role="button"
-       class="btn btn-outline-primary"
-       href="{% url 'web:email-conversation-table' email.id %}"><i class="fa-solid fa-table-list" aria-hidden="true"></i> {% translate "Table" %}</a>
-{% endblock header_buttons %}

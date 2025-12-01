@@ -1,4 +1,4 @@
-{% extends "web/bases/base.html" %}
+{% extends "web/layouts/base.html" %}
 
 {% load translate from i18n %}
 
@@ -51,7 +51,7 @@
         </div>
         {% if object.has_thumbnail %}
             <div class="row g-0">
-                <div class="col-6">
+                <div class="col-lg-6 d-flex flex-column order-2 order-lg-1">
                 {% endif %}
                 <div class="card-body text-break">
                     <h2 class="card-title">
@@ -73,7 +73,7 @@
                 </div>
                 {% if object.has_thumbnail %}
                 </div>
-                <div class="col-6">
+                <div class="col-lg-6 order-1 order-lg-2">
 
                     {% block thumbnail %}
                     {% endblock thumbnail %}

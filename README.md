@@ -1,7 +1,7 @@
 # E∘nvelope
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/eonvelope)](https://hub.docker.com/repository/docker/dacid99/eonvelope/general)
-[![Docker Image Version](https://img.shields.io/docker/v/dacid99/eonvelope)](https://hub.docker.com/repository/docker/dacid99/eonvelope/general)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/eonvelope)](https://hub.docker.com/r/dacid99/eonvelope)
+[![Docker Image Version](https://img.shields.io/docker/v/dacid99/eonvelope)](https://hub.docker.com/r/dacid99/eonvelope)
 [![Read the Docs](https://img.shields.io/readthedocs/eonvelope/latest)](https://eonvelope.readthedocs.io/latest/)
 [![Translation status](https://img.shields.io/weblate/progress/eonvelope)](https://hosted.weblate.org/projects/eonvelope/)
 [![Coverage](https://gitlab.com/Dacid99/eonvelope/badges/master/coverage.svg?job=test_codebase)](https://gitlab.com/Dacid99/eonvelope/)
@@ -30,6 +30,8 @@ As an admin you may choose this project because of its
 - SSL certificate out of the box
 - Full-fledged API
 
+*Check out the [project website](https://dacid99.gitlab.io/eonvelope) for screenshots and more information.*
+
 Your emails are serious business, so this projects codebase has > 95% test-coverage!
 
 ### Roadmap
@@ -43,7 +45,7 @@ Your emails are serious business, so this projects codebase has > 95% test-cover
 
 ## Installation
 
-The project is intended to be run with the container image provided at [dockerhub](https://hub.docker.com/repository/docker/dacid99/eonvelope/general).
+The project is intended to be run with the container image provided at [dockerhub](https://hub.docker.com/r/dacid99/eonvelope).
 
 ### Docker
 

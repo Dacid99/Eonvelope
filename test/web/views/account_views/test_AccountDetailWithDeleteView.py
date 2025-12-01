@@ -44,7 +44,7 @@ def test_get_noauth(fake_account, client, detail_url, login_url):
     assert response.url.endswith(
         f"?next={detail_url(AccountDetailWithDeleteView, fake_account)}"
     )
-    assert fake_account.mail_address not in response.content.decode()
+    assert fake_account.mail_address not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -54,7 +54,7 @@ def test_get_auth_other(fake_account, other_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    assert fake_account.mail_address not in response.content.decode()
+    assert fake_account.mail_address not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -71,7 +71,7 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
     assert isinstance(response.context["object"], Account)
     assert "latest_emails" in response.context
     assert isinstance(response.context["latest_emails"], QuerySet)
-    assert fake_account.mail_address in response.content.decode()
+    assert fake_account.mail_address in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -205,7 +205,7 @@ def test_post_test_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Account_test.assert_called_once()
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -316,7 +316,7 @@ def test_post_update_mailboxes_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Account_update_mailboxes.assert_called_once()
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

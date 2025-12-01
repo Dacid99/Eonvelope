@@ -59,8 +59,8 @@ def test_output(fake_email, request_context):
     assert "mailbox" in serializer_data
     assert serializer_data["mailbox"] == fake_email.mailbox.id
     assert "headers" not in serializer_data
-    assert "x_spam" in serializer_data
-    assert serializer_data["x_spam"] == fake_email.x_spam
+    assert "x_spam_flag" in serializer_data
+    assert serializer_data["x_spam_flag"] == fake_email.x_spam_flag
     assert "created" in serializer_data
     assert datetime.fromisoformat(serializer_data["created"]) == fake_email.created
     assert "updated" in serializer_data
@@ -100,7 +100,7 @@ def test_input(email_payload, request_context):
     assert "file_path" not in serializer_data
     assert "mailbox" not in serializer_data
     assert "headers" not in serializer_data
-    assert "x_spam" not in serializer_data
+    assert "x_spam_flag" not in serializer_data
     assert "created" not in serializer_data
     assert "updated" not in serializer_data
     assert "replies" not in serializer_data

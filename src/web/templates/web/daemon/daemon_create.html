@@ -1,4 +1,4 @@
-{% extends "web/bases/base_create.html" %}
+{% extends "web/layouts/base_create.html" %}
 
 {% load bootstrap_field from django_bootstrap5 %}
 
@@ -7,10 +7,6 @@
 {% block title %}
     {% translate "Add Routine" %} -
 {% endblock title %}
-
-{% block nav_class_daemons %}
-    link-light active
-{% endblock nav_class_daemons %}
 
 {% block close_to_list_button %}
     <a class="btn-close"

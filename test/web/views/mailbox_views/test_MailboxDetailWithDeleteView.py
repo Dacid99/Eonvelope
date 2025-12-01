@@ -45,7 +45,7 @@ def test_get_noauth(fake_mailbox, client, detail_url, login_url):
     assert response.url.endswith(
         f"?next={detail_url(MailboxDetailWithDeleteView, fake_mailbox)}"
     )
-    assert fake_mailbox.name not in response.content.decode()
+    assert fake_mailbox.name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -55,7 +55,7 @@ def test_get_auth_other(fake_mailbox, other_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    assert fake_mailbox.name not in response.content.decode()
+    assert fake_mailbox.name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -72,7 +72,7 @@ def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
     assert isinstance(response.context["object"], Mailbox)
     assert "latest_emails" in response.context
     assert isinstance(response.context["latest_emails"], QuerySet)
-    assert fake_mailbox.name in response.content.decode()
+    assert fake_mailbox.name in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -210,7 +210,7 @@ def test_post_test_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Mailbox_test.assert_called_once()
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -375,7 +375,7 @@ def test_post_fetch_failure_auth_owner(
     mock_Mailbox_fetch.assert_called_once_with(
         fake_mailbox, EmailFetchingCriterionChoices.ALL
     )
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

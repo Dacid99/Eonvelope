@@ -75,8 +75,7 @@ def test_Email_fields(fake_email):
     assert fake_email.mailbox is not None
     assert isinstance(fake_email.mailbox, Mailbox)
     assert fake_email.headers is None
-    assert fake_email.x_spam is not None
-    assert isinstance(fake_email.x_spam, str)
+    assert fake_email.x_spam_flag is None
 
     assert isinstance(fake_email.updated, datetime.datetime)
     assert fake_email.updated is not None
@@ -106,7 +105,7 @@ def test_Email_foreign_key_mailbox_deletion(fake_email):
 def test_Email_m2m_references_deletion(fake_email):
     """Tests the on_delete foreign key constraint on in_reply_to in :class:`core.models.Email.Email`."""
 
-    referenced_email = baker.make(Email, x_spam="NO")
+    referenced_email = baker.make(Email, x_spam_flag=False)
     fake_email.references.add(referenced_email)
 
     referenced_email.delete()
@@ -121,7 +120,7 @@ def test_Email_m2m_references_deletion(fake_email):
 def test_Email_m2m_in_reply_to_deletion(fake_email):
     """Tests the on_delete foreign key constraint on in_reply_to in :class:`core.models.Email.Email`."""
 
-    in_reply_to_email = baker.make(Email, x_spam="NO")
+    in_reply_to_email = baker.make(Email, x_spam_flag=False)
     fake_email.in_reply_to.add(in_reply_to_email)
 
     in_reply_to_email.delete()
@@ -330,7 +329,9 @@ def test_Email_reprocess_success(fake_email_with_file):
     assert fake_email_with_file.pk == previous_pk
     assert fake_email_with_file.message_id == TEST_EMAIL_PARAMETERS[0][1]["message_id"]
     assert fake_email_with_file.subject == TEST_EMAIL_PARAMETERS[0][1]["subject"]
-    assert fake_email_with_file.x_spam == TEST_EMAIL_PARAMETERS[0][1]["x_spam"]
+    assert (
+        fake_email_with_file.x_spam_flag == TEST_EMAIL_PARAMETERS[0][1]["x_spam_flag"]
+    )
     assert (
         fake_email_with_file.plain_bodytext
         == TEST_EMAIL_PARAMETERS[0][1]["plain_bodytext"]
@@ -472,21 +473,16 @@ def test_Email_conversation_missing_connection_node(fake_email_conversation, sta
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "x_spam, expected_result",
+    "x_spam_flag, expected_result",
     [
         (None, False),
-        ("", False),
-        ("YES", True),
-        ("NO", False),
-        ("NO, YES", True),
-        ("YES, YES", True),
-        ("NO, NO", False),
-        ("CRAZY", False),
+        (False, False),
+        (True, True),
     ],
 )
-def test_Email_is_spam(fake_email, x_spam, expected_result):
+def test_Email_is_spam(fake_email, x_spam_flag, expected_result):
     """Tests :func:`core.models.Email.Email.is_spam`."""
-    fake_email.x_spam = x_spam
+    fake_email.x_spam_flag = x_spam_flag
 
     result = fake_email.is_spam
 
@@ -959,7 +955,7 @@ def test_Email_create_from_email_bytes_success(
     assert result.pk is not None
     assert result.message_id == expected_email_features["message_id"]
     assert result.subject == expected_email_features["subject"]
-    assert result.x_spam == expected_email_features["x_spam"]
+    assert result.x_spam_flag == expected_email_features["x_spam_flag"]
     assert result.plain_bodytext == expected_email_features["plain_bodytext"]
     assert result.html_bodytext == expected_email_features["html_bodytext"]
     assert result.attachments.count() == len(expected_attachments_features)
@@ -1037,16 +1033,18 @@ def test_Email_create_from_email_bytes_duplicate(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "X_Spam_Flag, THROW_OUT_SPAM, expected_is_none",
+    "x_spam_flag, THROW_OUT_SPAM, expected_is_none",
     [
         ("YES", True, True),
         ("NO", True, False),
+        ("", True, False),
         ("YES, NO", True, True),
         ("NO, YES", True, True),
         ("NO, NO", True, False),
         ("SOMETHING", True, False),
         ("YES", False, False),
         ("NO", False, False),
+        ("", False, False),
         ("YES, NO", False, False),
         ("NO, YES", False, False),
         ("NO, NO", False, False),
@@ -1058,7 +1056,7 @@ def test_Email_create_from_email_bytes_spam(
     fake_fs,
     fake_mailbox,
     mock_logger,
-    X_Spam_Flag,
+    x_spam_flag,
     THROW_OUT_SPAM,
     expected_is_none,
 ):
@@ -1067,7 +1065,7 @@ def test_Email_create_from_email_bytes_spam(
     """
     with override_config(THROW_OUT_SPAM=THROW_OUT_SPAM):
         result = Email.create_from_email_bytes(
-            f"X-Spam-Flag: {X_Spam_Flag}".encode(), fake_mailbox
+            f"X-Spam-Flag: {x_spam_flag}".encode(), fake_mailbox
         )
 
     assert (result is None) is expected_is_none
@@ -1108,6 +1106,7 @@ def test_Email_html_version(fake_email, fake_attachment, fake_correspondent):
     result = fake_email.html_version
 
     assert result
+    print(result)
     assert get_config("EMAIL_CSS") in result
 
 
@@ -1130,18 +1129,16 @@ def test_Email_has_download(fake_email, file_path, expected_has_download):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "x_spam, expected_has_download",
+    "x_spam_flag, expected_has_download",
     [
-        ("NO", True),
-        ("NO, NO", True),
-        ("YES", False),
-        ("YES,NO", False),
-        ("", True),
+        (False, True),
+        (True, False),
+        (None, True),
     ],
 )
-def test_Email_has_thumbnail(fake_email, x_spam, expected_has_download):
+def test_Email_has_thumbnail(fake_email, x_spam_flag, expected_has_download):
     """Tests :func:`core.models.Email.Email.has_download` in the two relevant cases."""
-    fake_email.x_spam = x_spam
+    fake_email.x_spam_flag = x_spam_flag
 
     result = fake_email.has_thumbnail
 

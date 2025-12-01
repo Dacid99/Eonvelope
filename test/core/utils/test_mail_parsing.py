@@ -19,12 +19,13 @@
 """Test module for :mod:`core.utils.mail_parsing`."""
 
 import email
-from datetime import datetime
+from datetime import UTC, datetime
 from email import policy
 from email.message import EmailMessage
 from email.utils import format_datetime
 
 import pytest
+from django.utils.timezone import get_current_timezone
 
 from core.utils import mail_parsing
 from test.conftest import TEST_EMAIL_PARAMETERS
@@ -303,10 +304,10 @@ def test_find_best_href_in_header(header, expected_href):
 
 
 @pytest.mark.parametrize(
-    "x_spam, expected_result",
+    "x_spam_header, expected_result",
     [
-        (None, False),
-        ("", False),
+        (None, None),
+        ("", None),
         ("YES", True),
         ("NO", False),
         ("NO, YES", True),
@@ -315,8 +316,97 @@ def test_find_best_href_in_header(header, expected_href):
         ("CRAZY", False),
     ],
 )
-def test_is_x_spam(x_spam, expected_result):
+def test_is_x_spam(x_spam_header, expected_result):
     """Tests :func:`core.models.Email.Email.is_spam`."""
-    result = mail_parsing.is_x_spam(x_spam)
+    result = mail_parsing.is_x_spam(x_spam_header)
 
     assert result is expected_result
+
+
+@pytest.mark.parametrize(
+    "icalendar_data, expected_readout",
+    [
+        ("Not icalendar content", []),
+        (
+            "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Test event\nLOCATION:Somewhere\nDTSTART:20200115T120000Z\nDTEND:20200115T150000Z\nEND:VEVENT\nEND:VCALENDAR",
+            [
+                (
+                    datetime(2020, 1, 15, 12, 00, 00, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    datetime(2020, 1, 15, 15, 00, 00, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    "Test event",
+                    "Somewhere",
+                )
+            ],
+        ),
+        (
+            "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:First event\nDTSTART:20200505T040040Z\nDTEND:20200505T100000Z\nEND:VEVENT\nBEGIN:VEVENT\nSUMMARY:New\nDTSTART:20100305T101000Z\nDURATION:P0D1H0M0S\nEND:VEVENT\nEND:VCALENDAR",
+            [
+                (
+                    datetime(2020, 5, 5, 4, 00, 40, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    datetime(2020, 5, 5, 10, 00, 00, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    "First event",
+                    "",
+                ),
+                (
+                    datetime(2010, 3, 5, 10, 10, 0, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    datetime(2010, 3, 5, 11, 10, 0, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    "New",
+                    "",
+                ),
+            ],
+        ),
+    ],
+)
+def test_make_icalendar_readout(icalendar_data, expected_readout):
+    result = mail_parsing.make_icalendar_readout(icalendar_data)
+
+    assert result == expected_readout
+
+
+@pytest.mark.parametrize(
+    "vcard_data, expected_readout",
+    [
+        ("Not vcf content", []),
+        (
+            "BEGIN:VCARD\nVERSION:3.0\nEMAIL:jeffrey@osafoundation.org\nFN:Jeffrey Harris\nTEL:+45 151 999 888 12\nADR:;;Jeffreys Place 1;California;;\nPHOTO;ENCODING=b;TYPE=JPEG:YWZmZQ==\nEND:VCARD",
+            [
+                (
+                    "Jeffrey Harris",
+                    "YWZmZQ==",
+                    "jeffrey@osafoundation.org",
+                    "Jeffreys Place 1\nCalifornia,",
+                    "+45 151 999 888 12",
+                )
+            ],
+        ),
+        (
+            "BEGIN:VCARD\nVERSION:3.0\nEMAIL:arnie@test.org\nFN:Arnie Daniel\nADR:Somewhere;in;the;west\nEND:VCARD\nBEGIN:VCARD\nVERSION:3.0\nEMAIL:dude2@test.org\nFN:Brother Daniel\nEND:VCARD",
+            [
+                (
+                    "Arnie Daniel",
+                    "",
+                    "arnie@test.org",
+                    "Somewhere\nin\nthe\nwest,",
+                    "",
+                ),
+                ("Brother Daniel", "", "dude2@test.org", "", ""),
+            ],
+        ),
+    ],
+)
+def test_make_vcard_readout(vcard_data, expected_readout):
+    result = mail_parsing.make_vcard_readout(vcard_data)
+
+    assert result == expected_readout

@@ -42,7 +42,7 @@ def test_get_noauth(fake_attachment, client, detail_url, login_url):
     assert response.url.endswith(
         f"?next={detail_url(AttachmentDetailWithDeleteView, fake_attachment)}"
     )
-    assert fake_attachment.file_name not in response.content.decode()
+    assert fake_attachment.file_name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -54,7 +54,7 @@ def test_get_auth_other(fake_attachment, other_client, detail_url):
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    assert fake_attachment.file_name not in response.content.decode()
+    assert fake_attachment.file_name not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -71,7 +71,7 @@ def test_get_auth_owner(fake_attachment, owner_client, detail_url):
     ]
     assert "object" in response.context
     assert isinstance(response.context["object"], Attachment)
-    assert fake_attachment.file_name in response.content.decode()
+    assert fake_attachment.file_name in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -222,7 +222,7 @@ def test_post_share_to_paperless_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Attachment_share_to_paperless.assert_called_once()
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -342,7 +342,7 @@ def test_post_share_to_immich_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Attachment_share_to_immich.assert_called_once()
-    assert fake_error_message in response.content.decode()
+    assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db

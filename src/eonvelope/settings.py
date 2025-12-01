@@ -554,13 +554,12 @@ SITE_ID = 1
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-
 ##### django-pwa #####
 # https://pypi.org/project/django-pwa/
 
 PWA_APP_NAME = "Eonvelope"
 PWA_APP_DESCRIPTION = _("Your email archiving server")
-PWA_APP_THEME_COLOR = "#0d6efd"
+PWA_APP_THEME_COLOR = "#3e7bb6"
 PWA_APP_BACKGROUND_COLOR = "#ffffff"
 PWA_APP_DISPLAY = "standalone"
 PWA_APP_SCOPE = "/"
@@ -593,7 +592,6 @@ PWA_APP_SPLASH_SCREEN = [
         "src": STATIC_URL + "eonvelope/icons/favicon-512x512.png",
         "sizes": "512x512",
         "type": "image/png",
-        "purpose": "maskable",
         "media": "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)",
     },
 ]
@@ -612,6 +610,9 @@ PWA_APP_SHORTCUTS = [
     },
 ]
 PWA_APP_SCREENSHOTS = []
+PWA_SERVICE_WORKER_PATH = (
+    BASE_DIR / "src" / "eonvelope" / "templates" / "serviceworker.js"
+)
 PWA_APP_DEBUG_MODE = DEBUG
 
 
@@ -621,6 +622,7 @@ PWA_APP_DEBUG_MODE = DEBUG
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": "debug_toolbar.middleware.show_toolbar_with_docker",
 }
+
 
 ##### django-settings-export #####
 # https://github.com/jkbrzt/django-settings-export/blob/master/README.md

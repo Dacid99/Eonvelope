@@ -36,7 +36,7 @@ class MailboxFilterView(LoginRequiredMixin, FilterPageView):
     template_name = "web/mailbox/mailbox_filter_list.html"
     context_object_name = "mailboxes"
     filterset_class = MailboxFilterSet
-    ordering = ["-is_favorite", "name"]
+    ordering = ["-is_favorite", "account__mail_address", "name"]
 
     @override
     def get_queryset(self) -> QuerySet[Mailbox]:

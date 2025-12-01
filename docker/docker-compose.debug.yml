@@ -11,7 +11,11 @@ services:
       - MARIADB_ROOT_PASSWORD=example
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'" ]
+      test:
+        [
+          "CMD-SHELL",
+          "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'",
+        ]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -39,7 +43,7 @@ services:
       - DATABASE_PASSWORD=passwd # must match db:MARIADB_PASSWORD
       - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
       - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
-      - ALLOWED_HOSTS=localhost # all allowed host URLs separated by ,
+      - ALLOWED_HOSTS=*
       - REGISTRATION_ENABLED=True
       - LOGFILE_BACKUP_NUMBER=10
       - APP_LOG_LEVEL=DEBUG

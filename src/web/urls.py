@@ -75,6 +75,8 @@ from .views import (
 
 app_name = "web"
 
+# be cautious when changing the view url names, template optics may depend on them!
+
 urlpatterns = [
     path("dashboard/", DashboardView.as_view(), name=DashboardView.URL_NAME),
     path(

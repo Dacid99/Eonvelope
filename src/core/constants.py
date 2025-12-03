@@ -329,7 +329,7 @@ ICALENDAR_TEMPLATE = """<div class="row g-0 overflow-y-scroll">
                                                 <h5 class="card-title">{{ summary }}</h5>
                                                 <p class="card-text text-muted d-flex flex-column">
                                                     <span>{{ dtstart | time }}</span>
-                                                    <span class="mx-1">–</span>
+                                                    <span class="mx-1">-</span>
                                                     {% if dtend.date != dtstart.date %}<span class="fw-bold me-1">{{dtend |date }}</span>{% endif %}
                                                     <span>{{ dtend | time }}</span>
                                                 </p>

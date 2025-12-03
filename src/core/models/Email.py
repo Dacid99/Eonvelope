@@ -569,8 +569,8 @@ class Email(
             Does not validate args! This has to be done beforehand.
         """
         tempfile = (
-            NamedTemporaryFile()
-        )  # noqa: SIM115  # pylint: disable=consider-using-with ; the file must not be closed as it is returned later
+            NamedTemporaryFile()  # noqa: SIM115  # pylint: disable=consider-using-with
+        )  # the file must not be closed as it is returned later
         with ZipFile(tempfile.name, "w") as zipfile:
             for email_item in queryset:
                 try:
@@ -596,8 +596,8 @@ class Email(
             Does not validate args! This has to be done beforehand.
         """
         tempfile = (
-            NamedTemporaryFile()
-        )  # noqa: SIM115  # pylint: disable=consider-using-with ; the file must not be closed as it is returned later
+            NamedTemporaryFile()  # noqa: SIM115  # pylint: disable=consider-using-with
+        )  # the file must not be closed as it is returned later
         parser_class = file_format_parsers[file_format]
         parser = parser_class(tempfile.name, create=True)
         parser.lock()

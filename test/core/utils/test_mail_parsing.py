@@ -370,6 +370,7 @@ def test_is_x_spam(x_spam_header, expected_result):
     ],
 )
 def test_make_icalendar_readout(icalendar_data, expected_readout):
+    """Test the icalendar readout creation with basic example data."""
     result = mail_parsing.make_icalendar_readout(icalendar_data)
 
     assert result == expected_readout
@@ -407,6 +408,7 @@ def test_make_icalendar_readout(icalendar_data, expected_readout):
     ],
 )
 def test_make_vcard_readout(vcard_data, expected_readout):
+    """Test the icalendar readout creation with basic example data."""
     result = mail_parsing.make_vcard_readout(vcard_data)
 
     assert result == expected_readout

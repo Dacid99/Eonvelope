@@ -5,7 +5,7 @@
 ##    stage 1    ##
 ## build python dependencies ##
 ## no cleanup required ##
-FROM python:3.13-alpine AS python-prestage
+FROM python:3.14-alpine AS python-prestage
 
 WORKDIR /
 COPY pyproject.toml poetry.lock ./
@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir poetry && \
 
 ##   stage 2   ##
 ## install s6-overlay ##
-FROM python:3.13-alpine AS s6-overlay-base
+FROM python:3.14-alpine AS s6-overlay-base
 
 ARG S6_OVERLAY_VERSION=3.2.1.0
 

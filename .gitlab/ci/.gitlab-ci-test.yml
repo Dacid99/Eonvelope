@@ -15,4 +15,5 @@ test_codebase:
       - "$TEST_REPORT_PATH"
     when: always
     expire_in: 30 days
+  retry: 1
   coverage: '/^\d+(?:\.\d+)?\s*$/'

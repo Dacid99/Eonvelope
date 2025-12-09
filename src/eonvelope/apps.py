@@ -23,9 +23,20 @@ from __future__ import annotations
 from typing import override
 
 from django.apps import AppConfig
+from django.contrib.admin.apps import AdminConfig
 
 
-class CoreConfig(AppConfig):
+class EonvelopeAdminConfig(AdminConfig):
+    """App config for django admin to set the custom site as default.
+
+    References:
+        https://docs.djangoproject.com/en/5.2/ref/contrib/admin/#overriding-the-default-admin-site
+    """
+
+    default_site = "eonvelope.admin.EonvelopeAdminSite"
+
+
+class EonvelopeConfig(AppConfig):
     """App config for :mod:`eonvelope`."""
 
     default_auto_field = "django.db.models.BigAutoField"

@@ -63,7 +63,7 @@ VERSION = config["project"]["version"]
 ### Models
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "eonvelope.apps.EonvelopeAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -105,10 +105,10 @@ INSTALLED_APPS = [
     "health_check.contrib.celery_ping",
     "django_celery_results",
     "django_celery_beat",
-    "eonvelope",
-    "core",
-    "api",
-    "web",
+    "eonvelope.apps.EonvelopeConfig",
+    "core.apps.CoreConfig",
+    "api.apps.APIConfig",
+    "web.apps.WebConfig",
 ]
 
 

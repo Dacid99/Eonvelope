@@ -71,6 +71,22 @@ def test_get_auth_owner(owner_api_client, url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(admin_api_client, url):
+    """Tests the `get` method on :class:`api.v1.views.UserProfileView`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(url(UserProfileView))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "paperless_url" in response.data
+    assert (
+        response.data["paperless_url"]
+        == admin_api_client.handler._force_user.profile.paperless_url
+    )
+    assert "paperless_api_key" not in response.data
+
+
+@pytest.mark.django_db
 def test_patch_noauth(noauth_api_client, profile_payload, url):
     """Tests the `patch` method on :class:`api.v1.views.UserProfileView`
     with an unauthenticated user client.
@@ -127,6 +143,28 @@ def test_patch_auth_owner(owner_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
+def test_patch_auth_admin(admin_api_client, profile_payload, url):
+    """Tests the `patch` method on :class:`api.v1.views.UserProfileView`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.patch(url(UserProfileView), data=profile_payload)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "paperless_url" in response.data
+    assert response.data["paperless_url"] == profile_payload["paperless_url"]
+    assert "paperless_api_key" not in response.data
+    admin_api_client.handler._force_user.profile.refresh_from_db()
+    assert (
+        admin_api_client.handler._force_user.profile.paperless_url
+        == profile_payload["paperless_url"]
+    )
+    assert (
+        admin_api_client.handler._force_user.profile.paperless_api_key
+        == profile_payload["paperless_api_key"]
+    )
+
+
+@pytest.mark.django_db
 def test_put_noauth(noauth_api_client, profile_payload, url):
     """Tests the `put` method on :class:`api.v1.views.UserProfileView`
     with an unauthenticated user client.
@@ -170,5 +208,23 @@ def test_put_auth_owner(owner_api_client, profile_payload, url):
     owner_api_client.handler._force_user.profile.refresh_from_db()
     assert (
         owner_api_client.handler._force_user.profile.paperless_url
+        == profile_payload["paperless_url"]
+    )
+
+
+@pytest.mark.django_db
+def test_put_auth_admin(admin_api_client, profile_payload, url):
+    """Tests the `put` method on :class:`api.v1.views.UserProfileView`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.put(url(UserProfileView), data=profile_payload)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "paperless_url" in response.data
+    assert response.data["paperless_url"] == profile_payload["paperless_url"]
+    assert "paperless_api_key" not in response.data
+    admin_api_client.handler._force_user.profile.refresh_from_db()
+    assert (
+        admin_api_client.handler._force_user.profile.paperless_url
         == profile_payload["paperless_url"]
     )

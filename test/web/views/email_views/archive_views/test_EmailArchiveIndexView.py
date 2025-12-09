@@ -66,3 +66,19 @@ def test_get_auth_owner(owner_client, date_url):
     assert "page_obj" in response.context
     assert "page_size" in response.context
     assert "date_list" in response.context
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(admin_client, date_url):
+    """Tests :class:`web.views.EmailArchiveIndexView` with the authenticated admin user client."""
+    response = admin_client.get(date_url(EmailArchiveIndexView))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/email/archive/index.html" in [
+        template.name for template in response.templates
+    ]
+    assert "today" in response.context
+    assert "page_obj" in response.context
+    assert "page_size" in response.context
+    assert "date_list" in response.context

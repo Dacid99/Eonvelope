@@ -67,3 +67,13 @@ def test_get_auth_owner(fake_email, fake_email_conversation, owner_client, detai
         for context_email in response.context["page_obj"]
     )
     assert len(fake_email.conversation.all()) == len(response.context["page_obj"])
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(fake_email, admin_client, detail_url):
+    """Tests :class:`web.views.EmailConversationView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(EmailConversationView, fake_email))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_email.message_id not in response.content.decode("utf-8")

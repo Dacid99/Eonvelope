@@ -25,7 +25,7 @@ from rest_framework import status
 
 from eonvelope.middleware.TimezoneMiddleware import TimezoneMiddleware
 from eonvelope.views.timezone import SET_TIMEZONE_URL_NAME
-from test.web.conftest import other_client, owner_client
+from test.web.conftest import admin_client, other_client, owner_client
 
 
 @pytest.mark.django_db
@@ -59,6 +59,17 @@ def test_get_owner(owner_client):
     assert response.status_code == status.HTTP_302_FOUND
     assert response.url == "/"
     assert TimezoneMiddleware.TIMEZONE_SESSION_KEY not in owner_client.session
+
+
+@pytest.mark.django_db
+def test_get_admin(admin_client):
+    """Tests `get` on :func:`eonvelope.views.timezone` for the authenticated admin user client."""
+    response = admin_client.get(reverse(SET_TIMEZONE_URL_NAME))
+
+    assert isinstance(response, HttpResponseRedirect)
+    assert response.status_code == status.HTTP_302_FOUND
+    assert response.url == "/"
+    assert TimezoneMiddleware.TIMEZONE_SESSION_KEY not in admin_client.session
 
 
 @pytest.mark.django_db

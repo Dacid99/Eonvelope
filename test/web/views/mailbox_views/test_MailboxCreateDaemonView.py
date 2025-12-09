@@ -90,6 +90,16 @@ def test_get_auth_owner_criterion_choices(owner_client, fake_mailbox, detail_url
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(admin_client, fake_mailbox, detail_url):
+    """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(MailboxCreateDaemonView, fake_mailbox))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_mailbox.name not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_noauth(
     daemon_with_interval_payload, client, fake_mailbox, detail_url, login_url
 ):
@@ -248,3 +258,23 @@ def test_post_duplicate_auth_owner(
     assert "object" in response.context
     assert response.context["object"] == fake_mailbox
     assert Daemon.objects.all().count() == 1
+
+
+@pytest.mark.django_db
+def test_post_auth_admin(
+    daemon_with_interval_payload,
+    admin_client,
+    fake_mailbox,
+    detail_url,
+):
+    """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated admin user client."""
+    assert Daemon.objects.all().count() == 1
+
+    response = admin_client.post(
+        detail_url(MailboxCreateDaemonView, fake_mailbox),
+        daemon_with_interval_payload,
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_mailbox.name not in response.content.decode("utf-8")

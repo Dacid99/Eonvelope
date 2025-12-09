@@ -45,3 +45,10 @@ def owner_api_client(noauth_api_client, owner_user):
     """A :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`owner_user`."""
     noauth_api_client.force_authenticate(user=owner_user)
     return noauth_api_client
+
+
+@pytest.fixture
+def admin_api_client(noauth_api_client, admin_user):
+    """A :class:`rest_framework.test.APIClient` instance that is authenticated as :attr:`admin_user`."""
+    noauth_api_client.force_authenticate(user=admin_user)
+    return noauth_api_client

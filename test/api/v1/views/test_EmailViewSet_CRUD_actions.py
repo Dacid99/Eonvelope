@@ -61,6 +61,18 @@ def test_list_auth_owner(fake_email, owner_api_client, list_url):
 
 
 @pytest.mark.django_db
+def test_list_auth_admin(fake_email, admin_api_client, list_url):
+    """Tests the `list` method on :class:`api.v1.views.EmailViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(list_url(EmailViewSet))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 0
+    assert response.data["results"] == []
+
+
+@pytest.mark.django_db
 def test_get_noauth(fake_email, noauth_api_client, detail_url):
     """Tests the get method on :class:`api.v1.views.EmailViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(detail_url(EmailViewSet, fake_email))
@@ -89,6 +101,17 @@ def test_get_auth_owner(fake_email, owner_api_client, detail_url):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["message_id"] == fake_email.message_id
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(fake_email, admin_api_client, detail_url):
+    """Tests the `get` method on :class:`api.v1.views.EmailViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(detail_url(EmailViewSet, fake_email))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "message_id" not in response.data
 
 
 @pytest.mark.django_db
@@ -125,6 +148,21 @@ def test_patch_auth_owner(fake_email, owner_api_client, email_payload, detail_ur
     with the authenticated owner user client.
     """
     response = owner_api_client.patch(
+        detail_url(EmailViewSet, fake_email), data=email_payload
+    )
+
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert "message_id" not in response.data
+    fake_email.refresh_from_db()
+    assert fake_email.message_id != email_payload["message_id"]
+
+
+@pytest.mark.django_db
+def test_patch_auth_admin(fake_email, admin_api_client, email_payload, detail_url):
+    """Tests the `patch` method on :class:`api.v1.views.EmailViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.patch(
         detail_url(EmailViewSet, fake_email), data=email_payload
     )
 
@@ -178,6 +216,21 @@ def test_put_auth_owner(fake_email, owner_api_client, email_payload, detail_url)
 
 
 @pytest.mark.django_db
+def test_put_auth_admin(fake_email, admin_api_client, email_payload, detail_url):
+    """Tests the `put` method on :class:`api.v1.views.EmailViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.put(
+        detail_url(EmailViewSet, fake_email), data=email_payload
+    )
+
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert "message_id" not in response.data
+    fake_email.refresh_from_db()
+    assert fake_email.message_id != email_payload["message_id"]
+
+
+@pytest.mark.django_db
 def test_post_noauth(noauth_api_client, email_payload, list_url):
     """Tests the post method on :class:`api.v1.views.EmailViewSet` with an unauthenticated user client."""
     response = noauth_api_client.post(list_url(EmailViewSet), data=email_payload)
@@ -207,6 +260,19 @@ def test_post_auth_owner(owner_api_client, email_payload, list_url):
     with the authenticated owner user client.
     """
     response = owner_api_client.post(list_url(EmailViewSet), data=email_payload)
+
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert "message_id" not in response.data
+    with pytest.raises(Email.DoesNotExist):
+        Email.objects.get(message_id=email_payload["message_id"])
+
+
+@pytest.mark.django_db
+def test_post_auth_admin(admin_api_client, email_payload, list_url):
+    """Tests the `post` method on :class:`api.v1.views.EmailViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.post(list_url(EmailViewSet), data=email_payload)
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     assert "message_id" not in response.data
@@ -259,5 +325,17 @@ def test_delete_nonexistant_auth_owner(fake_email, owner_api_client, detail_url)
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     fake_email.id = old_id
+    fake_email.refresh_from_db()
+    assert fake_email.message_id is not None
+
+
+@pytest.mark.django_db
+def test_delete_auth_admin(fake_email, admin_api_client, detail_url):
+    """Tests the `delete` method on :class:`api.v1.views.EmailViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.delete(detail_url(EmailViewSet, fake_email))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     fake_email.refresh_from_db()
     assert fake_email.message_id is not None

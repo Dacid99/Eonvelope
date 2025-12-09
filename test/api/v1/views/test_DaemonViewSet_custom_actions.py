@@ -126,6 +126,25 @@ def test_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_test_auth_admin(
+    fake_daemon,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Daemon_test,
+):
+    """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.test` action with the authenticated admin user client."""
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            DaemonViewSet, DaemonViewSet.URL_NAME_TEST, fake_daemon
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "data" not in response.data
+    mock_Daemon_test.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_start_noauth(
     fake_daemon,
     noauth_api_client,
@@ -219,6 +238,30 @@ def test_start_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_start_auth_admin(
+    fake_daemon,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.start` action with the authenticated admin user client."""
+    fake_daemon.celery_task.enabled = False
+    fake_daemon.celery_task.save(update_fields=["enabled"])
+
+    assert fake_daemon.celery_task.enabled is False
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            DaemonViewSet, DaemonViewSet.URL_NAME_START, fake_daemon
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is False
+    assert "data" not in response.data
+
+
+@pytest.mark.django_db
 def test_stop_noauth(
     fake_daemon,
     noauth_api_client,
@@ -303,3 +346,24 @@ def test_stop_failure_auth_owner(
     fake_daemon.refresh_from_db()
     assert response.data["data"] == DaemonViewSet.serializer_class(fake_daemon).data
     assert fake_daemon.celery_task.enabled is False
+
+
+@pytest.mark.django_db
+def test_stop_auth_admin(
+    fake_daemon,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the post method :func:`api.v1.views.DaemonViewSet.DaemonViewSet.stop` action with the authenticated admin user client."""
+    assert fake_daemon.celery_task.enabled is True
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            DaemonViewSet, DaemonViewSet.URL_NAME_STOP, fake_daemon
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is True
+    assert "data" not in response.data

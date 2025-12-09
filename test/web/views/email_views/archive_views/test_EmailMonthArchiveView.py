@@ -94,3 +94,29 @@ def test_get_auth_owner(owner_client, fake_email, date_url):
     assert "date_list" in response.context
     assert "previous_month" in response.context
     assert "next_month" in response.context
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(admin_client, fake_email, date_url):
+    """Tests :class:`web.views.EmailMonthArchiveView` with the authenticated admin user client."""
+    response = admin_client.get(
+        date_url(
+            EmailMonthArchiveView,
+            date_args=[
+                fake_email.datetime.year,
+                fake_email.datetime.month,
+            ],
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/email/archive/month.html" in [
+        template.name for template in response.templates
+    ]
+    assert "month" in response.context
+    assert "page_obj" in response.context
+    assert "page_size" in response.context
+    assert "date_list" in response.context
+    assert "previous_month" in response.context
+    assert "next_month" in response.context

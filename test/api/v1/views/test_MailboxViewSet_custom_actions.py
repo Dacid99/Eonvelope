@@ -168,6 +168,29 @@ def test_test_mailbox_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_test_mailbox_auth_admin(
+    fake_mailbox,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Mailbox_test,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.test_mailbox` action with the authenticated admin user client."""
+    previous_is_healthy = fake_mailbox.is_healthy
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_TEST, fake_mailbox
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Mailbox_test.assert_not_called()
+    fake_mailbox.refresh_from_db()
+    assert fake_mailbox.is_healthy is previous_is_healthy
+    assert "name" not in response.data
+
+
+@pytest.mark.django_db
 def test_fetching_options_noauth(
     noauth_api_client,
     custom_detail_action_url,
@@ -216,6 +239,23 @@ def test_fetching_options_auth_owner(
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["options"] == fake_mailbox.available_fetching_criteria
+
+
+@pytest.mark.django_db
+def test_fetching_options_auth_admin(
+    admin_api_client,
+    custom_detail_action_url,
+    fake_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetching_options` action with the authenticated admin user client."""
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_FETCHING_OPTIONS, fake_mailbox
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "options" not in response.data
 
 
 @pytest.mark.django_db
@@ -356,6 +396,29 @@ def test_fetch_auth_owner_bad_criterion(
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion"]
     mock_Mailbox_fetch.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_fetch_auth_admin(
+    fake_mailbox,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Mailbox_fetch,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated admin user client."""
+    assert fake_mailbox.daemons.all().count() == 1
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
+        ),
+        data={"criterion": EmailFetchingCriterionChoices.ALL.value},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Mailbox_fetch.assert_not_called()
+    assert fake_mailbox.emails.all().count() == 1
+    assert "name" not in response.data
 
 
 @pytest.mark.django_db
@@ -502,6 +565,27 @@ def test_download_auth_owner(
         fake_mailbox.emails.all()
     )
     assert mock_Email_queryset_as_file.call_args.args[1] == fake_format
+
+
+@pytest.mark.django_db
+def test_download_auth_admin(
+    faker,
+    fake_mailbox,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD, fake_mailbox
+        ),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
 
 
 @pytest.mark.django_db
@@ -699,6 +783,34 @@ def test_upload_mailbox_bad_file_auth_owner(
 
 
 @pytest.mark.django_db
+def test_upload_mailbox_auth_admin(
+    faker,
+    fake_mailbox,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Mailbox_add_emails_from_file,
+    fake_file,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.upload_mailbox` action with the authenticated admin user client."""
+    fake_format = faker.word()
+
+    assert fake_mailbox.emails.all().count() == 1
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_UPLOAD_MAILBOX, fake_mailbox
+        ),
+        {"file": fake_file, "file_format": fake_format},
+        format="multipart",
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Mailbox_add_emails_from_file.assert_not_called()
+    assert fake_mailbox.emails.all().count() == 1
+    assert "name" not in response.data
+
+
+@pytest.mark.django_db
 def test_toggle_favorite_noauth(
     faker, fake_mailbox, noauth_api_client, custom_detail_action_url
 ):
@@ -756,3 +868,23 @@ def test_toggle_favorite_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_favorite is not previous_is_favorite
+
+
+@pytest.mark.django_db
+def test_toggle_favorite_auth_admin(
+    faker, fake_mailbox, admin_api_client, custom_detail_action_url
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated admin user client."""
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_mailbox.is_favorite = previous_is_favorite
+    fake_mailbox.save(update_fields=["is_favorite"])
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_TOGGLE_FAVORITE, fake_mailbox
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_mailbox.refresh_from_db()
+    assert fake_mailbox.is_favorite is previous_is_favorite

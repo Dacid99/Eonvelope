@@ -64,3 +64,18 @@ def test_get_auth_owner(owner_client, list_url):
     assert "page_obj" in response.context
     assert "page_size" in response.context
     assert "query" in response.context
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(admin_client, list_url):
+    """Tests :class:`web.views.DaemonFilterView` with the authenticated admin user client."""
+    response = admin_client.get(list_url(DaemonFilterView))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/daemon/daemon_filter_list.html" in [
+        template.name for template in response.templates
+    ]
+    assert "page_obj" in response.context
+    assert "page_size" in response.context
+    assert "query" in response.context

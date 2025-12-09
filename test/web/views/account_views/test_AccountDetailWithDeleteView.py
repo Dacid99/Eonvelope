@@ -75,6 +75,16 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_account, admin_client, detail_url):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(AccountDetailWithDeleteView, fake_account))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_account.mail_address not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_delete_noauth(fake_account, client, detail_url, login_url):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -119,6 +129,20 @@ def test_post_delete_auth_owner(fake_account, owner_client, detail_url):
     assert response.url.startswith(reverse("web:" + AccountFilterView.URL_NAME))
     with pytest.raises(Account.DoesNotExist):
         fake_account.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_delete_auth_admin(fake_account, admin_client, detail_url):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+        {"delete": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    fake_account.refresh_from_db()
+    assert fake_account is not None
 
 
 @pytest.mark.django_db
@@ -219,6 +243,21 @@ def test_post_test_missing_action_auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
+    mock_Account_test.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_test_auth_admin(
+    fake_account, admin_client, detail_url, mock_Account_test
+):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+        {"test": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     mock_Account_test.assert_not_called()
 
 
@@ -332,4 +371,19 @@ def test_post_update_mailboxes_missing_action_auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
+    mock_Account_update_mailboxes.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_update_mailboxes_auth_admin(
+    fake_account, admin_client, detail_url, mock_Account_update_mailboxes
+):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+        {"update_mailboxes": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     mock_Account_update_mailboxes.assert_not_called()

@@ -68,6 +68,16 @@ def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_mailbox, admin_client, detail_url):
+    """Tests :class:`web.views.MailboxUpdateOrDeleteView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(MailboxUpdateOrDeleteView, fake_mailbox))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_mailbox.name not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_update_noauth(
     fake_mailbox, mailbox_payload, client, detail_url, login_url
 ):
@@ -121,6 +131,22 @@ def test_post_update_auth_owner(
 
 
 @pytest.mark.django_db
+def test_post_update_auth_admin(
+    fake_mailbox, mailbox_payload, admin_client, detail_url
+):
+    """Tests :class:`web.views.MailboxUpdateOrDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(MailboxUpdateOrDeleteView, fake_mailbox), mailbox_payload
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    fake_mailbox.refresh_from_db()
+    assert fake_mailbox.save_attachments != mailbox_payload["save_attachments"]
+    assert fake_mailbox.save_to_eml != mailbox_payload["save_to_eml"]
+
+
+@pytest.mark.django_db
 def test_post_delete_noauth(fake_mailbox, client, detail_url, login_url):
     """Tests :class:`web.views.MailboxUpdateOrDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -165,3 +191,17 @@ def test_post_delete_auth_owner(fake_mailbox, owner_client, detail_url):
     assert response.url.startswith(reverse("web:mailbox-filter-list"))
     with pytest.raises(Mailbox.DoesNotExist):
         fake_mailbox.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_delete_auth_admin(fake_mailbox, admin_client, detail_url):
+    """Tests :class:`web.views.MailboxUpdateOrDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(MailboxUpdateOrDeleteView, fake_mailbox),
+        {"delete": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    fake_mailbox.refresh_from_db()
+    assert fake_mailbox is not None

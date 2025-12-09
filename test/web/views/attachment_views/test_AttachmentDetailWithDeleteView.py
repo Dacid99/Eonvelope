@@ -75,6 +75,18 @@ def test_get_auth_owner(fake_attachment, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_attachment, admin_client, detail_url):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.get(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment)
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_attachment.file_name not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -119,6 +131,20 @@ def test_post_delete_auth_owner(fake_attachment, owner_client, detail_url):
     assert response.url.startswith(reverse("web:" + AttachmentFilterView.URL_NAME))
     with pytest.raises(Attachment.DoesNotExist):
         fake_attachment.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_delete_auth_admin(fake_attachment, admin_client, detail_url):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"delete": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    fake_attachment.refresh_from_db()
+    assert fake_attachment is not None
 
 
 @pytest.mark.django_db
@@ -238,6 +264,21 @@ def test_post_share_to_paperless_missing_action_auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
+    mock_Attachment_share_to_paperless.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_share_to_paperless_auth_admin(
+    fake_attachment, admin_client, detail_url, mock_Attachment_share_to_paperless
+):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"share": "paperless"},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     mock_Attachment_share_to_paperless.assert_not_called()
 
 
@@ -380,3 +421,18 @@ def test_post_share_missing_value_auth_owner(
     assert isinstance(response, HttpResponse)
     mock_Attachment_share_to_immich.assert_not_called()
     mock_Attachment_share_to_paperless.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_share_to_immich_auth_admin(
+    fake_attachment, admin_client, detail_url, mock_Attachment_share_to_immich
+):
+    """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(AttachmentDetailWithDeleteView, fake_attachment),
+        {"share": "immich"},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    mock_Attachment_share_to_immich.assert_not_called()

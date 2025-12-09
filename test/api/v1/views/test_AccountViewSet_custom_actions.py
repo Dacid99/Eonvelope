@@ -138,6 +138,27 @@ def test_update_mailboxes_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_update_mailboxes_auth_admin(
+    fake_account,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Account_update_mailboxes,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with the authenticated admin user client.
+    """
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_UPDATE_MAILBOXES, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Account_update_mailboxes.assert_not_called()
+    assert "mail_address" not in response.data
+
+
+@pytest.mark.django_db
 def test_test_noauth(
     fake_account,
     noauth_api_client,
@@ -244,6 +265,32 @@ def test_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
+def test_test_auth_admin(
+    fake_account,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Account_test,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.test`
+    action with the authenticated admin user client.
+    """
+
+    previous_is_healthy = fake_account.is_healthy
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_TEST, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Account_test.assert_not_called()
+    fake_account.refresh_from_db()
+    assert fake_account.is_healthy is previous_is_healthy
+    assert "mail_address" not in response.data
+
+
+@pytest.mark.django_db
 def test_toggle_favorite_noauth(
     faker, fake_account, noauth_api_client, custom_detail_action_url
 ):
@@ -301,3 +348,23 @@ def test_toggle_favorite_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     fake_account.refresh_from_db()
     assert fake_account.is_favorite is not previous_is_favorite
+
+
+@pytest.mark.django_db
+def test_toggle_favorite_auth_admin(
+    faker, fake_account, admin_api_client, custom_detail_action_url
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated admin user client."""
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_account.is_favorite = previous_is_favorite
+    fake_account.save(update_fields=["is_favorite"])
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_TOGGLE_FAVORITE, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_account.refresh_from_db()
+    assert fake_account.is_favorite is previous_is_favorite

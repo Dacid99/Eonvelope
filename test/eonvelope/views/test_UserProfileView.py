@@ -26,7 +26,7 @@ from rest_framework import status
 
 from eonvelope.models import UserProfile
 from eonvelope.views import UserProfileView
-from test.web.conftest import other_client, owner_client
+from test.web.conftest import admin_client, other_client, owner_client
 
 
 @pytest.mark.django_db
@@ -42,7 +42,7 @@ def test_get_noauth(client, login_url):
 
 @pytest.mark.django_db
 def test_get_auth_other(other_user, other_client):
-    """Tests :class:`eonvelope.views.UserProfileView` with the authenticated owner user client."""
+    """Tests :class:`eonvelope.views.UserProfileView` with the authenticated other user client."""
     response = other_client.get(reverse(UserProfileView.URL_NAME))
 
     assert response.status_code == status.HTTP_200_OK
@@ -65,6 +65,20 @@ def test_get_auth_owner(owner_user, owner_client):
     assert "object" in response.context
     assert isinstance(response.context["object"], UserProfile)
     assert response.context["object"] == owner_user.profile
+    assert "form" in response.context
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(admin_user, admin_client):
+    """Tests :class:`eonvelope.views.UserProfileView` with the authenticated admin user client."""
+    response = admin_client.get(reverse(UserProfileView.URL_NAME))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "account/profile.html" in [template.name for template in response.templates]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], UserProfile)
+    assert response.context["object"] == admin_user.profile
     assert "form" in response.context
 
 
@@ -109,5 +123,22 @@ def test_post_update_auth_owner(owner_user, profile_payload, owner_client):
     assert owner_user.profile.paperless_api_key == profile_payload["paperless_api_key"]
     assert (
         owner_user.profile.paperless_tika_enabled
+        == profile_payload["paperless_tika_enabled"]
+    )
+
+
+@pytest.mark.django_db
+def test_post_update_auth_admin(admin_user, profile_payload, admin_client):
+    """Tests :class:`eonvelope.views.UserProfileView` with the authenticated admin user client."""
+    response = admin_client.post(reverse(UserProfileView.URL_NAME), profile_payload)
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert isinstance(response, HttpResponseRedirect)
+    assert response.url.startswith(reverse(UserProfileView.URL_NAME))
+    admin_user.refresh_from_db()
+    assert admin_user.profile.paperless_url == profile_payload["paperless_url"]
+    assert admin_user.profile.paperless_api_key == profile_payload["paperless_api_key"]
+    assert (
+        admin_user.profile.paperless_tika_enabled
         == profile_payload["paperless_tika_enabled"]
     )

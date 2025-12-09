@@ -76,6 +76,16 @@ def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_mailbox, admin_client, detail_url):
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_mailbox.name not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_delete_noauth(fake_mailbox, client, detail_url, login_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -120,6 +130,20 @@ def test_post_delete_auth_owner(fake_mailbox, owner_client, detail_url):
     assert response.url.startswith(reverse("web:" + MailboxFilterView.URL_NAME))
     with pytest.raises(Mailbox.DoesNotExist):
         fake_mailbox.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_delete_auth_admin(fake_mailbox, admin_client, detail_url):
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(MailboxDetailWithDeleteView, fake_mailbox),
+        {"delete": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    fake_mailbox.refresh_from_db()
+    assert fake_mailbox is not None
 
 
 @pytest.mark.django_db
@@ -224,6 +248,21 @@ def test_post_test_missing_action_auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
+    mock_Mailbox_test.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_test_auth_admin(
+    fake_mailbox, admin_client, detail_url, mock_Mailbox_test
+):
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(MailboxDetailWithDeleteView, fake_mailbox),
+        {"test": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     mock_Mailbox_test.assert_not_called()
 
 
@@ -389,4 +428,19 @@ def test_post_fetch_missing_action_auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
+    mock_Mailbox_fetch.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_fetch_auth_admin(
+    fake_mailbox, admin_client, detail_url, mock_Mailbox_fetch
+):
+    """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(MailboxDetailWithDeleteView, fake_mailbox),
+        {"fetch": EmailFetchingCriterionChoices.ALL.value},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     mock_Mailbox_fetch.assert_not_called()

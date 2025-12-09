@@ -67,3 +67,19 @@ def test_get_auth_owner(owner_client, list_url):
     assert "page_size" in response.context
     assert "query" in response.context
     assert 'srcdoc="' not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(admin_client, list_url):
+    """Tests :class:`web.views.AttachmentTableView` with the authenticated admin user client."""
+    response = admin_client.get(list_url(AttachmentTableView))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/attachment/attachment_filter_list.html" in [
+        template.name for template in response.templates
+    ]
+    assert "table" in response.context
+    assert "page_obj" in response.context
+    assert "page_size" in response.context
+    assert "query" in response.context

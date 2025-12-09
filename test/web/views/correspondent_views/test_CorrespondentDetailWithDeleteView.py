@@ -82,6 +82,18 @@ def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_correspondent, admin_client, detail_url):
+    """Tests :class:`web.views.CorrespondentDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.get(
+        detail_url(CorrespondentDetailWithDeleteView, fake_correspondent)
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_correspondent.email_address not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_delete_noauth(fake_correspondent, client, detail_url, login_url):
     """Tests :class:`web.views.CorrespondentDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -126,6 +138,20 @@ def test_post_delete_auth_owner(fake_correspondent, owner_client, detail_url):
     assert response.url.startswith(reverse("web:" + CorrespondentFilterView.URL_NAME))
     with pytest.raises(Correspondent.DoesNotExist):
         fake_correspondent.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_delete_auth_admin(fake_correspondent, admin_client, detail_url):
+    """Tests :class:`web.views.CorrespondentDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(CorrespondentDetailWithDeleteView, fake_correspondent),
+        {"delete": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    fake_correspondent.refresh_from_db()
+    assert fake_correspondent is not None
 
 
 @pytest.mark.django_db
@@ -267,4 +293,19 @@ def test_post_share_missing_value_auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
+    mock_Correspondent_share_to_nextcloud.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_share_to_nextcloud_auth_admin(
+    fake_correspondent, admin_client, detail_url, mock_Correspondent_share_to_nextcloud
+):
+    """Tests :class:`web.views.CorrespondentDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(CorrespondentDetailWithDeleteView, fake_correspondent),
+        {"share": "nextcloud"},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     mock_Correspondent_share_to_nextcloud.assert_not_called()

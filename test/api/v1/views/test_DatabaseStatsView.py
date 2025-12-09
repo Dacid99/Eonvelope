@@ -64,6 +64,20 @@ def test_list_auth_owner(fake_email, owner_api_client, url):
 
 
 @pytest.mark.django_db
+def test_list_auth_admin(fake_email, admin_api_client, url):
+    """Tests the list method with the authenticated admin user client."""
+    response = admin_api_client.get(url(DatabaseStatsView))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["email_count"] == 0
+    assert response.data["correspondent_count"] == 0
+    assert response.data["attachment_count"] == 0
+    assert response.data["account_count"] == 0
+    assert response.data["mailbox_count"] == 0
+    assert response.data["daemon_count"] == 0
+
+
+@pytest.mark.django_db
 def test_post_noauth(noauth_api_client, url):
     """Tests the post method with an unauthenticated user client."""
     response = noauth_api_client.post(url(DatabaseStatsView), data={})
@@ -85,6 +99,15 @@ def test_post_auth_other(other_api_client, url):
 def test_post_auth_owner(owner_api_client, url):
     """Tests the post method with the authenticated owner user client."""
     response = owner_api_client.post(url(DatabaseStatsView), data={})
+
+    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert "email_count" not in response.data
+
+
+@pytest.mark.django_db
+def test_post_auth_admin(admin_api_client, url):
+    """Tests the post method with the authenticated admin user client."""
+    response = admin_api_client.post(url(DatabaseStatsView), data={})
 
     assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
     assert "email_count" not in response.data

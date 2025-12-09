@@ -70,6 +70,16 @@ def test_get_auth_owner(fake_email, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_email, admin_client, detail_url):
+    """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(EmailDetailWithDeleteView, fake_email))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_email.message_id not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_delete_noauth(fake_email, client, detail_url, login_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -111,6 +121,19 @@ def test_post_delete_auth_owner(fake_email, owner_client, detail_url):
     assert response.url.startswith(reverse("web:" + EmailFilterView.URL_NAME))
     with pytest.raises(Email.DoesNotExist):
         fake_email.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_delete_auth_admin(fake_email, admin_client, detail_url):
+    """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(EmailDetailWithDeleteView, fake_email), {"delete": ""}
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    fake_email.refresh_from_db()
+    assert fake_email is not None
 
 
 @pytest.mark.django_db
@@ -287,6 +310,21 @@ def test_post_restore_missing_action_auth_owner(
 
 
 @pytest.mark.django_db
+def test_post_restore_auth_admin(
+    fake_email, admin_client, detail_url, mock_Email_restore_to_mailbox
+):
+    """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(EmailDetailWithDeleteView, fake_email),
+        {"restore": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    mock_Email_restore_to_mailbox.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_post_reprocess_noauth(
     fake_email, client, detail_url, login_url, mock_Email_reprocess
 ):
@@ -344,3 +382,18 @@ def test_post_reprocess_auth_owner_success(
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
     mock_Email_reprocess.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_post_reprocess_auth_admin(
+    fake_email, admin_client, detail_url, mock_Email_reprocess
+):
+    """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(EmailDetailWithDeleteView, fake_email),
+        {"reprocess": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    mock_Email_reprocess.assert_not_called()

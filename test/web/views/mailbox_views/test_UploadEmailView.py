@@ -70,6 +70,15 @@ def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_mailbox, admin_client, detail_url):
+    """Tests :class:`web.views.UploadEmailView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(UploadEmailView, fake_mailbox))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+
+
+@pytest.mark.django_db
 def test_post_upload_noauth(
     fake_mailbox,
     client,
@@ -189,3 +198,21 @@ def test_post_upload_auth_owner_bad_file(
     assert response.context["form"].errors
     assert "mailbox" in response.context
     mock_Mailbox_add_emails_from_file.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_post_upload_auth_admin(
+    fake_mailbox,
+    admin_client,
+    detail_url,
+    mock_Mailbox_add_emails_from_file,
+    email_upload_payload,
+):
+    """Tests :class:`web.views.UploadEmailView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(UploadEmailView, fake_mailbox), email_upload_payload
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    mock_Mailbox_add_emails_from_file.assert_not_called()

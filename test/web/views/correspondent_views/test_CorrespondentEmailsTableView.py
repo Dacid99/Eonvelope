@@ -70,5 +70,14 @@ def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
     assert "correspondent" in response.context
     assert isinstance(response.context["correspondent"], Correspondent)
 
-    with open("table.html", "w") as f:
-        f.write(response.content.decode("utf-8"))
+
+@pytest.mark.django_db
+def test_get_auth_admin(fake_correspondent, admin_client, detail_url):
+    """Tests :class:`web.views.CorrespondentEmailsTableView` with the authenticated admin user client."""
+    response = admin_client.get(
+        detail_url(CorrespondentEmailsTableView, fake_correspondent)
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert fake_correspondent.email_address not in response.content.decode("utf-8")

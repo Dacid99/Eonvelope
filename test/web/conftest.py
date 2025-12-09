@@ -41,6 +41,13 @@ def owner_client(client, owner_user):
     return client
 
 
+@pytest.fixture
+def admin_client(client, admin_user):
+    """A :class:`django.test.client.Client` instance that is authenticated as :attr:`admin_user`."""
+    client.force_login(user=admin_user)
+    return client
+
+
 @pytest.fixture(scope="package")
 def list_url():
     """Callable getting the viewsets url for list actions."""

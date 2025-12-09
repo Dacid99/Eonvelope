@@ -124,6 +124,27 @@ def test_download_auth_owner(
 
 
 @pytest.mark.django_db
+def test_download_auth_admin(
+    fake_correspondent,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_DOWNLOAD,
+            fake_correspondent,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_batch_download_noauth(noauth_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.download` action
     with an unauthenticated user client.
@@ -249,6 +270,22 @@ def test_batch_download_auth_owner(
 
 
 @pytest.mark.django_db
+def test_batch_download_auth_admin(admin_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_list_action_url(
+            CorrespondentViewSet, CorrespondentViewSet.URL_NAME_DOWNLOAD_BATCH
+        ),
+        {"id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_toggle_favorite_noauth(
     faker, fake_correspondent, noauth_api_client, custom_detail_action_url
 ):
@@ -312,6 +349,28 @@ def test_toggle_favorite_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     fake_correspondent.refresh_from_db()
     assert fake_correspondent.is_favorite is not previous_is_favorite
+
+
+@pytest.mark.django_db
+def test_toggle_favorite_auth_admin(
+    faker, fake_correspondent, admin_api_client, custom_detail_action_url
+):
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.toggle_favorite` action with the authenticated admin user client."""
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_correspondent.is_favorite = previous_is_favorite
+    fake_correspondent.save(update_fields=["is_favorite"])
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            fake_correspondent,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_correspondent.refresh_from_db()
+    assert fake_correspondent.is_favorite is previous_is_favorite
 
 
 @pytest.mark.django_db
@@ -417,3 +476,25 @@ def test_share_to_nextcloud_auth_owner_failure(
     assert "error" in response.data
     assert fake_error_message in response.data["error"]
     mock_Correspondent_share_to_nextcloud.assert_called_once_with(fake_correspondent)
+
+
+@pytest.mark.django_db
+def test_share_to_nextcloud_auth_admin(
+    fake_correspondent,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Correspondent_share_to_nextcloud,
+):
+    """Tests the post method :func:`api.v1.views.CorrespondentViewSet.CorrespondentViewSet.share_to_nextcloud` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            CorrespondentViewSet,
+            CorrespondentViewSet.URL_NAME_SHARE_TO_NEXTCLOUD,
+            fake_correspondent,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_correspondent.refresh_from_db()

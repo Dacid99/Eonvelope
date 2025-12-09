@@ -155,6 +155,27 @@ def test_download_auth_owner(
 
 
 @pytest.mark.django_db
+def test_download_auth_admin(
+    fake_attachment_with_file,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_DOWNLOAD,
+            fake_attachment_with_file,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_batch_download_noauth(noauth_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with an unauthenticated user client.
@@ -279,6 +300,22 @@ def test_batch_download_auth_owner(
 
 
 @pytest.mark.django_db
+def test_batch_download_auth_admin(admin_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_list_action_url(
+            AttachmentViewSet, AttachmentViewSet.URL_NAME_DOWNLOAD_BATCH
+        ),
+        {"id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_download_thumbnail_noauth(
     fake_attachment_with_file,
     noauth_api_client,
@@ -379,6 +416,27 @@ def test_download_thumbnail_auth_owner(
 
 
 @pytest.mark.django_db
+def test_download_thumbnail_auth_admin(
+    fake_attachment_with_file,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_THUMBNAIL,
+            fake_attachment_with_file,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_toggle_favorite_noauth(
     faker, fake_attachment, noauth_api_client, custom_detail_action_url
 ):
@@ -448,6 +506,30 @@ def test_toggle_favorite_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     fake_attachment.refresh_from_db()
     assert fake_attachment.is_favorite is not previous_is_favorite
+
+
+@pytest.mark.django_db
+def test_toggle_favorite_auth_admin(
+    faker, fake_attachment, admin_api_client, custom_detail_action_url
+):
+    """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
+    with the authenticated admin user client.
+    """
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_attachment.is_favorite = previous_is_favorite
+    fake_attachment.save(update_fields=["is_favorite"])
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_TOGGLE_FAVORITE,
+            fake_attachment,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_attachment.refresh_from_db()
+    assert fake_attachment.is_favorite is previous_is_favorite
 
 
 @pytest.mark.django_db
@@ -584,6 +666,28 @@ def test_share_to_paperless_auth_owner_no_file(
 
 
 @pytest.mark.django_db
+def test_share_to_paperless_auth_admin(
+    fake_attachment,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Attachment_share_to_paperless,
+):
+    """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.share_to_paperless` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_SHARE_TO_PAPERLESS,
+            fake_attachment,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_attachment.refresh_from_db()
+
+
+@pytest.mark.django_db
 def test_share_to_immich_noauth(
     fake_attachment,
     noauth_api_client,
@@ -714,3 +818,25 @@ def test_share_to_immich_auth_owner_no_file(
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "detail" in response.data
     mock_Attachment_share_to_immich.assert_called_once_with(fake_attachment)
+
+
+@pytest.mark.django_db
+def test_share_to_immich_auth_admin(
+    fake_attachment,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Attachment_share_to_immich,
+):
+    """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.share_to_immich` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AttachmentViewSet,
+            AttachmentViewSet.URL_NAME_SHARE_TO_IMMICH,
+            fake_attachment,
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_attachment.refresh_from_db()

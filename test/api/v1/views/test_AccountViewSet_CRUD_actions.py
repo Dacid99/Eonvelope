@@ -65,6 +65,18 @@ def test_list_auth_owner(fake_account, owner_api_client, list_url):
 
 
 @pytest.mark.django_db
+def test_list_auth_admin(fake_account, admin_api_client, list_url):
+    """Tests the `list` method on :class:`api.v1.views.AccountViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(list_url(AccountViewSet))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 0
+    assert response.data["results"] == []
+
+
+@pytest.mark.django_db
 def test_get_noauth(fake_account, noauth_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.AccountViewSet`
     with an unauthenticated user client.
@@ -95,6 +107,17 @@ def test_get_auth_owner(fake_account, owner_api_client, detail_url):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["mail_address"] == fake_account.mail_address
+    assert "password" not in response.data
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(fake_account, admin_api_client, detail_url):
+    """Tests the `get` method on :class:`api.v1.views.AccountViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(detail_url(AccountViewSet, fake_account))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "password" not in response.data
 
 
@@ -150,6 +173,23 @@ def test_patch_auth_owner(fake_account, owner_api_client, account_payload, detai
 
 
 @pytest.mark.django_db
+def test_patch_auth_admin(fake_account, admin_api_client, account_payload, detail_url):
+    """Tests the `patch` method on :class:`api.v1.views.AccountViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.patch(
+        detail_url(AccountViewSet, fake_account), data=account_payload
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "mail_address" not in response.data
+    assert "password" not in response.data
+    fake_account.refresh_from_db()
+    assert fake_account.mail_address != account_payload["mail_address"]
+    assert fake_account.password != account_payload["password"]
+
+
+@pytest.mark.django_db
 def test_put_noauth(fake_account, noauth_api_client, account_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.AccountViewSet`
     with an unauthenticated user client.
@@ -195,6 +235,22 @@ def test_put_auth_owner(fake_account, owner_api_client, account_payload, detail_
     assert "password" not in response.data
     fake_account.refresh_from_db()
     assert fake_account.mail_host == account_payload["mail_host"]
+
+
+@pytest.mark.django_db
+def test_put_auth_admin(fake_account, admin_api_client, account_payload, detail_url):
+    """Tests the `put` method on :class:`api.v1.views.AccountViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.put(
+        detail_url(AccountViewSet, fake_account), data=account_payload
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "mail_host" not in response.data
+    assert "password" not in response.data
+    fake_account.refresh_from_db()
+    assert fake_account.mail_host != account_payload["mail_host"]
 
 
 @pytest.mark.django_db
@@ -254,6 +310,21 @@ def test_post_duplicate_auth_owner(fake_account, owner_api_client, list_url):
 
 
 @pytest.mark.django_db
+def test_post_auth_admin(admin_user, admin_api_client, account_payload, list_url):
+    """Tests the `post` method on :class:`api.v1.views.AccountViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.post(list_url(AccountViewSet), data=account_payload)
+
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.data["mail_host"] == account_payload["mail_host"]
+    assert "password" not in response.data
+    posted_account = Account.objects.get(mail_host=account_payload["mail_host"])
+    assert posted_account is not None
+    assert posted_account.user == admin_user
+
+
+@pytest.mark.django_db
 def test_delete_noauth(fake_account, noauth_api_client, detail_url):
     """Tests the delete method on :class:`api.v1.views.AccountViewSet` with an unauthenticated user client."""
     response = noauth_api_client.delete(detail_url(AccountViewSet, fake_account))
@@ -285,3 +356,15 @@ def test_delete_auth_owner(fake_account, owner_api_client, detail_url):
     assert response.status_code == status.HTTP_204_NO_CONTENT
     with pytest.raises(Account.DoesNotExist):
         fake_account.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_delete_auth_admin(fake_account, admin_api_client, detail_url):
+    """Tests the `delete` method on :class:`api.v1.views.AccountViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.delete(detail_url(AccountViewSet, fake_account))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_account.refresh_from_db()
+    assert fake_account.mail_address is not None

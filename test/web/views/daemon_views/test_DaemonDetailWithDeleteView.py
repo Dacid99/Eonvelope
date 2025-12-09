@@ -69,6 +69,17 @@ def test_get_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
+def test_get_auth_admin(fake_daemon, admin_client, detail_url):
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert isinstance(response, HttpResponse)
+    assert fake_daemon.mailbox.name not in response.content.decode("utf-8")
+
+
+@pytest.mark.django_db
 def test_post_delete_noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -114,6 +125,21 @@ def test_post_delete_auth_owner(fake_daemon, owner_client, detail_url):
     assert response.url.startswith(reverse("web:" + DaemonFilterView.URL_NAME))
     with pytest.raises(Daemon.DoesNotExist):
         fake_daemon.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_post_delete_auth_admin(fake_daemon, admin_client, detail_url):
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(DaemonDetailWithDeleteView, fake_daemon),
+        {"delete": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    assert isinstance(response, HttpResponse)
+    fake_daemon.refresh_from_db()
+    assert fake_daemon is not None
 
 
 @pytest.mark.django_db
@@ -212,6 +238,19 @@ def test_post_test_missing_action_auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
+    mock_Daemon_test.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_test_auth_admin(fake_daemon, admin_client, detail_url, mock_Daemon_test):
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(DaemonDetailWithDeleteView, fake_daemon),
+        {"test": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     mock_Daemon_test.assert_not_called()
 
 
@@ -332,6 +371,26 @@ def test_post_start_missing_action_auth_owner(fake_daemon, owner_client, detail_
 
 
 @pytest.mark.django_db
+def test_post_start_auth_admin(fake_daemon, admin_client, detail_url):
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
+    fake_daemon.celery_task.enabled = False
+    fake_daemon.celery_task.save(update_fields=["enabled"])
+
+    assert fake_daemon.celery_task.enabled is False
+
+    response = admin_client.post(
+        detail_url(DaemonDetailWithDeleteView, fake_daemon),
+        {"start_daemon": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert isinstance(response, HttpResponse)
+    assert "404.html" in [template.name for template in response.templates]
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is False
+
+
+@pytest.mark.django_db
 def test_post_stop_noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     assert fake_daemon.celery_task.enabled is True
@@ -435,6 +494,23 @@ def test_post_stop_missing_action_auth_owner(fake_daemon, owner_client, detail_u
     response = owner_client.post(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.celery_task.enabled is True
+
+
+@pytest.mark.django_db
+def test_post_stop_auth_admin(fake_daemon, admin_client, detail_url):
+    """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
+    assert fake_daemon.celery_task.enabled is True
+
+    response = admin_client.post(
+        detail_url(DaemonDetailWithDeleteView, fake_daemon),
+        {"stop_daemon": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
     assert isinstance(response, HttpResponse)
     fake_daemon.refresh_from_db()
     assert fake_daemon.celery_task.enabled is True

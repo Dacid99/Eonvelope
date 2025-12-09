@@ -133,6 +133,23 @@ def test_download_auth_owner(
 
 
 @pytest.mark.django_db
+def test_download_auth_admin(
+    fake_email_with_file,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action with the authenticated admin user client."""
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD, fake_email_with_file
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_batch_download_noauth(faker, noauth_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
     with an unauthenticated user client.
@@ -280,6 +297,20 @@ def test_batch_download_auth_owner(
 
 
 @pytest.mark.django_db
+def test_batch_download_auth_admin(faker, admin_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_list_action_url(EmailViewSet, EmailViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": faker.word(), "id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_thumbnail_noauth(
     fake_email,
     noauth_api_client,
@@ -341,6 +372,23 @@ def test_thumbnail_auth_owner(
 
 
 @pytest.mark.django_db
+def test_thumbnail_auth_admin(
+    fake_email,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.thumbnail` action with the authenticated admin user client."""
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_THUMBNAIL, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
 def test_conversation_noauth(
     fake_email,
     fake_email_conversation,
@@ -391,6 +439,23 @@ def test_conversation_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     assert response.data["count"] == 8
     assert len(response.data["results"]) == 8
+
+
+@pytest.mark.django_db
+def test_conversation_auth_admin(
+    fake_email,
+    fake_email_conversation,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.conversation` action with the authenticated admin user client."""
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_FULLCONVERSATION, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.django_db
@@ -518,6 +583,24 @@ def test_restore_auth_owner_failure(
 
 
 @pytest.mark.django_db
+def test_restore_auth_admin(
+    fake_email,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Email_restore_to_mailbox,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.restore` action with the authenticated admin user client."""
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_RESTORE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Email_restore_to_mailbox.assert_not_called()
+
+
+@pytest.mark.django_db
 def test_reprocess_noauth(
     fake_email,
     noauth_api_client,
@@ -572,6 +655,24 @@ def test_reprocess_auth_owner(
     assert response.data["data"] == EmailViewSet.serializer_class(fake_email).data
     assert "detail" in response.data
     mock_Email_reprocess.assert_called_once_with()
+
+
+@pytest.mark.django_db
+def test_reprocess_auth_admin(
+    fake_email,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Email_reprocess,
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.reprocess` action with the authenticated admin user client."""
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_REPROCESS, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Email_reprocess.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -632,3 +733,23 @@ def test_toggle_favorite_auth_owner(
     assert response.status_code == status.HTTP_200_OK
     fake_email.refresh_from_db()
     assert fake_email.is_favorite is not previous_is_favorite
+
+
+@pytest.mark.django_db
+def test_toggle_favorite_auth_admin(
+    faker, fake_email, admin_api_client, custom_detail_action_url
+):
+    """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with the authenticated admin user client."""
+    previous_is_favorite = bool(faker.random.getrandbits(1))
+    fake_email.is_favorite = previous_is_favorite
+    fake_email.save(update_fields=["is_favorite"])
+
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            EmailViewSet, EmailViewSet.URL_NAME_TOGGLE_FAVORITE, fake_email
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_email.refresh_from_db()
+    assert fake_email.is_favorite is previous_is_favorite

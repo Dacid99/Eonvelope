@@ -62,6 +62,18 @@ def test_list_auth_owner(fake_daemon, owner_api_client, list_url):
 
 
 @pytest.mark.django_db
+def test_list_auth_admin(fake_daemon, admin_api_client, list_url):
+    """Tests the `list` method on :class:`api.v1.views.DaemonViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(list_url(DaemonViewSet))
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 0
+    assert response.data["results"] == []
+
+
+@pytest.mark.django_db
 def test_get_noauth(fake_daemon, noauth_api_client, detail_url):
     """Tests the get method on :class:`api.v1.views.DaemonViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(detail_url(DaemonViewSet, fake_daemon))
@@ -89,6 +101,16 @@ def test_get_auth_owner(fake_daemon, owner_api_client, detail_url):
 
     assert response.status_code == status.HTTP_200_OK
     assert response.data["fetching_criterion"] == fake_daemon.fetching_criterion
+
+
+@pytest.mark.django_db
+def test_get_auth_admin(fake_daemon, admin_api_client, detail_url):
+    """Tests the `get` method on :class:`api.v1.views.DaemonViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(detail_url(DaemonViewSet, fake_daemon))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
 
 
 @pytest.mark.django_db
@@ -161,6 +183,28 @@ def test_patch_auth_owner(
 
 
 @pytest.mark.django_db
+def test_patch_auth_admin(
+    fake_daemon, admin_api_client, daemon_with_interval_payload, detail_url
+):
+    """Tests the `patch` method on :class:`api.v1.views.DaemonViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.patch(
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "fetching_criterion" not in response.data
+    fake_daemon.refresh_from_db()
+    assert (
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
+    )
+
+
+@pytest.mark.django_db
 def test_put_noauth(
     fake_daemon, noauth_api_client, daemon_with_interval_payload, detail_url
 ):
@@ -225,6 +269,28 @@ def test_put_auth_owner(
     assert (
         fake_daemon.fetching_criterion
         == daemon_with_interval_payload["fetching_criterion"]
+    )
+
+
+@pytest.mark.django_db
+def test_put_auth_admin(
+    fake_daemon, admin_api_client, daemon_with_interval_payload, detail_url
+):
+    """Tests the `put` method on :class:`api.v1.views.DaemonViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.put(
+        detail_url(DaemonViewSet, fake_daemon),
+        data=daemon_with_interval_payload,
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "fetching_criterion" not in response.data
+    fake_daemon.refresh_from_db()
+    assert (
+        fake_daemon.fetching_criterion
+        != daemon_with_interval_payload["fetching_criterion"]
     )
 
 
@@ -305,6 +371,26 @@ def test_post_duplicate_auth_owner(fake_daemon, owner_api_client, list_url):
 
 
 @pytest.mark.django_db
+def test_post_auth_admin(admin_api_client, daemon_with_interval_payload, list_url):
+    """Tests the `post` method on :class:`api.v1.views.DaemonViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.post(
+        list_url(DaemonViewSet),
+        data=daemon_with_interval_payload,
+        format="json",
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "mailbox" in response.data
+    assert "fetching_criterion" not in response.data
+    with pytest.raises(Daemon.DoesNotExist):
+        Daemon.objects.get(
+            fetching_criterion=daemon_with_interval_payload["fetching_criterion"]
+        )
+
+
+@pytest.mark.django_db
 def test_delete_noauth(fake_daemon, noauth_api_client, detail_url):
     """Tests the delete method on :class:`api.v1.views.DaemonViewSet` with an unauthenticated user client."""
     response = noauth_api_client.delete(detail_url(DaemonViewSet, fake_daemon))
@@ -336,3 +422,15 @@ def test_delete_auth_owner(fake_daemon, owner_api_client, detail_url):
     assert response.status_code == status.HTTP_204_NO_CONTENT
     with pytest.raises(fake_daemon.DoesNotExist):
         fake_daemon.refresh_from_db()
+
+
+@pytest.mark.django_db
+def test_delete_auth_admin(fake_daemon, admin_api_client, detail_url):
+    """Tests the `delete` method on :class:`api.v1.views.DaemonViewSet`
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.delete(detail_url(DaemonViewSet, fake_daemon))
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    fake_daemon.refresh_from_db()
+    assert fake_daemon.fetching_criterion is not None

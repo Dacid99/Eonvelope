@@ -201,3 +201,24 @@ def test_post_unavailable_criterion_auth_owner(
     assert "form" in response.context
     assert response.context["form"].errors
     assert Daemon.objects.all().count() == 1
+
+
+@pytest.mark.django_db
+def test_post_auth_admin_strange_mailbox(
+    daemon_with_interval_payload, admin_client, list_url
+):
+    """Tests :class:`web.views.DaemonCreateView` with the authenticated admin user client."""
+    assert Daemon.objects.all().count() == 1
+
+    response = admin_client.post(
+        list_url(DaemonCreateView), daemon_with_interval_payload
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert Daemon.objects.all().count() == 1
+    assert "web/daemon/daemon_create.html" in [
+        template.name for template in response.templates
+    ]
+    assert "form" in response.context
+    assert isinstance(response.context["form"], CreateDaemonForm)

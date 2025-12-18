@@ -369,6 +369,9 @@ class Mailbox(
     ) -> Mailbox | None:
         """Creates a :class:`core.models.Mailbox` from the mailboxname in bytes.
 
+        Note:
+            Mailbox created from data is considered healthy by default.
+
         Args:
             mailbox_data: The bytes with the mailboxname.
             account: The account the mailbox is in.
@@ -386,15 +389,19 @@ class Mailbox(
             logger.debug("%s is in the ignorelist, it is skipped.", mailbox_name)
             return None
         try:
-            new_mailbox = cls.objects.get(account=account, name=mailbox_name)
-            logger.debug("%s already exists in db, it is skipped.", new_mailbox)
+            mailbox = cls.objects.get(account=account, name=mailbox_name)
+            mailbox.set_healthy()
+            logger.debug(
+                "%s already exists in db, it has been set to healthy.", mailbox
+            )
         except Mailbox.DoesNotExist:
-            new_mailbox = cls(
+            mailbox = cls(
                 account=account,
                 name=mailbox_name,
                 save_to_eml=get_config("DEFAULT_SAVE_TO_EML"),
                 save_attachments=get_config("DEFAULT_SAVE_ATTACHMENTS"),
+                is_healthy=True,
             )
-            new_mailbox.save()
+            mailbox.save()
             logger.debug("Successfully saved mailbox %s to db.", mailbox_name)
-        return new_mailbox
+        return mailbox

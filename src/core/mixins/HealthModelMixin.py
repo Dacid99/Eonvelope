@@ -61,19 +61,19 @@ class HealthModelMixin(Model):
     def set_unhealthy(self, errormessage: str | Exception) -> None:
         """Sets the `is_healthy` flag to `False` and adds the `last_error` and its time.
 
-        Only runs if the model is already in the database.
+        Only saves if the model is already in the database.
 
         Args:
             errormessage: The error causing the health change or its message.
         """
         logger.info("Setting %s to unhealthy because of error: %s", self, errormessage)
+        if isinstance(errormessage, str):
+            self.last_error = errormessage
+        elif isinstance(errormessage, Exception):
+            self.last_error = str(errormessage)
+        self.last_error_occurred_at = timezone.now()
+        self.is_healthy = False
         if self.pk:
-            if isinstance(errormessage, str):
-                self.last_error = errormessage
-            elif isinstance(errormessage, Exception):
-                self.last_error = str(errormessage)
-            self.last_error_occurred_at = timezone.now()
-            self.is_healthy = False
             self.save(
                 update_fields=["is_healthy", "last_error", "last_error_occurred_at"]
             )
@@ -81,8 +81,9 @@ class HealthModelMixin(Model):
     def set_healthy(self) -> None:
         """Sets the `is_healthy` flag to `True`.
 
-        Only runs if the model is already in the database.
+        Only saves if the model is already in the database and runs the model is not already healthy.
         """
-        if self.pk:
+        if not self.is_healthy:
             self.is_healthy = True
-            self.save(update_fields=["is_healthy"])
+            if self.pk:
+                self.save(update_fields=["is_healthy"])

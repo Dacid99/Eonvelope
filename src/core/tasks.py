@@ -48,10 +48,10 @@ def fetch_emails(  # this must not be renamed or moved, otherwise existing daemo
     try:
         daemon.mailbox.fetch(daemon.fetching_criterion)
     except Exception as exc:
-        daemon.set_unhealthy(str(exc))
+        daemon.set_unhealthy(exc)
         if isinstance(exc, MailAccountError):
-            daemon.mailbox.account.set_unhealthy(str(exc))
+            daemon.mailbox.account.set_unhealthy(exc)
         elif isinstance(exc, MailboxError):
-            daemon.mailbox.set_unhealthy(str(exc))
+            daemon.mailbox.set_unhealthy(exc)
         raise
     daemon.set_healthy()

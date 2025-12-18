@@ -169,11 +169,11 @@ class Mailbox(
                 fetcher.test(self)
             except MailboxError as error:
                 logger.info("Failed testing %s with error: %s.", self, error)
-                self.set_unhealthy(str(error))
+                self.set_unhealthy(error)
                 raise
             except MailAccountError as error:
                 logger.info("Failed testing %s with error %s.", self.account, error)
-                self.account.set_unhealthy(str(error))
+                self.account.set_unhealthy(error)
                 raise
         self.set_healthy()
         logger.info("Successfully tested mailbox")
@@ -196,11 +196,11 @@ class Mailbox(
                 fetched_mails = fetcher.fetch_emails(self, criterion)
             except MailboxError as error:
                 logger.info("Failed fetching %s with error: %s.", self, error)
-                self.set_unhealthy(str(error))
+                self.set_unhealthy(error)
                 raise
             except MailAccountError as error:
                 logger.info("Failed fetching %s with error: %s.", self, error)
-                self.account.set_unhealthy(str(error))
+                self.account.set_unhealthy(error)
                 raise
         self.set_healthy()
         logger.info("Successfully fetched emails.")

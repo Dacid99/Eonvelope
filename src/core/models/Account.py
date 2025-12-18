@@ -246,7 +246,7 @@ class Account(
             fetcher = self.get_fetcher_class()(self)
         except MailAccountError as error:
             logger.exception("Failed to instantiate fetcher for %s!", self)
-            self.set_unhealthy(str(error))
+            self.set_unhealthy(error)
             raise
         return fetcher
 
@@ -266,7 +266,7 @@ class Account(
                 fetcher.test()
         except MailAccountError as error:
             logger.info("Testing %s failed with error: %s.", self, error)
-            self.set_unhealthy(str(error))
+            self.set_unhealthy(error)
             raise
         self.set_healthy()
         logger.info("Successfully tested account.")
@@ -285,7 +285,7 @@ class Account(
             try:
                 mailbox_list = fetcher.fetch_mailboxes()
             except MailAccountError as error:
-                self.set_unhealthy(str(error))
+                self.set_unhealthy(error)
                 raise
         self.set_healthy()
 

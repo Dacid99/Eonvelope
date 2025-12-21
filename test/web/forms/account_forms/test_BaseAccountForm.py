@@ -19,12 +19,20 @@
 """Test module for the :class:`web.forms.BaseAccountForm` form class."""
 
 import pytest
+from django.forms import model_to_dict
 
+from core.models import Account
+from core.utils.fetchers.exceptions import MailAccountError
 from web.forms import BaseAccountForm
 
 
+@pytest.fixture(autouse=True)
+def auto_mock_Account_test(mock_Account_test):
+    """All tests mock Accounts test."""
+
+
 @pytest.mark.django_db
-def test_post_create(account_payload, other_user):
+def test_post_create_test_success(account_payload, other_user, mock_Account_test):
     """Tests post direction of :class:`web.forms.BaseAccountForm`."""
     form = BaseAccountForm(data=account_payload)
     form.instance.user = other_user
@@ -45,15 +53,14 @@ def test_post_create(account_payload, other_user):
     assert form_data["timeout"] == account_payload["timeout"]
     assert "is_favorite" in form_data
     assert form_data["is_favorite"] == account_payload["is_favorite"]
-    assert "user" not in form_data
     assert "is_healthy" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data
-    assert len(form_data) == 7
+    mock_Account_test.assert_called_once()
 
 
 @pytest.mark.django_db
-def test_post_update(fake_account, account_payload):
+def test_post_update_test_success(fake_account, account_payload, mock_Account_test):
     """Tests post direction of :class:`web.forms.BaseAccountForm`."""
     form = BaseAccountForm(instance=fake_account, data=account_payload)
 
@@ -73,11 +80,72 @@ def test_post_update(fake_account, account_payload):
     assert form_data["timeout"] == account_payload["timeout"]
     assert "is_favorite" in form_data
     assert form_data["is_favorite"] == account_payload["is_favorite"]
-    assert "user" not in form_data
     assert "is_healthy" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data
-    assert len(form_data) == 7
+    mock_Account_test.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_post_create_test_failure(
+    account_payload, other_user, fake_error_message, mock_Account_test
+):
+    """Tests post direction of :class:`web.forms.BaseAccountForm`."""
+    mock_Account_test.side_effect = MailAccountError(ValueError(fake_error_message))
+
+    form = BaseAccountForm(data=account_payload)
+    form.instance.user = other_user
+
+    assert not form.is_valid()
+    assert len(form.errors) == 1
+    assert "__all__" in form.errors
+    assert len(form.errors["__all__"]) == 1
+    assert fake_error_message in form.errors["__all__"][0]
+    mock_Account_test.assert_called_once()
+    assert len(mock_Account_test.call_args.kwargs) == 0
+    assert len(mock_Account_test.call_args.args) == 1
+    assert isinstance(mock_Account_test.call_args.args[0], Account)
+    assert (
+        mock_Account_test.call_args.args[0].mail_address
+        == account_payload["mail_address"]
+    )
+
+
+@pytest.mark.django_db
+def test_post_update_test_failure(
+    fake_account, account_payload, fake_error_message, mock_Account_test
+):
+    """Tests post direction of :class:`web.forms.BaseAccountForm`."""
+    mock_Account_test.side_effect = MailAccountError(ValueError(fake_error_message))
+
+    form = BaseAccountForm(instance=fake_account, data=account_payload)
+
+    assert not form.is_valid()
+    assert len(form.errors) == 1
+    assert "__all__" in form.errors
+    assert len(form.errors["__all__"]) == 1
+    assert fake_error_message in form.errors["__all__"][0]
+    mock_Account_test.assert_called_once()
+    assert len(mock_Account_test.call_args.kwargs) == 0
+    assert len(mock_Account_test.call_args.args) == 1
+    assert isinstance(mock_Account_test.call_args.args[0], Account)
+    assert (
+        mock_Account_test.call_args.args[0].mail_address
+        == account_payload["mail_address"]
+    )
+
+
+@pytest.mark.django_db
+def test_post_update_no_test(fake_account, mock_Account_test):
+    """Tests post direction of :class:`web.forms.BaseAccountForm`."""
+    unchanged_data = model_to_dict(fake_account)
+    unchanged_data.pop("user")
+    unchanged_data.pop("id")
+
+    form = BaseAccountForm(instance=fake_account, data=unchanged_data)
+
+    assert form.is_valid()
+    mock_Account_test.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -129,7 +197,7 @@ def test_post_bad_timeout(fake_account, account_payload, bad_timeout):
 
 
 @pytest.mark.django_db
-def test_get(fake_account):
+def test_get(fake_account, mock_Account_test):
     """Tests get direction of :class:`web.forms.BaseAccountForm`."""
     form = BaseAccountForm(instance=fake_account)
     form_initial_data = form.initial
@@ -161,3 +229,4 @@ def test_get(fake_account):
     assert "created" not in form_fields
     assert "updated" not in form_fields
     assert len(form_fields) == 7
+    mock_Account_test.assert_not_called()

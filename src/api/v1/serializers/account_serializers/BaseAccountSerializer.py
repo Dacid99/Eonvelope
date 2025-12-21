@@ -20,8 +20,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Final
+from typing import TYPE_CHECKING, Any, Final, override
 
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 from core.models import Account
@@ -72,3 +73,28 @@ class BaseAccountSerializer(serializers.ModelSerializer[Account]):
         """The :attr:`core.models.Account.Account.password` field
         is set to write-only for security reasons.
         """
+
+    @override
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        """Include full model-side validation to allow testing of account on submission.
+
+        Args:
+            attrs: The attributes on the serializer.
+
+        Returns:
+            The same attributes.
+
+        Raises:
+            serializers.ValidationError: If the validation fails.
+        """
+        instance = self.instance or self.Meta.model()
+
+        for attr, value in attrs.items():
+            setattr(instance, attr, value)
+
+        try:
+            instance.full_clean()
+        except ValidationError as e:
+            raise serializers.ValidationError(e.message_dict or e.messages)
+
+        return attrs

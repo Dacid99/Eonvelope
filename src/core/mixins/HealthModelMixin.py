@@ -24,7 +24,6 @@ from django.db.models import BooleanField, DateTimeField, Model, TextField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -33,6 +32,7 @@ class HealthModelMixin(Model):
 
     is_healthy = BooleanField(
         null=True,
+        blank=True,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("health status"),
     )
@@ -48,6 +48,7 @@ class HealthModelMixin(Model):
 
     last_error_occurred_at = DateTimeField(
         null=True,
+        blank=True,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("time of last error occurrence"),
     )

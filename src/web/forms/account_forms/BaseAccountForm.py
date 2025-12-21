@@ -27,7 +27,6 @@ from django.forms import PasswordInput, Widget
 from core.models import Account
 from web.utils.forms import RequiredMarkerModelForm
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 
@@ -66,3 +65,4 @@ class BaseAccountForm(RequiredMarkerModelForm):
         widgets: ClassVar[dict[str, type[Widget] | Widget]] = {
             "password": PasswordInput(render_value=True),
         }
+        """Allow initial values in the password field."""

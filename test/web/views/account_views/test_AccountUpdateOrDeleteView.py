@@ -24,7 +24,13 @@ from django.urls import reverse
 from rest_framework import status
 
 from core.models import Account
+from core.utils.fetchers.exceptions import MailAccountError
 from web.views import AccountUpdateOrDeleteView
+
+
+@pytest.fixture(autouse=True)
+def auto_mock_Account_test(mock_Account_test):
+    """All tests mock Accounts test."""
 
 
 @pytest.mark.django_db
@@ -116,7 +122,7 @@ def test_post_update_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_update_auth_owner(
+def test_post_update_auth_owner_test_success(
     fake_account, account_payload, owner_client, detail_url
 ):
     """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated owner user client."""
@@ -131,6 +137,69 @@ def test_post_update_auth_owner(
     assert fake_account.mail_address == account_payload["mail_address"]
     assert fake_account.password == account_payload["password"]
     assert fake_account.mail_host == account_payload["mail_host"]
+
+
+@pytest.mark.django_db
+def test_post_update_auth_owner_test_failure(
+    fake_error_message,
+    fake_account,
+    account_payload,
+    mock_Account_test,
+    owner_client,
+    detail_url,
+):
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated owner user client."""
+    mock_Account_test.side_effect = MailAccountError(ValueError(fake_error_message))
+
+    response = owner_client.post(
+        detail_url(AccountUpdateOrDeleteView, fake_account), account_payload
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/account/account_edit.html" in [
+        template.name for template in response.templates
+    ]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Account)
+    assert "form" in response.context
+    fake_account.refresh_from_db()
+    assert fake_account.mail_address != account_payload["mail_address"]
+    assert fake_account.password != account_payload["password"]
+    assert fake_account.mail_host != account_payload["mail_host"]
+
+
+@pytest.mark.django_db
+def test_post_update_duplicate_auth_owner(
+    fake_account, account_payload, owner_client, detail_url
+):
+    """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated owner user client."""
+    Account.objects.create(
+        user=fake_account.user,
+        mail_address=account_payload["mail_address"],
+        protocol=account_payload["protocol"],
+        mail_host=account_payload["mail_host"],
+        password=account_payload["password"],
+    )
+
+    assert Account.objects.count() == 2
+
+    response = owner_client.post(
+        detail_url(AccountUpdateOrDeleteView, fake_account), account_payload
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/account/account_edit.html" in [
+        template.name for template in response.templates
+    ]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Account)
+    assert "form" in response.context
+    fake_account.refresh_from_db()
+    assert fake_account.mail_address != account_payload["mail_address"]
+    assert fake_account.protocol != account_payload["protocol"]
+    assert Account.objects.count() == 2
 
 
 @pytest.mark.django_db

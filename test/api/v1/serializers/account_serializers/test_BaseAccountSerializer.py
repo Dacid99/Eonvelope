@@ -26,6 +26,12 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.account_serializers.BaseAccountSerializer import (
     BaseAccountSerializer,
 )
+from core.utils.fetchers.exceptions import MailAccountError
+
+
+@pytest.fixture(autouse=True)
+def auto_mock_Account_test(mock_Account_test):
+    """All tests mock Accounts test."""
 
 
 @pytest.mark.django_db
@@ -62,13 +68,12 @@ def test_output(fake_account, request_context):
     assert datetime.fromisoformat(serializer_data["created"]) == fake_account.created
     assert "updated" in serializer_data
     assert datetime.fromisoformat(serializer_data["updated"]) == fake_account.updated
-
     assert "user" not in serializer_data
     assert len(serializer_data) == 12
 
 
 @pytest.mark.django_db
-def test_input(account_payload, request_context):
+def test_input_test_success(account_payload, request_context, mock_Account_test):
     """Tests for the expected input of the serializer."""
     assert "user" not in account_payload
 
@@ -99,6 +104,38 @@ def test_input(account_payload, request_context):
     assert "user" in serializer_data
     assert serializer_data["user"] == request_context["request"].user
     assert len(serializer_data) == 8
+    mock_Account_test.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_input_test_failure(
+    account_payload, request_context, mock_Account_test, fake_error_message
+):
+    """Tests for the expected input of the serializer."""
+    mock_Account_test.side_effect = MailAccountError(ValueError(fake_error_message))
+
+    serializer = BaseAccountSerializer(data=account_payload, context=request_context)
+    assert not serializer.is_valid()
+    assert len(serializer.errors) == 1
+    assert "__all__" in serializer.errors
+    assert len(serializer.errors["__all__"]) == 1
+    assert fake_error_message in serializer.errors["__all__"][0]
+    mock_Account_test.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_input_no_test(fake_account, request_context, mock_Account_test):
+    """Tests post direction of :class:`web.forms.BaseAccountForm`."""
+    unchanged_data = model_to_dict(fake_account)
+    unchanged_data.pop("user")
+    unchanged_data.pop("id")
+
+    serializer = BaseAccountSerializer(
+        instance=fake_account, data=unchanged_data, context=request_context
+    )
+
+    assert serializer.is_valid()
+    mock_Account_test.assert_not_called()
 
 
 @pytest.mark.django_db

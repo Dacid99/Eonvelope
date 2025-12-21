@@ -9,7 +9,7 @@
 - mechanism to remove all correspondents without emails
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
-- autotest account before form submission, fetch mailboxes on submission
+- autofetch mailboxes on submission
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
 - more tags
@@ -50,6 +50,7 @@
 
 ## To fix
 
+- form errors not shown in account edit page (https://django-bootstrap5.readthedocs.io/en/latest/templatetags.html)
 - filteroptions for existing db entries leak other user data
 - fetching too many emails leads to browser timeout
 - ci:

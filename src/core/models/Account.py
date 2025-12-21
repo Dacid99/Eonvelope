@@ -49,7 +49,6 @@ from core.utils.fetchers.exceptions import MailAccountError
 
 from .Mailbox import Mailbox
 
-
 if TYPE_CHECKING:
     from core.utils.fetchers import BaseFetcher
 
@@ -182,11 +181,12 @@ class Account(
     @override
     def clean(self) -> None:
         """Validation for the unique together constraint on :attr:`mail_account`.
+        Validate the account data by testing if one of the relevant fields is dirty.
 
         Required to allow correct validation of the create form.
 
         Raises:
-            ValidationError: If the instance violates the constraint.
+            ValidationError: If the instance violates the constraint or testing fails.
         """
         if (
             Account.objects.filter(
@@ -196,6 +196,23 @@ class Account(
             .exists()
         ):
             raise ValidationError({"mail_address": _("This account already exists.")})
+
+        test_on_dirty_fields = [
+            "mail_address",
+            "password",
+            "mail_host",
+            "mail_host_port",
+            "protocol",
+        ]
+        dirty_fields = self.get_dirty_fields()
+        if any(field in dirty_fields for field in test_on_dirty_fields):
+            try:
+                self.test()
+            except MailAccountError as error:
+                raise ValidationError(
+                    _("Testing this account data failed: %(error)s")
+                    % {"error": str(error)}
+                )
 
     def get_fetcher_class(self) -> type[BaseFetcher]:
         """Returns the fetcher class from :class:`core.utils.fetchers` corresponding to :attr:`protocol`.

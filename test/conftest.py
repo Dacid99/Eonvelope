@@ -696,3 +696,13 @@ def mailbox_payload(fake_account):
     payload = model_to_dict(mailbox_data)
     payload.pop("id")
     return {key: value for key, value in payload.items() if value is not None}
+
+
+@pytest.fixture
+def mock_Account_test(mocker):
+    """Patches :func:`core.models.Account.Account.test` for testing of the test action."""
+    return mocker.patch(
+        "core.models.Account.Account.test",
+        autospec=True,
+        return_value=None,
+    )

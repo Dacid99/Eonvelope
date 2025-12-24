@@ -51,8 +51,7 @@ def test_post_create_test_success(account_payload, other_user, mock_Account_test
     assert form_data["mail_host_port"] == account_payload["mail_host_port"]
     assert "timeout" in form_data
     assert form_data["timeout"] == account_payload["timeout"]
-    assert "is_favorite" in form_data
-    assert form_data["is_favorite"] == account_payload["is_favorite"]
+    assert "is_favorite" not in form_data
     assert "is_healthy" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data
@@ -78,8 +77,7 @@ def test_post_update_test_success(fake_account, account_payload, mock_Account_te
     assert form_data["mail_host_port"] == account_payload["mail_host_port"]
     assert "timeout" in form_data
     assert form_data["timeout"] == account_payload["timeout"]
-    assert "is_favorite" in form_data
-    assert form_data["is_favorite"] == account_payload["is_favorite"]
+    assert "is_favorite" not in form_data
     assert "is_healthy" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data
@@ -221,9 +219,7 @@ def test_get(fake_account, mock_Account_test):
     assert "timeout" in form_fields
     assert "timeout" in form_initial_data
     assert form_initial_data["timeout"] == fake_account.timeout
-    assert "is_favorite" in form_fields
-    assert "is_favorite" in form_initial_data
-    assert form_initial_data["is_favorite"] == fake_account.is_favorite
+    assert "is_favorite" not in form_fields
     assert "user" not in form_fields
     assert "is_healthy" not in form_fields
     assert "created" not in form_fields

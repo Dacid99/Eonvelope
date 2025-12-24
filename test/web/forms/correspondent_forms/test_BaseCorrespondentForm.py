@@ -32,8 +32,7 @@ def test_post(correspondent_payload):
     form_data = form.cleaned_data
     assert "real_name" in form_data
     assert form_data["real_name"] == correspondent_payload["real_name"]
-    assert "is_favorite" in form_data
-    assert form_data["is_favorite"] == correspondent_payload["is_favorite"]
+    assert "is_favorite" not in form_data
     assert "email_address" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data
@@ -50,9 +49,7 @@ def test_get(fake_correspondent):
     assert "real_name" in form_fields
     assert "real_name" in form_initial_data
     assert form_initial_data["real_name"] == fake_correspondent.email_name
-    assert "is_favorite" in form_fields
-    assert "is_favorite" in form_initial_data
-    assert form_initial_data["is_favorite"] == fake_correspondent.is_favorite
+    assert "is_favorite" not in form_fields
     assert "email_address" not in form_fields
     assert "created" not in form_fields
     assert "updated" not in form_fields

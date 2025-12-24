@@ -27,6 +27,7 @@ from django.forms import PasswordInput, Widget
 from core.models import Account
 from web.utils.forms import RequiredMarkerModelForm
 
+
 if TYPE_CHECKING:
     from django.db.models import Model
 
@@ -55,7 +56,6 @@ class BaseAccountForm(RequiredMarkerModelForm):
             "protocol",
             "mail_host_port",
             "timeout",
-            "is_favorite",
         ]
         """Exposes all fields that the user should be able to change."""
 

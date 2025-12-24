@@ -34,8 +34,7 @@ def test_post(mailbox_payload):
     assert form_data["save_to_eml"] == mailbox_payload["save_to_eml"]
     assert "save_attachments" in form_data
     assert form_data["save_attachments"] == mailbox_payload["save_attachments"]
-    assert "is_favorite" in form_data
-    assert form_data["is_favorite"] == mailbox_payload["is_favorite"]
+    assert "is_favorite" not in form_data
     assert "name" not in form_data
     assert "account" not in form_data
     assert "is_healthy" not in form_data
@@ -57,9 +56,7 @@ def test_get(fake_mailbox):
     assert "save_attachments" in form_fields
     assert "save_attachments" in form_initial_data
     assert form_initial_data["save_attachments"] == fake_mailbox.save_attachments
-    assert "is_favorite" in form_fields
-    assert "is_favorite" in form_initial_data
-    assert form_initial_data["is_favorite"] == fake_mailbox.is_favorite
+    assert "is_favorite" not in form_fields
     assert "name" not in form_fields
     assert "account" not in form_fields
     assert "is_healthy" not in form_fields

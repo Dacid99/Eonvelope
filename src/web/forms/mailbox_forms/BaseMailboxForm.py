@@ -50,7 +50,6 @@ class BaseMailboxForm(RequiredMarkerModelForm):
         fields: ClassVar[list[str]] = [
             "save_to_eml",
             "save_attachments",
-            "is_favorite",
         ]
         """Exposes all fields that the user should be able to change."""
 

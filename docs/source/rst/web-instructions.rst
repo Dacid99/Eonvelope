@@ -83,7 +83,9 @@ Don't use larger timeout values than 60 seconds, as this may significantly impac
 the runtime of individual fetch operations and may at worst delay the archiving schedule.
 The minimal accepted timeout value is 0.1.
 
-After you have added the account, you can test the configuration via the test button.
+When you submit the data to add the account, Eonvelope will test
+whether it can access this account with the given information.
+In case this is not possible, you will get feedback about the problem that occured.
 If the service is unknown, check the email server URL.
 In case of a failed authentication, check the credentials.
 

@@ -15,7 +15,10 @@ Next take this docker-compose file and adapt the environment settings that need 
    :language: yaml
    :caption: docker-compose.yml
 
-For security reasons please change all passwords and the ``SECRET_KEY``.
+For security reasons please change all passwords and the ``SECRET_KEY``.]
+
+If your device is low on compute power and system resources, you may prefer to use the slim version of the docker-compose file instead.
+This will only run the core of the application in the docker container, excluding some additional components mostly aimed at development.
 
 Now you can start the docker stack with ``docker compose up -d``.
 Or you use a container management platform like  `portainer <https://www.portainer.io/>`_, `dockge <https://dockge.kuma.pet/>`_ or many others.

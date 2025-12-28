@@ -561,7 +561,9 @@ SITE_ID = 1
 # https://docs.djangoproject.com/en/5.2/ref/settings/#static-files
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = (
+    BASE_DIR / "staticfiles"
+)  # must be inside BASE_DIR to be copied correctly in the Dockerfile
 
 ##### django-pwa #####
 # https://pypi.org/project/django-pwa/

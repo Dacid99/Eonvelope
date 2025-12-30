@@ -32,7 +32,6 @@ class EmailFetchingCriterionChoices(TextChoices):
 
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
     Note that IMAP does not support time just dates. So we are always referring to full days.
-    POP does not support queries at all, so everything will be fetched.
     """
 
     DAILY = "DAILY", _("All emails received the last DAY")
@@ -67,6 +66,9 @@ class EmailFetchingCriterionChoices(TextChoices):
 
     FLAGGED = "FLAGGED", _("FLAGGED emails")
     """Filter by "FLAGGED" flag."""
+
+    UNFLAGGED = "UNFLAGGED", _("All emails that are not FLAGGED")
+    """Filter by "UNFLAGGED" flag."""
 
     DRAFT = "DRAFT", _("All email DRAFTs")
     """Filter by "DRAFT" flag."""

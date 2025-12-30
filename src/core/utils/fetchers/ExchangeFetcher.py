@@ -58,6 +58,7 @@ class ExchangeFetcher(BaseFetcher):
         EmailFetchingCriterionChoices.SEEN.value,
         EmailFetchingCriterionChoices.UNSEEN.value,
         EmailFetchingCriterionChoices.DRAFT.value,
+        EmailFetchingCriterionChoices.UNDRAFT.value,
         EmailFetchingCriterionChoices.DAILY.value,
         EmailFetchingCriterionChoices.WEEKLY.value,
         EmailFetchingCriterionChoices.MONTHLY.value,
@@ -85,6 +86,8 @@ class ExchangeFetcher(BaseFetcher):
             mail_query = base_query.filter(is_read=True)
         elif criterion == EmailFetchingCriterionChoices.DRAFT:
             mail_query = base_query.filter(is_draft=True)
+        elif criterion == EmailFetchingCriterionChoices.UNDRAFT:
+            mail_query = base_query.filter(is_draft=False)
         elif criterion == EmailFetchingCriterionChoices.DAILY:
             start_time = timezone.now() - datetime.timedelta(days=1)
             mail_query = base_query.filter(datetime_received__gte=start_time)

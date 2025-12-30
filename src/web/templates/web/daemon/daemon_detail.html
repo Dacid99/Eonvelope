@@ -41,6 +41,9 @@
         <li class="list-group-item">
             {% translate "Criterion" %}: {{ object.get_fetching_criterion_display }}
         </li>
+        {% if object.fetching_criterion_arg %}
+            <li class="list-group-item">{% translate "With value" %}: {{ object.fetching_criterion_arg }}</li>
+        {% endif %}
         <li class="list-group-item">{% translate "Interval" %}: {{ object.interval }}</li>
         <li class="list-group-item">{% translate "Last Run" %}: {{ object.celery_task.last_run_at }}</li>
         <li class="list-group-item">

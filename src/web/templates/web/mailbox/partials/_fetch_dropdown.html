@@ -8,7 +8,7 @@
             data-bs-toggle="dropdown"
             aria-expanded="false">{% translate 'Fetch' %}</button>
     <ul class="dropdown-menu" aria-labelledby="dropdownFetchMenuButton">
-        {% for criterion, label in mailbox.available_fetching_criterion_choices %}
+        {% for criterion, label in mailbox.available_no_arg_fetching_criterion_choices %}
             <li>
                 <button class="btn dropdown-item"
                         type="submit"

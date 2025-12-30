@@ -25,6 +25,11 @@
 
 
 {% block card_content %}
-    <div class="card-text">{% translate "Criterion" %}: {{ card_object.fetching_criterion }}</div>
+    <div class="card-text">
+        {% translate "Criterion" %}:{{ card_object.get_fetching_criterion_display }}
+    </div>
+    {% if card_object.fetching_criterion_arg %}
+        <div class="card-text">{% translate "With value" %}: {{ card_object.fetching_criterion_arg }}</div>
+    {% endif %}
     <div class="card-text">{% translate "Interval" %}: {{ card_object.interval }}</div>
 {% endblock card_content %}

@@ -339,6 +339,22 @@ class Mailbox(
         return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
 
     @property
+    def available_no_arg_fetching_criteria(self) -> tuple[StrOrPromise]:
+        """Gets the available fetching criteria that do not require an argument based on the mail protocol of this mailbox.
+
+        Returns:
+            A tuple of all available fetching criteria that do not require an argument for this mailbox.
+
+        Raises:
+            ValueError: If the account has an unimplemented protocol.
+        """
+        return [
+            criterion
+            for criterion in self.available_fetching_criteria
+            if criterion.format("arg") == criterion
+        ]  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
+
+    @property
     def available_fetching_criterion_choices(self) -> list[tuple[str, StrOrPromise]]:
         """Gets the available fetching criterion choices based on the mail protocol of this mailbox.
 
@@ -352,6 +368,24 @@ class Mailbox(
             (criterion, label)
             for criterion, label in EmailFetchingCriterionChoices.choices
             if criterion in self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA
+        ]
+
+    @property
+    def available_no_arg_fetching_criterion_choices(
+        self,
+    ) -> list[tuple[str, StrOrPromise]]:
+        """Gets the available fetching criterion choices that do not require an argumentbased on the mail protocol of this mailbox.
+
+        Returns:
+            A choices-type tuple of all available fetching criteria that do not require an argument for this mailbox.
+
+        Raises:
+            ValueError: If the account has an unimplemented protocol.
+        """
+        return [
+            (criterion, label)
+            for criterion, label in self.available_fetching_criterion_choices
+            if criterion.format("arg") == criterion
         ]
 
     @property

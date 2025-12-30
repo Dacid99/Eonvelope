@@ -148,6 +148,7 @@ def test_ExchangeFetcher_make_fetching_query_date_criterion(
         (EmailFetchingCriterionChoices.UNSEEN, {"is_read": False}),
         (EmailFetchingCriterionChoices.SEEN, {"is_read": True}),
         (EmailFetchingCriterionChoices.DRAFT, {"is_draft": True}),
+        (EmailFetchingCriterionChoices.UNDRAFT, {"is_draft": False}),
     ],
 )
 def test_ExchangeFetcher_make_fetching_query_other_criterion(

@@ -97,14 +97,29 @@ def test_IMAP4Fetcher_make_fetching_criterion_date_criterion(
     [
         (EmailFetchingCriterionChoices.ALL, EmailFetchingCriterionChoices.ALL),
         (EmailFetchingCriterionChoices.UNSEEN, EmailFetchingCriterionChoices.UNSEEN),
+        (EmailFetchingCriterionChoices.SEEN, EmailFetchingCriterionChoices.SEEN),
         (EmailFetchingCriterionChoices.RECENT, EmailFetchingCriterionChoices.RECENT),
         (EmailFetchingCriterionChoices.NEW, EmailFetchingCriterionChoices.NEW),
         (EmailFetchingCriterionChoices.OLD, EmailFetchingCriterionChoices.OLD),
         (EmailFetchingCriterionChoices.FLAGGED, EmailFetchingCriterionChoices.FLAGGED),
+        (
+            EmailFetchingCriterionChoices.UNFLAGGED,
+            EmailFetchingCriterionChoices.UNFLAGGED,
+        ),
         (EmailFetchingCriterionChoices.DRAFT, EmailFetchingCriterionChoices.DRAFT),
+        (EmailFetchingCriterionChoices.UNDRAFT, EmailFetchingCriterionChoices.UNDRAFT),
+        (EmailFetchingCriterionChoices.DELETED, EmailFetchingCriterionChoices.DELETED),
+        (
+            EmailFetchingCriterionChoices.UNDELETED,
+            EmailFetchingCriterionChoices.UNDELETED,
+        ),
         (
             EmailFetchingCriterionChoices.ANSWERED,
             EmailFetchingCriterionChoices.ANSWERED,
+        ),
+        (
+            EmailFetchingCriterionChoices.UNANSWERED,
+            EmailFetchingCriterionChoices.UNANSWERED,
         ),
     ],
 )

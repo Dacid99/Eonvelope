@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-27 16:58+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2025-12-31 11:08+0000\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/core/"
+"et/>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: src/core/constants.py:38
 msgid "All emails received the last DAY"
@@ -88,47 +89,47 @@ msgstr ""
 
 #: src/core/constants.py:93
 msgid "IMAP4"
-msgstr ""
+msgstr "IMAP4"
 
 #: src/core/constants.py:96
 msgid "IMAP4 (unencrypted)"
-msgstr ""
+msgstr "IMAP4 (krüptimata)"
 
 #: src/core/constants.py:99
 msgid "POP3"
-msgstr ""
+msgstr "POP3"
 
 #: src/core/constants.py:102
 msgid "POP3 (unencrypted)"
-msgstr ""
+msgstr "POP3 (krüptimata)"
 
 #: src/core/constants.py:105
 msgid "Microsoft Exchange"
-msgstr ""
+msgstr "Microsoft Exchange"
 
 #: src/core/constants.py:143
 msgid "From"
-msgstr ""
+msgstr "Saatja"
 
 #: src/core/constants.py:144
 msgid "To"
-msgstr ""
+msgstr "Saaja"
 
 #: src/core/constants.py:145
 msgid "CC"
-msgstr ""
+msgstr "Koopia"
 
 #: src/core/constants.py:146
 msgid "BCC"
-msgstr ""
+msgstr "Pimekoopia"
 
 #: src/core/constants.py:147
 msgid "Sender"
-msgstr ""
+msgstr "Saatja"
 
 #: src/core/constants.py:148
 msgid "Reply-To"
-msgstr ""
+msgstr "Vastamise aadress"
 
 #: src/core/constants.py:149
 msgid "Resent-From"

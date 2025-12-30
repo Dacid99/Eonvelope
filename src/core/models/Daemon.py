@@ -23,6 +23,7 @@ from __future__ import annotations
 import json
 import logging
 import uuid
+from datetime import datetime
 from typing import TYPE_CHECKING, Any, ClassVar, override
 
 from celery import current_app
@@ -33,7 +34,7 @@ from django.utils.translation import gettext_lazy as _
 from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from django_prometheus.models import ExportModelOperationsMixin
 
-from core.constants import EmailFetchingCriterionChoices
+from core.constants import INTERNAL_DATE_FORMAT, EmailFetchingCriterionChoices
 from core.mixins import HealthModelMixin, TimestampModelMixin, URLMixin
 
 
@@ -93,6 +94,15 @@ class Daemon(
         help_text=_("The selection criterion for emails to archive."),
     )
     """The fetching criterion for this mailbox. :attr:`eonvelope.constants.EmailFetchingCriterionChoices.ALL` by default."""
+
+    fetching_criterion_arg = models.CharField(
+        default="",
+        max_length=255,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("filter value"),
+        help_text=_("Additional value for the selection criterion."),
+    )
+    """Additional fetching criterion argument for this mailbox. "" by default."""
 
     celery_task: models.OneToOneField[PeriodicTask] = models.OneToOneField(
         PeriodicTask,
@@ -188,6 +198,45 @@ class Daemon(
             raise ValidationError(
                 {"mailbox": _("No valid mailbox selected!")}
             ) from None
+        if self.fetching_criterion.format("arg") != self.fetching_criterion:
+            if not self.fetching_criterion_arg:
+                raise ValidationError(
+                    {
+                        "fetching_criterion_arg": _(
+                            "This fetching_criterion requires an argument."
+                        )
+                    }
+                )
+            if self.fetching_criterion == EmailFetchingCriterionChoices.SENTSINCE:
+                try:
+                    datetime.strptime(self.fetching_criterion_arg, INTERNAL_DATE_FORMAT)
+                except ValueError:
+                    raise ValidationError(
+                        {
+                            "fetching_criterion_arg": _(
+                                "Date values must be given in format %(format)s."
+                            )
+                            % {"format": INTERNAL_DATE_FORMAT}
+                        }
+                    ) from None
+            if self.fetching_criterion in [
+                EmailFetchingCriterionChoices.SMALLER,
+                EmailFetchingCriterionChoices.LARGER,
+            ]:
+                try:
+                    size_int = int(self.fetching_criterion_arg)
+                except ValueError:
+                    raise ValidationError(
+                        {"fetching_criterion_arg": _("This value must be an integer.")}
+                    )
+                if size_int < 0:
+                    raise ValidationError(
+                        {
+                            "fetching_criterion_arg": _(
+                                "This value must be a positive number."
+                            )
+                        }
+                    )
 
     def test(self) -> None:
         """Tests whether the data in the model is correct and the daemons task can be run.

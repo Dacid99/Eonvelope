@@ -39,7 +39,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.serializers import ChoiceField
+from rest_framework.serializers import CharField, ChoiceField
 
 from api.v1.filters import MailboxFilterSet
 from api.v1.mixins import ToggleFavoriteMixin
@@ -82,7 +82,8 @@ if TYPE_CHECKING:
         request=inline_serializer(
             name="fetch_criterion_data",
             fields={
-                "criterion": ChoiceField(choices=EmailFetchingCriterionChoices.choices)
+                "criterion": ChoiceField(choices=EmailFetchingCriterionChoices.choices),
+                "criterion_arg": CharField(required=False),
             },
         ),
         responses={
@@ -252,6 +253,7 @@ class MailboxViewSet(
         """
         mailbox = self.get_object()
         criterion = request.data.get("criterion")
+        criterion_arg = request.data.get("criterion_arg", "")
         if not criterion:
             raise ValidationError(
                 {"criterion": _("Fetching criterion is required.")},
@@ -265,8 +267,17 @@ class MailboxViewSet(
                     % {"criterion": criterion}
                 },
             )
+        if not criterion_arg and criterion.format("arg") != criterion:
+            raise ValidationError(
+                {
+                    "criterion_arg": _(
+                        "The given criterion %(criterion)s requires an argument."
+                    )
+                    % {"criterion": criterion}
+                },
+            )
         try:
-            mailbox.fetch(criterion)
+            mailbox.fetch(criterion, criterion_arg)
         except FetcherError as error:
             response = Response(
                 {

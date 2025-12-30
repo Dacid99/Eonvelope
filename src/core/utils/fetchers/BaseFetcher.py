@@ -89,13 +89,16 @@ class BaseFetcher(ABC):
         self,
         mailbox: Mailbox,
         criterion: str = EmailFetchingCriterionChoices.ALL,
+        criterion_arg: str = "",
     ) -> list[bytes]:
         """Fetches emails based on a criterion from the server.
 
         Args:
             mailbox: The model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails by.
-                Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
+                Defaults to :attr:`core.constants.EmailFetchingCriterionChoices.ALL`.
+            criterion_arg: The value to filter by.
+                Defaults to "" as :attr:`core.constants.EmailFetchingCriterionChoices.ALL` does not require a value.
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.

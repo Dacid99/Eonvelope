@@ -178,7 +178,7 @@ class Mailbox(
         self.set_healthy()
         logger.info("Successfully tested mailbox")
 
-    def fetch(self, criterion: str) -> None:
+    def fetch(self, criterion: str, criterion_arg: str) -> None:
         """Fetches emails from this mailbox based on :attr:`criterion` and adds them to the db.
 
         If successful, marks this mailbox as healthy, otherwise unhealthy.
@@ -193,7 +193,7 @@ class Mailbox(
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
         with self.account.get_fetcher() as fetcher:
             try:
-                fetched_mails = fetcher.fetch_emails(self, criterion)
+                fetched_mails = fetcher.fetch_emails(self, criterion, criterion_arg)
             except MailboxError as error:
                 logger.info("Failed fetching %s with error: %s.", self, error)
                 self.set_unhealthy(error)

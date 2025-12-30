@@ -119,6 +119,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         self,
         mailbox: Mailbox,
         criterion: str = EmailFetchingCriterionChoices.ALL,
+        criterion_arg: str = "",
     ) -> list[bytes]:
         """Fetches and returns all maildata from the server.
 
@@ -127,6 +128,8 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
             criterion: POP only supports ALL lookups.
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
                 This arg ensures compatibility with the other fetchers.
+            criterion_arg: The value to filter by.
+                Defaults to "" as :attr:`core.constants.EmailFetchingCriterionChoices.ALL` does not require a value.
 
         Returns:
             List of :class:`email.message.EmailMessage` mails in the mailbox.

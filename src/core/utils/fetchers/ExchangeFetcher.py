@@ -20,16 +20,19 @@
 
 from __future__ import annotations
 
-import datetime
 import os
+from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, override
 
 import exchangelib
 import exchangelib.errors
-from django.utils import timezone
 from django.utils.translation import gettext as _
 
-from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
+from core.constants import (
+    INTERNAL_DATE_FORMAT,
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+)
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 from .BaseFetcher import BaseFetcher
@@ -63,6 +66,8 @@ class ExchangeFetcher(BaseFetcher):
         EmailFetchingCriterionChoices.WEEKLY.value,
         EmailFetchingCriterionChoices.MONTHLY.value,
         EmailFetchingCriterionChoices.ANNUALLY.value,
+        EmailFetchingCriterionChoices.SUBJECT.value,
+        EmailFetchingCriterionChoices.BODY.value,
     )
     """Tuple of all criteria available for fetching. Refers to :class:`EmailFetchingCriterionChoices`.
     Constructed analogous to the IMAP4 criteria.
@@ -70,8 +75,13 @@ class ExchangeFetcher(BaseFetcher):
     """
 
     @staticmethod
-    def make_fetching_query(criterion: str, base_query: QuerySet) -> QuerySet:
+    def make_fetching_query(
+        criterion: str, criterion_arg: str, base_query: QuerySet
+    ) -> QuerySet:
         """Returns the queryset for the Exchange request.
+
+        Note:
+            Use no timezone here to use the mailserver time settings.
 
         Args:
             criterion: The criterion for the Exchange request.
@@ -89,18 +99,27 @@ class ExchangeFetcher(BaseFetcher):
         elif criterion == EmailFetchingCriterionChoices.UNDRAFT:
             mail_query = base_query.filter(is_draft=False)
         elif criterion == EmailFetchingCriterionChoices.DAILY:
-            start_time = timezone.now() - datetime.timedelta(days=1)
+            start_time = datetime.now(tz=UTC) - timedelta(days=1)
             mail_query = base_query.filter(datetime_received__gte=start_time)
         elif criterion == EmailFetchingCriterionChoices.WEEKLY:
-            start_time = timezone.now() - datetime.timedelta(weeks=1)
+            start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
             mail_query = base_query.filter(datetime_received__gte=start_time)
         elif criterion == EmailFetchingCriterionChoices.MONTHLY:
-            start_time = timezone.now() - datetime.timedelta(weeks=4)
+            start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
             mail_query = base_query.filter(datetime_received__gte=start_time)
         elif criterion == EmailFetchingCriterionChoices.ANNUALLY:
-            start_time = timezone.now() - datetime.timedelta(weeks=52)
+            start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
             mail_query = base_query.filter(datetime_received__gte=start_time)
-        else:
+        elif criterion == EmailFetchingCriterionChoices.SENTSINCE:
+            start_time = datetime.strptime(
+                criterion_arg, INTERNAL_DATE_FORMAT
+            ).astimezone(UTC)
+            mail_query = base_query.filter(datetime_received__gte=start_time)
+        elif criterion == EmailFetchingCriterionChoices.SUBJECT:
+            mail_query = base_query.filter(subject__contains=criterion_arg)
+        elif criterion == EmailFetchingCriterionChoices.BODY:
+            mail_query = base_query.filter(body__contains=criterion_arg)
+        else:  # only ALL left
             mail_query = base_query
         return mail_query
 
@@ -204,6 +223,7 @@ class ExchangeFetcher(BaseFetcher):
         self,
         mailbox: Mailbox,
         criterion: str = EmailFetchingCriterionChoices.ALL,
+        criterion_arg: str = "",
     ) -> list[bytes]:
         """Fetches and returns maildata from a mailbox based on a given criterion.
 
@@ -224,16 +244,18 @@ class ExchangeFetcher(BaseFetcher):
                 If :attr:`criterion` is not in :attr:`ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA`.
             MailboxError: If an error occurs or a bad response is returned during an action on the mailbox..
         """
-        super().fetch_emails(mailbox, criterion)
+        super().fetch_emails(mailbox, criterion, criterion_arg)
         self.logger.debug(
             "Searching and fetching %s messages in %s...",
-            criterion,
+            criterion.format(criterion_arg),
             mailbox,
         )
         try:
             mailbox_folder = self.open_mailbox(mailbox)
             mail_query = self.make_fetching_query(
-                criterion, mailbox_folder.all().order_by("datetime_received")
+                criterion,
+                criterion_arg,
+                mailbox_folder.all().order_by("datetime_received"),
             )
             mail_data_list = [mail.mime_content for mail in mail_query]
         except exchangelib.errors.EWSError as error:

@@ -27,6 +27,9 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 
 
+INTERNAL_DATE_FORMAT = "%Y-%m-%d"
+
+
 class EmailFetchingCriterionChoices(TextChoices):
     """Namespace class for all implemented mail fetching criteria constants.
 
@@ -87,6 +90,31 @@ class EmailFetchingCriterionChoices(TextChoices):
 
     UNDELETED = "UNDELETED", _("All UNDELETED emails")
     """Filter by "UNDELETED" flag."""
+
+    # all filters with arg
+    KEYWORD = "KEYWORD {}", _("All emails with the given KEYWORD")
+    """Filter by "KEYWORD". Must be formatted."""
+
+    UNKEYWORD = "UNKEYWORD {}", _("All emails without the given KEYWORD")
+    """Filter by "UNKEYWORD". Must be formatted."""
+
+    LARGER = "LARGER {}", _("All emails LARGER than the given size")
+    """Filter by "LARGER". Must be formatted."""
+
+    SMALLER = "SMALLER {}", _("All emails SMALLER than the given size")
+    """Filter by "SMALLER". Must be formatted."""
+
+    SUBJECT = "SUBJECT {}", _("All emails with SUBJECT containing the given text")
+    """Filter by "SUBJECT" content. Must be formatted."""
+
+    BODY = "BODY {}", _("All emails with BODY containing the given text")
+    """Filter by "BODY" content. Must be formatted."""
+
+    FROM = "FROM {}", _("All emails sent FROM the given address")
+    """Filter by "FROM" header. Must be formatted."""
+
+    SENTSINCE = "SENTSINCE {}", _("All emails SENT SINCE the given date")
+    """Filter by "SENTSINCE" time. Must be formatted."""
 
 
 class EmailProtocolChoices(TextChoices):

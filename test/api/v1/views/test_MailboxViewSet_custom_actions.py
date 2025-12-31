@@ -407,13 +407,11 @@ def test_fetch_auth_owner_bad_criterion(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion"]
-    print(response.data["criterion"])
     mock_Mailbox_fetch.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_fetch_auth_owner_missing_criterion_arg(
-    faker,
     fake_mailbox,
     owner_api_client,
     mock_Mailbox_fetch,
@@ -428,13 +426,12 @@ def test_fetch_auth_owner_missing_criterion_arg(
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    # assert response.data["criterion_arg"]
+    assert response.data["criterion_arg"]
     mock_Mailbox_fetch.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_fetch_auth_owner_criterion_arg_not_required(
-    faker,
     fake_mailbox,
     owner_api_client,
     mock_Mailbox_fetch,

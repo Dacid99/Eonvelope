@@ -209,9 +209,9 @@ class Daemon(
                 )
             if self.fetching_criterion == EmailFetchingCriterionChoices.SENTSINCE:
                 try:
-                    datetime.strptime(
+                    datetime.strptime(  # noqa: DTZ007 # this value does not need to be naive
                         self.fetching_criterion_arg, INTERNAL_DATE_FORMAT
-                    )  # noqa: DTZ007 # this value does not need to be naive
+                    )
                 except ValueError:
                     raise ValidationError(
                         {

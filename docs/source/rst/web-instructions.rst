@@ -85,7 +85,7 @@ The minimal accepted timeout value is 0.1.
 
 When you submit the data to add the account, Eonvelope will test
 whether it can access this account with the given information.
-In case this is not possible, you will get feedback about the problem that occured.
+In case this is not possible, you will get feedback about the problem that occurred.
 If the service is unknown, check the email server URL.
 In case of a failed authentication, check the credentials.
 

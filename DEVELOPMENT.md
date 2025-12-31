@@ -196,7 +196,7 @@ git config core.hooksPath tools/githooks/
       ],
     },
   },
-  "format_on_save": true,
+  "format_on_save": "on",
 }
 ```
 
@@ -226,4 +226,18 @@ git config core.hooksPath tools/githooks/
     },
   },
 }
+```
+
+- ruff lsp:
+
+```json
+"lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "configuration": "tools/ruff.toml",
+        },
+      },
+    },
+  }
 ```

@@ -4,7 +4,6 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
     hooks:
-      - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-merge-conflict
@@ -18,7 +17,7 @@ repos:
     rev: v0.14.10
     hooks:
       - id: ruff-check
-        args: [--configuration, tools/ruff.toml]
+        args: [--config, tools/ruff.toml]
   - repo: https://github.com/adamchainz/django-upgrade
     rev: 1.29.1
     hooks:
@@ -44,3 +43,4 @@ repos:
     rev: v2.12.0
     hooks:
       - id: hadolint-docker
+        args: [--config, tools/.hadolint.yaml]

@@ -63,7 +63,7 @@ tasks:
     shell: npx --yes eslint --no-config-lookup --fix
 
   hadolint:
-    shell: sudo docker run --rm -i hadolint/hadolint < docker/Dockerfile
+    shell: sudo docker run --rm -i -v tools/hadolint.yaml:/.config/hadolint.yaml hadolint/hadolint < docker/Dockerfile
     capture_stdout: ${REPORT_PATH}hadolint.ansi
 
   licenses:

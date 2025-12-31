@@ -60,7 +60,7 @@ def set_timezone(request: HttpRequest) -> HttpResponse:
         allowed_hosts={request.get_host()},
         require_https=request.is_secure(),
     ):
-        next_url = request.META.get("HTTP_REFERER")
+        next_url = request.headers.get("referer")
         if not url_has_allowed_host_and_scheme(
             url=next_url,
             allowed_hosts={request.get_host()},

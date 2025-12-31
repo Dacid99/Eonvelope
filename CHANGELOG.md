@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.4.0
+
+- Features:
+  - more fetching criteria
+  - fetching criteria with custom filter value
+
 ## Version 0.3.0
 
 - Features:

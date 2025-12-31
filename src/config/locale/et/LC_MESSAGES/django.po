@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 16:47+0000\n"
 "PO-Revision-Date: 2025-12-31 20:14+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/"
 "config/et/>\n"
 "Language: et\n"
@@ -22,33 +22,33 @@ msgstr ""
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/admin.py:32
 msgid "E∘nvelope Administration"
-msgstr ""
+msgstr "E∘nvelope'i haldus"
 
 #. Translators: Eonvelope is the brand name.
 #: src/config/admin.py:34
 msgid "Eonvelope Administration"
-msgstr ""
+msgstr "Eonvelope'i haldus"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/admin.py:37
 msgid "E∘nvelope Settings"
-msgstr ""
+msgstr "E∘nvelope'i seadistused"
 
 #: src/config/settings.py:572
 msgid "Your email archiving server"
-msgstr ""
+msgstr "Sinu server e-kirjade arhiveerimiseks"
 
 #: src/config/settings.py:613
 msgid "Dashboard"
-msgstr ""
+msgstr "Juhtpaneel"
 
 #: src/config/settings.py:615
 msgid "Shortcut to the dashboard"
-msgstr ""
+msgstr "Link juhtpaneelile"
 
 #: src/config/settings.py:618
 msgid "Timeline"
-msgstr ""
+msgstr "Ajajoon"
 
 #: src/config/settings.py:620
 msgid "Shortcut to the email timeline"

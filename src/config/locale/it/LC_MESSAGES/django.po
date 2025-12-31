@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 17:07+0000\n"
+"POT-Creation-Date: 2025-12-31 16:47+0000\n"
 "PO-Revision-Date: 2025-08-15 10:02+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/eonvelope/"
@@ -36,41 +36,41 @@ msgstr ""
 msgid "E∘nvelope Settings"
 msgstr "Impostazioni web"
 
-#: src/config/settings.py:569
+#: src/config/settings.py:572
 msgid "Your email archiving server"
 msgstr ""
 
-#: src/config/settings.py:610
+#: src/config/settings.py:613
 msgid "Dashboard"
 msgstr ""
 
-#: src/config/settings.py:612
+#: src/config/settings.py:615
 msgid "Shortcut to the dashboard"
 msgstr ""
 
-#: src/config/settings.py:615
+#: src/config/settings.py:618
 msgid "Timeline"
 msgstr ""
 
-#: src/config/settings.py:617
+#: src/config/settings.py:620
 msgid "Shortcut to the email timeline"
 msgstr ""
 
-#: src/config/settings.py:894
+#: src/config/settings.py:897
 msgid "Default page size for paginated API response data"
 msgstr ""
 "Dimensione della pagina predefinita per i dati di risposta delle API paginate"
 
-#: src/config/settings.py:899
+#: src/config/settings.py:902
 msgid "Maximum page size for paginated API response data"
 msgstr "Dimensione massima della pagina per i dati di risposta API impaginati"
 
-#: src/config/settings.py:904
+#: src/config/settings.py:907
 msgid "Default page size for pagination in the webapp."
 msgstr ""
 "Dimensione della pagina predefinita per la paginazione nell'applicazione web."
 
-#: src/config/settings.py:910
+#: src/config/settings.py:913
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
@@ -78,7 +78,7 @@ msgstr ""
 "Opzioni di formato pagina per la paginazione nell'applicazione web. Dovrebbe "
 "contenere il valore WEB_DEFAULT_PAGE_SIZE."
 
-#: src/config/settings.py:917
+#: src/config/settings.py:920
 msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
@@ -86,25 +86,25 @@ msgstr ""
 "Dimensioni massime dei dati per una miniatura nell'applicazione web. Le "
 "miniature più grandi di questo non saranno caricate."
 
-#: src/config/settings.py:923
+#: src/config/settings.py:926
 msgid "Maximum numbers of files in one storage unit."
 msgstr "Numero massimo di file in un'unità di archiviazione."
 
-#: src/config/settings.py:928
+#: src/config/settings.py:931
 msgid "Whether or not to ignore emails that have a spam flag"
 msgstr "Ignorare o no le e-mail che hanno una bandiera spam"
 
-#: src/config/settings.py:934
+#: src/config/settings.py:937
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
 msgstr ""
 
-#: src/config/settings.py:940
+#: src/config/settings.py:943
 msgid "List of content types prefixes to not parse as files."
 msgstr "Elenco dei prefissi di tipi di contenuto da non analizzare come file."
 
-#: src/config/settings.py:946
+#: src/config/settings.py:949
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
@@ -112,7 +112,7 @@ msgstr ""
 "Elenco dei prefissi di tipi di contenuti da non analizzare come file. La "
 "pianura e il testo HTML è sempre ignorato come il suo testo del corpo."
 
-#: src/config/settings.py:953
+#: src/config/settings.py:956
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
@@ -125,7 +125,7 @@ msgstr ""
 "modello può causare 500 risposte quando si richiede pagine con miniature e-"
 "mail, quindi fai attenzione."
 
-#: src/config/settings.py:960
+#: src/config/settings.py:963
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
@@ -133,19 +133,19 @@ msgstr ""
 "Stile CSS usato per rendere le e-mail in HTML. Fai riferimento a "
 "HTML_TEMPLATE per il contesto sulle classi."
 
-#: src/config/settings.py:966
+#: src/config/settings.py:969
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr ""
 "Impostazione predefinita della casella di posta per memorizzare o no le e-"
 "mail come eml."
 
-#: src/config/settings.py:971
+#: src/config/settings.py:974
 msgid "Default mailbox setting whether to store attachments."
 msgstr ""
 "Impostazione predefinita della casella di posta per memorizzare o no gli "
 "allegati."
 
-#: src/config/settings.py:977
+#: src/config/settings.py:980
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
@@ -154,26 +154,26 @@ msgstr ""
 "impostazione ha effetto solo se l'impostazione dell'ambiente "
 "REGISTRATION_ENABLED non è 0."
 
-#: src/config/settings.py:984
+#: src/config/settings.py:987
 msgid "Server Configurations"
 msgstr "Configurazioni server"
 
-#: src/config/settings.py:986
+#: src/config/settings.py:989
 msgid "Default Values"
 msgstr "Valori predefiniti"
 
-#: src/config/settings.py:993
+#: src/config/settings.py:996
 msgid "Processing Settings"
 msgstr "Impostazioni di elaborazione"
 
-#: src/config/settings.py:1004
+#: src/config/settings.py:1007
 msgid "Storage Settings"
 msgstr "Impostazioni di archiviazione"
 
-#: src/config/settings.py:1008
+#: src/config/settings.py:1011
 msgid "API Settings"
 msgstr "Impostazioni API"
 
-#: src/config/settings.py:1015
+#: src/config/settings.py:1018
 msgid "Web Settings"
 msgstr "Impostazioni web"

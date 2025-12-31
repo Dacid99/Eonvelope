@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 16:47+0000\n"
 "PO-Revision-Date: 2025-12-31 20:14+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/eonvelope/web/"
 "it/>\n"
 "Language: it\n"
@@ -744,8 +744,7 @@ msgstr "Nessuna e-mail trovata."
 
 #: src/web/templates/web/email/partials/_filter_list_alternative.html:11
 msgid "You can fetch some from the mailboxes you have set up."
-msgstr ""
-"È possibile recuperare alcuni dalle caselle di posta che hai impostato."
+msgstr "È possibile recuperare alcuni dalle caselle di posta che hai impostato."
 
 #: src/web/templates/web/email/partials/_reprocess_email-button.html:5
 msgid "Reprocess"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 16:47+0000\n"
+"POT-Creation-Date: 2025-12-31 20:21+0000\n"
 "PO-Revision-Date: 2025-12-31 20:13+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/web/"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
-"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
-"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
-"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.15.1\n"
 
 #: src/web/filters/AccountFilterSet.py:55
@@ -599,7 +599,7 @@ msgid "Email Timeline"
 msgstr "Хронологія електронної пошти"
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr "День"
 
@@ -618,7 +618,6 @@ msgstr "Цього тижня"
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr "Місяць"
 
@@ -632,7 +631,7 @@ msgid "Week #"
 msgstr "Тиждень №"
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr "Рік"
 
@@ -912,7 +911,6 @@ msgid "End edit"
 msgstr "Кінець редагування"
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:90
 msgid "Favorite"
 msgstr "Улюблене"
 
@@ -1112,7 +1110,8 @@ msgstr "Електронну пошту успішно відновлено у �
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:102
 #, python-format
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
-msgstr "Вибраний критерій %(criterion)s недоступний для цієї поштової скриньки."
+msgstr ""
+"Вибраний критерій %(criterion)s недоступний для цієї поштової скриньки."
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
 #, python-format

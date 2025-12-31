@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 16:47+0000\n"
+"POT-Creation-Date: 2025-12-31 20:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -583,7 +583,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr ""
 
@@ -602,7 +602,6 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -616,7 +615,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr ""
 
@@ -888,7 +887,6 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:90
 msgid "Favorite"
 msgstr ""
 

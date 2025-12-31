@@ -123,7 +123,7 @@ tasks:
 
   translation:
     help: "Updates the translation files."
-    cmd: python3 manage.py makemessages --all --no-obsolete --ignore test/* --ignore docs/*
+    cmd: python3 manage.py makemessages --all --no-obsolete --ignore "test/*" --ignore "docs/*"
 
   build-docs:
     help: "Builds the documentation."

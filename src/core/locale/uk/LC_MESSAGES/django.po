@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 16:47+0000\n"
+"POT-Creation-Date: 2025-12-31 20:21+0000\n"
 "PO-Revision-Date: 2025-12-31 20:16+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/core/"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
-"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
-"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
-"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.15.1\n"
 
 #: src/core/constants.py:40
@@ -510,13 +510,15 @@ msgstr "Вміст вкладеного файлу"
 #: src/core/models/Correspondent.py:67
 msgid ""
 "This will only delete the record of this correspondent, not of its emails."
-msgstr "Це видалить лише запис цього кореспондента, а не його електронні листи."
+msgstr ""
+"Це видалить лише запис цього кореспондента, а не його електронні листи."
 
 #: src/core/models/Correspondent.py:71
 msgid ""
 "This will only delete the records of these correspondents, not of their "
 "emails."
-msgstr "Це видалить лише записи цих кореспондентів, а не їхні електронні листи."
+msgstr ""
+"Це видалить лише записи цих кореспондентів, а не їхні електронні листи."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:85
@@ -681,8 +683,8 @@ msgstr "розпорядки"
 #, python-format
 msgid "Emailfetching routine %(uuid)s for mailbox %(mailbox)s"
 msgstr ""
-"Процедура отримання електронної пошти %(uuid)s для поштової скриньки %"
-"(mailbox)s"
+"Процедура отримання електронної пошти %(uuid)s для поштової скриньки "
+"%(mailbox)s"
 
 #: src/core/models/Daemon.py:193
 msgid "This fetching criterion is not available for this mailbox!"
@@ -698,16 +700,16 @@ msgstr "Не вибрано дійсну поштову скриньку!"
 msgid "This fetching criterion requires an argument."
 msgstr "Цей критерій отримання недоступний для цієї поштової скриньки!"
 
-#: src/core/models/Daemon.py:217
+#: src/core/models/Daemon.py:219
 #, python-format
 msgid "Date values must be given in format %(format)s."
 msgstr ""
 
-#: src/core/models/Daemon.py:230
+#: src/core/models/Daemon.py:232
 msgid "This value must be an integer."
 msgstr ""
 
-#: src/core/models/Daemon.py:236
+#: src/core/models/Daemon.py:238
 msgid "This value must be a positive number."
 msgstr ""
 
@@ -784,7 +786,7 @@ msgstr ""
 "Електронний лист з ідентифікатором %(message_id)s, отриманий %(datetime)s "
 "від %(mailbox)s"
 
-#: src/core/models/Email.py:682 src/core/models/Mailbox.py:319
+#: src/core/models/Email.py:682 src/core/models/Mailbox.py:320
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr "Формат Файлу %(file_format)s не підтримується."
@@ -859,8 +861,8 @@ msgstr "поштові скриньки"
 msgid "Mailbox %(name)s of %(account)s"
 msgstr "Поштова скринька %(name)s з %(account)s"
 
-#: src/core/models/Mailbox.py:229 src/core/models/Mailbox.py:266
-#: src/core/models/Mailbox.py:284
+#: src/core/models/Mailbox.py:230 src/core/models/Mailbox.py:267
+#: src/core/models/Mailbox.py:285
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr "Вказаний файл не є коректним %(file_format)s."
@@ -903,24 +905,24 @@ msgstr "Архівовано"
 msgid "%(state)s storage directory %(name)s"
 msgstr "%(state)s каталог сховища %(name)s"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:206
-#: src/core/utils/fetchers/ExchangeFetcher.py:218
+#: src/core/utils/fetchers/ExchangeFetcher.py:207
+#: src/core/utils/fetchers/ExchangeFetcher.py:219
 msgid "refresh"
 msgstr "освіжити"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:263
+#: src/core/utils/fetchers/ExchangeFetcher.py:266
 msgid "fetching of mail contents"
 msgstr "отримання вмісту пошти"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:300
+#: src/core/utils/fetchers/ExchangeFetcher.py:303
 msgid "scan for mailboxes"
 msgstr "сканування поштових скриньок"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:326
+#: src/core/utils/fetchers/ExchangeFetcher.py:329
 msgid "restoring of email"
 msgstr "відновлення електронної пошти"
 
-#: src/core/utils/fetchers/IMAP4Fetcher.py:157
+#: src/core/utils/fetchers/IMAP4Fetcher.py:158
 #: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:76
 #: src/core/utils/fetchers/POP3Fetcher.py:92
 #: src/core/utils/fetchers/POP3_SSL_Fetcher.py:75
@@ -933,8 +935,8 @@ msgid ""
 "A %(error_class_name)s: %(error)s occurred during %(command_name)s on "
 "account!"
 msgstr ""
-"A %(error_class_name)s: Виникла помилка %(error)s під час виконання команди %"
-"(command_name)s на обліковому записі!"
+"A %(error_class_name)s: Виникла помилка %(error)s під час виконання команди "
+"%(command_name)s на обліковому записі!"
 
 #: src/core/utils/fetchers/exceptions.py:62
 #, python-format
@@ -942,8 +944,8 @@ msgid ""
 "A %(error_class_name)s: %(error)s occurred during %(command_name)s on "
 "mailbox!"
 msgstr ""
-"A %(error_class_name)s: Виникла помилка %(error)s під час виконання команди %"
-"(command_name)s на поштовій скриньці!"
+"A %(error_class_name)s: Виникла помилка %(error)s під час виконання команди "
+"%(command_name)s на поштовій скриньці!"
 
 #: src/core/utils/fetchers/exceptions.py:77
 #, python-format

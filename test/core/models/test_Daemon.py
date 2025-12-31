@@ -59,6 +59,7 @@ def test_Daemon_fields(fake_daemon):
     assert fake_daemon.mailbox is not None
     assert isinstance(fake_daemon.mailbox, Mailbox)
     assert fake_daemon.fetching_criterion == constants.EmailFetchingCriterionChoices.ALL
+    assert fake_daemon.fetching_criterion_arg == ""
     assert fake_daemon.interval is not None
     assert fake_daemon.is_healthy is None
     assert fake_daemon.last_error is not None

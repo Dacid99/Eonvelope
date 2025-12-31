@@ -45,6 +45,7 @@ class BaseDaemonTable(Table):
             "uuid",
             "mailbox",
             "fetching_criterion",
+            "fetching_criterion_arg",
             "interval__every",
             "interval__period",
             "is_healthy",

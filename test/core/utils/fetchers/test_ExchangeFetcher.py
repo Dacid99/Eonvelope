@@ -134,7 +134,7 @@ def test_ExchangeFetcher_make_fetching_query_date_criterion(
     fake_datetime = faker.date_time_this_decade(tzinfo=datetime.UTC)
 
     with freeze_time(fake_datetime):
-        result = ExchangeFetcher.make_fetching_query(criterion_name, mock_QuerySet)
+        result = ExchangeFetcher.make_fetching_query(criterion_name, "", mock_QuerySet)
 
     assert result == mock_QuerySet.filter.return_value
     mock_QuerySet.filter.assert_called_once_with(
@@ -142,22 +142,49 @@ def test_ExchangeFetcher_make_fetching_query_date_criterion(
     )
 
 
+def test_ExchangeFetcher_make_fetching_query_sentsince_criterion(mock_QuerySet):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.make_fetching_query`
+    in different cases of date criteria.
+    """
+
+    result = ExchangeFetcher.make_fetching_query(
+        EmailFetchingCriterionChoices.SENTSINCE, "2010-6-5", mock_QuerySet
+    )
+
+    assert result == mock_QuerySet.filter.return_value
+    mock_QuerySet.filter.assert_called_once_with(
+        datetime_received__gte=datetime.datetime(2010, 6, 5, tzinfo=datetime.UTC)
+    )
+
+
 @pytest.mark.parametrize(
-    "criterion_name, expected_kwarg",
+    "criterion_name, criterion_arg, expected_kwarg",
     [
-        (EmailFetchingCriterionChoices.UNSEEN, {"is_read": False}),
-        (EmailFetchingCriterionChoices.SEEN, {"is_read": True}),
-        (EmailFetchingCriterionChoices.DRAFT, {"is_draft": True}),
-        (EmailFetchingCriterionChoices.UNDRAFT, {"is_draft": False}),
+        (EmailFetchingCriterionChoices.UNSEEN, "", {"is_read": False}),
+        (EmailFetchingCriterionChoices.SEEN, "", {"is_read": True}),
+        (EmailFetchingCriterionChoices.DRAFT, "", {"is_draft": True}),
+        (EmailFetchingCriterionChoices.UNDRAFT, "", {"is_draft": False}),
+        (
+            EmailFetchingCriterionChoices.SUBJECT,
+            "somestring",
+            {"subject__contains": "somestring"},
+        ),
+        (
+            EmailFetchingCriterionChoices.BODY,
+            "textPart",
+            {"body__contains": "textPart"},
+        ),
     ],
 )
 def test_ExchangeFetcher_make_fetching_query_other_criterion(
-    mock_QuerySet, criterion_name, expected_kwarg
+    mock_QuerySet, criterion_name, criterion_arg, expected_kwarg
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.make_fetching_query`
     in different cases of flag criteria.
     """
-    result = ExchangeFetcher.make_fetching_query(criterion_name, mock_QuerySet)
+    result = ExchangeFetcher.make_fetching_query(
+        criterion_name, criterion_arg, mock_QuerySet
+    )
 
     assert result == mock_QuerySet.filter.return_value
     mock_QuerySet.filter.assert_called_once_with(**expected_kwarg)
@@ -168,7 +195,7 @@ def test_ExchangeFetcher_make_fetching_query_all_criterion(mock_QuerySet):
     in case of the ALL criterion.
     """
     result = ExchangeFetcher.make_fetching_query(
-        EmailFetchingCriterionChoices.ALL, mock_QuerySet
+        EmailFetchingCriterionChoices.ALL, "", mock_QuerySet
     )
 
     assert result == mock_QuerySet

@@ -30,7 +30,7 @@ from api.v1.serializers.django_celery_beat_serializers import (
     IntervalScheduleSerializer,
     PeriodicTaskSerializer,
 )
-from core.models import Daemon
+from core.models import Daemon, Mailbox
 
 
 if TYPE_CHECKING:
@@ -99,16 +99,30 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         instance = self.instance or self.Meta.model()
 
         for attr, value in attrs.items():
-            setattr(instance, attr, value)
+            if attr == "interval":
+                instance.interval = IntervalSchedule(
+                    every=value["every"], period=value["period"]
+                )
+            else:
+                setattr(instance, attr, value)
 
         try:
-            instance.full_clean()
+            instance.clean()
         except ValidationError as error:
             raise serializers.ValidationError(
                 error.message_dict or error.messages
             ) from error
 
         return attrs
+
+    def validate_mailbox(self, value: Mailbox) -> Mailbox:
+        """Validate that the given mailbox belongs to the requesting user."""
+        if (
+            "request" not in self.context
+            or value.account.user != self.context["request"].user
+        ):
+            raise serializers.ValidationError("No mailbox with that id found.")
+        return value
 
     @override
     def update(self, instance: Daemon, validated_data: dict) -> Daemon:

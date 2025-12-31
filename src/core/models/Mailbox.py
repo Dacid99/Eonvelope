@@ -348,11 +348,11 @@ class Mailbox(
         Raises:
             ValueError: If the account has an unimplemented protocol.
         """
-        return [
+        return tuple(
             criterion
             for criterion in self.available_fetching_criteria
             if criterion.format("arg") == criterion
-        ]  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
+        )  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
 
     @property
     def available_fetching_criterion_choices(self) -> list[tuple[str, StrOrPromise]]:

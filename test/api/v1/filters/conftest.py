@@ -289,6 +289,7 @@ def daemon_queryset(unblocked_db, mailbox_queryset):
             daemon = baker.make(
                 Daemon,
                 interval=interval,
+                fetching_criterion_arg=TEXT_TEST_ITEMS[number],
                 is_healthy=bool_test_item,
                 last_error=TEXT_TEST_ITEMS[number],
                 last_error_occurred_at=DATETIME_TEST_ITEMS[number],

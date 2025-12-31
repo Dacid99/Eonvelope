@@ -272,7 +272,10 @@ def test_fetch_noauth(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": EmailFetchingCriterionChoices.ALL.value},
+        data={
+            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion_arg": "value",
+        },
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
@@ -295,7 +298,10 @@ def test_fetch_auth_other(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": EmailFetchingCriterionChoices.ALL.value},
+        data={
+            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion_arg": "value",
+        },
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -316,7 +322,10 @@ def test_fetch_success_auth_owner(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": EmailFetchingCriterionChoices.ALL.value},
+        data={
+            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion_arg": "value",
+        },
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -324,7 +333,7 @@ def test_fetch_success_auth_owner(
     assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
     assert "error" not in response.data
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL.value
+        fake_mailbox, EmailFetchingCriterionChoices.ALL.value, "value"
     )
 
 
@@ -345,7 +354,10 @@ def test_fetch_failure_auth_owner(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": EmailFetchingCriterionChoices.ALL.value},
+        data={
+            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion_arg": "value",
+        },
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -354,7 +366,7 @@ def test_fetch_failure_auth_owner(
     assert "error" in response.data
     assert fake_error_message in response.data["error"]
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL
+        fake_mailbox, EmailFetchingCriterionChoices.ALL, "value"
     )
 
 
@@ -390,12 +402,59 @@ def test_fetch_auth_owner_bad_criterion(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": faker.word()},
+        data={"criterion": faker.word(), "criterion_arg": "value"},
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion"]
+    print(response.data["criterion"])
     mock_Mailbox_fetch.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_fetch_auth_owner_missing_criterion_arg(
+    faker,
+    fake_mailbox,
+    owner_api_client,
+    mock_Mailbox_fetch,
+    custom_detail_action_url,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
+        ),
+        data={"criterion": EmailFetchingCriterionChoices.SENTSINCE},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    # assert response.data["criterion_arg"]
+    mock_Mailbox_fetch.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_fetch_auth_owner_criterion_arg_not_required(
+    faker,
+    fake_mailbox,
+    owner_api_client,
+    mock_Mailbox_fetch,
+    custom_detail_action_url,
+):
+    """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
+        ),
+        data={"criterion": EmailFetchingCriterionChoices.DAILY},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    fake_mailbox.refresh_from_db()
+    assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
+    assert "error" not in response.data
+    mock_Mailbox_fetch.assert_called_once_with(
+        fake_mailbox, EmailFetchingCriterionChoices.DAILY.value, ""
+    )
 
 
 @pytest.mark.django_db
@@ -412,7 +471,10 @@ def test_fetch_auth_admin(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": EmailFetchingCriterionChoices.ALL.value},
+        data={
+            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion_arg": "value",
+        },
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND

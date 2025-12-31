@@ -643,14 +643,14 @@ def correspondent_payload(faker, fake_email):
 @pytest.fixture
 def daemon_payload(faker, fake_mailbox, fake_daemon):
     """Fixture creating clean :class:`core.models.Daemon` payload with data deviating from the defaults."""
-    # no cryptography going on here
-    fetching_choices = list(fake_mailbox.available_fetching_criteria)
+    fetching_choices = list(fake_mailbox.available_no_arg_fetching_criteria)
     if fake_daemon.fetching_criterion in fetching_choices:
         fetching_choices.remove(fake_daemon.fetching_criterion)
     daemon_data = baker.prepare(
         Daemon,
         mailbox=fake_mailbox,
         fetching_criterion=faker.random.choice(fetching_choices),
+        fetching_criterion_arg=faker.word(),
     )
     payload = model_to_dict(daemon_data)
     payload.pop("id")

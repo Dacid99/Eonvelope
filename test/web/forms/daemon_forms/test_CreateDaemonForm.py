@@ -41,6 +41,11 @@ def test_post_update(fake_daemon, daemon_with_interval_payload):
         form_data["fetching_criterion"]
         == daemon_with_interval_payload["fetching_criterion"]
     )
+    assert "fetching_criterion_arg" in form_data
+    assert (
+        form_data["fetching_criterion_arg"]
+        == daemon_with_interval_payload["fetching_criterion_arg"]
+    )
     assert "interval_every" in form_data
     assert form_data["interval_every"] == daemon_with_interval_payload["interval_every"]
     assert "interval_period" in form_data
@@ -52,7 +57,7 @@ def test_post_update(fake_daemon, daemon_with_interval_payload):
     assert "is_healthy" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data
-    assert len(form_data) == 4
+    assert len(form_data) == 5
 
 
 @pytest.mark.django_db
@@ -118,6 +123,12 @@ def test_get(fake_daemon):
     assert "fetching_criterion" in form_fields
     assert "fetching_criterion" in form_initial_data
     assert form_initial_data["fetching_criterion"] == fake_daemon.fetching_criterion
+    assert "fetching_criterion_arg" in form_fields
+    assert "fetching_criterion_arg" in form_initial_data
+    assert (
+        form_initial_data["fetching_criterion_arg"]
+        == fake_daemon.fetching_criterion_arg
+    )
     assert "interval_every" in form_fields
     assert "interval_every" in form_initial_data
     assert form_initial_data["interval_every"] == fake_daemon.interval.every
@@ -129,4 +140,4 @@ def test_get(fake_daemon):
     assert "is_healthy" not in form_fields
     assert "created" not in form_fields
     assert "updated" not in form_fields
-    assert len(form_fields) == 4
+    assert len(form_fields) == 5

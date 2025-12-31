@@ -105,7 +105,7 @@ class MailboxDetailWithDeleteView(
             )
             return self.get(request)
         try:
-            self.object.fetch(criterion)
+            self.object.fetch(criterion, "")
         except FetcherError as error:
             messages.error(
                 request, _("Fetching failed: %(error)s") % {"error": str(error)}

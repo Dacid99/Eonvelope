@@ -38,6 +38,11 @@ def test_post_update(fake_daemon, daemon_with_interval_payload):
         form_data["fetching_criterion"]
         == daemon_with_interval_payload["fetching_criterion"]
     )
+    assert "fetching_criterion_arg" in form_data
+    assert (
+        form_data["fetching_criterion_arg"]
+        == daemon_with_interval_payload["fetching_criterion_arg"]
+    )
     assert "interval_every" in form_data
     assert form_data["interval_every"] == daemon_with_interval_payload["interval_every"]
     assert "interval_period" in form_data
@@ -50,7 +55,7 @@ def test_post_update(fake_daemon, daemon_with_interval_payload):
     assert "is_healthy" not in form_data
     assert "created" not in form_data
     assert "updated" not in form_data
-    assert len(form_data) == 3
+    assert len(form_data) == 4
 
 
 @pytest.mark.django_db
@@ -91,6 +96,75 @@ def test_post_unavailable_fetching_criterion(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "int_arg_fetching_criterion, bad_int_arg",
+    [
+        (EmailFetchingCriterionChoices.LARGER, "no int"),
+        (EmailFetchingCriterionChoices.SMALLER, "-11"),
+    ],
+)
+def test_post_bad_int_fetching_criterion_arg(
+    fake_daemon,
+    daemon_with_interval_payload,
+    int_arg_fetching_criterion,
+    bad_int_arg,
+):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_with_interval_payload["fetching_criterion"] = int_arg_fetching_criterion
+    daemon_with_interval_payload["fetching_criterion_arg"] = bad_int_arg
+
+    form = BaseDaemonForm(instance=fake_daemon, data=daemon_with_interval_payload)
+
+    assert not form.is_valid()
+    assert form["fetching_criterion_arg"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "date_arg_fetching_criterion",
+    [
+        EmailFetchingCriterionChoices.SENTSINCE,
+    ],
+)
+def test_post_bad_date_fetching_criterion_arg(
+    fake_daemon,
+    daemon_with_interval_payload,
+    date_arg_fetching_criterion,
+):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_with_interval_payload["fetching_criterion"] = date_arg_fetching_criterion
+    daemon_with_interval_payload["fetching_criterion_arg"] = "no time"
+
+    form = BaseDaemonForm(instance=fake_daemon, data=daemon_with_interval_payload)
+
+    assert not form.is_valid()
+    assert form["fetching_criterion_arg"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "arg_fetching_criterion",
+    [
+        EmailFetchingCriterionChoices.BODY,
+        EmailFetchingCriterionChoices.SUBJECT,
+    ],
+)
+def test_post_missing_fetching_criterion_arg(
+    fake_daemon,
+    daemon_with_interval_payload,
+    arg_fetching_criterion,
+):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_with_interval_payload["fetching_criterion"] = arg_fetching_criterion
+    daemon_with_interval_payload["fetching_criterion_arg"] = ""
+
+    form = BaseDaemonForm(instance=fake_daemon, data=daemon_with_interval_payload)
+
+    assert not form.is_valid()
+    assert form["fetching_criterion_arg"].errors
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize("bad_interval_period", ["other"])
 def test_post_bad_interval_period(
     fake_daemon, daemon_with_interval_payload, bad_interval_period
@@ -128,6 +202,12 @@ def test_get(fake_daemon):
     assert "fetching_criterion" in form_fields
     assert "fetching_criterion" in form_initial_data
     assert form_initial_data["fetching_criterion"] == fake_daemon.fetching_criterion
+    assert "fetching_criterion_arg" in form_fields
+    assert "fetching_criterion_arg" in form_initial_data
+    assert (
+        form_initial_data["fetching_criterion_arg"]
+        == fake_daemon.fetching_criterion_arg
+    )
     assert "interval_every" in form_fields
     assert "interval_every" in form_initial_data
     assert form_initial_data["interval_every"] == fake_daemon.interval.every
@@ -140,7 +220,7 @@ def test_get(fake_daemon):
     assert "is_healthy" not in form_fields
     assert "created" not in form_fields
     assert "updated" not in form_fields
-    assert len(form_fields) == 3
+    assert len(form_fields) == 4
 
 
 @pytest.mark.django_db

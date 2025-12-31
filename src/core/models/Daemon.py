@@ -203,7 +203,7 @@ class Daemon(
                 raise ValidationError(
                     {
                         "fetching_criterion_arg": _(
-                            "This fetching_criterion requires an argument."
+                            "This fetching criterion requires an argument."
                         )
                     }
                 )

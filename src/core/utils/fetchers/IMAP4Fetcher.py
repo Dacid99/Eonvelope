@@ -73,6 +73,14 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         EmailFetchingCriterionChoices.WEEKLY.value,
         EmailFetchingCriterionChoices.MONTHLY.value,
         EmailFetchingCriterionChoices.ANNUALLY.value,
+        EmailFetchingCriterionChoices.SENTSINCE.value,
+        EmailFetchingCriterionChoices.SUBJECT.value,
+        EmailFetchingCriterionChoices.BODY.value,
+        EmailFetchingCriterionChoices.FROM.value,
+        EmailFetchingCriterionChoices.KEYWORD.value,
+        EmailFetchingCriterionChoices.UNKEYWORD.value,
+        EmailFetchingCriterionChoices.LARGER.value,
+        EmailFetchingCriterionChoices.SMALLER.value,
     )
     """Tuple of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
     Must be immutable!

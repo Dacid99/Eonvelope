@@ -146,17 +146,16 @@ def test_Mailbox_unique_constraints():
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
-def test_Mailbox_get_available_fetching_criteria(
+def test_Mailbox_available_fetching_criteria(
     fake_mailbox, protocol, expected_fetching_criteria
 ):
-    """Tests :func:`core.models.Mailbox.Mailbox.get_available_fetching_criteria`.
-
-    expected_fetching_criteria: The expected fetching_criteria result parameter.
-    """
+    """Tests :func:`core.models.Mailbox.Mailbox.available_fetching_criteria`."""
 
     fake_mailbox.account.protocol = protocol
-    fake_mailbox.account.save()
-    assert fake_mailbox.available_fetching_criteria == expected_fetching_criteria
+
+    result = fake_mailbox.available_fetching_criteria
+
+    assert result == expected_fetching_criteria
 
 
 @pytest.mark.django_db
@@ -170,20 +169,74 @@ def test_Mailbox_get_available_fetching_criteria(
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
-def test_Mailbox_get_available_fetching_criterion_choices(
+def test_Mailbox_available_no_arg_fetching_criteria(
     fake_mailbox, protocol, expected_fetching_criteria
 ):
-    """Tests :func:`core.models.Mailbox.Mailbox.get_available_fetching_criteria`.
-
-    expected_fetching_criteria: The expected fetching_criteria result parameter.
-    """
+    """Tests :func:`core.models.Mailbox.Mailbox.available_fetching_criteria`."""
 
     fake_mailbox.account.protocol = protocol
-    fake_mailbox.account.save()
-    assert fake_mailbox.available_fetching_criterion_choices == [
+
+    result = fake_mailbox.available_no_arg_fetching_criteria
+
+    assert result == tuple(
+        criterion
+        for criterion in expected_fetching_criteria
+        if criterion.format("test") == criterion
+    )
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "protocol, expected_fetching_criteria",
+    [
+        (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+    ],
+)
+def test_Mailbox_available_fetching_criterion_choices(
+    fake_mailbox, protocol, expected_fetching_criteria
+):
+    """Tests :func:`core.models.Mailbox.Mailbox.available_fetching_criteria`."""
+
+    fake_mailbox.account.protocol = protocol
+
+    result = fake_mailbox.available_fetching_criterion_choices
+
+    assert result == [
         (criterion, label)
         for criterion, label in EmailFetchingCriterionChoices.choices
         if criterion in expected_fetching_criteria
+    ]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "protocol, expected_fetching_criteria",
+    [
+        (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+    ],
+)
+def test_Mailbox_available_no_arg_fetching_criterion_choices(
+    fake_mailbox, protocol, expected_fetching_criteria
+):
+    """Tests :func:`core.models.Mailbox.Mailbox.available_no_arg_fetching_criteria`."""
+
+    fake_mailbox.account.protocol = protocol
+
+    result = fake_mailbox.available_no_arg_fetching_criterion_choices
+
+    assert result == [
+        (criterion, label)
+        for criterion, label in EmailFetchingCriterionChoices.choices
+        if criterion in expected_fetching_criteria
+        and (criterion.format("test") == criterion)
     ]
 
 
@@ -288,15 +341,18 @@ def test_Mailbox_fetch_success(
     in case of success.
     """
     fake_criterion = faker.word()
+    fake_criterion_arg = faker.word()
     fake_mailbox.is_healthy = False
     fake_mailbox.save(update_fields=["is_healthy"])
 
-    fake_mailbox.fetch(fake_criterion)
+    fake_mailbox.fetch(fake_criterion, fake_criterion_arg)
 
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy is True
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
-    mock_fetcher.fetch_emails.assert_called_once_with(fake_mailbox, fake_criterion)
+    mock_fetcher.fetch_emails.assert_called_once_with(
+        fake_mailbox, fake_criterion, fake_criterion_arg
+    )
     assert mock_Email_create_from_email_bytes.call_count == len(
         mock_fetcher.fetch_emails.return_value
     )
@@ -317,17 +373,20 @@ def test_Mailbox_fetch_failure(
     in case fetching fails with a :class:`core.utils.fetchers.exceptions.MailboxError`.
     """
     fake_criterion = faker.word()
+    fake_criterion_arg = faker.word()
     mock_fetcher.fetch_emails.side_effect = MailboxError(Exception())
     fake_mailbox.is_healthy = True
     fake_mailbox.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailboxError):
-        fake_mailbox.fetch(fake_criterion)
+        fake_mailbox.fetch(fake_criterion, fake_criterion_arg)
 
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy is False
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
-    mock_fetcher.fetch_emails.assert_called_once_with(fake_mailbox, fake_criterion)
+    mock_fetcher.fetch_emails.assert_called_once_with(
+        fake_mailbox, fake_criterion, fake_criterion_arg
+    )
     mock_Email_create_from_email_bytes.assert_not_called()
     mock_logger.info.assert_called()
     mock_logger.error.assert_not_called()
@@ -350,7 +409,7 @@ def test_Mailbox_fetch_get_fetcher_error(
     fake_mailbox.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailAccountError):
-        fake_mailbox.fetch("criterion")
+        fake_mailbox.fetch("criterion", "value")
 
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy is True

@@ -267,7 +267,7 @@ class MailboxViewSet(
                     % {"criterion": criterion}
                 },
             )
-        if not criterion_arg and criterion.format("arg") != criterion:
+        if not criterion_arg and (criterion.format("arg") != criterion):
             raise ValidationError(
                 {
                     "criterion_arg": _(

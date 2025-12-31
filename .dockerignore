@@ -86,6 +86,7 @@ $RECYCLE.BIN/
 .vscode/
 .weblate
 .weblate.ini
+.zed/
 __pycache__/
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
@@ -109,6 +110,7 @@ Temporary Items
 Thumbs.db
 Thumbs.db:encryptable
 atlassian-ide-plugin.xml
+codebook.toml
 com_crashlytics_export_strings.xml
 coverage.xml
 crashlytics-build.properties

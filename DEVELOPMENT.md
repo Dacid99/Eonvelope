@@ -166,3 +166,53 @@ git config core.hooksPath tools/githooks/
 ```
 
 - bootstrap 5 intellisense etc.
+
+### Zed
+
+- python config:
+
+```json
+"Python": {
+  "formatter": {
+    "external": {
+      "command": "black",
+      "arguments": [
+        "-",
+        "--config",
+        "tools/black_config",
+        "--stdin-filename",
+        "{buffer_path}",
+      ],
+    },
+  },
+  "format_on_save": true,
+}
+```
+
+- disable HTML autoformatting:
+
+```json
+"HTML": {
+  "format_on_save": "off"
+  "formatter": null
+}
+```
+
+- find poetry venvs
+
+```json
+"terminal": {
+  "detect_venv": {
+    "on": {
+      "directories": [
+        ".env",
+        "env",
+        ".venv",
+        "venv",
+        "/home/david/.cache/pypoetry/virtualenvs/",
+      ],
+      "activate_script": "default",
+    },
+  },
+}
+```

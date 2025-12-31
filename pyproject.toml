@@ -5,7 +5,8 @@ description = "Preserve your emails with this open-source self-hosted email arch
 authors = [
     {name = "David Aderbauer & The Eonvelope Contributors", email = "eonvelope@mailo.com"}
 ]
-license = {text = "AGPL-3.0-or-later"}
+license = "AGPL-3.0-or-later"
+license-files = ["LICENSE", "docs/LICENSE"]
 readme = "README.md"
 requires-python = ">=3.14,<3.15"
 dependencies = [
@@ -52,9 +53,6 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = ">=3.14,<3.15"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.8"
 
 [tool.poetry.group.dev]
 optional=true

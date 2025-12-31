@@ -185,6 +185,7 @@ class Mailbox(
 
         Args:
             criterion: The criterion used to fetch emails from the mailbox.
+            criterion_arg: The argument for the criterion.
 
         Raises:
             MailboxError: Reraised if fetching failed due to a MailboxError.

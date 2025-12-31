@@ -85,6 +85,7 @@ class ExchangeFetcher(BaseFetcher):
 
         Args:
             criterion: The criterion for the Exchange request.
+            criterion_arg: The argument for the criterion.
             base_query: The query to extend based on the criterion.
 
         Returns:
@@ -234,6 +235,8 @@ class ExchangeFetcher(BaseFetcher):
             mailbox: Database model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails in the Exchange server.
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
+            criterion_arg: The argument for the criterion.
+                Defaults to "".
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.

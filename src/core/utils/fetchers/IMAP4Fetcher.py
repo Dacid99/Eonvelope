@@ -97,6 +97,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
 
         Args:
             criterion_name: The criterion to prepare for the IMAP request.
+            criterion_arg: The argument for the criterion.
 
         Returns:
             Formatted criterion to be used in IMAP request.

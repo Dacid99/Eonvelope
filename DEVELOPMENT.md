@@ -43,7 +43,7 @@ poetry install --with dev,docs
 Finally you can activate the venv with
 
 ```bash
-eval $(poetry env activate)
+poetry run poe venv
 ```
 
 You should avoid having the venv inside the workspace as that will brick docker run in most cases.
@@ -51,6 +51,15 @@ You should avoid having the venv inside the workspace as that will brick docker 
 Depending on your OS, the mysqlclient package may cause problems, this can usually be solved by installing a missing system package.
 
 ## Testing
+
+### Linting
+
+There are various tools set up for linting and formatting this projects codebase and documentation.
+The easiest way to run them is via the poe task runner.
+
+```bash
+poe lint
+```
 
 ### Unittests
 

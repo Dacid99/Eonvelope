@@ -27,8 +27,8 @@
   - use more of the unittest api
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
-- use pre-commit
 - split up long functions that are marked as too complex by ruff
+- remove poetry-export plugin from pyproject.toml, install it manually in dockerfile poetry stage (poetry self add )
 
 ## To test
 

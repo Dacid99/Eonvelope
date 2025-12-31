@@ -25,7 +25,9 @@ Then to install the python dependencies start a new virtual environment and acti
 [Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies of this project.
 
 ```bash
-pip install poetry
+pip install pipx
+pipx install poetry
+pipx inject poetry poetry-pre-commit-plugin
 ```
 
 You can then add the tab completions for it by:

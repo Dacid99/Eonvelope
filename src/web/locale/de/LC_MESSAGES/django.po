@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 20:21+0000\n"
-"PO-Revision-Date: 2025-12-31 20:15+0000\n"
-"Last-Translator: \"Mirko P.\" <michoo@outlook.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/"
-">\n"
+"PO-Revision-Date: 2025-12-31 20:49+0000\n"
+"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -496,7 +496,7 @@ msgstr "Kriterium"
 #: src/web/templates/web/daemon/daemon_detail.html:45
 #: src/web/templates/web/daemon/partials/_daemon_card.html:32
 msgid "With value"
-msgstr ""
+msgstr "Mit Wert"
 
 #: src/web/templates/web/daemon/daemon_detail.html:47
 #: src/web/templates/web/daemon/partials/_daemon_card.html:34

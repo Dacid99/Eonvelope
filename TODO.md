@@ -2,7 +2,6 @@
 
 ## Feature ideas
 
-- custom fetching filters with NOT, OR and custom criteria
 - combined filter for correspondent with mention
 - extensive database statistics
 - toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/)

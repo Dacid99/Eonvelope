@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 16:47+0000\n"
 "PO-Revision-Date: 2025-12-31 20:16+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/web/"
 "et/>\n"
 "Language: et\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:55
 #: src/web/filters/EmailFilterSet.py:53 src/web/filters/MailboxFilterSet.py:53
 msgid "Search"
-msgstr ""
+msgstr "Otsi"
 
 #: src/web/filters/AccountFilterSet.py:66
 #: src/web/filters/CorrespondentFilterSet.py:61
@@ -35,7 +35,7 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:65
 #: src/web/filters/MailboxFilterSet.py:67
 msgid "Created before"
-msgstr ""
+msgstr "Loodud enne"
 
 #: src/web/filters/AccountFilterSet.py:72
 #: src/web/filters/CorrespondentFilterSet.py:67
@@ -43,19 +43,19 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:71
 #: src/web/filters/MailboxFilterSet.py:73
 msgid "Created after"
-msgstr ""
+msgstr "Loodud peale"
 
 #: src/web/filters/AttachmentFilterSet.py:78
 #: src/web/filters/CorrespondentEmailFilterSet.py:74
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
-msgstr ""
+msgstr "Saabunud enne"
 
 #: src/web/filters/AttachmentFilterSet.py:84
 #: src/web/filters/CorrespondentEmailFilterSet.py:80
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
-msgstr ""
+msgstr "Saabunud peale"
 
 #: src/web/filters/DaemonFilterSet.py:68
 msgid "Number of intervals"
@@ -67,7 +67,7 @@ msgstr ""
 
 #: src/web/filters/DaemonFilterSet.py:79
 msgid "Enabled"
-msgstr ""
+msgstr "Kasutusel"
 
 #: src/web/forms/UploadEmailForm.py:34
 msgid "File format"
@@ -108,11 +108,11 @@ msgstr ""
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:35
 #: src/web/templates/web/attachment/attachment_detail.html:64
 msgid "Email"
-msgstr ""
+msgstr "E-kiri"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:40
 msgid "Content type"
-msgstr ""
+msgstr "Sisu tüüp"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:68
 #: src/web/tables/email_tables/BaseEmailTable.py:69
@@ -120,7 +120,7 @@ msgstr ""
 #: src/web/templates/web/attachment/partials/_attachment_card.html:22
 #: src/web/templates/web/email/email_detail.html:58
 msgid "bytes"
-msgstr ""
+msgstr "baiti"
 
 #: src/web/tables/daemon_tables/BaseDaemonTable.py:34
 #: src/web/tables/email_tables/BaseEmailTable.py:35
@@ -162,7 +162,7 @@ msgstr ""
 #: src/web/templates/403.html:6 src/web/templates/403.html:10
 #: src/web/templates/403_csrf.html:6 src/web/templates/403_csrf.html:10
 msgid "Forbidden"
-msgstr ""
+msgstr "Keelatud"
 
 #: src/web/templates/403.html:11
 msgid "You are not allowed to access the page you requested."
@@ -208,11 +208,11 @@ msgstr ""
 
 #: src/web/templates/web/account/account_create.html:8
 msgid "Add Account"
-msgstr ""
+msgstr "Lisa kasutajakonto"
 
 #: src/web/templates/web/account/account_create.html:18
 msgid "New Account"
-msgstr ""
+msgstr "Uus kasutajakonto"
 
 #: src/web/templates/web/account/account_create.html:37
 #: src/web/templates/web/daemon/daemon_create.html:36
@@ -221,42 +221,42 @@ msgstr ""
 #: src/web/templates/web/partials/_delete-modal.html:28
 #: src/web/templates/web/partials/_multi_delete-modal.html:25
 msgid "Cancel"
-msgstr ""
+msgstr "Katkesta"
 
 #: src/web/templates/web/account/account_detail.html:6
 msgid "Account Details"
-msgstr ""
+msgstr "Kasutajakonto üksikasjad"
 
 #: src/web/templates/web/account/account_detail.html:37
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: src/web/templates/web/account/account_detail.html:38
 #: src/web/templates/web/account/partials/_account_card.html:24
 msgid "Protocol"
-msgstr ""
+msgstr "Protokoll"
 
 #: src/web/templates/web/account/account_detail.html:40
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: src/web/templates/web/account/account_detail.html:44
 msgid "Default"
-msgstr ""
+msgstr "Vaikimisi"
 
 #: src/web/templates/web/account/account_detail.html:48
 msgid "Timeout"
-msgstr ""
+msgstr "Aegumine"
 
 #: src/web/templates/web/account/account_detail.html:52
 msgid "None"
-msgstr ""
+msgstr "Puudub"
 
 #: src/web/templates/web/account/account_detail.html:57
 #: src/web/templates/web/daemon/daemon_detail.html:54
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
 msgid "Latest Error"
-msgstr ""
+msgstr "Viimane viga"
 
 #: src/web/templates/web/account/account_detail.html:61
 #: src/web/templates/web/daemon/daemon_detail.html:58
@@ -274,7 +274,7 @@ msgstr ""
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:11
 #: src/web/templates/web/partials/_header.html:126
 msgid "Mailboxes"
-msgstr ""
+msgstr "Postkastid"
 
 #: src/web/templates/web/account/account_detail.html:96
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
@@ -305,7 +305,7 @@ msgstr ""
 #: src/web/templates/web/dashboard.html:69
 #: src/web/templates/web/partials/_header.html:104
 msgid "Accounts"
-msgstr ""
+msgstr "Kasutajakontod"
 
 #: src/web/templates/web/account/partials/_add_button.html:6
 msgid "Add account"
@@ -346,7 +346,7 @@ msgstr ""
 
 #: src/web/templates/web/attachment/attachment_detail.html:38
 msgid "Size"
-msgstr ""
+msgstr "Suurus"
 
 #: src/web/templates/web/attachment/attachment_detail.html:42
 msgid "Content Disposition"
@@ -368,7 +368,7 @@ msgstr ""
 #: src/web/templates/web/email/email_detail.html:133
 #: src/web/templates/web/partials/_header.html:56
 msgid "Attachments"
-msgstr ""
+msgstr "Manused"
 
 #: src/web/templates/web/attachment/partials/_attachment_card.html:22
 #: src/web/templates/web/email/email_detail.html:58
@@ -420,11 +420,11 @@ msgstr ""
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:49
 msgid "Subscribe"
-msgstr ""
+msgstr "Telli"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:56
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Loobu tellimusest"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:64
 msgid "Post"
@@ -548,7 +548,7 @@ msgstr ""
 
 #: src/web/templates/web/dashboard.html:6
 msgid "Dashboard"
-msgstr ""
+msgstr "Juhtpaneel"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/web/templates/web/dashboard.html:11
@@ -577,7 +577,7 @@ msgstr ""
 #: src/web/templates/web/email/archive/base_archive.html:6
 #: src/web/templates/web/partials/_header.html:42
 msgid "Timeline"
-msgstr ""
+msgstr "Ajajoon"
 
 #: src/web/templates/web/email/archive/base_archive.html:15
 msgid "Email Timeline"
@@ -745,7 +745,7 @@ msgstr ""
 #: src/web/templates/web/partials/_delete-modal.html:17
 #: src/web/templates/web/partials/_multi_delete-modal.html:15
 msgid "Close"
-msgstr ""
+msgstr "Sulge"
 
 #: src/web/templates/web/layouts/base_list.html:38
 msgid "Select All"

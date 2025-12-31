@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 20:21+0000\n"
-"PO-Revision-Date: 2025-12-31 20:14+0000\n"
-"Last-Translator: \"Mirko P.\" <michoo@outlook.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/core/de/"
-">\n"
+"PO-Revision-Date: 2025-12-31 20:49+0000\n"
+"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/core/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -64,10 +64,8 @@ msgid "FLAGGED emails"
 msgstr "MARKIERTE E-Mails"
 
 #: src/core/constants.py:73
-#, fuzzy
-#| msgid "All emails that are not RECENT"
 msgid "All emails that are not FLAGGED"
-msgstr "Alle E-Mails die nicht AKTUELL sind"
+msgstr "Alle E-Mails die nicht MARKIERT sind"
 
 #: src/core/constants.py:76
 msgid "All email DRAFTs"
@@ -94,40 +92,36 @@ msgid "All UNDELETED emails"
 msgstr "Alle UNGELÖSCHTEN E-Mails"
 
 #: src/core/constants.py:95
-#, fuzzy
-#| msgid "All emails received the last YEAR"
 msgid "All emails with the given KEYWORD"
-msgstr "Alle E-Mails des letzten JAHRES"
+msgstr "Alle E-Mails mit dem gegebenen STICHWORT"
 
 #: src/core/constants.py:98
-#, fuzzy
-#| msgid "All emails that are not RECENT"
 msgid "All emails without the given KEYWORD"
-msgstr "Alle E-Mails die nicht AKTUELL sind"
+msgstr "Alle E-Mails ohne das gegebene STICHWORT"
 
 #: src/core/constants.py:101
 msgid "All emails LARGER than the given size"
-msgstr ""
+msgstr "Alle E-Mails größer als die angegebene Größe"
 
 #: src/core/constants.py:104
 msgid "All emails SMALLER than the given size"
-msgstr ""
+msgstr "Alle E-Mails kleiner als die angegebene Größe"
 
 #: src/core/constants.py:107
 msgid "All emails with SUBJECT containing the given text"
-msgstr ""
+msgstr "Alle E-Mails mit dem gegebenen Wort im BETREFF"
 
 #: src/core/constants.py:110
 msgid "All emails with BODY containing the given text"
-msgstr ""
+msgstr "Alle E-Mails mit dem gegebenen Wort im HAUPTTEXT"
 
 #: src/core/constants.py:113
 msgid "All emails sent FROM the given address"
-msgstr ""
+msgstr "Alle E-Mails die VON der gegebenen Adresse gesendet wurden"
 
 #: src/core/constants.py:116
 msgid "All emails SENT SINCE the given date"
-msgstr ""
+msgstr "Alle E-Mails die SEIT dem gegebenen Datum gesendet wurden"
 
 #: src/core/constants.py:123
 msgid "IMAP4"
@@ -646,11 +640,11 @@ msgstr "Das Kriterium nach dem Emails abgerufen werden."
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:102
 msgid "filter value"
-msgstr ""
+msgstr "Filterwert"
 
 #: src/core/models/Daemon.py:103
 msgid "Additional value for the selection criterion."
-msgstr ""
+msgstr "Zusätzlicher Wert für das Abrufkriterium.."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:112
@@ -690,23 +684,21 @@ msgid "No valid mailbox selected!"
 msgstr "Keine gültige Mailbox ausgewählt!"
 
 #: src/core/models/Daemon.py:206
-#, fuzzy
-#| msgid "This fetching criterion is not available for this mailbox!"
 msgid "This fetching criterion requires an argument."
-msgstr "Dieses Abfragekriterium ist für diese Mailbox nicht verfügbar!"
+msgstr "Dieses Abfragekriterium benötigt ein Argument."
 
 #: src/core/models/Daemon.py:219
 #, python-format
 msgid "Date values must be given in format %(format)s."
-msgstr ""
+msgstr "Daten müssen im Format %(format)s gegeben werden."
 
 #: src/core/models/Daemon.py:232
 msgid "This value must be an integer."
-msgstr ""
+msgstr "DIeser Wert muss eine ganze Zahl sein."
 
 #: src/core/models/Daemon.py:238
 msgid "This value must be a positive number."
-msgstr ""
+msgstr "Dieser Wert muss eine positive Zahl sein."
 
 #: src/core/models/Email.py:97
 msgid ""

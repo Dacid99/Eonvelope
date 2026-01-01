@@ -8,18 +8,18 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 20:21+0000\n"
-"PO-Revision-Date: 2025-12-31 20:16+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-01-02 08:01+0000\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/core/"
 "uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.15.1\n"
 
 #: src/core/constants.py:40
@@ -67,10 +67,8 @@ msgid "FLAGGED emails"
 msgstr "ПОМІЧЕНІ електронні листи"
 
 #: src/core/constants.py:73
-#, fuzzy
-#| msgid "All emails that are not RECENT"
 msgid "All emails that are not FLAGGED"
-msgstr "Усі електронні листи, які не є НЕЩОДАВНІМИ"
+msgstr "Усі електронні листи, які не ПОМІЧЕНО"
 
 #: src/core/constants.py:76
 msgid "All email DRAFTs"
@@ -97,40 +95,36 @@ msgid "All UNDELETED emails"
 msgstr "Усі НЕВИДАЛЕНІ електронні листи"
 
 #: src/core/constants.py:95
-#, fuzzy
-#| msgid "All emails received the last YEAR"
 msgid "All emails with the given KEYWORD"
-msgstr "Усі електронні листи, отримані за останній РІК"
+msgstr "Усі електронні листи з заданим КЛЮЧОВИМ СЛОВОМ"
 
 #: src/core/constants.py:98
-#, fuzzy
-#| msgid "All emails that are not RECENT"
 msgid "All emails without the given KEYWORD"
-msgstr "Усі електронні листи, які не є НЕЩОДАВНІМИ"
+msgstr "Усі електронні листи без заданого КЛЮЧОВОГО СЛОВА"
 
 #: src/core/constants.py:101
 msgid "All emails LARGER than the given size"
-msgstr ""
+msgstr "Усі електронні листи БІЛЬШІ за заданий розмір"
 
 #: src/core/constants.py:104
 msgid "All emails SMALLER than the given size"
-msgstr ""
+msgstr "Усі електронні листи МЕНШІ за заданий розмір"
 
 #: src/core/constants.py:107
 msgid "All emails with SUBJECT containing the given text"
-msgstr ""
+msgstr "Усі електронні листи з ТЕМОЮ, що містять заданий текст"
 
 #: src/core/constants.py:110
 msgid "All emails with BODY containing the given text"
-msgstr ""
+msgstr "Усі електронні листи з тілом BODY, що містить заданий текст"
 
 #: src/core/constants.py:113
 msgid "All emails sent FROM the given address"
-msgstr ""
+msgstr "Усі електронні листи, надіслані З вказаної адреси"
 
 #: src/core/constants.py:116
 msgid "All emails SENT SINCE the given date"
-msgstr ""
+msgstr "Усі електронні листи, НАДІСЛАНІ З зазначеної дати"
 
 #: src/core/constants.py:123
 msgid "IMAP4"
@@ -649,11 +643,11 @@ msgstr "Критерій вибору електронних листів для
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:102
 msgid "filter value"
-msgstr ""
+msgstr "значення фільтра"
 
 #: src/core/models/Daemon.py:103
 msgid "Additional value for the selection criterion."
-msgstr ""
+msgstr "Додаткове значення для критерію вибору."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:112
@@ -695,23 +689,21 @@ msgid "No valid mailbox selected!"
 msgstr "Не вибрано дійсну поштову скриньку!"
 
 #: src/core/models/Daemon.py:206
-#, fuzzy
-#| msgid "This fetching criterion is not available for this mailbox!"
 msgid "This fetching criterion requires an argument."
-msgstr "Цей критерій отримання недоступний для цієї поштової скриньки!"
+msgstr "Цей критерій отримання вимагає аргументу."
 
 #: src/core/models/Daemon.py:219
 #, python-format
 msgid "Date values must be given in format %(format)s."
-msgstr ""
+msgstr "Значення дати мають бути вказані у форматі %(format)s."
 
 #: src/core/models/Daemon.py:232
 msgid "This value must be an integer."
-msgstr ""
+msgstr "Це значення має бути цілим числом."
 
 #: src/core/models/Daemon.py:238
 msgid "This value must be a positive number."
-msgstr ""
+msgstr "Це значення має бути додатним числом."
 
 #: src/core/models/Email.py:97
 msgid ""

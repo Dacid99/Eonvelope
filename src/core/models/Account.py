@@ -42,6 +42,7 @@ from core.utils.fetchers import (
     ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
+    JMAPFetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -235,6 +236,8 @@ class Account(
             return POP3_SSL_Fetcher
         if self.protocol == ExchangeFetcher.PROTOCOL:
             return ExchangeFetcher
+        if self.protocol == JMAPFetcher.PROTOCOL:
+            return JMAPFetcher
 
         logger.error(
             "The protocol %s is not implemented in a fetcher class!", self.protocol

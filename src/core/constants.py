@@ -135,6 +135,9 @@ class EmailProtocolChoices(TextChoices):
     EXCHANGE = "EXCHANGE", _("Microsoft Exchange")
     """Microsoft's Exchange protocol"""
 
+    JMAP = "JMAP", _("JMAP")
+    """The JMAP protocol"""
+
 
 class HeaderFields:
     """Namespace class with all header fields that have their own column in the emails table.

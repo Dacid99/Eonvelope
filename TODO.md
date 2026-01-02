@@ -16,7 +16,6 @@
 - async parsing, sync saving
 - download for account and batchdownload for mailbox
 - show pwd button
-- add jmap protocol
 
 ## To refactor
 

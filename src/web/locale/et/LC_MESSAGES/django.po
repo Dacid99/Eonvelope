@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 20:21+0000\n"
-"PO-Revision-Date: 2025-12-31 20:16+0000\n"
+"PO-Revision-Date: 2026-01-04 11:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/web/"
 "et/>\n"
@@ -71,11 +71,11 @@ msgstr "Kasutusel"
 
 #: src/web/forms/UploadEmailForm.py:34
 msgid "File format"
-msgstr ""
+msgstr "Failivorming"
 
 #: src/web/forms/UploadEmailForm.py:35
 msgid "Select the format of the email file you want to upload."
-msgstr ""
+msgstr "Palun vali üleslaaditava e-kirja vorming."
 
 #: src/web/forms/UploadEmailForm.py:40
 msgid "Email or Mailbox file"
@@ -145,19 +145,19 @@ msgstr ""
 #: src/web/templates/web/mailbox/mailbox_detail.html:40
 #: src/web/templates/web/mailbox/partials/_mailbox_card.html:24
 msgid "Account"
-msgstr ""
+msgstr "Kasutajakonto"
 
 #: src/web/templates/400.html:6 src/web/templates/400.html:10
 msgid "Request Error"
-msgstr ""
+msgstr "Päringu viga"
 
 #: src/web/templates/400.html:11
 msgid "There was something wrong with your request."
-msgstr ""
+msgstr "Midagi oli valesti sinu päringuga."
 
 #: src/web/templates/400.html:12
 msgid "First aid: Please try again."
-msgstr ""
+msgstr "Esmalt palun korda päringut."
 
 #: src/web/templates/403.html:6 src/web/templates/403.html:10
 #: src/web/templates/403_csrf.html:6 src/web/templates/403_csrf.html:10
@@ -381,7 +381,7 @@ msgstr ""
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:7
 msgid "No attachments found."
-msgstr ""
+msgstr "Manuseid ei leidu."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:11
 msgid ""
@@ -942,7 +942,7 @@ msgstr ""
 
 #: src/web/templates/web/partials/_header.html:21
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Lülita menüü sisse/välja"
 
 #: src/web/templates/web/partials/_header.html:32
 #: src/web/templates/web/partials/_header.html:58
@@ -1012,7 +1012,7 @@ msgstr ""
 
 #: src/web/templates/web/partials/_submit_form-button.html:3
 msgid "Save"
-msgstr ""
+msgstr "Salvesta"
 
 #: src/web/templates/web/partials/_test-button.html:4
 msgid "Test"

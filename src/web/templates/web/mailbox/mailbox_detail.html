@@ -38,7 +38,7 @@
 
 {% block card_subtitle %}
     {% translate "Account" %}: <a href="{{ object.account.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.account.mail_address }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.account.complete_mail_address }}</a>
 {% endblock card_subtitle %}
 
 

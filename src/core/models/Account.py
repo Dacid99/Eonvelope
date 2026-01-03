@@ -322,6 +322,21 @@ class Account(
         logger.info("Successfully updated mailboxes.")
 
     @property
+    def complete_mail_address(self) -> str:
+        """The complete mail address of the account.
+        If the username (:attr:`mail_address`) is not valid a valid address,
+        constructs one with :attr:`mail_host`.
+
+        Returns:
+            A valid mail address for the account.
+        """
+        return (
+            self.mail_address
+            if "@" in self.mail_address
+            else f"{self.mail_address}@{self.mail_host}"
+        )
+
+    @property
     def mail_host_address(self) -> str:
         """The mail_host address with port specified for the hostname.
 

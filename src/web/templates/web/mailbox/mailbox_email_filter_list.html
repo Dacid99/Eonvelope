@@ -5,5 +5,5 @@
 {% block header_subtitle %}
     {% translate "in" %} <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
     href="{{ mailbox.get_absolute_url }}">{{ mailbox.name }}</a> {% translate "of" %} <a class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-    href="{{ mailbox.account.get_absolute_url }}">{{ mailbox.account.mail_address }}</a>
+    href="{{ mailbox.account.get_absolute_url }}">{{ mailbox.account.complete_mail_address }}</a>
 {% endblock header_subtitle %}

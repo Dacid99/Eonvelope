@@ -63,7 +63,7 @@
         </li>
         <li class="list-group-item list-group-item-action">
             {% translate "Account" %}: <a href="{{ object.mailbox.account.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.mail_address }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.complete_mail_address }}</a>
         </li>
         <div class="accordion accordion-flush" id="content-accordion">
             <li class="list-group-item accordion-item">

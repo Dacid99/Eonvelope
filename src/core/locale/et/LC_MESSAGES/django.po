@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 20:21+0000\n"
-"PO-Revision-Date: 2025-12-31 20:15+0000\n"
+"PO-Revision-Date: 2026-01-04 11:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/core/"
 "et/>\n"
@@ -21,107 +21,107 @@ msgstr ""
 
 #: src/core/constants.py:40
 msgid "All emails received the last DAY"
-msgstr ""
+msgstr "Kõik eelmisel PÄEVAL saabunud e-kirjad"
 
 #: src/core/constants.py:43
 msgid "All emails received the last WEEK"
-msgstr ""
+msgstr "Kõik eelmisel NÄDALAL saabunud e-kirjad"
 
 #: src/core/constants.py:46
 msgid "All emails received the last MONTH"
-msgstr ""
+msgstr "Kõik eelmisel KUUL saabunud e-kirjad"
 
 #: src/core/constants.py:49
 msgid "All emails received the last YEAR"
-msgstr ""
+msgstr "Kõik eelmisel AASTAL saabunud e-kirjad"
 
 #: src/core/constants.py:52
 msgid "All RECENT emails"
-msgstr ""
+msgstr "Kõik HILJUTISED e-kirjad"
 
 #: src/core/constants.py:55
 msgid "All UNSEEN emails"
-msgstr ""
+msgstr "Kõik NÄGEMATA e-kirjad"
 
 #: src/core/constants.py:58
 msgid "All SEEN emails"
-msgstr ""
+msgstr "Kõik NÄHTUD e-kirjad"
 
 #: src/core/constants.py:61
 msgid "All emails"
-msgstr ""
+msgstr "Kõik e-kirjad"
 
 #: src/core/constants.py:64
 msgid "All RECENT and UNSEEN emails"
-msgstr ""
+msgstr "Kõik HILJUTISED ja NÄGEMATA e-kirjad"
 
 #: src/core/constants.py:67
 msgid "All emails that are not RECENT"
-msgstr ""
+msgstr "Kõik kirjad, mis pole HILJUTISED"
 
 #: src/core/constants.py:70
 msgid "FLAGGED emails"
-msgstr ""
+msgstr "MÄRGISTATUD e-kirjad"
 
 #: src/core/constants.py:73
 msgid "All emails that are not FLAGGED"
-msgstr ""
+msgstr "Kõik e-kirjad, mis on MÄRGISTAMATA"
 
 #: src/core/constants.py:76
 msgid "All email DRAFTs"
-msgstr ""
+msgstr "Kõik e-kirjade KAVANDID"
 
 #: src/core/constants.py:79
 msgid "All emails that are not DRAFTs"
-msgstr ""
+msgstr "Kõik e-kirjad, mis pole KAVANDID"
 
 #: src/core/constants.py:82
 msgid "All ANSWERED emails"
-msgstr ""
+msgstr "Kõik VASTATUD e-kirjad"
 
 #: src/core/constants.py:85
 msgid "All UNANSWERED emails"
-msgstr ""
+msgstr "Kõik VASTAMATA e-kirjad"
 
 #: src/core/constants.py:88
 msgid "All DELETED emails"
-msgstr ""
+msgstr "Kõik KUSTUTATAUD e-kirjad"
 
 #: src/core/constants.py:91
 msgid "All UNDELETED emails"
-msgstr ""
+msgstr "Kõik KUSTUTAMATA e-kirjad"
 
 #: src/core/constants.py:95
 msgid "All emails with the given KEYWORD"
-msgstr ""
+msgstr "Kõik antud MÄRKSÕNAGA e-kirjad"
 
 #: src/core/constants.py:98
 msgid "All emails without the given KEYWORD"
-msgstr ""
+msgstr "Kõik antud MÄRKSÕNATA e-kirjad"
 
 #: src/core/constants.py:101
 msgid "All emails LARGER than the given size"
-msgstr ""
+msgstr "Kõik antud mahust SUUREMAD e-kirjad"
 
 #: src/core/constants.py:104
 msgid "All emails SMALLER than the given size"
-msgstr ""
+msgstr "Kõik antud mahust VÄIKSEMAD e-kirjad"
 
 #: src/core/constants.py:107
 msgid "All emails with SUBJECT containing the given text"
-msgstr ""
+msgstr "Kõik e-kirjad, mille PEALKIRJAS leidub antud tekst"
 
 #: src/core/constants.py:110
 msgid "All emails with BODY containing the given text"
-msgstr ""
+msgstr "Kõik e-kirjad, mille SISUS leidub antud tekst"
 
 #: src/core/constants.py:113
 msgid "All emails sent FROM the given address"
-msgstr ""
+msgstr "Kõik antud aadressilt SAADETUD e-kirjad"
 
 #: src/core/constants.py:116
 msgid "All emails SENT SINCE the given date"
-msgstr ""
+msgstr "Kõik e-kirjad, SAADETUD PEALE antud kuupäeva"
 
 #: src/core/constants.py:123
 msgid "IMAP4"
@@ -213,41 +213,41 @@ msgstr ""
 
 #: src/core/constants.py:204 src/core/constants.py:216
 msgid ".zip with .eml files inside"
-msgstr ""
+msgstr "sees on .zip koos .eml failidega"
 
 #: src/core/constants.py:205 src/core/constants.py:217
 msgid ".mbox"
-msgstr ""
+msgstr ".mbox"
 
 #: src/core/constants.py:206 src/core/constants.py:218
 msgid ".babyl"
-msgstr ""
+msgstr ".babyl"
 
 #: src/core/constants.py:207 src/core/constants.py:219
 msgid ".mmdf"
-msgstr ""
+msgstr ".mmdf"
 
 #: src/core/constants.py:208 src/core/constants.py:220
 msgid ".zip with mh mailbox inside"
-msgstr ""
+msgstr "sees on .zip koos .mh mailboxiga"
 
 #: src/core/constants.py:209 src/core/constants.py:221
 msgid ".zip with maildir mailbox inside"
-msgstr ""
+msgstr "sees on .zip koos maildir mailboxiga"
 
 #: src/core/constants.py:215
 msgid ".eml"
-msgstr ""
+msgstr ".eml"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/FavoriteModelMixin.py:33
 msgid "favorite status"
-msgstr ""
+msgstr "olek lemmikuna"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/FilePathModelMixin.py:48
 msgid "filepath"
-msgstr ""
+msgstr "faili asukoht"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:38
@@ -257,22 +257,22 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:46
 msgid "last error"
-msgstr ""
+msgstr "viimane viga"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:54
 msgid "time of last error occurrence"
-msgstr ""
+msgstr "viimase vea aeg"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:31
 msgid "time of creation"
-msgstr ""
+msgstr "loomise aeg"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:38
 msgid "time of last update"
-msgstr ""
+msgstr "viimase uuenduse aeg"
 
 #: src/core/models/Account.py:75
 msgid ""
@@ -289,7 +289,7 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:86 src/core/models/Correspondent.py:77
 msgid "email address"
-msgstr ""
+msgstr "e-posti aadress"
 
 #: src/core/models/Account.py:87
 msgid "The mail address to the account."

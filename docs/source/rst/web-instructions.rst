@@ -40,6 +40,11 @@ Fill out the form with the credentials of the account, the fields marked with a 
 In case you have set up two-factor-authentication for your mailaccount,
 you need an app-password (can be created in the settings of your email account)
 in lieu of a your plain password.
+
+.. note::
+    JMAP allows authentication via a apitoken.
+    To use this option, omit the username and put the token as password.
+
 You can find the information about mailserver-URL, protocol, port in the documentation
 of your email provider.
 The following protocols are supported:

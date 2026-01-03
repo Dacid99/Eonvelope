@@ -98,3 +98,16 @@ To authenticate via the API you have 4 options:
 
 
 For more details see `the django restframework documentation on the matter <https://www.django-rest-framework.org/api-guide/authentication/#sessionauthentication>`_.
+
+Gotcha Notes
+------------
+
+There may be a few unexpected quirks in the api, especially when it comes to field naming.
+These are listed here.
+
+Version 1
+:::::::::
+
+The mail_address field returned by account endpoints refers to the username field from the web interface.
+It does NOT need to contain a valid mail_address.
+The outward facing name in the web interface was changed to 'username' for semantic compatibility with JMAP.

@@ -474,6 +474,53 @@ def test_Account_update_mailboxes_get_fetcher_error(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize(
+    "mail_address, user_username, mail_host , expected_address",
+    [
+        ("no_at", "someone", "stalwart.tld", "no_at@stalwart.tld"),
+        ("", "admin", "iloveeonvelope.org", "admin@iloveeonvelope.org"),
+        ("valid@mail.address", "server.com", "standard", "valid@mail.address"),
+    ],
+)
+def test_Account_complete_mail_address(
+    fake_account, mail_address, user_username, mail_host, expected_address
+):
+    """Tests the complete_mail_address property of :class:`core.models.Account`
+    for all relevant cases.
+    """
+    fake_account.mail_address = mail_address
+    fake_account.mail_host = mail_host
+    fake_account.user.username = user_username
+
+    result = fake_account.complete_mail_address
+
+    assert result == expected_address
+    assert "@" in result
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "mail_host, mail_host_port, expected_address",
+    [
+        ("stalwart.tld", "433", "stalwart.tld:433"),
+        ("iloveeonvelope.org", None, "iloveeonvelope.org"),
+    ],
+)
+def test_Account_mail_host_address(
+    fake_account, mail_host, mail_host_port, expected_address
+):
+    """Tests the mail_host_address property of :class:`core.models.Account`
+    for all relevant cases.
+    """
+    fake_account.mail_host = mail_host
+    fake_account.mail_host_port = mail_host_port
+
+    result = fake_account.mail_host_address
+
+    assert result == expected_address
+
+
+@pytest.mark.django_db
 def test_Account_get_absolute_url(fake_account):
     """Tests :func:`core.models.Account.Account.get_absolute_url`."""
     result = fake_account.get_absolute_url()

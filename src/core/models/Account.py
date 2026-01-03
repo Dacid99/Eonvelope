@@ -326,15 +326,13 @@ class Account(
         """The complete mail address of the account.
         If the username (:attr:`mail_address`) is not valid a valid address,
         constructs one with :attr:`mail_host`.
+        If there is no username, guess it from the Eonvelope users name.
 
         Returns:
             A valid mail address for the account.
         """
-        return (
-            self.mail_address
-            if "@" in self.mail_address
-            else f"{self.mail_address}@{self.mail_host}"
-        )
+        username = self.mail_address or self.user.username
+        return username if "@" in username else f"{username}@{self.mail_host}"
 
     @property
     def mail_host_address(self) -> str:

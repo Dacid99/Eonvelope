@@ -160,15 +160,15 @@ class Account(
 
         constraints: ClassVar[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
-                fields=["mail_address", "protocol", "user"],
-                name="account_unique_together_mail_address_protocol_user",
+                fields=["mail_address", "password", "protocol", "user"],
+                name="account_unique_together_mail_address_password_protocol_user",
             ),
             models.CheckConstraint(
                 condition=models.Q(protocol__in=EmailProtocolChoices.values),
                 name="protocol_valid_choice",
             ),
         ]
-        """`mail_address` and :attr:`user` in combination are unique fields.
+        """:attr:`mail_address`, :attr:`password`, :attr:`protocol` and :attr:`user` in combination are unique fields.
         Choices for :attr:`protocol` are enforced on db level.
         """
 

@@ -123,33 +123,96 @@ def test_Account_foreign_key_deletion(fake_account):
 @pytest.mark.django_db
 def test_Account_unique_constraints(django_user_model):
     """Tests the unique constraints of :class:`core.models.Account.Account`."""
-
+    # ruff: disable[S106]
     account_1 = baker.make(
-        Account, mail_address="abc123", protocol=EmailProtocolChoices.IMAP
+        Account,
+        mail_address="abc123",
+        password="passwordlol",
+        protocol=EmailProtocolChoices.IMAP,
     )
     account_2 = baker.make(
-        Account, mail_address="abc123", protocol=EmailProtocolChoices.IMAP
+        Account,
+        mail_address="abc123",
+        password="passwordlol",
+        protocol=EmailProtocolChoices.IMAP,
     )
     assert account_1.mail_address == account_2.mail_address
+    assert account_1.password == account_2.password
     assert account_1.protocol == account_2.protocol
     assert account_1.user != account_2.user
 
     user = baker.make(django_user_model)
 
-    account_1 = baker.make(Account, user=user, protocol=EmailProtocolChoices.IMAP)
-    account_2 = baker.make(Account, user=user, protocol=EmailProtocolChoices.IMAP)
+    account_1 = baker.make(
+        Account,
+        user=user,
+        mail_address="user1@server.com",
+        password="qwerty1234",
+        protocol=EmailProtocolChoices.EXCHANGE,
+    )
+    account_2 = baker.make(
+        Account,
+        user=user,
+        mail_address="user2@server.com",
+        password="qwerty1234",
+        protocol=EmailProtocolChoices.EXCHANGE,
+    )
     assert account_1.mail_address != account_2.mail_address
+    assert account_1.password == account_2.password
+    assert account_1.protocol == account_2.protocol
+    assert account_1.user == account_2.user
+
+    account_1 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="abcdef",
+        protocol=EmailProtocolChoices.POP3_SSL,
+    )
+    account_2 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="abcdef",
+        protocol=EmailProtocolChoices.POP3,
+    )
+    assert account_1.mail_address == account_2.mail_address
+    assert account_1.password == account_2.password
+    assert account_1.protocol != account_2.protocol
+    assert account_1.user == account_2.user
+
+    account_1 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="123456",
+        protocol=EmailProtocolChoices.JMAP,
+    )
+    account_2 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="abcdef",
+        protocol=EmailProtocolChoices.JMAP,
+    )
+    assert account_1.mail_address == account_2.mail_address
+    assert account_1.password != account_2.password
     assert account_1.protocol == account_2.protocol
     assert account_1.user == account_2.user
 
     baker.make(
-        Account, mail_address="abc123", user=user, protocol=EmailProtocolChoices.IMAP
+        Account,
+        user=user,
+        mail_address="abc123",
+        password="mypassword",
+        protocol=EmailProtocolChoices.IMAP,
     )
     with pytest.raises(IntegrityError):
         baker.make(
             Account,
-            mail_address="abc123",
             user=user,
+            mail_address="abc123",
+            password="mypassword",
             protocol=EmailProtocolChoices.IMAP,
         )
 

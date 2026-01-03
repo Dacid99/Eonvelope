@@ -313,3 +313,16 @@ class Account(
             Mailbox.create_from_data(mailbox_data, self)
 
         logger.info("Successfully updated mailboxes.")
+
+    @property
+    def mail_host_address(self) -> str:
+        """The mail_host address with port specified for the hostname.
+
+        Returns:
+            The complete host address.
+        """
+        return (
+            f"{self.mail_host}:{self.mail_host_port}"
+            if self.mail_host_port
+            else self.mail_host
+        )

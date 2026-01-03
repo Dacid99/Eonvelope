@@ -157,11 +157,7 @@ class ExchangeFetcher(BaseFetcher):
             if self.account.mail_host.startswith("http://")
             or self.account.mail_host.startswith("https://")
             else exchangelib.Configuration(
-                server=(
-                    f"{self.account.mail_host}:{self.account.mail_host_port}"
-                    if self.account.mail_host_port
-                    else self.account.mail_host
-                ),
+                server=self.account.mail_host_address,
                 credentials=credentials,
                 retry_policy=retry_policy,
             )

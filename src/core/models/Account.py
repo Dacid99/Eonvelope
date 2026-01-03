@@ -81,13 +81,17 @@ class Account(
 
     MAX_MAIL_HOST_PORT = 65535
 
-    mail_address = models.EmailField(
+    mail_address = models.CharField(
         max_length=255,
+        default="",
+        blank=True,
         # Translators: Do not capitalize the very first letter unless your language requires it.
-        verbose_name=_("email address"),
-        help_text=_("The mail address to the account."),
+        verbose_name=_("username"),
+        help_text=_("The username of the account. Typically the mail address."),
     )
-    """The mail address of the account. Unique together with :attr:`user`."""
+    """The username of the account. Unique together with :attr:`user`.
+    Named mail_address for continuity.
+    """
 
     password = models.CharField(
         max_length=255,

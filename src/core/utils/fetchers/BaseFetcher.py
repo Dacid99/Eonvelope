@@ -137,10 +137,13 @@ class BaseFetcher(ABC):
 
         Raises:
             ValueError: If the emails mailbox is not in this fetchers account.
+            FileNotFoundError: If the emails file_path is not set.
         """
         if email.mailbox.account != self.account:
             self.logger.error("Mailbox of %s is not in %s!", email, self.account)
             raise ValueError(f"Mailbox of {email} is not in {self.account}!")
+        if not email.file_path:
+            raise FileNotFoundError("Email has no stored eml file.")
 
     @abstractmethod
     def close(self) -> None:

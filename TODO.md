@@ -4,7 +4,7 @@
 
 - combined filter for correspondent with mention
 - extensive database statistics
-- toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/)
+- toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/) or [popovers](https://developer.chrome.com/blog/popover-hint?hl=de)
 - mechanism to remove all correspondents without emails
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
@@ -16,6 +16,8 @@
 - async parsing, sync saving
 - download for account and batchdownload for mailbox
 - show pwd button
+- structured json based logging messages
+- refine fetchererrors into errors for auth, connection, etc.
 
 ## To refactor
 

@@ -3,6 +3,7 @@
 ## Version 0.4.0
 
 - Features:
+  - support for JMAP protocol
   - more fetching criteria
   - fetching criteria with custom filter value
 

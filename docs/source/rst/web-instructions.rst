@@ -49,6 +49,7 @@ The following protocols are supported:
 - POP3
 - POP3 (unencrypted)
 - Microsoft Exchange
+- JMAP
 
 .. note::
     If possible, use IMAP4 via SSL.
@@ -78,6 +79,8 @@ the request is treated as if the server was unavailable.
 If you know the mailserver of an account to be slow, you can set a larger value.
 
 For Exchange this enables a retry and faulttolerance logic timing out after the given value.
+
+Unfortunately, JMAP doesn't use the timeout value at this point. Just keep the default until further notice.
 
 Don't use larger timeout values than 60 seconds, as this may significantly impact
 the runtime of individual fetch operations and may at worst delay the archiving schedule.
@@ -289,7 +292,7 @@ The table interface can always be found by appending `table/` to the url of the 
 Emails
 ^^^^^^
 
-For IMAP and Exchange email accounts, emails can be restored to the mailbox that they were found in.
+For IMAP, Exchange and JMAP email accounts, emails can be restored to the mailbox that they were found in.
 
 Conversations
 """""""""""""

@@ -16,7 +16,7 @@ Preserve your emails for [an indefinite long period of time](https://en.wikipedi
 As a user you may like this application because of
 
 - Automated continuous email fetching
-- Support for IMAP, POP and Exchange
+- Support for IMAP, POP, Exchange and JMAP
 - Import and export of emails in various formats
 - Identification of related emails
 - Restoring of emails to your mailaccount

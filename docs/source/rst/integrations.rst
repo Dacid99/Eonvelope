@@ -73,6 +73,11 @@ For instance, to search the attachments data, use:
 Similar patterns apply for correspondents, accounts, mailboxes, etc.
 Check the API schema or the browsable API for more details.
 
+.. note::
+    Please check that the api urls do not have a / before the ? (or end in a slash).
+    Otherwise the request will fail with a 404 response.
+    See :doc:`the api docs <api-instructions>` for details.
+
 To grant access, you can create a persistent ``accesstoken`` in the admin panel
 and provide it in the configuration of the ``JSONEngine``.
 

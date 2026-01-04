@@ -175,10 +175,10 @@ class JMAPFetcher(BaseFetcher):
                 jmapc.methods.MailboxGet(ids=jmapc.Ref("/ids")),
             )
             try:
-                results = self._mail_client.request(methods)
-            except (requests.RequestException, jmapc.ClientError) as error:
+                results = self._mail_client.request(methods, raise_errors=True)
+            except requests.RequestException as error:
                 raise MailboxError(error) from error
-            if not isinstance(results[1].response, jmapc.methods.MailboxQueryResponse):
+            if not isinstance(results[1].response, jmapc.methods.MailboxGetResponse):
                 raise MailboxError(
                     BadServerResponseError(results[1].response.to_json()),
                     methods[1].jmap_method_name,

@@ -54,7 +54,7 @@ ARG TARGETVARIANT
 
 ARG BUILD_S6_APK_DEPENDENCIES="curl xz"
 
-RUN apk add --no-cache "${BUILD_S6_APK_DEPENDENCIES}" && \
+RUN apk add --no-cache ${BUILD_S6_APK_DEPENDENCIES} && \
     S6_ARCH="" && \
     if [ "${TARGETARCH}""${TARGETVARIANT}" = "amd64" ]; then S6_ARCH="x86_64"; \
     elif [ "${TARGETARCH}""${TARGETVARIANT}" = "arm64" ]; then S6_ARCH="aarch64"; fi && \
@@ -74,7 +74,7 @@ RUN apk add --no-cache "${BUILD_S6_APK_DEPENDENCIES}" && \
 ## build django translation and staticfiles ##
 ## no cleanup required ##
 
-# hadolint ignore=DL3029
+# hadolint ignore=DL3029 # required to fix arm64 build
 FROM --platform=linux/amd64 python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS django-prestage
 
 WORKDIR /app
@@ -87,7 +87,7 @@ COPY --from=poetry-prestage /requirements.txt ./
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=${SRC_PATH}'src/' \
+    PYTHONPATH=src/ \
     DJANGO_SETTINGS_MODULE=config.settings \
     SECRET_KEY=IM_JUST_HERE_AS_A_WORKAROUND
 

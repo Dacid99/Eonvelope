@@ -144,6 +144,7 @@ share/python-wheels/
 tags
 test.html
 test.py
+test.sh
 test/
 tools/
 var/

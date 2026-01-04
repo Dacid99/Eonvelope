@@ -132,6 +132,7 @@ staticfiles/
 tags
 test.html
 test.py
+test.sh
 var/
 venv/
 wheels/

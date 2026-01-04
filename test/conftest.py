@@ -377,14 +377,17 @@ def other_user(django_user_model):
 
 
 @pytest.fixture
-def fake_account(owner_user):
+def fake_account(faker, owner_user):
     """An :class:`core.models.Account` owned by :attr:`owner_user`.
 
     Note:
         The protocol is always IMAP to allow for different fetchingoptions.
     """
     return baker.make(
-        Account, user=owner_user, protocol=EmailProtocolChoices.IMAP.value
+        Account,
+        user=owner_user,
+        mail_address=faker.email(),
+        protocol=EmailProtocolChoices.IMAP.value,
     )
 
 
@@ -590,6 +593,7 @@ def account_payload(faker, owner_user):
     account_data = baker.prepare(
         Account,
         user=owner_user,
+        mail_address=faker.email(),
         mail_host_port=faker.random.randint(0, 65535),
         protocol=faker.random.choice(EmailProtocolChoices.values),
         timeout=faker.random.randint(1, 1000),

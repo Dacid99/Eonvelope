@@ -79,7 +79,6 @@ def test_Account_fields(django_user_model, fake_account):
     """Tests the fields of :class:`core.models.Account.Account`."""
     assert fake_account.mail_address is not None
     assert isinstance(fake_account.mail_address, str)
-    assert fake_account.mail_address == ""
     assert fake_account.password is not None
     assert isinstance(fake_account.password, str)
     assert fake_account.mail_host is not None

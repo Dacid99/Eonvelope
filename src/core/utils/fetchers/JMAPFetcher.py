@@ -137,13 +137,13 @@ class JMAPFetcher(BaseFetcher):
         try:
             if self.account.mail_address:
                 self._mail_client = jmapc.Client.create_with_password(
-                    host=f"{self.account.mail_host}:{self.account.mail_host_port}",
+                    host=self.account.mail_host_address,
                     user=self.account.mail_address,
                     password=self.account.password,
                 )
             else:
                 self._mail_client = jmapc.Client.create_with_api_token(
-                    host=f"{self.account.mail_host}:{self.account.mail_host_port}",
+                    host=self.account.mail_host_address,
                     api_token=self.account.password,
                 )
         except requests.RequestException as error:
@@ -159,7 +159,9 @@ class JMAPFetcher(BaseFetcher):
         except requests.RequestException as error:
             raise MailAccountError(error) from error
         except jmapc.ClientError as error:
-            raise MailAccountError(error) from error
+            raise MailAccountError(
+                BadServerResponseError(str(error)), method.jmap_method_name
+            ) from error
         if not isinstance(result, jmapc.methods.IdentityGetResponse):
             raise MailAccountError(
                 BadServerResponseError(result.to_json()), method.jmap_method_name
@@ -174,9 +176,7 @@ class JMAPFetcher(BaseFetcher):
             )
             try:
                 results = self._mail_client.request(methods)
-            except requests.RequestException as error:
-                raise MailboxError(error) from error
-            except jmapc.ClientError as error:
+            except (requests.RequestException, jmapc.ClientError) as error:
                 raise MailboxError(error) from error
             if not isinstance(results[1].response, jmapc.methods.MailboxQueryResponse):
                 raise MailboxError(
@@ -193,15 +193,17 @@ class JMAPFetcher(BaseFetcher):
     ) -> list[bytes]:
         super().fetch_emails(mailbox, criterion)
 
-        methods = jmapc.methods.MailboxQuery(
+        method = jmapc.methods.MailboxQuery(
             filter=jmapc.MailboxQueryFilterCondition(name=mailbox.name)
         )
         try:
-            result = self._mail_client.request(methods)
+            result = self._mail_client.request(method)
         except requests.RequestException as error:
             raise MailAccountError(error) from error
         except jmapc.ClientError as error:
-            raise MailAccountError(error) from error
+            raise MailAccountError(
+                BadServerResponseError(str(error)), method.jmap_method_name
+            ) from error
         if not isinstance(result, jmapc.methods.MailboxQueryResponse):
             raise MailAccountError(BadServerResponseError(result.to_json()), "")
         if not result.ids or not isinstance(result.ids, list):
@@ -209,7 +211,7 @@ class JMAPFetcher(BaseFetcher):
 
         criterion_filter = self.make_fetching_filter(criterion, criterion_arg)
         criterion_filter.in_mailbox = result.ids[0]
-        methods = [
+        methods = (
             jmapc.methods.EmailQuery(
                 sort=[jmapc.Comparator(property="receivedAt", is_ascending=True)],
                 filter=criterion_filter,
@@ -220,13 +222,11 @@ class JMAPFetcher(BaseFetcher):
                     "blobId",
                 ],
             ),
-        ]
+        )
         try:
             results = self._mail_client.request(methods)
         except requests.RequestException as error:
             raise MailAccountError(error) from error
-        except jmapc.ClientError as error:
-            raise MailboxError(error) from error
         if not isinstance(results[1].response, jmapc.methods.EmailGetResponse):
             raise MailboxError(
                 BadServerResponseError(results[1].response.to_json()),
@@ -261,7 +261,9 @@ class JMAPFetcher(BaseFetcher):
         except requests.RequestException as error:
             raise MailAccountError(error) from error
         except jmapc.ClientError as error:
-            raise MailboxError(error) from error
+            raise MailAccountError(
+                BadServerResponseError(str(error)), method.jmap_method_name
+            ) from error
         if not isinstance(result, jmapc.methods.MailboxGetResponse):
             raise MailAccountError(
                 BadServerResponseError(result.to_json()), method.jmap_method_name
@@ -276,7 +278,7 @@ class JMAPFetcher(BaseFetcher):
             result = self._mail_client.upload_blob(file_name=email.file_path)
         except requests.RequestException as error:
             raise MailAccountError(error) from error
-        methods = [
+        methods = (
             jmapc.methods.MailboxQuery(
                 filter=jmapc.MailboxQueryFilterCondition(name=email.mailbox.name)
             ),
@@ -294,14 +296,12 @@ class JMAPFetcher(BaseFetcher):
                     }
                 }
             ),
-        ]
+        )
         methods[1].jmap_method = "Email/import"
         try:
             results = self._mail_client.request(methods)
         except requests.RequestException as error:
             raise MailAccountError(error) from error
-        except jmapc.ClientError as error:
-            raise MailboxError(error) from error
         if isinstance(results[1].response, jmapc.Error):
             raise MailboxError(
                 BadServerResponseError(results[1].response.to_json()),

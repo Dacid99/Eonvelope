@@ -62,12 +62,18 @@ tasks:
   eslint:
     shell: npx --yes eslint --no-config-lookup --fix
 
+  validate-templates:
+    cmd: python3 manage.py validate_templates
+
   hadolint:
     shell: sudo docker run --rm -i -v tools/hadolint.yaml:/.config/hadolint.yaml hadolint/hadolint < docker/Dockerfile
     capture_stdout: ${REPORT_PATH}hadolint.ansi
 
   licenses:
     cmd: pip-licenses --from=all --with-license-file --format=plain-vertical --no-license-path > THIRD_PARTY_LICENSES
+
+  validate-renovate:
+    shell: npx --yes renovate renovate-config-validator
 
   lint-code:
     help: "Lints and fixes the codebase."
@@ -82,6 +88,8 @@ tasks:
         "hadolint",
         "autotyping",
         "djlint",
+        "validate-templates",
+        "validate-renovate",
       ]
     ignore_fail: return_non_zero
 

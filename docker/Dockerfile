@@ -99,8 +99,9 @@ ARG LOG_PATH
 
 RUN apk add --no-cache ${BUILD_DJANGO_APK_DEPENDENCIES} ${BUILD_PYTHON_APK_DEPENDENCIES} ${RUNTIME_APK_DEPENDENCIES} && \
     pip install --no-cache-dir --requirement requirements.txt && \
-    mkdir -p ${STORAGE_PATH} ${LOG_PATH} && \
-    django-admin collectstatic --noinput && \
+    mkdir -p ${STORAGE_PATH} ${LOG_PATH}
+
+RUN django-admin collectstatic --noinput && \
     django-admin compilemessages
 
 

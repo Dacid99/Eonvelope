@@ -228,6 +228,7 @@ PROTOCOLS_SUPPORTING_RESTORE = (
     EmailProtocolChoices.IMAP,
     EmailProtocolChoices.IMAP4_SSL,
     EmailProtocolChoices.EXCHANGE,
+    EmailProtocolChoices.JMAP,
 )
 """All protocols supporting restoring of emails."""
 

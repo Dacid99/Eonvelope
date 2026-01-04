@@ -29,6 +29,7 @@
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
 - split up long functions that are marked as too complex by ruff
+- make all filepaths pathlib.Paths
 
 ## To test
 

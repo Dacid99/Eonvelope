@@ -273,9 +273,10 @@ class JMAPFetcher(BaseFetcher):
     @override
     def restore(self, email: Email) -> None:
         super().restore(email)
-
+        if not email.file_path:
+            raise FileNotFoundError("This email has no stored eml file.")
         try:
-            result = self._mail_client.upload_blob(file_name=email.file_path)
+            result = self._mail_client.upload_blob(file_name=email.absolute_filepath)
         except requests.RequestException as error:
             raise MailAccountError(error) from error
         methods = (

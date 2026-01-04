@@ -241,13 +241,11 @@ def test_Attachment_open_file_success(fake_attachment_with_file):
     result.close()
 
 
-def test_Attachment_open_file_no_filepath(fake_attachment_with_file):
+def test_Attachment_open_file_no_filepath(fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.open_file`
     in case the filepath on the instance is not set.
     """
-    fake_attachment_with_file.file_path = None
-
-    with pytest.raises(FileNotFoundError), fake_attachment_with_file.open_file():
+    with pytest.raises(FileNotFoundError), fake_attachment.open_file():
         pass
 
 
@@ -259,6 +257,35 @@ def test_Attachment_open_file_no_file(faker, fake_attachment):
 
     with pytest.raises(FileNotFoundError), fake_attachment.open_file():
         pass
+
+
+def test_Attachment_absolute_filepath_success(fake_attachment_with_file):
+    """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
+    in case of success.
+    """
+    result = fake_attachment_with_file.absolute_filepath
+
+    assert result == default_storage.path(fake_attachment_with_file.file_path)
+
+
+def test_Attachment_absolute_filepath_no_filepath(fake_attachment):
+    """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
+    in case the filepath on the instance is not set.
+    """
+    result = fake_attachment.absolute_filepath
+
+    assert result is None
+
+
+def test_Attachment_absolute_filepath_no_file(faker, fake_attachment):
+    """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
+    in case the file can't be found in the storage.
+    """
+    fake_attachment.file_path = faker.file_name()
+
+    result = fake_attachment.absolute_filepath
+
+    assert result == default_storage.path(fake_attachment.file_path)
 
 
 @pytest.mark.django_db

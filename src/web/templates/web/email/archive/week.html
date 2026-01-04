@@ -11,22 +11,22 @@
 {% endblock header_archive_title %}
 
 {% block header_subtitle %}
-    <a href="{% url 'web:email-archive-year' week.year %}"
-       class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ week|date:"Y" }}</a> - {% translate "Week #" %}{{ week|date:"W" }}
+    <a href="{% url 'web:email-archive-year' week.isocalendar.year %}"
+       class="link-primary link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ week|date:"o" }}</a> - {% translate "Week #" %}{{ week|date:"W" }}
 {% endblock header_subtitle %}
 
 {% block previous_date_url %}
-    {% url 'web:email-archive-week' previous_week.year previous_week.isocalendar.week %}
+    {% url 'web:email-archive-week' previous_week.isocalendar.year previous_week.isocalendar.week %}
 {% endblock previous_date_url %}
 
 {% block previous_date_name %}
-    {{ previous_week|date:"Y - W" }}
+    {{ previous_week|date:"o - W" }}
 {% endblock previous_date_name %}
 
 {% block next_date_url %}
-    {% url 'web:email-archive-week' next_week.year next_week.isocalendar.week %}
+    {% url 'web:email-archive-week' next_week.isocalendar.year next_week.isocalendar.week %}
 {% endblock next_date_url %}
 
 {% block next_date_name %}
-    {{ next_week|date:"Y - W" }}
+    {{ next_week|date:"o - W" }}
 {% endblock next_date_name %}

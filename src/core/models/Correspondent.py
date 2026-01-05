@@ -425,8 +425,7 @@ class Correspondent(
             correspondent_vcard = vCard()
             correspondent_vcard.add("email").value = correspondent.email_address
             correspondent_vcard.add("fn").value = correspondent.name
-            if correspondent.email_name and correspondent.real_name:
-                correspondent_vcard.add("nickname").value = correspondent.email_name
+            correspondent_vcard.add("nickname").value = correspondent.email_name
             vcard_buffer.write(correspondent_vcard.serialize().encode())
         vcard_buffer.seek(0)
         return vcard_buffer

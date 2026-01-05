@@ -716,11 +716,11 @@ def test_toggle_favorite_auth_other(
 
 
 @pytest.mark.django_db
+@pytest.mark.parametrize("previous_is_favorite", [True, False])
 def test_toggle_favorite_auth_owner(
-    faker, fake_email, owner_api_client, custom_detail_action_url
+    fake_email, owner_api_client, custom_detail_action_url, previous_is_favorite
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with the authenticated owner user client."""
-    previous_is_favorite = bool(faker.random.getrandbits(1))
     fake_email.is_favorite = previous_is_favorite
     fake_email.save(update_fields=["is_favorite"])
 

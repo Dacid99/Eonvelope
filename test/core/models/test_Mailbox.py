@@ -45,6 +45,7 @@ from core.utils.fetchers import (
     ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
+    JMAPFetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -144,6 +145,7 @@ def test_Mailbox_unique_constraints():
         (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (JMAPFetcher.PROTOCOL, JMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
 def test_Mailbox_available_fetching_criteria(
@@ -167,6 +169,7 @@ def test_Mailbox_available_fetching_criteria(
         (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (JMAPFetcher.PROTOCOL, JMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
 def test_Mailbox_available_no_arg_fetching_criteria(
@@ -194,6 +197,7 @@ def test_Mailbox_available_no_arg_fetching_criteria(
         (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (JMAPFetcher.PROTOCOL, JMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
 def test_Mailbox_available_fetching_criterion_choices(
@@ -221,6 +225,7 @@ def test_Mailbox_available_fetching_criterion_choices(
         (POP3Fetcher.PROTOCOL, POP3Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4_SSL_Fetcher.PROTOCOL, IMAP4_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
         (POP3_SSL_Fetcher.PROTOCOL, POP3_SSL_Fetcher.AVAILABLE_FETCHING_CRITERIA),
+        (JMAPFetcher.PROTOCOL, JMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
 def test_Mailbox_available_no_arg_fetching_criterion_choices(
@@ -876,4 +881,15 @@ def test_Mailbox_get_absolute_list_url(fake_mailbox):
 
     assert result == reverse(
         f"web:{fake_mailbox.BASENAME}-filter-list",
+    )
+
+
+@pytest.mark.django_db
+def test_Mailbox_get_absolute_upload_url(fake_mailbox):
+    """Tests :func:`core.models.Mailbox.Mailbox.get_absolute_list_url`."""
+    result = fake_mailbox.get_absolute_upload_url()
+
+    assert result == reverse(
+        f"web:{fake_mailbox.BASENAME}-upload",
+        kwargs={"pk": fake_mailbox.pk},
     )

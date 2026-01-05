@@ -30,6 +30,7 @@
 - emailcorrespondent creation for better integration of mailinglist
 - split up long functions that are marked as too complex by ruff
 - make all filepaths pathlib.Paths
+- compress fetchingcriterion logic into a class
 
 ## To test
 
@@ -41,6 +42,7 @@
 ## To implement
 
 - migration to django6.0
+- squashmigrations
 
 ### Work in progress
 

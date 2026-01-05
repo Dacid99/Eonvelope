@@ -256,6 +256,54 @@ def test_Correspondent_share_to_nextcloud_error_status(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
+    "href_property, href_field",
+    [
+        ("list_archive_href", "list_archive"),
+        ("list_help_href", "list_help"),
+        ("list_post_href", "list_post"),
+        ("list_subscribe_href", "list_subscribe"),
+        ("list_unsubscribe_href", "list_unsubscribe"),
+    ],
+)
+@pytest.mark.parametrize(
+    "field_value, expected_href",
+    [
+        ("", ""),
+        ("https://test.list.com", "https://test.list.com"),
+        ("<mailto:getridofthe@list.us>, <http://other.way.us>,", "http://other.way.us"),
+        ("<mailto:one@mail.it>, <mailto:other@mail.it>,", "mailto:one@mail.it"),
+        ("http://insecure.ru, https://sslftw.org,", "https://sslftw.org"),
+    ],
+)
+def test_Correspondent_href_properties(
+    fake_correspondent, field_value, expected_href, href_property, href_field
+):
+    """Test the various href properties of :class:`core.models.Correspondent`."""
+    setattr(fake_correspondent, href_field, field_value)
+
+    result = getattr(fake_correspondent, href_property)
+
+    assert result == expected_href
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "list_unsubscribe_post, expected_name",
+    [("Method", "Method"), ("List-Unsubscribe=One-Click", "One-Click")],
+)
+def test_Correspondent_list_unsubscribe_post_name(
+    fake_correspondent, list_unsubscribe_post, expected_name
+):
+    """Test the various href properties of :class:`core.models.Correspondent`."""
+    fake_correspondent.list_unsubscribe_post = list_unsubscribe_post
+
+    result = fake_correspondent.list_unsubscribe_post_name
+
+    assert result == expected_name
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
     "email_name, real_name, email_address, expected_name",
     [
         ("", "", "abc113@web.ca", "abc113"),
@@ -290,7 +338,9 @@ def test_Correspondent_queryset_as_file(fake_correspondent):
     for correspondent_vcard in vobject.readComponents(result.read().decode("utf-8")):
         correspondent_vcard.fn = fake_correspondent.name
         correspondent_vcard.email = fake_correspondent.email_address
+        correspondent_vcard.nickname = fake_correspondent.email_name
     assert hasattr(result, "close")
+
     result.close()
 
 

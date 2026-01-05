@@ -34,6 +34,7 @@ from core.utils.fetchers import (
     ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
+    JMAPFetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -225,6 +226,7 @@ def test_Account_unique_constraints(django_user_model):
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
         (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
+        (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
 def test_Account_get_fetcher_success(
@@ -271,6 +273,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
         (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
+        (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
 def test_Account_get_fetcher_init_failure(
@@ -304,6 +307,7 @@ def test_Account_get_fetcher_init_failure(
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
         (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
+        (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
 def test_Account_get_fetcher_class_success(

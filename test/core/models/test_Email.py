@@ -1215,3 +1215,21 @@ def test_Email_get_absolute_list_url(fake_email):
     assert result == reverse(
         f"web:{fake_email.BASENAME}-filter-list",
     )
+
+
+@pytest.mark.django_db
+def test_Email_get_absolute_table_url(fake_email):
+    """Tests :func:`core.models.Email.Email.get_absolute_table_url`."""
+    result = fake_email.get_absolute_table_url()
+
+    assert result == reverse(
+        f"web:{fake_email.BASENAME}-table",
+    )
+
+
+@pytest.mark.django_db
+def test_Email__get_storage_file_name(fake_email, fake_other_email):
+    """Test that the storage file name is unique."""
+    assert (
+        fake_email._get_storage_file_name() != fake_other_email._get_storage_file_name()
+    )

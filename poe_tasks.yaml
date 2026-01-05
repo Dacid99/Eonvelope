@@ -124,7 +124,7 @@ tasks:
 
   wlc-lock:
     help: "Locks all weblate components."
-    cmd: wlc lock Eonvelope/config Eonvelope/core Eonvelope/api Eonvelope/web Eonvelope/Eonvelope
+    cmd: wlc lock eonvelope/config eonvelope/core eonvelope/api eonvelope/web eonvelope/eonvelope
 
   wlc-unlock:
     help: "Unlocks all weblate components."

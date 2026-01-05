@@ -19,11 +19,13 @@
 """Test module for the :class:`IMAP4Fetcher` class."""
 
 import datetime
+from collections.abc import Iterable
 
 import jmapc
 import pytest
 import requests
 from freezegun import freeze_time
+from jmapc.methods import InvocationResponse
 from jmapc.methods.email import EmailGetResponse
 from jmapc.methods.identity import IdentityGet
 
@@ -66,12 +68,15 @@ def fake_query_response_data(faker):
 
 
 @pytest.fixture
-def mock_JMAP_request_handler(fake_get_response_data, fake_query_response_data):
+def mock_JMAP_request_handler(faker, fake_get_response_data, fake_query_response_data):
     """Handler for the fake JMAP responses."""
 
     def handle_request(methods):
-        if isinstance(methods, list):
-            return [handle_request(method) for method in methods]
+        if isinstance(methods, Iterable):
+            return [
+                InvocationResponse(id=faker.word(), response=handle_request(method))
+                for method in methods
+            ]
 
         if isinstance(methods, jmapc.methods.IdentityGet):
             return jmapc.methods.IdentityGetResponse(**fake_get_response_data)
@@ -189,7 +194,7 @@ def test_JMAPFetcher_make_fetching_filter_with_arg(
 @pytest.mark.parametrize("mail_host_port", [123, None])
 @pytest.mark.parametrize("mail_address", ["test@mail.org", None])
 def test_JMAPFetcher___init___success(
-    jmap_mailbox, mock_JMAP_client, mail_address, mail_host_port
+    jmap_mailbox, mock_logger, mock_JMAP_client, mail_address, mail_host_port
 ):
     """Test the constructor of JMAPFetcher in case of success."""
     jmap_mailbox.account.mail_address = mail_address
@@ -219,12 +224,16 @@ def test_JMAPFetcher___init___success(
             api_token=jmap_mailbox.account.password,
         )
         mock_JMAP_client.create_with_password.assert_not_called()
+    mock_logger.info.assert_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
 def test_JMAPFetcher___init___failure(
     fake_error_message,
     jmap_mailbox,
+    mock_logger,
     mock_JMAP_client,
     error,
 ):
@@ -237,9 +246,10 @@ def test_JMAPFetcher___init___failure(
         JMAPFetcher(jmap_mailbox.account)
 
     mock_JMAP_client.create_with_password.assert_called_once()
+    mock_logger.exception.assert_called()
 
 
-def test_JMAPFetcher_test_account_success(jmap_mailbox, mock_JMAP_client):
+def test_JMAPFetcher_test_account_success(jmap_mailbox, mock_logger, mock_JMAP_client):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with no mailbox given.
     """
@@ -247,6 +257,9 @@ def test_JMAPFetcher_test_account_success(jmap_mailbox, mock_JMAP_client):
 
     assert result is None
     mock_JMAP_client.return_value.request.assert_called_once()
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
 
 
 # def test_JMAPFetcher_test_account_non_single_response(
@@ -314,7 +327,7 @@ def test_JMAPFetcher_test_account_success(jmap_mailbox, mock_JMAP_client):
 #     mock_JMAP_client.request.assert_called_once()
 
 
-def test_JMAPFetcher_test_mailbox_success(jmap_mailbox, mock_JMAP_client):
+def test_JMAPFetcher_test_mailbox_success(jmap_mailbox, mock_logger, mock_JMAP_client):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with mailbox given.
     """
@@ -323,6 +336,9 @@ def test_JMAPFetcher_test_mailbox_success(jmap_mailbox, mock_JMAP_client):
     assert result is None
     mock_JMAP_client.return_value.request.assert_called()
     assert mock_JMAP_client.return_value.request.call_count == 2
+    mock_logger.debug.assert_called()
+    mock_logger.error.assert_not_called()
+    mock_logger.exception.assert_not_called()
 
 
 # def test_JMAPFetcher_fetch_mailboxes_success(jmap_mailbox, mock_JMAP_client):

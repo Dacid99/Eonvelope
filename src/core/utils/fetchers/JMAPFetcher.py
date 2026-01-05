@@ -147,25 +147,34 @@ class JMAPFetcher(BaseFetcher):
                     api_token=self.account.password,
                 )
         except requests.RequestException as error:
+            self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error, "login") from error
+        self.logger.info("Successfully connected to %s.", self.account)
 
     @override
     def test(self, mailbox: Mailbox | None = None) -> None:
         super().test(mailbox)
 
         method = jmapc.methods.IdentityGet()
+        self.logger.debug("Testing %s ...", self.account)
         try:
             result = self._mail_client.request(method)
         except requests.RequestException as error:
+            self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
         except jmapc.ClientError as error:
+            self.logger.exception(
+                "Wrong number of responses for request to %s!", self.account
+            )
             raise MailAccountError(
                 BadServerResponseError(str(error)), method.jmap_method_name
             ) from error
         if not isinstance(result, jmapc.methods.IdentityGetResponse):
+            self.logger.error("Error in response from %s!", self.account)
             raise MailAccountError(
                 BadServerResponseError(result.to_json()), method.jmap_method_name
             )
+        self.logger.debug("Successfully tested %s.", self.account)
 
         if mailbox is not None:
             methods = (
@@ -174,15 +183,19 @@ class JMAPFetcher(BaseFetcher):
                 ),
                 jmapc.methods.MailboxGet(ids=jmapc.Ref("/ids")),
             )
+            self.logger.debug("Testing %s ...", mailbox)
             try:
-                results = self._mail_client.request(methods, raise_errors=True)
+                results = self._mail_client.request(methods)
             except requests.RequestException as error:
+                self.logger.exception("Error connecting to %s!", self.account)
                 raise MailboxError(error) from error
             if not isinstance(results[1].response, jmapc.methods.MailboxGetResponse):
+                self.logger.error("Error in response from %s!", self.account)
                 raise MailboxError(
                     BadServerResponseError(results[1].response.to_json()),
                     methods[1].jmap_method_name,
                 )
+            self.logger.debug("Successfully tested %s.", mailbox)
 
     @override
     def fetch_emails(
@@ -193,21 +206,34 @@ class JMAPFetcher(BaseFetcher):
     ) -> list[bytes]:
         super().fetch_emails(mailbox, criterion)
 
+        self.logger.debug(
+            "Searching and fetching %s messages in %s...",
+            criterion,
+            mailbox,
+        )
+
         method = jmapc.methods.MailboxQuery(
             filter=jmapc.MailboxQueryFilterCondition(name=mailbox.name)
         )
+        self.logger.debug("Querying for mailbox %s ...", mailbox)
         try:
             result = self._mail_client.request(method)
         except requests.RequestException as error:
+            self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
         except jmapc.ClientError as error:
+            self.logger.exception(
+                "Wrong number of responses for request to %s!", self.account
+            )
             raise MailAccountError(
                 BadServerResponseError(str(error)), method.jmap_method_name
             ) from error
         if not isinstance(result, jmapc.methods.MailboxQueryResponse):
+            self.logger.error("Error in response from %s!", self.account)
             raise MailAccountError(BadServerResponseError(result.to_json()), "")
         if not result.ids or not isinstance(result.ids, list):
             raise MailboxError(IndexError("Mailbox not found"))
+        self.logger.debug("Successfully queried mailbox.")
 
         criterion_filter = self.make_fetching_filter(criterion, criterion_arg)
         criterion_filter.in_mailbox = result.ids[0]
@@ -223,17 +249,27 @@ class JMAPFetcher(BaseFetcher):
                 ],
             ),
         )
+        self.logger.debug("Querying %s messages in %s ...", criterion, mailbox)
         try:
             results = self._mail_client.request(methods)
         except requests.RequestException as error:
+            self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
         if not isinstance(results[1].response, jmapc.methods.EmailGetResponse):
+            self.logger.error("Error in response from %s!", self.account)
             raise MailboxError(
                 BadServerResponseError(results[1].response.to_json()),
                 methods[1].jmap_method_name,
             )
+        self.logger.info(
+            "Found %s messages matching %s in %s.",
+            len(results[1].response.data),
+            criterion,
+            mailbox,
+        )
 
         email_data = []
+        self.logger.debug("Downloading matching message blobs from %s ...", mailbox)
         for email in results[1].response.data:
             blob_url = self._mail_client.jmap_session.download_url.format(
                 accountId=self._mail_client.account_id,
@@ -247,27 +283,34 @@ class JMAPFetcher(BaseFetcher):
                 )
                 response.raise_for_status()
             except requests.RequestException as error:
+                self.logger.exception("Error connecting to %s!", self.account)
                 raise MailAccountError(error) from error
-            except jmapc.ClientError as error:
-                raise MailboxError(error) from error
             email_data.append(response.raw.data)
+            self.logger.debug("Successfully downloaded message blobs.")
         return email_data
 
     @override
     def fetch_mailboxes(self) -> list[str]:
         method = jmapc.methods.MailboxGet(ids=None)
+        self.logger.debug("Fetching mailboxes in %s ...", self.account)
         try:
             result = self._mail_client.request(method)
         except requests.RequestException as error:
+            self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
         except jmapc.ClientError as error:
+            self.logger.exception(
+                "Wrong number of responses for request to %s!", self.account
+            )
             raise MailAccountError(
                 BadServerResponseError(str(error)), method.jmap_method_name
             ) from error
         if not isinstance(result, jmapc.methods.MailboxGetResponse):
+            self.logger.error("Error in response from %s!", self.account)
             raise MailAccountError(
                 BadServerResponseError(result.to_json()), method.jmap_method_name
             )
+        self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
         return [mailbox.name for mailbox in result.data if mailbox.name is not None]
 
     @override
@@ -275,10 +318,13 @@ class JMAPFetcher(BaseFetcher):
         super().restore(email)
         if not email.file_path:
             raise FileNotFoundError("This email has no stored eml file.")
+        self.logger.debug("Uploading blob for %s ...", email)
         try:
             result = self._mail_client.upload_blob(file_name=email.absolute_filepath)
         except requests.RequestException as error:
+            self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
+        self.logger.debug("Successfully uploaded email blob.")
         methods = (
             jmapc.methods.MailboxQuery(
                 filter=jmapc.MailboxQueryFilterCondition(name=email.mailbox.name)
@@ -299,15 +345,19 @@ class JMAPFetcher(BaseFetcher):
             ),
         )
         methods[1].jmap_method = "Email/import"
+        self.logger.debug("Importing %s to its mailbox ...", email)
         try:
             results = self._mail_client.request(methods)
         except requests.RequestException as error:
+            self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
         if isinstance(results[1].response, jmapc.Error):
+            self.logger.error("Error in response from %s!", self.account)
             raise MailboxError(
                 BadServerResponseError(results[1].response.to_json()),
                 methods[1].jmap_method_name,
             )
+        self.logger.debug("Successfully imported email.")
 
     @override
     def close(self) -> None:

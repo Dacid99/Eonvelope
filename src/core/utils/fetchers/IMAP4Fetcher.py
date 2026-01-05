@@ -308,7 +308,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
             MailboxError: If uploading the email to the mailserver fails or returns a bad response.
         """
         super().restore(email)
-        self.logger.debug("Restoring email %s to its mailbox ...", email)
+        self.logger.debug("Restoring %s to its mailbox ...", email)
         with email.open_file() as email_file:
             self.safe_append(email.mailbox.name, None, None, email_file.read())
         self.logger.debug("Successfully restored email.")

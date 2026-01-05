@@ -320,7 +320,7 @@ class JMAPFetcher(BaseFetcher):
             raise FileNotFoundError("This email has no stored eml file.")
         self.logger.debug("Uploading blob for %s ...", email)
         try:
-            result = self._mail_client.upload_blob(file_name=email.absolute_filepath)
+            blob = self._mail_client.upload_blob(file_name=email.absolute_filepath)
         except requests.RequestException as error:
             self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
@@ -333,7 +333,7 @@ class JMAPFetcher(BaseFetcher):
                 {
                     "emails": {
                         1: {
-                            "blobId": result.id,
+                            "blobId": blob.id,
                             "#mailboxIds": {
                                 "path": "/ids",
                                 "resultOf": "0.Mailbox/query",
@@ -351,7 +351,7 @@ class JMAPFetcher(BaseFetcher):
         except requests.RequestException as error:
             self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error) from error
-        if isinstance(results[1].response, jmapc.Error):
+        if not isinstance(results[1].response, jmapc.methods.CustomResponse):
             self.logger.error("Error in response from %s!", self.account)
             raise MailboxError(
                 BadServerResponseError(results[1].response.to_json()),

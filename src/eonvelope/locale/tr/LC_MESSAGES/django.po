@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-27 17:03+0000\n"
-"PO-Revision-Date: 2025-12-31 20:14+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-01-08 23:01+0000\n"
+"Last-Translator: WarHammer <ibrhmmlgr46@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/eonvelope/"
 "eonvelope/tr/>\n"
 "Language: tr\n"
@@ -22,22 +22,22 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:45
 msgid "Paperless server URL"
-msgstr ""
+msgstr "Paperless sunucu adresi"
 
 #. Translators: Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:47
 msgid "URL of your Paperless server."
-msgstr ""
+msgstr "Paperless sunucunuzun adresi."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:54
 msgid "Paperless server API key"
-msgstr ""
+msgstr "Paperless sunucu API anahtarı"
 
 #. Translators: Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:56
 msgid "API key for your Paperless server."
-msgstr ""
+msgstr "Paperless sunucun için API anahtarı."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless and Tika are brand names.
 #: src/eonvelope/models/UserProfile.py:62

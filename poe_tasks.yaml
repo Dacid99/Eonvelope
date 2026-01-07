@@ -71,7 +71,7 @@ tasks:
     capture_stdout: ${REPORT_PATH}hadolint.ansi
 
   licenses:
-    cmd: pip-licenses --from=all --with-license-file --format=plain-vertical --no-license-path > THIRD_PARTY_LICENSES
+    shell: pip-licenses --from=all --with-license-file --format=plain-vertical --no-license-path > THIRD_PARTY_LICENSES
 
   validate-renovate:
     shell: npx --yes renovate renovate-config-validator

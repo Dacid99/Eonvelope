@@ -6,6 +6,9 @@
   - support for JMAP protocol
   - more fetching criteria
   - fetching criteria with custom filter value
+  
+- Fixes:
+  - year values in timeline week overview were incorrectly formatted
 
 ## Version 0.3.0
 

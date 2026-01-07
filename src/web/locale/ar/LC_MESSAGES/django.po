@@ -3,21 +3,22 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 16:58+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2025-12-31 20:21+0000\n"
+"PO-Revision-Date: 2025-12-31 20:15+0000\n"
+"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"Language-Team: Arabic <https://hosted.weblate.org/projects/eonvelope/web/ar/"
+">\n"
+"Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
-"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+"&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -126,7 +127,7 @@ msgstr ""
 #: src/web/tables/email_tables/BaseEmailTable.py:35
 #: src/web/tables/emailcorrespondent_tables/BaseCorrespondentEmailTable.py:37
 #: src/web/templates/web/daemon/daemon_detail.html:32
-#: src/web/templates/web/daemon/daemon_detail.html:66
+#: src/web/templates/web/daemon/daemon_detail.html:69
 #: src/web/templates/web/daemon/daemon_edit.html:17
 #: src/web/templates/web/daemon/partials/_daemon_card.html:19
 #: src/web/templates/web/email/email_detail.html:61
@@ -215,8 +216,8 @@ msgid "New Account"
 msgstr ""
 
 #: src/web/templates/web/account/account_create.html:37
-#: src/web/templates/web/daemon/daemon_create.html:35
-#: src/web/templates/web/mailbox/mailbox_daemon_create.html:39
+#: src/web/templates/web/daemon/daemon_create.html:36
+#: src/web/templates/web/mailbox/mailbox_daemon_create.html:40
 #: src/web/templates/web/partials/_cancel_edit-button.html:5
 #: src/web/templates/web/partials/_delete-modal.html:28
 #: src/web/templates/web/partials/_multi_delete-modal.html:25
@@ -253,13 +254,13 @@ msgid "None"
 msgstr ""
 
 #: src/web/templates/web/account/account_detail.html:57
-#: src/web/templates/web/daemon/daemon_detail.html:51
+#: src/web/templates/web/daemon/daemon_detail.html:54
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
 msgid "Latest Error"
 msgstr ""
 
 #: src/web/templates/web/account/account_detail.html:61
-#: src/web/templates/web/daemon/daemon_detail.html:55
+#: src/web/templates/web/daemon/daemon_detail.html:58
 #: src/web/templates/web/mailbox/mailbox_detail.html:69
 msgid "Occurred At"
 msgstr ""
@@ -479,24 +480,29 @@ msgid "Routine Details"
 msgstr ""
 
 #: src/web/templates/web/daemon/daemon_detail.html:42
-#: src/web/templates/web/daemon/partials/_daemon_card.html:28
+#: src/web/templates/web/daemon/partials/_daemon_card.html:29
 msgid "Criterion"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:44
-#: src/web/templates/web/daemon/partials/_daemon_card.html:29
-msgid "Interval"
-msgstr ""
-
 #: src/web/templates/web/daemon/daemon_detail.html:45
-msgid "Last Run"
+#: src/web/templates/web/daemon/partials/_daemon_card.html:32
+msgid "With value"
 msgstr ""
 
 #: src/web/templates/web/daemon/daemon_detail.html:47
+#: src/web/templates/web/daemon/partials/_daemon_card.html:34
+msgid "Interval"
+msgstr ""
+
+#: src/web/templates/web/daemon/daemon_detail.html:48
+msgid "Last Run"
+msgstr ""
+
+#: src/web/templates/web/daemon/daemon_detail.html:50
 msgid "Total Run Count"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:56
+#: src/web/templates/web/daemon/daemon_detail.html:59
 msgid "Test the routine to see if this error persists."
 msgstr ""
 
@@ -579,7 +585,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr ""
 
@@ -598,7 +604,6 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -612,7 +617,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr ""
 
@@ -884,7 +889,6 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:90
 msgid "Favorite"
 msgstr ""
 

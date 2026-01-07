@@ -27,12 +27,14 @@ from django.db.models import TextChoices
 from django.utils.translation import gettext_lazy as _
 
 
+INTERNAL_DATE_FORMAT = "%Y-%m-%d"
+
+
 class EmailFetchingCriterionChoices(TextChoices):
     """Namespace class for all implemented mail fetching criteria constants.
 
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4
     Note that IMAP does not support time just dates. So we are always referring to full days.
-    POP does not support queries at all, so everything will be fetched.
     """
 
     DAILY = "DAILY", _("All emails received the last DAY")
@@ -68,6 +70,9 @@ class EmailFetchingCriterionChoices(TextChoices):
     FLAGGED = "FLAGGED", _("FLAGGED emails")
     """Filter by "FLAGGED" flag."""
 
+    UNFLAGGED = "UNFLAGGED", _("All emails that are not FLAGGED")
+    """Filter by "UNFLAGGED" flag."""
+
     DRAFT = "DRAFT", _("All email DRAFTs")
     """Filter by "DRAFT" flag."""
 
@@ -85,6 +90,31 @@ class EmailFetchingCriterionChoices(TextChoices):
 
     UNDELETED = "UNDELETED", _("All UNDELETED emails")
     """Filter by "UNDELETED" flag."""
+
+    # all filters with arg
+    KEYWORD = "KEYWORD {}", _("All emails with the given KEYWORD")
+    """Filter by "KEYWORD". Must be formatted."""
+
+    UNKEYWORD = "UNKEYWORD {}", _("All emails without the given KEYWORD")
+    """Filter by "UNKEYWORD". Must be formatted."""
+
+    LARGER = "LARGER {}", _("All emails LARGER than the given size")
+    """Filter by "LARGER". Must be formatted."""
+
+    SMALLER = "SMALLER {}", _("All emails SMALLER than the given size")
+    """Filter by "SMALLER". Must be formatted."""
+
+    SUBJECT = "SUBJECT {}", _("All emails with SUBJECT containing the given text")
+    """Filter by "SUBJECT" content. Must be formatted."""
+
+    BODY = "BODY {}", _("All emails with BODY containing the given text")
+    """Filter by "BODY" content. Must be formatted."""
+
+    FROM = "FROM {}", _("All emails sent FROM the given address")
+    """Filter by "FROM" header. Must be formatted."""
+
+    SENTSINCE = "SENTSINCE {}", _("All emails SENT SINCE the given date")
+    """Filter by "SENTSINCE" time. Must be formatted."""
 
 
 class EmailProtocolChoices(TextChoices):
@@ -104,6 +134,9 @@ class EmailProtocolChoices(TextChoices):
 
     EXCHANGE = "EXCHANGE", _("Microsoft Exchange")
     """Microsoft's Exchange protocol"""
+
+    JMAP = "JMAP", _("JMAP")
+    """The JMAP protocol"""
 
 
 class HeaderFields:
@@ -195,6 +228,7 @@ PROTOCOLS_SUPPORTING_RESTORE = (
     EmailProtocolChoices.IMAP,
     EmailProtocolChoices.IMAP4_SSL,
     EmailProtocolChoices.EXCHANGE,
+    EmailProtocolChoices.JMAP,
 )
 """All protocols supporting restoring of emails."""
 
@@ -301,11 +335,11 @@ file_format_parsers: Final[
         ],
     ]
 ] = {
-    SupportedEmailUploadFormats.MBOX.value: mailbox.mbox,
-    SupportedEmailUploadFormats.BABYL.value: mailbox.Babyl,
-    SupportedEmailUploadFormats.MMDF.value: mailbox.MMDF,
-    SupportedEmailUploadFormats.MAILDIR.value: mailbox.Maildir,
-    SupportedEmailUploadFormats.MH.value: mailbox.MH,
+    SupportedEmailUploadFormats.MBOX: mailbox.mbox,
+    SupportedEmailUploadFormats.BABYL: mailbox.Babyl,
+    SupportedEmailUploadFormats.MMDF: mailbox.MMDF,
+    SupportedEmailUploadFormats.MAILDIR: mailbox.Maildir,
+    SupportedEmailUploadFormats.MH: mailbox.MH,
 }
 """Mapping of supported file formats to their parser classes."""
 

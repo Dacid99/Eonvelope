@@ -47,6 +47,10 @@ def test_output(fake_daemon, request_context):
     assert serializer_data["mailbox"] == fake_daemon.mailbox.id
     assert "fetching_criterion" in serializer_data
     assert serializer_data["fetching_criterion"] == fake_daemon.fetching_criterion
+    assert "fetching_criterion_arg" in serializer_data
+    assert (
+        serializer_data["fetching_criterion_arg"] == fake_daemon.fetching_criterion_arg
+    )
     assert "interval" in serializer_data
     assert isinstance(serializer_data["interval"], dict)
     assert "every" in serializer_data["interval"]
@@ -81,7 +85,7 @@ def test_output(fake_daemon, request_context):
     assert datetime.fromisoformat(serializer_data["created"]) == fake_daemon.created
     assert "updated" in serializer_data
     assert datetime.fromisoformat(serializer_data["updated"]) == fake_daemon.updated
-    assert len(serializer_data) == 11
+    assert len(serializer_data) == 12
 
 
 @pytest.mark.django_db
@@ -103,6 +107,11 @@ def test_input(daemon_with_interval_payload, request_context):
         serializer_data["fetching_criterion"]
         == daemon_with_interval_payload["fetching_criterion"]
     )
+    assert "fetching_criterion_arg" in serializer_data
+    assert (
+        serializer_data["fetching_criterion_arg"]
+        == daemon_with_interval_payload["fetching_criterion_arg"]
+    )
     assert "interval" in serializer_data
     assert isinstance(serializer_data["interval"], dict)
     assert "every" in serializer_data["interval"]
@@ -122,7 +131,7 @@ def test_input(daemon_with_interval_payload, request_context):
     assert "last_error_occurred_at" not in serializer_data
     assert "created" not in serializer_data
     assert "updated" not in serializer_data
-    assert len(serializer_data) == 3
+    assert len(serializer_data) == 4
 
 
 @pytest.mark.django_db
@@ -203,6 +212,84 @@ def test_post_unavailable_fetching_criterion(
 
     assert not serializer.is_valid()
     assert serializer["fetching_criterion"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "int_arg_fetching_criterion, bad_int_arg",
+    [
+        (EmailFetchingCriterionChoices.LARGER, "no int"),
+        (EmailFetchingCriterionChoices.SMALLER, "-11"),
+    ],
+)
+def test_post_bad_int_fetching_criterion_arg(
+    fake_daemon,
+    daemon_with_interval_payload,
+    request_context,
+    int_arg_fetching_criterion,
+    bad_int_arg,
+):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_with_interval_payload["fetching_criterion"] = int_arg_fetching_criterion
+    daemon_with_interval_payload["fetching_criterion_arg"] = bad_int_arg
+
+    serializer = BaseDaemonSerializer(
+        instance=fake_daemon, data=daemon_with_interval_payload, context=request_context
+    )
+
+    assert not serializer.is_valid()
+    assert serializer["fetching_criterion_arg"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "date_arg_fetching_criterion",
+    [
+        EmailFetchingCriterionChoices.SENTSINCE,
+    ],
+)
+def test_post_bad_date_fetching_criterion_arg(
+    fake_daemon,
+    daemon_with_interval_payload,
+    request_context,
+    date_arg_fetching_criterion,
+):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_with_interval_payload["fetching_criterion"] = date_arg_fetching_criterion
+    daemon_with_interval_payload["fetching_criterion_arg"] = "no time"
+
+    serializer = BaseDaemonSerializer(
+        instance=fake_daemon, data=daemon_with_interval_payload, context=request_context
+    )
+
+    assert not serializer.is_valid()
+    assert serializer["fetching_criterion_arg"].errors
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "arg_fetching_criterion",
+    [
+        EmailFetchingCriterionChoices.BODY,
+        EmailFetchingCriterionChoices.SUBJECT,
+    ],
+)
+def test_post_missing_fetching_criterion_arg(
+    fake_daemon,
+    daemon_with_interval_payload,
+    request_context,
+    arg_fetching_criterion,
+):
+    """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
+    daemon_with_interval_payload["fetching_criterion"] = arg_fetching_criterion
+    daemon_with_interval_payload["fetching_criterion_arg"] = ""
+
+    serializer = BaseDaemonSerializer(
+        instance=fake_daemon, data=daemon_with_interval_payload, context=request_context
+    )
+
+    assert not serializer.is_valid()
+    assert serializer["fetching_criterion_arg"].errors
 
 
 @pytest.mark.django_db

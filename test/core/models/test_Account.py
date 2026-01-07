@@ -34,6 +34,7 @@ from core.utils.fetchers import (
     ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
+    JMAPFetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -122,33 +123,96 @@ def test_Account_foreign_key_deletion(fake_account):
 @pytest.mark.django_db
 def test_Account_unique_constraints(django_user_model):
     """Tests the unique constraints of :class:`core.models.Account.Account`."""
-
+    # ruff: disable[S106]
     account_1 = baker.make(
-        Account, mail_address="abc123", protocol=EmailProtocolChoices.IMAP
+        Account,
+        mail_address="abc123",
+        password="passwordlol",
+        protocol=EmailProtocolChoices.IMAP,
     )
     account_2 = baker.make(
-        Account, mail_address="abc123", protocol=EmailProtocolChoices.IMAP
+        Account,
+        mail_address="abc123",
+        password="passwordlol",
+        protocol=EmailProtocolChoices.IMAP,
     )
     assert account_1.mail_address == account_2.mail_address
+    assert account_1.password == account_2.password
     assert account_1.protocol == account_2.protocol
     assert account_1.user != account_2.user
 
     user = baker.make(django_user_model)
 
-    account_1 = baker.make(Account, user=user, protocol=EmailProtocolChoices.IMAP)
-    account_2 = baker.make(Account, user=user, protocol=EmailProtocolChoices.IMAP)
+    account_1 = baker.make(
+        Account,
+        user=user,
+        mail_address="user1@server.com",
+        password="qwerty1234",
+        protocol=EmailProtocolChoices.EXCHANGE,
+    )
+    account_2 = baker.make(
+        Account,
+        user=user,
+        mail_address="user2@server.com",
+        password="qwerty1234",
+        protocol=EmailProtocolChoices.EXCHANGE,
+    )
     assert account_1.mail_address != account_2.mail_address
+    assert account_1.password == account_2.password
+    assert account_1.protocol == account_2.protocol
+    assert account_1.user == account_2.user
+
+    account_1 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="abcdef",
+        protocol=EmailProtocolChoices.POP3_SSL,
+    )
+    account_2 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="abcdef",
+        protocol=EmailProtocolChoices.POP3,
+    )
+    assert account_1.mail_address == account_2.mail_address
+    assert account_1.password == account_2.password
+    assert account_1.protocol != account_2.protocol
+    assert account_1.user == account_2.user
+
+    account_1 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="123456",
+        protocol=EmailProtocolChoices.JMAP,
+    )
+    account_2 = baker.make(
+        Account,
+        user=user,
+        mail_address="mail@test.org",
+        password="abcdef",
+        protocol=EmailProtocolChoices.JMAP,
+    )
+    assert account_1.mail_address == account_2.mail_address
+    assert account_1.password != account_2.password
     assert account_1.protocol == account_2.protocol
     assert account_1.user == account_2.user
 
     baker.make(
-        Account, mail_address="abc123", user=user, protocol=EmailProtocolChoices.IMAP
+        Account,
+        user=user,
+        mail_address="abc123",
+        password="mypassword",
+        protocol=EmailProtocolChoices.IMAP,
     )
     with pytest.raises(IntegrityError):
         baker.make(
             Account,
-            mail_address="abc123",
             user=user,
+            mail_address="abc123",
+            password="mypassword",
             protocol=EmailProtocolChoices.IMAP,
         )
 
@@ -162,6 +226,7 @@ def test_Account_unique_constraints(django_user_model):
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
         (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
+        (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
 def test_Account_get_fetcher_success(
@@ -208,6 +273,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
         (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
+        (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
 def test_Account_get_fetcher_init_failure(
@@ -241,6 +307,7 @@ def test_Account_get_fetcher_init_failure(
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
         (EmailProtocolChoices.EXCHANGE, ExchangeFetcher),
+        (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
 def test_Account_get_fetcher_class_success(
@@ -470,6 +537,53 @@ def test_Account_update_mailboxes_get_fetcher_error(
     mock_fetcher.fetch_mailboxes.assert_not_called()
     spy_Mailbox_create_from_data.assert_not_called()
     mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "mail_address, user_username, mail_host , expected_address",
+    [
+        ("no_at", "someone", "stalwart.tld", "no_at@stalwart.tld"),
+        ("", "admin", "iloveeonvelope.org", "admin@iloveeonvelope.org"),
+        ("valid@mail.address", "server.com", "standard", "valid@mail.address"),
+    ],
+)
+def test_Account_complete_mail_address(
+    fake_account, mail_address, user_username, mail_host, expected_address
+):
+    """Tests the complete_mail_address property of :class:`core.models.Account`
+    for all relevant cases.
+    """
+    fake_account.mail_address = mail_address
+    fake_account.mail_host = mail_host
+    fake_account.user.username = user_username
+
+    result = fake_account.complete_mail_address
+
+    assert result == expected_address
+    assert "@" in result
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "mail_host, mail_host_port, expected_address",
+    [
+        ("stalwart.tld", "433", "stalwart.tld:433"),
+        ("iloveeonvelope.org", None, "iloveeonvelope.org"),
+    ],
+)
+def test_Account_mail_host_address(
+    fake_account, mail_host, mail_host_port, expected_address
+):
+    """Tests the mail_host_address property of :class:`core.models.Account`
+    for all relevant cases.
+    """
+    fake_account.mail_host = mail_host
+    fake_account.mail_host_port = mail_host_port
+
+    result = fake_account.mail_host_address
+
+    assert result == expected_address
 
 
 @pytest.mark.django_db

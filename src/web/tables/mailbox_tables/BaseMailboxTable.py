@@ -35,7 +35,6 @@ class BaseMailboxTable(Table):
     account = Column(
         verbose_name=_("Account"),
         linkify=lambda record: record.account.get_absolute_url(),
-        accessor="account__mail_address",
     )
 
     class Meta:
@@ -51,3 +50,7 @@ class BaseMailboxTable(Table):
             "is_healthy",
         )
         sequence = ("checkbox", *fields)
+
+    def render_account(self, record: Mailbox) -> str:
+        """Render the complete account mail address instead of the pure username field."""
+        return record.account.complete_mail_address

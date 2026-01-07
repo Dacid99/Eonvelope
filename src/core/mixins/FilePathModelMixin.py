@@ -111,3 +111,15 @@ class FilePathModelMixin(Model):
             default_storage.delete(self.file_path)
             self.file_path = None
             logger.debug("Successfully removed file from storage.")
+
+    @property
+    def absolute_filepath(self) -> str | None:
+        """The absolute filepath in the server fs for use with open.
+
+        Returns:
+            The absolute path in the stored file.
+            If no file_path is set, returns None.
+        """
+        if self.file_path:
+            return default_storage.path(self.file_path)
+        return None

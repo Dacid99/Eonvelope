@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, ClassVar, Final, override
 
+from django.core.exceptions import ValidationError
 from django_celery_beat.models import IntervalSchedule
 from rest_framework import serializers
 
@@ -82,6 +83,38 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         :attr:`core.models.Daemon.Daemon.updated` fields are read-only.
         """
 
+    @override
+    def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
+        """Include full model-side validation to allow testing of account on submission.
+
+        Args:
+            attrs: The attributes on the serializer.
+
+        Returns:
+            The same attributes.
+
+        Raises:
+            serializers.ValidationError: If the validation fails.
+        """
+        instance = self.instance or self.Meta.model()
+
+        for attr, value in attrs.items():
+            if attr == "interval":
+                instance.interval = IntervalSchedule(
+                    every=value["every"], period=value["period"]
+                )
+            else:
+                setattr(instance, attr, value)
+
+        try:
+            instance.clean()
+        except ValidationError as error:
+            raise serializers.ValidationError(
+                error.message_dict or error.messages
+            ) from error
+
+        return attrs
+
     def validate_mailbox(self, value: Mailbox) -> Mailbox:
         """Validate that the given mailbox belongs to the requesting user."""
         if (
@@ -90,20 +123,6 @@ class BaseDaemonSerializer(serializers.ModelSerializer[Daemon]):
         ):
             raise serializers.ValidationError("No mailbox with that id found.")
         return value
-
-    @override
-    def validate(self, attrs: Any) -> Any:
-        """Validate that the given fetching_criterion is available for the mailbox."""
-        if (
-            attrs["fetching_criterion"]
-            not in attrs["mailbox"].available_fetching_criteria
-        ):
-            raise serializers.ValidationError(
-                {
-                    "fetching_criterion": "This fetching criterion is not available for this mailbox."
-                }
-            )
-        return super().validate(attrs)
 
     @override
     def update(self, instance: Daemon, validated_data: dict) -> Daemon:

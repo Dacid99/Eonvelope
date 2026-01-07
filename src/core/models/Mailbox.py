@@ -178,13 +178,14 @@ class Mailbox(
         self.set_healthy()
         logger.info("Successfully tested mailbox")
 
-    def fetch(self, criterion: str) -> None:
+    def fetch(self, criterion: str, criterion_arg: str) -> None:
         """Fetches emails from this mailbox based on :attr:`criterion` and adds them to the db.
 
         If successful, marks this mailbox as healthy, otherwise unhealthy.
 
         Args:
             criterion: The criterion used to fetch emails from the mailbox.
+            criterion_arg: The argument for the criterion.
 
         Raises:
             MailboxError: Reraised if fetching failed due to a MailboxError.
@@ -193,7 +194,7 @@ class Mailbox(
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
         with self.account.get_fetcher() as fetcher:
             try:
-                fetched_mails = fetcher.fetch_emails(self, criterion)
+                fetched_mails = fetcher.fetch_emails(self, criterion, criterion_arg)
             except MailboxError as error:
                 logger.info("Failed fetching %s with error: %s.", self, error)
                 self.set_unhealthy(error)
@@ -339,6 +340,22 @@ class Mailbox(
         return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
 
     @property
+    def available_no_arg_fetching_criteria(self) -> tuple[StrOrPromise]:
+        """Gets the available fetching criteria that do not require an argument based on the mail protocol of this mailbox.
+
+        Returns:
+            A tuple of all available fetching criteria that do not require an argument for this mailbox.
+
+        Raises:
+            ValueError: If the account has an unimplemented protocol.
+        """
+        return tuple(
+            criterion
+            for criterion in self.available_fetching_criteria
+            if criterion.format("arg") == criterion
+        )  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
+
+    @property
     def available_fetching_criterion_choices(self) -> list[tuple[str, StrOrPromise]]:
         """Gets the available fetching criterion choices based on the mail protocol of this mailbox.
 
@@ -352,6 +369,24 @@ class Mailbox(
             (criterion, label)
             for criterion, label in EmailFetchingCriterionChoices.choices
             if criterion in self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA
+        ]
+
+    @property
+    def available_no_arg_fetching_criterion_choices(
+        self,
+    ) -> list[tuple[str, StrOrPromise]]:
+        """Gets the available fetching criterion choices that do not require an argumentbased on the mail protocol of this mailbox.
+
+        Returns:
+            A choices-type tuple of all available fetching criteria that do not require an argument for this mailbox.
+
+        Raises:
+            ValueError: If the account has an unimplemented protocol.
+        """
+        return [
+            (criterion, label)
+            for criterion, label in self.available_fetching_criterion_choices
+            if criterion.format("arg") == criterion
         ]
 
     @property

@@ -40,6 +40,11 @@ Fill out the form with the credentials of the account, the fields marked with a 
 In case you have set up two-factor-authentication for your mailaccount,
 you need an app-password (can be created in the settings of your email account)
 in lieu of a your plain password.
+
+.. note::
+    JMAP allows authentication via a apitoken.
+    To use this option, omit the username and put the token as password.
+
 You can find the information about mailserver-URL, protocol, port in the documentation
 of your email provider.
 The following protocols are supported:
@@ -49,6 +54,7 @@ The following protocols are supported:
 - POP3
 - POP3 (unencrypted)
 - Microsoft Exchange
+- JMAP
 
 .. note::
     If possible, use IMAP4 via SSL.
@@ -79,13 +85,15 @@ If you know the mailserver of an account to be slow, you can set a larger value.
 
 For Exchange this enables a retry and faulttolerance logic timing out after the given value.
 
+Unfortunately, JMAP doesn't use the timeout value at this point. Just keep the default until further notice.
+
 Don't use larger timeout values than 60 seconds, as this may significantly impact
 the runtime of individual fetch operations and may at worst delay the archiving schedule.
 The minimal accepted timeout value is 0.1.
 
 When you submit the data to add the account, Eonvelope will test
 whether it can access this account with the given information.
-In case this is not possible, you will get feedback about the problem that occured.
+In case this is not possible, you will get feedback about the problem that occurred.
 If the service is unknown, check the email server URL.
 In case of a failed authentication, check the credentials.
 
@@ -123,7 +131,10 @@ just like you did with the account earlier.
     As the information about the mailbox is collected from the account itself,
     this should only fail if the mailbox has been deleted or renamed.
 
-After a successful test, the option to fetch all emails in the mailbox becomes available.
+After a successful test, the option to fetch emails in the mailbox becomes available.
+You can choose the emails to fetch via a criterion.
+A list of these criteria can be found in the following section about routines.
+
 Depending on the number of mailboxes this may take a while.
 
 .. note::
@@ -140,20 +151,28 @@ The add-routine button on the mailbox detail page creates a new routine configur
 and lets you modify it.
 Most important is the criterion setting and the period time of this routine.
 
-The following criteria are available:
+There is a broad variety of criteria, not all are available for every email protocol.
+Some criteria require an additional value to filter by.
 
+The following criteria without required value are available:
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Criterion   | Description                                                                                                                                                                                                                                       |
++=============+==========================================================================================================================================================================================================================================================================+
 | RECENT      | Emails that have the RECENT flag set. This flag is set to newly received emails and is removed after the first session to the mailaccount after the email has been received. Suitable if the mailbox is fetched at a high frequency.                                     |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| UNSEEN      | Emails that have the UNSEEN flag set. This flag is set to newly received emails and is removed after the email has been requested by a mailclient. Suitable if the mailbox is fetched at a high frequency.                                                               |
+| SEEN        | Emails that have the SEEN flag set. This flag is set to newly received emails and is removed after the email has been requested by a mailclient.                                                                                                                         |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| ALL         | Emails in the mailbox. Use with care.                                                                                                                                                                                                                                    |
+| UNSEEN      | Emails that do not have the SEEN flag set. This flag is set to newly received emails and is removed after the email has been requested by a mailclient. Suitable if the mailbox is fetched at a high frequency.                                                          |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| ALL         | All emails in the mailbox. Use with care.                                                                                                                                                                                                                                |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | NEW         | Emails with RECENT and UNSEEN flag.                                                                                                                                                                                                                                      |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | OLD         | Emails that are not NEW.                                                                                                                                                                                                                                                 |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | FLAGGED     | Emails that are flagged by the user. Suitable if you want to only fetch very particular, hand-selected emails.                                                                                                                                                           |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| UNFLAGGED   | Emails that are not flagged by the user. Suitable if you want to exclude hand-selected emails.                                                                                                                                                                           |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | DRAFT       | Email drafts. Can be used to archive your drafts.                                                                                                                                                                                                                        |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -163,7 +182,7 @@ The following criteria are available:
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | UNANSWERED  | Emails that have not been answered.                                                                                                                                                                                                                                      |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| DELETED     | Emails that have been deleted. This mostly concerns the trash mailbox.                                                                                                                                                                                                   |
+| DELETED     | Emails that have been deleted. This typically concerns the trash mailbox.                                                                                                                                                                                                |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | UNDELETED   | Emails that have never been deleted.                                                                                                                                                                                                                                     |
 +-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -180,7 +199,7 @@ The following criteria are available:
     For POP accounts, only the ALL criterion is available.
 
 .. note::
-    The most precise time-based lookup is DAILY as IMAP does only support lookup by date, not by timestamp.
+    The most precise time-based lookup is DAILY as IMAP only supports lookup by date, not by timestamp.
 
 .. note::
     For a complete coverage of all emails that enter and exit a mailaccount,
@@ -202,6 +221,36 @@ The following criteria are available:
     since that may lead to race conditions between the two servers.
     Just use the time-based filters instead.
     Eonvelope with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
+
+For more specific filtering, you can use the following criteria that take a custom value to filter by.
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Criterion   | Description                                                                                                                                                                                                                                       |
++=============+==========================================================================================================================================================================================================================================================================+
+| FROM        | Emails that have been sent by the given mailaddress. |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| BODY        | Emails that have the given word in their bodytext. |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| SUBJECT     | Emails that have the given word in their subject line. |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| KEYWORD     | Emails that have been marked with the given flag. Can be used to filter for a specific flag that is not already implemented by one of the upper criteria.                                                                                                                                                                                                                                 |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| UNKEYWORD   | Emails with have not been marked with the given flag.                                                                                                                                                                                                                         |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| LARGER      | Emails that have a larger data size than the given value. That value has to be a positive integer in bytes.                                                                                                                                                                                                                                                 |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| SMALLER     | Emails that have a smaller data size than the given value. That value has to be a positive integer in bytes.                                                                                                                                                           |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| SENTSINCE   | Emails that have been sent since the given date. The date has to be given in format YYYY-MM-DD.                                                                                                                                                                           |
++-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+.. note::
+    If you use IMAP, you can use the custom value to configure much more complex filters.
+    For example, if you want to get only emails with a size above 1000 bytes and that have 'asdf' in the subject line,
+    you can use the SUBJECT filter with value 'asdf LARGER 1000'.
+    To chain the filters with an OR instead of an AND, you would use 'asdf OR LARGER 1000'.
+
+.. note::
+    For more details on filters in IMAP, see `the RFC 3501 standard<https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4>`_.
 
 The *interval-period* setting defines the time unit that lies between two routine jobs runs.
 The *interval-every* parameter defines
@@ -248,7 +297,7 @@ The table interface can always be found by appending `table/` to the url of the 
 Emails
 ^^^^^^
 
-For IMAP and Exchange email accounts, emails can be restored to the mailbox that they were found in.
+For IMAP, Exchange and JMAP email accounts, emails can be restored to the mailbox that they were found in.
 
 Conversations
 """""""""""""

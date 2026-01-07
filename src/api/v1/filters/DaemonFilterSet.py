@@ -133,6 +133,7 @@ class DaemonFilterSet(filters.FilterSet):
         fields: ClassVar[dict[str, list[str]]] = {
             "uuid": ["exact", "contains"],
             "fetching_criterion": FilterSetups.CHOICE,
+            "fetching_criterion_arg": FilterSetups.TEXT,
             "interval__every": FilterSetups.INT,
             "interval__period": FilterSetups.TEXT,
             "celery_task__last_run_at": FilterSetups.DATETIME,
@@ -162,6 +163,7 @@ class DaemonFilterSet(filters.FilterSet):
         return queryset.filter(
             Q(uuid__icontains=value)
             | Q(fetching_criterion__icontains=value)
+            | Q(fetching_criterion_arg__icontains=value)
             | Q(mailbox__name__icontains=value)
             | Q(mailbox__account__mail_address__icontains=value)
             | Q(mailbox__account__mail_host__icontains=value)

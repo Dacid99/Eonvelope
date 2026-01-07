@@ -47,6 +47,26 @@ def test_search_filter(faker, daemon_queryset, searched_field):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+)
+def test_fetching_criterion_arg_filter(
+    daemon_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
+    for the :attr:`core.models.Daemon.Daemon.fetching_criterion_arg` field.
+    """
+    query = {"fetching_criterion_arg" + lookup_expr: filterquery}
+
+    filtered_data = DaemonFilterSet(query, queryset=daemon_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
     "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
 )
 def test_interval__every_filter(

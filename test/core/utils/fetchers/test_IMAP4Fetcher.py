@@ -87,36 +87,74 @@ def test_IMAP4Fetcher_make_fetching_criterion_date_criterion(
     }"
 
     with freeze_time(fake_datetime):
-        result = IMAP4Fetcher.make_fetching_criterion(criterion_name)
+        result = IMAP4Fetcher.make_fetching_criterion(criterion_name, "value")
 
     assert result == expected_criterion
+
+
+def test_IMAP4Fetcher_make_fetching_criterion_sentsince():
+    """Tests :func:`core.utils.fetchers.IMAP4Fetcher.make_fetching_query`
+    in different cases of date criteria.
+    """
+    result = IMAP4Fetcher.make_fetching_criterion(
+        EmailFetchingCriterionChoices.SENTSINCE, "2009-01-12"
+    )
+
+    assert result == "SENTSINCE 12-Jan-2009"
 
 
 @pytest.mark.parametrize(
     "criterion_name, expected_result",
     [
-        (EmailFetchingCriterionChoices.ALL, EmailFetchingCriterionChoices.ALL),
-        (EmailFetchingCriterionChoices.UNSEEN, EmailFetchingCriterionChoices.UNSEEN),
-        (EmailFetchingCriterionChoices.RECENT, EmailFetchingCriterionChoices.RECENT),
-        (EmailFetchingCriterionChoices.NEW, EmailFetchingCriterionChoices.NEW),
-        (EmailFetchingCriterionChoices.OLD, EmailFetchingCriterionChoices.OLD),
-        (EmailFetchingCriterionChoices.FLAGGED, EmailFetchingCriterionChoices.FLAGGED),
-        (EmailFetchingCriterionChoices.DRAFT, EmailFetchingCriterionChoices.DRAFT),
-        (
-            EmailFetchingCriterionChoices.ANSWERED,
-            EmailFetchingCriterionChoices.ANSWERED,
-        ),
+        (EmailFetchingCriterionChoices.ALL, "ALL"),
+        (EmailFetchingCriterionChoices.UNSEEN, "UNSEEN"),
+        (EmailFetchingCriterionChoices.SEEN, "SEEN"),
+        (EmailFetchingCriterionChoices.RECENT, "RECENT"),
+        (EmailFetchingCriterionChoices.NEW, "NEW"),
+        (EmailFetchingCriterionChoices.OLD, "OLD"),
+        (EmailFetchingCriterionChoices.FLAGGED, "FLAGGED"),
+        (EmailFetchingCriterionChoices.UNFLAGGED, "UNFLAGGED"),
+        (EmailFetchingCriterionChoices.DRAFT, "DRAFT"),
+        (EmailFetchingCriterionChoices.UNDRAFT, "UNDRAFT"),
+        (EmailFetchingCriterionChoices.DELETED, "DELETED"),
+        (EmailFetchingCriterionChoices.UNDELETED, "UNDELETED"),
+        (EmailFetchingCriterionChoices.ANSWERED, "ANSWERED"),
+        (EmailFetchingCriterionChoices.UNANSWERED, "UNANSWERED"),
     ],
 )
-def test_IMAP4Fetcher_make_fetching_criterion_other_criterion(
+def test_IMAP4Fetcher_make_fetching_criterion_criterion_no_arg(
     criterion_name, expected_result
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.make_fetching_query`
     in different cases of non-date criteria.
     """
-    result = IMAP4Fetcher.make_fetching_criterion(criterion_name)
+    result = IMAP4Fetcher.make_fetching_criterion(criterion_name, "value")
 
     assert result == expected_result
+
+
+@pytest.mark.parametrize(
+    "criterion_name, expected_result_template",
+    [
+        (EmailFetchingCriterionChoices.SUBJECT, "SUBJECT {}"),
+        (EmailFetchingCriterionChoices.KEYWORD, "KEYWORD {}"),
+        (EmailFetchingCriterionChoices.UNKEYWORD, "UNKEYWORD {}"),
+        (EmailFetchingCriterionChoices.LARGER, "LARGER {}"),
+        (EmailFetchingCriterionChoices.SMALLER, "SMALLER {}"),
+        (EmailFetchingCriterionChoices.BODY, "BODY {}"),
+        (EmailFetchingCriterionChoices.FROM, "FROM {}"),
+    ],
+)
+def test_IMAP4Fetcher_make_fetching_criterion_criterion_with_arg(
+    faker, criterion_name, expected_result_template
+):
+    """Tests :func:`core.utils.fetchers.IMAP4Fetcher.make_fetching_query`
+    in different cases of non-date criteria.
+    """
+    fake_criterion_arg = faker.word()
+    result = IMAP4Fetcher.make_fetching_criterion(criterion_name, fake_criterion_arg)
+
+    assert result == expected_result_template.format(fake_criterion_arg)
 
 
 @pytest.mark.django_db

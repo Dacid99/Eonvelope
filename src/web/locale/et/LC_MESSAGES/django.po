@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-27 16:58+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2025-12-31 20:21+0000\n"
+"PO-Revision-Date: 2026-01-04 11:01+0000\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/web/"
+"et/>\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -26,7 +27,7 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:55
 #: src/web/filters/EmailFilterSet.py:53 src/web/filters/MailboxFilterSet.py:53
 msgid "Search"
-msgstr ""
+msgstr "Otsi"
 
 #: src/web/filters/AccountFilterSet.py:66
 #: src/web/filters/CorrespondentFilterSet.py:61
@@ -34,7 +35,7 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:65
 #: src/web/filters/MailboxFilterSet.py:67
 msgid "Created before"
-msgstr ""
+msgstr "Loodud enne"
 
 #: src/web/filters/AccountFilterSet.py:72
 #: src/web/filters/CorrespondentFilterSet.py:67
@@ -42,19 +43,19 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:71
 #: src/web/filters/MailboxFilterSet.py:73
 msgid "Created after"
-msgstr ""
+msgstr "Loodud peale"
 
 #: src/web/filters/AttachmentFilterSet.py:78
 #: src/web/filters/CorrespondentEmailFilterSet.py:74
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
-msgstr ""
+msgstr "Saabunud enne"
 
 #: src/web/filters/AttachmentFilterSet.py:84
 #: src/web/filters/CorrespondentEmailFilterSet.py:80
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
-msgstr ""
+msgstr "Saabunud peale"
 
 #: src/web/filters/DaemonFilterSet.py:68
 msgid "Number of intervals"
@@ -66,15 +67,15 @@ msgstr ""
 
 #: src/web/filters/DaemonFilterSet.py:79
 msgid "Enabled"
-msgstr ""
+msgstr "Kasutusel"
 
 #: src/web/forms/UploadEmailForm.py:34
 msgid "File format"
-msgstr ""
+msgstr "Failivorming"
 
 #: src/web/forms/UploadEmailForm.py:35
 msgid "Select the format of the email file you want to upload."
-msgstr ""
+msgstr "Palun vali üleslaaditava e-kirja vorming."
 
 #: src/web/forms/UploadEmailForm.py:40
 msgid "Email or Mailbox file"
@@ -107,11 +108,11 @@ msgstr ""
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:35
 #: src/web/templates/web/attachment/attachment_detail.html:64
 msgid "Email"
-msgstr ""
+msgstr "E-kiri"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:40
 msgid "Content type"
-msgstr ""
+msgstr "Sisu tüüp"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:68
 #: src/web/tables/email_tables/BaseEmailTable.py:69
@@ -119,13 +120,13 @@ msgstr ""
 #: src/web/templates/web/attachment/partials/_attachment_card.html:22
 #: src/web/templates/web/email/email_detail.html:58
 msgid "bytes"
-msgstr ""
+msgstr "baiti"
 
 #: src/web/tables/daemon_tables/BaseDaemonTable.py:34
 #: src/web/tables/email_tables/BaseEmailTable.py:35
 #: src/web/tables/emailcorrespondent_tables/BaseCorrespondentEmailTable.py:37
 #: src/web/templates/web/daemon/daemon_detail.html:32
-#: src/web/templates/web/daemon/daemon_detail.html:66
+#: src/web/templates/web/daemon/daemon_detail.html:69
 #: src/web/templates/web/daemon/daemon_edit.html:17
 #: src/web/templates/web/daemon/partials/_daemon_card.html:19
 #: src/web/templates/web/email/email_detail.html:61
@@ -144,24 +145,24 @@ msgstr ""
 #: src/web/templates/web/mailbox/mailbox_detail.html:40
 #: src/web/templates/web/mailbox/partials/_mailbox_card.html:24
 msgid "Account"
-msgstr ""
+msgstr "Kasutajakonto"
 
 #: src/web/templates/400.html:6 src/web/templates/400.html:10
 msgid "Request Error"
-msgstr ""
+msgstr "Päringu viga"
 
 #: src/web/templates/400.html:11
 msgid "There was something wrong with your request."
-msgstr ""
+msgstr "Midagi oli valesti sinu päringuga."
 
 #: src/web/templates/400.html:12
 msgid "First aid: Please try again."
-msgstr ""
+msgstr "Esmalt palun korda päringut."
 
 #: src/web/templates/403.html:6 src/web/templates/403.html:10
 #: src/web/templates/403_csrf.html:6 src/web/templates/403_csrf.html:10
 msgid "Forbidden"
-msgstr ""
+msgstr "Keelatud"
 
 #: src/web/templates/403.html:11
 msgid "You are not allowed to access the page you requested."
@@ -207,58 +208,58 @@ msgstr ""
 
 #: src/web/templates/web/account/account_create.html:8
 msgid "Add Account"
-msgstr ""
+msgstr "Lisa kasutajakonto"
 
 #: src/web/templates/web/account/account_create.html:18
 msgid "New Account"
-msgstr ""
+msgstr "Uus kasutajakonto"
 
 #: src/web/templates/web/account/account_create.html:37
-#: src/web/templates/web/daemon/daemon_create.html:35
-#: src/web/templates/web/mailbox/mailbox_daemon_create.html:39
+#: src/web/templates/web/daemon/daemon_create.html:36
+#: src/web/templates/web/mailbox/mailbox_daemon_create.html:40
 #: src/web/templates/web/partials/_cancel_edit-button.html:5
 #: src/web/templates/web/partials/_delete-modal.html:28
 #: src/web/templates/web/partials/_multi_delete-modal.html:25
 msgid "Cancel"
-msgstr ""
+msgstr "Katkesta"
 
 #: src/web/templates/web/account/account_detail.html:6
 msgid "Account Details"
-msgstr ""
+msgstr "Kasutajakonto üksikasjad"
 
 #: src/web/templates/web/account/account_detail.html:37
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: src/web/templates/web/account/account_detail.html:38
 #: src/web/templates/web/account/partials/_account_card.html:24
 msgid "Protocol"
-msgstr ""
+msgstr "Protokoll"
 
 #: src/web/templates/web/account/account_detail.html:40
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: src/web/templates/web/account/account_detail.html:44
 msgid "Default"
-msgstr ""
+msgstr "Vaikimisi"
 
 #: src/web/templates/web/account/account_detail.html:48
 msgid "Timeout"
-msgstr ""
+msgstr "Aegumine"
 
 #: src/web/templates/web/account/account_detail.html:52
 msgid "None"
-msgstr ""
+msgstr "Puudub"
 
 #: src/web/templates/web/account/account_detail.html:57
-#: src/web/templates/web/daemon/daemon_detail.html:51
+#: src/web/templates/web/daemon/daemon_detail.html:54
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
 msgid "Latest Error"
-msgstr ""
+msgstr "Viimane viga"
 
 #: src/web/templates/web/account/account_detail.html:61
-#: src/web/templates/web/daemon/daemon_detail.html:55
+#: src/web/templates/web/daemon/daemon_detail.html:58
 #: src/web/templates/web/mailbox/mailbox_detail.html:69
 msgid "Occurred At"
 msgstr ""
@@ -273,7 +274,7 @@ msgstr ""
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:11
 #: src/web/templates/web/partials/_header.html:126
 msgid "Mailboxes"
-msgstr ""
+msgstr "Postkastid"
 
 #: src/web/templates/web/account/account_detail.html:96
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
@@ -304,7 +305,7 @@ msgstr ""
 #: src/web/templates/web/dashboard.html:69
 #: src/web/templates/web/partials/_header.html:104
 msgid "Accounts"
-msgstr ""
+msgstr "Kasutajakontod"
 
 #: src/web/templates/web/account/partials/_add_button.html:6
 msgid "Add account"
@@ -345,7 +346,7 @@ msgstr ""
 
 #: src/web/templates/web/attachment/attachment_detail.html:38
 msgid "Size"
-msgstr ""
+msgstr "Suurus"
 
 #: src/web/templates/web/attachment/attachment_detail.html:42
 msgid "Content Disposition"
@@ -367,7 +368,7 @@ msgstr ""
 #: src/web/templates/web/email/email_detail.html:133
 #: src/web/templates/web/partials/_header.html:56
 msgid "Attachments"
-msgstr ""
+msgstr "Manused"
 
 #: src/web/templates/web/attachment/partials/_attachment_card.html:22
 #: src/web/templates/web/email/email_detail.html:58
@@ -380,7 +381,7 @@ msgstr ""
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:7
 msgid "No attachments found."
-msgstr ""
+msgstr "Manuseid ei leidu."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:11
 msgid ""
@@ -419,11 +420,11 @@ msgstr ""
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:49
 msgid "Subscribe"
-msgstr ""
+msgstr "Telli"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:56
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Loobu tellimusest"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:64
 msgid "Post"
@@ -478,24 +479,29 @@ msgid "Routine Details"
 msgstr ""
 
 #: src/web/templates/web/daemon/daemon_detail.html:42
-#: src/web/templates/web/daemon/partials/_daemon_card.html:28
+#: src/web/templates/web/daemon/partials/_daemon_card.html:29
 msgid "Criterion"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:44
-#: src/web/templates/web/daemon/partials/_daemon_card.html:29
-msgid "Interval"
-msgstr ""
-
 #: src/web/templates/web/daemon/daemon_detail.html:45
-msgid "Last Run"
+#: src/web/templates/web/daemon/partials/_daemon_card.html:32
+msgid "With value"
 msgstr ""
 
 #: src/web/templates/web/daemon/daemon_detail.html:47
+#: src/web/templates/web/daemon/partials/_daemon_card.html:34
+msgid "Interval"
+msgstr ""
+
+#: src/web/templates/web/daemon/daemon_detail.html:48
+msgid "Last Run"
+msgstr ""
+
+#: src/web/templates/web/daemon/daemon_detail.html:50
 msgid "Total Run Count"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:56
+#: src/web/templates/web/daemon/daemon_detail.html:59
 msgid "Test the routine to see if this error persists."
 msgstr ""
 
@@ -542,7 +548,7 @@ msgstr ""
 
 #: src/web/templates/web/dashboard.html:6
 msgid "Dashboard"
-msgstr ""
+msgstr "Juhtpaneel"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/web/templates/web/dashboard.html:11
@@ -571,14 +577,14 @@ msgstr ""
 #: src/web/templates/web/email/archive/base_archive.html:6
 #: src/web/templates/web/partials/_header.html:42
 msgid "Timeline"
-msgstr ""
+msgstr "Ajajoon"
 
 #: src/web/templates/web/email/archive/base_archive.html:15
 msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr ""
 
@@ -597,7 +603,6 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -611,7 +616,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr ""
 
@@ -739,7 +744,7 @@ msgstr ""
 #: src/web/templates/web/partials/_delete-modal.html:17
 #: src/web/templates/web/partials/_multi_delete-modal.html:15
 msgid "Close"
-msgstr ""
+msgstr "Sulge"
 
 #: src/web/templates/web/layouts/base_list.html:38
 msgid "Select All"
@@ -883,7 +888,6 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:90
 msgid "Favorite"
 msgstr ""
 
@@ -938,7 +942,7 @@ msgstr ""
 
 #: src/web/templates/web/partials/_header.html:21
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Lülita menüü sisse/välja"
 
 #: src/web/templates/web/partials/_header.html:32
 #: src/web/templates/web/partials/_header.html:58
@@ -1008,7 +1012,7 @@ msgstr ""
 
 #: src/web/templates/web/partials/_submit_form-button.html:3
 msgid "Save"
-msgstr ""
+msgstr "Salvesta"
 
 #: src/web/templates/web/partials/_test-button.html:4
 msgid "Test"

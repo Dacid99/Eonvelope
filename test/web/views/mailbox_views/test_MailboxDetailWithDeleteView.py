@@ -325,7 +325,7 @@ def test_post_fetch_success_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL
+        fake_mailbox, EmailFetchingCriterionChoices.ALL, ""
     )
 
 
@@ -354,7 +354,7 @@ def test_post_fetch_no_criterion_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL
+        fake_mailbox, EmailFetchingCriterionChoices.ALL, ""
     )
 
 
@@ -367,7 +367,7 @@ def test_post_fetch_bad_criterion_auth_owner(
     """
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
-        {"fetch": EmailFetchingCriterionChoices.DELETED.value},
+        {"fetch": "WEIRD"},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -412,7 +412,7 @@ def test_post_fetch_failure_auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL
+        fake_mailbox, EmailFetchingCriterionChoices.ALL, ""
     )
     assert fake_error_message in response.content.decode("utf-8")
 

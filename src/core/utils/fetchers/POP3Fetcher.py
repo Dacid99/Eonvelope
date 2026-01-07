@@ -47,10 +47,10 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
     Since POP does not have any mailboxes, none of the methods should raise a `MailboxError`.
     """
 
-    PROTOCOL = EmailProtocolChoices.POP3.value
+    PROTOCOL = EmailProtocolChoices.POP3
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.POP3`."""
 
-    AVAILABLE_FETCHING_CRITERIA = (EmailFetchingCriterionChoices.ALL.value,)
+    AVAILABLE_FETCHING_CRITERIA = (EmailFetchingCriterionChoices.ALL,)
     """Tuple of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
     Must be immutable!
     """
@@ -119,6 +119,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         self,
         mailbox: Mailbox,
         criterion: str = EmailFetchingCriterionChoices.ALL,
+        criterion_arg: str = "",
     ) -> list[bytes]:
         """Fetches and returns all maildata from the server.
 
@@ -127,6 +128,8 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
             criterion: POP only supports ALL lookups.
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
                 This arg ensures compatibility with the other fetchers.
+            criterion_arg: The value to filter by.
+                Defaults to "" as :attr:`core.constants.EmailFetchingCriterionChoices.ALL` does not require a value.
 
         Returns:
             List of :class:`email.message.EmailMessage` mails in the mailbox.

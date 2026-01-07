@@ -125,6 +125,7 @@ parametrize-values-type = "list"
 [lint.extend-per-file-ignores]
 "/**/test/**/test_**.py" = [  # extend ignores for test_* files, so excluding conftests
   "S101", # asserts
+  "S106", # allow setting random passwords
   "F401", # unused import
   "F811", # redefinition of unused
 ]

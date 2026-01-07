@@ -19,7 +19,7 @@
 {% endblock previous_date_name %}
 
 {% block next_date_url %}
-    {% url 'web:email-archive-week' today.year today.isocalendar.week %}
+    {% url 'web:email-archive-week' today.isocalendar.year today.isocalendar.week %}
 {% endblock next_date_url %}
 
 {% block next_date_name %}

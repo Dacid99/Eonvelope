@@ -377,14 +377,17 @@ def other_user(django_user_model):
 
 
 @pytest.fixture
-def fake_account(owner_user):
+def fake_account(faker, owner_user):
     """An :class:`core.models.Account` owned by :attr:`owner_user`.
 
     Note:
         The protocol is always IMAP to allow for different fetchingoptions.
     """
     return baker.make(
-        Account, user=owner_user, protocol=EmailProtocolChoices.IMAP.value
+        Account,
+        user=owner_user,
+        mail_address=faker.email(),
+        protocol=EmailProtocolChoices.IMAP.value,
     )
 
 
@@ -590,6 +593,7 @@ def account_payload(faker, owner_user):
     account_data = baker.prepare(
         Account,
         user=owner_user,
+        mail_address=faker.email(),
         mail_host_port=faker.random.randint(0, 65535),
         protocol=faker.random.choice(EmailProtocolChoices.values),
         timeout=faker.random.randint(1, 1000),
@@ -643,14 +647,14 @@ def correspondent_payload(faker, fake_email):
 @pytest.fixture
 def daemon_payload(faker, fake_mailbox, fake_daemon):
     """Fixture creating clean :class:`core.models.Daemon` payload with data deviating from the defaults."""
-    # no cryptography going on here
-    fetching_choices = list(fake_mailbox.available_fetching_criteria)
+    fetching_choices = list(fake_mailbox.available_no_arg_fetching_criteria)
     if fake_daemon.fetching_criterion in fetching_choices:
         fetching_choices.remove(fake_daemon.fetching_criterion)
     daemon_data = baker.prepare(
         Daemon,
         mailbox=fake_mailbox,
         fetching_criterion=faker.random.choice(fetching_choices),
+        fetching_criterion_arg=faker.word(),
     )
     payload = model_to_dict(daemon_data)
     payload.pop("id")

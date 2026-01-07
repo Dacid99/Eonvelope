@@ -42,6 +42,7 @@ from core.utils.fetchers import (
     ExchangeFetcher,
     IMAP4_SSL_Fetcher,
     IMAP4Fetcher,
+    JMAPFetcher,
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
@@ -80,13 +81,17 @@ class Account(
 
     MAX_MAIL_HOST_PORT = 65535
 
-    mail_address = models.EmailField(
+    mail_address = models.CharField(
         max_length=255,
+        default="",
+        blank=True,
         # Translators: Do not capitalize the very first letter unless your language requires it.
-        verbose_name=_("email address"),
-        help_text=_("The mail address to the account."),
+        verbose_name=_("username"),
+        help_text=_("The username of the account. Typically the mail address."),
     )
-    """The mail address of the account. Unique together with :attr:`user`."""
+    """The username of the account. Unique together with :attr:`user`.
+    Named mail_address for continuity.
+    """
 
     password = models.CharField(
         max_length=255,
@@ -155,15 +160,15 @@ class Account(
 
         constraints: ClassVar[list[models.BaseConstraint]] = [
             models.UniqueConstraint(
-                fields=["mail_address", "protocol", "user"],
-                name="account_unique_together_mail_address_protocol_user",
+                fields=["mail_address", "password", "protocol", "user"],
+                name="account_unique_together_mail_address_password_protocol_user",
             ),
             models.CheckConstraint(
                 condition=models.Q(protocol__in=EmailProtocolChoices.values),
                 name="protocol_valid_choice",
             ),
         ]
-        """`mail_address` and :attr:`user` in combination are unique fields.
+        """:attr:`mail_address`, :attr:`password`, :attr:`protocol` and :attr:`user` in combination are unique fields.
         Choices for :attr:`protocol` are enforced on db level.
         """
 
@@ -235,6 +240,8 @@ class Account(
             return POP3_SSL_Fetcher
         if self.protocol == ExchangeFetcher.PROTOCOL:
             return ExchangeFetcher
+        if self.protocol == JMAPFetcher.PROTOCOL:
+            return JMAPFetcher
 
         logger.error(
             "The protocol %s is not implemented in a fetcher class!", self.protocol
@@ -313,3 +320,29 @@ class Account(
             Mailbox.create_from_data(mailbox_data, self)
 
         logger.info("Successfully updated mailboxes.")
+
+    @property
+    def complete_mail_address(self) -> str:
+        """The complete mail address of the account.
+        If the username (:attr:`mail_address`) is not valid a valid address,
+        constructs one with :attr:`mail_host`.
+        If there is no username, guess it from the Eonvelope users name.
+
+        Returns:
+            A valid mail address for the account.
+        """
+        username = self.mail_address or self.user.username
+        return username if "@" in username else f"{username}@{self.mail_host}"
+
+    @property
+    def mail_host_address(self) -> str:
+        """The mail_host address with port specified for the hostname.
+
+        Returns:
+            The complete host address.
+        """
+        return (
+            f"{self.mail_host}:{self.mail_host_port}"
+            if self.mail_host_port
+            else self.mail_host
+        )

@@ -15,18 +15,18 @@ Preserve your emails for [an indefinite long period of time](https://en.wikipedi
 
 As a user you may like this application because of
 
-- Automated continuous email fetching
-- Support for IMAP, POP and Exchange
+- Automatic and continuous email fetching
+- Support for all mayor mail access protocols: IMAP, POP, Exchange and JMAP
 - Import and export of emails in various formats
 - Identification of related emails
-- Restoring of emails to your mailaccount
+- Restoring of emails to your mail account
 - Cross integrations with other self-hosted projects like Paperless-ngx, Searxng and Grafana
 - Mobile-friendly Bootstrap5 webapp with PWA support
 - Easy filtering and searching options for your archived emails, attachments and correspondents
 
 As an admin you may choose this project because of its
 
-- Quick and easy setup and configuration via container (docker, podman, kubernetes, etc.)
+- Quick and easy setup and configuration via container (Docker, Podman, Kubernetes, etc.)
 - SSL certificate out of the box
 - Full-fledged API
 - Slim mode for low-spec systems
@@ -70,19 +70,27 @@ Check it out for details on configuration and instructions on how to use the run
 
 We are striving to support as many languages as possible to make the application accessible to everyone!
 
-Translation is done via [weblate](https://hosted.weblate.org/projects/eonvelope/). If you want to add a language that is missing, go check it out! If the language is missing on [weblate](https://hosted.weblate.org/projects/eonvelope/) too, please file an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues) using the missing-language template.
+Translation is done via [weblate](https://hosted.weblate.org/projects/eonvelope/). 
+If you want to add a language that is missing, go check it out! 
+If the language is missing on [weblate](https://hosted.weblate.org/projects/eonvelope/) too, 
+please file an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues) using the missing-language template.
 
 ## Accessibility
 
-Everybody should be able to use Eonvelope. Please don't hesitate to report any problem related to accessibility via an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues).
+Everybody should be able to use Eonvelope. 
+Please don't hesitate to report any problem related to accessibility via an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues).
 
 ## Contributing
 
-If you want to help with improving this project that is great! Please don't hesitate to approach us with ideas. And of course we are looking forward to your pull requests!
+If you want to help with improving this project that is great! 
+You can always approach us with ideas. 
+And of course we are looking forward to your pull requests!
 
-To get you started smoothly just follow [the development guide](DEVELOPMENT.md). This will help you set up a workspace for working with this project conveniently!
+To get you started smoothly just follow [the development guide](DEVELOPMENT.md). 
+This will help you set up a workspace for working with this project conveniently!
 
-In order to keep the code maintainable and in a consistent style please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
+In order to keep the code maintainable and in a consistent style 
+please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
 
 The complete source code documentation is part of the docs on [ReadTheDocs](https://eonvelope.readthedocs.io/latest/rst/developers.html)
 

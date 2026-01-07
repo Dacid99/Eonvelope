@@ -28,7 +28,7 @@ from __future__ import annotations
 from debug_toolbar.toolbar import debug_toolbar_urls
 from django.conf import settings
 from django.contrib import admin
-from django.urls import include, path, re_path
+from django.urls import include, path
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
@@ -56,7 +56,7 @@ urlpatterns = [
 ]
 if not settings.SLIM:
     urlpatterns += [
-        re_path(r"^robots\.txt", include("robots.urls")),
+        path("robots.txt", include("robots.urls")),
         path("db-schema/", include("schema_viewer.urls")),
         path("", include("django_prometheus.urls")),
         path("api/schema/", SpectacularAPIView.as_view(), name=SCHEMA_NAME),

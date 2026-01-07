@@ -111,6 +111,7 @@ class DaemonFilterSet(django_filters.FilterSet):
         return queryset.filter(
             models.Q(uuid__icontains=value)
             | models.Q(fetching_criterion__icontains=value)
+            | models.Q(fetching_criterion_arg__icontains=value)
             | models.Q(mailbox__name__icontains=value)
             | models.Q(mailbox__account__mail_address__icontains=value)
             | models.Q(mailbox__account__mail_host__icontains=value)

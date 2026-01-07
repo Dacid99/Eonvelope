@@ -2,22 +2,22 @@
 
 ## Feature ideas
 
-- custom fetching filters with NOT, OR and custom criteria
 - combined filter for correspondent with mention
 - extensive database statistics
-- toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/)
+- toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/) or [popovers](https://developer.chrome.com/blog/popover-hint?hl=de)
 - mechanism to remove all correspondents without emails
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
 - autofetch mailboxes on submission
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
-- more tags
+- tagging system (https://django-tagging.readthedocs.io/en or https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
 - async parsing, sync saving
 - download for account and batchdownload for mailbox
 - show pwd button
-- add jmap protocol
+- structured json based logging messages
+- refine fetchererrors into errors for auth, connection, etc.
 
 ## To refactor
 
@@ -28,19 +28,21 @@
   - use more of the unittest api
   - streamline serializer and form tests
 - emailcorrespondent creation for better integration of mailinglist
-- use pre-commit
 - split up long functions that are marked as too complex by ruff
+- make all filepaths pathlib.Paths
+- compress fetchingcriterion logic into a class
 
 ## To test
 
 - storagebackend for colliding file/dir
-- test failing single message fetch (imap,pop)
+- test failing single message fetch (imap, pop, jmap)
 - page_obj of list views for correct email content
 - add test email with references
 
 ## To implement
 
 - migration to django6.0
+- squashmigrations
 
 ### Work in progress
 

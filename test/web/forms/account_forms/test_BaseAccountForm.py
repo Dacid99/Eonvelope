@@ -149,18 +149,6 @@ def test_post_update_no_test(fake_account, mock_Account_test):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("bad_mail_address", ["nomail", "email@email@multi@.com"])
-def test_post_bad_mail_address(fake_account, account_payload, bad_mail_address):
-    """Tests post direction of :class:`web.forms.BaseAccountForm`."""
-    account_payload["mail_address"] = bad_mail_address
-
-    form = BaseAccountForm(instance=fake_account, data=account_payload)
-
-    assert not form.is_valid()
-    assert form["mail_address"].errors
-
-
-@pytest.mark.django_db
 @pytest.mark.parametrize("bad_mail_host_port", [-10, 98765])
 def test_post_bad_mail_host_port(fake_account, account_payload, bad_mail_host_port):
     """Tests post direction of :class:`web.forms.BaseAccountForm`."""

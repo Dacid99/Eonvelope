@@ -66,14 +66,15 @@ RUN apk add --no-cache ${BUILD_S6_APK_DEPENDENCIES} && \
     "https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${S6_ARCH}.tar.xz.sha256" && \
     sha256sum -c ./*.sha256 && \
     mkdir -p /s6-overlay && \
-    tar --directory /s6-overlay -Jxpf s6-overlay-noarch.tar.xz && \
-    tar --directory /s6-overlay -Jxpf s6-overlay-${S6_ARCH}.tar.xz
+    tar --directory /s6-overlay -Jxpf "s6-overlay-noarch.tar.xz" && \
+    tar --directory /s6-overlay -Jxpf "s6-overlay-${S6_ARCH}.tar.xz"
 
 
 ##   stage 3  -  amd64  ##
 ## build django translation and staticfiles ##
 ## no cleanup required ##
 
+# hadolint ignore=DL3029 # required to fix arm64 build
 FROM --platform=linux/amd64 python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS django-prestage
 
 WORKDIR /app
@@ -86,7 +87,7 @@ COPY --from=poetry-prestage /requirements.txt ./
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=${SRC_PATH}'src/' \
+    PYTHONPATH=src/ \
     DJANGO_SETTINGS_MODULE=config.settings \
     SECRET_KEY=IM_JUST_HERE_AS_A_WORKAROUND
 
@@ -98,8 +99,9 @@ ARG LOG_PATH
 
 RUN apk add --no-cache ${BUILD_DJANGO_APK_DEPENDENCIES} ${BUILD_PYTHON_APK_DEPENDENCIES} ${RUNTIME_APK_DEPENDENCIES} && \
     pip install --no-cache-dir --requirement requirements.txt && \
-    mkdir -p ${STORAGE_PATH} ${LOG_PATH} && \
-    django-admin collectstatic --noinput && \
+    mkdir -p ${STORAGE_PATH} ${LOG_PATH}
+
+RUN django-admin collectstatic --noinput && \
     django-admin compilemessages
 
 

@@ -33,7 +33,7 @@
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.name }}</a>
     <br />
     {% translate "Account" %}: <a href="{{ object.mailbox.account.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.mail_address }}</a>
+    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.complete_mail_address }}</a>
 {% endblock card_subtitle %}
 
 {% block card_content %}
@@ -41,6 +41,9 @@
         <li class="list-group-item">
             {% translate "Criterion" %}: {{ object.get_fetching_criterion_display }}
         </li>
+        {% if object.fetching_criterion_arg %}
+            <li class="list-group-item">{% translate "With value" %}: {{ object.fetching_criterion_arg }}</li>
+        {% endif %}
         <li class="list-group-item">{% translate "Interval" %}: {{ object.interval }}</li>
         <li class="list-group-item">{% translate "Last Run" %}: {{ object.celery_task.last_run_at }}</li>
         <li class="list-group-item">

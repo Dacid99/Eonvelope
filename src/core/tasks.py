@@ -46,7 +46,7 @@ def fetch_emails(  # this must not be renamed or moved, otherwise existing daemo
     except Daemon.DoesNotExist:
         return
     try:
-        daemon.mailbox.fetch(daemon.fetching_criterion)
+        daemon.mailbox.fetch(daemon.fetching_criterion, daemon.fetching_criterion_arg)
     except Exception as exc:
         daemon.set_unhealthy(exc)
         if isinstance(exc, MailAccountError):

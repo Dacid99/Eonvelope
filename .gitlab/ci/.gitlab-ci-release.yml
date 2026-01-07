@@ -1,42 +1,42 @@
 release:
-  stage: build
-  rules:
-    - if: "$CI_COMMIT_TAG =~ /^[0-9]/"
-  allow_failure: true
-  before_script:
-    - echo "Skip installing python dependencies"
-    - apk add curl git
-  script:
-    - PREVIOUS_BUILD_TAG=$(git tag --list "[0-9]*" --sort=-creatordate | sed -n '2p')
-    - CHANGELOG=$(git diff $PREVIOUS_BUILD_TAG:CHANGELOG.md $CI_COMMIT_TAG:CHANGELOG.md | grep '^+[^+]' | sed 's/^+//')
-    # gitlab
-    - |
-      curl --request POST --header "JOB-TOKEN: $CI_JOB_TOKEN" \
-           --data "name=$CI_COMMIT_TAG" \
-           --data "tag_name=$CI_COMMIT_TAG" \
-           --data-urlencode "assets[links][][name]=Get it on Dockerhub!" \
-           --data-urlencode "assets[links][][url]=https://hub.docker.com/layers/dacid99/eonvelope/$CI_COMMIT_TAG/images" \
-           --data-urlencode "assets[links][][link_type]=image" \
-           --data-urlencode "description=$CHANGELOG" \
-           "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/releases"
-    # github
-    - |
-      body=$(printf "%s\n\n[Get it on Dockerhub!](https://hub.docker.com/layers/dacid99/eonvelope/%s/images)" \
-       "$CHANGELOG" "$CI_COMMIT_TAG")
-    - |
-      json=$(printf '%s' "$body" | jq -R -s --arg tag "$CI_COMMIT_TAG" '
-      {
-        tag_name: $tag,
-        target_commitish: "master",
-        name: $tag,
-        body: .
-      }
-      ')
-    - |
-      curl -L \
-           --request POST \
-           --header "Authorization: Bearer $GITHUB_TOKEN_RELEASE" \
-           --header "Accept: application/vnd.github+json" \
-           --header "X-GitHub-Api-Version: 2022-11-28" \
-           --data "$json" \
-           https://api.github.com/repos/dacid99/eonvelope/releases
+    stage: build
+    rules:
+        - if: "$CI_COMMIT_TAG =~ /^[0-9]/"
+    allow_failure: true
+    before_script:
+        - echo "Skip installing python dependencies"
+        - apk add git curl jq
+    script:
+        - PREVIOUS_BUILD_TAG=$(git tag --list "[0-9]*" --sort=-creatordate | sed -n '2p')
+        - CHANGELOG=$(git diff $PREVIOUS_BUILD_TAG:CHANGELOG.md $CI_COMMIT_TAG:CHANGELOG.md | grep '^+[^+]' | sed 's/^+//')
+        # gitlab
+        - |
+            curl --request POST --header "JOB-TOKEN: $CI_JOB_TOKEN" \
+                 --data "name=$CI_COMMIT_TAG" \
+                 --data "tag_name=$CI_COMMIT_TAG" \
+                 --data-urlencode "assets[links][][name]=Get it on Dockerhub!" \
+                 --data-urlencode "assets[links][][url]=https://hub.docker.com/layers/dacid99/eonvelope/$CI_COMMIT_TAG/images" \
+                 --data-urlencode "assets[links][][link_type]=image" \
+                 --data-urlencode "description=$CHANGELOG" \
+                 "https://gitlab.com/api/v4/projects/$CI_PROJECT_ID/releases"
+        # github
+        - |
+            body=$(printf "%s\n\n[Get it on Dockerhub!](https://hub.docker.com/layers/dacid99/eonvelope/%s/images)" \
+             "$CHANGELOG" "$CI_COMMIT_TAG")
+        - |
+            json=$(printf '%s' "$body" | jq -R -s --arg tag "$CI_COMMIT_TAG" '
+            {
+              tag_name: $tag,
+              target_commitish: "master",
+              name: $tag,
+              body: .
+            }
+            ')
+        - |
+            curl -L \
+                 --request POST \
+                 --header "Authorization: Bearer $GITHUB_TOKEN_RELEASE" \
+                 --header "Accept: application/vnd.github+json" \
+                 --header "X-GitHub-Api-Version: 2022-11-28" \
+                 --data "$json" \
+                 https://api.github.com/repos/dacid99/eonvelope/releases

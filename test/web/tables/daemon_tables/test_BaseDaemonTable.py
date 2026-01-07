@@ -33,7 +33,8 @@ def test_output(fake_daemon):
     assert "uuid" in fields
     assert "mailbox" in fields
     assert "fetching_criterion" in fields
+    assert "fetching_criterion_arg" in fields
     assert "interval__period" in fields
     assert "interval__every" in fields
     assert "is_healthy" in fields
-    assert len(fields) == 7
+    assert len(fields) == 8

@@ -76,6 +76,7 @@ $RECYCLE.BIN/
 .tox/
 .venv/
 .vscode/
+.zed/
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
 [._]*.un~
@@ -98,6 +99,7 @@ Temporary Items
 Thumbs.db
 Thumbs.db:encryptable
 atlassian-ide-plugin.xml
+codebook.toml
 com_crashlytics_export_strings.xml
 coverage.xml
 crashlytics-build.properties
@@ -132,6 +134,7 @@ staticfiles/
 tags
 test.html
 test.py
+test.sh
 var/
 venv/
 wheels/

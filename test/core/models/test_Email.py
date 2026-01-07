@@ -286,14 +286,12 @@ def test_Email_open_file_success(fake_email_with_file):
     result.close()
 
 
-def test_Email_open_file_no_filepath(fake_email_with_file):
+def test_Email_open_file_no_filepath(fake_email):
     """Tests :func:`core.models.Email.Email.open_file`
     in case the filepath on the instance is not set.
     """
-    fake_email_with_file.file_path = None
-
-    with pytest.raises(FileNotFoundError):
-        fake_email_with_file.open_file()
+    with pytest.raises(FileNotFoundError), fake_email.open_file():
+        pass
 
 
 def test_Email_open_file_no_file(faker, fake_email):
@@ -304,6 +302,35 @@ def test_Email_open_file_no_file(faker, fake_email):
 
     with pytest.raises(FileNotFoundError):
         fake_email.open_file()
+
+
+def test_Email_absolute_filepath_success(fake_email_with_file):
+    """Tests :func:`core.models.Email.Email.absolute_filepath`
+    in case of success.
+    """
+    result = fake_email_with_file.absolute_filepath
+
+    assert result == default_storage.path(fake_email_with_file.file_path)
+
+
+def test_Email_absolute_filepath_no_filepath(fake_email):
+    """Tests :func:`core.models.Email.Email.absolute_filepath`
+    in case the filepath on the instance is not set.
+    """
+    result = fake_email.absolute_filepath
+
+    assert result is None
+
+
+def test_Email_absolute_filepath_no_file(faker, fake_email):
+    """Tests :func:`core.models.Email.Email.absolute_filepath`
+    in case the file can't be found in the storage.
+    """
+    fake_email.file_path = faker.file_name()
+
+    result = fake_email.absolute_filepath
+
+    assert result == default_storage.path(fake_email.file_path)
 
 
 @pytest.mark.django_db
@@ -1187,4 +1214,22 @@ def test_Email_get_absolute_list_url(fake_email):
 
     assert result == reverse(
         f"web:{fake_email.BASENAME}-filter-list",
+    )
+
+
+@pytest.mark.django_db
+def test_Email_get_absolute_table_url(fake_email):
+    """Tests :func:`core.models.Email.Email.get_absolute_table_url`."""
+    result = fake_email.get_absolute_table_url()
+
+    assert result == reverse(
+        f"web:{fake_email.BASENAME}-table",
+    )
+
+
+@pytest.mark.django_db
+def test_Email__get_storage_file_name(fake_email, fake_other_email):
+    """Test that the storage file name is unique."""
+    assert (
+        fake_email._get_storage_file_name() != fake_other_email._get_storage_file_name()
     )

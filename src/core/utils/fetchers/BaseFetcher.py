@@ -89,13 +89,16 @@ class BaseFetcher(ABC):
         self,
         mailbox: Mailbox,
         criterion: str = EmailFetchingCriterionChoices.ALL,
+        criterion_arg: str = "",
     ) -> list[bytes]:
         """Fetches emails based on a criterion from the server.
 
         Args:
             mailbox: The model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails by.
-                Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
+                Defaults to :attr:`core.constants.EmailFetchingCriterionChoices.ALL`.
+            criterion_arg: The value to filter by.
+                Defaults to "" as :attr:`core.constants.EmailFetchingCriterionChoices.ALL` does not require a value.
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.
@@ -134,10 +137,13 @@ class BaseFetcher(ABC):
 
         Raises:
             ValueError: If the emails mailbox is not in this fetchers account.
+            FileNotFoundError: If the emails file_path is not set.
         """
         if email.mailbox.account != self.account:
             self.logger.error("Mailbox of %s is not in %s!", email, self.account)
             raise ValueError(f"Mailbox of {email} is not in {self.account}!")
+        if not email.file_path:
+            raise FileNotFoundError("Email has no stored eml file.")
 
     @abstractmethod
     def close(self) -> None:
@@ -175,6 +181,6 @@ class BaseFetcher(ABC):
         """
         if exc_value or exc_type:
             self.logger.error(
-                "An error %s occurred, exiting Fetcher!", exc_type, exc_info=exc_value
+                "An error %s occurred exiting Fetcher!", exc_type, exc_info=exc_value
             )
         self.close()

@@ -95,7 +95,7 @@ class MailboxDetailWithDeleteView(
         """
         self.object = self.get_object()
         criterion = request.POST.get("fetch") or EmailFetchingCriterionChoices.ALL.value
-        if criterion not in self.object.available_fetching_criteria:
+        if criterion not in self.object.available_no_arg_fetching_criteria:
             messages.warning(
                 request,
                 _(
@@ -105,7 +105,7 @@ class MailboxDetailWithDeleteView(
             )
             return self.get(request)
         try:
-            self.object.fetch(criterion)
+            self.object.fetch(criterion, "")
         except FetcherError as error:
             messages.error(
                 request, _("Fetching failed: %(error)s") % {"error": str(error)}

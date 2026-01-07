@@ -241,13 +241,11 @@ def test_Attachment_open_file_success(fake_attachment_with_file):
     result.close()
 
 
-def test_Attachment_open_file_no_filepath(fake_attachment_with_file):
+def test_Attachment_open_file_no_filepath(fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.open_file`
     in case the filepath on the instance is not set.
     """
-    fake_attachment_with_file.file_path = None
-
-    with pytest.raises(FileNotFoundError), fake_attachment_with_file.open_file():
+    with pytest.raises(FileNotFoundError), fake_attachment.open_file():
         pass
 
 
@@ -259,6 +257,35 @@ def test_Attachment_open_file_no_file(faker, fake_attachment):
 
     with pytest.raises(FileNotFoundError), fake_attachment.open_file():
         pass
+
+
+def test_Attachment_absolute_filepath_success(fake_attachment_with_file):
+    """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
+    in case of success.
+    """
+    result = fake_attachment_with_file.absolute_filepath
+
+    assert result == default_storage.path(fake_attachment_with_file.file_path)
+
+
+def test_Attachment_absolute_filepath_no_filepath(fake_attachment):
+    """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
+    in case the filepath on the instance is not set.
+    """
+    result = fake_attachment.absolute_filepath
+
+    assert result is None
+
+
+def test_Attachment_absolute_filepath_no_file(faker, fake_attachment):
+    """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
+    in case the file can't be found in the storage.
+    """
+    fake_attachment.file_path = faker.file_name()
+
+    result = fake_attachment.absolute_filepath
+
+    assert result == default_storage.path(fake_attachment.file_path)
 
 
 @pytest.mark.django_db
@@ -654,10 +681,10 @@ def test_Attachment_share_to_immich_error_status(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "test_email_path, expected_email_features, expected_correspondents_features,expected_attachments_features",
+    "test_email_path, expected_email_features, expected_correspondents_features, expected_attachments_features",
     TEST_EMAIL_PARAMETERS,
 )
-def test_Attachment_from_data(
+def test_Attachment_create_from_email_message(
     fake_fs,
     fake_email,
     test_email_path,
@@ -697,6 +724,17 @@ def test_Attachment_from_data(
             == expected_attachments_features[item.file_name]["content_id"]
         )
         assert item.file_path is not None
+
+
+@pytest.mark.django_db
+def test_Attachment_create_from_email_message_unsaved_email():
+    """Tests :func:`core.models.Attachment.Attachment.from_data`
+    in case of success.
+    """
+    test_email_message = email.message_from_bytes(b"")
+
+    with pytest.raises(ValueError, match="db"):
+        Attachment.create_from_email_message(test_email_message, Email())
 
 
 @pytest.mark.django_db
@@ -900,6 +938,24 @@ def test_Attachment_thumbnail_empty(fake_attachment, content_maintype, content_s
     fake_attachment.content_subtype = content_subtype
 
     assert not fake_attachment.thumbnail
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "content_maintype, content_subtype",
+    [
+        ("text", "vcard"),
+        ("text", "x-icalendar"),
+    ],
+)
+def test_Attachment_thumbnail_no_file(
+    fake_attachment, content_maintype, content_subtype
+):
+    """Tests :func:`core.models.Attachment.Attachment.thumbnail` for all types that don't have an html thumbnail."""
+    fake_attachment.content_maintype = content_maintype
+    fake_attachment.content_subtype = content_subtype
+
+    assert fake_attachment.thumbnail == ""
 
 
 @pytest.mark.django_db

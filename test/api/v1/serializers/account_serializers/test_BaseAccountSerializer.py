@@ -139,22 +139,6 @@ def test_input_no_test(fake_account, request_context, mock_Account_test):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("bad_mail_address", ["nomail", "email@email@multi@.com"])
-def test_input_bad_mail_address(
-    fake_account, account_payload, request_context, bad_mail_address
-):
-    """Tests input direction of :class:`api.v1.serializers.BaseAccountSerializer`."""
-    account_payload["mail_address"] = bad_mail_address
-
-    serializer = BaseAccountSerializer(
-        instance=fake_account, data=account_payload, context=request_context
-    )
-
-    assert not serializer.is_valid()
-    assert serializer["mail_address"].errors
-
-
-@pytest.mark.django_db
 @pytest.mark.parametrize("bad_mail_host_port", [-10, 98765])
 def test_input_bad_mail_host_port(
     fake_account, account_payload, request_context, bad_mail_host_port

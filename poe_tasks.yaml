@@ -1,0 +1,145 @@
+executor:
+  type: poetry
+shell_interpreter: bash
+
+env:
+  REPORT_PATH: ${POE_PWD}/tools/reports/
+  CONFIG_PATH: ${POE_PWD}/tools/
+
+tasks:
+  venv:
+    shell: eval $(poetry env activate) || source ~/.cache/pypoetry/virtualenvs/eonvelope*/bin/activate
+
+  black:
+    cmd: black --config ${CONFIG_PATH}black_config ${files}
+    args:
+      - name: files
+        default: .
+        help: The files to format.
+
+  pytest:
+    cmd: pytest ${files}
+    args:
+      - name: files
+        help: The test files to run
+        default: test
+
+  pylint-code:
+    cmd: pylint --rcfile=${CONFIG_PATH}pylintrc_src src/
+    capture_stdout: ${REPORT_PATH}pylint_code.ansi
+
+  pylint-docs:
+    cmd: pylint --rcfile=${CONFIG_PATH}pylintrc_docs src/
+    capture_stdout: ${REPORT_PATH}pylint_docs.ansi
+
+  pylint-test:
+    cmd: pylint --rcfile=${CONFIG_PATH}pylintrc_test test/
+    capture_stdout: ${REPORT_PATH}pylint_test.ansi
+
+  djlint:
+    cmd: djlint --configuration ${CONFIG_PATH}djlintrc src/web/templates
+    capture_stdout: ${REPORT_PATH}djlint.ansi
+
+  mypy:
+    cmd: mypy --config-file ${CONFIG_PATH}mypy.ini src/
+    capture_stdout: ${REPORT_PATH}mypy/mypy.ansi
+
+  ruff:
+    cmd: ruff check --config=${CONFIG_PATH}ruff.toml src/ test/
+    capture_stdout: ${REPORT_PATH}ruff.ansi
+
+  autotyping:
+    cmd: python3 -m autotyping --safe src/
+
+  doc8:
+    cmd: doc8 --config ${CONFIG_PATH}doc8.ini docs/source/rst/
+    capture_stdout: ${REPORT_PATH}doc8.ansi
+
+  codespell:
+    cmd: codespell src/ test/ docs/ .git*/ *.md --config=${CONFIG_PATH}.codespellrc
+    capture_stdout: ${REPORT_PATH}codespell.ansi
+
+  eslint:
+    shell: npx --yes eslint --no-config-lookup --fix
+
+  validate-templates:
+    cmd: python3 manage.py validate_templates
+
+  hadolint:
+    cwd: ${CONFIG_PATH}
+    shell: sudo docker run --rm -i -v .hadolint.yaml:/.config/hadolint.yaml hadolint/hadolint < ${POE_PWD}/docker/Dockerfile
+    capture_stdout: ${REPORT_PATH}hadolint.ansi
+
+  licenses:
+    shell: pip-licenses --from=all --with-license-file --format=plain-vertical --no-license-path > THIRD_PARTY_LICENSES
+
+  validate-renovate:
+    shell: npx --yes renovate renovate-config-validator
+
+  lint-code:
+    help: "Lints and fixes the codebase."
+    sequence:
+      [
+        "ruff",
+        "pylint-code",
+        "pylint-test",
+        "pylint-docs",
+        "codespell",
+        "eslint",
+        "hadolint",
+        "autotyping",
+        "djlint",
+        "validate-templates",
+        "validate-renovate",
+      ]
+    ignore_fail: return_non_zero
+
+  lint:
+    help: "Lints the entire project."
+    sequence: ["lint-code", "lint-docs"]
+    ignore_fail: return_non_zero
+
+  test:
+    help: "Tests the codebase."
+    sequence: ["pytest"]
+    ignore_fail: return_non_zero
+
+  types:
+    help: "Type-checks the codebase."
+    sequence: ["mypy"]
+    ignore_fail: return_non_zero
+
+  format:
+    help: "Formats the codebase."
+    sequence: ["black"]
+    ignore_fail: return_non_zero
+
+  build-docker:
+    help: "Builds the docker image."
+    shell: docker build -f docker/Dockerfile -t eonvelope:${tag} .
+    args:
+      - name: tag
+        default: debug
+        help: "The image tag for the result, default 'debug'"
+
+  wlc-lock:
+    help: "Locks all weblate components."
+    cmd: wlc lock eonvelope/config eonvelope/core eonvelope/api eonvelope/web eonvelope/eonvelope
+
+  wlc-unlock:
+    help: "Unlocks all weblate components."
+    cmd: wlc unlock eonvelope/config eonvelope/core eonvelope/api eonvelope/web eonvelope/eonvelope
+
+  translation:
+    help: "Updates the translation files."
+    cmd: python3 manage.py makemessages --all --no-obsolete --ignore "test/*" --ignore "docs/*"
+
+  build-docs:
+    help: "Builds the documentation."
+    cwd: ${POE_PWD}/docs/
+    shell: make source && make html
+
+  lint-docs:
+    help: "Lints the documentation files."
+    sequence: ["doc8"]
+    ignore_fail: return_non_zero

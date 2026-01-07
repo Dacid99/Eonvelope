@@ -367,6 +367,21 @@ def test_is_x_spam(x_spam_header, expected_result):
                 ),
             ],
         ),
+        (
+            "BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:Bad event\nDTEND:20010107T190520Z\nEND:VEVENT\nBEGIN:VEVENT\nSUMMARY:Full Day\nDTSTART:20130609T155030Z\nEND:VEVENT\nEND:VCALENDAR",
+            [
+                (
+                    datetime(2013, 6, 9, 15, 50, 30, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    datetime(2013, 6, 9, 23, 59, 59, 999999, tzinfo=UTC).astimezone(
+                        get_current_timezone()
+                    ),
+                    "Full Day",
+                    "",
+                ),
+            ],
+        ),
     ],
 )
 def test_make_icalendar_readout(icalendar_data, expected_readout):

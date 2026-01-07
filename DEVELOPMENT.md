@@ -11,7 +11,7 @@ Make sure to also install the **python-dev** version!
 First install the packages required for the build environment, on debian based distros:
 
 ```bash
-sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client libmysqlclient-dev pkg-config npx
+sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client libmysqlclient-dev pkg-config
 ```
 
 and on redhat distros:
@@ -19,13 +19,16 @@ and on redhat distros:
 ```bash
 sudo dnf -y update && dnf -y install gcc gettext mysql-devel pkgconf npx
 ```
+For some linters you need npm installed, follow the installation guide from [their documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). 
 
 Then to install the python dependencies start a new virtual environment and activate it:
 
 [Poetry](https://python-poetry.org/docs/) is used to manage the python dependencies of this project.
 
 ```bash
-pip install poetry
+pip install pipx
+pipx install poetry
+pipx inject poetry poetry-pre-commit-plugin
 ```
 
 You can then add the tab completions for it by:
@@ -43,7 +46,7 @@ poetry install --with dev,docs
 Finally you can activate the venv with
 
 ```bash
-eval $(poetry env activate)
+poetry run poe venv
 ```
 
 You should avoid having the venv inside the workspace as that will brick docker run in most cases.
@@ -51,6 +54,15 @@ You should avoid having the venv inside the workspace as that will brick docker 
 Depending on your OS, the mysqlclient package may cause problems, this can usually be solved by installing a missing system package.
 
 ## Testing
+
+### Linting
+
+There are various tools set up for linting and formatting this projects codebase and documentation.
+The easiest way to run them is via the poe task runner.
+
+```bash
+poe lint
+```
 
 ### Unittests
 
@@ -166,3 +178,67 @@ git config core.hooksPath tools/githooks/
 ```
 
 - bootstrap 5 intellisense etc.
+
+### Zed
+
+- python config:
+
+```json
+"Python": {
+  "formatter": {
+    "external": {
+      "command": "black",
+      "arguments": [
+        "-",
+        "--config",
+        "tools/black_config",
+        "--stdin-filename",
+        "{buffer_path}",
+      ],
+    },
+  },
+  "format_on_save": "on",
+}
+```
+
+- disable HTML autoformatting:
+
+```json
+"HTML": {
+  "format_on_save": "off"
+  "formatter": null
+}
+```
+
+- find poetry venvs
+
+```json
+"terminal": {
+  "detect_venv": {
+    "on": {
+      "directories": [
+        ".env",
+        "env",
+        ".venv",
+        "venv",
+        "/home/david/.cache/pypoetry/virtualenvs/",
+      ],
+      "activate_script": "default",
+    },
+  },
+}
+```
+
+- ruff lsp:
+
+```json
+"lsp": {
+    "ruff": {
+      "initialization_options": {
+        "settings": {
+          "configuration": "tools/ruff.toml",
+        },
+      },
+    },
+  }
+```

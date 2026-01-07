@@ -39,7 +39,6 @@ class BaseEmailTable(Table):
     mailbox__account = Column(
         verbose_name=_("Account"),
         linkify=lambda record: record.mailbox.account.get_absolute_url(),
-        accessor="mailbox__account__mail_address",
     )
 
     class Meta:
@@ -67,3 +66,7 @@ class BaseEmailTable(Table):
             The string shown for datasize in the table.
         """
         return str(value) + " " + _("bytes")
+
+    def render_mailbox__account(self, record: Email) -> str:
+        """Render the complete account mail address instead of the pure username field."""
+        return record.mailbox.account.complete_mail_address

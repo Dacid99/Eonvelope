@@ -46,3 +46,7 @@ class BaseAccountTable(Table):
             "is_healthy",
         )
         sequence = ("checkbox", *fields)
+
+    def render_mail_address(self, record: Account) -> str:
+        """Render the complete mail address instead of the pure username field."""
+        return record.complete_mail_address

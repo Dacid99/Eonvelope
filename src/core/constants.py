@@ -335,11 +335,11 @@ file_format_parsers: Final[
         ],
     ]
 ] = {
-    SupportedEmailUploadFormats.MBOX.value: mailbox.mbox,
-    SupportedEmailUploadFormats.BABYL.value: mailbox.Babyl,
-    SupportedEmailUploadFormats.MMDF.value: mailbox.MMDF,
-    SupportedEmailUploadFormats.MAILDIR.value: mailbox.Maildir,
-    SupportedEmailUploadFormats.MH.value: mailbox.MH,
+    SupportedEmailUploadFormats.MBOX: mailbox.mbox,
+    SupportedEmailUploadFormats.BABYL: mailbox.Babyl,
+    SupportedEmailUploadFormats.MMDF: mailbox.MMDF,
+    SupportedEmailUploadFormats.MAILDIR: mailbox.Maildir,
+    SupportedEmailUploadFormats.MH: mailbox.MH,
 }
 """Mapping of supported file formats to their parser classes."""
 

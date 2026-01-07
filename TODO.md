@@ -11,7 +11,7 @@
 - autofetch mailboxes on submission
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
-- more tags
+- tagging system (https://django-tagging.readthedocs.io/en or https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
 - async parsing, sync saving
 - download for account and batchdownload for mailbox

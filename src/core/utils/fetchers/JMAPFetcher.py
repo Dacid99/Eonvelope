@@ -47,26 +47,26 @@ class JMAPFetcher(BaseFetcher):
     Allows fetching of mails and mailboxes from an account on an JMAP host.
     """
 
-    PROTOCOL = EmailProtocolChoices.JMAP.value
+    PROTOCOL = EmailProtocolChoices.JMAP
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.JMAP`."""
 
     AVAILABLE_FETCHING_CRITERIA = (
-        EmailFetchingCriterionChoices.ALL.value,
-        EmailFetchingCriterionChoices.SEEN.value,
-        EmailFetchingCriterionChoices.UNSEEN.value,
-        EmailFetchingCriterionChoices.DRAFT.value,
-        EmailFetchingCriterionChoices.UNDRAFT.value,
-        EmailFetchingCriterionChoices.ANSWERED.value,
-        EmailFetchingCriterionChoices.UNANSWERED.value,
-        EmailFetchingCriterionChoices.DAILY.value,
-        EmailFetchingCriterionChoices.WEEKLY.value,
-        EmailFetchingCriterionChoices.MONTHLY.value,
-        EmailFetchingCriterionChoices.ANNUALLY.value,
-        EmailFetchingCriterionChoices.BODY.value,
-        EmailFetchingCriterionChoices.FROM.value,
-        EmailFetchingCriterionChoices.SENTSINCE.value,
-        EmailFetchingCriterionChoices.LARGER.value,
-        EmailFetchingCriterionChoices.SMALLER.value,
+        EmailFetchingCriterionChoices.ALL,
+        EmailFetchingCriterionChoices.SEEN,
+        EmailFetchingCriterionChoices.UNSEEN,
+        EmailFetchingCriterionChoices.DRAFT,
+        EmailFetchingCriterionChoices.UNDRAFT,
+        EmailFetchingCriterionChoices.ANSWERED,
+        EmailFetchingCriterionChoices.UNANSWERED,
+        EmailFetchingCriterionChoices.DAILY,
+        EmailFetchingCriterionChoices.WEEKLY,
+        EmailFetchingCriterionChoices.MONTHLY,
+        EmailFetchingCriterionChoices.ANNUALLY,
+        EmailFetchingCriterionChoices.BODY,
+        EmailFetchingCriterionChoices.FROM,
+        EmailFetchingCriterionChoices.SENTSINCE,
+        EmailFetchingCriterionChoices.LARGER,
+        EmailFetchingCriterionChoices.SMALLER,
     )
     """Tuple of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
     Must be immutable!
@@ -86,45 +86,45 @@ class JMAPFetcher(BaseFetcher):
         Returns:
             The filter-condition to be used in JMAP request.
         """
-        if criterion_name == EmailFetchingCriterionChoices.DAILY:
-            start_time = datetime.now(tz=UTC) - timedelta(days=1)
-        elif criterion_name == EmailFetchingCriterionChoices.WEEKLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
-        elif criterion_name == EmailFetchingCriterionChoices.MONTHLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
-        elif criterion_name == EmailFetchingCriterionChoices.ANNUALLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
-        elif criterion_name == EmailFetchingCriterionChoices.SENTSINCE:
-            start_time = datetime.strptime(
-                criterion_arg, INTERNAL_DATE_FORMAT
-            ).astimezone(UTC)
-        else:
-            if criterion_name in [
-                EmailFetchingCriterionChoices.SEEN,
-                EmailFetchingCriterionChoices.ANSWERED,
-                EmailFetchingCriterionChoices.DRAFT,
-            ]:
+        match criterion_name:
+            case EmailFetchingCriterionChoices.DAILY:
+                start_time = datetime.now(tz=UTC) - timedelta(days=1)
+            case EmailFetchingCriterionChoices.WEEKLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
+            case EmailFetchingCriterionChoices.MONTHLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
+            case EmailFetchingCriterionChoices.ANNUALLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
+            case EmailFetchingCriterionChoices.SENTSINCE:
+                start_time = datetime.strptime(
+                    criterion_arg, INTERNAL_DATE_FORMAT
+                ).astimezone(UTC)
+            case (
+                EmailFetchingCriterionChoices.SEEN
+                | EmailFetchingCriterionChoices.ANSWERED
+                | EmailFetchingCriterionChoices.DRAFT
+            ):
                 return jmapc.EmailQueryFilterCondition(
                     has_keyword="$" + criterion_name.lower(),
                 )
-            if criterion_name in [
-                EmailFetchingCriterionChoices.UNSEEN,
-                EmailFetchingCriterionChoices.UNANSWERED,
-                EmailFetchingCriterionChoices.UNDRAFT,
-            ]:
+            case (
+                EmailFetchingCriterionChoices.UNSEEN
+                | EmailFetchingCriterionChoices.UNANSWERED
+                | EmailFetchingCriterionChoices.UNDRAFT
+            ):
                 return jmapc.EmailQueryFilterCondition(
                     not_keyword="$" + criterion_name.lower().removeprefix("un"),
                 )
-            if criterion_name == EmailFetchingCriterionChoices.LARGER:
+            case EmailFetchingCriterionChoices.LARGER:
                 return jmapc.EmailQueryFilterCondition(min_size=int(criterion_arg))
-            if criterion_name == EmailFetchingCriterionChoices.SMALLER:
+            case EmailFetchingCriterionChoices.SMALLER:
                 return jmapc.EmailQueryFilterCondition(max_size=int(criterion_arg))
-            if criterion_name == EmailFetchingCriterionChoices.BODY:
+            case EmailFetchingCriterionChoices.BODY:
                 return jmapc.EmailQueryFilterCondition(body=criterion_arg)
-            if criterion_name == EmailFetchingCriterionChoices.FROM:
+            case EmailFetchingCriterionChoices.FROM:
                 return jmapc.EmailQueryFilterCondition(mail_from=criterion_arg)
-
-            return jmapc.EmailQueryFilterCondition()
+            case _:
+                return jmapc.EmailQueryFilterCondition()
         return jmapc.EmailQueryFilterCondition(after=start_time)
 
     @override

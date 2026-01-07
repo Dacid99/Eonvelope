@@ -47,10 +47,10 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
     Since POP does not have any mailboxes, none of the methods should raise a `MailboxError`.
     """
 
-    PROTOCOL = EmailProtocolChoices.POP3.value
+    PROTOCOL = EmailProtocolChoices.POP3
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.POP3`."""
 
-    AVAILABLE_FETCHING_CRITERIA = (EmailFetchingCriterionChoices.ALL.value,)
+    AVAILABLE_FETCHING_CRITERIA = (EmailFetchingCriterionChoices.ALL,)
     """Tuple of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
     Must be immutable!
     """

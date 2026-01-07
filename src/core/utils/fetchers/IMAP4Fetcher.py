@@ -51,36 +51,36 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     Allows fetching of mails and mailboxes from an account on an IMAP host.
     """
 
-    PROTOCOL = EmailProtocolChoices.IMAP.value
+    PROTOCOL = EmailProtocolChoices.IMAP
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.IMAP`."""
 
     AVAILABLE_FETCHING_CRITERIA = (
-        EmailFetchingCriterionChoices.ALL.value,
-        EmailFetchingCriterionChoices.UNSEEN.value,
-        EmailFetchingCriterionChoices.SEEN.value,
-        EmailFetchingCriterionChoices.RECENT.value,
-        EmailFetchingCriterionChoices.NEW.value,
-        EmailFetchingCriterionChoices.OLD.value,
-        EmailFetchingCriterionChoices.FLAGGED.value,
-        EmailFetchingCriterionChoices.UNFLAGGED.value,
-        EmailFetchingCriterionChoices.DRAFT.value,
-        EmailFetchingCriterionChoices.UNDRAFT.value,
-        EmailFetchingCriterionChoices.ANSWERED.value,
-        EmailFetchingCriterionChoices.UNANSWERED.value,
-        EmailFetchingCriterionChoices.DELETED.value,
-        EmailFetchingCriterionChoices.UNDELETED.value,
-        EmailFetchingCriterionChoices.DAILY.value,
-        EmailFetchingCriterionChoices.WEEKLY.value,
-        EmailFetchingCriterionChoices.MONTHLY.value,
-        EmailFetchingCriterionChoices.ANNUALLY.value,
-        EmailFetchingCriterionChoices.SENTSINCE.value,
-        EmailFetchingCriterionChoices.SUBJECT.value,
-        EmailFetchingCriterionChoices.BODY.value,
-        EmailFetchingCriterionChoices.FROM.value,
-        EmailFetchingCriterionChoices.KEYWORD.value,
-        EmailFetchingCriterionChoices.UNKEYWORD.value,
-        EmailFetchingCriterionChoices.LARGER.value,
-        EmailFetchingCriterionChoices.SMALLER.value,
+        EmailFetchingCriterionChoices.ALL,
+        EmailFetchingCriterionChoices.UNSEEN,
+        EmailFetchingCriterionChoices.SEEN,
+        EmailFetchingCriterionChoices.RECENT,
+        EmailFetchingCriterionChoices.NEW,
+        EmailFetchingCriterionChoices.OLD,
+        EmailFetchingCriterionChoices.FLAGGED,
+        EmailFetchingCriterionChoices.UNFLAGGED,
+        EmailFetchingCriterionChoices.DRAFT,
+        EmailFetchingCriterionChoices.UNDRAFT,
+        EmailFetchingCriterionChoices.ANSWERED,
+        EmailFetchingCriterionChoices.UNANSWERED,
+        EmailFetchingCriterionChoices.DELETED,
+        EmailFetchingCriterionChoices.UNDELETED,
+        EmailFetchingCriterionChoices.DAILY,
+        EmailFetchingCriterionChoices.WEEKLY,
+        EmailFetchingCriterionChoices.MONTHLY,
+        EmailFetchingCriterionChoices.ANNUALLY,
+        EmailFetchingCriterionChoices.SENTSINCE,
+        EmailFetchingCriterionChoices.SUBJECT,
+        EmailFetchingCriterionChoices.BODY,
+        EmailFetchingCriterionChoices.FROM,
+        EmailFetchingCriterionChoices.KEYWORD,
+        EmailFetchingCriterionChoices.UNKEYWORD,
+        EmailFetchingCriterionChoices.LARGER,
+        EmailFetchingCriterionChoices.SMALLER,
     )
     """Tuple of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
     Must be immutable!
@@ -102,20 +102,21 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         Returns:
             Formatted criterion to be used in IMAP request.
         """
-        if criterion_name == EmailFetchingCriterionChoices.DAILY:
-            start_time = datetime.now(tz=UTC) - timedelta(days=1)
-        elif criterion_name == EmailFetchingCriterionChoices.WEEKLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
-        elif criterion_name == EmailFetchingCriterionChoices.MONTHLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
-        elif criterion_name == EmailFetchingCriterionChoices.ANNUALLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
-        elif criterion_name == EmailFetchingCriterionChoices.SENTSINCE:
-            start_time = datetime.strptime(
-                criterion_arg, INTERNAL_DATE_FORMAT
-            ).astimezone(UTC)
-        else:
-            return criterion_name.format(criterion_arg)
+        match criterion_name:
+            case EmailFetchingCriterionChoices.DAILY:
+                start_time = datetime.now(tz=UTC) - timedelta(days=1)
+            case EmailFetchingCriterionChoices.WEEKLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
+            case EmailFetchingCriterionChoices.MONTHLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
+            case EmailFetchingCriterionChoices.ANNUALLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
+            case EmailFetchingCriterionChoices.SENTSINCE:
+                start_time = datetime.strptime(
+                    criterion_arg, INTERNAL_DATE_FORMAT
+                ).astimezone(UTC)
+            case _:
+                return criterion_name.format(criterion_arg)
         return EmailFetchingCriterionChoices.SENTSINCE.format(
             imaplib.Time2Internaldate(start_time).split(" ")[0].strip('" ')
         )

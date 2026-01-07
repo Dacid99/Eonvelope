@@ -53,21 +53,21 @@ class ExchangeFetcher(BaseFetcher):
     Allows fetching of mails and mailboxes from an account on an Exchange host.
     """
 
-    PROTOCOL = EmailProtocolChoices.EXCHANGE.value
+    PROTOCOL = EmailProtocolChoices.EXCHANGE
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.Exchange`."""
 
     AVAILABLE_FETCHING_CRITERIA = (
-        EmailFetchingCriterionChoices.ALL.value,
-        EmailFetchingCriterionChoices.SEEN.value,
-        EmailFetchingCriterionChoices.UNSEEN.value,
-        EmailFetchingCriterionChoices.DRAFT.value,
-        EmailFetchingCriterionChoices.UNDRAFT.value,
-        EmailFetchingCriterionChoices.DAILY.value,
-        EmailFetchingCriterionChoices.WEEKLY.value,
-        EmailFetchingCriterionChoices.MONTHLY.value,
-        EmailFetchingCriterionChoices.ANNUALLY.value,
-        EmailFetchingCriterionChoices.SUBJECT.value,
-        EmailFetchingCriterionChoices.BODY.value,
+        EmailFetchingCriterionChoices.ALL,
+        EmailFetchingCriterionChoices.SEEN,
+        EmailFetchingCriterionChoices.UNSEEN,
+        EmailFetchingCriterionChoices.DRAFT,
+        EmailFetchingCriterionChoices.UNDRAFT,
+        EmailFetchingCriterionChoices.DAILY,
+        EmailFetchingCriterionChoices.WEEKLY,
+        EmailFetchingCriterionChoices.MONTHLY,
+        EmailFetchingCriterionChoices.ANNUALLY,
+        EmailFetchingCriterionChoices.SUBJECT,
+        EmailFetchingCriterionChoices.BODY,
     )
     """Tuple of all criteria available for fetching. Refers to :class:`EmailFetchingCriterionChoices`.
     Constructed analogous to the IMAP4 criteria.
@@ -91,38 +91,34 @@ class ExchangeFetcher(BaseFetcher):
         Returns:
             Augmented queryset to be used in Exchange request.
         """
-        if criterion == EmailFetchingCriterionChoices.UNSEEN:
-            mail_query = base_query.filter(is_read=False)
-        elif criterion == EmailFetchingCriterionChoices.SEEN:
-            mail_query = base_query.filter(is_read=True)
-        elif criterion == EmailFetchingCriterionChoices.DRAFT:
-            mail_query = base_query.filter(is_draft=True)
-        elif criterion == EmailFetchingCriterionChoices.UNDRAFT:
-            mail_query = base_query.filter(is_draft=False)
-        elif criterion == EmailFetchingCriterionChoices.DAILY:
-            start_time = datetime.now(tz=UTC) - timedelta(days=1)
-            mail_query = base_query.filter(datetime_received__gte=start_time)
-        elif criterion == EmailFetchingCriterionChoices.WEEKLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
-            mail_query = base_query.filter(datetime_received__gte=start_time)
-        elif criterion == EmailFetchingCriterionChoices.MONTHLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
-            mail_query = base_query.filter(datetime_received__gte=start_time)
-        elif criterion == EmailFetchingCriterionChoices.ANNUALLY:
-            start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
-            mail_query = base_query.filter(datetime_received__gte=start_time)
-        elif criterion == EmailFetchingCriterionChoices.SENTSINCE:
-            start_time = datetime.strptime(
-                criterion_arg, INTERNAL_DATE_FORMAT
-            ).astimezone(UTC)
-            mail_query = base_query.filter(datetime_received__gte=start_time)
-        elif criterion == EmailFetchingCriterionChoices.SUBJECT:
-            mail_query = base_query.filter(subject__contains=criterion_arg)
-        elif criterion == EmailFetchingCriterionChoices.BODY:
-            mail_query = base_query.filter(body__contains=criterion_arg)
-        else:  # only ALL left
-            mail_query = base_query
-        return mail_query
+        match criterion:
+            case EmailFetchingCriterionChoices.DAILY:
+                start_time = datetime.now(tz=UTC) - timedelta(days=1)
+            case EmailFetchingCriterionChoices.WEEKLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
+            case EmailFetchingCriterionChoices.MONTHLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
+            case EmailFetchingCriterionChoices.ANNUALLY:
+                start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
+            case EmailFetchingCriterionChoices.SENTSINCE:
+                start_time = datetime.strptime(
+                    criterion_arg, INTERNAL_DATE_FORMAT
+                ).astimezone(UTC)
+            case EmailFetchingCriterionChoices.SUBJECT:
+                return base_query.filter(subject__contains=criterion_arg)
+            case EmailFetchingCriterionChoices.BODY:
+                return base_query.filter(body__contains=criterion_arg)
+            case EmailFetchingCriterionChoices.UNSEEN:
+                return base_query.filter(is_read=False)
+            case EmailFetchingCriterionChoices.SEEN:
+                return base_query.filter(is_read=True)
+            case EmailFetchingCriterionChoices.DRAFT:
+                return base_query.filter(is_draft=True)
+            case EmailFetchingCriterionChoices.UNDRAFT:
+                return base_query.filter(is_draft=False)
+            case _:  # only ALL left
+                return base_query
+        return base_query.filter(datetime_received__gte=start_time)
 
     @override
     def __init__(self, account: Account) -> None:

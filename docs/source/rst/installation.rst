@@ -40,7 +40,7 @@ one for the logfiles of Eonvelope and one for the files that Eonvelope archives.
     In that case you will have to give the directory 777 permissions, otherwise services will fail to start and log properly.
 
 It is recommended to use the minimal version of the docker-compose for the first time you deploy Eonvelope
-and to skim the docker settings section of the :doc:`configuration reference <configurations page>` beforehand.
+and to skim the docker settings section of the :doc:`configuration reference <configuration>` beforehand.
 
 Docker
 ^^^^^^
@@ -106,10 +106,11 @@ you must make sure that the prometheus endpoint ``/metrics`` is not exposed for 
 
 Just add
 
-.. code-block::
-   location /metrics {
-      return 403;   # or 404
-   }
+.. code-block:: text
+
+    location /metrics {
+       return 403;   # or 404
+    }
 
 to your nginx config.
 

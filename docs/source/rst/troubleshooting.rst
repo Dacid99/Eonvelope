@@ -37,7 +37,7 @@ More details are available on the :doc:`installation page <installation>`.
 I have locked myself out of my Eonvelope account.
 -------------------------------------------------
 
-This is a job for the admin, go to :doc:`admin-instructions <the admin instructions>`,
+This is a job for the admin, go to :doc:`the admin instructions <admin-instructions>`,
 where there is a list of instructions for different lockout scenarios.
 
 
@@ -46,4 +46,4 @@ I am using the API and some name(s) and(/or) behavior(s) don't make sense to me.
 
 This may be because that field have been renamed or may have no analogue in the web interface.
 
-There is a list with these known oddities in the :doc:`api-instructions <the api instructions>`.
+There is a list with these known oddities in the :doc:`the api instructions <api-instructions>`.

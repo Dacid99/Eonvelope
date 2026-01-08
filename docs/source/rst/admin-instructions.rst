@@ -53,13 +53,17 @@ The user may change it himself once logged in.
 Admin password forgotten
 """"""""""""""""""""""""
 
-If the admin user password has been forgotten, there are a variety of options.
+If the admin user password has been forgotten,
+there are a variety of options.
 
-If the admin password has not been changed, you can just look it up in the ``docker-compose.yml`` environmental variables.
+If the admin password has not been changed,
+you can just look it up in the ``docker-compose.yml`` environmental variables.
 
-If you have access to the docker management, you can use ``docker exec`` to run
+If you have access to the docker management,
+you can use ``docker exec`` to run
 
-.. code-block::
+.. code-block:: bash
+
     python3 manage.py changepassword admin
 
 and change the password.
@@ -80,8 +84,10 @@ You may delete this additional admin afterwards. You can recreate it if required
 MFA activated, device lost, no recovery codes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If a user has MFA activated but lost their device and all recovery codes, you can look into the database via the admin panel.
-The second factor secrets are stored in the mfa table. The secret for authentication can be found in the TOTP entry for the locked-out user.
+If a user has MFA activated but lost their device and all recovery codes,
+you can look into the database via the admin panel.
+The second factor secrets are stored in the mfa table.
+The secret for authentication can be found in the TOTP entry for the locked-out user.
 Take that secret and supply it to the user so they can set up the authenticator app on their device.
 They should turn MFA off and back on again afterwards to change the now compromised secret.
 

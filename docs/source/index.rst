@@ -13,9 +13,9 @@ Welcome to the documentation of Eonvelope!
 
 Eonvelope is an open-source self-hostable email archive built with the django framework.
 
-If you want to get started, try the :doc:`quickstart <quickstart>` and :doc:`installation pages <installation>`.
+If you want to get started, try the :doc:`quickstart <rst/quickstart>` and :doc:`installation pages <rst/installation>`.
 
-If you need information about how the application works, try the :doc:`instructions <instructions>`.
+If you need information about how the application works, try the :doc:`instructions <rst/instructions>`.
 
 
 .. toctree::

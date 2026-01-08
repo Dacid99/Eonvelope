@@ -9,10 +9,15 @@ Import Graphs
 
 A graphical overview of the internal and external dependencies of the Eonvelope package
 
-Eonvelope package
--------------------
+config package
+--------------
 
-.. image:: ../Eonvelope_import_graph.svg
+.. image:: ../config_import_graph.svg
+
+Eonvelope package
+-----------------
+
+.. image:: ../eonvelope_import_graph.svg
 
 
 core package

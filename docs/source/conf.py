@@ -30,6 +30,7 @@ import django
 import tomli
 
 
+sys.path.insert(0, os.path.abspath("../../"))
 sys.path.insert(0, os.path.abspath("../../src/"))
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "config.settings"
@@ -182,6 +183,7 @@ autodoc_inherit_docstrings = True
 # https://www.sphinx-doc.org/en/master/usage/extensions/apidoc.html#configuration
 
 apidoc_modules = [
+    {"path": "../../src/config", "destination": "apidoc-rst/config"},
     {"path": "../../src/eonvelope", "destination": "apidoc-rst/eonvelope"},
     {"path": "../../src/core", "destination": "apidoc-rst/core"},
     {"path": "../../src/api", "destination": "apidoc-rst/api"},
@@ -264,6 +266,14 @@ intersphinx_mapping = {
     ),
     "celery": (
         "https://docs.celeryq.dev/en/stable/",
+        None,
+    ),
+    "django_tables2": (
+        "https://django-tables2.readthedocs.io/en/latest/",
+        None,
+    ),
+    "vobject": (
+        "https://vobject.readthedocs.io/latest/",
         None,
     ),
 }

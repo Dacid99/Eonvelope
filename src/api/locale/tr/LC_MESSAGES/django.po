@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-31 16:47+0000\n"
-"PO-Revision-Date: 2025-12-31 20:13+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/eonvelope/api/tr/"
-">\n"
+"PO-Revision-Date: 2026-01-08 23:01+0000\n"
+"Last-Translator: WarHammer <ibrhmmlgr46@gmail.com>\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/eonvelope/api/"
+"tr/>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,20 +22,20 @@ msgstr ""
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:71
 #, python-format
 msgid "%(object)s marked as favorite."
-msgstr ""
+msgstr "%(object)s favori olarak işaretlendi."
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:73
 #, python-format
 msgid "%(object)s unmarked as favorite."
-msgstr ""
+msgstr "%(object)s favorilerden çıkarıldı."
 
 #: src/api/v1/views/AccountViewSet.py:142
 msgid "An error with the mailaccount occurred."
-msgstr ""
+msgstr "Mail hesabı ile bir sorun oluştu."
 
 #: src/api/v1/views/AccountViewSet.py:148
 msgid "Updated mailboxes"
-msgstr ""
+msgstr "Güncellenen mail kutuları"
 
 #: src/api/v1/views/AccountViewSet.py:172
 msgid "Tested mailaccount"

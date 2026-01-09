@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-05 21:24+0000\n"
-"PO-Revision-Date: 2025-12-31 20:16+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-01-08 23:01+0000\n"
+"Last-Translator: WarHammer <ibrhmmlgr46@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/eonvelope/core/"
 "tr/>\n"
 "Language: tr\n"
@@ -21,23 +21,23 @@ msgstr ""
 
 #: src/core/constants.py:40
 msgid "All emails received the last DAY"
-msgstr ""
+msgstr "DÜN alınan tüm e-mailler"
 
 #: src/core/constants.py:43
 msgid "All emails received the last WEEK"
-msgstr ""
+msgstr "GEÇEN HAFTA alınan tüm e-mailler"
 
 #: src/core/constants.py:46
 msgid "All emails received the last MONTH"
-msgstr ""
+msgstr "GEÇEN AY alınan tüm e-mailler"
 
 #: src/core/constants.py:49
 msgid "All emails received the last YEAR"
-msgstr ""
+msgstr "GEÇEN YIL alınan tüm e-mailler"
 
 #: src/core/constants.py:52
 msgid "All RECENT emails"
-msgstr ""
+msgstr "Tüm YENİ e-mailler"
 
 #: src/core/constants.py:55
 msgid "All UNSEEN emails"

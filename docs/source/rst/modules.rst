@@ -12,7 +12,8 @@ Eonvelope source code documentation
    :maxdepth: 1
    :caption: Packages:
 
-   ../apidoc-rst/Eonvelope/modules
+   ../apidoc-rst/config/modules
+   ../apidoc-rst/eonvelope/modules
    ../apidoc-rst/core/modules
    ../apidoc-rst/api/modules
    ../apidoc-rst/web/modules

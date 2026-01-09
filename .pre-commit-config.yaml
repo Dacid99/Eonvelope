@@ -48,3 +48,8 @@ repos:
     rev: 42.71.0
     hooks:
       - id: renovate-config-validator
+  - repo: https://github.com/PyCQA/doc8
+    rev: v2.0.0
+    hooks:
+      - id: doc8
+        args: [--config, tools/doc8.ini]

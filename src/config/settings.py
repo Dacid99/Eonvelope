@@ -31,9 +31,9 @@ from __future__ import annotations
 import re
 import socket
 import sys
+import tomllib
 from pathlib import Path
 
-import tomli
 from django.utils.translation import get_language, get_language_bidi, get_language_info
 from django.utils.translation import gettext_lazy as _
 from environ import FileAwareEnv
@@ -50,7 +50,7 @@ env.read_env(BASE_DIR / ".env")
 
 # Version synced from pyproject config file
 with open(BASE_DIR / "pyproject.toml", "rb") as f:
-    config = tomli.load(f)
+    config = tomllib.load(f)
 VERSION = config["project"]["version"]
 
 

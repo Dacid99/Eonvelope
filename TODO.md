@@ -18,6 +18,7 @@
 - show pwd button
 - structured json based logging messages
 - refine fetchererrors into errors for auth, connection, etc.
+- add gmail client support
 
 ## To refactor
 

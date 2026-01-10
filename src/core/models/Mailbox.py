@@ -35,6 +35,7 @@ from django_prometheus.models import ExportModelOperationsMixin
 
 from core.constants import (
     EmailFetchingCriterionChoices,
+    MailboxTypeChoices,
     SupportedEmailDownloadFormats,
     SupportedEmailUploadFormats,
     file_format_parsers,
@@ -93,6 +94,14 @@ class Mailbox(
         verbose_name=_("name"),
     )
     """The mailaccount internal name of the mailbox. Unique together with :attr:`account`."""
+
+    type = models.CharField(
+        default=MailboxTypeChoices.CUSTOM,
+        choices=MailboxTypeChoices,
+        max_length=32,
+        verbose_name=_("type"),
+    )
+    """The mailaccount internal role or distinguished id of the mailbox."""
 
     account: models.ForeignKey[Account] = models.ForeignKey(
         "Account",

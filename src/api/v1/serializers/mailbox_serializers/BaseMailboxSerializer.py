@@ -55,6 +55,7 @@ class BaseMailboxSerializer(serializers.ModelSerializer[Mailbox]):
 
         read_only_fields: Final[list[str]] = [
             "name",
+            "type",
             "account",
             "is_healthy",
             "last_error",
@@ -63,6 +64,7 @@ class BaseMailboxSerializer(serializers.ModelSerializer[Mailbox]):
             "updated",
         ]
         """The :attr:`core.models.Mailbox.Mailbox.name`,
+        :attr:`core.models.Mailbox.Mailbox.type`,
         :attr:`core.models.Mailbox.Mailbox.account`,
         :attr:`core.models.Mailbox.Mailbox.is_healthy`,
         :attr:`core.models.Mailbox.Mailbox.created` and

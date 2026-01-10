@@ -139,6 +139,19 @@ class EmailProtocolChoices(TextChoices):
     """The JMAP protocol"""
 
 
+class MailboxTypeChoices(TextChoices):
+    """Namespace class for all available mailbox types."""
+
+    INBOX = "INBOX", _("Inbox")
+    OUTBOX = "OUTBOX", _("Outbox")
+    SENT = "SENT", _("Sent")
+    JUNK = "JUNK", _("Junk")
+    DRAFTS = "DRAFTS", _("Drafts")
+    TRASH = "TRASH", _("Trash")
+    CUSTOM = "", ""
+    """Custom mailboxes have no type."""
+
+
 class HeaderFields:
     """Namespace class with all header fields that have their own column in the emails table.
 

@@ -37,6 +37,7 @@ from pyfakefs.fake_filesystem_unittest import Pause
 
 from core.constants import (
     EmailFetchingCriterionChoices,
+    MailboxTypeChoices,
     SupportedEmailUploadFormats,
     file_format_parsers,
 )
@@ -86,6 +87,8 @@ def test_Mailbox_fields(fake_mailbox):
     """Tests the fields of :class:`core.models.Mailbox.Mailbox`."""
 
     assert fake_mailbox.name is not None
+    assert fake_mailbox.type is not None
+    assert fake_mailbox.type == MailboxTypeChoices.CUSTOM
     assert fake_mailbox.account is not None
     assert isinstance(fake_mailbox.account, Account)
     assert fake_mailbox.save_attachments is True

@@ -316,8 +316,10 @@ class Account(
 
         logger.info("Parsing mailbox data ...")
 
-        for mailbox_data in mailbox_list:
-            Mailbox.create_from_data(mailbox_data, self)
+        for mailbox_name, mailbox_type in mailbox_list:
+            Mailbox.create_from_data(
+                mailbox_name=mailbox_name, mailbox_type=mailbox_type, account=self
+            )
 
         logger.info("Successfully updated mailboxes.")
 

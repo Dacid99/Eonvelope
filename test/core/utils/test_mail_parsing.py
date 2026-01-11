@@ -216,45 +216,41 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
 
 
 @pytest.mark.parametrize(
-    "name_data, expected_name",
+    "name_data, expected_name, expected_type",
     [
-        (b"INBOX", "INBOX"),
-        ("INBOX", "INBOX"),
         (
-            b'Dr&AOc-. Bianka "/" F&APY-rste&BBk-r',
-            "FörsteЙr",
-        ),
-        (
-            b'Yves "/" Pr&AN8EGQ-uvost',
-            "PrßЙuvost",
-        ),
-        (
-            b'&ZY4mBQDfheQ- "/" &Zg5,jg-',
+            b'(test) "/" &Zg5,jg-',
+            "test",
             "明美",
         ),
         (
             '(\\Sent \\HasNoChildren) "/" "Gesendete Objekte"',
+            "\\Sent \\HasNoChildren",
             '"Gesendete Objekte"',
         ),
         (
             b'(\\Sent \\HasChildren) "." INBOX.Sent',
+            "\\Sent \\HasChildren",
             "INBOX.Sent",
         ),
         (
             b'(\\HasNoChildren) "/" Archive/2024',
+            "\\HasNoChildren",
             "Archive/2024",
         ),
         (
             b'() ";" Trash',
+            "",
             "Trash",
         ),
     ],
 )
-def test_parse_mailbox_name(name_data, expected_name):
+def test_parse_IMAP_mailbox_data(name_data, expected_name, expected_type):
     """Tests :func:`core.utils.mail_parsing.parse_mailbox_name`."""
-    result = mail_parsing.parse_mailbox_name(name_data)
+    result = mail_parsing.parse_IMAP_mailbox_data(name_data)
 
-    assert result == expected_name
+    assert result[0] == expected_name
+    assert result[1] == expected_type
 
 
 @pytest.mark.django_db

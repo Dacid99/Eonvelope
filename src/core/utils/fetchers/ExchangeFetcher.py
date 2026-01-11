@@ -267,7 +267,7 @@ class ExchangeFetcher(BaseFetcher):
         return mail_data_list
 
     @override
-    def fetch_mailboxes(self) -> list[str]:
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
         """Retrieves and returns the data of the mailboxes in the account.
 
         Todo:
@@ -286,8 +286,11 @@ class ExchangeFetcher(BaseFetcher):
         self.logger.debug("Fetching mailboxes in %s ...", self.account)
         try:
             mail_root_path = self._mail_client.absolute
-            mailbox_names = [
-                os.path.relpath(folder.absolute, mail_root_path)
+            mailboxes = [
+                (
+                    os.path.relpath(folder.absolute, mail_root_path),
+                    (str(folder.to_id().id) if folder.is_distinguished else ""),
+                )
                 for folder in self._mail_client.walk()
                 if isinstance(folder, exchangelib.Folder)
                 and folder.folder_class == "IPF.Note"
@@ -296,7 +299,7 @@ class ExchangeFetcher(BaseFetcher):
             self.logger.exception("Error during scan of message_root!")
             raise MailAccountError(error, _("scan for mailboxes")) from error
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
-        return mailbox_names
+        return mailboxes
 
     @override
     def restore(self, email: Email) -> None:

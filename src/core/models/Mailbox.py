@@ -49,8 +49,8 @@ from core.mixins import (
     URLMixin,
 )
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from core.utils.mail_parsing import parse_mailbox_name
 from eonvelope.utils.workarounds import get_config
+from src.core.utils.mail_parsing import parse_mailbox_type
 
 from .Email import Email
 
@@ -409,15 +409,16 @@ class Mailbox(
 
     @classmethod
     def create_from_data(
-        cls, mailbox_data: bytes | str, account: Account
+        cls, mailbox_name: str, mailbox_type: str, account: Account
     ) -> Mailbox | None:
-        """Creates a :class:`core.models.Mailbox` from the mailboxname in bytes.
+        """Creates a :class:`core.models.Mailbox` from the mailboxdata.
 
         Note:
             Mailbox created from data is considered healthy by default.
 
         Args:
-            mailbox_data: The bytes with the mailboxname.
+            mailbox_data: The name of the mailbox.
+            mailbox_type: The type of the mailbox.
             account: The account the mailbox is in.
 
         Returns:
@@ -426,7 +427,10 @@ class Mailbox(
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")
-        mailbox_name = parse_mailbox_name(mailbox_data)
+        mailbox_type = parse_mailbox_type(mailbox_type)
+        if get_config("THROW_OUT_SPAM") and (mailbox_type == MailboxTypeChoices.JUNK):
+            logger.debug("%s is a spambox, it is skipped.", mailbox_name)
+            return None
         if re.compile(
             get_config("IGNORED_MAILBOXES_REGEX"), flags=re.IGNORECASE
         ).search(mailbox_name):
@@ -434,6 +438,8 @@ class Mailbox(
             return None
         try:
             mailbox = cls.objects.get(account=account, name=mailbox_name)
+            mailbox.type = mailbox_type  # for migration of old mailbox instances
+            mailbox.save(update_fields=["type"])
             mailbox.set_healthy()
             logger.debug(
                 "%s already exists in db, it has been set to healthy.", mailbox
@@ -442,10 +448,11 @@ class Mailbox(
             mailbox = cls(
                 account=account,
                 name=mailbox_name,
+                type=mailbox_type,
                 save_to_eml=get_config("DEFAULT_SAVE_TO_EML"),
                 save_attachments=get_config("DEFAULT_SAVE_ATTACHMENTS"),
                 is_healthy=True,
             )
             mailbox.save()
-            logger.debug("Successfully saved mailbox %s to db.", mailbox_name)
+            logger.debug("Successfully saved %s to db.", mailbox_name)
         return mailbox

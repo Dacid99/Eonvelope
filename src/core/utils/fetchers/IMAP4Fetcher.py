@@ -34,6 +34,7 @@ from core.constants import (
 )
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from core.utils.fetchers.SafeIMAPMixin import SafeIMAPMixin
+from src.core.utils.mail_parsing import parse_IMAP_mailbox_data
 
 from .BaseFetcher import BaseFetcher
 
@@ -270,7 +271,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         return mail_data_list
 
     @override
-    def fetch_mailboxes(self) -> list[bytes]:
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
         """Retrieves and returns the data of the mailboxes in the account.
 
         Todo:
@@ -283,18 +284,14 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
             MailAccountError: If an error occurs or a bad response is returned.
         """
         self.logger.debug("Fetching mailboxes in %s ...", self.account)
-        _, mailboxes = self.safe_list()
-        bytes_mailboxes = [
-            mailbox for mailbox in mailboxes if isinstance(mailbox, bytes)
+        _, mailboxes_data = self.safe_list()
+        mailboxes = [
+            parse_IMAP_mailbox_data(mailbox_data)
+            for mailbox_data in mailboxes_data
+            if isinstance(mailbox_data, bytes | str)
         ]
-        if len(mailboxes) != len(bytes_mailboxes):
-            self.logger.debug(
-                "UNEXPECTED: %s returned mailboxes %s, not all are bytes.",
-                self.account,
-                mailboxes,
-            )
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
-        return bytes_mailboxes
+        return mailboxes
 
     @override
     def restore(self, email: Email) -> None:

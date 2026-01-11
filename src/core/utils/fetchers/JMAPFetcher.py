@@ -292,8 +292,8 @@ class JMAPFetcher(BaseFetcher):
         return email_data
 
     @override
-    def fetch_mailboxes(self) -> list[str]:
-        method = jmapc.methods.MailboxGet(ids=None)
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
+        method = jmapc.methods.MailboxGet(ids=None, properties=["name", "role"])
         self.logger.debug("Fetching mailboxes in %s ...", self.account)
         try:
             result = self._mail_client.request(method)
@@ -313,7 +313,11 @@ class JMAPFetcher(BaseFetcher):
                 BadServerResponseError(result.to_json()), method.jmap_method_name
             )
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
-        return [mailbox.name for mailbox in result.data if mailbox.name is not None]
+        return [
+            (mailbox.name, mailbox.role or "")
+            for mailbox in result.data
+            if mailbox.name is not None
+        ]
 
     @override
     def restore(self, email: Email) -> None:

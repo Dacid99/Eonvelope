@@ -121,7 +121,7 @@ class BaseFetcher(ABC):
             raise ValueError(f"{mailbox} is not in {self.account}!")
 
     @abstractmethod
-    def fetch_mailboxes(self) -> list[bytes] | list[str]:
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
         """Fetches all mailbox names from the server.
 
         Returns:

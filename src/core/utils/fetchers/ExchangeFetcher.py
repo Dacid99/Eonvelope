@@ -144,6 +144,8 @@ class ExchangeFetcher(BaseFetcher):
             self.account.mail_address, self.account.password
         )
         retry_policy = exchangelib.FaultTolerance(max_wait=self.account.timeout)
+        # manually set fallback timeout; https://github.com/ecederstrand/exchangelib/issues/1375
+        exchangelib.protocol.Protocol.TIMEOUT = self.account.timeout
         config = (
             exchangelib.Configuration(
                 service_endpoint=self.account.mail_host,

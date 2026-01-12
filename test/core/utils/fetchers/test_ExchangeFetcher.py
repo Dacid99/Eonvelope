@@ -310,6 +310,8 @@ def test_ExchangeFetcher_connect_to_host_hostURL_success(
         assert mock_ExchangeAccount.call_args.kwargs[
             "config"
         ].retry_policy.max_wait == (exchange_mailbox.account.timeout)
+    # ruff: noqa: SIM300 # check altered constant
+    assert exchangelib.protocol.Protocol.TIMEOUT == exchange_mailbox.account.timeout
     assert mock_ExchangeAccount.call_args.kwargs["access_type"] == exchangelib.DELEGATE
     assert mock_ExchangeAccount.call_args.kwargs["autodiscover"] is False
     assert mock_ExchangeAccount.call_args.kwargs[
@@ -374,6 +376,8 @@ def test_ExchangeFetcher_connect_to_host_hostname_success(
         assert mock_ExchangeAccount.call_args.kwargs[
             "config"
         ].retry_policy.max_wait == (exchange_mailbox.account.timeout)
+    # ruff: noqa: SIM300 # check altered constant
+    assert exchangelib.protocol.Protocol.TIMEOUT == exchange_mailbox.account.timeout
     assert mock_ExchangeAccount.call_args.kwargs["access_type"] == exchangelib.DELEGATE
     assert mock_ExchangeAccount.call_args.kwargs["autodiscover"] is False
     assert mock_ExchangeAccount.call_args.kwargs[

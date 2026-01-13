@@ -36,59 +36,59 @@ from .models import (
 
 admin.site.register([StorageShard])
 
-AccountResource = modelresource_factory(Account)
-AttachmentResource = modelresource_factory(Attachment)
-CorrespondentResource = modelresource_factory(Correspondent)
-DaemonResource = modelresource_factory(Daemon)
-EmailResource = modelresource_factory(Email)
-EmailCorrespondentResource = modelresource_factory(EmailCorrespondent)
-MailboxResource = modelresource_factory(Mailbox)
+AccountResource = modelresource_factory(model=Account)
+AttachmentResource = modelresource_factory(model=Attachment)
+CorrespondentResource = modelresource_factory(model=Correspondent)
+DaemonResource = modelresource_factory(model=Daemon)
+EmailResource = modelresource_factory(model=Email)
+EmailCorrespondentResource = modelresource_factory(model=EmailCorrespondent)
+MailboxResource = modelresource_factory(model=Mailbox)
 
 
 @admin.register(Account)
 class AccountAdmin(ImportExportModelAdmin):
     """Admin config for :class:`core.models.Account`."""
 
-    resource_class = [AccountResource]
+    resource_classes = [AccountResource]
 
 
 @admin.register(Attachment)
 class AttachmentAdmin(ImportExportModelAdmin):
     """Admin config for :class:`core.models.Attachment`."""
 
-    resource_class = [AttachmentResource]
+    resource_classes = [AttachmentResource]
 
 
 @admin.register(Correspondent)
 class CorrespondentAdmin(ImportExportModelAdmin):
     """Admin config for :class:`core.models.Correspondent`."""
 
-    resource_class = [CorrespondentResource]
+    resource_classes = [CorrespondentResource]
 
 
 @admin.register(Daemon)
 class DaemonAdmin(ImportExportModelAdmin):
     """Admin config for :class:`core.models.Daemon`."""
 
-    resource_class = [DaemonResource]
+    resource_classes = [DaemonResource]
 
 
 @admin.register(Email)
 class EmailAdmin(ImportExportModelAdmin):
     """Admin config for :class:`core.models.Email`."""
 
-    resource_class = [EmailResource]
+    resource_classes = [EmailResource]
 
 
 @admin.register(EmailCorrespondent)
 class EmailCorrespondentAdmin(ImportExportModelAdmin):
     """Admin config for :class:`core.models.EmailCorrespondent`."""
 
-    resource_class = [EmailCorrespondentResource]
+    resource_classes = [EmailCorrespondentResource]
 
 
 @admin.register(Mailbox)
 class MailboxAdmin(ImportExportModelAdmin):
     """Admin config for :class:`core.models.Mailbox`."""
 
-    resource_class = [MailboxResource]
+    resource_classes = [MailboxResource]

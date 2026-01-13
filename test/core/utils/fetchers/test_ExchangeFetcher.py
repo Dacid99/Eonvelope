@@ -34,6 +34,7 @@ from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
 from core.models import Mailbox
 from core.utils.fetchers import ExchangeFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from src.core.constants import MailboxTypeChoices
 
 
 @pytest.fixture
@@ -71,11 +72,13 @@ def mock_QuerySet(mocker, mock_message):
 
 
 @pytest.fixture
-def mock_Folder(mocker, mock_QuerySet):
+def mock_Folder(mocker, faker, mock_QuerySet):
     """Mocks an :class:`exchangelib.Folder` with mocked :class:`exchangelib.queryset.QuerySet` as content."""
     mock_Folder = mocker.MagicMock(spec=exchangelib.Folder)
     mock_Folder.all.return_value = mock_QuerySet
     mock_Folder.folder_class.return_value = "IPF.Note"
+    mock_Folder.is_distinguished = True
+    mock_Folder.to_id.return_value.id = faker.random_element(MailboxTypeChoices.values)
     return mock_Folder
 
 
@@ -671,8 +674,11 @@ def test_ExchangeFetcher_fetch_mailboxes_success(
 
     mock_msg_folder_root.walk.assert_called()
     assert result == [
-        os.path.relpath(
-            item.absolute.return_value, mock_msg_folder_root.absolute.return_value
+        (
+            os.path.relpath(
+                item.absolute.return_value, mock_msg_folder_root.absolute.return_value
+            ),
+            str(item.to_id().id),
         )
         for item in mock_msg_folder_root.walk.return_value
         if isinstance(item, exchangelib.Folder) and item.folder_class == "IPF.Note"

@@ -506,7 +506,7 @@ def fake_other_mailbox(fake_other_account):
 
 
 @pytest.fixture
-def fake_other_daemon(faker, fake_other_mailbox):
+def fake_other_daemon(fake_other_mailbox):
     """An :class:`core.models.Daemon` owned by :attr:`other_user`."""
     return baker.make(
         Daemon,
@@ -515,7 +515,7 @@ def fake_other_daemon(faker, fake_other_mailbox):
 
 
 @pytest.fixture
-def fake_other_email(faker, fake_other_mailbox):
+def fake_other_email(fake_other_mailbox):
     """An :class:`core.models.Email` owned by :attr:`other_user`."""
     return baker.make(Email, mailbox=fake_other_mailbox)
 

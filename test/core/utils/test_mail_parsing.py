@@ -220,28 +220,28 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
     [
         (
             b'(test) "/" &Zg5,jg-',
-            "test",
             "明美",
+            "test",
         ),
         (
             '(\\Sent \\HasNoChildren) "/" "Gesendete Objekte"',
-            "\\Sent \\HasNoChildren",
             '"Gesendete Objekte"',
+            "\\Sent \\HasNoChildren",
         ),
         (
             b'(\\Sent \\HasChildren) "." INBOX.Sent',
-            "\\Sent \\HasChildren",
             "INBOX.Sent",
+            "\\Sent \\HasChildren",
         ),
         (
             b'(\\HasNoChildren) "/" Archive/2024',
-            "\\HasNoChildren",
             "Archive/2024",
+            "\\HasNoChildren",
         ),
         (
             b'() ";" Trash',
-            "",
             "Trash",
+            "",
         ),
     ],
 )

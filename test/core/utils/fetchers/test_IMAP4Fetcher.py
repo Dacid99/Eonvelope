@@ -26,10 +26,15 @@ from freezegun import freeze_time
 from imap_tools.imap_utf7 import utf7_encode
 from model_bakery import baker
 
-from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.models import Mailbox
 from core.utils.fetchers import IMAP4Fetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from core.utils.mail_parsing import parse_IMAP_mailbox_data
 
 
 class FakeIMAP4Error(Exception):
@@ -57,7 +62,17 @@ def mock_IMAP4(mocker, faker):
     mock_IMAP4.return_value.authenticate.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.noop.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.check.return_value = ("OK", [fake_response])
-    mock_IMAP4.return_value.list.return_value = ("OK", fake_response.split())
+    mock_IMAP4.return_value.list.return_value = (
+        "OK",
+        [
+            utf7_encode(f'(\\{type_choice}) "/" {word}')
+            for word, type_choice in zip(
+                faker.words(),
+                faker.random_elements(MailboxTypeChoices.values),
+                strict=False,
+            )
+        ],
+    )
     mock_IMAP4.return_value.select.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.unselect.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.append.return_value = ("OK", [fake_response])
@@ -766,7 +781,13 @@ def test_IMAP4Fetcher_fetch_mailboxes_success(imap_mailbox, mock_logger, mock_IM
     """
     result = IMAP4Fetcher(imap_mailbox.account).fetch_mailboxes()
 
-    assert result == mock_IMAP4.return_value.list.return_value[1]
+    assert len(mock_IMAP4.return_value.list.return_value) == len(result)
+    assert all(
+        item == parse_IMAP_mailbox_data(return_value)
+        for item, return_value in zip(
+            result, mock_IMAP4.return_value.list.return_value[1], strict=True
+        )
+    )
     mock_IMAP4.return_value.list.assert_called_once()
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()

@@ -27,7 +27,7 @@ from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
 
-from core.constants import EmailProtocolChoices
+from core.constants import EmailProtocolChoices, MailboxTypeChoices
 from core.models import Account, Mailbox
 from core.utils.fetchers import (
     BaseFetcher,
@@ -54,7 +54,12 @@ def mock_fetcher(mocker, faker):
     mock_fetcher.__enter__.return_value = mock_fetcher
     mock_fetcher.fetch_emails.return_value = [text.encode() for text in faker.texts()]
     mock_fetcher.fetch_mailboxes.return_value = [
-        word.encode() for word in faker.words()
+        (word, type_choice)
+        for word, type_choice in zip(
+            faker.words(),
+            faker.random_elements(MailboxTypeChoices.values),
+            strict=False,
+        )
     ]
     return mock_fetcher
 
@@ -466,7 +471,7 @@ def test_Account_update_mailboxes_duplicate(
     in case of a fetched mailbox already being in the db.
     """
     baker.make(Mailbox, account=fake_account, name="INBOX")
-    mock_fetcher.fetch_mailboxes.return_value[0] = b"INBOX"
+    mock_fetcher.fetch_mailboxes.return_value[0] = ("INBOX", "")
 
     assert fake_account.mailboxes.count() == 1
 

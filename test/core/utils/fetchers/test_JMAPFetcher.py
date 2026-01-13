@@ -29,6 +29,7 @@ from freezegun import freeze_time
 from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
 from core.utils.fetchers import JMAPFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from src.core.constants import MailboxTypeChoices
 
 
 @pytest.fixture
@@ -81,7 +82,17 @@ def mock_JMAP_request_handler(faker, fake_get_response_data, fake_query_response
             return jmapc.methods.IdentityGetResponse(**fake_get_response_data)
         if isinstance(methods, jmapc.methods.MailboxGet):
             fake_get_response_data.update(
-                data=[jmapc.Mailbox(name=word) for word in faker.words()]
+                data=[
+                    jmapc.Mailbox(
+                        name=word,
+                        role=role.lower(),
+                    )
+                    for word, role in zip(
+                        faker.words(),
+                        faker.random_elements(MailboxTypeChoices.values),
+                        strict=False,
+                    )
+                ]
             )
             return jmapc.methods.MailboxGetResponse(**fake_get_response_data)
         if isinstance(methods, jmapc.methods.EmailGet):
@@ -505,7 +516,9 @@ def test_JMAPFetcher_test_mailbox_bad_response(
 
 @pytest.mark.django_db
 def test_JMAPFetcher_fetch_mailboxes_success(
-    jmap_mailbox, mock_logger, mock_JMAP_client
+    jmap_mailbox,
+    mock_logger,
+    mock_JMAP_client,
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_mailboxes`
     in case of success.
@@ -513,6 +526,7 @@ def test_JMAPFetcher_fetch_mailboxes_success(
     result = JMAPFetcher(jmap_mailbox.account).fetch_mailboxes()
 
     assert result
+    assert len(result[0]) == 2
     mock_JMAP_client.return_value.request.assert_called_once()
     mock_logger.debug.assert_called()
     mock_logger.error.assert_not_called()

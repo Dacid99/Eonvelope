@@ -170,7 +170,14 @@ def parse_IMAP_mailbox_data(mailbox_data: bytes | str) -> tuple[str, str]:
     match = re.search(
         r"\(([\S ]*?)\) [\S]+ (.+)", mailbox_str
     )  # regex adapted from imap_tools.folder.MailBoxFolderManager.list
-    return match.group(1), match.group(2)
+    if not match:
+        return (
+            "",
+            mailbox_str.rsplit('"', maxsplit=1)[-1]
+            .rsplit('"."', maxsplit=1)[-1]
+            .strip(),
+        )
+    return match.group(2), match.group(1)
 
 
 def parse_mailbox_type(mailbox_type_name: str) -> str:

@@ -64,17 +64,6 @@ def mock_logger(mocker):
 
 
 @pytest.fixture
-def mock_parse_mailbox_name(mocker, faker):
-    """Patches `core.utils.mail_parsing.parse_mailbox_name`."""
-    fake_name = faker.name()
-    return mocker.patch(
-        "core.models.Mailbox.parse_mailbox_name",
-        autospec=True,
-        return_value=fake_name,
-    )
-
-
-@pytest.fixture
 def mock_Email_create_from_email_bytes(mocker):
     """Patches `core.models.Email.create_from_email_bytes`."""
     return mocker.patch(
@@ -739,26 +728,26 @@ def test_Mailbox_create_from_data_success(
     override_config,
     fake_account,
     mock_logger,
-    mock_parse_mailbox_name,
     DEFAULT_SAVE_ATTACHMENTS,
     DEFAULT_SAVE_TO_EML,
 ):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of success.
     """
-    fake_name_bytes = faker.name().encode()
+    fake_name = faker.name()
 
     assert Mailbox.objects.count() == 0
     with override_config(
         DEFAULT_SAVE_ATTACHMENTS=DEFAULT_SAVE_ATTACHMENTS,
         DEFAULT_SAVE_TO_EML=DEFAULT_SAVE_TO_EML,
+        THROW_OUT_SPAM=False,
     ):
-        new_mailbox = Mailbox.create_from_data(fake_name_bytes, fake_account)
+        new_mailbox = Mailbox.create_from_data(fake_name, "junk", fake_account)
 
     assert Mailbox.objects.count() == 1
     assert new_mailbox.pk is not None
-    mock_parse_mailbox_name.assert_called_once_with(fake_name_bytes)
-    assert new_mailbox.name == mock_parse_mailbox_name.return_value
+    assert new_mailbox.name == fake_name
+    assert new_mailbox.type == MailboxTypeChoices.JUNK
     assert new_mailbox.save_attachments is DEFAULT_SAVE_ATTACHMENTS
     assert new_mailbox.save_to_eml is DEFAULT_SAVE_TO_EML
     assert new_mailbox.is_healthy
@@ -766,24 +755,22 @@ def test_Mailbox_create_from_data_success(
 
 
 @pytest.mark.django_db
-def test_Mailbox_create_from_data_duplicate(
-    faker, fake_mailbox, mock_logger, mock_parse_mailbox_name
-):
+def test_Mailbox_create_from_data_duplicate(faker, fake_mailbox, mock_logger):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of data that is already in the db.
     """
-    fake_name_bytes = faker.name().encode()
+    fake_type = faker.random_element(MailboxTypeChoices.values)
 
     assert Mailbox.objects.count() == 1
 
-    mock_parse_mailbox_name.return_value = fake_mailbox.name
-
-    new_mailbox = Mailbox.create_from_data(fake_name_bytes, fake_mailbox.account)
+    new_mailbox = Mailbox.create_from_data(
+        fake_mailbox.name, fake_type.title(), fake_mailbox.account
+    )
 
     assert Mailbox.objects.count() == 1
     assert new_mailbox.pk is not None
-    mock_parse_mailbox_name.assert_called_once_with(fake_name_bytes)
     assert new_mailbox == fake_mailbox
+    assert new_mailbox.type == fake_type
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy
     mock_logger.debug.assert_called()
@@ -794,33 +781,47 @@ def test_Mailbox_create_from_data_duplicate(
     "mailbox_name",
     ["Spam", "Junk", "Account/Spam", "Junk-Email", "Emailjunk", "Warning:spam-folder"],
 )
-def test_Mailbox_create_from_data_ignored(
-    faker,
+def test_Mailbox_create_from_data_ignored_by_name(
     override_config,
     fake_mailbox,
     mock_logger,
-    mock_parse_mailbox_name,
     mailbox_name,
 ):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of data that is in the ignorelist.
     """
-    fake_name_bytes = faker.name().encode()
-
     assert Mailbox.objects.count() == 1
 
-    mock_parse_mailbox_name.return_value = mailbox_name
     with override_config(IGNORED_MAILBOXES_REGEX="(Spam|Junk)"):
-        new_mailbox = Mailbox.create_from_data(fake_name_bytes, fake_mailbox.account)
+        new_mailbox = Mailbox.create_from_data(
+            mailbox_name, "Custom", fake_mailbox.account
+        )
 
     assert Mailbox.objects.count() == 1
     assert new_mailbox is None
-    mock_parse_mailbox_name.assert_called_once_with(fake_name_bytes)
+    mock_logger.debug.assert_called()
+
+
+def test_Mailbox_create_from_data_ignored_by_type(
+    override_config,
+    fake_mailbox,
+    mock_logger,
+):
+    """Tests :func:`core.models.Account.Account.create_from_data`
+    in case of a type that is in the ignored.
+    """
+    assert Mailbox.objects.count() == 1
+
+    with override_config(THROW_OUT_SPAM=True):
+        new_mailbox = Mailbox.create_from_data("someName", "junk", fake_mailbox.account)
+
+    assert Mailbox.objects.count() == 1
+    assert new_mailbox is None
     mock_logger.debug.assert_called()
 
 
 @pytest.mark.django_db
-def test_Mailbox_create_from_data_no_account(faker, mock_parse_mailbox_name):
+def test_Mailbox_create_from_data_no_account(faker):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of data that is already in the db.
     """
@@ -829,10 +830,9 @@ def test_Mailbox_create_from_data_no_account(faker, mock_parse_mailbox_name):
     assert Mailbox.objects.count() == 0
 
     with pytest.raises(ValueError):
-        Mailbox.create_from_data(fake_name_bytes, Account())
+        Mailbox.create_from_data(fake_name_bytes, "no_type", Account())
 
     assert Mailbox.objects.count() == 0
-    mock_parse_mailbox_name.assert_not_called()
 
 
 @pytest.mark.django_db

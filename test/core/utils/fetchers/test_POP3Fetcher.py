@@ -23,7 +23,7 @@ import logging
 import pytest
 from model_bakery import baker
 
-from core.constants import EmailProtocolChoices
+from core.constants import EmailProtocolChoices, MailboxTypeChoices
 from core.models import Mailbox
 from core.utils.fetchers import POP3Fetcher
 from core.utils.fetchers.exceptions import MailAccountError
@@ -497,7 +497,7 @@ def test_POP3Fetcher_fetch_mailboxes(pop3_mailbox):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.fetch_mailboxes`."""
     result = POP3Fetcher(pop3_mailbox.account).fetch_mailboxes()
 
-    assert result == ["INBOX"]
+    assert result == [("INBOX", "inbox")]
 
 
 @pytest.mark.django_db

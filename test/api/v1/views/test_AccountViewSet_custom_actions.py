@@ -36,6 +36,14 @@ def mock_Account_update_mailboxes(mocker):
 
 
 @pytest.fixture
+def mock_Account_add_daemons(mocker):
+    """Patches `core.models.Account_add_daemons`."""
+    return mocker.patch(
+        "api.v1.views.AccountViewSet.Account.add_daemons", autospec=True
+    )
+
+
+@pytest.fixture
 def mock_Account_test(mocker):
     """Patches `core.models.Account.test`."""
     return mocker.patch("api.v1.views.AccountViewSet.Account.test", autospec=True)
@@ -156,6 +164,88 @@ def test_update_mailboxes_auth_admin(
     assert response.status_code == status.HTTP_404_NOT_FOUND
     mock_Account_update_mailboxes.assert_not_called()
     assert "mail_address" not in response.data
+
+
+@pytest.mark.django_db
+def test_add_daemons_noauth(
+    fake_account,
+    noauth_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with an unauthenticated user client.
+    """
+    response = noauth_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_add_daemons_auth_other(
+    fake_account,
+    other_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with the authenticated other user client.
+    """
+    response = other_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_add_daemons_success_auth_owner(
+    fake_account,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with the authenticated owner user client
+    in case of success.
+    """
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "error" not in response.data
+    mock_Account_add_daemons.assert_called_once_with(fake_account)
+
+
+@pytest.mark.django_db
+def test_add_daemons_auth_admin(
+    fake_account,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with the authenticated admin user client.
+    """
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Account_add_daemons.assert_not_called()
 
 
 @pytest.mark.django_db

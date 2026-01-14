@@ -33,6 +33,14 @@ from web.views.account_views.AccountDetailWithDeleteView import (
 )
 
 
+@pytest.fixture
+def mock_Account_add_daemons(mocker):
+    """Patches `core.models.Account_add_daemons`."""
+    return mocker.patch(
+        "api.v1.views.AccountViewSet.Account.add_daemons", autospec=True
+    )
+
+
 @pytest.mark.django_db
 def test_get_noauth(fake_account, client, detail_url, login_url):
     """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
@@ -387,3 +395,95 @@ def test_post_update_mailboxes_auth_admin(
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
     mock_Account_update_mailboxes.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_update_mailboxes_noauth(
+    fake_account, client, detail_url, login_url, mock_Account_add_daemons
+):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with an unauthenticated user client."""
+    response = client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+        {"add_daemons": ""},
+    )
+
+    assert response.status_code == status.HTTP_302_FOUND
+    assert isinstance(response, HttpResponseRedirect)
+    assert response.url.startswith(login_url)
+    assert response.url.endswith(
+        f"?next={detail_url(AccountDetailWithDeleteView, fake_account)}"
+    )
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_add_daemons_auth_other(
+    fake_account, other_client, detail_url, mock_Account_add_daemons
+):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated other user client."""
+    response = other_client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+        {"add_daemons": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_add_daemons_success_auth_owner(
+    fake_account, owner_client, detail_url, mock_Account_add_daemons
+):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client
+    in case of success.
+    """
+    response = owner_client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+        {"add_daemons": ""},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, HttpResponse)
+    assert "web/account/account_detail.html" in [
+        template.name for template in response.templates
+    ]
+    assert "object" in response.context
+    assert isinstance(response.context["object"], Account)
+    assert "latest_emails" in response.context
+    assert "messages" in response.context
+    assert len(response.context["messages"]) == 1
+    for mess in response.context["messages"]:
+        assert mess.level == messages.SUCCESS
+    mock_Account_add_daemons.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_post_add_daemons_missing_action_auth_owner(
+    fake_account, owner_client, detail_url, mock_Account_add_daemons
+):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated owner user client
+    in case the action is missing in the request.
+    """
+    response = owner_client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+    )
+
+    assert response.status_code == status.HTTP_204_NO_CONTENT
+    assert isinstance(response, HttpResponse)
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_post_add_daemons_auth_admin(
+    fake_account, admin_client, detail_url, mock_Account_add_daemons
+):
+    """Tests :class:`web.views.AccountDetailWithDeleteView` with the authenticated admin user client."""
+    response = admin_client.post(
+        detail_url(AccountDetailWithDeleteView, fake_account),
+        {"add_daemons": ""},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert "404.html" in [template.name for template in response.templates]
+    mock_Account_add_daemons.assert_not_called()

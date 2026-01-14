@@ -104,3 +104,18 @@ class AccountDetailWithDeleteView(
         self.object.refresh_from_db()
 
         return self.get(request)
+
+    def handle_add_daemons(self, request: HttpRequest) -> HttpResponse:
+        """Handler function for the `add-daemons` action.
+
+        Args:
+            request: The action request to handle.
+
+        Returns:
+            A template response with the updated view after the action.
+        """
+        self.object = self.get_object()
+        self.object.add_daemons()
+
+        messages.success(request, _("Updating mailboxes successful"))
+        return self.get(request)

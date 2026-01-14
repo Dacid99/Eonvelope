@@ -29,9 +29,14 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_celery_beat.models import IntervalSchedule
 from django_prometheus.models import ExportModelOperationsMixin
 
-from core.constants import EmailProtocolChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.mixins import (
     FavoriteModelMixin,
     HealthModelMixin,
@@ -322,6 +327,39 @@ class Account(
             )
 
         logger.info("Successfully updated mailboxes.")
+
+    def add_daemons(self) -> None:
+        """Adds a default set of daemons to the in- and sent mailboxes of this account."""
+        inbox_mailboxes = self.mailboxes.filter(
+            type=MailboxTypeChoices.INBOX
+        ).prefetch_related("daemons")
+        for inbox_mailbox in inbox_mailboxes:
+            inbox_mailbox.daemons.get_or_create(
+                fetching_criterion=(
+                    EmailFetchingCriterionChoices.DAILY
+                    if self.protocol
+                    not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+                    else EmailFetchingCriterionChoices.ALL
+                ),
+                interval=IntervalSchedule.objects.get_or_create(
+                    every=30, period=IntervalSchedule.SECONDS
+                )[0],
+            )
+        sent_mailboxes = self.mailboxes.filter(
+            type=MailboxTypeChoices.SENT
+        ).prefetch_related("daemons")
+        for sent_mailbox in sent_mailboxes:
+            sent_mailbox.daemons.get_or_create(
+                fetching_criterion=(
+                    EmailFetchingCriterionChoices.DAILY
+                    if self.protocol
+                    not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+                    else EmailFetchingCriterionChoices.ALL
+                ),
+                interval=IntervalSchedule.objects.get_or_create(
+                    every=1, period=IntervalSchedule.HOURS
+                )[0],
+            )
 
     @property
     def complete_mail_address(self) -> str:

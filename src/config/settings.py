@@ -928,7 +928,7 @@ CONSTANCE_CONFIG = {
     ),
     "THROW_OUT_SPAM": (
         True,
-        _("Whether or not to ignore emails that have a spam flag"),
+        _("Whether or not to ignore emails and mailboxes that have a spam flag"),
         bool,
     ),
     "IGNORED_MAILBOXES_REGEX": (

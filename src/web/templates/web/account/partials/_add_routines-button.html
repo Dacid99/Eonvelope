@@ -1,0 +1,11 @@
+{% load translate from i18n %}
+
+<button type="submit"
+        class="btn btn-outline-primary"
+        name="add_daemons"
+        {% if not account.is_healthy or not account.mailboxes.exists %}disabled{% endif %}>
+    {% translate "Add routines" as button_text %}
+
+    {% include "web/partials/_spinner-text.html" with text=button_text %}
+
+</button>

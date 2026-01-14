@@ -25,10 +25,11 @@ import datetime
 import pytest
 from django.db import IntegrityError
 from django.urls import reverse
+from django_celery_beat.models import IntervalSchedule
 from model_bakery import baker
 
 from core.constants import EmailProtocolChoices, MailboxTypeChoices
-from core.models import Account, Mailbox
+from core.models import Account, Daemon, Mailbox
 from core.utils.fetchers import (
     BaseFetcher,
     ExchangeFetcher,
@@ -39,6 +40,7 @@ from core.utils.fetchers import (
     POP3Fetcher,
 )
 from core.utils.fetchers.exceptions import MailAccountError
+from src.core.constants import EmailFetchingCriterionChoices
 
 
 @pytest.fixture(autouse=True)
@@ -542,6 +544,117 @@ def test_Account_update_mailboxes_get_fetcher_error(
     mock_fetcher.fetch_mailboxes.assert_not_called()
     spy_Mailbox_create_from_data.assert_not_called()
     mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "protocol",
+    [
+        EmailProtocolChoices.IMAP,
+        EmailProtocolChoices.IMAP4_SSL,
+        EmailProtocolChoices.JMAP,
+        EmailProtocolChoices.EXCHANGE,
+    ],
+)
+def test_Account_add_daemons_success(fake_account, protocol):
+    """Tests :func:`core.models.Account.Account.add_daemons`
+    in case of success.
+    """
+    fake_account.protocol = protocol
+    fake_inbox = fake_account.mailboxes.create(
+        name="INBOX", type=MailboxTypeChoices.INBOX
+    )
+    fake_sentbox = fake_account.mailboxes.create(
+        name="SENT", type=MailboxTypeChoices.SENT
+    )
+
+    assert Daemon.objects.count() == 0
+    assert fake_account.mailboxes.count() == 2
+
+    fake_account.add_daemons()
+
+    assert Daemon.objects.count() == 2
+    assert fake_inbox.daemons.count() == 1
+    fake_inbox_daemon = fake_inbox.daemons.first()
+    assert fake_inbox_daemon.interval.period == IntervalSchedule.SECONDS
+    assert fake_inbox_daemon.interval.every == 30
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.DAILY
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+    assert fake_sentbox.daemons.count() == 1
+    fake_sentbox_daemon = fake_sentbox.daemons.first()
+    assert fake_sentbox_daemon.interval.period == IntervalSchedule.HOURS
+    assert fake_sentbox_daemon.interval.every == 1
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.DAILY
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "protocol", [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+)
+def test_Account_add_daemons_success_pop(fake_account, protocol):
+    """Tests :func:`core.models.Account.Account.add_daemons`
+    in case of success.
+    """
+    fake_account.protocol = protocol
+    fake_inbox = fake_account.mailboxes.create(
+        name="INBOX", type=MailboxTypeChoices.INBOX
+    )
+    fake_sentbox = fake_account.mailboxes.create(
+        name="SENT", type=MailboxTypeChoices.SENT
+    )
+
+    assert Daemon.objects.count() == 0
+    assert fake_account.mailboxes.count() == 2
+
+    fake_account.add_daemons()
+
+    assert Daemon.objects.count() == 2
+    assert fake_inbox.daemons.count() == 1
+    fake_inbox_daemon = fake_inbox.daemons.first()
+    assert fake_inbox_daemon.interval.period == IntervalSchedule.SECONDS
+    assert fake_inbox_daemon.interval.every == 30
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.ALL
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+    assert fake_sentbox.daemons.count() == 1
+    fake_sentbox_daemon = fake_sentbox.daemons.first()
+    assert fake_sentbox_daemon.interval.period == IntervalSchedule.HOURS
+    assert fake_sentbox_daemon.interval.every == 1
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.ALL
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+
+
+@pytest.mark.django_db
+def test_Account_add_daemons_twice(fake_account):
+    """Tests :func:`core.models.Account.Account.add_daemons`
+    in case its called more than once.
+    """
+    fake_inbox = fake_account.mailboxes.create(
+        name="INBOX", type=MailboxTypeChoices.INBOX
+    )
+    fake_sentbox = fake_account.mailboxes.create(
+        name="SENT", type=MailboxTypeChoices.SENT
+    )
+
+    assert Daemon.objects.count() == 0
+    assert fake_account.mailboxes.count() == 2
+
+    fake_account.add_daemons()
+    fake_account.add_daemons()
+
+    assert Daemon.objects.count() == 2
+    assert fake_inbox.daemons.count() == 1
+    fake_inbox_daemon = fake_inbox.daemons.first()
+    assert fake_inbox_daemon.interval.period == IntervalSchedule.SECONDS
+    assert fake_inbox_daemon.interval.every == 30
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.DAILY
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+    assert fake_sentbox.daemons.count() == 1
+    fake_sentbox_daemon = fake_sentbox.daemons.first()
+    assert fake_sentbox_daemon.interval.period == IntervalSchedule.HOURS
+    assert fake_sentbox_daemon.interval.every == 1
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.DAILY
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
 
 
 @pytest.mark.django_db

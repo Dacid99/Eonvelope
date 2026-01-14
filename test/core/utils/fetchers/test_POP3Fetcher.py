@@ -103,7 +103,7 @@ def test_POP3Fetcher___init___bad_protocol(
     in case of the mailbox has a non-POP protocol.
     """
     spy_POP3Fetcher_connect_to_host = mocker.spy(POP3Fetcher, "connect_to_host")
-    pop3_mailbox.account.protocol = EmailProtocolChoices.IMAP
+    pop3_mailbox.account.protocol = EmailProtocolChoices.IMAP4
 
     with pytest.raises(ValueError, match="protocol"):
         POP3Fetcher(pop3_mailbox.account)

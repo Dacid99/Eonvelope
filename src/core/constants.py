@@ -123,7 +123,7 @@ class EmailProtocolChoices(TextChoices):
     IMAP4_SSL = "IMAP4_SSL", _("IMAP4")
     """The IMAP4 protocol over SSL"""
 
-    IMAP = "IMAP", _("IMAP4 (unencrypted)")
+    IMAP4 = "IMAP", _("IMAP4 (unencrypted)")
     """The IMAP4 protocol"""
 
     POP3_SSL = "POP3_SSL", _("POP3")
@@ -238,7 +238,7 @@ class SupportedEmailUploadFormats(TextChoices):
 
 
 PROTOCOLS_SUPPORTING_RESTORE = (
-    EmailProtocolChoices.IMAP,
+    EmailProtocolChoices.IMAP4,
     EmailProtocolChoices.IMAP4_SSL,
     EmailProtocolChoices.EXCHANGE,
     EmailProtocolChoices.JMAP,

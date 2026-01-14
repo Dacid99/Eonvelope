@@ -387,7 +387,7 @@ def fake_account(faker, owner_user):
         Account,
         user=owner_user,
         mail_address=faker.email(),
-        protocol=EmailProtocolChoices.IMAP.value,
+        protocol=EmailProtocolChoices.IMAP4.value,
     )
 
 
@@ -495,7 +495,7 @@ def fake_other_account(other_user):
 
     """
     return baker.make(
-        Account, user=other_user, protocol=EmailProtocolChoices.IMAP.value
+        Account, user=other_user, protocol=EmailProtocolChoices.IMAP4.value
     )
 
 

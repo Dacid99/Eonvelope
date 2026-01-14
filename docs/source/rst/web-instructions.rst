@@ -57,7 +57,7 @@ The following protocols are supported:
 - JMAP
 
 .. note::
-    If possible, use IMAP4 via SSL.
+    If possible, use IMAP.
     This enables you to use the most features with the most security.
 
 .. note::

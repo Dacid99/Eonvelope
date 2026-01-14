@@ -135,13 +135,13 @@ def test_Account_unique_constraints(django_user_model):
         Account,
         mail_address="abc123",
         password="passwordlol",
-        protocol=EmailProtocolChoices.IMAP,
+        protocol=EmailProtocolChoices.IMAP4,
     )
     account_2 = baker.make(
         Account,
         mail_address="abc123",
         password="passwordlol",
-        protocol=EmailProtocolChoices.IMAP,
+        protocol=EmailProtocolChoices.IMAP4,
     )
     assert account_1.mail_address == account_2.mail_address
     assert account_1.password == account_2.password
@@ -212,7 +212,7 @@ def test_Account_unique_constraints(django_user_model):
         user=user,
         mail_address="abc123",
         password="mypassword",
-        protocol=EmailProtocolChoices.IMAP,
+        protocol=EmailProtocolChoices.IMAP4,
     )
     with pytest.raises(IntegrityError):
         baker.make(
@@ -220,7 +220,7 @@ def test_Account_unique_constraints(django_user_model):
             user=user,
             mail_address="abc123",
             password="mypassword",
-            protocol=EmailProtocolChoices.IMAP,
+            protocol=EmailProtocolChoices.IMAP4,
         )
 
 
@@ -228,7 +228,7 @@ def test_Account_unique_constraints(django_user_model):
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
@@ -275,7 +275,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
@@ -309,7 +309,7 @@ def test_Account_get_fetcher_init_failure(
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
@@ -550,7 +550,7 @@ def test_Account_update_mailboxes_get_fetcher_error(
 @pytest.mark.parametrize(
     "protocol",
     [
-        EmailProtocolChoices.IMAP,
+        EmailProtocolChoices.IMAP4,
         EmailProtocolChoices.IMAP4_SSL,
         EmailProtocolChoices.JMAP,
         EmailProtocolChoices.EXCHANGE,

@@ -52,7 +52,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     Allows fetching of mails and mailboxes from an account on an IMAP host.
     """
 
-    PROTOCOL = EmailProtocolChoices.IMAP
+    PROTOCOL = EmailProtocolChoices.IMAP4
     """Name of the used protocol, refers to :attr:`MailFetchingProtocols.IMAP`."""
 
     AVAILABLE_FETCHING_CRITERIA = (

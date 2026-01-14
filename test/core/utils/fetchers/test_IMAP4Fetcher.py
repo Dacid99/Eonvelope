@@ -44,7 +44,7 @@ class FakeIMAP4Error(Exception):
 @pytest.fixture
 def imap_mailbox(fake_mailbox):
     """Extends :func:`test.conftest.fake_mailbox` to have IMAP4 as protocol."""
-    fake_mailbox.account.protocol = EmailProtocolChoices.IMAP
+    fake_mailbox.account.protocol = EmailProtocolChoices.IMAP4
     fake_mailbox.account.save(update_fields=["protocol"])
     return fake_mailbox
 

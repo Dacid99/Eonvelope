@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, ClassVar, override
+from typing import TYPE_CHECKING, Any, ClassVar, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.conf import settings
@@ -189,6 +189,14 @@ class Account(
             "mail_address": self.mail_address,
             "protocol": self.protocol,
         }
+
+    @override
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Extended to auto-update mailboxes when the account is saved for the first time."""
+        needs_mailbox_update = not self.pk
+        super().save(*args, **kwargs)
+        if needs_mailbox_update:
+            self.update_mailboxes()
 
     @override
     def clean(self) -> None:

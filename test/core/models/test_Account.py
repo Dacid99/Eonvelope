@@ -128,8 +128,9 @@ def test_Account_foreign_key_deletion(fake_account):
 
 
 @pytest.mark.django_db
-def test_Account_unique_constraints(django_user_model):
+def test_Account_unique_constraints(mocker, django_user_model):
     """Tests the unique constraints of :class:`core.models.Account.Account`."""
+    mocker.patch("core.models.Account.Account.update_mailboxes")
     # ruff: disable[S106]
     account_1 = baker.make(
         Account,
@@ -222,6 +223,31 @@ def test_Account_unique_constraints(django_user_model):
             password="mypassword",
             protocol=EmailProtocolChoices.IMAP4,
         )
+
+
+@pytest.mark.django_db
+def test_Account_save_new(mocker, owner_user):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is not the db.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+    fake_account = baker.prepare(Account, user=owner_user)
+
+    fake_account.save()
+
+    mock_update_mailboxes.assert_called_once()
+
+
+@pytest.mark.django_db
+def test_Account_save_old(mocker, fake_account, account_payload):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is already in the db.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+
+    fake_account.save()
+
+    mock_update_mailboxes.assert_not_called()
 
 
 @pytest.mark.django_db

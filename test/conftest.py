@@ -377,18 +377,24 @@ def other_user(django_user_model):
 
 
 @pytest.fixture
-def fake_account(faker, owner_user):
+def fake_account(monkeypatch, faker, owner_user):
     """An :class:`core.models.Account` owned by :attr:`owner_user`.
 
     Note:
         The protocol is always IMAP to allow for different fetchingoptions.
     """
-    return baker.make(
+    fake_account = baker.prepare(
         Account,
         user=owner_user,
         mail_address=faker.email(),
         protocol=EmailProtocolChoices.IMAP4.value,
     )
+    #
+    # with mocker.patch("core.models.Account.Account.update_mailboxes"):
+    monkeypatch.setattr(fake_account, "update_mailboxes", lambda: None)
+    fake_account.save()
+    monkeypatch.undo()
+    return fake_account
 
 
 @pytest.fixture

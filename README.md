@@ -63,6 +63,14 @@ Do the same thing as above, just using *podman* instead of *docker*.
 
 You can use [the example kubernetes cluster setup](docker/kubernetes/minimal/) and launch it, for example via *minikube*.
 
+### Agentic installation
+
+If you want an agent to install Eonvelope for you, point it to [the install.md file](install.md), e.g.
+
+```bash
+  curl -fsSL https://github.com/dacid99/eonvelope/blob/master/install.md | claude
+```
+
 ## Docs
 
 The full documentation is available on [ReadTheDocs](https://eonvelope.readthedocs.io/latest/).

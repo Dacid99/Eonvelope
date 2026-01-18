@@ -239,9 +239,24 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
             "\\HasNoChildren",
         ),
         (
-            b'() ";" Trash',
+            b'(\\Trash) ";" Trash',
             "Trash",
+            "\\Trash",
+        ),
+        (
+            b'() ";" CustoM',
+            "CustoM",
             "",
+        ),
+        (
+            b'() ";" INBOX',
+            "INBOX",
+            "\\inbox",
+        ),
+        (
+            b'(\\HasChildren) ";" INBOX',
+            "INBOX",
+            "\\HasChildren\\inbox",
         ),
     ],
 )

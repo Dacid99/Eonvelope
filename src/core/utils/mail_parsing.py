@@ -172,11 +172,16 @@ def parse_IMAP_mailbox_data(mailbox_data: bytes | str) -> tuple[str, str]:
     )  # regex adapted from imap_tools.folder.MailBoxFolderManager.list
     if not match:
         return (
-            "",
             mailbox_str.rsplit('"', maxsplit=1)[-1]
             .rsplit('"."', maxsplit=1)[-1]
             .strip(),
+            "",
         )
+    if match.group(2) == "INBOX":
+        return (
+            match.group(2),
+            match.group(1) + "\\inbox",
+        )  # INBOX is marked by name only
     return match.group(2), match.group(1)
 
 

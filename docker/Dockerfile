@@ -98,8 +98,8 @@ RUN apk add --no-cache ${BUILD_DJANGO_APK_DEPENDENCIES} ${BUILD_PYTHON_APK_DEPEN
     pip install --no-cache-dir --requirement requirements.txt && \
     mkdir -p ${STORAGE_PATH} ${LOG_PATH}
 
+COPY ./manage.py ./pyproject.toml ./
 COPY ./src/ ./src/
-COPY ./manage.py ./
 
 RUN django-admin collectstatic --noinput && \
     django-admin compilemessages

@@ -117,5 +117,5 @@ class AccountDetailWithDeleteView(
         self.object = self.get_object()
         self.object.add_daemons()
 
-        messages.success(request, _("Updating mailboxes successful"))
+        messages.success(request, _("Adding routines successful"))
         return self.get(request)

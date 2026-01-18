@@ -3,7 +3,15 @@
 {% load translate from i18n %}
 
 {% block card_title %}
-    {{ card_object.uuid }}
+    <a href="{{ card_object.mailbox.get_absolute_url }}"
+       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+        {{ card_object.mailbox.name }}
+    </a>
+    <br />
+    <a href="{{ card_object.mailbox.account.get_absolute_url }}"
+       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+        {{ card_object.mailbox.account.complete_mail_address }}
+    </a>
 {% endblock card_title %}
 
 {% block end_badges %}
@@ -16,20 +24,17 @@
 
 
 {% block card_subtitle %}
-    {% translate "Mailbox" %}: <a href="{{ card_object.mailbox.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ card_object.mailbox.name }}</a>
+    {% translate "Criterion" %}: {{ card_object.get_fetching_criterion_display }}
     <br />
-    {% translate "Account" %}: <a href="{{ card_object.mailbox.account.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ card_object.mailbox.account.complete_mail_address }}</a>
+    {% if card_object.fetching_criterion_arg %}
+        <li class="list-group-item">
+            {% translate "With value" %}: {{ card_object.fetching_criterion_arg }}
+        </li>
+        <br />
+    {% endif %}
+    {% translate "Interval" %}: {{ card_object.interval | title }}
 {% endblock card_subtitle %}
 
-
 {% block card_content %}
-    <div class="card-text">
-        {% translate "Criterion" %}:{{ card_object.get_fetching_criterion_display }}
-    </div>
-    {% if card_object.fetching_criterion_arg %}
-        <div class="card-text">{% translate "With value" %}: {{ card_object.fetching_criterion_arg }}</div>
-    {% endif %}
-    <div class="card-text">{% translate "Interval" %}: {{ card_object.interval }}</div>
+    {% translate "UUID" %}: {{ card_object.uuid }}
 {% endblock card_content %}

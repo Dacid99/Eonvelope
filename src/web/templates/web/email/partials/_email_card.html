@@ -27,9 +27,7 @@
 
 
 {% block card_content %}
-    <div class="card-text">
-        {% translate "Received" %}: {{ card_object.datetime|date:"SHORT_DATETIME_FORMAT" }}
-    </div>
+    {% translate "Received" %}: {{ card_object.datetime|date:"SHORT_DATETIME_FORMAT" }}
 {% endblock card_content %}
 
 

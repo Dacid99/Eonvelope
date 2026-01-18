@@ -3,7 +3,9 @@ name: Bugreport
 about: Use this template for reporting bugs.
 labels: bug
 ---
-**Thank you for your effort to report a bug in the Eonvelope project!**
+# Bug Report
+
+<!-- Thank you for your effort to report a bug in the Eonvelope project!
 
 The time to maintain and advance this project is precious, so we need to focus and filter what time is spent on.
 
@@ -13,23 +15,25 @@ The time to maintain and advance this project is precious, so we need to focus a
 
 - If the bug is security related, please do not file a public issue but contact one of the maintainers privately!
 
-If your problem doesn't fall in one of these categories, please go ahead and fill out the report. The more information you provide the more material we can work with in order to reach a quick and complete fix.
+If your problem doesn't fall in one of these categories, please go ahead and fill out the report.
+The more information you provide the more material we can work with in order to reach a quick and complete fix. -->
 
-- [ ] I have checked that there is no existing issue dealing with this problem.
+- [] I have checked that there is no existing issue dealing with this problem.
 
 ## Summary
 
-*Summarize the bug and how you discovered it. This gives us a first idea of what may be going on.*
+<!-- Summarize the bug and how you discovered it. This gives us a first idea of what may be going on. -->
 
 
 ## Eonvelope version
 
-*The version of the application you used to find the bug. Ideally a docker image tag (not 'latest').*
+<!-- The version of the application you used to find the bug. Ideally a docker image tag (not 'latest'). -->
 
 
 ## Steps to reproduce *
 
-*A step-by-step explanation of how to reproduce the bug. Very important, please be precise and mention all steps, even if they seem unrelated.*
+<!-- A step-by-step explanation of how to reproduce the bug.
+Very important, please be precise and mention all steps, even if they seem unrelated. -->
 
 1.
 2.
@@ -37,34 +41,36 @@ If your problem doesn't fall in one of these categories, please go ahead and fil
 
 ## Bug behaviour *
 
-*How the bug manifests itself.*
+<!-- How the bug manifests itself. -->
 
 
 ## Expected behaviour *
 
-*How the application is expected to behave without the bug.*
+<!-- How the application is expected to behave without the bug. -->
 
 
 ## Logs *
 
-*Please put the relevant parts of the logfile(s) here. You can find the logfiles in the */var/log/eonvelope/* docker volume. This is crucial, without this information we will have to produce the bug ourselves, which may be consuming a lot of time.*
+<!-- Please put the relevant parts of the logfile(s) here. You can find the logfiles in the */var/log/eonvelope/* docker volume.
+This is crucial, without this information we will have to produce the bug ourselves, which may be consuming a lot of time. -->
 
 
 ## Screenshots
 
-*Put screenshots documenting the bug in action here. This is especially helpful if the bug is related to the webapp interface.*
+<!-- Put screenshots documenting the bug in action here. This is especially helpful if the bug is related to the webapp interface. -->
 
 
 ## Files/Emails
 
-*If the bug occurs when processing a specific email or file, please send them to *eonvelope@mailo.com* if possible. This can help to improve Eonvelope's capabilities of parsing emails correctly and completely and guard against similar bugs in the future.*
+<!-- If the bug occurs when processing a specific email or file, please send them to *eonvelope@mailo.com* if possible.
+This can help to improve Eonvelope's capabilities of parsing emails correctly and completely and guard against similar bugs in the future. -->
 
 
 ## Possible diagnosis
 
-*If you have an idea what may be causing the bug please let us know.*
+<!-- If you have an idea what may be causing the bug please let us know. -->
 
 
 ## Fix it yourself?
 
-*What you be interested in fixing this problem yourself? If you do we are happy to support you on the way.*
+<!-- Would you be interested in fixing this problem yourself? If you do we are happy to support you on the way. -->

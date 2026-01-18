@@ -1,4 +1,6 @@
-**Thank you for considering to add a new translation!**
+# Missing Language Report
+
+<!-- Thank you for considering to add a new translation! -->
 
 - [ ] I have checked that there is no existing issue dealing with this problem.
 
@@ -7,4 +9,4 @@
 
 ## What is the i18n language code of the missing language? *
 
-*You can look it up [http://www.i18nguy.com/unicode/language-identifiers.html](in this list).*
+<!-- You can look it up in this list: http://www.i18nguy.com/unicode/language-identifiers.html. -->

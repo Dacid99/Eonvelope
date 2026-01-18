@@ -1,22 +1,26 @@
-**Thank you for your effort to provide a feature idea for the Eonvelope project!**
+# Feature Request
+
+<!-- Thank you for your effort to provide a feature idea for the Eonvelope project! -->
 
 - [ ] I have checked that there is no existing issue discussing this feature.
 
 ## Summary
 
-*Summarize the feature you'd like us to add.*
+<!-- Summarize the feature you'd like us to add. -->
 
 
 ## Benefit
 
-*What benefit would this feature bring to the project?*
+<!-- What benefit would this feature bring to the project? -->
 
 
 ## Current workaround
 
-*If you are currently using a workaround to achieve this behaviour please let us know how you manage that. This can provide a starting point for implementation for us.*
+<!-- If you are currently using a workaround to achieve this behaviour please let us know how you manage that.
+This can provide a starting point for implementation for us. -->
 
 
 ## Implement it yourself?
 
-*What you be interested in implementing this feature yourself? If you do we are happy to support you on the way.*
+<!-- Would you be interested in implementing this feature yourself?
+If you do we are happy to support you on the way. -->

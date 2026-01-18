@@ -53,3 +53,8 @@ repos:
     hooks:
       - id: doc8
         args: [--config, tools/doc8.ini]
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.20.0
+    hooks:
+      - id: markdownlint-cli2
+        args: [--config, tools/.markdownlint.yml]

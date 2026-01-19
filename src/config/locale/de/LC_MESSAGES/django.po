@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-19 17:52+0000\n"
-"PO-Revision-Date: 2025-12-31 20:14+0000\n"
-"Last-Translator: Dacid99 <dave.aderbauer@gmail.com>\n"
+"PO-Revision-Date: 2026-01-20 19:01+0000\n"
+"Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/config/"
 "de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/admin.py:32
@@ -87,10 +87,8 @@ msgid "Maximum numbers of files in one storage unit."
 msgstr "Maximale Anzahl von Dateien in einer Speichereinheit."
 
 #: src/config/settings.py:936
-#, fuzzy
-#| msgid "Whether or not to ignore emails that have a spam flag"
 msgid "Whether or not to ignore emails and mailboxes that have a spam flag"
-msgstr "Ob als Spam markierte E-Mails ignoriert werden"
+msgstr "Ob als Spam markierte E-Mails und Postfächer ignoriert werden"
 
 #: src/config/settings.py:942
 msgid ""
@@ -147,20 +145,25 @@ msgid ""
 "Default number of periods between two runs of a standard routine for a INBOX "
 "mailbox."
 msgstr ""
+"Standardanzahl an Perioden zwischen zwei Ausführungen einer Standardroutine "
+"für einen Posteingang."
 
 #: src/config/settings.py:991
 msgid "Default fetching criterion for a standard routine for a INBOX mailbox."
-msgstr ""
+msgstr "Standard-Abrufkriterium für eine Standardroutine für einen Posteingang."
 
 #: src/config/settings.py:997
 msgid ""
 "Default number of periods between two runs of a standard routine for a SENT "
 "mailbox."
 msgstr ""
+"Standardnummer an Perioden zwischen zwei Ausführungen einer Standardroutine "
+"für ein Gesendet Postfach."
 
 #: src/config/settings.py:1003
 msgid "Default fetching criterion for a standard routine for a SENT mailbox."
 msgstr ""
+"Standard-Abrufkriterium für eine Standardroutine für ein Gesendet Postfach."
 
 #: src/config/settings.py:1009
 msgid ""

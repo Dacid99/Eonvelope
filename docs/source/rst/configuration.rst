@@ -179,62 +179,72 @@ Admin User Settings
 These settings can be found and managed in the Django admin interface at */admin* under *constance - Configuration*.
 They are sorted into categories:
 
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| Setting                      | Default                 | Description                                                                                       |
-+==============================+=========================+===================================================================================================+
-| **Server Configurations**    |                         |                                                                                                   |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| REGISTRATION_ENABLED         | `True`                  | Set this to `True` to allow new users to sign up themselves.                                      |
-|                              |                         | This setting only takes effect if the ``REGISTRATION_ENABLED`` environment setting is not `False`.|
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| **Default Values**           |                         |                                                                                                   |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| DEFAULT_SAVE_TO_EML          | `True`                  | The default mailbox setting whether to store mails as eml.                                        |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| DEFAULT_SAVE_ATTACHMENTS     | `True`                  | The default mailbox setting whether to store attachments.                                         |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| **Processing Settings**      |                         |                                                                                                   |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| THROW_OUT_SPAM               | `True`                  | Set this to `True` to ignore emails that have a spam flag.                                        |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| IGNORED_MAILBOXES_REGEX      | `(Spam|Junk)`           | Regex pattern (case-insensitive) for mailbox names                                                |
-|                              |                         | that are ignored when looking up mailboxes in an account.                                         |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| EMAIL_HTML_TEMPLATE          | *Omitted for space*     | The html template used to render emails to html.                                                  |
-|                              |                         | Uses the django template syntax and has access to all fields of the email database table.         |
-|                              |                         | Removing template tag imports may result in a 500 responses, so be careful.                       |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| EMAIL_CSS                    | *Omitted for space*     | The css style used to render emails to html.                                                      |
-|                              |                         | Refer to ``HTML_TEMPLATE`` for context on the classes.                                            |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| DONT_PARSE_CONTENT_MAINTYPES | `[""]`                  | A list of content maintypes to not parse as attachment files.                                     |
-|                              |                         | For an exhaustive list of all available MIME contenttypes                                         |
-|                              |                         | see `IANA Media Types <https://www.iana.org/assignments/media-types/media-types.xhtml#text>`_.    |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| DONT_PARSE_CONTENT_SUBTYPES  | `[""]`                  | A list of content subtypes to not parse as attachment files.                                      |
-|                              |                         | Use this for more finegrain control than ``DONT_SAVE_CONTENT_TYPE_PREFIXES``.                     |
-|                              |                         | Plain and HTML text is always ignored as that is the bodytext.                                    |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| **Storage Settings**         |                         |                                                                                                   |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| STORAGE_MAX_FILES_PER_DIR    | `10000`                 | The maximum number of files in one storage unit.                                                  |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| **API Settings**             |                         |                                                                                                   |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| API_DEFAULT_PAGE_SIZE        | `20`                    | The default page size for paginated API response data.                                            |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| API_MAX_PAGE_SIZE            | `200`                   | The maximum page size for paginated API response data.                                            |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| **Webapp Settings**          |                         |                                                                                                   |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| WEB_DEFAULT_PAGE_SIZE        | `20`                    | The default page size for paginated API response data.                                            |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| WEB_PAGE_SIZES_OPTIONS       | `[10, 25, 50, 75, 100]` | The page size options for pagination in the webapp.                                               |
-|                              |                         | Should contain the ``WEB_DEFAULT_PAGE_SIZE`` value.                                               |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
-| WEB_THUMBNAIL_MAX_DATASIZE   | `10 MB`                 | Maximum datasize in bytes for a thumbnail in the webapp.                                          |
-|                              |                         | Thumbnails larger than this will not be loaded.                                                   |
-+------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| Setting                            | Default                 | Description                                                                                       |
++====================================+=========================+===================================================================================================+
+| **Server Configurations**          |                         |                                                                                                   |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| REGISTRATION_ENABLED               | `True`                  | Set this to `True` to allow new users to sign up themselves.                                      |
+|                                    |                         | This setting only takes effect if the ``REGISTRATION_ENABLED`` environment setting is not `False`.|
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| **Default Values**                 |                         |                                                                                                   |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DEFAULT_SAVE_TO_EML                | `True`                  | The default mailbox setting whether to store mails as eml.                                        |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DEFAULT_SAVE_ATTACHMENTS           | `True`                  | The default mailbox setting whether to store attachments.                                         |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DEFAULT_INBOX_INTERVAL_EVERY       | `30`                    | The default number of periods between two runs of a standard routine for a SENT mailbox.          |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DEFAULT_INBOX_FETCHING_CRITERION   | `UNSEEN`                | The default fetching criterion for a standard routine for a INBOX mailbox.                        |
+|                                    |                         | If you select a criterion that is not available for an account, the default is used instead.      |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DEFAULT_SENTBOX_INTERVAL_EVERY     | `1`                     | The default number of periods between two runs of a standard routine for a SENT mailbox.          |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DEFAULT_SENTBOX_FETCHING_CRITERION | `DAILY`                 | The default fetching criterion for a standard routine for a SENT mailbox.                         |
+|                                    |                         | If you select a criterion that is not available for an account, the default is used instead.      |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| **Processing Settings**            |                         |                                                                                                   |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| THROW_OUT_SPAM                     | `True`                  | Set this to `True` to ignore emails that have a spam flag.                                        |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| IGNORED_MAILBOXES_REGEX            | `(Spam|Junk)`           | Regex pattern (case-insensitive) for mailbox names                                                |
+|                                    |                         | that are ignored when looking up mailboxes in an account.                                         |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| EMAIL_HTML_TEMPLATE                | *Omitted for space*     | The html template used to render emails to html.                                                  |
+|                                    |                         | Uses the django template syntax and has access to all fields of the email database table.         |
+|                                    |                         | Removing template tag imports may result in a 500 responses, so be careful.                       |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| EMAIL_CSS                          | *Omitted for space*     | The css style used to render emails to html.                                                      |
+|                                    |                         | Refer to ``HTML_TEMPLATE`` for context on the classes.                                            |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DONT_PARSE_CONTENT_MAINTYPES       | `[""]`                  | A list of content maintypes to not parse as attachment files.                                     |
+|                                    |                         | For an exhaustive list of all available MIME contenttypes                                         |
+|                                    |                         | see `IANA Media Types <https://www.iana.org/assignments/media-types/media-types.xhtml#text>`_.    |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| DONT_PARSE_CONTENT_SUBTYPES        | `[""]`                  | A list of content subtypes to not parse as attachment files.                                      |
+|                                    |                         | Use this for more finegrain control than ``DONT_SAVE_CONTENT_TYPE_PREFIXES``.                     |
+|                                    |                         | Plain and HTML text is always ignored as that is the bodytext.                                    |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| **Storage Settings**               |                         |                                                                                                   |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| STORAGE_MAX_FILES_PER_DIR          | `10000`                 | The maximum number of files in one storage unit.                                                  |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| **API Settings**                   |                         |                                                                                                   |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| API_DEFAULT_PAGE_SIZE              | `20`                    | The default page size for paginated API response data.                                            |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| API_MAX_PAGE_SIZE                  | `200`                   | The maximum page size for paginated API response data.                                            |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| **Webapp Settings**                |                         |                                                                                                   |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| WEB_DEFAULT_PAGE_SIZE              | `20`                    | The default page size for paginated API response data.                                            |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| WEB_PAGE_SIZES_OPTIONS             | `[10, 25, 50, 75, 100]` | The page size options for pagination in the webapp.                                               |
+|                                    |                         | Should contain the ``WEB_DEFAULT_PAGE_SIZE`` value.                                               |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| WEB_THUMBNAIL_MAX_DATASIZE         | `10 MB`                 | Maximum datasize in bytes for a thumbnail in the webapp.                                          |
+|                                    |                         | Thumbnails larger than this will not be loaded.                                                   |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
 
 If the default for one of these settings changes, your already set up instance will not be affected by that change.
 To set the new default, go to the admin panel and use the reset to default option for that setting.

@@ -52,6 +52,7 @@ from core.utils.fetchers import (
     POP3Fetcher,
 )
 from core.utils.fetchers.exceptions import MailAccountError
+from eonvelope.utils.workarounds import get_config
 
 from .Mailbox import Mailbox
 
@@ -334,30 +335,44 @@ class Account(
             type=MailboxTypeChoices.INBOX
         ).prefetch_related("daemons")
         for inbox_mailbox in inbox_mailboxes:
+            fetching_criterion = (
+                get_config("DEFAULT_INBOX_FETCHING_CRITERION")
+                if self.protocol
+                not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+                else EmailFetchingCriterionChoices.ALL
+            )
+            if (
+                fetching_criterion
+                not in inbox_mailbox.available_no_arg_fetching_criteria
+            ):
+                fetching_criterion = EmailFetchingCriterionChoices.UNSEEN
             inbox_mailbox.daemons.get_or_create(
-                fetching_criterion=(
-                    EmailFetchingCriterionChoices.DAILY
-                    if self.protocol
-                    not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
-                    else EmailFetchingCriterionChoices.ALL
-                ),
+                fetching_criterion=fetching_criterion,
                 interval=IntervalSchedule.objects.get_or_create(
-                    every=30, period=IntervalSchedule.SECONDS
+                    every=get_config("DEFAULT_INBOX_INTERVAL_EVERY"),
+                    period=IntervalSchedule.SECONDS,
                 )[0],
             )
         sent_mailboxes = self.mailboxes.filter(
             type=MailboxTypeChoices.SENT
         ).prefetch_related("daemons")
         for sent_mailbox in sent_mailboxes:
+            fetching_criterion = (
+                get_config("DEFAULT_SENTBOX_FETCHING_CRITERION")
+                if self.protocol
+                not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+                else EmailFetchingCriterionChoices.ALL
+            )
+            if (
+                fetching_criterion
+                not in sent_mailbox.available_no_arg_fetching_criteria
+            ):
+                fetching_criterion = EmailFetchingCriterionChoices.DAILY
             sent_mailbox.daemons.get_or_create(
-                fetching_criterion=(
-                    EmailFetchingCriterionChoices.DAILY
-                    if self.protocol
-                    not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
-                    else EmailFetchingCriterionChoices.ALL
-                ),
+                fetching_criterion=fetching_criterion,
                 interval=IntervalSchedule.objects.get_or_create(
-                    every=1, period=IntervalSchedule.HOURS
+                    every=get_config("DEFAULT_SENTBOX_INTERVAL_EVERY"),
+                    period=IntervalSchedule.HOURS,
                 )[0],
             )
 

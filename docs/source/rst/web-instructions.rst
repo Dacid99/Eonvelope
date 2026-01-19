@@ -146,8 +146,19 @@ Depending on the number of mailboxes this may take a while.
 Routine setup
 ^^^^^^^^^^^^^
 
-For every mailbox you can set up routines that continuously query and fetch the mailboxes.
-The add-routine button on the mailbox detail page creates a new routine configuration
+If you want to fetch all email traffic passing through your mailaccount,
+you can set up routines for this purpose with the 'add-routines' button of the respective accounts page.
+The routines that will be automatically configured will scan your Inbox and Sent mailboxes for emails and archive them.
+
+.. note::
+    The Inbox and Sent mailboxes are recognized by internal protocol flags, not by name.
+    There is no need to rename your mailboxes in order to use Eonvelope.
+
+Archiving all emails going in and out of your account allows you to make maximum use
+of Eonvelope's feature to capture, archive and map complete conversations.
+
+Additionally or alternatively you can set up routines that continuously query and fetch other individual mailboxes.
+The add-routine button on a mailbox's page creates a new routine configuration
 and lets you modify it.
 Most important is the criterion setting and the period time of this routine.
 
@@ -217,10 +228,12 @@ The following criteria without required value are available:
     The most precise time-based lookup is DAILY as IMAP only supports lookup by date, not by timestamp.
 
 .. note::
-    For a complete coverage of all emails that enter and exit a mailaccount,
-    set up a routine for both the INBOX and the Sent mailbox.
-    That way you can make use of Eonvelope's feature to capture, archive and map complete conversations.
-    Additionally you can archive your drafts by fetching that mailbox repeatedly.
+    The standard routines for a mailaccount fetch both the Inbox and the Sent mailbox.
+    You can change the values for these routines later to match your needs.
+
+.. note::
+    For Inbox mailboxes, the recommended setup is filtering by UNSEEN flag multiple times every minute.
+    For other mailboxes, use DAILY or WEEKLY depending on the activity in the mailbox.
 
 .. note::
     For mailboxes with a sizeable number of emails (e.g. because you rarely clean out your INBOX),
@@ -228,14 +241,9 @@ The following criteria without required value are available:
     causing a large workload for the server.
 
 .. note::
-    For INBOX mailboxes, the recommended setup is filtering by UNSEEN flag multiple times every minute.
-    For other mailboxes, use DAILY or WEEKLY depending on the activity in the mailbox.
-
-.. note::
     If you use a different emailarchive server as backup, you may not be able to use filtering by RECENT or UNSEEN,
     since that may lead to race conditions between the two servers.
     Just use the time-based filters instead.
-    Eonvelope with IMAP safely opens the mailbox in read-only mode, so no flags are altered.
 
 For more specific filtering, you can use the following criteria that take a custom value to filter by.
 +-----------+---------------------------------------------------------------------------------------------------------+

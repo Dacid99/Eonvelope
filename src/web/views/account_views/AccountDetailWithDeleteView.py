@@ -28,7 +28,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic.edit import DeletionMixin
 
-from core.models import Account, Email
+from core.models import Account, Daemon, Email
 from core.utils.fetchers.exceptions import MailAccountError
 from web.mixins.CustomActionMixin import CustomActionMixin
 from web.mixins.TestActionMixin import TestActionMixin
@@ -74,6 +74,9 @@ class AccountDetailWithDeleteView(
             .order_by("-created")
             .select_related("mailbox", "mailbox__account")[:25]
         )
+        context["account_daemons"] = Daemon.objects.filter(
+            mailbox__in=self.object.mailboxes.all()
+        ).select_related("mailbox", "mailbox__account", "interval")
         return context
 
     @override

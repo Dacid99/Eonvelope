@@ -78,7 +78,8 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
     assert "object" in response.context
     assert isinstance(response.context["object"], Account)
     assert "latest_emails" in response.context
-    assert isinstance(response.context["latest_emails"], QuerySet)
+    assert "account_daemons" in response.context
+    assert isinstance(response.context["account_daemons"], QuerySet)
     assert fake_account.mail_address in response.content.decode("utf-8")
 
 

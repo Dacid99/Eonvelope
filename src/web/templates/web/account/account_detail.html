@@ -93,6 +93,27 @@
     </div>
     <div class="card">
         <div class="card-body">
+            <h4 class="card-title">
+                {% translate "Routines" %}<i class="fa-solid fa-calendar-days mx-2" aria-hidden="true"></i>
+            </h4>
+            {% if account_daemons.exists %}
+
+                {% include "web/daemon/partials/_daemon_list.html" with daemons=account_daemons %}
+
+            {% elif not object.is_healthy %}
+
+                {% include "web/account/partials/_unhealthy_list_alternative.html" %}
+
+            {% else %}
+
+                {% include "web/account/partials/_daemons_list_alternative.html" %}
+
+            {% endif %}
+
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
             <div class="d-flex justify-content-between m-1">
                 <h4 class="card-title">
                     {% translate "Latest Emails" %}<i class="fa-solid fa-envelope mx-1" aria-hidden="true"></i>

@@ -44,6 +44,7 @@
 
 - migration to django6.0
 - squashmigrations
+- further optimize queryset lookups
 
 ### Work in progress
 

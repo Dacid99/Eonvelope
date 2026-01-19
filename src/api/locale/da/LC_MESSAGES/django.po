@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 16:47+0000\n"
+"POT-Creation-Date: 2026-01-19 17:52+0000\n"
 "PO-Revision-Date: 2025-12-31 20:13+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/eonvelope/api/da/"
@@ -29,15 +29,19 @@ msgstr ""
 msgid "%(object)s unmarked as favorite."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:142
+#: src/api/v1/views/AccountViewSet.py:150
 msgid "An error with the mailaccount occurred."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:148
+#: src/api/v1/views/AccountViewSet.py:156
 msgid "Updated mailboxes"
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:172
+#: src/api/v1/views/AccountViewSet.py:182
+msgid "Added daemons to inbox and sentbox."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:203
 msgid "Tested mailaccount"
 msgstr ""
 

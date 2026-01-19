@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-05 21:24+0000\n"
+"POT-Creation-Date: 2026-01-19 17:52+0000\n"
 "PO-Revision-Date: 2025-12-31 20:15+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/eonvelope/core/ar/"
@@ -148,99 +148,123 @@ msgstr ""
 msgid "JMAP"
 msgstr ""
 
-#: src/core/constants.py:176
+#: src/core/constants.py:145
+msgid "Inbox"
+msgstr ""
+
+#: src/core/constants.py:146
+msgid "Outbox"
+msgstr ""
+
+#: src/core/constants.py:147
+msgid "Sent"
+msgstr ""
+
+#: src/core/constants.py:148
+msgid "Junk"
+msgstr ""
+
+#: src/core/constants.py:149
+msgid "Drafts"
+msgstr ""
+
+#: src/core/constants.py:150
+msgid "Trash"
+msgstr ""
+
+#: src/core/constants.py:189
 msgid "From"
 msgstr ""
 
-#: src/core/constants.py:177
+#: src/core/constants.py:190
 msgid "To"
 msgstr ""
 
-#: src/core/constants.py:178
+#: src/core/constants.py:191
 msgid "CC"
 msgstr ""
 
-#: src/core/constants.py:179
+#: src/core/constants.py:192
 msgid "BCC"
 msgstr ""
 
-#: src/core/constants.py:180
+#: src/core/constants.py:193
 msgid "Sender"
 msgstr ""
 
-#: src/core/constants.py:181
+#: src/core/constants.py:194
 msgid "Reply-To"
 msgstr ""
 
-#: src/core/constants.py:182
+#: src/core/constants.py:195
 msgid "Resent-From"
 msgstr ""
 
-#: src/core/constants.py:183
+#: src/core/constants.py:196
 msgid "Resent-To"
 msgstr ""
 
-#: src/core/constants.py:184
+#: src/core/constants.py:197
 msgid "Resent-Cc"
 msgstr ""
 
-#: src/core/constants.py:185
+#: src/core/constants.py:198
 msgid "Resent-Bcc"
 msgstr ""
 
-#: src/core/constants.py:186
+#: src/core/constants.py:199
 msgid "Resent-Sender"
 msgstr ""
 
-#: src/core/constants.py:187
+#: src/core/constants.py:200
 msgid "Resent-Reply-To"
 msgstr ""
 
-#: src/core/constants.py:190
+#: src/core/constants.py:203
 msgid "Envelope-To"
 msgstr ""
 
-#: src/core/constants.py:192
+#: src/core/constants.py:205
 msgid "Delivered-To"
 msgstr ""
 
-#: src/core/constants.py:193
+#: src/core/constants.py:206
 msgid "Return-Path"
 msgstr ""
 
-#: src/core/constants.py:194
+#: src/core/constants.py:207
 msgid "Return-Receipt-To"
 msgstr ""
 
-#: src/core/constants.py:197
+#: src/core/constants.py:210
 msgid "Disposition-Notification-To"
 msgstr ""
 
-#: src/core/constants.py:207 src/core/constants.py:219
+#: src/core/constants.py:220 src/core/constants.py:232
 msgid ".zip with .eml files inside"
 msgstr ""
 
-#: src/core/constants.py:208 src/core/constants.py:220
+#: src/core/constants.py:221 src/core/constants.py:233
 msgid ".mbox"
 msgstr ""
 
-#: src/core/constants.py:209 src/core/constants.py:221
+#: src/core/constants.py:222 src/core/constants.py:234
 msgid ".babyl"
 msgstr ""
 
-#: src/core/constants.py:210 src/core/constants.py:222
+#: src/core/constants.py:223 src/core/constants.py:235
 msgid ".mmdf"
 msgstr ""
 
-#: src/core/constants.py:211 src/core/constants.py:223
+#: src/core/constants.py:224 src/core/constants.py:236
 msgid ".zip with mh mailbox inside"
 msgstr ""
 
-#: src/core/constants.py:212 src/core/constants.py:224
+#: src/core/constants.py:225 src/core/constants.py:237
 msgid ".zip with maildir mailbox inside"
 msgstr ""
 
-#: src/core/constants.py:218
+#: src/core/constants.py:231
 msgid ".eml"
 msgstr ""
 
@@ -279,102 +303,102 @@ msgstr ""
 msgid "time of last update"
 msgstr ""
 
-#: src/core/models/Account.py:76
+#: src/core/models/Account.py:82
 msgid ""
 "This will delete the records of this account and all mailboxes, emails and "
 "attachments found in it!"
 msgstr ""
 
-#: src/core/models/Account.py:79
+#: src/core/models/Account.py:85
 msgid ""
 "This will delete the records of these accounts and all mailboxes, emails and "
 "attachments found in them!"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:89
+#: src/core/models/Account.py:95
 msgid "username"
 msgstr ""
 
-#: src/core/models/Account.py:90
+#: src/core/models/Account.py:96
 msgid "The username of the account. Typically the mail address."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:99
+#: src/core/models/Account.py:105
 msgid "password"
 msgstr ""
 
-#: src/core/models/Account.py:100
+#: src/core/models/Account.py:106
 msgid "The password to the account."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:107
+#: src/core/models/Account.py:113
 msgid "mailserver URL"
 msgstr ""
 
-#: src/core/models/Account.py:108
+#: src/core/models/Account.py:114
 msgid "The URL of the mailserver for the chosen protocol."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:117
+#: src/core/models/Account.py:123
 msgid "mailserver portnumber"
 msgstr ""
 
-#: src/core/models/Account.py:118
+#: src/core/models/Account.py:124
 msgid "The port of the mailserver for the chosen protocol."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:126
+#: src/core/models/Account.py:132
 msgid "email protocol"
 msgstr ""
 
-#: src/core/models/Account.py:127
+#: src/core/models/Account.py:133
 msgid "The email protocol implemented by the server."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:136
+#: src/core/models/Account.py:142
 msgid "connection timeout"
 msgstr ""
 
-#: src/core/models/Account.py:137
+#: src/core/models/Account.py:143
 msgid "Timeout for the connection to the mailserver."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:146 src/core/models/Correspondent.py:103
+#: src/core/models/Account.py:152 src/core/models/Correspondent.py:103
 msgid "user"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:156 src/core/models/Mailbox.py:102
+#: src/core/models/Account.py:162 src/core/models/Mailbox.py:111
 msgid "account"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:158
+#: src/core/models/Account.py:164
 msgid "accounts"
 msgstr ""
 
-#: src/core/models/Account.py:182
+#: src/core/models/Account.py:188
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr ""
 
-#: src/core/models/Account.py:204
+#: src/core/models/Account.py:210
 msgid "This account already exists."
 msgstr ""
 
-#: src/core/models/Account.py:219
+#: src/core/models/Account.py:225
 #, python-format
 msgid "Testing this account data failed: %(error)s"
 msgstr ""
 
-#: src/core/models/Account.py:250 src/core/models/Account.py:253
+#: src/core/models/Account.py:256 src/core/models/Account.py:259
 #, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
 msgstr ""
@@ -628,7 +652,7 @@ msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:84 src/core/models/Email.py:182
-#: src/core/models/Mailbox.py:130
+#: src/core/models/Mailbox.py:139
 msgid "mailbox"
 msgstr ""
 
@@ -771,7 +795,7 @@ msgstr ""
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
 
-#: src/core/models/Email.py:682 src/core/models/Mailbox.py:320
+#: src/core/models/Email.py:682 src/core/models/Mailbox.py:329
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr ""
@@ -793,53 +817,57 @@ msgid ""
 "%(correspondent)s with mention %(mention)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:83
+#: src/core/models/Mailbox.py:84
 msgid ""
 "This will delete the record of this mailbox and all emails and attachments "
 "found in it!"
 msgstr ""
 
-#: src/core/models/Mailbox.py:87
+#: src/core/models/Mailbox.py:88
 msgid ""
 "This will delete the records of these mailboxes and all emails and "
 "attachments found in them!"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:93
+#: src/core/models/Mailbox.py:94
 msgid "name"
 msgstr ""
 
+#: src/core/models/Mailbox.py:102
+msgid "type"
+msgstr ""
+
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:109
+#: src/core/models/Mailbox.py:118
 msgid "save attachments"
 msgstr ""
 
-#: src/core/models/Mailbox.py:111
+#: src/core/models/Mailbox.py:120
 msgid "Whether the attachments from the emails in this mailbox will be saved."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:119
+#: src/core/models/Mailbox.py:128
 msgid "save as .eml"
 msgstr ""
 
-#: src/core/models/Mailbox.py:120
+#: src/core/models/Mailbox.py:129
 msgid "Whether the emails in this mailbox will be stored in .eml files."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:132
+#: src/core/models/Mailbox.py:141
 msgid "mailboxes"
 msgstr ""
 
-#: src/core/models/Mailbox.py:149
+#: src/core/models/Mailbox.py:158
 #, python-format
 msgid "Mailbox %(name)s of %(account)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:230 src/core/models/Mailbox.py:267
-#: src/core/models/Mailbox.py:285
+#: src/core/models/Mailbox.py:239 src/core/models/Mailbox.py:276
+#: src/core/models/Mailbox.py:294
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr ""
@@ -882,24 +910,24 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:203
-#: src/core/utils/fetchers/ExchangeFetcher.py:215
+#: src/core/utils/fetchers/ExchangeFetcher.py:201
+#: src/core/utils/fetchers/ExchangeFetcher.py:213
 msgid "refresh"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:262
+#: src/core/utils/fetchers/ExchangeFetcher.py:260
 msgid "fetching of mail contents"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:299
+#: src/core/utils/fetchers/ExchangeFetcher.py:300
 msgid "scan for mailboxes"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:325
+#: src/core/utils/fetchers/ExchangeFetcher.py:326
 msgid "restoring of email"
 msgstr ""
 
-#: src/core/utils/fetchers/IMAP4Fetcher.py:158
+#: src/core/utils/fetchers/IMAP4Fetcher.py:160
 #: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:76
 #: src/core/utils/fetchers/POP3Fetcher.py:92
 #: src/core/utils/fetchers/POP3_SSL_Fetcher.py:75

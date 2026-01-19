@@ -202,13 +202,24 @@ git config core.hooksPath tools/githooks/
 }
 ```
 
-- disable HTML autoformatting:
+- use djlint for HTML autoformatting:
 
 ```json
 "HTML": {
-  "format_on_save": "off"
-  "formatter": null
-}
+  "format_on_save": "on",
+  "formatter": {
+    "external": {
+      "command": "djlint",
+      "arguments": [
+        "-",
+        "--reformat",
+        "--configuration",
+        "tools/djlintrc",
+        "{buffer_path}",
+      ],
+    },
+  },
+},
 ```
 
 - find poetry venvs

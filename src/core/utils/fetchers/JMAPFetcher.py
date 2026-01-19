@@ -81,9 +81,8 @@ class JMAPFetcher(BaseFetcher):
         """Returns the filter-condition for the JMAP Email/query request.
 
         Args:
-            criterion: The criterion for the JMAP request.
+            criterion_name: The criterion for the JMAP request.
             criterion_arg: The argument for the criterion.
-            base_query: The query to extend based on the criterion.
 
         Returns:
             The filter-condition to be used in JMAP request.

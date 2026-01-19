@@ -417,7 +417,7 @@ class Mailbox(
             Mailbox created from data is considered healthy by default.
 
         Args:
-            mailbox_data: The name of the mailbox.
+            mailbox_name: The name of the mailbox.
             mailbox_type: The type of the mailbox.
             account: The account the mailbox is in.
 

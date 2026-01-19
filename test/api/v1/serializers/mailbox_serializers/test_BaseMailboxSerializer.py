@@ -39,7 +39,7 @@ def test_output(fake_mailbox, request_context):
     assert "name" in serializer_data
     assert serializer_data["name"] == fake_mailbox.name
     assert "type" in serializer_data
-    assert serializer_data["name"] == fake_mailbox.type
+    assert serializer_data["type"] == fake_mailbox.type
     assert "account" in serializer_data
     assert serializer_data["account"] == fake_mailbox.account.id
     assert "save_attachments" in serializer_data

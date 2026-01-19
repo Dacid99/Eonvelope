@@ -11,7 +11,7 @@
 - autofetch mailboxes on submission
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
-- tagging system (https://django-tagging.readthedocs.io/en or https://django-taggit.readthedocs.io/en/latest/)
+- tagging system with [django-tagging](https://django-tagging.readthedocs.io/en) of [taggit](https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
 - async parsing, sync saving
 - download for account and batchdownload for mailbox
@@ -32,6 +32,7 @@
 - split up long functions that are marked as too complex by ruff
 - make all filepaths pathlib.Paths
 - compress fetchingcriterion logic into a class
+- rewrite test_names using __ to make them more readable
 
 ## To test
 

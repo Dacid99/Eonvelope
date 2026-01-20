@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-19 17:52+0000\n"
-"PO-Revision-Date: 2026-01-02 08:01+0000\n"
+"PO-Revision-Date: 2026-01-21 21:01+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/web/"
 "uk/>\n"
@@ -16,11 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.15.1\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:55
 #: src/web/filters/AttachmentFilterSet.py:55
@@ -322,22 +322,16 @@ msgid "Add account"
 msgstr "Додати Обліковий запис"
 
 #: src/web/templates/web/account/partials/_add_routines-button.html:7
-#, fuzzy
-#| msgid "Add routine"
 msgid "Add routines"
-msgstr "Додати розпорядок дня"
+msgstr "Додати процедури"
 
 #: src/web/templates/web/account/partials/_daemons_list_alternative.html:8
-#, fuzzy
-#| msgid ""
-#| "You can set up routines for this mailbox to fetch its contents on a "
-#| "regular schedule."
 msgid ""
 "You can set up routines for this account's mailboxes to fetch its complete "
 "email traffic."
 msgstr ""
-"Ви можете налаштувати для цієї поштової скриньки процедури, щоб отримувати "
-"її вміст за регулярним розкладом."
+"Ви можете налаштувати процедури для поштових скриньок цього облікового "
+"запису, щоб отримувати весь його поштовий трафік."
 
 #: src/web/templates/web/account/partials/_emails_list_alternative.html:6
 msgid "You can fetch emails from one of this accounts mailboxes."
@@ -534,7 +528,7 @@ msgstr "Інтервал"
 #: src/web/templates/web/daemon/daemon_detail.html:51
 #: src/web/templates/web/daemon/partials/_daemon_card.html:39
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: src/web/templates/web/daemon/daemon_detail.html:52
 msgid "Last Run"
@@ -1079,10 +1073,8 @@ msgid "Updating mailboxes successful"
 msgstr "Оновлення поштових скриньок успішно завершено"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:123
-#, fuzzy
-#| msgid "Updating mailboxes successful"
 msgid "Adding routines successful"
-msgstr "Оновлення поштових скриньок успішно завершено"
+msgstr "Додавання процедур успішне"
 
 #: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:98
 #: src/web/views/correspondent_views/CorrespondentDetailWithDeleteView.py:106

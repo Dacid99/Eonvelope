@@ -39,7 +39,7 @@ from core.utils.fetchers import (
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
-from core.utils.fetchers.exceptions import MailAccountError
+from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from src.core.constants import EmailFetchingCriterionChoices
 
 
@@ -226,20 +226,22 @@ def test_Account_unique_constraints(mocker, django_user_model):
 
 
 @pytest.mark.django_db
-def test_Account_save_new(mocker, owner_user):
+def test_Account_save_new(mocker, owner_user, mock_logger):
     """Tests saving a :class:`core.models.Account.Account`
     in case it is not the db.
     """
     mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
-    fake_account = baker.prepare(Account, user=owner_user)
+    new_account = baker.prepare(Account, user=owner_user)
 
-    fake_account.save()
+    new_account.save()
 
     mock_update_mailboxes.assert_called_once()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_Account_save_old(mocker, fake_account, account_payload):
+def test_Account_save_old(mocker, fake_account, mock_logger):
     """Tests saving a :class:`core.models.Account.Account`
     in case it is already in the db.
     """
@@ -248,6 +250,26 @@ def test_Account_save_old(mocker, fake_account, account_payload):
     fake_account.save()
 
     mock_update_mailboxes.assert_not_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_Account_save_autoupdate_error(
+    mocker, fake_error_message, owner_user, mock_logger
+):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is not in the db and updating mailboxes fails.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+    mock_update_mailboxes.side_effect = FetcherError(fake_error_message)
+    new_account = baker.prepare(Account, user=owner_user)
+
+    new_account.save()
+
+    mock_update_mailboxes.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db

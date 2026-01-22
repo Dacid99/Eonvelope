@@ -160,15 +160,22 @@ class ExchangeFetcher(BaseFetcher):
                 retry_policy=retry_policy,
             )
         )
-        exchange_account = exchangelib.Account(
-            primary_smtp_address=self.account.mail_address,
-            config=config,
-            access_type=exchangelib.DELEGATE,
-            autodiscover=False,
-            default_timezone=exchangelib.EWSTimeZone(
-                "UTC"
-            ),  # for consistency with celery and django settings
-        )
+        try:
+            exchange_account = exchangelib.Account(
+                primary_smtp_address=self.account.mail_address,
+                config=config,
+                access_type=exchangelib.DELEGATE,
+                autodiscover=False,
+                default_timezone=exchangelib.EWSTimeZone(
+                    "UTC"
+                ),  # for consistency with celery and django settings
+            )
+        except ValueError as error:
+            self.logger.exception(
+                "Error in configuration of %s!",
+                self.account,
+            )
+            raise MailAccountError(error, "connecting") from error
         try:
             self._mail_client = exchange_account.msg_folder_root
         except exchangelib.errors.EWSError as error:

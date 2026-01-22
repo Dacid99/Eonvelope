@@ -392,6 +392,23 @@ def test_ExchangeFetcher_connect_to_host_hostname_success(
 
 
 @pytest.mark.django_db
+def test_ExchangeFetcher_connect_to_host_bad_configuration(
+    exchange_mailbox, mock_logger, mock_ExchangeAccount
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.connect_to_host`
+    in different cases of account `mail_host` in URL form, `timeout` and`mail_host_port` settings.
+    """
+    mock_ExchangeAccount.side_effect = ValueError("bad smtp address")
+
+    with pytest.raises(MailAccountError):
+        ExchangeFetcher(exchange_mailbox.account)
+
+    mock_ExchangeAccount.assert_called_once()
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_called()
+
+
+@pytest.mark.django_db
 def test_ExchangeFetcher_test_account_success(
     exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):

@@ -233,7 +233,11 @@ def test_Account_save_new(mocker, owner_user, mock_logger):
     mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
     new_account = baker.prepare(Account, user=owner_user)
 
+    assert Account.objects.count() == 0
+
     new_account.save()
+
+    assert Account.objects.count() == 1
 
     mock_update_mailboxes.assert_called_once()
     mock_logger.info.assert_called()
@@ -247,7 +251,11 @@ def test_Account_save_old(mocker, fake_account, mock_logger):
     """
     mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
 
+    assert Account.objects.count() == 1
+
     fake_account.save()
+
+    assert Account.objects.count() == 1
 
     mock_update_mailboxes.assert_not_called()
     mock_logger.info.assert_called()

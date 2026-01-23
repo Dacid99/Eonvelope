@@ -426,11 +426,13 @@ def test_IMAP4Fetcher_test_mailbox_success(imap_mailbox, mock_logger, mock_IMAP4
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_test_mailbox_wrong_mailbox(imap_mailbox, mock_logger, mock_IMAP4):
+def test_IMAP4Fetcher_test_mailbox_wrong_mailbox(
+    fake_other_account, imap_mailbox, mock_logger, mock_IMAP4
+):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success the given mailbox doesn't belong to the given account.
     """
-    wrong_mailbox = baker.make(Mailbox)
+    wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match="is not in"):
         IMAP4Fetcher(imap_mailbox.account).test(wrong_mailbox)
@@ -616,11 +618,13 @@ def test_IMAP4Fetcher_fetch_emails_success_search(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails_wrong_mailbox(imap_mailbox, mock_logger):
+def test_IMAP4Fetcher_fetch_emails_wrong_mailbox(
+    fake_other_account, imap_mailbox, mock_logger
+):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
     in case the given mailbox does not belong to the given account.
     """
-    wrong_mailbox = baker.make(Mailbox)
+    wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match="is not in"):
         IMAP4Fetcher(imap_mailbox.account).fetch_emails(wrong_mailbox)

@@ -259,7 +259,9 @@ def test_put_auth_admin(fake_account, admin_api_client, account_payload, detail_
 
 
 @pytest.mark.django_db
-def test_post_noauth(noauth_api_client, account_payload, list_url):
+def test_post_noauth(
+    noauth_api_client, account_payload, mock_Account_update_mailboxes, list_url
+):
     """Tests the `post` method on :class:`api.v1.views.AccountViewSet`
     with an unauthenticated user client.
     """
@@ -270,10 +272,17 @@ def test_post_noauth(noauth_api_client, account_payload, list_url):
     assert "password" not in response.data
     with pytest.raises(Account.DoesNotExist):
         Account.objects.get(mail_host=account_payload["mail_host"])
+    mock_Account_update_mailboxes.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_user, other_api_client, account_payload, list_url):
+def test_post_auth_other(
+    other_user,
+    other_api_client,
+    account_payload,
+    mock_Account_update_mailboxes,
+    list_url,
+):
     """Tests the `post` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated other user client.
     """
@@ -285,10 +294,17 @@ def test_post_auth_other(other_user, other_api_client, account_payload, list_url
     posted_account = Account.objects.get(mail_host=account_payload["mail_host"])
     assert posted_account is not None
     assert posted_account.user == other_user
+    mock_Account_update_mailboxes.assert_called_once()
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_user, owner_api_client, account_payload, list_url):
+def test_post_auth_owner(
+    owner_user,
+    owner_api_client,
+    account_payload,
+    mock_Account_update_mailboxes,
+    list_url,
+):
     """Tests the `post` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated owner user client.
     """
@@ -300,10 +316,13 @@ def test_post_auth_owner(owner_user, owner_api_client, account_payload, list_url
     posted_account = Account.objects.get(mail_host=account_payload["mail_host"])
     assert posted_account is not None
     assert posted_account.user == owner_user
+    mock_Account_update_mailboxes.assert_called_once()
 
 
 @pytest.mark.django_db
-def test_post_duplicate_auth_owner(fake_account, owner_api_client, list_url):
+def test_post_duplicate_auth_owner(
+    fake_account, owner_api_client, mock_Account_update_mailboxes, list_url
+):
     """Tests the post method on :class:`api.v1.views.AccountViewSet` with the authenticated owner user client and duplicate data."""
     payload = model_to_dict(fake_account)
     payload.pop("id")
@@ -312,10 +331,17 @@ def test_post_duplicate_auth_owner(fake_account, owner_api_client, list_url):
     response = owner_api_client.post(list_url(AccountViewSet), data=clean_payload)
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
+    mock_Account_update_mailboxes.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_post_auth_admin(admin_user, admin_api_client, account_payload, list_url):
+def test_post_auth_admin(
+    admin_user,
+    admin_api_client,
+    account_payload,
+    mock_Account_update_mailboxes,
+    list_url,
+):
     """Tests the `post` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated admin user client.
     """
@@ -327,6 +353,7 @@ def test_post_auth_admin(admin_user, admin_api_client, account_payload, list_url
     posted_account = Account.objects.get(mail_host=account_payload["mail_host"])
     assert posted_account is not None
     assert posted_account.user == admin_user
+    mock_Account_update_mailboxes.assert_called_once()
 
 
 @pytest.mark.django_db

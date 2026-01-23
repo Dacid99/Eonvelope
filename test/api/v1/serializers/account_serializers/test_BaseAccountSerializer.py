@@ -26,6 +26,7 @@ from django.forms.models import model_to_dict
 from api.v1.serializers.account_serializers.BaseAccountSerializer import (
     BaseAccountSerializer,
 )
+from core.models import Account
 from core.utils.fetchers.exceptions import MailAccountError
 
 
@@ -196,3 +197,17 @@ def test_input_duplicate(fake_account, request_context):
 
     assert not serializer.is_valid()
     assert serializer.errors
+
+
+@pytest.mark.django_db
+def test_save(account_payload, request_context, mock_Account_update_mailboxes):
+    """Tests saving of :class:`api.v1.serializers.BaseAccountSerializer`."""
+    form = BaseAccountSerializer(data=account_payload, context=request_context)
+
+    assert Account.objects.count() == 1
+
+    assert form.is_valid()
+    form.save()
+
+    assert Account.objects.count() == 2
+    mock_Account_update_mailboxes.assert_called_once()

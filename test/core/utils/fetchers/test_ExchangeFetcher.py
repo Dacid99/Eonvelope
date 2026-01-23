@@ -508,12 +508,12 @@ def test_ExchangeFetcher_test_mailbox_subfolder_success(
 
 @pytest.mark.django_db
 def test_ExchangeFetcher_test_mailbox_wrong_mailbox(
-    exchange_mailbox, mock_logger, mock_msg_folder_root
+    fake_other_account, exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
     in case the given mailbox does not belong to the given account.
     """
-    wrong_mailbox = baker.make(Mailbox)
+    wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match="is not in"):
         ExchangeFetcher(exchange_mailbox.account).test(wrong_mailbox)
@@ -636,11 +636,13 @@ def test_ExchangeFetcher_fetch_emails_filter_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_wrong_mailbox(exchange_mailbox, mock_logger):
+def test_ExchangeFetcher_fetch_emails_wrong_mailbox(
+    fake_other_account, exchange_mailbox, mock_logger
+):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
     in case the given mailbox does not belong to the given account.
     """
-    wrong_mailbox = baker.make(Mailbox)
+    wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match="is not in"):
         ExchangeFetcher(exchange_mailbox.account).fetch_emails(wrong_mailbox)

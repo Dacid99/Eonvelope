@@ -171,7 +171,11 @@ def test_post_update_auth_owner_test_failure(
 
 @pytest.mark.django_db
 def test_post_update_duplicate_auth_owner(
-    fake_account, account_payload, owner_client, detail_url
+    fake_account,
+    account_payload,
+    mock_Account_update_mailboxes,
+    owner_client,
+    detail_url,
 ):
     """Tests :class:`web.views.AccountUpdateOrDeleteView` with the authenticated owner user client."""
     Account.objects.create(

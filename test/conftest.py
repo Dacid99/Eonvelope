@@ -510,8 +510,8 @@ def fake_other_account(monkeypatch, faker, other_user):
     fake_other_account = baker.prepare(
         Account,
         user=other_user,
-        email=faker.email(),
-        protocol=EmailProtocolChoices.IMAP.value,
+        mail_address=faker.email(),
+        protocol=EmailProtocolChoices.IMAP4.value,
     )
     #
     # with mocker.patch("core.models.Account.Account.update_mailboxes"):
@@ -729,6 +729,16 @@ def mock_Account_test(mocker):
     """Patches :func:`core.models.Account.Account.test` for testing of the test action."""
     return mocker.patch(
         "core.models.Account.Account.test",
+        autospec=True,
+        return_value=None,
+    )
+
+
+@pytest.fixture
+def mock_Account_update_mailboxes(mocker):
+    """Patches :func:`core.models.Account.Account.update_mailboxes` for testing of the test action."""
+    return mocker.patch(
+        "core.models.Account.Account.update_mailboxes",
         autospec=True,
         return_value=None,
     )

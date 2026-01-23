@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 17:52+0000\n"
+"POT-Creation-Date: 2026-01-23 13:23+0000\n"
 "PO-Revision-Date: 2026-01-21 21:01+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/core/"
@@ -16,10 +16,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
-"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
-"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
-"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.16-dev\n"
 
 #: src/core/constants.py:40
@@ -396,16 +396,16 @@ msgstr "обліковий записи"
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr "Обліковий запис %(mail_address)s з протоколом %(protocol)s"
 
-#: src/core/models/Account.py:210
+#: src/core/models/Account.py:222
 msgid "This account already exists."
 msgstr "Цей обліковий запис вже існує."
 
-#: src/core/models/Account.py:225
+#: src/core/models/Account.py:237
 #, python-format
 msgid "Testing this account data failed: %(error)s"
 msgstr "Не вдалося перевірити дані цього облікового запису: %(error)s"
 
-#: src/core/models/Account.py:256 src/core/models/Account.py:259
+#: src/core/models/Account.py:268 src/core/models/Account.py:271
 #, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
 msgstr "Протокол %s не реалізовано в класі fetcher!"
@@ -935,20 +935,20 @@ msgstr "Архівовано"
 msgid "%(state)s storage directory %(name)s"
 msgstr "%(state)s каталог сховища %(name)s"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:201
-#: src/core/utils/fetchers/ExchangeFetcher.py:213
+#: src/core/utils/fetchers/ExchangeFetcher.py:208
+#: src/core/utils/fetchers/ExchangeFetcher.py:220
 msgid "refresh"
 msgstr "освіжити"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:260
+#: src/core/utils/fetchers/ExchangeFetcher.py:267
 msgid "fetching of mail contents"
 msgstr "отримання вмісту пошти"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:300
+#: src/core/utils/fetchers/ExchangeFetcher.py:307
 msgid "scan for mailboxes"
 msgstr "сканування поштових скриньок"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:326
+#: src/core/utils/fetchers/ExchangeFetcher.py:333
 msgid "restoring of email"
 msgstr "відновлення електронної пошти"
 

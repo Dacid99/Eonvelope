@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 17:52+0000\n"
+"POT-Creation-Date: 2026-01-23 13:23+0000\n"
 "PO-Revision-Date: 2026-01-20 19:01+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/>"
-"\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,9 @@ msgid "Updated mailboxes"
 msgstr "Postfächer aktualisiert"
 
 #: src/api/v1/views/AccountViewSet.py:182
-msgid "Added daemons to inbox and sentbox."
+#, fuzzy
+#| msgid "Added daemons to inbox and sentbox."
+msgid "Added routines to inbox and sentbox."
 msgstr "Routinen zu Posteingang und Gesendet hinzugefügt."
 
 #: src/api/v1/views/AccountViewSet.py:203

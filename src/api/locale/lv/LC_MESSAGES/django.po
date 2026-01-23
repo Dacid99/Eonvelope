@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 17:52+0000\n"
+"POT-Creation-Date: 2026-01-23 13:23+0000\n"
 "PO-Revision-Date: 2025-12-31 20:13+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Latvian <https://hosted.weblate.org/projects/eonvelope/api/lv/"
@@ -38,7 +38,7 @@ msgid "Updated mailboxes"
 msgstr ""
 
 #: src/api/v1/views/AccountViewSet.py:182
-msgid "Added daemons to inbox and sentbox."
+msgid "Added routines to inbox and sentbox."
 msgstr ""
 
 #: src/api/v1/views/AccountViewSet.py:203

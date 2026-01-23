@@ -150,7 +150,8 @@ msgstr ""
 
 #: src/config/settings.py:991
 msgid "Default fetching criterion for a standard routine for a INBOX mailbox."
-msgstr "Standard-Abrufkriterium für eine Standardroutine für einen Posteingang."
+msgstr ""
+"Standard-Abrufkriterium für eine Standardroutine für einen Posteingang."
 
 #: src/config/settings.py:997
 msgid ""

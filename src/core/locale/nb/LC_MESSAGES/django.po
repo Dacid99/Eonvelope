@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 17:52+0000\n"
+"POT-Creation-Date: 2026-01-23 13:23+0000\n"
 "PO-Revision-Date: 2025-12-31 20:15+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
@@ -388,16 +388,16 @@ msgstr ""
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr ""
 
-#: src/core/models/Account.py:210
+#: src/core/models/Account.py:222
 msgid "This account already exists."
 msgstr ""
 
-#: src/core/models/Account.py:225
+#: src/core/models/Account.py:237
 #, python-format
 msgid "Testing this account data failed: %(error)s"
 msgstr ""
 
-#: src/core/models/Account.py:256 src/core/models/Account.py:259
+#: src/core/models/Account.py:268 src/core/models/Account.py:271
 #, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
 msgstr ""
@@ -909,20 +909,20 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:201
-#: src/core/utils/fetchers/ExchangeFetcher.py:213
+#: src/core/utils/fetchers/ExchangeFetcher.py:208
+#: src/core/utils/fetchers/ExchangeFetcher.py:220
 msgid "refresh"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:260
+#: src/core/utils/fetchers/ExchangeFetcher.py:267
 msgid "fetching of mail contents"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:300
+#: src/core/utils/fetchers/ExchangeFetcher.py:307
 msgid "scan for mailboxes"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:326
+#: src/core/utils/fetchers/ExchangeFetcher.py:333
 msgid "restoring of email"
 msgstr ""
 

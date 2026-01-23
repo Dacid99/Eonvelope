@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 17:52+0000\n"
+"POT-Creation-Date: 2026-01-23 13:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -37,7 +37,7 @@ msgid "Updated mailboxes"
 msgstr ""
 
 #: src/api/v1/views/AccountViewSet.py:182
-msgid "Added daemons to inbox and sentbox."
+msgid "Added routines to inbox and sentbox."
 msgstr ""
 
 #: src/api/v1/views/AccountViewSet.py:203

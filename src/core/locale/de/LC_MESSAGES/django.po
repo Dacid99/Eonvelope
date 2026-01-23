@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 17:52+0000\n"
+"POT-Creation-Date: 2026-01-23 13:23+0000\n"
 "PO-Revision-Date: 2026-01-20 19:01+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/core/"
-"de/>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/core/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -392,16 +392,16 @@ msgstr "Konten"
 msgid "Account %(mail_address)s with protocol %(protocol)s"
 msgstr "Konto %(mail_address)s mit Protokoll %(protocol)s"
 
-#: src/core/models/Account.py:210
+#: src/core/models/Account.py:222
 msgid "This account already exists."
 msgstr "Dieses Konto existiert schon."
 
-#: src/core/models/Account.py:225
+#: src/core/models/Account.py:237
 #, python-format
 msgid "Testing this account data failed: %(error)s"
 msgstr "Testen dieses Kontos fehlgeschlagen: %(error)s"
 
-#: src/core/models/Account.py:256 src/core/models/Account.py:259
+#: src/core/models/Account.py:268 src/core/models/Account.py:271
 #, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
 msgstr "Das E-Mail-Protokoll %s ist nicht implementiert!"
@@ -925,20 +925,20 @@ msgstr "Archiviert"
 msgid "%(state)s storage directory %(name)s"
 msgstr "%(state)s Speicherordner %(name)s"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:201
-#: src/core/utils/fetchers/ExchangeFetcher.py:213
+#: src/core/utils/fetchers/ExchangeFetcher.py:208
+#: src/core/utils/fetchers/ExchangeFetcher.py:220
 msgid "refresh"
 msgstr "aktualisieren"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:260
+#: src/core/utils/fetchers/ExchangeFetcher.py:267
 msgid "fetching of mail contents"
 msgstr "Abrufen von E-Mails"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:300
+#: src/core/utils/fetchers/ExchangeFetcher.py:307
 msgid "scan for mailboxes"
 msgstr "Postfächer-Suche"
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:326
+#: src/core/utils/fetchers/ExchangeFetcher.py:333
 msgid "restoring of email"
 msgstr "Wiederherstellen der E-Mail"
 

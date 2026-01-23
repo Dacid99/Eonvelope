@@ -132,7 +132,7 @@ def test_Email_m2m_in_reply_to_deletion(fake_email):
 
 
 @pytest.mark.django_db
-def test_Email_unique_constraints():
+def test_Email_unique_constraints(fake_mailbox, mock_Account_update_mailboxes):
     """Tests the unique constraints of :class:`core.models.Email.Email`."""
 
     email_1 = baker.make(Email, message_id="abc123")
@@ -140,16 +140,14 @@ def test_Email_unique_constraints():
     assert email_1.message_id == email_2.message_id
     assert email_1.mailbox != email_2.mailbox
 
-    mailbox = baker.make(Mailbox)
-
-    email_1 = baker.make(Email, mailbox=mailbox)
-    email_2 = baker.make(Email, mailbox=mailbox)
+    email_1 = baker.make(Email, mailbox=fake_mailbox)
+    email_2 = baker.make(Email, mailbox=fake_mailbox)
     assert email_1.message_id != email_2.message_id
     assert email_1.mailbox == email_2.mailbox
 
-    baker.make(Email, message_id="abc123", mailbox=mailbox)
+    baker.make(Email, message_id="ghfjdk", mailbox=fake_mailbox)
     with pytest.raises(IntegrityError):
-        baker.make(Email, message_id="abc123", mailbox=mailbox)
+        baker.make(Email, message_id="ghfjdk", mailbox=fake_mailbox)
 
 
 @pytest.mark.django_db

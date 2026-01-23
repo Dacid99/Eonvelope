@@ -1,12 +1,24 @@
 # Changelog
 
+## Version 0.5.0
+
+- Features:
+  - simplified setup of routines to archive entire mailtraffic of an account
+  - mailboxes are automatically retrieved for new accounts
+
+- Fixes:
+  - data import and export in admin panel was broken
+  - in some edge cases exchange would not use the configured timeout value
+  - bad configuration of an Exchange account lead to an internal server error
+
+
 ## Version 0.4.0
 
 - Features:
   - support for JMAP protocol
   - more fetching criteria
   - fetching criteria with custom filter value
-  
+
 - Fixes:
   - year values in timeline week overview were incorrectly formatted
 

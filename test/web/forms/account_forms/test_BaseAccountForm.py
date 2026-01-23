@@ -216,3 +216,18 @@ def test_get(fake_account, mock_Account_test):
     assert "updated" not in form_fields
     assert len(form_fields) == 6
     mock_Account_test.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_save(other_user, account_payload, mock_Account_update_mailboxes):
+    """Tests saving of :class:`web.forms.BaseAccountForm`."""
+    form = BaseAccountForm(data=account_payload)
+    form.instance.user = other_user
+
+    assert Account.objects.count() == 0
+
+    assert form.is_valid()
+    form.save()
+
+    assert Account.objects.count() == 1
+    mock_Account_update_mailboxes.assert_called_once()

@@ -8,7 +8,6 @@
 - mechanism to remove all correspondents without emails
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
-- autofetch mailboxes on submission
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
 - tagging system with [django-tagging](https://django-tagging.readthedocs.io/en) of [taggit](https://django-taggit.readthedocs.io/en/latest/)

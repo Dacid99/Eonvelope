@@ -108,24 +108,23 @@ def test_Mailbox_foreign_key_deletion(fake_mailbox):
 
 
 @pytest.mark.django_db
-def test_Mailbox_unique_constraints():
+def test_Mailbox_unique_constraints(mocker, fake_account):
     """Tests the unique constraints of :class:`core.models.Mailbox.Mailbox`."""
+    mocker.patch("core.models.Account.Account.update_mailboxes")
 
     mailbox_1 = baker.make(Mailbox, name="abc123")
     mailbox_2 = baker.make(Mailbox, name="abc123")
     assert mailbox_1.name == mailbox_2.name
     assert mailbox_1.account != mailbox_2.account
 
-    account = baker.make(Account)
-
-    mailbox_1 = baker.make(Mailbox, account=account)
-    mailbox_2 = baker.make(Mailbox, account=account)
+    mailbox_1 = baker.make(Mailbox, account=fake_account)
+    mailbox_2 = baker.make(Mailbox, account=fake_account)
     assert mailbox_1.name != mailbox_2.name
     assert mailbox_1.account == mailbox_2.account
 
-    baker.make(Mailbox, name="abc123", account=account)
+    baker.make(Mailbox, name="abc123", account=fake_account)
     with pytest.raises(IntegrityError):
-        baker.make(Mailbox, name="abc123", account=account)
+        baker.make(Mailbox, name="abc123", account=fake_account)
 
 
 @pytest.mark.django_db

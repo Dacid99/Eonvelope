@@ -231,11 +231,11 @@ def unblocked_db(django_db_setup, django_db_blocker):
 
 
 @pytest.fixture(scope="package")
-def account_queryset(unblocked_db):
+def account_queryset(unblocked_db, pkg_monkeypatch):
     """Fixture adding accounts with the test attributes to the database and returns them in a queryset."""
     for number, text_test_item in enumerate(TEXT_TEST_ITEMS):
         with freeze_time(DATETIME_TEST_ITEMS[number]):
-            baker.make(
+            account = baker.prepare(
                 Account,
                 mail_address=text_test_item,
                 mail_host=text_test_item,
@@ -245,7 +245,11 @@ def account_queryset(unblocked_db):
                 is_healthy=BOOL_TEST_ITEMS[number],
                 last_error=text_test_item,
                 last_error_occurred_at=DATETIME_TEST_ITEMS[number],
+                _save_related=True,
             )
+            pkg_monkeypatch.setattr(account, "update_mailboxes", lambda: None)
+            account.save()
+            pkg_monkeypatch.undo()
 
     return Account.objects.all()
 

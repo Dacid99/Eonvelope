@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, ClassVar, override
+from typing import TYPE_CHECKING, Any, ClassVar, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.conf import settings
@@ -51,7 +51,7 @@ from core.utils.fetchers import (
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
-from core.utils.fetchers.exceptions import MailAccountError
+from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from eonvelope.utils.workarounds import get_config
 
 from .Mailbox import Mailbox
@@ -189,6 +189,18 @@ class Account(
             "mail_address": self.mail_address,
             "protocol": self.protocol,
         }
+
+    @override
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Extended to auto-update mailboxes when the account is saved for the first time."""
+        needs_mailbox_update = self.pk is None
+        super().save(*args, **kwargs)
+        if needs_mailbox_update:
+            logger.info("Autoupdate mailboxes for new %s.", self)
+            try:
+                self.update_mailboxes()
+            except FetcherError:
+                logger.exception("Autoupdating mailboxes for %s failed!", self)
 
     @override
     def clean(self) -> None:

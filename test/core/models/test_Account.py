@@ -39,7 +39,7 @@ from core.utils.fetchers import (
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
-from core.utils.fetchers.exceptions import MailAccountError
+from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from src.core.constants import EmailFetchingCriterionChoices
 
 
@@ -128,8 +128,9 @@ def test_Account_foreign_key_deletion(fake_account):
 
 
 @pytest.mark.django_db
-def test_Account_unique_constraints(django_user_model):
+def test_Account_unique_constraints(mocker, django_user_model):
     """Tests the unique constraints of :class:`core.models.Account.Account`."""
+    mocker.patch("core.models.Account.Account.update_mailboxes")
     # ruff: disable[S106]
     account_1 = baker.make(
         Account,
@@ -222,6 +223,61 @@ def test_Account_unique_constraints(django_user_model):
             password="mypassword",
             protocol=EmailProtocolChoices.IMAP4,
         )
+
+
+@pytest.mark.django_db
+def test_Account_save_new(mocker, owner_user, mock_logger):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is not the db.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+    new_account = baker.prepare(Account, user=owner_user)
+
+    assert Account.objects.count() == 0
+
+    new_account.save()
+
+    assert Account.objects.count() == 1
+
+    mock_update_mailboxes.assert_called_once()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_Account_save_old(mocker, fake_account, mock_logger):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is already in the db.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+
+    assert Account.objects.count() == 1
+
+    fake_account.save()
+
+    assert Account.objects.count() == 1
+
+    mock_update_mailboxes.assert_not_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_Account_save_autoupdate_error(
+    mocker, fake_error_message, owner_user, mock_logger
+):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is not in the db and updating mailboxes fails.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+    mock_update_mailboxes.side_effect = FetcherError(fake_error_message)
+    new_account = baker.prepare(Account, user=owner_user)
+
+    new_account.save()
+
+    mock_update_mailboxes.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db

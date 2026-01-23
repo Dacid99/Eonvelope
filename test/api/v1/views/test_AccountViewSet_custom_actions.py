@@ -28,14 +28,6 @@ from core.utils.fetchers.exceptions import MailAccountError
 
 
 @pytest.fixture
-def mock_Account_update_mailboxes(mocker):
-    """Patches `core.models.Account.update_mailboxes`."""
-    return mocker.patch(
-        "api.v1.views.AccountViewSet.Account.update_mailboxes", autospec=True
-    )
-
-
-@pytest.fixture
 def mock_Account_add_daemons(mocker):
     """Patches `core.models.Account_add_daemons`."""
     return mocker.patch(

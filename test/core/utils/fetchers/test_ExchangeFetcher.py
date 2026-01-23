@@ -392,6 +392,23 @@ def test_ExchangeFetcher_connect_to_host_hostname_success(
 
 
 @pytest.mark.django_db
+def test_ExchangeFetcher_connect_to_host_bad_configuration(
+    exchange_mailbox, mock_logger, mock_ExchangeAccount
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.connect_to_host`
+    in different cases of account `mail_host` in URL form, `timeout` and`mail_host_port` settings.
+    """
+    mock_ExchangeAccount.side_effect = ValueError("bad smtp address")
+
+    with pytest.raises(MailAccountError):
+        ExchangeFetcher(exchange_mailbox.account)
+
+    mock_ExchangeAccount.assert_called_once()
+    mock_logger.debug.assert_called()
+    mock_logger.exception.assert_called()
+
+
+@pytest.mark.django_db
 def test_ExchangeFetcher_test_account_success(
     exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
@@ -491,12 +508,12 @@ def test_ExchangeFetcher_test_mailbox_subfolder_success(
 
 @pytest.mark.django_db
 def test_ExchangeFetcher_test_mailbox_wrong_mailbox(
-    exchange_mailbox, mock_logger, mock_msg_folder_root
+    fake_other_account, exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
     in case the given mailbox does not belong to the given account.
     """
-    wrong_mailbox = baker.make(Mailbox)
+    wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match="is not in"):
         ExchangeFetcher(exchange_mailbox.account).test(wrong_mailbox)
@@ -619,11 +636,13 @@ def test_ExchangeFetcher_fetch_emails_filter_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_wrong_mailbox(exchange_mailbox, mock_logger):
+def test_ExchangeFetcher_fetch_emails_wrong_mailbox(
+    fake_other_account, exchange_mailbox, mock_logger
+):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
     in case the given mailbox does not belong to the given account.
     """
-    wrong_mailbox = baker.make(Mailbox)
+    wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match="is not in"):
         ExchangeFetcher(exchange_mailbox.account).fetch_emails(wrong_mailbox)

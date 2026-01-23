@@ -1,16 +1,17 @@
 # E∘nvelope
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/eonvelope)](https://hub.docker.com/r/dacid99/eonvelope)
 [![Docker Image Version](https://img.shields.io/docker/v/dacid99/eonvelope)](https://hub.docker.com/r/dacid99/eonvelope)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/eonvelope)](https://hub.docker.com/r/dacid99/eonvelope)
+
+[![Last commit](https://img.shields.io/github/last-commit/dacid99/eonvelope)](https://gitlab.com/Dacid99/eonvelope/)
+[![Commit frequency](https://img.shields.io/github/commit-activity/m/dacid99/eonvelope/development)](https://gitlab.com/Dacid99/eonvelope/)
+[![Pipeline](https://gitlab.com/Dacid99/eonvelope/badges/master/pipeline.svg)](https://gitlab.com/Dacid99/eonvelope/)
+[![Coverage](https://gitlab.com/Dacid99/eonvelope/badges/master/coverage.svg?job=test_codebase)](https://gitlab.com/Dacid99/eonvelope/)
 [![Read the Docs](https://img.shields.io/readthedocs/eonvelope/latest)](https://eonvelope.readthedocs.io/latest/)
 [![Translation status](https://img.shields.io/weblate/progress/eonvelope)](https://hosted.weblate.org/projects/eonvelope/)
-[![Coverage](https://gitlab.com/Dacid99/eonvelope/badges/master/coverage.svg?job=test_codebase)](https://gitlab.com/Dacid99/eonvelope/)
-[![Pipeline](https://gitlab.com/Dacid99/eonvelope/badges/master/pipeline.svg)](https://gitlab.com/Dacid99/eonvelope/)
+
 [![Framework](https://pypi-camo.freetls.fastly.net/beb496af0833573259d4094b1fe3b0a3ea831607/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6672616d65776f726b2d446a616e676f2d3043334332362e737667)](https://www.djangoproject.com/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
-[![Project created](https://img.shields.io/date/2024)](https://gitlab.com/Dacid99/eonvelope/)
-[![Commit frequency](https://img.shields.io/github/commit-activity/m/dacid99/eonvelope/development)](https://gitlab.com/Dacid99/eonvelope/)
-[![Last commit](https://img.shields.io/github/last-commit/dacid99/eonvelope)](https://gitlab.com/Dacid99/eonvelope/)
 
 Preserve your emails for [an indefinite long period of time](https://en.wikipedia.org/wiki/Aeon) with this open-source self-hostable email archive!
 
@@ -81,26 +82,26 @@ Check it out for details on configuration and instructions on how to use the run
 
 We are striving to support as many languages as possible to make the application accessible to everyone!
 
-Translation is done via [weblate](https://hosted.weblate.org/projects/eonvelope/). 
-If you want to add a language that is missing, go check it out! 
-If the language is missing on [weblate](https://hosted.weblate.org/projects/eonvelope/) too, 
+Translation is done via [weblate](https://hosted.weblate.org/projects/eonvelope/).
+If you want to add a language that is missing, go check it out!
+If the language is missing on [weblate](https://hosted.weblate.org/projects/eonvelope/) too,
 please file an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues) using the missing-language template.
 
 ## Accessibility
 
-Everybody should be able to use Eonvelope. 
+Everybody should be able to use Eonvelope.
 Please don't hesitate to report any problem related to accessibility via an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues).
 
 ## Contributing
 
-If you want to help with improving this project that is great! 
-You can always approach us with ideas. 
+If you want to help with improving this project that is great!
+You can always approach us with ideas.
 And of course we are looking forward to your pull requests!
 
-To get you started smoothly just follow [the development guide](DEVELOPMENT.md). 
+To get you started smoothly just follow [the development guide](DEVELOPMENT.md).
 This will help you set up a workspace for working with this project conveniently!
 
-In order to keep the code maintainable and in a consistent style 
+In order to keep the code maintainable and in a consistent style
 please make sure to follow the rules in [the guidelines](CONTRIBUTING.md).
 
 The complete source code documentation is part of the docs on [ReadTheDocs](https://eonvelope.readthedocs.io/latest/rst/developers.html)

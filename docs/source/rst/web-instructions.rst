@@ -101,19 +101,20 @@ In case of a failed authentication, check the credentials.
 Mailbox setup
 ^^^^^^^^^^^^^
 
-When the account is set up successfully, you can collect the names of all mailboxes in the mailaccount.
-You can use the fetch mailboxes button in the overview of the account
-or the equivalent API endpoint.
+When the account is set up successfully, the mailboxes in the mailaccount are fetched and stored.
+
+Depending on the settings made by your admin, not all mailboxes in your account may be present.
+By default, mailboxes for spammails are excluded to avoid archiving malicious content.
+
+If you add or change a mailbox in that account later on, you can use the fetch mailboxes button in the overview of the account
+or the equivalent API endpoint to update the mailboxes that are known to Eonvelope.
 
 .. note::
     For POP mailaccounts, there is only a single mailbox, the 'INBOX'.
 
-In case of success, these mailboxes will be listed in the account.
-Depending on the settings made by your admin, not all mailboxes in your account may be present.
-By default, mailboxes for spammails are excluded to avoid archiving malicious content.
-
-If you change a mailbox name or create a new one, you can also use this method
-to update the mailboxes in the account.
+.. tip::
+    Updating mailboxes also updates the mailboxes health status.
+    If many mailboxes in an account are marked as unhealthy, you can make use of this instead of testing them individually.
 
 You can further configure a mailbox in its detail overview.
 

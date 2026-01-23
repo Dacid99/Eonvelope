@@ -35,7 +35,7 @@ from web.views.mailbox_views.MailboxDetailWithDeleteView import (
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_mailbox, client, detail_url, login_url):
+def test_get__noauth(fake_mailbox, client, detail_url, login_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
@@ -49,7 +49,7 @@ def test_get_noauth(fake_mailbox, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_mailbox, other_client, detail_url):
+def test_get__auth_other(fake_mailbox, other_client, detail_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
@@ -59,7 +59,7 @@ def test_get_auth_other(fake_mailbox, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
+def test_get__auth_owner(fake_mailbox, owner_client, detail_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
@@ -76,7 +76,7 @@ def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_mailbox, admin_client, detail_url):
+def test_get__auth_admin(fake_mailbox, admin_client, detail_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(MailboxDetailWithDeleteView, fake_mailbox))
 
@@ -86,7 +86,7 @@ def test_get_auth_admin(fake_mailbox, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_noauth(fake_mailbox, client, detail_url, login_url):
+def test_post_delete__noauth(fake_mailbox, client, detail_url, login_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
@@ -104,7 +104,7 @@ def test_post_delete_noauth(fake_mailbox, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_other(fake_mailbox, other_client, detail_url):
+def test_post_delete__auth_other(fake_mailbox, other_client, detail_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
@@ -118,7 +118,7 @@ def test_post_delete_auth_other(fake_mailbox, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_owner(fake_mailbox, owner_client, detail_url):
+def test_post_delete__auth_owner(fake_mailbox, owner_client, detail_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
@@ -133,7 +133,7 @@ def test_post_delete_auth_owner(fake_mailbox, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_admin(fake_mailbox, admin_client, detail_url):
+def test_post_delete__auth_admin(fake_mailbox, admin_client, detail_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
@@ -147,7 +147,7 @@ def test_post_delete_auth_admin(fake_mailbox, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_test_noauth(
+def test_post_test__noauth(
     fake_mailbox, client, detail_url, login_url, mock_Mailbox_test
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
@@ -166,7 +166,7 @@ def test_post_test_noauth(
 
 
 @pytest.mark.django_db
-def test_post_test_auth_other(
+def test_post_test__auth_other(
     fake_mailbox, other_client, detail_url, mock_Mailbox_test
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
@@ -181,7 +181,7 @@ def test_post_test_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_test_success_auth_owner(
+def test_post_test__success__auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_test
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -208,7 +208,7 @@ def test_post_test_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_test_failure_auth_owner(
+def test_post_test__failure__auth_owner(
     fake_error_message, fake_mailbox, owner_client, detail_url, mock_Mailbox_test
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -238,7 +238,7 @@ def test_post_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_test_missing_action_auth_owner(
+def test_post_test__missing_action__auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_test
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -252,7 +252,7 @@ def test_post_test_missing_action_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_test_auth_admin(
+def test_post_test__auth_admin(
     fake_mailbox, admin_client, detail_url, mock_Mailbox_test
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
@@ -267,7 +267,7 @@ def test_post_test_auth_admin(
 
 
 @pytest.mark.django_db
-def test_post_fetch_noauth(
+def test_post_fetch__noauth(
     fake_mailbox, client, detail_url, login_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
@@ -286,7 +286,7 @@ def test_post_fetch_noauth(
 
 
 @pytest.mark.django_db
-def test_post_fetch_auth_other(
+def test_post_fetch__auth_other(
     fake_mailbox, other_client, detail_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
@@ -301,7 +301,7 @@ def test_post_fetch_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_fetch_success_auth_owner(
+def test_post_fetch__success__auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -330,7 +330,7 @@ def test_post_fetch_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_fetch_no_criterion_auth_owner(
+def test_post_fetch__no_criterion__auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -359,7 +359,7 @@ def test_post_fetch_no_criterion_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_fetch_bad_criterion_auth_owner(
+def test_post_fetch__bad_criterion__auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -386,7 +386,7 @@ def test_post_fetch_bad_criterion_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_fetch_failure_auth_owner(
+def test_post_fetch__failure__auth_owner(
     fake_error_message, fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -418,7 +418,7 @@ def test_post_fetch_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_fetch_missing_action_auth_owner(
+def test_post_fetch__missing_action__auth_owner(
     fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
@@ -432,7 +432,7 @@ def test_post_fetch_missing_action_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_fetch_auth_admin(
+def test_post_fetch__auth_admin(
     fake_mailbox, admin_client, detail_url, mock_Mailbox_fetch
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""

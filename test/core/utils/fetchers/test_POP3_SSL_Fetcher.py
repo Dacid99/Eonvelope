@@ -58,7 +58,7 @@ def mock_POP3_SSL(mocker, faker):
         None,
     ],
 )
-def test_POP3Fetcher_connect_to_host_success(
+def test_POP3Fetcher_connect_to_host__success(
     pop3_ssl_mailbox,
     mock_ssl_create_default_context,
     mock_logger,

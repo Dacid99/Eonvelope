@@ -42,7 +42,7 @@ def mock_Account_test(mocker):
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_noauth(
+def test_update_mailboxes__noauth(
     fake_account,
     noauth_api_client,
     custom_detail_action_url,
@@ -63,7 +63,7 @@ def test_update_mailboxes_noauth(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_auth_other(
+def test_update_mailboxes__auth_other(
     fake_account,
     other_api_client,
     custom_detail_action_url,
@@ -84,7 +84,7 @@ def test_update_mailboxes_auth_other(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_success_auth_owner(
+def test_update_mailboxes__success__auth_owner(
     fake_account,
     owner_api_client,
     custom_detail_action_url,
@@ -108,7 +108,7 @@ def test_update_mailboxes_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_failure_auth_owner(
+def test_update_mailboxes__failure__auth_owner(
     fake_error_message,
     fake_account,
     owner_api_client,
@@ -129,7 +129,7 @@ def test_update_mailboxes_failure_auth_owner(
         )
     )
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400__bad_REQUEST
     fake_account.refresh_from_db()
     assert response.data["data"] == AccountViewSet.serializer_class(fake_account).data
     assert "error" in response.data
@@ -138,7 +138,7 @@ def test_update_mailboxes_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_auth_admin(
+def test_update_mailboxes__auth_admin(
     fake_account,
     admin_api_client,
     custom_detail_action_url,
@@ -159,7 +159,7 @@ def test_update_mailboxes_auth_admin(
 
 
 @pytest.mark.django_db
-def test_add_daemons_noauth(
+def test_add_daemons__noauth(
     fake_account,
     noauth_api_client,
     custom_detail_action_url,
@@ -179,7 +179,7 @@ def test_add_daemons_noauth(
 
 
 @pytest.mark.django_db
-def test_add_daemons_auth_other(
+def test_add_daemons__auth_other(
     fake_account,
     other_api_client,
     custom_detail_action_url,
@@ -199,7 +199,7 @@ def test_add_daemons_auth_other(
 
 
 @pytest.mark.django_db
-def test_add_daemons_success_auth_owner(
+def test_add_daemons__success__auth_owner(
     fake_account,
     owner_api_client,
     custom_detail_action_url,
@@ -221,7 +221,7 @@ def test_add_daemons_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_add_daemons_auth_admin(
+def test_add_daemons__auth_admin(
     fake_account,
     admin_api_client,
     custom_detail_action_url,
@@ -241,7 +241,7 @@ def test_add_daemons_auth_admin(
 
 
 @pytest.mark.django_db
-def test_test_noauth(
+def test_test__noauth(
     fake_account,
     noauth_api_client,
     custom_detail_action_url,
@@ -266,7 +266,7 @@ def test_test_noauth(
 
 
 @pytest.mark.django_db
-def test_test_auth_other(
+def test_test__auth_other(
     fake_account,
     other_api_client,
     custom_detail_action_url,
@@ -292,7 +292,7 @@ def test_test_auth_other(
 
 
 @pytest.mark.django_db
-def test_test_success_auth_owner(
+def test_test__success__auth_owner(
     fake_account,
     owner_api_client,
     custom_detail_action_url,
@@ -318,7 +318,7 @@ def test_test_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_failure_auth_owner(
+def test_test__failure__auth_owner(
     fake_error_message,
     fake_account,
     owner_api_client,
@@ -347,7 +347,7 @@ def test_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_auth_admin(
+def test_test__auth_admin(
     fake_account,
     admin_api_client,
     custom_detail_action_url,
@@ -373,7 +373,7 @@ def test_test_auth_admin(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(
+def test_toggle_favorite__noauth(
     faker, fake_account, noauth_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with an unauthenticated user client."""
@@ -393,7 +393,7 @@ def test_toggle_favorite_noauth(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(
+def test_toggle_favorite__auth_other(
     faker, fake_account, other_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated other user client."""
@@ -414,7 +414,7 @@ def test_toggle_favorite_auth_other(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("previous_is_favorite", [True, False])
-def test_toggle_favorite_auth_owner(
+def test_toggle_favorite__auth_owner(
     fake_account, owner_api_client, custom_detail_action_url, previous_is_favorite
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated owner user client."""
@@ -433,7 +433,7 @@ def test_toggle_favorite_auth_owner(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_admin(
+def test_toggle_favorite__auth_admin(
     faker, fake_account, admin_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated admin user client."""

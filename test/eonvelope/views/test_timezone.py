@@ -29,7 +29,7 @@ from test.web.conftest import admin_client, other_client, owner_client
 
 
 @pytest.mark.django_db
-def test_get_noauth(client):
+def test_get__noauth(client):
     """Tests `get` on :func:`eonvelope.views.timezone` for an unauthenticated user client."""
     response = client.get(reverse(SET_TIMEZONE_URL_NAME))
 
@@ -73,7 +73,7 @@ def test_get_admin(admin_client):
 
 
 @pytest.mark.django_db
-def test_post_noauth_good_timezone(client, fake_timezone):
+def test_post__noauth_good_timezone(client, fake_timezone):
     """Tests `post` on :func:`eonvelope.views.timezone` for an unauthenticated user client
     in case of an available timezone in the request.
     """
@@ -87,7 +87,7 @@ def test_post_noauth_good_timezone(client, fake_timezone):
 
 
 @pytest.mark.django_db
-def test_post_noauth_no_timezone(client):
+def test_post__noauth__no_timezone(client):
     """Tests `post` on :func:`eonvelope.views.timezone` for an unauthenticated user client
     in case of no timezone in the request.
     """
@@ -100,7 +100,7 @@ def test_post_noauth_no_timezone(client):
 
 
 @pytest.mark.django_db
-def test_post_noauth_bad_timezone(client):
+def test_post__noauth__bad_timezone(client):
     """Tests `post` on :func:`eonvelope.views.timezone` for an unauthenticated user client
     in case of an unavailable timezone in the request.
     """
@@ -112,7 +112,7 @@ def test_post_noauth_bad_timezone(client):
 
 
 @pytest.mark.django_db
-def test_post_other_good_timezone(other_client, fake_timezone):
+def test_post__other__good_timezone(other_client, fake_timezone):
     """Tests `post` on :func:`eonvelope.views.timezone` for the authenticated other user client
     in case of an available timezone in the request.
     """
@@ -130,7 +130,7 @@ def test_post_other_good_timezone(other_client, fake_timezone):
 
 
 @pytest.mark.django_db
-def test_post_other_no_timezone(other_client):
+def test_post__other__no_timezone(other_client):
     """Tests `post` on :func:`eonvelope.views.timezone` for the authenticated other user client
     in case of no timezone in the request.
     """
@@ -143,7 +143,7 @@ def test_post_other_no_timezone(other_client):
 
 
 @pytest.mark.django_db
-def test_post_other_bad_timezone(other_client):
+def test_post__other__bad_timezone(other_client):
     """Tests `post` on :func:`eonvelope.views.timezone` for the authenticated other user client
     in case of an unavailable timezone in the request.
     """
@@ -175,7 +175,7 @@ def test_post_owner_good_timezone(owner_client, fake_timezone):
 
 
 @pytest.mark.django_db
-def test_post_owner_no_timezone(owner_client):
+def test_post_owner__no_timezone(owner_client):
     """Tests `post` on :func:`eonvelope.views.timezone` for the authenticated owner user client
     in case of no timezone in the request.
     """
@@ -188,7 +188,7 @@ def test_post_owner_no_timezone(owner_client):
 
 
 @pytest.mark.django_db
-def test_post_owner_bad_timezone(owner_client):
+def test_post_owner__bad_timezone(owner_client):
     """Tests `post` on :func:`eonvelope.views.timezone` for the authenticated owner user client
     in case of an unavailable timezone in the request.
     """

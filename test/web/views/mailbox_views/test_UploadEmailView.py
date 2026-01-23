@@ -36,7 +36,7 @@ def email_upload_payload(fake_file):
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_mailbox, client, detail_url, login_url):
+def test_get__noauth(fake_mailbox, client, detail_url, login_url):
     """Tests :class:`web.views.UploadEmailView` with an unauthenticated user client."""
     response = client.get(detail_url(UploadEmailView, fake_mailbox))
 
@@ -47,7 +47,7 @@ def test_get_noauth(fake_mailbox, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_mailbox, other_client, detail_url):
+def test_get__auth_other(fake_mailbox, other_client, detail_url):
     """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
     response = other_client.get(detail_url(UploadEmailView, fake_mailbox))
 
@@ -56,7 +56,7 @@ def test_get_auth_other(fake_mailbox, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
+def test_get__auth_owner(fake_mailbox, owner_client, detail_url):
     """Tests :class:`web.views.UploadEmailView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(UploadEmailView, fake_mailbox))
 
@@ -70,7 +70,7 @@ def test_get_auth_owner(fake_mailbox, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_mailbox, admin_client, detail_url):
+def test_get__auth_admin(fake_mailbox, admin_client, detail_url):
     """Tests :class:`web.views.UploadEmailView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(UploadEmailView, fake_mailbox))
 
@@ -79,7 +79,7 @@ def test_get_auth_admin(fake_mailbox, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_upload_noauth(
+def test_post_upload__noauth(
     fake_mailbox,
     client,
     detail_url,
@@ -100,7 +100,7 @@ def test_post_upload_noauth(
 
 
 @pytest.mark.django_db
-def test_post_upload_auth_other(
+def test_post_upload__auth_other(
     fake_mailbox,
     other_client,
     detail_url,
@@ -119,7 +119,7 @@ def test_post_upload_auth_other(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("file_format", SupportedEmailUploadFormats.values)
-def test_post_upload_mailbox_auth_owner(
+def test_post_upload_mailbox__auth_owner(
     fake_mailbox,
     owner_client,
     detail_url,
@@ -151,7 +151,7 @@ def test_post_upload_mailbox_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_upload_auth_owner_bad_format(
+def test_post_upload__auth_owner__bad_format(
     fake_mailbox,
     owner_client,
     detail_url,
@@ -176,7 +176,7 @@ def test_post_upload_auth_owner_bad_format(
 
 
 @pytest.mark.django_db
-def test_post_upload_auth_owner_bad_file(
+def test_post_upload__auth_owner__bad_file(
     fake_mailbox,
     owner_client,
     detail_url,
@@ -201,7 +201,7 @@ def test_post_upload_auth_owner_bad_file(
 
 
 @pytest.mark.django_db
-def test_post_upload_auth_admin(
+def test_post_upload__auth_admin(
     fake_mailbox,
     admin_client,
     detail_url,

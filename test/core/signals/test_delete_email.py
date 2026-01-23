@@ -25,7 +25,7 @@ from core.models import Email
 
 
 @pytest.mark.django_db
-def test_delete_email_no_file(fake_email):
+def test_delete_email__no_file(fake_email):
     """Test individual deletion of an :class:`core.models.Email` instance
     in case its `file_path` is not set.
     """
@@ -38,7 +38,7 @@ def test_delete_email_no_file(fake_email):
 
 
 @pytest.mark.django_db
-def test_delete_email_with_file(fake_email_with_file):
+def test_delete_email__with_file(fake_email_with_file):
     """Test individual deletion of an :class:`core.models.Email` instance
     in case its `file_path` is set.
     """
@@ -53,7 +53,7 @@ def test_delete_email_with_file(fake_email_with_file):
 
 
 @pytest.mark.django_db
-def test_cascade_delete_email_with_file(fake_email_with_file, fake_mailbox):
+def test_cascade_delete_email__with_file(fake_email_with_file, fake_mailbox):
     """Test cascade deletion of an :class:`core.models.Email` instance
     in case its `file_path` is set.
     """
@@ -67,7 +67,7 @@ def test_cascade_delete_email_with_file(fake_email_with_file, fake_mailbox):
 
 
 @pytest.mark.django_db
-def test_bulk_delete_email_with_file(fake_email_with_file):
+def test_bulk_delete_email__with_file(fake_email_with_file):
     """Test bulk deletion of an :class:`core.models.Email` instance
     in case its `file_path` is not set.
     """

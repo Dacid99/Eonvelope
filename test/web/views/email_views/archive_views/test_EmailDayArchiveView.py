@@ -26,7 +26,7 @@ from web.views import EmailDayArchiveView
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, fake_email, login_url, date_url):
+def test_get__noauth(client, fake_email, login_url, date_url):
     """Tests :class:`web.views.EmailDayArchiveView` with an unauthenticated user client."""
     url = date_url(
         EmailDayArchiveView,
@@ -46,7 +46,7 @@ def test_get_noauth(client, fake_email, login_url, date_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, fake_email, date_url):
+def test_get__auth_other(other_client, fake_email, date_url):
     """Tests :class:`web.views.EmailDayArchiveView` with the authenticated other user client."""
     response = other_client.get(
         date_url(
@@ -72,7 +72,7 @@ def test_get_auth_other(other_client, fake_email, date_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, fake_email, date_url):
+def test_get__auth_owner(owner_client, fake_email, date_url):
     """Tests :class:`web.views.EmailDayArchiveView` with the authenticated owner user client."""
     response = owner_client.get(
         date_url(
@@ -98,7 +98,7 @@ def test_get_auth_owner(owner_client, fake_email, date_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, fake_email, date_url):
+def test_get__auth_admin(admin_client, fake_email, date_url):
     """Tests :class:`web.views.EmailDayArchiveView` with the authenticated admin user client."""
     response = admin_client.get(
         date_url(

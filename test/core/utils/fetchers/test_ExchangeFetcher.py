@@ -179,7 +179,7 @@ def test_ExchangeFetcher_make_fetching_query_sentsince_criterion(mock_QuerySet):
         ),
     ],
 )
-def test_ExchangeFetcher_make_fetching_query_other_criterion(
+def test_ExchangeFetcher_make_fetching_query__other_criterion(
     mock_QuerySet, criterion_name, criterion_arg, expected_kwarg
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.make_fetching_query`
@@ -223,7 +223,7 @@ def test_ExchangeFetcher___init___success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher___init___failure(
+def test_ExchangeFetcher___init____failure(
     mocker, fake_error_message, exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.__init__`
@@ -240,7 +240,7 @@ def test_ExchangeFetcher___init___failure(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher___init___bad_protocol(
+def test_ExchangeFetcher___init____bad_protocol(
     mocker, exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.__init__`
@@ -266,7 +266,7 @@ def test_ExchangeFetcher___init___bad_protocol(
         None,
     ],
 )
-def test_ExchangeFetcher_connect_to_host_hostURL_success(
+def test_ExchangeFetcher_connect_to_host_hostURL__success(
     exchange_mailbox,
     mock_logger,
     mock_ExchangeAccount,
@@ -333,7 +333,7 @@ def test_ExchangeFetcher_connect_to_host_hostURL_success(
         None,
     ],
 )
-def test_ExchangeFetcher_connect_to_host_hostname_success(
+def test_ExchangeFetcher_connect_to_host_hostname__success(
     exchange_mailbox, mock_logger, mock_ExchangeAccount, mail_host_port
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.connect_to_host`
@@ -392,7 +392,7 @@ def test_ExchangeFetcher_connect_to_host_hostname_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_connect_to_host_bad_configuration(
+def test_ExchangeFetcher_connect_to_host__bad_configuration(
     exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.connect_to_host`
@@ -409,7 +409,7 @@ def test_ExchangeFetcher_connect_to_host_bad_configuration(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_account_success(
+def test_ExchangeFetcher_test_account__success(
     exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
@@ -425,7 +425,7 @@ def test_ExchangeFetcher_test_account_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_account_ewserror(
+def test_ExchangeFetcher_test_account__ewserror(
     fake_error_message, exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
@@ -444,7 +444,7 @@ def test_ExchangeFetcher_test_account_ewserror(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_account_other_exception(
+def test_ExchangeFetcher_test_account__other_exception(
     exchange_mailbox, mock_logger, mock_ExchangeAccount
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
@@ -463,7 +463,7 @@ def test_ExchangeFetcher_test_account_other_exception(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_mailbox_success(
+def test_ExchangeFetcher_test_mailbox__success(
     exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
@@ -482,7 +482,7 @@ def test_ExchangeFetcher_test_mailbox_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_mailbox_subfolder_success(
+def test_ExchangeFetcher_test_mailbox_subfolder__success(
     faker, exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
@@ -524,7 +524,7 @@ def test_ExchangeFetcher_test_mailbox_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_mailbox_ewserror(
+def test_ExchangeFetcher_test_mailbox__ewserror(
     fake_error_message,
     exchange_mailbox,
     mock_logger,
@@ -547,7 +547,7 @@ def test_ExchangeFetcher_test_mailbox_ewserror(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_mailbox_other_exception(
+def test_ExchangeFetcher_test_mailbox__other_exception(
     fake_error_message,
     exchange_mailbox,
     mock_logger,
@@ -570,7 +570,7 @@ def test_ExchangeFetcher_test_mailbox_other_exception(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_all_success(
+def test_ExchangeFetcher_fetch_emails_all__success(
     exchange_mailbox, mock_logger, mock_QuerySet, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
@@ -589,7 +589,7 @@ def test_ExchangeFetcher_fetch_emails_all_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_subfolder_all_success(
+def test_ExchangeFetcher_fetch_emails_subfolder_all__success(
     faker, exchange_mailbox, mock_logger, mock_QuerySet, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
@@ -614,7 +614,7 @@ def test_ExchangeFetcher_fetch_emails_subfolder_all_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_filter_success(
+def test_ExchangeFetcher_fetch_emails_filter__success(
     exchange_mailbox, mock_logger, mock_QuerySet
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
@@ -651,7 +651,7 @@ def test_ExchangeFetcher_fetch_emails_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_ewserror_query(
+def test_ExchangeFetcher_fetch_emails__ewserror__query(
     fake_error_message, exchange_mailbox, mock_logger, mock_Folder
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
@@ -667,7 +667,7 @@ def test_ExchangeFetcher_fetch_emails_ewserror_query(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_other_exception_query(
+def test_ExchangeFetcher_fetch_emails__other_exception_query(
     fake_error_message, exchange_mailbox, mock_logger, mock_Folder
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
@@ -683,7 +683,7 @@ def test_ExchangeFetcher_fetch_emails_other_exception_query(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_mailboxes_success(
+def test_ExchangeFetcher_fetch_mailboxes__success(
     exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_mailboxes`
@@ -708,7 +708,7 @@ def test_ExchangeFetcher_fetch_mailboxes_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_mailboxes_ewserror_walk(
+def test_ExchangeFetcher_fetch_mailboxes__ewserror__walk(
     fake_error_message, exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_mailboxes`
@@ -727,7 +727,7 @@ def test_ExchangeFetcher_fetch_mailboxes_ewserror_walk(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_mailboxes_other_exception_walk(
+def test_ExchangeFetcher_fetch_mailboxes__other_exception_walk(
     fake_error_message, exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_mailboxes`
@@ -744,7 +744,7 @@ def test_ExchangeFetcher_fetch_mailboxes_other_exception_walk(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_restore_success(
+def test_ExchangeFetcher_restore__success(
     exchange_mailbox,
     fake_email_with_file,
     mock_logger,
@@ -770,7 +770,7 @@ def test_ExchangeFetcher_restore_success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_restore_success_subfolder(
+def test_ExchangeFetcher_restore__success__subfolder(
     faker,
     exchange_mailbox,
     fake_email_with_file,
@@ -803,7 +803,7 @@ def test_ExchangeFetcher_restore_success_subfolder(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_restore_no_file(
+def test_ExchangeFetcher_restore__no_file(
     exchange_mailbox, fake_email, mock_logger, mock_Message
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.restore`
@@ -839,7 +839,7 @@ def test_ExchangeFetcher_restore_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_restore_ewserror(
+def test_ExchangeFetcher_restore__ewserror(
     fake_error_message,
     fake_email_with_file,
     exchange_mailbox,
@@ -864,7 +864,7 @@ def test_ExchangeFetcher_restore_ewserror(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_restore_other_error(
+def test_ExchangeFetcher_restore__other_error(
     fake_email_with_file,
     exchange_mailbox,
     mock_logger,
@@ -885,7 +885,7 @@ def test_ExchangeFetcher_restore_other_error(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_close_success(exchange_mailbox, mock_logger):
+def test_ExchangeFetcher_close__success(exchange_mailbox, mock_logger):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.close`
     in case of success.
     """

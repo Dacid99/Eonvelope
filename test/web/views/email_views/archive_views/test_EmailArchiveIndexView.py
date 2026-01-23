@@ -26,7 +26,7 @@ from web.views import EmailArchiveIndexView
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, login_url, date_url):
+def test_get__noauth(client, login_url, date_url):
     """Tests :class:`web.views.EmailArchiveIndexView` with an unauthenticated user client."""
     response = client.get(date_url(EmailArchiveIndexView))
 
@@ -37,7 +37,7 @@ def test_get_noauth(client, login_url, date_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, date_url):
+def test_get__auth_other(other_client, date_url):
     """Tests :class:`web.views.EmailArchiveIndexView` with the authenticated other user client."""
     response = other_client.get(date_url(EmailArchiveIndexView))
 
@@ -53,7 +53,7 @@ def test_get_auth_other(other_client, date_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, date_url):
+def test_get__auth_owner(owner_client, date_url):
     """Tests :class:`web.views.EmailArchiveIndexView` with the authenticated owner user client."""
     response = owner_client.get(date_url(EmailArchiveIndexView))
 
@@ -69,7 +69,7 @@ def test_get_auth_owner(owner_client, date_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, date_url):
+def test_get__auth_admin(admin_client, date_url):
     """Tests :class:`web.views.EmailArchiveIndexView` with the authenticated admin user client."""
     response = admin_client.get(date_url(EmailArchiveIndexView))
 

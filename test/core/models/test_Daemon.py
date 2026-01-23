@@ -112,7 +112,7 @@ def test_Daemon_valid_fetching_criterion_constraint(faker, fake_daemon):
 
 
 @pytest.mark.django_db
-def test_Daemon_save_new(fake_mailbox):
+def test_Daemon_save__new(fake_mailbox):
     """Tests :func:`core.models.Correspondent.Correspondent.delete`
     in case the interval was changed.
     """
@@ -161,7 +161,7 @@ def test_Daemon_delete_celery_task_deletion(fake_daemon):
 
 
 @pytest.mark.django_db
-def test_Daemon_delete_no_celery_task(fake_daemon):
+def test_Daemon_delete__no_celery_task(fake_daemon):
     """Tests :func:`core.models.Correspondent.Correspondent.delete`
     in case there is a celery_task.
     """
@@ -172,7 +172,7 @@ def test_Daemon_delete_no_celery_task(fake_daemon):
 
 
 @pytest.mark.django_db
-def test_Daemon_test_success(mock_celery_app, fake_daemon):
+def test_Daemon_test__success(mock_celery_app, fake_daemon):
     """Tests :func:`core.models.Daemon.Daemon.test`
     in case of success.
     """
@@ -190,7 +190,7 @@ def test_Daemon_test_success(mock_celery_app, fake_daemon):
 @pytest.mark.parametrize(
     "error", [AssertionError, ValueError, MailAccountError, MailboxError]
 )
-def test_Daemon_test_failure(mock_celery_app, fake_daemon, error):
+def test_Daemon_test__failure(mock_celery_app, fake_daemon, error):
     """Tests :func:`core.models.Daemon.Daemon.test`
     in case of failure.
     """

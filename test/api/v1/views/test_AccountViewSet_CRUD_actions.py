@@ -34,7 +34,7 @@ def auto_mock_Account_test(mock_Account_test):
 
 
 @pytest.mark.django_db
-def test_list_noauth(fake_account, noauth_api_client, list_url):
+def test_list__noauth(fake_account, noauth_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.AccountViewSet`
     with an unauthenticated user client.
     """
@@ -45,7 +45,7 @@ def test_list_noauth(fake_account, noauth_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(fake_account, other_api_client, list_url):
+def test_list__auth_other(fake_account, other_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated other user client.
     """
@@ -57,7 +57,7 @@ def test_list_auth_other(fake_account, other_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(fake_account, owner_api_client, list_url):
+def test_list__auth_owner(fake_account, owner_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated owner user client.
     """
@@ -70,7 +70,7 @@ def test_list_auth_owner(fake_account, owner_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_admin(fake_account, admin_api_client, list_url):
+def test_list__auth_admin(fake_account, admin_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated admin user client.
     """
@@ -82,7 +82,7 @@ def test_list_auth_admin(fake_account, admin_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_account, noauth_api_client, detail_url):
+def test_get__noauth(fake_account, noauth_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.AccountViewSet`
     with an unauthenticated user client.
     """
@@ -93,7 +93,7 @@ def test_get_noauth(fake_account, noauth_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_account, other_api_client, detail_url):
+def test_get__auth_other(fake_account, other_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated other user client.
     """
@@ -104,7 +104,7 @@ def test_get_auth_other(fake_account, other_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_account, owner_api_client, detail_url):
+def test_get__auth_owner(fake_account, owner_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated owner user client.
     """
@@ -116,7 +116,7 @@ def test_get_auth_owner(fake_account, owner_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_account, admin_api_client, detail_url):
+def test_get__auth_admin(fake_account, admin_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated admin user client.
     """
@@ -127,7 +127,7 @@ def test_get_auth_admin(fake_account, admin_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(fake_account, noauth_api_client, account_payload, detail_url):
+def test_patch__noauth(fake_account, noauth_api_client, account_payload, detail_url):
     """Tests the `patch` method on :class:`api.v1.views.AccountViewSet`
     with an unauthenticated user client.
     """
@@ -144,7 +144,7 @@ def test_patch_noauth(fake_account, noauth_api_client, account_payload, detail_u
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(fake_account, other_api_client, account_payload, detail_url):
+def test_patch__auth_other(fake_account, other_api_client, account_payload, detail_url):
     """Tests the `patch` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated other user client.
     """
@@ -161,7 +161,7 @@ def test_patch_auth_other(fake_account, other_api_client, account_payload, detai
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(fake_account, owner_api_client, account_payload, detail_url):
+def test_patch__auth_owner(fake_account, owner_api_client, account_payload, detail_url):
     """Tests the `patch` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated owner user client.
     """
@@ -178,7 +178,7 @@ def test_patch_auth_owner(fake_account, owner_api_client, account_payload, detai
 
 
 @pytest.mark.django_db
-def test_patch_auth_admin(fake_account, admin_api_client, account_payload, detail_url):
+def test_patch__auth_admin(fake_account, admin_api_client, account_payload, detail_url):
     """Tests the `patch` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated admin user client.
     """
@@ -195,7 +195,7 @@ def test_patch_auth_admin(fake_account, admin_api_client, account_payload, detai
 
 
 @pytest.mark.django_db
-def test_put_noauth(fake_account, noauth_api_client, account_payload, detail_url):
+def test_put__noauth(fake_account, noauth_api_client, account_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.AccountViewSet`
     with an unauthenticated user client.
     """
@@ -211,7 +211,7 @@ def test_put_noauth(fake_account, noauth_api_client, account_payload, detail_url
 
 
 @pytest.mark.django_db
-def test_put_auth_other(fake_account, other_api_client, account_payload, detail_url):
+def test_put__auth_other(fake_account, other_api_client, account_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated other user client.
     """
@@ -227,7 +227,7 @@ def test_put_auth_other(fake_account, other_api_client, account_payload, detail_
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(fake_account, owner_api_client, account_payload, detail_url):
+def test_put__auth_owner(fake_account, owner_api_client, account_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated owner user client.
     """
@@ -243,7 +243,7 @@ def test_put_auth_owner(fake_account, owner_api_client, account_payload, detail_
 
 
 @pytest.mark.django_db
-def test_put_auth_admin(fake_account, admin_api_client, account_payload, detail_url):
+def test_put__auth_admin(fake_account, admin_api_client, account_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated admin user client.
     """
@@ -259,7 +259,7 @@ def test_put_auth_admin(fake_account, admin_api_client, account_payload, detail_
 
 
 @pytest.mark.django_db
-def test_post_noauth(
+def test_post__noauth(
     noauth_api_client, account_payload, mock_Account_update_mailboxes, list_url
 ):
     """Tests the `post` method on :class:`api.v1.views.AccountViewSet`
@@ -276,7 +276,7 @@ def test_post_noauth(
 
 
 @pytest.mark.django_db
-def test_post_auth_other(
+def test_post__auth_other(
     other_user,
     other_api_client,
     account_payload,
@@ -298,7 +298,7 @@ def test_post_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(
+def test_post__auth_owner(
     owner_user,
     owner_api_client,
     account_payload,
@@ -320,7 +320,7 @@ def test_post_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_duplicate_auth_owner(
+def test_post__duplicate__auth_owner(
     fake_account, owner_api_client, mock_Account_update_mailboxes, list_url
 ):
     """Tests the post method on :class:`api.v1.views.AccountViewSet` with the authenticated owner user client and duplicate data."""
@@ -330,12 +330,12 @@ def test_post_duplicate_auth_owner(
 
     response = owner_api_client.post(list_url(AccountViewSet), data=clean_payload)
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400__bad_REQUEST
     mock_Account_update_mailboxes.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_post_auth_admin(
+def test_post__auth_admin(
     admin_user,
     admin_api_client,
     account_payload,
@@ -357,7 +357,7 @@ def test_post_auth_admin(
 
 
 @pytest.mark.django_db
-def test_delete_noauth(fake_account, noauth_api_client, detail_url):
+def test_delete__noauth(fake_account, noauth_api_client, detail_url):
     """Tests the delete method on :class:`api.v1.views.AccountViewSet` with an unauthenticated user client."""
     response = noauth_api_client.delete(detail_url(AccountViewSet, fake_account))
 
@@ -367,7 +367,7 @@ def test_delete_noauth(fake_account, noauth_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_other(fake_account, other_api_client, detail_url):
+def test_delete__auth_other(fake_account, other_api_client, detail_url):
     """Tests the `delete` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated other user client.
     """
@@ -379,7 +379,7 @@ def test_delete_auth_other(fake_account, other_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_owner(fake_account, owner_api_client, detail_url):
+def test_delete__auth_owner(fake_account, owner_api_client, detail_url):
     """Tests the `delete` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated owner user client.
     """
@@ -391,7 +391,7 @@ def test_delete_auth_owner(fake_account, owner_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_admin(fake_account, admin_api_client, detail_url):
+def test_delete__auth_admin(fake_account, admin_api_client, detail_url):
     """Tests the `delete` method on :class:`api.v1.views.AccountViewSet`
     with the authenticated admin user client.
     """

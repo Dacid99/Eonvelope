@@ -103,7 +103,7 @@ def test_Correspondent_unique_together_constraint(fake_correspondent):
 
 
 @pytest.mark.django_db
-def test_Correspondent_share_to_nextcloud_success(
+def test_Correspondent_share_to_nextcloud__success(
     faker, fake_correspondent, mock_logger, mock_httpx_put
 ):
     """Tests :func:`core.models.Correspondent.Correspondent.share_to_nextcloud`
@@ -146,7 +146,7 @@ def test_Correspondent_share_to_nextcloud_success(
 
 
 @pytest.mark.django_db
-def test_Correspondent_share_to_nextcloud_no_password(
+def test_Correspondent_share_to_nextcloud__no_password(
     faker, fake_correspondent, mock_logger, mock_httpx_put
 ):
     """Tests :func:`core.models.Correspondent.Correspondent.share_to_nextcloud`
@@ -166,7 +166,7 @@ def test_Correspondent_share_to_nextcloud_no_password(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("nextcloud_url", ["test.org", "smb://100.200.051.421", ""])
-def test_Correspondent_share_to_nextcloud_error_request_setup(
+def test_Correspondent_share_to_nextcloud__request_setup_error(
     fake_correspondent, mock_logger, nextcloud_url
 ):
     """Tests :func:`core.models.Correspondent.Correspondent.share_to_nextcloud`
@@ -183,7 +183,7 @@ def test_Correspondent_share_to_nextcloud_error_request_setup(
 
 
 @pytest.mark.django_db
-def test_Correspondent_share_to_nextcloud_error_request(
+def test_Correspondent_share_to_nextcloud__request_error(
     fake_error_message,
     fake_correspondent,
     mock_logger,
@@ -230,7 +230,7 @@ def test_Correspondent_share_to_nextcloud_unauthorized(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("status_code", [400, 500, 300])
-def test_Correspondent_share_to_nextcloud_error_status(
+def test_Correspondent_share_to_nextcloud__status_error(
     fake_error_message,
     fake_correspondent,
     mock_httpx_put,
@@ -345,7 +345,7 @@ def test_Correspondent_queryset_as_file(fake_correspondent):
 
 
 @pytest.mark.django_db
-def test_Correspondent_create_from_correspondent_tuple_success(
+def test_Correspondent_create_from_correspondent_tuple__success(
     fake_correspondent_tuple, owner_user
 ):
     """Tests :func:`core.models.Correspondent.Correspondent.create_from_correspondent_tuple`
@@ -366,7 +366,7 @@ def test_Correspondent_create_from_correspondent_tuple_success(
 
 
 @pytest.mark.django_db
-def test_Correspondent_create_from_correspondent_tuple_success_unstripped_address(
+def test_Correspondent_create_from_correspondent_tuple__success__unstripped_address(
     fake_correspondent_tuple, owner_user
 ):
     """Tests :func:`core.models.Correspondent.Correspondent.create_from_correspondent_tuple`
@@ -391,7 +391,7 @@ def test_Correspondent_create_from_correspondent_tuple_success_unstripped_addres
 
 
 @pytest.mark.django_db
-def test_Correspondent_create_from_correspondent_tuple_duplicate(
+def test_Correspondent_create_from_correspondent_tuple__duplicate(
     fake_correspondent, fake_correspondent_tuple
 ):
     """Tests :func:`core.models.Correspondent.Correspondent.create_from_correspondent_tuple`
@@ -414,7 +414,7 @@ def test_Correspondent_create_from_correspondent_tuple_duplicate(
 
 
 @pytest.mark.django_db
-def test_Correspondent_create_from_correspondent_tuple_no_address(
+def test_Correspondent_create_from_correspondent_tuple__no_address(
     mock_logger, fake_correspondent_tuple, owner_user
 ):
     """Tests :func:`core.models.Correspondent.Correspondent.create_from_correspondent_tuple`

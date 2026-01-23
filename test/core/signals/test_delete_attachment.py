@@ -25,7 +25,7 @@ from core.models import Attachment
 
 
 @pytest.mark.django_db
-def test_delete_attachment_no_file(fake_attachment):
+def test_delete_attachment__no_file(fake_attachment):
     """Test individual deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is not set.
     """
@@ -38,7 +38,7 @@ def test_delete_attachment_no_file(fake_attachment):
 
 
 @pytest.mark.django_db
-def test_delete_attachment_with_file(fake_attachment_with_file):
+def test_delete_attachment__with_file(fake_attachment_with_file):
     """Test individual deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is set.
     """
@@ -54,7 +54,7 @@ def test_delete_attachment_with_file(fake_attachment_with_file):
 
 
 @pytest.mark.django_db
-def test_cascade_delete_attachment_with_file(fake_attachment_with_file, fake_mailbox):
+def test_cascade_delete_attachment__with_file(fake_attachment_with_file, fake_mailbox):
     """Test cascade deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is set.
     """
@@ -68,7 +68,7 @@ def test_cascade_delete_attachment_with_file(fake_attachment_with_file, fake_mai
 
 
 @pytest.mark.django_db
-def test_bulk_delete_attachment_with_file(fake_attachment_with_file):
+def test_bulk_delete_attachment__with_file(fake_attachment_with_file):
     """Test bulk deletion of an :class:`core.models.Attachment` instance
     in case its `file_path` is not set.
     """

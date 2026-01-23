@@ -46,7 +46,7 @@ def mock_Account_get_test_email_fetcher(
 
 
 @pytest.mark.django_db
-def test_fetch_emails_task_success(
+def test_fetch_emails_task__success(
     fake_fs,
     fake_daemon,
 ):
@@ -64,7 +64,7 @@ def test_fetch_emails_task_success(
 
 
 @pytest.mark.django_db
-def test_fetch_emails_task_bad_daemon_uuid(faker, fake_daemon):
+def test_fetch_emails_task__bad_daemon_uuid(faker, fake_daemon):
     """Tests :func:`core.tasks.fetch_emails`
     in case the given uuid doesn't match any daemon entry.
     """
@@ -121,7 +121,7 @@ def test_fetch_emails_task_MailAccountError(
 
 
 @pytest.mark.django_db
-def test_fetch_emails_task_unexpected_error(
+def test_fetch_emails_task__unexpected_error(
     fake_error_message, fake_daemon, mock_test_email_fetcher
 ):
     """Tests :func:`core.tasks.fetch_emails`

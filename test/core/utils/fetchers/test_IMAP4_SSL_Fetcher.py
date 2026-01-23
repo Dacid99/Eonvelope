@@ -62,7 +62,7 @@ def mock_IMAP4_SSL(mocker, faker):
         None,
     ],
 )
-def test_IMAP4Fetcher_connect_to_host_success(
+def test_IMAP4Fetcher_connect_to_host__success(
     imap_ssl_mailbox,
     mock_ssl_create_default_context,
     mock_logger,

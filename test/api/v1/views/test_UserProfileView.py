@@ -28,7 +28,7 @@ from api.v1.views import UserProfileView
 
 
 @pytest.mark.django_db
-def test_get_noauth(noauth_api_client, url):
+def test_get__noauth(noauth_api_client, url):
     """Tests the `get` method on :class:`api.v1.views.UserProfileView`
     with an unauthenticated user client.
     """
@@ -39,7 +39,7 @@ def test_get_noauth(noauth_api_client, url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_api_client, url):
+def test_get__auth_other(other_api_client, url):
     """Tests the `get` method on :class:`api.v1.views.UserProfileView`
     with the authenticated other user client.
     """
@@ -55,7 +55,7 @@ def test_get_auth_other(other_api_client, url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_api_client, url):
+def test_get__auth_owner(owner_api_client, url):
     """Tests the `get` method on :class:`api.v1.views.UserProfileView`
     with the authenticated owner user client.
     """
@@ -71,7 +71,7 @@ def test_get_auth_owner(owner_api_client, url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_api_client, url):
+def test_get__auth_admin(admin_api_client, url):
     """Tests the `get` method on :class:`api.v1.views.UserProfileView`
     with the authenticated admin user client.
     """
@@ -87,7 +87,7 @@ def test_get_auth_admin(admin_api_client, url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(noauth_api_client, profile_payload, url):
+def test_patch__noauth(noauth_api_client, profile_payload, url):
     """Tests the `patch` method on :class:`api.v1.views.UserProfileView`
     with an unauthenticated user client.
     """
@@ -99,7 +99,7 @@ def test_patch_noauth(noauth_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(other_api_client, profile_payload, url):
+def test_patch__auth_other(other_api_client, profile_payload, url):
     """Tests the `patch` method on :class:`api.v1.views.UserProfileView`
     with the authenticated other user client.
     """
@@ -121,7 +121,7 @@ def test_patch_auth_other(other_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(owner_api_client, profile_payload, url):
+def test_patch__auth_owner(owner_api_client, profile_payload, url):
     """Tests the `patch` method on :class:`api.v1.views.UserProfileView`
     with the authenticated owner user client.
     """
@@ -143,7 +143,7 @@ def test_patch_auth_owner(owner_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
-def test_patch_auth_admin(admin_api_client, profile_payload, url):
+def test_patch__auth_admin(admin_api_client, profile_payload, url):
     """Tests the `patch` method on :class:`api.v1.views.UserProfileView`
     with the authenticated admin user client.
     """
@@ -165,7 +165,7 @@ def test_patch_auth_admin(admin_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
-def test_put_noauth(noauth_api_client, profile_payload, url):
+def test_put__noauth(noauth_api_client, profile_payload, url):
     """Tests the `put` method on :class:`api.v1.views.UserProfileView`
     with an unauthenticated user client.
     """
@@ -177,7 +177,7 @@ def test_put_noauth(noauth_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
-def test_put_auth_other(other_api_client, profile_payload, url):
+def test_put__auth_other(other_api_client, profile_payload, url):
     """Tests the `put` method on :class:`api.v1.views.UserProfileView`
     with the authenticated other user client.
     """
@@ -195,7 +195,7 @@ def test_put_auth_other(other_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(owner_api_client, profile_payload, url):
+def test_put__auth_owner(owner_api_client, profile_payload, url):
     """Tests the `put` method on :class:`api.v1.views.UserProfileView`
     with the authenticated owner user client.
     """
@@ -213,7 +213,7 @@ def test_put_auth_owner(owner_api_client, profile_payload, url):
 
 
 @pytest.mark.django_db
-def test_put_auth_admin(admin_api_client, profile_payload, url):
+def test_put__auth_admin(admin_api_client, profile_payload, url):
     """Tests the `put` method on :class:`api.v1.views.UserProfileView`
     with the authenticated admin user client.
     """

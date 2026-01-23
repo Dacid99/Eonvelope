@@ -39,7 +39,7 @@ def file_payload(faker, fake_file):
     "file_format",
     SupportedEmailUploadFormats.values,
 )
-def test_post_success(file_payload, file_format):
+def test_post__success(file_payload, file_format):
     """Tests post direction of :class:`web.forms.UploadEmailForm`
     in case of success.
     """
@@ -48,7 +48,7 @@ def test_post_success(file_payload, file_format):
     assert form.is_valid()
 
 
-def test_post_bad_format(file_payload):
+def test_post__bad_format(file_payload):
     """Tests post direction of :class:`web.forms.UploadEmailForm`
     in case of the file_format is unsupported.
     """
@@ -57,7 +57,7 @@ def test_post_bad_format(file_payload):
     assert not form.is_valid()
 
 
-def test_post_bad_file():
+def test_post__bad_file():
     """Tests post direction of :class:`web.forms.UploadEmailForm`
     in case of no file.
     """

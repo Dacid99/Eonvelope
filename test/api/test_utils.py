@@ -80,7 +80,7 @@ def test_csv_query_param_to_typed_list(query_param, expected_list):
     "invalid_query_param",
     ["xyz", "7dy4", "9.5", "4e5", "tyu,5"],
 )
-def test_csv_query_param_to_typed_list_invalid(invalid_query_param):
+def test_csv_query_param_to_typed_list__invalid(invalid_query_param):
     """Tests :func:`api.v1.utils.csv_query_param_to_typed_list` in case of an invalid query_param."""
     with pytest.raises(ValueError, match=invalid_query_param):
         csv_query_param_to_typed_list(invalid_query_param, int)

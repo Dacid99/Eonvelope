@@ -36,7 +36,7 @@ def test_get_available_timezones_tag():
     assert context["TIMEZONES"] == sorted(zoneinfo.available_timezones())
 
 
-def test_get_available_timezones_tag_syntax_error():
+def test_get_available_timezones_tag__syntax_error():
     """Tests the :func:`eonvelope.templatetags.get_available_timezones`
     in case of a syntax error in the template.
     """

@@ -96,7 +96,7 @@ def test_POP3Fetcher___init___connection_error(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher___init___bad_protocol(
+def test_POP3Fetcher___init____bad_protocol(
     mocker, pop3_mailbox, mock_logger, mock_POP3
 ):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.__init__`
@@ -156,7 +156,7 @@ def test_POP3Fetcher___init__login_exception(
 @pytest.mark.parametrize(
     "raising_function, expected_calls", [("user", (1, 0)), ("pass_", (1, 1))]
 )
-def test_POP3Fetcher___init__login_bad_response(
+def test_POP3Fetcher___init__login__bad_response(
     mocker,
     fake_error_message,
     pop3_mailbox,
@@ -193,7 +193,7 @@ def test_POP3Fetcher___init__login_bad_response(
     "mail_host_port",
     [123, None],
 )
-def test_POP3Fetcher_connect_to_host_success(
+def test_POP3Fetcher_connect_to_host__success(
     pop3_mailbox, mock_logger, mock_POP3, mail_host_port
 ):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.connect_to_host`
@@ -240,7 +240,7 @@ def test_POP3Fetcher_connect_to_host_exception(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_test_account_success(pop3_mailbox, mock_logger, mock_POP3):
+def test_POP3Fetcher_test_account__success(pop3_mailbox, mock_logger, mock_POP3):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.test`
     in case of success with no mailbox given.
     """
@@ -254,7 +254,7 @@ def test_POP3Fetcher_test_account_success(pop3_mailbox, mock_logger, mock_POP3):
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_test_account_bad_response(
+def test_POP3Fetcher_test_account__bad_response(
     fake_error_message, pop3_mailbox, mock_logger, mock_POP3
 ):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.test`
@@ -290,7 +290,7 @@ def test_POP3Fetcher_test_account_exception(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_test_mailbox_success(pop3_mailbox, mock_logger, mock_POP3):
+def test_POP3Fetcher_test_mailbox__success(pop3_mailbox, mock_logger, mock_POP3):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.test`
     in case of success with a mailbox given.
     """
@@ -321,7 +321,7 @@ def test_POP3Fetcher_test_mailbox_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_test_mailbox_bad_response(
+def test_POP3Fetcher_test_mailbox__bad_response(
     fake_error_message, pop3_mailbox, mock_logger, mock_POP3
 ):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.test`
@@ -359,7 +359,9 @@ def test_POP3Fetcher_test_mailbox_exception(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetch_emails_success(mocker, pop3_mailbox, mock_logger, mock_POP3):
+def test_POP3Fetcher_fetch_emails__success(
+    mocker, pop3_mailbox, mock_logger, mock_POP3
+):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.fetch_emails`
     in case of success.
     """
@@ -398,7 +400,7 @@ def test_POP3Fetcher_fetch_emails_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetch_emails_bad_criterion(pop3_mailbox, mock_logger):
+def test_POP3Fetcher_fetch_emails__bad_criterion(pop3_mailbox, mock_logger):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.fetch_emails`
     in case of an unavailable criterion.
     """
@@ -409,7 +411,7 @@ def test_POP3Fetcher_fetch_emails_bad_criterion(pop3_mailbox, mock_logger):
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetch_emails_bad_response(
+def test_POP3Fetcher_fetch_emails__bad_response(
     fake_error_message, pop3_mailbox, mock_logger, mock_POP3
 ):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.fetch_emails`
@@ -447,7 +449,7 @@ def test_POP3Fetcher_fetch_emails_exception(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetch_emails_bad_response_ignored(
+def test_POP3Fetcher_fetch_emails__bad_response__ignored(
     mocker, pop3_mailbox, mock_logger, mock_POP3
 ):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.fetch_emails`
@@ -472,7 +474,7 @@ def test_POP3Fetcher_fetch_emails_bad_response_ignored(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_fetch_emails_exception_ignored(
+def test_POP3Fetcher_fetch_emails_exception__ignored(
     mocker, pop3_mailbox, mock_logger, mock_POP3
 ):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.fetch_emails`
@@ -524,7 +526,7 @@ def test_POP3Fetcher_restore_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_close_success(pop3_mailbox, mock_logger, mock_POP3):
+def test_POP3Fetcher_close__success(pop3_mailbox, mock_logger, mock_POP3):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.close`
     in case of success.
     """
@@ -537,7 +539,7 @@ def test_POP3Fetcher_close_success(pop3_mailbox, mock_logger, mock_POP3):
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_close_bad_response(pop3_mailbox, mock_logger, mock_POP3):
+def test_POP3Fetcher_close__bad_response(pop3_mailbox, mock_logger, mock_POP3):
     """Tests :func:`core.utils.fetchers.POP3Fetcher.close`
     in case of a bad response.
     """

@@ -58,7 +58,7 @@ def test_post(owner_user, profile_payload):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_protocol", ["ftp://", "ftps://", "other://"])
-def test_post_bad_paperless_url_protocol(
+def test_post__bad_paperless_url_protocol(
     faker, owner_user, profile_payload, bad_protocol
 ):
     """Tests post direction of :class:`web.forms.UserProfileForm`."""

@@ -32,7 +32,7 @@ from web.views.attachment_views.AttachmentDetailWithDeleteView import (
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_attachment, client, detail_url, login_url):
+def test_get__noauth(fake_attachment, client, detail_url, login_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(AttachmentDetailWithDeleteView, fake_attachment))
 
@@ -46,7 +46,7 @@ def test_get_noauth(fake_attachment, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_attachment, other_client, detail_url):
+def test_get__auth_other(fake_attachment, other_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment)
@@ -58,7 +58,7 @@ def test_get_auth_other(fake_attachment, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_attachment, owner_client, detail_url):
+def test_get__auth_owner(fake_attachment, owner_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment)
@@ -75,7 +75,7 @@ def test_get_auth_owner(fake_attachment, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_attachment, admin_client, detail_url):
+def test_get__auth_admin(fake_attachment, admin_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.get(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment)
@@ -87,7 +87,7 @@ def test_get_auth_admin(fake_attachment, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
+def test_post_delete__noauth(fake_attachment, client, detail_url, login_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment),
@@ -105,7 +105,7 @@ def test_post_delete_noauth(fake_attachment, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_other(fake_attachment, other_client, detail_url):
+def test_post_delete__auth_other(fake_attachment, other_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment),
@@ -119,7 +119,7 @@ def test_post_delete_auth_other(fake_attachment, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_owner(fake_attachment, owner_client, detail_url):
+def test_post_delete__auth_owner(fake_attachment, owner_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment),
@@ -134,7 +134,7 @@ def test_post_delete_auth_owner(fake_attachment, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_admin(fake_attachment, admin_client, detail_url):
+def test_post_delete__auth_admin(fake_attachment, admin_client, detail_url):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.post(
         detail_url(AttachmentDetailWithDeleteView, fake_attachment),
@@ -148,7 +148,7 @@ def test_post_delete_auth_admin(fake_attachment, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_share_to_paperless_noauth(
+def test_post_share_to_paperless__noauth(
     fake_attachment, client, detail_url, login_url, mock_Attachment_share_to_paperless
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
@@ -167,7 +167,7 @@ def test_post_share_to_paperless_noauth(
 
 
 @pytest.mark.django_db
-def test_post_share_to_paperless_auth_other(
+def test_post_share_to_paperless__auth_other(
     fake_attachment, other_client, detail_url, mock_Attachment_share_to_paperless
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
@@ -182,7 +182,7 @@ def test_post_share_to_paperless_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_share_to_paperless_success_auth_owner(
+def test_post_share_to_paperless__success__auth_owner(
     fake_attachment, owner_client, detail_url, mock_Attachment_share_to_paperless
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client
@@ -218,7 +218,7 @@ def test_post_share_to_paperless_success_auth_owner(
         RuntimeError,
     ],
 )
-def test_post_share_to_paperless_failure_auth_owner(
+def test_post_share_to_paperless__failure__auth_owner(
     fake_error_message,
     fake_attachment,
     owner_client,
@@ -252,7 +252,7 @@ def test_post_share_to_paperless_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_share_to_paperless_missing_action_auth_owner(
+def test_post_share_to_paperless__missing_action__auth_owner(
     fake_attachment, owner_client, detail_url, mock_Attachment_share_to_paperless
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client
@@ -268,7 +268,7 @@ def test_post_share_to_paperless_missing_action_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_share_to_paperless_auth_admin(
+def test_post_share_to_paperless__auth_admin(
     fake_attachment, admin_client, detail_url, mock_Attachment_share_to_paperless
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""
@@ -283,7 +283,7 @@ def test_post_share_to_paperless_auth_admin(
 
 
 @pytest.mark.django_db
-def test_post_share_to_immich_noauth(
+def test_post_share_to_immich__noauth(
     fake_attachment, client, detail_url, login_url, mock_Attachment_share_to_immich
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with an unauthenticated user client."""
@@ -302,7 +302,7 @@ def test_post_share_to_immich_noauth(
 
 
 @pytest.mark.django_db
-def test_post_share_to_immich_auth_other(
+def test_post_share_to_immich__auth_other(
     fake_attachment, other_client, detail_url, mock_Attachment_share_to_immich
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated other user client."""
@@ -317,7 +317,7 @@ def test_post_share_to_immich_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_share_to_immich_success_auth_owner(
+def test_post_share_to_immich__success__auth_owner(
     fake_attachment, owner_client, detail_url, mock_Attachment_share_to_immich
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client
@@ -353,7 +353,7 @@ def test_post_share_to_immich_success_auth_owner(
         RuntimeError,
     ],
 )
-def test_post_share_to_immich_failure_auth_owner(
+def test_post_share_to_immich__failure__auth_owner(
     fake_error_message,
     fake_attachment,
     owner_client,
@@ -387,7 +387,7 @@ def test_post_share_to_immich_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_share_to_immich_missing_action_auth_owner(
+def test_post_share_to_immich__missing_action__auth_owner(
     fake_attachment, owner_client, detail_url, mock_Attachment_share_to_immich
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated owner user client
@@ -403,7 +403,7 @@ def test_post_share_to_immich_missing_action_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_share_missing_value_auth_owner(
+def test_post_share__missing_value__auth_owner(
     fake_attachment,
     owner_client,
     detail_url,
@@ -424,7 +424,7 @@ def test_post_share_missing_value_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_share_to_immich_auth_admin(
+def test_post_share_to_immich__auth_admin(
     fake_attachment, admin_client, detail_url, mock_Attachment_share_to_immich
 ):
     """Tests :class:`web.views.AttachmentDetailWithDeleteView` with the authenticated admin user client."""

@@ -27,7 +27,7 @@ from web.views import AccountEmailsFilterView
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_account, client, detail_url, login_url):
+def test_get__noauth(fake_account, client, detail_url, login_url):
     """Tests :class:`web.views.AccountEmailsFilterView` with an unauthenticated user client."""
     response = client.get(detail_url(AccountEmailsFilterView, fake_account))
 
@@ -40,7 +40,7 @@ def test_get_noauth(fake_account, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_account, other_client, detail_url):
+def test_get__auth_other(fake_account, other_client, detail_url):
     """Tests :class:`web.views.AccountEmailsFilterView` with the authenticated other user client."""
     response = other_client.get(detail_url(AccountEmailsFilterView, fake_account))
 
@@ -50,7 +50,7 @@ def test_get_auth_other(fake_account, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_account, owner_client, detail_url):
+def test_get__auth_owner(fake_account, owner_client, detail_url):
     """Tests :class:`web.views.AccountEmailsFilterView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(AccountEmailsFilterView, fake_account))
 
@@ -67,7 +67,7 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_account, admin_client, detail_url):
+def test_get__auth_admin(fake_account, admin_client, detail_url):
     """Tests :class:`web.views.AccountEmailsFilterView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(AccountEmailsFilterView, fake_account))
 

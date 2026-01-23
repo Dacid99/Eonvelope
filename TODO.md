@@ -23,7 +23,6 @@
 
 - safeimap and pop classes
 - rework test:
-  - disable all signals in tests
   - tests more implementation agnostic
   - use more of the unittest api
   - streamline serializer and form tests
@@ -31,7 +30,6 @@
 - split up long functions that are marked as too complex by ruff
 - make all filepaths pathlib.Paths
 - compress fetchingcriterion logic into a class
-- rewrite test_names using __ to make them more readable
 
 ## To test
 

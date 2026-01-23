@@ -137,7 +137,7 @@ def test_IMAP4Fetcher_make_fetching_criterion_sentsince():
         (EmailFetchingCriterionChoices.UNANSWERED, "UNANSWERED"),
     ],
 )
-def test_IMAP4Fetcher_make_fetching_criterion_criterion_no_arg(
+def test_IMAP4Fetcher_make_fetching_criterion_criterion__no_arg(
     criterion_name, expected_result
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.make_fetching_query`
@@ -212,7 +212,7 @@ def test_IMAP4Fetcher___init___connection_error(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher___init___bad_protocol(
+def test_IMAP4Fetcher___init____bad_protocol(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.__init__`
@@ -252,7 +252,7 @@ def test_IMAP4Fetcher___init___login_error(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher___init___login_bad_response(
+def test_IMAP4Fetcher___init___login__bad_response(
     mocker, fake_error_message, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.__init__`
@@ -310,7 +310,7 @@ def test_IMAP4Fetcher___init__success_utf_8_credentials(
         None,
     ],
 )
-def test_IMAP4Fetcher_connect_to_host_success(
+def test_IMAP4Fetcher_connect_to_host__success(
     imap_mailbox, mock_logger, mock_IMAP4, mail_host_port
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.connect_to_host`
@@ -357,7 +357,7 @@ def test_IMAP4Fetcher_connect_to_host_exception(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_test_account_success(imap_mailbox, mock_logger, mock_IMAP4):
+def test_IMAP4Fetcher_test_account__success(imap_mailbox, mock_logger, mock_IMAP4):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with no mailbox given.
     """
@@ -371,7 +371,7 @@ def test_IMAP4Fetcher_test_account_success(imap_mailbox, mock_logger, mock_IMAP4
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_test_account_bad_response(
+def test_IMAP4Fetcher_test_account__bad_response(
     fake_error_message, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
@@ -407,7 +407,7 @@ def test_IMAP4Fetcher_test_account_exception(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_test_mailbox_success(imap_mailbox, mock_logger, mock_IMAP4):
+def test_IMAP4Fetcher_test_mailbox__success(imap_mailbox, mock_logger, mock_IMAP4):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with a mailbox given.
     """
@@ -445,7 +445,7 @@ def test_IMAP4Fetcher_test_mailbox_wrong_mailbox(
 @pytest.mark.parametrize(
     "raising_function, expected_calls", [("select", (1, 0)), ("check", (1, 1))]
 )
-def test_IMAP4Fetcher_test_mailbox_bad_response(
+def test_IMAP4Fetcher_test_mailbox__bad_response(
     fake_error_message,
     imap_mailbox,
     mock_logger,
@@ -514,7 +514,7 @@ def test_IMAP4Fetcher_test_mailbox_exception(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_test_mailbox_bad_response_ignored(
+def test_IMAP4Fetcher_test_mailbox__bad_response__ignored(
     imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
@@ -535,7 +535,7 @@ def test_IMAP4Fetcher_test_mailbox_bad_response_ignored(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_test_mailbox_exception_ignored(
+def test_IMAP4Fetcher_test_mailbox_exception__ignored(
     imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
@@ -555,7 +555,7 @@ def test_IMAP4Fetcher_test_mailbox_exception_ignored(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails_success_sort(
+def test_IMAP4Fetcher_fetch_emails__success__sort(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
@@ -587,7 +587,7 @@ def test_IMAP4Fetcher_fetch_emails_success_sort(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails_success_search(
+def test_IMAP4Fetcher_fetch_emails__success__search(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
@@ -633,7 +633,7 @@ def test_IMAP4Fetcher_fetch_emails_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails_bad_criterion(imap_mailbox, mock_logger):
+def test_IMAP4Fetcher_fetch_emails__bad_criterion(imap_mailbox, mock_logger):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
     in case of an unavailable criterion.
     """
@@ -647,7 +647,7 @@ def test_IMAP4Fetcher_fetch_emails_bad_criterion(imap_mailbox, mock_logger):
 @pytest.mark.parametrize(
     "raising_function, expected_calls", [("select", (1, 0)), ("uid", (1, 1))]
 )
-def test_IMAP4Fetcher_fetch_emails_bad_response(
+def test_IMAP4Fetcher_fetch_emails__bad_response(
     fake_error_message,
     imap_mailbox,
     mock_logger,
@@ -717,7 +717,7 @@ def test_IMAP4Fetcher_fetch_emails_exception(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails_bad_response_ignored(
+def test_IMAP4Fetcher_fetch_emails__bad_response__ignored(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
@@ -748,7 +748,7 @@ def test_IMAP4Fetcher_fetch_emails_bad_response_ignored(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails_exception_ignored(
+def test_IMAP4Fetcher_fetch_emails_exception__ignored(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
@@ -779,7 +779,7 @@ def test_IMAP4Fetcher_fetch_emails_exception_ignored(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_mailboxes_success(imap_mailbox, mock_logger, mock_IMAP4):
+def test_IMAP4Fetcher_fetch_mailboxes__success(imap_mailbox, mock_logger, mock_IMAP4):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_mailboxes`
     in case of success.
     """
@@ -799,7 +799,7 @@ def test_IMAP4Fetcher_fetch_mailboxes_success(imap_mailbox, mock_logger, mock_IM
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_mailboxes_bad_response(
+def test_IMAP4Fetcher_fetch_mailboxes__bad_response(
     fake_error_message, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_mailboxes`
@@ -835,7 +835,7 @@ def test_IMAP4Fetcher_fetch_mailboxes_exception(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_restore_success(
+def test_IMAP4Fetcher_restore__success(
     imap_mailbox, fake_email_with_file, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.restore`
@@ -853,7 +853,7 @@ def test_IMAP4Fetcher_restore_success(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_restore_no_file(
+def test_IMAP4Fetcher_restore__no_file(
     imap_mailbox, fake_email, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.restore`
@@ -888,7 +888,7 @@ def test_IMAP4Fetcher_restore_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_restore_bad_response(
+def test_IMAP4Fetcher_restore__bad_response(
     fake_error_message, imap_mailbox, fake_email_with_file, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.restore`
@@ -922,7 +922,7 @@ def test_IMAP4Fetcher_restore_exception(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_close_success(imap_mailbox, mock_logger, mock_IMAP4):
+def test_IMAP4Fetcher_close__success(imap_mailbox, mock_logger, mock_IMAP4):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.close`
     in case of success.
     """
@@ -935,7 +935,7 @@ def test_IMAP4Fetcher_close_success(imap_mailbox, mock_logger, mock_IMAP4):
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_close_bad_response(imap_mailbox, mock_logger, mock_IMAP4):
+def test_IMAP4Fetcher_close__bad_response(imap_mailbox, mock_logger, mock_IMAP4):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.close`
     in case of a bad response.
     """

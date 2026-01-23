@@ -107,7 +107,7 @@ def test_ToggleSignUpAdapter_is_open_for_signup_fallback(
         (False, False, False, False),
     ],
 )
-def test_ToggleSignUpPermissionClass_has_permission_noauth(
+def test_ToggleSignUpPermissionClass_has_permission__noauth(
     settings,
     override_config,
     django_user_model,
@@ -143,7 +143,7 @@ def test_ToggleSignUpPermissionClass_has_permission_noauth(
         (False, False, False, False),
     ],
 )
-def test_ToggleSignUpPermissionClass_has_permission_auth_user(
+def test_ToggleSignUpPermissionClass_has_permission__auth_user(
     settings,
     override_config,
     owner_user,
@@ -177,7 +177,7 @@ def test_ToggleSignUpPermissionClass_has_permission_auth_user(
         (False, False, False, True),
     ],
 )
-def test_ToggleSignUpPermissionClass_has_permission_auth_admin(
+def test_ToggleSignUpPermissionClass_has_permission__auth_admin(
     settings,
     override_config,
     admin_user,
@@ -208,7 +208,7 @@ def test_ToggleSignUpPermissionClass_has_permission_auth_admin(
         (False, False, False),
     ],
 )
-def test_ToggleSignUpPermissionClass_has_permission_fallback_noauth(
+def test_ToggleSignUpPermissionClass_has_permission_fallback__noauth(
     settings,
     override_config,
     django_user_model,
@@ -237,7 +237,7 @@ def test_ToggleSignUpPermissionClass_has_permission_fallback_noauth(
         (False, False, False),
     ],
 )
-def test_ToggleSignUpPermissionClass_has_permission_fallback_auth_user(
+def test_ToggleSignUpPermissionClass_has_permission_fallback__auth_user(
     settings,
     override_config,
     owner_user,
@@ -265,7 +265,7 @@ def test_ToggleSignUpPermissionClass_has_permission_fallback_auth_user(
         (False, False, True),
     ],
 )
-def test_ToggleSignUpPermissionClass_has_permission_fallback_auth_admin(
+def test_ToggleSignUpPermissionClass_has_permission_fallback__auth_admin(
     settings,
     override_config,
     admin_user,

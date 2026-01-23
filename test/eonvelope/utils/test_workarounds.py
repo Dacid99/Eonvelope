@@ -38,7 +38,7 @@ def mock_getattr(mocker):
     return mocker.patch("eonvelope.utils.workarounds.getattr")
 
 
-def test_get_config_success(monkeypatch, faker, mock_logger, mock_getattr):
+def test_get_config__success(monkeypatch, faker, mock_logger, mock_getattr):
     """Tests getting a constance value in case of success."""
     fake_config_default = faker.word()
     monkeypatch.setattr(
@@ -58,7 +58,7 @@ def test_get_config_success(monkeypatch, faker, mock_logger, mock_getattr):
     mock_logger.critical.assert_not_called()
 
 
-def test_get_config_workaround_success(monkeypatch, faker, mock_logger, mock_getattr):
+def test_get_config_workaround__success(monkeypatch, faker, mock_logger, mock_getattr):
     """Tests getting a constance value in case of success via the workaround."""
     fake_config_default = faker.word()
     monkeypatch.setattr(
@@ -78,7 +78,7 @@ def test_get_config_workaround_success(monkeypatch, faker, mock_logger, mock_get
     mock_logger.error.assert_not_called()
 
 
-def test_get_config_workaround_failure(monkeypatch, faker, mock_logger, mock_getattr):
+def test_get_config_workaround__failure(monkeypatch, faker, mock_logger, mock_getattr):
     """Tests getting a constance value in case of failure."""
     fake_config_default = faker.word()
     monkeypatch.setattr(

@@ -107,7 +107,7 @@ def test_EmailCorrespondent_unique_constraints(fake_emailcorrespondent):
         ("a <addr@sub.dom.tld>", [("a", "addr@sub.dom.tld")]),
     ],
 )
-def test_EmailCorrespondent_create_from_header_success(
+def test_EmailCorrespondent_create_from_header__success(
     fake_email, fake_header_name, header, expected_results
 ):
     """Tests :func:`core.models.EmailCorrespondent.EmailCorrespondent.create_from_header`
@@ -132,7 +132,7 @@ def test_EmailCorrespondent_create_from_header_success(
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent_create_from_header_no_correspondent(
+def test_EmailCorrespondent_create_from_header__no_correspondent(
     fake_email, fake_header_name
 ):
     """Tests :func:`core.models.EmailCorrespondent.EmailCorrespondent.create_from_header`
@@ -149,7 +149,9 @@ def test_EmailCorrespondent_create_from_header_no_correspondent(
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent_create_from_header_no_address(fake_email, fake_header_name):
+def test_EmailCorrespondent_create_from_header__no_address(
+    fake_email, fake_header_name
+):
     """Tests :func:`core.models.EmailCorrespondent.EmailCorrespondent.create_from_header`
     in case of the correspondent cannot be set up.
     """
@@ -164,7 +166,7 @@ def test_EmailCorrespondent_create_from_header_no_address(fake_email, fake_heade
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent_create_from_header_no_email(fake_header_name, faker):
+def test_EmailCorrespondent_create_from_header__no_email(fake_header_name, faker):
     """Tests :func:`core.models.EmailCorrespondent.EmailCorrespondent.create_from_header`
     in case the email argument is not in the database.
     """

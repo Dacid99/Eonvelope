@@ -135,7 +135,7 @@ def test_input(daemon_with_interval_payload, request_context):
 
 
 @pytest.mark.django_db
-def test_post_other_mailbox(
+def test_post__other_mailbox(
     fake_daemon,
     daemon_with_interval_payload,
     fake_other_mailbox,
@@ -153,7 +153,7 @@ def test_post_other_mailbox(
 
 
 @pytest.mark.django_db
-def test_post_unknown_mailbox(
+def test_post__unknown_mailbox(
     fake_daemon,
     daemon_with_interval_payload,
     request_context,
@@ -171,7 +171,7 @@ def test_post_unknown_mailbox(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_fetching_criterion", ["OTHER"])
-def test_post_bad_fetching_criterion(
+def test_post__bad_fetching_criterion(
     fake_daemon, daemon_with_interval_payload, request_context, bad_fetching_criterion
 ):
     """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
@@ -194,7 +194,7 @@ def test_post_bad_fetching_criterion(
         EmailFetchingCriterionChoices.UNANSWERED,
     ],
 )
-def test_post_unavailable_fetching_criterion(
+def test_post__unavailable_fetching_criterion(
     fake_daemon,
     daemon_with_interval_payload,
     request_context,
@@ -222,7 +222,7 @@ def test_post_unavailable_fetching_criterion(
         (EmailFetchingCriterionChoices.SMALLER, "-11"),
     ],
 )
-def test_post_bad_int_fetching_criterion_arg(
+def test_post__bad_int_fetching_criterion_arg(
     fake_daemon,
     daemon_with_interval_payload,
     request_context,
@@ -248,7 +248,7 @@ def test_post_bad_int_fetching_criterion_arg(
         EmailFetchingCriterionChoices.SENTSINCE,
     ],
 )
-def test_post_bad_date_fetching_criterion_arg(
+def test_post__bad_date_fetching_criterion_arg(
     fake_daemon,
     daemon_with_interval_payload,
     request_context,
@@ -274,7 +274,7 @@ def test_post_bad_date_fetching_criterion_arg(
         EmailFetchingCriterionChoices.SUBJECT,
     ],
 )
-def test_post_missing_fetching_criterion_arg(
+def test_post__missing_fetching_criterion_arg(
     fake_daemon,
     daemon_with_interval_payload,
     request_context,
@@ -294,7 +294,7 @@ def test_post_missing_fetching_criterion_arg(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_interval_period", ["other"])
-def test_post_bad_interval_period(
+def test_post__bad_interval_period(
     fake_daemon, daemon_with_interval_payload, request_context, bad_interval_period
 ):
     """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
@@ -310,7 +310,7 @@ def test_post_bad_interval_period(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_interval_every", [0, -1])
-def test_post_bad_interval_every(
+def test_post__bad_interval_every(
     fake_daemon, daemon_with_interval_payload, request_context, bad_interval_every
 ):
     """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer`."""
@@ -325,7 +325,7 @@ def test_post_bad_interval_every(
 
 
 @pytest.mark.django_db
-def test_update_new_interval(
+def test_update__new_interval(
     fake_daemon, daemon_with_interval_payload, request_context
 ):
     """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer` with new interval data."""
@@ -348,7 +348,7 @@ def test_update_new_interval(
 
 
 @pytest.mark.django_db
-def test_update_existing_interval(
+def test_update__existing_interval(
     fake_daemon, daemon_with_interval_payload, request_context
 ):
     """Tests post direction of :class:`api.v1.serializers.BaseDaemonSerializer` with interval data matching an existing db entry."""
@@ -377,7 +377,7 @@ def test_update_existing_interval(
 
 
 @pytest.mark.django_db
-def test_input_duplicate(fake_daemon, request_context):
+def test_input__duplicate(fake_daemon, request_context):
     """Tests input direction of :class:`api.v1.serializers.BaseAccountSerializer`."""
     payload = model_to_dict(fake_daemon)
     payload.pop("id")

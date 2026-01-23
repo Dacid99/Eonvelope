@@ -34,7 +34,7 @@ def auto_mock_Account_test(mock_Account_test):
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, list_url, login_url):
+def test_get__noauth(client, list_url, login_url):
     """Tests :class:`web.views.AccountCreateView` with an unauthenticated user client."""
     response = client.get(list_url(AccountCreateView))
 
@@ -45,7 +45,7 @@ def test_get_noauth(client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, list_url):
+def test_get__auth_other(other_client, list_url):
     """Tests :class:`web.views.AccountCreateView` with the authenticated other user client."""
     response = other_client.get(list_url(AccountCreateView))
 
@@ -58,7 +58,7 @@ def test_get_auth_other(other_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, list_url):
+def test_get__auth_owner(owner_client, list_url):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
     response = owner_client.get(list_url(AccountCreateView))
 
@@ -71,7 +71,7 @@ def test_get_auth_owner(owner_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, list_url):
+def test_get__auth_admin(admin_client, list_url):
     """Tests :class:`web.views.AccountCreateView` with the authenticated admin user client."""
     response = admin_client.get(list_url(AccountCreateView))
 
@@ -84,7 +84,7 @@ def test_get_auth_admin(admin_client, list_url):
 
 
 @pytest.mark.django_db
-def test_post_noauth(
+def test_post__noauth(
     account_payload, mock_Account_update_mailboxes, client, list_url, login_url
 ):
     """Tests :class:`web.views.AccountCreateView` with an unauthenticated user client."""
@@ -101,7 +101,7 @@ def test_post_noauth(
 
 
 @pytest.mark.django_db
-def test_post_auth_other(
+def test_post__auth_other(
     account_payload, other_user, mock_Account_update_mailboxes, other_client, list_url
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated other user client."""
@@ -123,7 +123,7 @@ def test_post_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_test_success(
+def test_post__auth_owner__test_success(
     account_payload, owner_user, mock_Account_update_mailboxes, owner_client, list_url
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
@@ -145,7 +145,7 @@ def test_post_auth_owner_test_success(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_test_failure(
+def test_post__auth_owner_test__failure(
     fake_error_message,
     account_payload,
     mock_Account_update_mailboxes,
@@ -171,7 +171,7 @@ def test_post_auth_owner_test_failure(
 
 
 @pytest.mark.django_db
-def test_post_duplicate_auth_owner(
+def test_post__duplicate__auth_owner(
     fake_account, account_payload, mock_Account_update_mailboxes, owner_client, list_url
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client
@@ -194,7 +194,7 @@ def test_post_duplicate_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_auth_admin(
+def test_post__auth_admin(
     account_payload, admin_user, mock_Account_update_mailboxes, admin_client, list_url
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated admin user client."""

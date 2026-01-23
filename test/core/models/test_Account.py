@@ -226,7 +226,7 @@ def test_Account_unique_constraints(mocker, django_user_model):
 
 
 @pytest.mark.django_db
-def test_Account_save_new(mocker, owner_user, mock_logger):
+def test_Account_save__new(mocker, owner_user, mock_logger):
     """Tests saving a :class:`core.models.Account.Account`
     in case it is not the db.
     """
@@ -245,7 +245,7 @@ def test_Account_save_new(mocker, owner_user, mock_logger):
 
 
 @pytest.mark.django_db
-def test_Account_save_old(mocker, fake_account, mock_logger):
+def test_Account_save__old(mocker, fake_account, mock_logger):
     """Tests saving a :class:`core.models.Account.Account`
     in case it is already in the db.
     """
@@ -263,7 +263,7 @@ def test_Account_save_old(mocker, fake_account, mock_logger):
 
 
 @pytest.mark.django_db
-def test_Account_save_autoupdate_error(
+def test_Account_save__autoupdate_error(
     mocker, fake_error_message, owner_user, mock_logger
 ):
     """Tests saving a :class:`core.models.Account.Account`
@@ -292,7 +292,7 @@ def test_Account_save_autoupdate_error(
         (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
-def test_Account_get_fetcher_success(
+def test_Account_get_fetcher__success(
     mocker, mock_logger, fake_account, protocol, expected_fetcher_class
 ):
     """Tests :func:`core.models.Account.Account.get_fetcher`
@@ -311,7 +311,7 @@ def test_Account_get_fetcher_success(
 
 
 @pytest.mark.django_db
-def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
+def test_Account_get_fetcher__bad_protocol(mock_logger, fake_account):
     """Tests :func:`core.models.Account.Account.get_fetcher`
     in case the account has a bad :attr:`core.models.Account.Account.protocol` field.
     """
@@ -339,7 +339,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
         (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
-def test_Account_get_fetcher_init_failure(
+def test_Account_get_fetcher_init__failure(
     mocker, mock_logger, fake_account, protocol, expected_fetcher_class
 ):
     """Tests :func:`core.models.Account.Account.get_fetcher`
@@ -373,7 +373,7 @@ def test_Account_get_fetcher_init_failure(
         (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
-def test_Account_get_fetcher_class_success(
+def test_Account_get_fetcher_class__success(
     fake_account, mock_logger, protocol, expected_fetcher_class
 ):
     """Tests :func:`core.models.Account.Account.get_fetcher_class`
@@ -388,7 +388,7 @@ def test_Account_get_fetcher_class_success(
 
 
 @pytest.mark.django_db
-def test_Account_get_fetcher_class_bad_protocol(fake_account, mock_logger):
+def test_Account_get_fetcher_class__bad_protocol(fake_account, mock_logger):
     """Tests :func:`core.models.Account.Account.get_fetcher_class`
     in case the account has a bad :attr:`core.models.Account.Account.protocol` field.
     """
@@ -425,7 +425,7 @@ def test_Account_test_success(
 
 
 @pytest.mark.django_db
-def test_Account_test_bad_protocol(
+def test_Account_test__bad_protocol(
     fake_error_message,
     fake_account,
     mock_logger,
@@ -446,7 +446,7 @@ def test_Account_test_bad_protocol(
 
 
 @pytest.mark.django_db
-def test_Account_test_failure(
+def test_Account_test__failure(
     fake_account, mock_logger, mock_fetcher, mock_Account_get_fetcher
 ):
     """Tests :func:`core.models.Account.Account.test`
@@ -467,7 +467,7 @@ def test_Account_test_failure(
 
 
 @pytest.mark.django_db
-def test_Account_test_get_fetcher_error(
+def test_Account_test__get_fetcher_error(
     fake_account, mock_logger, mock_Account_get_fetcher
 ):
     """Tests :func:`core.models.Account.Account.test`
@@ -489,7 +489,7 @@ def test_Account_test_get_fetcher_error(
 
 
 @pytest.mark.django_db
-def test_Account_update_mailboxes_success(
+def test_Account_update_mailboxes__success(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -518,7 +518,7 @@ def test_Account_update_mailboxes_success(
 
 
 @pytest.mark.django_db(transaction=True)
-def test_Account_update_mailboxes_duplicate(
+def test_Account_update_mailboxes__duplicate(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -548,7 +548,7 @@ def test_Account_update_mailboxes_duplicate(
 
 
 @pytest.mark.django_db
-def test_Account_update_mailboxes_failure(
+def test_Account_update_mailboxes__failure(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -575,7 +575,7 @@ def test_Account_update_mailboxes_failure(
 
 
 @pytest.mark.django_db
-def test_Account_update_mailboxes_get_fetcher_error(
+def test_Account_update_mailboxes__get_fetcher_error(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -612,7 +612,7 @@ def test_Account_update_mailboxes_get_fetcher_error(
         EmailProtocolChoices.EXCHANGE,
     ],
 )
-def test_Account_add_daemons_success(faker, override_config, fake_account, protocol):
+def test_Account_add_daemons__success(faker, override_config, fake_account, protocol):
     """Tests :func:`core.models.Account.Account.add_daemons`
     in case of success.
     """
@@ -657,7 +657,7 @@ def test_Account_add_daemons_success(faker, override_config, fake_account, proto
 @pytest.mark.parametrize(
     "protocol", [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
 )
-def test_Account_add_daemons_success_pop(
+def test_Account_add_daemons__success__pop(
     faker, override_config, fake_account, protocol
 ):
     """Tests :func:`core.models.Account.Account.add_daemons`
@@ -698,7 +698,7 @@ def test_Account_add_daemons_success_pop(
 
 
 @pytest.mark.django_db
-def test_Account_add_daemons_success_unavailable_criterion_config(
+def test_Account_add_daemons__success__unavailable_criterion_config(
     faker, override_config, fake_account
 ):
     """Tests :func:`core.models.Account.Account.add_daemons`

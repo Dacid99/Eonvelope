@@ -41,7 +41,7 @@ def mock_Daemon_test(mocker):
 
 
 @pytest.mark.django_db
-def test_test_noauth(
+def test_test__noauth(
     fake_daemon,
     noauth_api_client,
     custom_detail_action_url,
@@ -60,7 +60,7 @@ def test_test_noauth(
 
 
 @pytest.mark.django_db
-def test_test_auth_other(
+def test_test__auth_other(
     fake_daemon,
     other_api_client,
     custom_detail_action_url,
@@ -79,7 +79,7 @@ def test_test_auth_other(
 
 
 @pytest.mark.django_db
-def test_test_success_auth_owner(
+def test_test__success__auth_owner(
     fake_daemon,
     owner_api_client,
     custom_detail_action_url,
@@ -101,7 +101,7 @@ def test_test_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_failure_auth_owner(
+def test_test__failure__auth_owner(
     faker,
     fake_daemon,
     owner_api_client,
@@ -126,7 +126,7 @@ def test_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_auth_admin(
+def test_test__auth_admin(
     fake_daemon,
     admin_api_client,
     custom_detail_action_url,
@@ -145,7 +145,7 @@ def test_test_auth_admin(
 
 
 @pytest.mark.django_db
-def test_start_noauth(
+def test_start__noauth(
     fake_daemon,
     noauth_api_client,
     custom_detail_action_url,
@@ -169,7 +169,7 @@ def test_start_noauth(
 
 
 @pytest.mark.django_db
-def test_start_auth_other(
+def test_start__auth_other(
     fake_daemon,
     other_api_client,
     custom_detail_action_url,
@@ -193,7 +193,7 @@ def test_start_auth_other(
 
 
 @pytest.mark.django_db
-def test_start_success_auth_owner(
+def test_start__success__auth_owner(
     fake_daemon,
     owner_api_client,
     custom_detail_action_url,
@@ -217,7 +217,7 @@ def test_start_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_start_failure_auth_owner(
+def test_start__failure__auth_owner(
     fake_daemon,
     owner_api_client,
     custom_detail_action_url,
@@ -231,14 +231,14 @@ def test_start_failure_auth_owner(
         )
     )
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400__bad_REQUEST
     fake_daemon.refresh_from_db()
     assert response.data["data"] == DaemonViewSet.serializer_class(fake_daemon).data
     assert fake_daemon.celery_task.enabled is True
 
 
 @pytest.mark.django_db
-def test_start_auth_admin(
+def test_start__auth_admin(
     fake_daemon,
     admin_api_client,
     custom_detail_action_url,
@@ -262,7 +262,7 @@ def test_start_auth_admin(
 
 
 @pytest.mark.django_db
-def test_stop_noauth(
+def test_stop__noauth(
     fake_daemon,
     noauth_api_client,
     custom_detail_action_url,
@@ -283,7 +283,7 @@ def test_stop_noauth(
 
 
 @pytest.mark.django_db
-def test_stop_auth_other(
+def test_stop__auth_other(
     fake_daemon,
     other_api_client,
     custom_detail_action_url,
@@ -304,7 +304,7 @@ def test_stop_auth_other(
 
 
 @pytest.mark.django_db
-def test_stop_success_auth_owner(
+def test_stop__success__auth_owner(
     fake_daemon,
     owner_api_client,
     custom_detail_action_url,
@@ -325,7 +325,7 @@ def test_stop_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_stop_failure_auth_owner(
+def test_stop__failure__auth_owner(
     fake_daemon,
     owner_api_client,
     custom_detail_action_url,
@@ -342,14 +342,14 @@ def test_stop_failure_auth_owner(
         )
     )
 
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.status_code == status.HTTP_400__bad_REQUEST
     fake_daemon.refresh_from_db()
     assert response.data["data"] == DaemonViewSet.serializer_class(fake_daemon).data
     assert fake_daemon.celery_task.enabled is False
 
 
 @pytest.mark.django_db
-def test_stop_auth_admin(
+def test_stop__auth_admin(
     fake_daemon,
     admin_api_client,
     custom_detail_action_url,

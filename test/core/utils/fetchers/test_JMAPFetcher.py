@@ -133,7 +133,7 @@ def mock_JMAP_error_response_handler(faker):
 
 
 @pytest.fixture
-def mock_JMAP_bad_response_handler(faker, fake_get_response_data):
+def mock_JMAP__bad_response_handler(faker, fake_get_response_data):
     """Handler for fake bad JMAP responses."""
 
     def bad_response_handler(request):
@@ -225,7 +225,9 @@ def test_IMAP4Fetcher_make_fetching_filter_sentsince():
         (EmailFetchingCriterionChoices.UNANSWERED, {"not_keyword": "$answered"}),
     ],
 )
-def test_JMAPFetcher_make_fetching_filter_no_arg(criterion_name, expected_filter_kwarg):
+def test_JMAPFetcher_make_fetching_filter__no_arg(
+    criterion_name, expected_filter_kwarg
+):
     """Tests :func:`core.utils.fetchers.JMAPFetcher.make_fetching_query`
     in different cases of criteria without argument.
     """
@@ -297,7 +299,7 @@ def test_JMAPFetcher___init___success(
 
 
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher___init___failure(
+def test_JMAPFetcher___init____failure(
     fake_error_message,
     jmap_mailbox,
     mock_logger,
@@ -316,7 +318,7 @@ def test_JMAPFetcher___init___failure(
     mock_logger.exception.assert_called()
 
 
-def test_JMAPFetcher_test_account_success(jmap_mailbox, mock_logger, mock_JMAP_client):
+def test_JMAPFetcher_test_account__success(jmap_mailbox, mock_logger, mock_JMAP_client):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with no mailbox given.
     """
@@ -350,7 +352,7 @@ def test_JMAPFetcher_test_account_non_single_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_test_account_error_response(
+def test_JMAPFetcher_test_account__error_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
@@ -369,16 +371,16 @@ def test_JMAPFetcher_test_account_error_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_test_account_bad_response(
+def test_JMAPFetcher_test_account__bad_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
-    mock_JMAP_bad_response_handler,
+    mock_JMAP__bad_response_handler,
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with no mailbox given.
     """
-    mock_JMAP_client.return_value.request.side_effect = mock_JMAP_bad_response_handler
+    mock_JMAP_client.return_value.request.side_effect = mock_JMAP__bad_response_handler
 
     with pytest.raises(MailAccountError):
         JMAPFetcher(jmap_mailbox.account).test()
@@ -389,7 +391,7 @@ def test_JMAPFetcher_test_account_bad_response(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher_test_account_requests_error(
+def test_JMAPFetcher_test_account__requests_error(
     fake_error_message, mock_logger, jmap_mailbox, mock_JMAP_client, error
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
@@ -407,7 +409,7 @@ def test_JMAPFetcher_test_account_requests_error(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_test_mailbox_success(jmap_mailbox, mock_logger, mock_JMAP_client):
+def test_JMAPFetcher_test_mailbox__success(jmap_mailbox, mock_logger, mock_JMAP_client):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with mailbox given.
     """
@@ -423,7 +425,7 @@ def test_JMAPFetcher_test_mailbox_success(jmap_mailbox, mock_logger, mock_JMAP_c
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher_test_mailbox_failure(
+def test_JMAPFetcher_test_mailbox__failure(
     fake_error_message,
     jmap_mailbox,
     mock_logger,
@@ -477,7 +479,7 @@ def test_JMAPFetcher_test_mailbox_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_test_mailbox_error_response(
+def test_JMAPFetcher_test_mailbox__error_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
@@ -496,16 +498,16 @@ def test_JMAPFetcher_test_mailbox_error_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_test_mailbox_bad_response(
+def test_JMAPFetcher_test_mailbox__bad_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
-    mock_JMAP_bad_response_handler,
+    mock_JMAP__bad_response_handler,
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with mailbox given.
     """
-    mock_JMAP_client.return_value.request.side_effect = mock_JMAP_bad_response_handler
+    mock_JMAP_client.return_value.request.side_effect = mock_JMAP__bad_response_handler
 
     with pytest.raises(MailAccountError):
         JMAPFetcher(jmap_mailbox.account).test(jmap_mailbox)
@@ -515,7 +517,7 @@ def test_JMAPFetcher_test_mailbox_bad_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_fetch_mailboxes_success(
+def test_JMAPFetcher_fetch_mailboxes__success(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
@@ -535,7 +537,7 @@ def test_JMAPFetcher_fetch_mailboxes_success(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher_fetch_mailboxes_failure(
+def test_JMAPFetcher_fetch_mailboxes__failure(
     fake_error_message, mock_logger, jmap_mailbox, mock_JMAP_client, error
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_mailboxes`
@@ -573,7 +575,7 @@ def test_JMAPFetcher_fetch_mailboxes_non_single_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_fetch_mailboxes_error_response(
+def test_JMAPFetcher_fetch_mailboxes__error_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
@@ -592,16 +594,16 @@ def test_JMAPFetcher_fetch_mailboxes_error_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_fetch_mailboxes_bad_response(
+def test_JMAPFetcher_fetch_mailboxes__bad_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
-    mock_JMAP_bad_response_handler,
+    mock_JMAP__bad_response_handler,
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with no mailbox given.
     """
-    mock_JMAP_client.return_value.request.side_effect = mock_JMAP_bad_response_handler
+    mock_JMAP_client.return_value.request.side_effect = mock_JMAP__bad_response_handler
 
     with pytest.raises(MailAccountError):
         JMAPFetcher(jmap_mailbox.account).fetch_mailboxes()
@@ -611,7 +613,7 @@ def test_JMAPFetcher_fetch_mailboxes_bad_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_fetch_emails_success(jmap_mailbox, mock_logger, mock_JMAP_client):
+def test_JMAPFetcher_fetch_emails__success(jmap_mailbox, mock_logger, mock_JMAP_client):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
     in case of success.
     """
@@ -629,7 +631,7 @@ def test_JMAPFetcher_fetch_emails_success(jmap_mailbox, mock_logger, mock_JMAP_c
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher_fetch_emails_failure_request(
+def test_JMAPFetcher_fetch_emails__failure_request(
     fake_error_message, mock_logger, jmap_mailbox, mock_JMAP_client, error
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
@@ -649,7 +651,7 @@ def test_JMAPFetcher_fetch_emails_failure_request(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher_fetch_emails_failure_download(
+def test_JMAPFetcher_fetch_emails__failure_download(
     fake_error_message, mock_logger, jmap_mailbox, mock_JMAP_client, error
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
@@ -691,7 +693,7 @@ def test_JMAPFetcher_fetch_emails_non_single_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_fetch_emails_error_response(
+def test_JMAPFetcher_fetch_emails__error_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
@@ -711,16 +713,16 @@ def test_JMAPFetcher_fetch_emails_error_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_fetch_emails_bad_response(
+def test_JMAPFetcher_fetch_emails__bad_response(
     jmap_mailbox,
     mock_logger,
     mock_JMAP_client,
-    mock_JMAP_bad_response_handler,
+    mock_JMAP__bad_response_handler,
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with no mailbox given.
     """
-    mock_JMAP_client.return_value.request.side_effect = mock_JMAP_bad_response_handler
+    mock_JMAP_client.return_value.request.side_effect = mock_JMAP__bad_response_handler
 
     with pytest.raises(MailAccountError):
         JMAPFetcher(jmap_mailbox.account).fetch_emails(jmap_mailbox)
@@ -744,7 +746,7 @@ def test_JMAPFetcher_fetch_emails_wrong_mailbox(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_restore_success(
+def test_JMAPFetcher_restore__success(
     fake_email_with_file, mock_logger, jmap_mailbox, mock_JMAP_client
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.restore`
@@ -761,7 +763,7 @@ def test_JMAPFetcher_restore_success(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher_restore_failure_upload_blob(
+def test_JMAPFetcher_restore__failure_upload_blob(
     fake_error_message,
     mock_logger,
     fake_email_with_file,
@@ -786,7 +788,7 @@ def test_JMAPFetcher_restore_failure_upload_blob(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
-def test_JMAPFetcher_restore_failure_request(
+def test_JMAPFetcher_restore__failure_request(
     fake_error_message,
     mock_logger,
     fake_email_with_file,
@@ -810,7 +812,7 @@ def test_JMAPFetcher_restore_failure_request(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_restore_error_response(
+def test_JMAPFetcher_restore__error_response(
     fake_email_with_file,
     mock_logger,
     jmap_mailbox,
@@ -831,17 +833,17 @@ def test_JMAPFetcher_restore_error_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_restore_bad_response(
+def test_JMAPFetcher_restore__bad_response(
     fake_email_with_file,
     mock_logger,
     jmap_mailbox,
     mock_JMAP_client,
-    mock_JMAP_bad_response_handler,
+    mock_JMAP__bad_response_handler,
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.test`
     in case of success with no mailbox given.
     """
-    mock_JMAP_client.return_value.request.side_effect = mock_JMAP_bad_response_handler
+    mock_JMAP_client.return_value.request.side_effect = mock_JMAP__bad_response_handler
 
     with pytest.raises(MailboxError):
         JMAPFetcher(jmap_mailbox.account).restore(fake_email_with_file)
@@ -852,7 +854,7 @@ def test_JMAPFetcher_restore_bad_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_restore_no_file(
+def test_JMAPFetcher_restore__no_file(
     fake_email_with_file, jmap_mailbox, mock_JMAP_client
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.restore`
@@ -868,7 +870,7 @@ def test_JMAPFetcher_restore_no_file(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_restore_no_filepath(fake_email, jmap_mailbox, mock_JMAP_client):
+def test_JMAPFetcher_restore__no_filepath(fake_email, jmap_mailbox, mock_JMAP_client):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.restore`
     in case of success.
     """
@@ -880,7 +882,7 @@ def test_JMAPFetcher_restore_no_filepath(fake_email, jmap_mailbox, mock_JMAP_cli
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_close_success(jmap_mailbox, mock_logger):
+def test_JMAPFetcher_close__success(jmap_mailbox, mock_logger):
     """Tests :func:`core.utils.fetchers.JMAPFetcher.close`
     in case of success.
     """

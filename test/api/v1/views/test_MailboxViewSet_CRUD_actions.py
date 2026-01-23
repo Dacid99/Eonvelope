@@ -28,7 +28,7 @@ from core.models import Mailbox
 
 
 @pytest.mark.django_db
-def test_list_noauth(fake_mailbox, noauth_api_client, list_url):
+def test_list__noauth(fake_mailbox, noauth_api_client, list_url):
     """Tests the list method on :class:`api.v1.views.MailboxViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(list_url(MailboxViewSet))
 
@@ -37,7 +37,7 @@ def test_list_noauth(fake_mailbox, noauth_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_other(fake_mailbox, other_api_client, list_url):
+def test_list__auth_other(fake_mailbox, other_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated other user client.
     """
@@ -49,7 +49,7 @@ def test_list_auth_other(fake_mailbox, other_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(fake_mailbox, owner_api_client, list_url):
+def test_list__auth_owner(fake_mailbox, owner_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated owner user client.
     """
@@ -61,7 +61,7 @@ def test_list_auth_owner(fake_mailbox, owner_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_list_auth_admin(fake_mailbox, admin_api_client, list_url):
+def test_list__auth_admin(fake_mailbox, admin_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated admin user client.
     """
@@ -73,7 +73,7 @@ def test_list_auth_admin(fake_mailbox, admin_api_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_mailbox, noauth_api_client, detail_url):
+def test_get__noauth(fake_mailbox, noauth_api_client, detail_url):
     """Tests the get method on :class:`api.v1.views.MailboxViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(detail_url(MailboxViewSet, fake_mailbox))
 
@@ -82,7 +82,7 @@ def test_get_noauth(fake_mailbox, noauth_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_mailbox, other_api_client, detail_url):
+def test_get__auth_other(fake_mailbox, other_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated other user client.
     """
@@ -92,7 +92,7 @@ def test_get_auth_other(fake_mailbox, other_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_mailbox, owner_api_client, detail_url):
+def test_get__auth_owner(fake_mailbox, owner_api_client, detail_url):
     """Tests the `list` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated owner user client.
     """
@@ -103,7 +103,7 @@ def test_get_auth_owner(fake_mailbox, owner_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_mailbox, admin_api_client, detail_url):
+def test_get__auth_admin(fake_mailbox, admin_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated admin user client.
     """
@@ -113,7 +113,7 @@ def test_get_auth_admin(fake_mailbox, admin_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_patch_noauth(fake_mailbox, noauth_api_client, mailbox_payload, detail_url):
+def test_patch__noauth(fake_mailbox, noauth_api_client, mailbox_payload, detail_url):
     """Tests the patch method on :class:`api.v1.views.MailboxViewSet` with an unauthenticated user client."""
     response = noauth_api_client.patch(
         detail_url(MailboxViewSet, fake_mailbox), data=mailbox_payload
@@ -126,7 +126,7 @@ def test_patch_noauth(fake_mailbox, noauth_api_client, mailbox_payload, detail_u
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(fake_mailbox, other_api_client, mailbox_payload, detail_url):
+def test_patch__auth_other(fake_mailbox, other_api_client, mailbox_payload, detail_url):
     """Tests the `patch` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated other user client.
     """
@@ -141,7 +141,7 @@ def test_patch_auth_other(fake_mailbox, other_api_client, mailbox_payload, detai
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(fake_mailbox, owner_api_client, mailbox_payload, detail_url):
+def test_patch__auth_owner(fake_mailbox, owner_api_client, mailbox_payload, detail_url):
     """Tests the `patch` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated owner user client.
     """
@@ -156,7 +156,7 @@ def test_patch_auth_owner(fake_mailbox, owner_api_client, mailbox_payload, detai
 
 
 @pytest.mark.django_db
-def test_patch_auth_admin(fake_mailbox, admin_api_client, mailbox_payload, detail_url):
+def test_patch__auth_admin(fake_mailbox, admin_api_client, mailbox_payload, detail_url):
     """Tests the `patch` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated admin user client.
     """
@@ -171,7 +171,7 @@ def test_patch_auth_admin(fake_mailbox, admin_api_client, mailbox_payload, detai
 
 
 @pytest.mark.django_db
-def test_put_noauth(fake_mailbox, noauth_api_client, mailbox_payload, detail_url):
+def test_put__noauth(fake_mailbox, noauth_api_client, mailbox_payload, detail_url):
     """Tests the put method on :class:`api.v1.views.MailboxViewSet` with an unauthenticated user client."""
     response = noauth_api_client.put(
         detail_url(MailboxViewSet, fake_mailbox), data=mailbox_payload
@@ -184,7 +184,7 @@ def test_put_noauth(fake_mailbox, noauth_api_client, mailbox_payload, detail_url
 
 
 @pytest.mark.django_db
-def test_put_auth_other(fake_mailbox, other_api_client, mailbox_payload, detail_url):
+def test_put__auth_other(fake_mailbox, other_api_client, mailbox_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated other user client.
     """
@@ -199,7 +199,7 @@ def test_put_auth_other(fake_mailbox, other_api_client, mailbox_payload, detail_
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(fake_mailbox, owner_api_client, mailbox_payload, detail_url):
+def test_put__auth_owner(fake_mailbox, owner_api_client, mailbox_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated owner user client.
     """
@@ -213,7 +213,7 @@ def test_put_auth_owner(fake_mailbox, owner_api_client, mailbox_payload, detail_
 
 
 @pytest.mark.django_db
-def test_put_auth_admin(fake_mailbox, admin_api_client, mailbox_payload, detail_url):
+def test_put__auth_admin(fake_mailbox, admin_api_client, mailbox_payload, detail_url):
     """Tests the `put` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated admin user client.
     """
@@ -228,7 +228,7 @@ def test_put_auth_admin(fake_mailbox, admin_api_client, mailbox_payload, detail_
 
 
 @pytest.mark.django_db
-def test_post_noauth(noauth_api_client, mailbox_payload, list_url):
+def test_post__noauth(noauth_api_client, mailbox_payload, list_url):
     """Tests the post method on :class:`api.v1.views.MailboxViewSet` with an unauthenticated user client."""
     response = noauth_api_client.post(list_url(MailboxViewSet), data=mailbox_payload)
 
@@ -239,7 +239,7 @@ def test_post_noauth(noauth_api_client, mailbox_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_api_client, mailbox_payload, list_url):
+def test_post__auth_other(other_api_client, mailbox_payload, list_url):
     """Tests the `post` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated other user client.
     """
@@ -252,7 +252,7 @@ def test_post_auth_other(other_api_client, mailbox_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_api_client, mailbox_payload, list_url):
+def test_post__auth_owner(owner_api_client, mailbox_payload, list_url):
     """Tests the `post` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated owner user client.
     """
@@ -265,7 +265,7 @@ def test_post_auth_owner(owner_api_client, mailbox_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_admin(admin_api_client, mailbox_payload, list_url):
+def test_post__auth_admin(admin_api_client, mailbox_payload, list_url):
     """Tests the `post` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated admin user client.
     """
@@ -278,7 +278,7 @@ def test_post_auth_admin(admin_api_client, mailbox_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_delete_noauth(fake_mailbox, noauth_api_client, detail_url):
+def test_delete__noauth(fake_mailbox, noauth_api_client, detail_url):
     """Tests the delete method on :class:`api.v1.views.MailboxViewSet` with an unauthenticated user client."""
     response = noauth_api_client.delete(detail_url(MailboxViewSet, fake_mailbox))
 
@@ -288,7 +288,7 @@ def test_delete_noauth(fake_mailbox, noauth_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_other(fake_mailbox, other_api_client, detail_url):
+def test_delete__auth_other(fake_mailbox, other_api_client, detail_url):
     """Tests the `delete` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated other user client.
     """
@@ -300,7 +300,7 @@ def test_delete_auth_other(fake_mailbox, other_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_owner(fake_mailbox, owner_api_client, detail_url):
+def test_delete__auth_owner(fake_mailbox, owner_api_client, detail_url):
     """Tests the `delete` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated owner user client.
     """
@@ -312,7 +312,7 @@ def test_delete_auth_owner(fake_mailbox, owner_api_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_delete_auth_admin(fake_mailbox, admin_api_client, detail_url):
+def test_delete__auth_admin(fake_mailbox, admin_api_client, detail_url):
     """Tests the `delete` method on :class:`api.v1.views.MailboxViewSet`
     with the authenticated admin user client.
     """

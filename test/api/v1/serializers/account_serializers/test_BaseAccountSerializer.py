@@ -74,7 +74,7 @@ def test_output(fake_account, request_context):
 
 
 @pytest.mark.django_db
-def test_input_test_success(account_payload, request_context, mock_Account_test):
+def test_input__test_success(account_payload, request_context, mock_Account_test):
     """Tests for the expected input of the serializer."""
     assert "user" not in account_payload
 
@@ -109,7 +109,7 @@ def test_input_test_success(account_payload, request_context, mock_Account_test)
 
 
 @pytest.mark.django_db
-def test_input_test_failure(
+def test_input__test_failure(
     account_payload, request_context, mock_Account_test, fake_error_message
 ):
     """Tests for the expected input of the serializer."""
@@ -125,7 +125,7 @@ def test_input_test_failure(
 
 
 @pytest.mark.django_db
-def test_input_no_test(fake_account, request_context, mock_Account_test):
+def test_input__no_test(fake_account, request_context, mock_Account_test):
     """Tests post direction of :class:`web.forms.BaseAccountForm`."""
     unchanged_data = model_to_dict(fake_account)
     unchanged_data.pop("user")
@@ -141,7 +141,7 @@ def test_input_no_test(fake_account, request_context, mock_Account_test):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_mail_host_port", [-10, 98765])
-def test_input_bad_mail_host_port(
+def test_input__bad_mail_host_port(
     fake_account, account_payload, request_context, bad_mail_host_port
 ):
     """Tests input direction of :class:`api.v1.serializers.BaseAccountSerializer`."""
@@ -157,7 +157,7 @@ def test_input_bad_mail_host_port(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_protocol", ["other"])
-def test_input_bad_protocol(
+def test_input__bad_protocol(
     fake_account, account_payload, request_context, bad_protocol
 ):
     """Tests input direction of :class:`api.v1.serializers.BaseAccountSerializer`."""
@@ -173,7 +173,9 @@ def test_input_bad_protocol(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_timeout", [-1])
-def test_input_bad_timeout(fake_account, account_payload, request_context, bad_timeout):
+def test_input__bad_timeout(
+    fake_account, account_payload, request_context, bad_timeout
+):
     """Tests input direction of :class:`api.v1.serializers.BaseAccountSerializer`."""
     account_payload["timeout"] = bad_timeout
 
@@ -186,7 +188,7 @@ def test_input_bad_timeout(fake_account, account_payload, request_context, bad_t
 
 
 @pytest.mark.django_db
-def test_input_duplicate(fake_account, request_context):
+def test_input__duplicate(fake_account, request_context):
     """Tests input direction of :class:`api.v1.serializers.BaseAccountSerializer`."""
     payload = model_to_dict(fake_account)
     payload.pop("id")

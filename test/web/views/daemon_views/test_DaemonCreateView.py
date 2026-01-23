@@ -30,7 +30,7 @@ from web.views import DaemonCreateView
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, list_url, login_url):
+def test_get__noauth(client, list_url, login_url):
     """Tests :class:`web.views.DaemonCreateView` with an unauthenticated user client."""
     response = client.get(list_url(DaemonCreateView))
 
@@ -41,7 +41,7 @@ def test_get_noauth(client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, list_url):
+def test_get__auth_other(other_client, list_url):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated other user client."""
     response = other_client.get(list_url(DaemonCreateView))
 
@@ -55,7 +55,7 @@ def test_get_auth_other(other_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, list_url):
+def test_get__auth_owner(owner_client, list_url):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated owner user client."""
     response = owner_client.get(list_url(DaemonCreateView))
 
@@ -69,7 +69,7 @@ def test_get_auth_owner(owner_client, list_url):
 
 
 @pytest.mark.django_db
-def test_post_noauth(daemon_with_interval_payload, client, list_url, login_url):
+def test_post__noauth(daemon_with_interval_payload, client, list_url, login_url):
     """Tests :class:`web.views.DaemonCreateView` with an unauthenticated user client."""
     assert Daemon.objects.all().count() == 1
 
@@ -83,7 +83,7 @@ def test_post_noauth(daemon_with_interval_payload, client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_other(
+def test_post__auth_other(
     daemon_with_interval_payload, fake_other_mailbox, other_client, list_url
 ):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated other user client."""
@@ -109,7 +109,7 @@ def test_post_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_auth_other_strange_mailbox(
+def test_post__auth__other__strange_mailbox(
     daemon_with_interval_payload, other_client, list_url
 ):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated other user client."""
@@ -130,7 +130,7 @@ def test_post_auth_other_strange_mailbox(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(daemon_with_interval_payload, owner_client, list_url):
+def test_post__auth_owner(daemon_with_interval_payload, owner_client, list_url):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated owner user client."""
     assert Daemon.objects.all().count() == 1
 
@@ -152,7 +152,7 @@ def test_post_auth_owner(daemon_with_interval_payload, owner_client, list_url):
 
 
 @pytest.mark.django_db
-def test_post_duplicate_auth_owner(
+def test_post__duplicate__auth_owner(
     fake_daemon, daemon_with_interval_payload, owner_client, list_url
 ):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated owner user client."""
@@ -176,7 +176,7 @@ def test_post_duplicate_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_unavailable_criterion_auth_owner(
+def test_post__unavailable_criterion__auth_owner(
     fake_daemon, daemon_with_interval_payload, owner_client, list_url
 ):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated owner user client."""
@@ -204,7 +204,7 @@ def test_post_unavailable_criterion_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_auth_admin_strange_mailbox(
+def test_post__auth_admin_strange_mailbox(
     daemon_with_interval_payload, admin_client, list_url
 ):
     """Tests :class:`web.views.DaemonCreateView` with the authenticated admin user client."""

@@ -163,7 +163,7 @@ def test_Mailbox_available_fetching_criteria(
         (JMAPFetcher.PROTOCOL, JMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
-def test_Mailbox_available_no_arg_fetching_criteria(
+def test_Mailbox_available__no_arg_fetching_criteria(
     fake_mailbox, protocol, expected_fetching_criteria
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.available_fetching_criteria`."""
@@ -219,7 +219,7 @@ def test_Mailbox_available_fetching_criterion_choices(
         (JMAPFetcher.PROTOCOL, JMAPFetcher.AVAILABLE_FETCHING_CRITERIA),
     ],
 )
-def test_Mailbox_available_no_arg_fetching_criterion_choices(
+def test_Mailbox_available__no_arg_fetching_criterion_choices(
     fake_mailbox, protocol, expected_fetching_criteria
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.available_no_arg_fetching_criteria`."""
@@ -237,7 +237,7 @@ def test_Mailbox_available_no_arg_fetching_criterion_choices(
 
 
 @pytest.mark.django_db
-def test_Mailbox_test_success(
+def test_Mailbox_test__success(
     fake_mailbox, mock_logger, mock_fetcher, mock_Account_get_fetcher
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.test`
@@ -257,7 +257,7 @@ def test_Mailbox_test_success(
 
 
 @pytest.mark.django_db
-def test_Mailbox_test_bad_protocol(
+def test_Mailbox_test__bad_protocol(
     fake_mailbox, mock_logger, mock_Account_get_fetcher, mock_fetcher
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.test`
@@ -276,7 +276,7 @@ def test_Mailbox_test_bad_protocol(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("test_side_effect", [MailboxError, MailAccountError])
-def test_Mailbox_test_failure(
+def test_Mailbox_test__failure(
     fake_mailbox,
     mock_logger,
     mock_Account_get_fetcher,
@@ -303,7 +303,7 @@ def test_Mailbox_test_failure(
 
 
 @pytest.mark.django_db
-def test_Mailbox_test_get_fetcher_error(
+def test_Mailbox_test__get_fetcher_error(
     fake_mailbox, mock_logger, mock_Account_get_fetcher, mock_fetcher
 ):
     """Tests :func:`core.models.Mailbox.Mailbox.test`
@@ -325,7 +325,7 @@ def test_Mailbox_test_get_fetcher_error(
 
 
 @pytest.mark.django_db
-def test_Mailbox_fetch_success(
+def test_Mailbox_fetch__success(
     faker,
     fake_mailbox,
     mock_logger,
@@ -357,7 +357,7 @@ def test_Mailbox_fetch_success(
 
 
 @pytest.mark.django_db
-def test_Mailbox_fetch_failure(
+def test_Mailbox_fetch__failure(
     faker,
     fake_mailbox,
     mock_logger,
@@ -389,7 +389,7 @@ def test_Mailbox_fetch_failure(
 
 
 @pytest.mark.django_db
-def test_Mailbox_fetch_get_fetcher_error(
+def test_Mailbox_fetch__get_fetcher_error(
     fake_mailbox,
     mock_logger,
     mock_Account_get_fetcher,
@@ -421,7 +421,7 @@ def test_Mailbox_fetch_get_fetcher_error(
     "file_format",
     [SupportedEmailUploadFormats.EML, SupportedEmailUploadFormats.EML.title()],
 )
-def test_Mailbox_add_emails_from_file_eml_success(
+def test_Mailbox_add_emails_from_file_eml__success(
     fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -442,7 +442,7 @@ def test_Mailbox_add_emails_from_file_eml_success(
     "file_format",
     [SupportedEmailUploadFormats.ZIP_EML, SupportedEmailUploadFormats.ZIP_EML.title()],
 )
-def test_Mailbox_add_emails_from_file_zip_eml_success(
+def test_Mailbox_add_emails_from_file_zip_eml__success(
     fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -477,7 +477,7 @@ def test_Mailbox_add_emails_from_file_zip_eml_success(
     "file_format",
     [SupportedEmailUploadFormats.ZIP_EML, SupportedEmailUploadFormats.ZIP_EML.title()],
 )
-def test_Mailbox_add_emails_from_file_zip_eml_bad_file(
+def test_Mailbox_add_emails_from_file_zip_eml__bad_file(
     faker,
     fake_fs,
     fake_mailbox,
@@ -509,7 +509,7 @@ def test_Mailbox_add_emails_from_file_zip_eml_bad_file(
         SupportedEmailUploadFormats.BABYL.title(),
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_file_success(
+def test_Mailbox_add_emails_from_file_mailbox_file__success(
     fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -552,7 +552,7 @@ def test_Mailbox_add_emails_from_file_mailbox_file_success(
         SupportedEmailUploadFormats.BABYL,
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_file_bad_file(
+def test_Mailbox_add_emails_from_file_mailbox_file__bad_file(
     faker,
     fake_fs,
     fake_mailbox,
@@ -583,7 +583,7 @@ def test_Mailbox_add_emails_from_file_mailbox_file_bad_file(
         SupportedEmailUploadFormats.MH.title(),
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_dir_success(
+def test_Mailbox_add_emails_from_file_mailbox_dir__success(
     fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -628,7 +628,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_success(
         SupportedEmailUploadFormats.MH,
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_dir_bad_zip(
+def test_Mailbox_add_emails_from_file_mailbox_dir__bad_zip(
     faker, fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -645,7 +645,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_zip(
 
 
 @pytest.mark.django_db
-def test_Mailbox_add_emails_from_file_mailbox_dir_bad_maildir(
+def test_Mailbox_add_emails_from_file_mailbox_dir__bad_maildir(
     fake_fs, fake_mailbox, mock_logger
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -678,7 +678,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_maildir(
 
 
 @pytest.mark.django_db
-def test_Mailbox_add_emails_from_file_mailbox_dir_bad_mh(
+def test_Mailbox_add_emails_from_file_mailbox_dir__bad_mh(
     fake_fs, fake_mailbox, mock_logger
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -704,7 +704,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir_bad_mh(
 
 
 @pytest.mark.django_db
-def test_Mailbox_add_emails_from_file_bad_format(
+def test_Mailbox_add_emails_from_file__bad_format(
     fake_fs, fake_file, fake_mailbox, mock_logger
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -722,7 +722,7 @@ def test_Mailbox_add_emails_from_file_bad_format(
     "DEFAULT_SAVE_ATTACHMENTS, DEFAULT_SAVE_TO_EML",
     [(True, True), (False, False), (True, False), (False, True)],
 )
-def test_Mailbox_create_from_data_success(
+def test_Mailbox_create_from_data__success(
     faker,
     override_config,
     fake_account,
@@ -754,7 +754,7 @@ def test_Mailbox_create_from_data_success(
 
 
 @pytest.mark.django_db
-def test_Mailbox_create_from_data_duplicate(faker, fake_mailbox, mock_logger):
+def test_Mailbox_create_from_data__duplicate(faker, fake_mailbox, mock_logger):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of data that is already in the db.
     """
@@ -780,7 +780,7 @@ def test_Mailbox_create_from_data_duplicate(faker, fake_mailbox, mock_logger):
     "mailbox_name",
     ["Spam", "Junk", "Account/Spam", "Junk-Email", "Emailjunk", "Warning:spam-folder"],
 )
-def test_Mailbox_create_from_data_ignored_by_name(
+def test_Mailbox_create_from_data__ignored__by_name(
     override_config,
     fake_mailbox,
     mock_logger,
@@ -801,7 +801,7 @@ def test_Mailbox_create_from_data_ignored_by_name(
     mock_logger.debug.assert_called()
 
 
-def test_Mailbox_create_from_data_ignored_by_type(
+def test_Mailbox_create_from_data__ignored__by_type(
     override_config,
     fake_mailbox,
     mock_logger,
@@ -820,7 +820,7 @@ def test_Mailbox_create_from_data_ignored_by_type(
 
 
 @pytest.mark.django_db
-def test_Mailbox_create_from_data_no_account(faker):
+def test_Mailbox_create_from_data__no_account(faker):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of data that is already in the db.
     """
@@ -845,7 +845,7 @@ def test_Mailbox_has_download_with_email(fake_mailbox, fake_email):
 
 
 @pytest.mark.django_db
-def test_Mailbox_has_download_no_email(fake_mailbox):
+def test_Mailbox_has_download__no_email(fake_mailbox):
     """Tests :func:`core.models.Mailbox.Mailbox.has_download`."""
     assert not fake_mailbox.emails.exists()
 

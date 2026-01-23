@@ -33,7 +33,7 @@ def always_fake_fs(fake_fs):
 
 
 @pytest.mark.django_db
-def test_ShardedFileSystemStorage_save_single(faker, fake_file):
+def test_ShardedFileSystemStorage_save__single(faker, fake_file):
     """Tests saving a single file via the :class:`core.backends.ShardedFileSystemStorage`."""
     fake_name = faker.name()
     assert StorageShard.objects.count() == 0
@@ -57,7 +57,7 @@ def test_ShardedFileSystemStorage_save_single(faker, fake_file):
 
 @pytest.mark.django_db
 @pytest.mark.override_config(STORAGE_MAX_FILES_PER_DIR=3)
-def test_ShardedFileSystemStorage_save_multi(faker, fake_file):
+def test_ShardedFileSystemStorage_save__multi(faker, fake_file):
     """Tests saving multiple files via the :class:`core.backends.ShardedFileSystemStorage`."""
     assert StorageShard.objects.count() == 0
     assert default_storage.listdir("")[0] == []
@@ -75,7 +75,7 @@ def test_ShardedFileSystemStorage_save_multi(faker, fake_file):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("unsafe_name", ["t/1", "*a*", "2.3", "~3", "<id/numbers>"])
-def test_ShardedFileSystemStorage_save_unsafe_name(fake_file, unsafe_name):
+def test_ShardedFileSystemStorage_save__unsafe_name(fake_file, unsafe_name):
     """Tests saving a single file with an unsafe name via the :class:`core.backends.ShardedFileSystemStorage`."""
     assert StorageShard.objects.count() == 0
 
@@ -90,7 +90,7 @@ def test_ShardedFileSystemStorage_save_unsafe_name(fake_file, unsafe_name):
 
 
 @pytest.mark.django_db
-def test_ShardedFileSystemStorage_delete_single(faker, fake_file):
+def test_ShardedFileSystemStorage_delete__single(faker, fake_file):
     """Tests deleting a single file via the :class:`core.backends.ShardedFileSystemStorage`."""
     fake_name = faker.name()
     file_name = default_storage.save(fake_name, fake_file)

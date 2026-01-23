@@ -28,7 +28,7 @@ from web.views.correspondent_views.CorrespondentFilterView import (
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, list_url, login_url):
+def test_get__noauth(client, list_url, login_url):
     """Tests :class:`web.views.correspondent_views.correspondent_filter_view.correspondent_filter_view` with an unauthenticated user client."""
     response = client.get(list_url(CorrespondentFilterView))
 
@@ -39,7 +39,7 @@ def test_get_noauth(client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, list_url):
+def test_get__auth_other(other_client, list_url):
     """Tests :class:`web.views.correspondent_views.correspondent_filter_view.correspondent_filter_view` with the authenticated other user client."""
     response = other_client.get(list_url(CorrespondentFilterView))
 
@@ -54,7 +54,7 @@ def test_get_auth_other(other_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, list_url):
+def test_get__auth_owner(owner_client, list_url):
     """Tests :class:`web.views.correspondent_views.correspondent_filter_view.correspondent_filter_view` with the authenticated owner user client."""
     response = owner_client.get(list_url(CorrespondentFilterView))
 
@@ -69,7 +69,7 @@ def test_get_auth_owner(owner_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, list_url):
+def test_get__auth_admin(admin_client, list_url):
     """Tests :class:`web.views.correspondent_views.correspondent_filter_view.correspondent_filter_view` with the authenticated admin user client."""
     response = admin_client.get(list_url(CorrespondentFilterView))
 

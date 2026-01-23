@@ -179,7 +179,7 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         """
         account = self.get_object()
         account.add_daemons()
-        return Response(data={"detail": _("Added daemons to inbox and sentbox.")})
+        return Response(data={"detail": _("Added routines to inbox and sentbox.")})
 
     URL_PATH_TEST = "test"
     URL_NAME_TEST = "test"

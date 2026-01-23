@@ -2,7 +2,6 @@
 
 {% load translate from i18n %}
 
-
 {% block instruction_text %}
 
     {% translate "You can set up routines for this account's mailboxes to fetch its complete email traffic." %}
@@ -11,6 +10,6 @@
 
 {% block instruction_buttons %}
 
-    {% include "web/account/partials/_add_routines_button.html" with account=object %}
+    {% include "web/account/partials/_add_routines-button.html" with account=object %}
 
 {% endblock instruction_buttons %}

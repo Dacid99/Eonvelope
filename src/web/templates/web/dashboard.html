@@ -2,6 +2,8 @@
 
 {% load translate from i18n %}
 
+{% load static %}
+
 {% block title %}
     {% translate "Dashboard" %} -
 {% endblock title %}
@@ -9,6 +11,12 @@
 {% block content %}
     {# Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218. #}
     <h1 class="my-4">{% translate "Welcome to E∘nvelope" %}</h1>
+    <form class="m-4" id="emailSearch">
+        <input type="text"
+               class="form-control form-control-lg"
+               placeholder="{% translate 'Search emails' %}"
+               aria-label="{% translate 'Search emails' %}" />
+    </form>
     <div class="row justify-content-evenly">
         <div class="col-lg-9 order-2 order-lg-1">
             <div class="card">
@@ -96,3 +104,10 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block scripts %}
+    {{ block.super }}
+
+    <script src="{% static 'web/js/email_search.js' %}"></script>
+
+{% endblock scripts %}

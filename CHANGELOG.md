@@ -5,6 +5,7 @@
 - Features:
   - simplified setup of routines to archive entire mailtraffic of an account
   - mailboxes are automatically retrieved for new accounts
+  - email searchbar on dashboard
 
 - Fixes:
   - data import and export in admin panel was broken

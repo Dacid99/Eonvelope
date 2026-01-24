@@ -20,7 +20,7 @@ Preserve your emails for [an indefinite long period of time](https://en.wikipedi
 As a user you may like this application because of
 
 - Automatic and continuous email fetching
-- Support for all mayor mail access protocols: IMAP, POP, Exchange and JMAP
+- Support for all major mail access protocols: IMAP, POP, Exchange and JMAP
 - Import and export of emails in various formats
 - Identification of related emails
 - Restoring of emails to your mail account

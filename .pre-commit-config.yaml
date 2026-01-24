@@ -2,19 +2,19 @@
 # See https://pre-commit.com/hooks.html for more hooks
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v6.0.0
     hooks:
       - id: end-of-file-fixer
       - id: check-yaml
       - id: check-merge-conflict
       - id: debug-statements
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.10.0
+    rev: 26.1.0
     hooks:
       - id: black
         args: [--config, tools/black_config]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.10
+    rev: v0.14.14
     hooks:
       - id: ruff-check
         args: [--config, tools/ruff.toml]
@@ -30,7 +30,7 @@ repos:
       - id: djlint-django
         args: [--configuration, tools/djlintrc]
   - repo: https://github.com/python-poetry/poetry
-    rev: 2.2.1
+    rev: 2.3.1
     hooks:
       - id: poetry-lock
       - id: poetry-check
@@ -40,12 +40,12 @@ repos:
       - id: codespell
         args: [--config, tools/.codespellrc]
   - repo: https://github.com/hadolint/hadolint
-    rev: v2.12.0
+    rev: v2.14.0
     hooks:
       - id: hadolint-docker
         args: [--config, tools/.hadolint.yaml]
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 42.71.0
+    rev: 42.84.0
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/PyCQA/doc8
@@ -59,6 +59,6 @@ repos:
       - id: markdownlint-cli2
         args: [--config, tools/.markdownlint.yml]
   - repo: https://github.com/gitleaks/gitleaks
-    rev: v8.24.2
+    rev: v8.30.0
     hooks:
       - id: gitleaks

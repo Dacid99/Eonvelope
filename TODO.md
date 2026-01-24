@@ -35,7 +35,6 @@
 
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap, pop, jmap)
-- page_obj of list views for correct email content
 - add test email with references
 
 ## To implement

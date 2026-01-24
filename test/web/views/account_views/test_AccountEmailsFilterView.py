@@ -19,10 +19,11 @@
 """Test module for :mod:`web.views.AccountEmailsFilterView`."""
 
 import pytest
+from django.core.paginator import Page
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
-from core.models import Account
+from core.models import Account, Email
 from web.views import AccountEmailsFilterView
 
 
@@ -60,6 +61,8 @@ def test_get__auth_owner(fake_account, owner_client, detail_url):
         template.name for template in response.templates
     ]
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Email)
     assert "page_size" in response.context
     assert "query" in response.context
     assert "account" in response.context

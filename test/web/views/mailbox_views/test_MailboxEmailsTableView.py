@@ -22,6 +22,7 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
+from core.models import Email
 from web.views import MailboxEmailsTableView
 
 
@@ -60,6 +61,8 @@ def test_get__auth_owner(fake_mailbox, owner_client, detail_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Email)
     assert "page_size" in response.context
     assert "query" in response.context
     assert "mailbox" in response.context

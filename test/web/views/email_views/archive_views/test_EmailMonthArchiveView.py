@@ -22,6 +22,7 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
+from core.models import Email
 from web.views import EmailMonthArchiveView
 
 
@@ -64,6 +65,7 @@ def test_get__auth_other(other_client, fake_email, date_url):
     ]
     assert "month" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "date_list" in response.context
     assert "previous_month" in response.context
@@ -90,6 +92,8 @@ def test_get__auth_owner(owner_client, fake_email, date_url):
     ]
     assert "month" in response.context
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Email)
     assert "page_size" in response.context
     assert "date_list" in response.context
     assert "previous_month" in response.context
@@ -116,6 +120,7 @@ def test_get__auth_admin(admin_client, fake_email, date_url):
     ]
     assert "month" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "date_list" in response.context
     assert "previous_month" in response.context

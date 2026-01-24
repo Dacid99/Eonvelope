@@ -22,7 +22,7 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
-from core.models import Correspondent
+from core.models import Correspondent, EmailCorrespondent
 from web.views import CorrespondentEmailsFilterView
 
 
@@ -64,6 +64,8 @@ def test_get__auth_owner(fake_correspondent, owner_client, detail_url):
         template.name for template in response.templates
     ]
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], EmailCorrespondent)
     assert "page_size" in response.context
     assert "query" in response.context
     assert "correspondent" in response.context

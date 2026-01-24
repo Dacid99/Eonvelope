@@ -22,6 +22,7 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
+from core.models import Account
 from web.views import AccountTableView
 
 
@@ -48,6 +49,7 @@ def test_get__auth_other(other_client, list_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "query" in response.context
 
@@ -64,6 +66,8 @@ def test_get__auth_owner(owner_client, list_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Account)
     assert "page_size" in response.context
     assert "query" in response.context
     assert 'srcdoc="' not in response.content.decode("utf-8")
@@ -81,5 +85,6 @@ def test_get__auth_admin(admin_client, list_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "query" in response.context

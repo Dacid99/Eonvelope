@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-23 13:23+0000\n"
+"POT-Creation-Date: 2026-01-24 13:44+0000\n"
 "PO-Revision-Date: 2026-01-20 19:01+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/"
@@ -270,7 +270,7 @@ msgid "Test the account to see if this error persists."
 msgstr "Teste dieses Konto um zu überprüfen ob der Fehler weiter auftritt."
 
 #: src/web/templates/web/account/account_detail.html:75
-#: src/web/templates/web/dashboard.html:76
+#: src/web/templates/web/dashboard.html:84
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:11
 #: src/web/templates/web/partials/_header.html:126
@@ -280,7 +280,7 @@ msgstr "Postfächer"
 #: src/web/templates/web/account/account_detail.html:97
 #: src/web/templates/web/daemon/daemon_filter_list.html:6
 #: src/web/templates/web/daemon/daemon_filter_list.html:11
-#: src/web/templates/web/dashboard.html:83
+#: src/web/templates/web/dashboard.html:91
 #: src/web/templates/web/mailbox/mailbox_detail.html:81
 #: src/web/templates/web/partials/_header.html:148
 msgid "Routines"
@@ -288,14 +288,14 @@ msgstr "Routinen"
 
 #: src/web/templates/web/account/account_detail.html:119
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
-#: src/web/templates/web/dashboard.html:17
+#: src/web/templates/web/dashboard.html:25
 #: src/web/templates/web/mailbox/mailbox_detail.html:105
 msgid "Latest Emails"
 msgstr "Neueste E-Mails"
 
 #: src/web/templates/web/account/account_detail.html:124
 #: src/web/templates/web/correspondent/correspondent_detail.html:94
-#: src/web/templates/web/dashboard.html:22
+#: src/web/templates/web/dashboard.html:30
 #: src/web/templates/web/email/email_detail.html:176
 #: src/web/templates/web/mailbox/mailbox_detail.html:110
 msgid "View all"
@@ -312,7 +312,7 @@ msgstr "in"
 
 #: src/web/templates/web/account/account_filter_list.html:6
 #: src/web/templates/web/account/account_filter_list.html:10
-#: src/web/templates/web/dashboard.html:69
+#: src/web/templates/web/dashboard.html:77
 #: src/web/templates/web/partials/_header.html:104
 msgid "Accounts"
 msgstr "Konten"
@@ -388,7 +388,7 @@ msgstr "Erhalten am"
 
 #: src/web/templates/web/attachment/attachment_filter_list.html:6
 #: src/web/templates/web/attachment/attachment_filter_list.html:10
-#: src/web/templates/web/dashboard.html:62
+#: src/web/templates/web/dashboard.html:70
 #: src/web/templates/web/email/email_detail.html:133
 #: src/web/templates/web/partials/_header.html:56
 msgid "Attachments"
@@ -474,7 +474,7 @@ msgstr "mit"
 
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:6
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:10
-#: src/web/templates/web/dashboard.html:55
+#: src/web/templates/web/dashboard.html:63
 #: src/web/templates/web/email/email_detail.html:122
 #: src/web/templates/web/partials/_header.html:79
 msgid "Correspondents"
@@ -571,28 +571,35 @@ msgstr "Starten"
 msgid "Stop"
 msgstr "Stoppen"
 
-#: src/web/templates/web/dashboard.html:6
+#: src/web/templates/web/dashboard.html:8
 msgid "Dashboard"
 msgstr "Dashboard"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
-#: src/web/templates/web/dashboard.html:11
+#: src/web/templates/web/dashboard.html:13
 msgid "Welcome to E∘nvelope"
 msgstr "Willkommen bei E∘nvelope"
 
-#: src/web/templates/web/dashboard.html:35
+#: src/web/templates/web/dashboard.html:17
+#: src/web/templates/web/dashboard.html:18
+#, fuzzy
+#| msgid "Search"
+msgid "Search emails"
+msgstr "Suche"
+
+#: src/web/templates/web/dashboard.html:43
 msgid "Statistics"
 msgstr "Statistiken"
 
-#: src/web/templates/web/dashboard.html:41
+#: src/web/templates/web/dashboard.html:49
 msgid "Data"
 msgstr "Daten"
 
-#: src/web/templates/web/dashboard.html:42
+#: src/web/templates/web/dashboard.html:50
 msgid "Count"
 msgstr "Anzahl"
 
-#: src/web/templates/web/dashboard.html:48
+#: src/web/templates/web/dashboard.html:56
 #: src/web/templates/web/email/email_filter_list.html:6
 #: src/web/templates/web/email/email_filter_list.html:11
 #: src/web/templates/web/partials/_header.html:31
@@ -609,7 +616,7 @@ msgid "Email Timeline"
 msgstr "E-Mail Chronik"
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10
+#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
 msgid "Day"
 msgstr "Tag"
 
@@ -628,6 +635,7 @@ msgstr "Diese Woche"
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
+#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr "Monat"
 
@@ -641,7 +649,7 @@ msgid "Week #"
 msgstr "Woche Nr."
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10
+#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
 msgid "Year"
 msgstr "Jahr"
 
@@ -921,6 +929,7 @@ msgid "End edit"
 msgstr "Bearbeiten beenden"
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
+#: src/web/utils/columns.py:90
 msgid "Favorite"
 msgstr "Favorit"
 

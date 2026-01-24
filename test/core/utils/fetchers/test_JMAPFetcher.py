@@ -25,6 +25,7 @@ from collections.abc import Iterable, Sized
 import jmapc
 import pytest
 import requests
+import urllib3.exceptions
 from freezegun import freeze_time
 
 from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
@@ -299,7 +300,10 @@ def test_JMAPFetcher___init___success(
     mock_logger.exception.assert_not_called()
 
 
-@pytest.mark.parametrize("error", [requests.HTTPError, requests.ConnectionError])
+@pytest.mark.parametrize(
+    "error",
+    [requests.HTTPError, requests.ConnectionError, urllib3.exceptions.HTTPError],
+)
 def test_JMAPFetcher___init____failure(
     fake_error_message,
     jmap_mailbox,

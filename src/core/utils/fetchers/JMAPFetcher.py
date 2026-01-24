@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING, override
 
 import jmapc
 import requests
+import urllib3.exceptions
 
 from core.constants import (
     INTERNAL_DATE_FORMAT,
@@ -147,7 +148,7 @@ class JMAPFetcher(BaseFetcher):
                     host=self.account.mail_host_address,
                     api_token=self.account.password,
                 )
-        except requests.RequestException as error:
+        except (requests.RequestException, urllib3.exceptions.HTTPError) as error:
             self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error, "login") from error
         self.logger.info("Successfully connected to %s.", self.account)

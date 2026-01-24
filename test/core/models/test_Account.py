@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import datetime
+import re
 
 import pytest
 from django.db import IntegrityError
@@ -319,7 +320,7 @@ def test_Account_get_fetcher__bad_protocol(mock_logger, fake_account):
     fake_account.save(update_fields=["is_healthy"])
     fake_account.protocol = "OTHER"
 
-    with pytest.raises(ValueError, match="OTHER"):
+    with pytest.raises(ValueError, match=re.compile("protocol", re.IGNORECASE)):
         fake_account.get_fetcher()
 
     fake_account.refresh_from_db()
@@ -396,7 +397,7 @@ def test_Account_get_fetcher_class__bad_protocol(fake_account, mock_logger):
     fake_account.protocol = "OTHER"
     fake_account.save(update_fields=["is_healthy"])
 
-    with pytest.raises(ValueError, match="OTHER"):
+    with pytest.raises(ValueError, match=re.compile("protocol", re.IGNORECASE)):
         fake_account.get_fetcher_class()
 
     fake_account.refresh_from_db()

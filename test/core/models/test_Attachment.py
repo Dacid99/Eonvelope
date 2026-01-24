@@ -21,6 +21,7 @@
 import datetime
 import email
 import os
+import re
 from tempfile import gettempdir
 from zipfile import ZipFile
 
@@ -89,9 +90,9 @@ def test_Attachment_foreign_key_deletion(fake_attachment):
 
 
 @pytest.mark.django_db
-def test_Attachment_unique_constraints():
+def test_Attachment_unique_constraints(fake_mailbox):
     """Tests the unique constraints of :class:`core.models.Attachment.Attachment`."""
-    email = baker.make(Email, x_spam_flag=False)
+    email = baker.make(Email, mailbox=fake_mailbox)
 
     baker.make(Attachment, file_path="test", email=email)
     with pytest.raises(IntegrityError):
@@ -727,13 +728,13 @@ def test_Attachment_create_from_email_message(
 
 
 @pytest.mark.django_db
-def test_Attachment_create_from_email_message_unsaved_email():
+def test_Attachment_create_from_email_message__unsaved_email():
     """Tests :func:`core.models.Attachment.Attachment.from_data`
     in case of success.
     """
     test_email_message = email.message_from_bytes(b"")
 
-    with pytest.raises(ValueError, match="db"):
+    with pytest.raises(ValueError, match=re.compile("email", re.IGNORECASE)):
         Attachment.create_from_email_message(test_email_message, Email())
 
 

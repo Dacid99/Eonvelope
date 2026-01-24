@@ -360,7 +360,7 @@ def test_fetch__failure__auth_owner(
         },
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     fake_mailbox.refresh_from_db()
     assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
     assert "error" in response.data
@@ -384,7 +384,7 @@ def test_fetch__auth_owner__no_criterion(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion"]
     mock_Mailbox_fetch.assert_not_called()
 
@@ -405,7 +405,7 @@ def test_fetch__auth_owner__bad_criterion(
         data={"criterion": faker.word(), "criterion_arg": "value"},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion"]
     mock_Mailbox_fetch.assert_not_called()
 
@@ -425,7 +425,7 @@ def test_fetch__auth_owner__missing_criterion_arg(
         data={"criterion": EmailFetchingCriterionChoices.SENTSINCE},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion_arg"]
     mock_Mailbox_fetch.assert_not_called()
 
@@ -538,7 +538,7 @@ def test_download__no_format__auth_owner(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert not isinstance(response, FileResponse)
 
 
@@ -585,7 +585,7 @@ def test_download__bad_format__auth_owner(
         {"file_format": faker.word()},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert not isinstance(response, FileResponse)
 
 
@@ -753,7 +753,7 @@ def test_upload_mailbox__no_file__auth_owner(
         {"file_format": fake_format},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["file"]
     mock_Mailbox_add_emails_from_file.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
@@ -779,7 +779,7 @@ def test_upload_mailbox__no_format__auth_owner(
         format="multipart",
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["file_format"]
     mock_Mailbox_add_emails_from_file.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
@@ -805,7 +805,7 @@ def test_upload_mailbox__bad_format__auth_owner(
         format="multipart",
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["file_format"]
     mock_Mailbox_add_emails_from_file.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
@@ -834,7 +834,7 @@ def test_upload_mailbox__bad_file__auth_owner(
         format="multipart",
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["file"] == str(mock_Mailbox_add_emails_from_file.side_effect)
     mock_Mailbox_add_emails_from_file.assert_called_once()
     assert fake_mailbox.emails.all().count() == 1

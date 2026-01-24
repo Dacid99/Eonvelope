@@ -149,7 +149,9 @@ def get_bodytexts(email_message: EmailMessage) -> dict[str, str]:
     return bodytexts
 
 
-def parse_IMAP_mailbox_data(mailbox_data: bytes | str) -> tuple[str, str]:
+def parse_IMAP_mailbox_data(  # noqa: N802 # that's how IMAP is spelled
+    mailbox_data: bytes | str,
+) -> tuple[str, str]:
     """Parses the mailbox name as received in :mod:`core.utils.fetchers.IMAP4Fetcher`.
 
     Note:

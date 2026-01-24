@@ -190,7 +190,7 @@ def test_batch_download__no_ids__auth_owner(
         {},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["id"]
     assert not isinstance(response, FileResponse)
     mock_Correspondent_queryset_as_file.assert_not_called()
@@ -222,7 +222,7 @@ def test_batch_download__bad_ids__auth_owner(
         {"id": bad_ids},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["id"]
     assert not isinstance(response, FileResponse)
     mock_Correspondent_queryset_as_file.assert_not_called()
@@ -471,7 +471,7 @@ def test_share_to_nextcloud__auth_owner__failure(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "detail" in response.data
     assert "error" in response.data
     assert fake_error_message in response.data["error"]

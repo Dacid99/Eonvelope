@@ -129,7 +129,7 @@ def test_update_mailboxes__failure__auth_owner(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     fake_account.refresh_from_db()
     assert response.data["data"] == AccountViewSet.serializer_class(fake_account).data
     assert "error" in response.data

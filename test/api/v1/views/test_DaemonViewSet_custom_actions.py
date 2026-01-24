@@ -231,7 +231,7 @@ def test_start__failure__auth_owner(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     fake_daemon.refresh_from_db()
     assert response.data["data"] == DaemonViewSet.serializer_class(fake_daemon).data
     assert fake_daemon.celery_task.enabled is True
@@ -342,7 +342,7 @@ def test_stop__failure__auth_owner(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     fake_daemon.refresh_from_db()
     assert response.data["data"] == DaemonViewSet.serializer_class(fake_daemon).data
     assert fake_daemon.celery_task.enabled is False

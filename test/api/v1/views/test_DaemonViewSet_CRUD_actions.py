@@ -322,7 +322,7 @@ def test_post__auth_other(other_api_client, daemon_with_interval_payload, list_u
         format="json",
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "mailbox" in response.data
     assert "fetching_criterion" not in response.data
     with pytest.raises(Daemon.DoesNotExist):
@@ -367,7 +367,7 @@ def test_post__duplicate__auth_owner(fake_daemon, owner_api_client, list_url):
 
     response = owner_api_client.post(list_url(DaemonViewSet), data=clean_payload)
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
 
 @pytest.mark.django_db
@@ -381,7 +381,7 @@ def test_post__auth_admin(admin_api_client, daemon_with_interval_payload, list_u
         format="json",
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "mailbox" in response.data
     assert "fetching_criterion" not in response.data
     with pytest.raises(Daemon.DoesNotExist):

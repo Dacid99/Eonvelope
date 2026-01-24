@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import datetime
 import os
+import re
 from tempfile import TemporaryDirectory, gettempdir
 from zipfile import ZipFile
 
@@ -105,7 +106,7 @@ def test_Email_foreign_key_mailbox_deletion(fake_email):
 def test_Email_m2m_references_deletion(fake_email):
     """Tests the on_delete foreign key constraint on in_reply_to in :class:`core.models.Email.Email`."""
 
-    referenced_email = baker.make(Email, x_spam_flag=False)
+    referenced_email = baker.make(Email, mailbox=fake_email.mailbox)
     fake_email.references.add(referenced_email)
 
     referenced_email.delete()
@@ -120,7 +121,7 @@ def test_Email_m2m_references_deletion(fake_email):
 def test_Email_m2m_in_reply_to_deletion(fake_email):
     """Tests the on_delete foreign key constraint on in_reply_to in :class:`core.models.Email.Email`."""
 
-    in_reply_to_email = baker.make(Email, x_spam_flag=False)
+    in_reply_to_email = baker.make(Email, mailbox=fake_email.mailbox)
     fake_email.in_reply_to.add(in_reply_to_email)
 
     in_reply_to_email.delete()
@@ -633,7 +634,7 @@ def test_Email_queryset_as_file__bad_format(fake_email):
     """
     assert Email.objects.count() == 1
 
-    with pytest.raises(ValueError, match="unsupported"):
+    with pytest.raises(ValueError, match=re.compile("unsupported", re.IGNORECASE)):
         Email.queryset_as_file(Email.objects.all(), "unSupPortEd")
 
     assert Email.objects.count() == 1

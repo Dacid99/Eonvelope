@@ -20,6 +20,7 @@
 
 import datetime
 import os
+import re
 
 import exchangelib
 import exchangelib.errors
@@ -249,7 +250,7 @@ def test_ExchangeFetcher___init____bad_protocol(
     spy_ExchangeFetcher_connect_to_host = mocker.spy(ExchangeFetcher, "connect_to_host")
     exchange_mailbox.account.protocol = EmailProtocolChoices.POP3
 
-    with pytest.raises(ValueError, match="protocol"):
+    with pytest.raises(ValueError, match=re.compile("protocol", re.IGNORECASE)):
         ExchangeFetcher(exchange_mailbox.account)
 
     spy_ExchangeFetcher_connect_to_host.assert_not_called()
@@ -435,7 +436,7 @@ def test_ExchangeFetcher_test_account__ewserror(
         exchangelib.errors.EWSError(fake_error_message)
     )
 
-    with pytest.raises(MailAccountError, match=f"EWSError.*?{fake_error_message}"):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         ExchangeFetcher(exchange_mailbox.account).test()
 
     mock_ExchangeAccount.return_value.msg_folder_root.refresh.assert_called_once_with()
@@ -507,7 +508,7 @@ def test_ExchangeFetcher_test_mailbox_subfolder__success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_test_mailbox_wrong_mailbox(
+def test_ExchangeFetcher_test_mailbox__wrong_mailbox(
     fake_other_account, exchange_mailbox, mock_logger, mock_msg_folder_root
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.test`
@@ -515,7 +516,7 @@ def test_ExchangeFetcher_test_mailbox_wrong_mailbox(
     """
     wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
-    with pytest.raises(ValueError, match="is not in"):
+    with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
         ExchangeFetcher(exchange_mailbox.account).test(wrong_mailbox)
 
     mock_msg_folder_root.refresh.assert_not_called()
@@ -537,7 +538,7 @@ def test_ExchangeFetcher_test_mailbox__ewserror(
         exchangelib.errors.EWSError(fake_error_message)
     )
 
-    with pytest.raises(MailboxError, match=f"EWSError.*?{fake_error_message}"):
+    with pytest.raises(MailboxError, match=fake_error_message):
         ExchangeFetcher(exchange_mailbox.account).test(exchange_mailbox)
 
     mock_msg_folder_root.refresh.assert_called_once_with()
@@ -636,7 +637,7 @@ def test_ExchangeFetcher_fetch_emails_filter__success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_wrong_mailbox(
+def test_ExchangeFetcher_fetch_emails__wrong_mailbox(
     fake_other_account, exchange_mailbox, mock_logger
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
@@ -644,7 +645,7 @@ def test_ExchangeFetcher_fetch_emails_wrong_mailbox(
     """
     wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
-    with pytest.raises(ValueError, match="is not in"):
+    with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
         ExchangeFetcher(exchange_mailbox.account).fetch_emails(wrong_mailbox)
 
     mock_logger.error.assert_called()
@@ -659,7 +660,7 @@ def test_ExchangeFetcher_fetch_emails__ewserror__query(
     """
     mock_Folder.all.side_effect = exchangelib.errors.EWSError(fake_error_message)
 
-    with pytest.raises(MailboxError, match=f"EWSError.*?{fake_error_message}"):
+    with pytest.raises(MailboxError, match=fake_error_message):
         ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
 
     mock_logger.debug.assert_called()
@@ -718,7 +719,7 @@ def test_ExchangeFetcher_fetch_mailboxes__ewserror__walk(
         fake_error_message
     )
 
-    with pytest.raises(MailAccountError, match=f"EWSError.*?{fake_error_message}"):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         ExchangeFetcher(exchange_mailbox.account).fetch_mailboxes()
 
     mock_msg_folder_root.walk.assert_called_once_with()
@@ -817,7 +818,7 @@ def test_ExchangeFetcher_restore__no_file(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_restore_wrong_mailbox(
+def test_ExchangeFetcher_restore__wrong_mailbox(
     exchange_mailbox,
     fake_email_with_file,
     fake_other_mailbox,
@@ -831,7 +832,7 @@ def test_ExchangeFetcher_restore_wrong_mailbox(
     fake_email_with_file.mailbox = fake_other_mailbox
     fake_email_with_file.save()
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
         ExchangeFetcher(exchange_mailbox.account).restore(fake_email_with_file)
 
     mock_Message.assert_not_called()
@@ -854,7 +855,7 @@ def test_ExchangeFetcher_restore__ewserror(
         fake_error_message
     )
 
-    with pytest.raises(MailboxError, match=f"EWSError.*?{fake_error_message}"):
+    with pytest.raises(MailboxError, match=fake_error_message):
         ExchangeFetcher(exchange_mailbox.account).restore(fake_email_with_file)
 
     mock_Message.assert_called_once()

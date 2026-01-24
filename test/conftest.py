@@ -334,14 +334,6 @@ def fake_timezone_client(client, fake_timezone):
 
 
 @pytest.fixture
-def fake__bad_timezone_client(client):
-    """A client with invalid session timezone."""
-    session = client.session
-    session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = "NO/TZONE"
-    session.save()
-
-
-@pytest.fixture
 def fake_fs(settings):
     """A mock Linux filesystem for realistic testing.
 

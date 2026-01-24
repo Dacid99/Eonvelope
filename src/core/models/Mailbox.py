@@ -308,27 +308,25 @@ class Mailbox(
         """
         file_format = file_format.lower()
         logger.info("Adding emails from %s file to %s ...", file_format, self)
-        if file_format == SupportedEmailUploadFormats.EML:
-            self._add_email_from_eml(file)
-        elif file_format == SupportedEmailUploadFormats.ZIP_EML:
-            self._add_emails_from_zip_eml(file)
-        elif file_format in [
-            SupportedEmailUploadFormats.MBOX,
-            SupportedEmailUploadFormats.MMDF,
-            SupportedEmailUploadFormats.BABYL,
-        ]:
-            self._add_emails_from_mailbox_file(file, file_format)
-        elif file_format in [
-            SupportedEmailUploadFormats.MAILDIR,
-            SupportedEmailUploadFormats.MH,
-        ]:
-            self._add_emails_from_mailbox_zip(file, file_format)
-        else:
-            logger.error("Unsupported fileformat for uploaded file.")
-            raise ValueError(
-                _("The file format %(file_format)s is not supported.")
-                % {"file_format": file_format}
-            )
+        match file_format:
+            case SupportedEmailUploadFormats.EML:
+                self._add_email_from_eml(file)
+            case SupportedEmailUploadFormats.ZIP_EML:
+                self._add_emails_from_zip_eml(file)
+            case (
+                SupportedEmailUploadFormats.MBOX
+                | SupportedEmailUploadFormats.MMDF
+                | SupportedEmailUploadFormats.BABYL
+            ):
+                self._add_emails_from_mailbox_file(file, file_format)
+            case SupportedEmailUploadFormats.MAILDIR | SupportedEmailUploadFormats.MH:
+                self._add_emails_from_mailbox_zip(file, file_format)
+            case _:
+                logger.error("Unsupported fileformat for uploaded file.")
+                raise ValueError(
+                    _("The file format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                )
         logger.info("Successfully added emails from file.")
 
     @property
@@ -423,7 +421,10 @@ class Mailbox(
 
         Returns:
             The :class:`core.models.Mailbox` instance with data from the bytes.
-            `None` if the mailbox name is in the ignorelist.
+            `None` if the mailbox name is ignored.
+
+        Raises:
+            Account.DoesNotExist: If the given account is not in the db.
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")

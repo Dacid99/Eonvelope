@@ -19,6 +19,8 @@
 
 """Test module for :mod:`core.models.EmailCorrespondent`."""
 
+import re
+
 import pytest
 from django.db import IntegrityError
 from model_bakery import baker
@@ -166,14 +168,14 @@ def test_EmailCorrespondent_create_from_header__no_address(
 
 
 @pytest.mark.django_db
-def test_EmailCorrespondent_create_from_header__no_email(fake_header_name, faker):
+def test_EmailCorrespondent_create_from_header__unsaved_email(fake_header_name, faker):
     """Tests :func:`core.models.EmailCorrespondent.EmailCorrespondent.create_from_header`
     in case the email argument is not in the database.
     """
     assert EmailCorrespondent.objects.count() == 0
     assert Correspondent.objects.count() == 0
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=re.compile("email", re.IGNORECASE)):
         EmailCorrespondent.create_from_header(
             faker.sentence(), fake_header_name, Email()
         )

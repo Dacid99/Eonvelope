@@ -101,7 +101,7 @@ def test_Daemon_unique_together_constraint_mailbox_fetching_criterion(
 
 
 @pytest.mark.django_db
-def test_Daemon_valid_fetching_criterion_constraint(faker, fake_daemon):
+def test_Daemon_valid_fetching_criterion_constraint(fake_daemon):
     """Tests the constraint on :attr:`core.models.Daemon.Daemon.fetching_criterion` of :class:`core.models.Daemon.Daemon`."""
     with pytest.raises(IntegrityError):
         baker.make(

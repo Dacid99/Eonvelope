@@ -330,7 +330,7 @@ def test_post__duplicate__auth_owner(
 
     response = owner_api_client.post(list_url(AccountViewSet), data=clean_payload)
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     mock_Account_update_mailboxes.assert_not_called()
 
 

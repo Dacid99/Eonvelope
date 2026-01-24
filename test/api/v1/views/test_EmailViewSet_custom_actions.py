@@ -189,7 +189,7 @@ def test_batch_download__no_ids__auth_owner(
         {"file_format": faker.word()},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["id"]
     assert not isinstance(response, FileResponse)
 
@@ -206,7 +206,7 @@ def test_batch_download__no_format__auth_owner(
         {"id": [1, 2]},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["file_format"]
     assert not isinstance(response, FileResponse)
 
@@ -223,7 +223,7 @@ def test_batch_download__bad_format__auth_owner(
         {"file_format": "unimplemented", "id": [1, 2]},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["file_format"]
     assert not isinstance(response, FileResponse)
 
@@ -249,7 +249,7 @@ def test_batch_download__bad_ids__auth_owner(
         {"file_format": SupportedEmailDownloadFormats.MBOX, "id": bad_ids},
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["id"]
     assert not isinstance(response, FileResponse)
     mock_Email_queryset_as_file.assert_not_called()
@@ -533,7 +533,7 @@ def test_restore__auth_owner__pop(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "detail" in response.data
     mock_Email_restore_to_mailbox.assert_called_once_with()
 
@@ -579,7 +579,7 @@ def test_restore__auth_owner__failure(
         )
     )
 
-    assert response.status_code == status.HTTP_400__bad_REQUEST
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "detail" in response.data
     assert "error" in response.data
     assert fake_error_message in response.data["error"]

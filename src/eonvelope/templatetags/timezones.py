@@ -19,27 +19,27 @@
 """Module with templatestags for timezone."""
 
 import zoneinfo
-from typing import Any, Literal, override
+from typing import Literal, override
 
-from django.template import Context, Library, Node, TemplateSyntaxError
-
-
-register = Library()
+from django import template
 
 
-class GetAvailableTimezonesNode(Node):
+register = template.Library()
+
+
+class GetAvailableTimezonesNode(template.Node):
     """Node putting the output of :func:`zoneinfo.available_timezones` in the context.
 
     Note:
         Analogous to :func:`django.templatetags.i18n.GetAvailableTimezonesNode`.
     """
 
-    def __init__(self, variable: Any) -> None:
+    def __init__(self, variable: str) -> None:
         """Constructor for the node."""
         self.variable = variable
 
     @override
-    def render(self, context: Context) -> Literal[""]:
+    def render(self, context: template.Context) -> Literal[""]:
         """Adds available timezones to the context.
 
         Args:
@@ -53,7 +53,9 @@ class GetAvailableTimezonesNode(Node):
 
 
 @register.tag("get_available_timezones")
-def do_get_available_timezones(parser, token) -> GetAvailableTimezonesNode:
+def do_get_available_timezones(
+    parser, token  # noqa: ANN001  # can't typecheck the invocation in templates anyway
+) -> GetAvailableTimezonesNode:
     """Store a list of available timezones in the context.
 
     Usage::
@@ -73,7 +75,7 @@ def do_get_available_timezones(parser, token) -> GetAvailableTimezonesNode:
     args = token.contents.split()
     if len(args) != 3 or args[1] != "as":  # noqa: PLR2004 ; just checking for length
         # pylint: disable=consider-using-f-string  # does not need to be evaluated early
-        raise TemplateSyntaxError(
+        raise template.TemplateSyntaxError(
             "'get_available_timezones' requires 'as variable' (got %r)"  # noqa: UP031
             % args
         )

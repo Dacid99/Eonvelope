@@ -266,7 +266,9 @@ def test_Mailbox_test__bad_protocol(
     """
     mock_Account_get_fetcher.side_effect = ValueError("Bad protocol OTHER")
 
-    with pytest.raises(ValueError, match="OTHER"):
+    with pytest.raises(
+        ValueError, check=lambda error: error == mock_Account_get_fetcher.side_effect
+    ):
         fake_mailbox.test()
 
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
@@ -477,7 +479,7 @@ def test_Mailbox_add_emails_from_file_zip_eml__success(
     "file_format",
     [SupportedEmailUploadFormats.ZIP_EML, SupportedEmailUploadFormats.ZIP_EML.title()],
 )
-def test_Mailbox_add_emails_from_file_zip_eml__bad_file(
+def test_Mailbox_add_emails_from_file__zip_eml__bad_file(
     faker,
     fake_fs,
     fake_mailbox,
@@ -489,7 +491,7 @@ def test_Mailbox_add_emails_from_file_zip_eml__bad_file(
     """
     assert fake_mailbox.emails.count() == 0
 
-    with pytest.raises(ValueError, match="zip"):
+    with pytest.raises(ValueError, match=re.compile("zip", re.IGNORECASE)):
         fake_mailbox.add_emails_from_file(BytesIO(faker.text().encode()), file_format)
 
     assert fake_mailbox.emails.count() == 0
@@ -509,7 +511,7 @@ def test_Mailbox_add_emails_from_file_zip_eml__bad_file(
         SupportedEmailUploadFormats.BABYL.title(),
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_file__success(
+def test_Mailbox_add_emails_from_file__mailbox_file__success(
     fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -552,7 +554,7 @@ def test_Mailbox_add_emails_from_file_mailbox_file__success(
         SupportedEmailUploadFormats.BABYL,
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_file__bad_file(
+def test_Mailbox_add_emails_from_file__mailbox_file__bad_file(
     faker,
     fake_fs,
     fake_mailbox,
@@ -583,7 +585,7 @@ def test_Mailbox_add_emails_from_file_mailbox_file__bad_file(
         SupportedEmailUploadFormats.MH.title(),
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_dir__success(
+def test_Mailbox_add_emails_from_file__mailbox_dir__success(
     fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -628,7 +630,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir__success(
         SupportedEmailUploadFormats.MH,
     ],
 )
-def test_Mailbox_add_emails_from_file_mailbox_dir__bad_zip(
+def test_Mailbox_add_emails_from_file__mailbox_dir__bad_zip(
     faker, fake_fs, fake_mailbox, mock_logger, file_format
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -636,7 +638,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir__bad_zip(
     """
     assert fake_mailbox.emails.count() == 0
 
-    with pytest.raises(ValueError, match="zip"):
+    with pytest.raises(ValueError, match=re.compile("zip", re.IGNORECASE)):
         fake_mailbox.add_emails_from_file(BytesIO(faker.text().encode()), file_format)
 
     assert fake_mailbox.emails.count() == 0
@@ -645,7 +647,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir__bad_zip(
 
 
 @pytest.mark.django_db
-def test_Mailbox_add_emails_from_file_mailbox_dir__bad_maildir(
+def test_Mailbox_add_emails_from_file__mailbox_dir__bad_maildir(
     fake_fs, fake_mailbox, mock_logger
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -678,7 +680,7 @@ def test_Mailbox_add_emails_from_file_mailbox_dir__bad_maildir(
 
 
 @pytest.mark.django_db
-def test_Mailbox_add_emails_from_file_mailbox_dir__bad_mh(
+def test_Mailbox_add_emails_from_file__mailbox_dir__bad_mh(
     fake_fs, fake_mailbox, mock_logger
 ):
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
@@ -710,7 +712,7 @@ def test_Mailbox_add_emails_from_file__bad_format(
     """Tests :func:`core.models.Account.Account.add_emails_from_file`
     in case of the mailbox file format is an unsupported format.
     """
-    with pytest.raises(ValueError, match="unimplemented"):
+    with pytest.raises(ValueError, match=re.compile("format", re.IGNORECASE)):
         fake_mailbox.add_emails_from_file(fake_file, "unimPLemented")
 
     assert os.listdir(gettempdir()) == []
@@ -820,7 +822,7 @@ def test_Mailbox_create_from_data__ignored__by_type(
 
 
 @pytest.mark.django_db
-def test_Mailbox_create_from_data__no_account(faker):
+def test_Mailbox_create_from_data__unsaved_account(faker):
     """Tests :func:`core.models.Account.Account.create_from_data`
     in case of data that is already in the db.
     """
@@ -828,7 +830,7 @@ def test_Mailbox_create_from_data__no_account(faker):
 
     assert Mailbox.objects.count() == 0
 
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=re.compile("account", re.IGNORECASE)):
         Mailbox.create_from_data(fake_name_bytes, "no_type", Account())
 
     assert Mailbox.objects.count() == 0

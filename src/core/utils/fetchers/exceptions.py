@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from django.utils.translation import gettext_lazy as _
 
@@ -72,6 +72,6 @@ class MailboxError(FetcherError):
 class BadServerResponseError(Exception):
     """Exception for unexpected server responses."""
 
-    def __init__(self, response: Any = "") -> None:
+    def __init__(self, response: object = "") -> None:
         """Extended for consistent message formatting."""
         super().__init__(_("Server responded %(response)s!") % {"response": response})

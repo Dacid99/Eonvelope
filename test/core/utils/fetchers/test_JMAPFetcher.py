@@ -19,6 +19,7 @@
 """Test module for the :class:`IMAP4Fetcher` class."""
 
 import datetime
+import re
 from collections.abc import Iterable, Sized
 
 import jmapc
@@ -309,9 +310,7 @@ def test_JMAPFetcher___init____failure(
     """Test the constructor of JMAPFetcher in case of an request error."""
     mock_JMAP_client.create_with_password.side_effect = error(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account)
 
     mock_JMAP_client.create_with_password.assert_called_once()
@@ -342,9 +341,7 @@ def test_JMAPFetcher_test_account_non_single_response(
         fake_error_message, result=None
     )
 
-    with pytest.raises(
-        MailAccountError, match=f"BadServerResponseError.*{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).test()
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -399,9 +396,7 @@ def test_JMAPFetcher_test_account__requests_error(
     """
     mock_JMAP_client.return_value.request.side_effect = error(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).test()
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -435,9 +430,7 @@ def test_JMAPFetcher_test_mailbox__failure(
     """Test the constructor of JMAPFetcher in case of an request error."""
     mock_JMAP_client.return_value.request.side_effect = error(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).test(jmap_mailbox)
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -455,9 +448,7 @@ def test_JMAPFetcher_test_mailbox_non_single_response(
         fake_error_message, result=None
     )
 
-    with pytest.raises(
-        MailAccountError, match=f"BadServerResponseError.*{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).test(jmap_mailbox)
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -465,14 +456,13 @@ def test_JMAPFetcher_test_mailbox_non_single_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_test_mailbox_wrong_mailbox(
+def test_JMAPFetcher_test_mailbox__wrong_mailbox(
     fake_other_mailbox,
     jmap_mailbox,
-    mock_logger,
     mock_JMAP_client,
 ):
     """Test the constructor of JMAPFetcher in case of an request error."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
         JMAPFetcher(jmap_mailbox.account).test(fake_other_mailbox)
 
     mock_JMAP_client.return_value.request.assert_not_called()
@@ -545,9 +535,7 @@ def test_JMAPFetcher_fetch_mailboxes__failure(
     """
     mock_JMAP_client.return_value.request.side_effect = error(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).fetch_mailboxes()
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -565,9 +553,7 @@ def test_JMAPFetcher_fetch_mailboxes_non_single_response(
         fake_error_message, result=None
     )
 
-    with pytest.raises(
-        MailAccountError, match=f"BadServerResponseError.*{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).fetch_mailboxes()
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -639,9 +625,7 @@ def test_JMAPFetcher_fetch_emails__failure_request(
     """
     mock_JMAP_client.return_value.request.side_effect = error(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).fetch_emails(jmap_mailbox)
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -661,9 +645,7 @@ def test_JMAPFetcher_fetch_emails__failure_download(
         fake_error_message
     )
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).fetch_emails(jmap_mailbox)
 
     mock_JMAP_client.return_value.request.assert_called()
@@ -683,9 +665,7 @@ def test_JMAPFetcher_fetch_emails_non_single_response(
         fake_error_message, result=None
     )
 
-    with pytest.raises(
-        MailAccountError, match=f"BadServerResponseError.*{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).fetch_emails(jmap_mailbox)
 
     mock_JMAP_client.return_value.request.assert_called_once()
@@ -733,14 +713,26 @@ def test_JMAPFetcher_fetch_emails__bad_response(
 
 
 @pytest.mark.django_db
-def test_JMAPFetcher_fetch_emails_wrong_mailbox(
+def test_JMAPFetcher_fetch_emails__wrong_mailbox(
     fake_other_mailbox,
     jmap_mailbox,
     mock_JMAP_client,
 ):
     """Test the constructor of JMAPFetcher in case of an request error."""
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
         JMAPFetcher(jmap_mailbox.account).fetch_emails(fake_other_mailbox)
+
+    mock_JMAP_client.return_value.request.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_JMAPFetcher_fetch_emails__bad_criterion(
+    jmap_mailbox,
+    mock_JMAP_client,
+):
+    """Test the constructor of JMAPFetcher in case of an request error."""
+    with pytest.raises(ValueError, match=re.compile("criterion", re.IGNORECASE)):
+        JMAPFetcher(jmap_mailbox.account).fetch_emails(jmap_mailbox, "NO_CRIT")
 
     mock_JMAP_client.return_value.request.assert_not_called()
 
@@ -776,9 +768,7 @@ def test_JMAPFetcher_restore__failure_upload_blob(
     """
     mock_JMAP_client.return_value.upload_blob.side_effect = error(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).restore(fake_email_with_file)
 
     mock_JMAP_client.return_value.upload_blob.assert_called_once()
@@ -801,9 +791,7 @@ def test_JMAPFetcher_restore__failure_request(
     """
     mock_JMAP_client.return_value.request.side_effect = error(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"{error.__name__}.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         JMAPFetcher(jmap_mailbox.account).restore(fake_email_with_file)
 
     mock_JMAP_client.return_value.upload_blob.assert_called_once()

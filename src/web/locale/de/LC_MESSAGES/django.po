@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-24 13:44+0000\n"
-"PO-Revision-Date: 2026-01-20 19:01+0000\n"
+"PO-Revision-Date: 2026-01-25 16:01+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/"
-">\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -330,8 +330,8 @@ msgid ""
 "You can set up routines for this account's mailboxes to fetch its complete "
 "email traffic."
 msgstr ""
-"Du kannst Routinen für dieses Konto hinzufügen, um seinen kompletten "
-"Mailverkehr zu archivieren."
+"Du kannst Routinen für die Postfächer dieses Kontos hinzufügen, um seinen "
+"kompletten Mailverkehr zu archivieren."
 
 #: src/web/templates/web/account/partials/_emails_list_alternative.html:6
 msgid "You can fetch emails from one of this accounts mailboxes."
@@ -582,10 +582,8 @@ msgstr "Willkommen bei E∘nvelope"
 
 #: src/web/templates/web/dashboard.html:17
 #: src/web/templates/web/dashboard.html:18
-#, fuzzy
-#| msgid "Search"
 msgid "Search emails"
-msgstr "Suche"
+msgstr "E-Mails durchsuchen"
 
 #: src/web/templates/web/dashboard.html:43
 msgid "Statistics"

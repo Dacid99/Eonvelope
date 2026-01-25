@@ -13,6 +13,9 @@
 [![Framework](https://pypi-camo.freetls.fastly.net/beb496af0833573259d4094b1fe3b0a3ea831607/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6672616d65776f726b2d446a616e676f2d3043334332362e737667)](https://www.djangoproject.com/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
+<!-- markdownlint-disable-next-line MD033 -->
+<img alt="Eonvelope icon" src="src/eonvelope/static/eonvelope/icons/favicon.svg" height="200"/>
+
 Preserve your emails for [an indefinite long period of time](https://en.wikipedia.org/wiki/Aeon) with this open-source self-hostable email archive!
 
 ## Features
@@ -20,7 +23,7 @@ Preserve your emails for [an indefinite long period of time](https://en.wikipedi
 As a user you may like this application because of
 
 - Automatic and continuous email fetching
-- Support for all mayor mail access protocols: IMAP, POP, Exchange and JMAP
+- Support for all major mail access protocols: IMAP, POP, Exchange and JMAP
 - Import and export of emails in various formats
 - Identification of related emails
 - Restoring of emails to your mail account

@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.5.1
+
+- Hotfix: there was a bad import path
+
 ## Version 0.5.0
 
 - Features:

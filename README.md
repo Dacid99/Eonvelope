@@ -1,14 +1,14 @@
 # E∘nvelope
 
-[![Docker Image Version](https://img.shields.io/docker/v/dacid99/eonvelope)](https://hub.docker.com/r/dacid99/eonvelope)
-[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/eonvelope)](https://hub.docker.com/r/dacid99/eonvelope)
+[![Docker Image Version](https://img.shields.io/docker/v/dacid99/eonvelope)][dockerhub]
+[![Docker Pulls](https://img.shields.io/docker/pulls/dacid99/eonvelope)][dockerhub]
 
-[![Last commit](https://img.shields.io/github/last-commit/dacid99/eonvelope)](https://gitlab.com/Dacid99/eonvelope/)
-[![Commit frequency](https://img.shields.io/github/commit-activity/m/dacid99/eonvelope/development)](https://gitlab.com/Dacid99/eonvelope/)
-[![Pipeline](https://gitlab.com/Dacid99/eonvelope/badges/master/pipeline.svg)](https://gitlab.com/Dacid99/eonvelope/)
-[![Coverage](https://gitlab.com/Dacid99/eonvelope/badges/master/coverage.svg?job=test_codebase)](https://gitlab.com/Dacid99/eonvelope/)
-[![Read the Docs](https://img.shields.io/readthedocs/eonvelope/latest)](https://eonvelope.readthedocs.io/latest/)
-[![Translation status](https://img.shields.io/weblate/progress/eonvelope)](https://hosted.weblate.org/projects/eonvelope/)
+[![Last commit](https://img.shields.io/github/last-commit/dacid99/eonvelope)][gitlab]
+[![Commit frequency](https://img.shields.io/github/commit-activity/m/dacid99/eonvelope/development)][gitlab]
+[![Pipeline](https://gitlab.com/Dacid99/eonvelope/badges/master/pipeline.svg)][gitlab]
+[![Coverage](https://gitlab.com/Dacid99/eonvelope/badges/master/coverage.svg?job=test_codebase)][gitlab]
+[![Read the Docs](https://img.shields.io/readthedocs/eonvelope/latest)][readthedocs]
+[![Translation status](https://img.shields.io/weblate/progress/eonvelope)][weblate]
 
 [![Framework](https://pypi-camo.freetls.fastly.net/beb496af0833573259d4094b1fe3b0a3ea831607/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6672616d65776f726b2d446a616e676f2d3043334332362e737667)](https://www.djangoproject.com/)
 [![Code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
@@ -35,7 +35,7 @@ As an admin you may choose this project because of its
 - Full-fledged API
 - Slim mode for low-spec systems
 
-*Check out the [project website](https://dacid99.gitlab.io/eonvelope) for screenshots and more information.*
+*Check out the [project website][website] for screenshots and more information.*
 
 Your emails are serious business, so this projects codebase has > 95% test-coverage!
 
@@ -50,7 +50,7 @@ Your emails are serious business, so this projects codebase has > 95% test-cover
 
 ## Installation
 
-The project is intended to be run with the container image provided at [dockerhub](https://hub.docker.com/r/dacid99/eonvelope).
+The project is intended to be run with the container image provided at [dockerhub][dockerhub].
 
 ### Docker
 
@@ -74,7 +74,7 @@ If you want an agent to install Eonvelope for you, point it to [the install.md f
 
 ## Docs
 
-The full documentation is available on [ReadTheDocs](https://eonvelope.readthedocs.io/latest/).
+The full documentation is available on [ReadTheDocs][readthedocs].
 
 Check it out for details on configuration and instructions on how to use the running server.
 
@@ -82,20 +82,25 @@ Check it out for details on configuration and instructions on how to use the run
 
 We are striving to support as many languages as possible to make the application accessible to everyone!
 
-Translation is done via [weblate](https://hosted.weblate.org/projects/eonvelope/).
+[![Translation status](https://hosted.weblate.org/widget/eonvelope/multi-auto.svg)][weblate]
+
+Translation is done via [weblate][weblate-engage].
 If you want to add a language that is missing, go check it out!
-If the language is missing on [weblate](https://hosted.weblate.org/projects/eonvelope/) too,
-please file an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues) using the missing-language template.
+
+If the language is missing on [weblate][weblate] too,
+please file an [issue][[github-issues]] using the missing-language template.
 
 ## Accessibility
 
 Everybody should be able to use Eonvelope.
-Please don't hesitate to report any problem related to accessibility via an [issue](https://gitlab.com/Dacid99/eonvelope/-/issues).
+Please don't hesitate to report any problem related to accessibility via a [github][github-issues] or [gitlab][gitlab-issues] issue.
 
 ## Contributing
 
 If you want to help with improving this project that is great!
-You can always approach us with ideas.
+You can always approach us with ideas or issues you have come across.
+The easiest way to get in touch is via a [github][github-issues] or [gitlab][gitlab-issues] issue.
+
 And of course we are looking forward to your pull requests!
 
 To get you started smoothly just follow [the development guide](DEVELOPMENT.md).
@@ -116,3 +121,13 @@ This software is proudly released under [the GNU Affero General Public License v
 Its documentation is licensed under [the Creative Commons Attributions-ShareAlike 4.0 International (CC BY-SA 4.0) license](docs/LICENSE).
 
 Any contributions will be subject to the same licensing.
+
+
+[weblate]: https://hosted.weblate.org/engage/eonvelope/
+[weblate-engage]: https://hosted.weblate.org/engage/eonvelope/
+[dockerhub]: https://hub.docker.com/r/dacid99/eonvelope
+[readthedocs]: https://eonvelope.readthedocs.io/latest/
+[website]: https://dacid99.gitlab.io/eonvelope
+[gitlab]: https://gitlab.com/Dacid99/eonvelope/
+[gitlab-issues]: https://gitlab.com/Dacid99/eonvelope/-/issues
+[github-issues]: https://github.com/Dacid99/eonvelope/issues

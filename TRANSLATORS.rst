@@ -15,7 +15,7 @@
 
 * German
 
-    * Dacid99 (Dacid99) - 351
+    * Dacid99 (Dacid99) - 372
     * J. Lavoie (Edanas) - 83
     * Mirko P. (Mirekon) - 11
 
@@ -45,6 +45,11 @@
     * Adrián Gelmotto Ruiz (Adr1GR) - 49
 
 
+* Turkish
+
+    * WarHammer (WarHammer-z) - 24
+
+
 * Ukrainian
 
-    * Максим Горпиніч (Maksim2005UKR) - 483
+    * Максим Горпиніч (Maksim2005UKR) - 505

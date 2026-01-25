@@ -10,7 +10,7 @@
 - fetching in bunches to handle large amounts of emails, fetch as generator
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
-- tagging system with [django-tagging](https://django-tagging.readthedocs.io/en) of [taggit](https://django-taggit.readthedocs.io/en/latest/)
+- tagging system with [taggit](https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
 - async parsing, sync saving
 - download for account and batchdownload for mailbox

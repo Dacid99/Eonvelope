@@ -12,7 +12,7 @@ To make it easier to read and understand your merge requests please follow these
 
 - The projects default branch is 'development'. Please direct all merge requests to it. There are no changes other than ci config on the master branch. Development is merged into master for new releases.
 
-- Commits should have a clear and descriptive commit message in a standardized format, please refer to [this article which describes the format used for this project](https://www.seyhan.me/blog/post/lost-art-of-commit-messages).
+- Commits should have a clear and descriptive commit message in a standardized format, [as explained here](https://www.seyhan.me/blog/post/lost-art-of-commit-messages) and endorsed by [commitizen project](https://commitizen-tools.github.io/commitizen/).
 
 - Every single commit should be able to run, so the changes made in it must be complete. If not that has to be indicated in the commit message.
   The completing commit then mentions the commit it completes.

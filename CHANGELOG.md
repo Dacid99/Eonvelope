@@ -11,6 +11,7 @@
   - data import and export in admin panel was broken
   - in some edge cases exchange would not use the configured timeout value
   - bad configuration of an Exchange account lead to an internal server error
+  - bad JMAP server addresses could result in uncaught internal error
 
 
 ## Version 0.4.0

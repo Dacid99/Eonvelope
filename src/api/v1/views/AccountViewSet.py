@@ -60,6 +60,14 @@ if TYPE_CHECKING:
         },
         description="Updates the mailboxes of the account instance.",
     ),
+    add_daemons=extend_schema(
+        request=None,
+        responses={
+            200: inline_serializer(
+                name="add_daemons_response", fields={"detail": OpenApiTypes.STR}
+            )
+        },
+    ),
     test=extend_schema(
         request=None,
         responses={
@@ -149,6 +157,29 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         account.refresh_from_db()
         response.data["data"] = self.get_serializer(account).data
         return response
+
+    URL_PATH_ADD_DAEMONS = "add-routines"
+    URL_NAME_ADD_DAEMONS = "add-daemons"
+
+    @action(
+        detail=True,
+        methods=["post"],
+        url_path=URL_PATH_ADD_DAEMONS,
+        url_name=URL_NAME_ADD_DAEMONS,
+    )
+    def add_daemons(self, request: Request, pk: int | None = None) -> Response:
+        """Action method updating the mailboxes in the account.
+
+        Args:
+            request: The request triggering the action.
+            pk: The private key of the account to scan for mailboxes. Defaults to None.
+
+        Returns:
+            A response containing the updated account data.
+        """
+        account = self.get_object()
+        account.add_daemons()
+        return Response(data={"detail": _("Added routines to inbox and sentbox.")})
 
     URL_PATH_TEST = "test"
     URL_NAME_TEST = "test"

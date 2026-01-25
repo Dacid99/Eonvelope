@@ -30,7 +30,7 @@ from test.web.conftest import admin_client, other_client, owner_client
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, login_url):
+def test_get__noauth(client, login_url):
     """Tests `get` on :class:`eonvelope.views.UserProfileView` for an unauthenticated user client."""
     response = client.get(reverse(UserProfileView.URL_NAME))
 
@@ -41,7 +41,7 @@ def test_get_noauth(client, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_user, other_client):
+def test_get__auth_other(other_user, other_client):
     """Tests :class:`eonvelope.views.UserProfileView` with the authenticated other user client."""
     response = other_client.get(reverse(UserProfileView.URL_NAME))
 
@@ -55,7 +55,7 @@ def test_get_auth_other(other_user, other_client):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_user, owner_client):
+def test_get__auth_owner(owner_user, owner_client):
     """Tests :class:`eonvelope.views.UserProfileView` with the authenticated owner user client."""
     response = owner_client.get(reverse(UserProfileView.URL_NAME))
 
@@ -69,7 +69,7 @@ def test_get_auth_owner(owner_user, owner_client):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_user, admin_client):
+def test_get__auth_admin(admin_user, admin_client):
     """Tests :class:`eonvelope.views.UserProfileView` with the authenticated admin user client."""
     response = admin_client.get(reverse(UserProfileView.URL_NAME))
 
@@ -83,7 +83,7 @@ def test_get_auth_admin(admin_user, admin_client):
 
 
 @pytest.mark.django_db
-def test_post_update_noauth(profile_payload, client, login_url):
+def test_post_update__noauth(profile_payload, client, login_url):
     """Tests :class:`eonvelope.views.UserProfileView` with an unauthenticated user client."""
     response = client.post(reverse(UserProfileView.URL_NAME), profile_payload)
 
@@ -94,7 +94,7 @@ def test_post_update_noauth(profile_payload, client, login_url):
 
 
 @pytest.mark.django_db
-def test_post_update_auth_other(other_user, profile_payload, other_client):
+def test_post_update__auth_other(other_user, profile_payload, other_client):
     """Tests :class:`eonvelope.views.UserProfileView` with the authenticated other user client."""
     response = other_client.post(reverse(UserProfileView.URL_NAME), profile_payload)
 
@@ -111,7 +111,7 @@ def test_post_update_auth_other(other_user, profile_payload, other_client):
 
 
 @pytest.mark.django_db
-def test_post_update_auth_owner(owner_user, profile_payload, owner_client):
+def test_post_update__auth_owner(owner_user, profile_payload, owner_client):
     """Tests :class:`eonvelope.views.UserProfileView` with the authenticated owner user client."""
     response = owner_client.post(reverse(UserProfileView.URL_NAME), profile_payload)
 
@@ -128,7 +128,7 @@ def test_post_update_auth_owner(owner_user, profile_payload, owner_client):
 
 
 @pytest.mark.django_db
-def test_post_update_auth_admin(admin_user, profile_payload, admin_client):
+def test_post_update__auth_admin(admin_user, profile_payload, admin_client):
     """Tests :class:`eonvelope.views.UserProfileView` with the authenticated admin user client."""
     response = admin_client.post(reverse(UserProfileView.URL_NAME), profile_payload)
 

@@ -22,11 +22,12 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
+from core.models import Email
 from web.views import EmailConversationView
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_email, client, detail_url, login_url):
+def test_get__noauth(fake_email, client, detail_url, login_url):
     """Tests :class:`web.views.EmailConversationView` with an unauthenticated user client."""
     response = client.get(detail_url(EmailConversationView, fake_email))
 
@@ -39,7 +40,7 @@ def test_get_noauth(fake_email, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_email, other_client, detail_url):
+def test_get__auth_other(fake_email, other_client, detail_url):
     """Tests :class:`web.views.EmailConversationView` with the authenticated other user client."""
     response = other_client.get(detail_url(EmailConversationView, fake_email))
 
@@ -49,7 +50,7 @@ def test_get_auth_other(fake_email, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_email, fake_email_conversation, owner_client, detail_url):
+def test_get__auth_owner(fake_email, fake_email_conversation, owner_client, detail_url):
     """Tests :class:`web.views.EmailConversationView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(EmailConversationView, fake_email))
 
@@ -59,6 +60,8 @@ def test_get_auth_owner(fake_email, fake_email_conversation, owner_client, detai
         template.name for template in response.templates
     ]
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Email)
     assert "page_size" in response.context
     assert "query" in response.context
     assert "email" in response.context
@@ -70,7 +73,7 @@ def test_get_auth_owner(fake_email, fake_email_conversation, owner_client, detai
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_email, admin_client, detail_url):
+def test_get__auth_admin(fake_email, admin_client, detail_url):
     """Tests :class:`web.views.EmailConversationView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(EmailConversationView, fake_email))
 

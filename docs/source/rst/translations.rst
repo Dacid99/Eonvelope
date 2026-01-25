@@ -11,7 +11,7 @@ We are striving to support as many languages as possible
 to make the application accessible to everyone!
 
 If you want to help with translating,
-you can go to `the weblate page <https://hosted.weblate.org/projects/eonvelope/>`_ and select
+you can go to `the weblate page <https://hosted.weblate.org/engage/eonvelope/>`_ and select
 your language.
 
 In case that language isn't available yet,

@@ -85,7 +85,7 @@ def test_Storage_healthcheck_filled_storage(settings):
 
 
 @pytest.mark.django_db
-def test_Storage_health_check_duplicate_current(mock_logger):
+def test_Storage_health_check__duplicate_current(mock_logger):
     """Tests the storage healthcheck in case of a duplicate `current` directory."""
     StorageShard.get_current_storage()
     StorageShard.objects.create(current=True)
@@ -109,7 +109,7 @@ def test_Storage_health_check_file_in_storage_root(settings, mock_logger):
 
 
 @pytest.mark.django_db
-def test_Storage_health_check_missing_dir(settings, mock_logger):
+def test_Storage_health_check__missing_dir(settings, mock_logger):
     """Tests the storage healthcheck in case of a directory missing in the storage."""
     storage = StorageShard.get_current_storage()
     os.rmdir(os.path.join(settings.STORAGE_PATH, str(storage.shard_directory_name)))

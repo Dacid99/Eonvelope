@@ -108,14 +108,14 @@ def bad_email_message():
         ),
     ],
 )
-def test_decode_header_success(header, expected_result):
+def test_decode_header__success(header, expected_result):
     """Tests :func:`core.utils.mail_parsing.decode_header`."""
     result = mail_parsing.decode_header(header)
 
     assert result == expected_result
 
 
-def test_get_header_single_success(email_message, fake_single_header):
+def test_get_header_single__success(email_message, fake_single_header):
     """Tests :func:`core.utils.mail_parsing.get_header`
     in case the header exists once.
     """
@@ -124,7 +124,7 @@ def test_get_header_single_success(email_message, fake_single_header):
     assert result == fake_single_header[1].strip()
 
 
-def test_get_header_unstripped_success(email_message, fake_unstripped_header):
+def test_get_header_unstripped__success(email_message, fake_unstripped_header):
     """Tests :func:`core.utils.mail_parsing.get_header`
     in case the header is unstripped.
     """
@@ -133,7 +133,7 @@ def test_get_header_unstripped_success(email_message, fake_unstripped_header):
     assert result == fake_unstripped_header[1].strip()
 
 
-def test_get_header_multi_success(email_message, fake_multi_header):
+def test_get_header_multi__success(email_message, fake_multi_header):
     """Tests :func:`core.utils.mail_parsing.get_header`
     in case the header exists multiple times.
     """
@@ -142,7 +142,7 @@ def test_get_header_multi_success(email_message, fake_multi_header):
     assert result == ",".join([header.strip() for header in fake_multi_header[1]])
 
 
-def test_get_header_multi_joinparam_success(email_message, fake_multi_header):
+def test_get_header_multi_joinparam__success(email_message, fake_multi_header):
     """Tests :func:`core.utils.mail_parsing.get_header`
     in case the header exists multiple times and a joining_string is given.
     """
@@ -162,7 +162,7 @@ def test_get_header_fallback(fake_single_header):
     assert result == ""
 
 
-def test_get_header_failure(fake_single_header):
+def test_get_header__failure(fake_single_header):
     """Tests :func:`core.utils.mail_parsing.get_header`
     in case there is no emailmessage.
     """
@@ -170,7 +170,7 @@ def test_get_header_failure(fake_single_header):
         mail_parsing.get_header(None, fake_single_header[0])
 
 
-def test_parse_datetime_header_success(faker, mock_logger):
+def test_parse_datetime_header__success(faker, mock_logger):
     """Tests :func:`core.utils.mail_parsing.parse_datetime_header`
     in case of success.
     """
@@ -199,7 +199,7 @@ def test_parse_datetime_header_fallback(mocker, faker, mock_logger):
     assert format_datetime(result) == format_datetime(mock_timezone_now.return_value)
 
 
-def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
+def test_parse_datetime_header__no_header(mocker, faker, mock_logger):
     """Tests :func:`core.utils.mail_parsing.parse_datetime_header`
     in case there is no header.
     """
@@ -216,45 +216,56 @@ def test_parse_datetime_header_no_header(mocker, faker, mock_logger):
 
 
 @pytest.mark.parametrize(
-    "name_data, expected_name",
+    "name_data, expected_name, expected_type",
     [
-        (b"INBOX", "INBOX"),
-        ("INBOX", "INBOX"),
         (
-            b'Dr&AOc-. Bianka "/" F&APY-rste&BBk-r',
-            "FörsteЙr",
-        ),
-        (
-            b'Yves "/" Pr&AN8EGQ-uvost',
-            "PrßЙuvost",
-        ),
-        (
-            b'&ZY4mBQDfheQ- "/" &Zg5,jg-',
+            b'(test) "/" &Zg5,jg-',
             "明美",
+            "test",
         ),
         (
             '(\\Sent \\HasNoChildren) "/" "Gesendete Objekte"',
             '"Gesendete Objekte"',
+            "\\Sent \\HasNoChildren",
         ),
         (
             b'(\\Sent \\HasChildren) "." INBOX.Sent',
             "INBOX.Sent",
+            "\\Sent \\HasChildren",
         ),
         (
             b'(\\HasNoChildren) "/" Archive/2024',
             "Archive/2024",
+            "\\HasNoChildren",
         ),
         (
-            b'() ";" Trash',
+            b'(\\Trash) ";" Trash',
             "Trash",
+            "\\Trash",
+        ),
+        (
+            b'() ";" CustoM',
+            "CustoM",
+            "",
+        ),
+        (
+            b'() ";" INBOX',
+            "INBOX",
+            "\\inbox",
+        ),
+        (
+            b'(\\HasChildren) ";" INBOX',
+            "INBOX",
+            "\\HasChildren\\inbox",
         ),
     ],
 )
-def test_parse_mailbox_name(name_data, expected_name):
+def test_parse_IMAP_mailbox_data(name_data, expected_name, expected_type):
     """Tests :func:`core.utils.mail_parsing.parse_mailbox_name`."""
-    result = mail_parsing.parse_mailbox_name(name_data)
+    result = mail_parsing.parse_IMAP_mailbox_data(name_data)
 
-    assert result == expected_name
+    assert result[0] == expected_name
+    assert result[1] == expected_type
 
 
 @pytest.mark.django_db

@@ -81,6 +81,14 @@ def pytest_configure(config):
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test.settings")
 
 
+@pytest.fixture(scope="package")
+def pkg_monkeypatch():
+    """A package scoped monkeypatch."""
+    mp = pytest.MonkeyPatch()
+    yield mp
+    mp.undo()
+
+
 # test_email_path, expected_email_features, expected_correspondents_features, expected_attachments_features
 TEST_EMAIL_PARAMETERS = [
     (
@@ -326,14 +334,6 @@ def fake_timezone_client(client, fake_timezone):
 
 
 @pytest.fixture
-def fake_bad_timezone_client(client):
-    """A client with invalid session timezone."""
-    session = client.session
-    session[TimezoneMiddleware.TIMEZONE_SESSION_KEY] = "NO/TZONE"
-    session.save()
-
-
-@pytest.fixture
 def fake_fs(settings):
     """A mock Linux filesystem for realistic testing.
 
@@ -377,18 +377,24 @@ def other_user(django_user_model):
 
 
 @pytest.fixture
-def fake_account(faker, owner_user):
+def fake_account(monkeypatch, faker, owner_user):
     """An :class:`core.models.Account` owned by :attr:`owner_user`.
 
     Note:
         The protocol is always IMAP to allow for different fetchingoptions.
     """
-    return baker.make(
+    fake_account = baker.prepare(
         Account,
         user=owner_user,
         mail_address=faker.email(),
-        protocol=EmailProtocolChoices.IMAP.value,
+        protocol=EmailProtocolChoices.IMAP4.value,
     )
+    #
+    # with mocker.patch("core.models.Account.Account.update_mailboxes"):
+    monkeypatch.setattr(fake_account, "update_mailboxes", lambda: None)
+    fake_account.save()
+    monkeypatch.undo()
+    return fake_account
 
 
 @pytest.fixture
@@ -487,16 +493,24 @@ def fake_attachment_with_file(faker, fake_file, fake_fs, fake_email):
 
 
 @pytest.fixture
-def fake_other_account(other_user):
+def fake_other_account(monkeypatch, faker, other_user):
     """An :class:`core.models.Account` owned by :attr:`other_user`.
 
     Note:
         The protocol is always IMAP to allow for different fetchingoptions.
-
     """
-    return baker.make(
-        Account, user=other_user, protocol=EmailProtocolChoices.IMAP.value
+    fake_other_account = baker.prepare(
+        Account,
+        user=other_user,
+        mail_address=faker.email(),
+        protocol=EmailProtocolChoices.IMAP4.value,
     )
+    #
+    # with mocker.patch("core.models.Account.Account.update_mailboxes"):
+    monkeypatch.setattr(fake_other_account, "update_mailboxes", lambda: None)
+    fake_other_account.save()
+    monkeypatch.undo()
+    return fake_other_account
 
 
 @pytest.fixture
@@ -506,7 +520,7 @@ def fake_other_mailbox(fake_other_account):
 
 
 @pytest.fixture
-def fake_other_daemon(faker, fake_other_mailbox):
+def fake_other_daemon(fake_other_mailbox):
     """An :class:`core.models.Daemon` owned by :attr:`other_user`."""
     return baker.make(
         Daemon,
@@ -515,7 +529,7 @@ def fake_other_daemon(faker, fake_other_mailbox):
 
 
 @pytest.fixture
-def fake_other_email(faker, fake_other_mailbox):
+def fake_other_email(fake_other_mailbox):
     """An :class:`core.models.Email` owned by :attr:`other_user`."""
     return baker.make(Email, mailbox=fake_other_mailbox)
 
@@ -707,6 +721,16 @@ def mock_Account_test(mocker):
     """Patches :func:`core.models.Account.Account.test` for testing of the test action."""
     return mocker.patch(
         "core.models.Account.Account.test",
+        autospec=True,
+        return_value=None,
+    )
+
+
+@pytest.fixture
+def mock_Account_update_mailboxes(mocker):
+    """Patches :func:`core.models.Account.Account.update_mailboxes` for testing of the test action."""
+    return mocker.patch(
+        "core.models.Account.Account.update_mailboxes",
         autospec=True,
         return_value=None,
     )

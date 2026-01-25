@@ -21,6 +21,7 @@
 import datetime
 import email
 import os
+import re
 from tempfile import gettempdir
 from zipfile import ZipFile
 
@@ -89,9 +90,9 @@ def test_Attachment_foreign_key_deletion(fake_attachment):
 
 
 @pytest.mark.django_db
-def test_Attachment_unique_constraints():
+def test_Attachment_unique_constraints(fake_mailbox):
     """Tests the unique constraints of :class:`core.models.Attachment.Attachment`."""
-    email = baker.make(Email, x_spam_flag=False)
+    email = baker.make(Email, mailbox=fake_mailbox)
 
     baker.make(Attachment, file_path="test", email=email)
     with pytest.raises(IntegrityError):
@@ -99,7 +100,7 @@ def test_Attachment_unique_constraints():
 
 
 @pytest.mark.django_db
-def test_Attachment_delete_attachmentfile_success(
+def test_Attachment_delete_attachmentfile__success(
     fake_attachment_with_file,
     mock_logger,
 ):
@@ -116,7 +117,7 @@ def test_Attachment_delete_attachmentfile_success(
 
 
 @pytest.mark.django_db
-def test_Attachment_delete_attachmentfile_delete_error(
+def test_Attachment_delete_attachmentfile__delete_error(
     mocker,
     fake_attachment_with_file,
     mock_logger,
@@ -165,7 +166,7 @@ def test_Attachment_save_with_data(
 
 
 @pytest.mark.django_db
-def test_Attachment_save_with_data_no_save_attachments(
+def test_Attachment_save_with_data__no_save_attachments(
     fake_fs,
     fake_email,
     fake_file_bytes,
@@ -209,7 +210,7 @@ def test_Attachment_save_with_data_file_path_set(
 
 
 @pytest.mark.django_db
-def test_Attachment_save_no_data_success(
+def test_Attachment_save__no_data__success(
     fake_email,
 ):
     """Tests :func:`core.models.Attachment.Attachment.save`
@@ -227,7 +228,7 @@ def test_Attachment_save_no_data_success(
     assert new_attachment.file_path is None
 
 
-def test_Attachment_open_file_success(fake_attachment_with_file):
+def test_Attachment_open_file__success(fake_attachment_with_file):
     """Tests :func:`core.models.Attachment.Attachment.open_file`
     in case of success.
     """
@@ -241,7 +242,7 @@ def test_Attachment_open_file_success(fake_attachment_with_file):
     result.close()
 
 
-def test_Attachment_open_file_no_filepath(fake_attachment):
+def test_Attachment_open_file__no_filepath(fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.open_file`
     in case the filepath on the instance is not set.
     """
@@ -249,7 +250,7 @@ def test_Attachment_open_file_no_filepath(fake_attachment):
         pass
 
 
-def test_Attachment_open_file_no_file(faker, fake_attachment):
+def test_Attachment_open_file__no_file(faker, fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.open_file`
     in case the file can't be found in the storage.
     """
@@ -259,7 +260,7 @@ def test_Attachment_open_file_no_file(faker, fake_attachment):
         pass
 
 
-def test_Attachment_absolute_filepath_success(fake_attachment_with_file):
+def test_Attachment_absolute_filepath__success(fake_attachment_with_file):
     """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
     in case of success.
     """
@@ -268,7 +269,7 @@ def test_Attachment_absolute_filepath_success(fake_attachment_with_file):
     assert result == default_storage.path(fake_attachment_with_file.file_path)
 
 
-def test_Attachment_absolute_filepath_no_filepath(fake_attachment):
+def test_Attachment_absolute_filepath__no_filepath(fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
     in case the filepath on the instance is not set.
     """
@@ -277,7 +278,7 @@ def test_Attachment_absolute_filepath_no_filepath(fake_attachment):
     assert result is None
 
 
-def test_Attachment_absolute_filepath_no_file(faker, fake_attachment):
+def test_Attachment_absolute_filepath__no_file(faker, fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.absolute_filepath`
     in case the file can't be found in the storage.
     """
@@ -350,7 +351,7 @@ def test_Attachment_queryset_as_file_empty_queryset():
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_paperless_success(
+def test_Attachment_share_to_paperless__success(
     faker, fake_attachment_with_file, mock_logger, mock_httpx_post
 ):
     """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
@@ -392,7 +393,7 @@ def test_Attachment_share_to_paperless_success(
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_paperless_no_file(fake_attachment):
+def test_Attachment_share_to_paperless__no_file(fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
     in case the attachment has no file.
     """
@@ -401,7 +402,7 @@ def test_Attachment_share_to_paperless_no_file(fake_attachment):
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_paperless_no_api_key(
+def test_Attachment_share_to_paperless__no_api_key(
     faker, fake_attachment_with_file, mock_logger, mock_httpx_post
 ):
     """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
@@ -423,7 +424,7 @@ def test_Attachment_share_to_paperless_no_api_key(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("paperless_url", ["test.org", "smb://100.200.051.421", ""])
-def test_Attachment_share_to_paperless_error_request_setup(
+def test_Attachment_share_to_paperless__request_setup_error(
     fake_attachment_with_file, mock_logger, paperless_url
 ):
     """Tests :func:`core.models.Attachment.Attachment.share_to_paperless`
@@ -442,7 +443,7 @@ def test_Attachment_share_to_paperless_error_request_setup(
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_paperless_error_request(
+def test_Attachment_share_to_paperless__request_error(
     fake_error_message,
     fake_attachment_with_file,
     mock_logger,
@@ -489,7 +490,7 @@ def test_Attachment_share_to_paperless_unauthorized(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("status_code", [400, 500, 300])
-def test_Attachment_share_to_paperless_error_status(
+def test_Attachment_share_to_paperless__status_error(
     fake_error_message,
     fake_attachment_with_file,
     mock_httpx_post,
@@ -514,7 +515,7 @@ def test_Attachment_share_to_paperless_error_status(
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_immich_success(
+def test_Attachment_share_to_immich__success(
     faker, fake_attachment_with_file, mock_logger, mock_httpx_post
 ):
     """Tests :func:`core.models.Attachment.Attachment.share_to_immich`
@@ -560,7 +561,7 @@ def test_Attachment_share_to_immich_success(
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_immich_no_file(fake_attachment):
+def test_Attachment_share_to_immich__no_file(fake_attachment):
     """Tests :func:`core.models.Attachment.Attachment.share_to_immich`
     in case the attachment has no file.
     """
@@ -569,7 +570,7 @@ def test_Attachment_share_to_immich_no_file(fake_attachment):
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_immich_no_api_key(
+def test_Attachment_share_to_immich__no_api_key(
     faker, fake_attachment_with_file, mock_logger, mock_httpx_post
 ):
     """Tests :func:`core.models.Attachment.Attachment.share_to_immich`
@@ -591,7 +592,7 @@ def test_Attachment_share_to_immich_no_api_key(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("immich_url", ["test.org", "smb://100.200.051.421", ""])
-def test_Attachment_share_to_immich_error_request_setup(
+def test_Attachment_share_to_immich__request_setup_error(
     fake_attachment_with_file, mock_logger, immich_url
 ):
     """Tests :func:`core.models.Attachment.Attachment.share_to_immich`
@@ -608,7 +609,7 @@ def test_Attachment_share_to_immich_error_request_setup(
 
 
 @pytest.mark.django_db
-def test_Attachment_share_to_immich_error_request(
+def test_Attachment_share_to_immich__request_error(
     fake_error_message,
     fake_attachment_with_file,
     mock_logger,
@@ -655,7 +656,7 @@ def test_Attachment_share_to_immich_unauthorized(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("status_code", [400, 500, 300])
-def test_Attachment_share_to_immich_error_status(
+def test_Attachment_share_to_immich__status_error(
     fake_error_message,
     fake_attachment_with_file,
     mock_httpx_post,
@@ -727,13 +728,13 @@ def test_Attachment_create_from_email_message(
 
 
 @pytest.mark.django_db
-def test_Attachment_create_from_email_message_unsaved_email():
+def test_Attachment_create_from_email_message__unsaved_email():
     """Tests :func:`core.models.Attachment.Attachment.from_data`
     in case of success.
     """
     test_email_message = email.message_from_bytes(b"")
 
-    with pytest.raises(ValueError, match="db"):
+    with pytest.raises(ValueError, match=re.compile("email", re.IGNORECASE)):
         Attachment.create_from_email_message(test_email_message, Email())
 
 
@@ -813,7 +814,7 @@ def test_Attachment_has_thumbnail_with_file(
         ("application", "854uqw"),
     ],
 )
-def test_Attachment_has_thumbnail_no_file(
+def test_Attachment_has_thumbnail__no_file(
     fake_attachment, content_maintype, content_subtype
 ):
     """Tests :func:`core.models.Attachment.Attachment.has_thumbnail` in the two relevant cases."""
@@ -948,7 +949,7 @@ def test_Attachment_thumbnail_empty(fake_attachment, content_maintype, content_s
         ("text", "x-icalendar"),
     ],
 )
-def test_Attachment_thumbnail_no_file(
+def test_Attachment_thumbnail__no_file(
     fake_attachment, content_maintype, content_subtype
 ):
     """Tests :func:`core.models.Attachment.Attachment.thumbnail` for all types that don't have an html thumbnail."""
@@ -1001,7 +1002,7 @@ def test_Attachment_thumbnail_no_file(
         ("application", "vnd.oasis.opendocument.spreadsheet", False),
     ],
 )
-def test_Attachment_is_shareable_to_paperless_with_file_no_tika(
+def test_Attachment_is_shareable_to_paperless_with_file__no_tika(
     fake_attachment_with_file,
     content_maintype,
     content_subtype,
@@ -1123,7 +1124,7 @@ def test_Attachment_is_shareable_to_paperless_with_file_with_tika(
         ("application", "vnd.oasis.opendocument.spreadsheet"),
     ],
 )
-def test_Attachment_is_shareable_to_paperless_no_file(
+def test_Attachment_is_shareable_to_paperless__no_file(
     fake_attachment, content_maintype, content_subtype
 ):
     """Tests :func:`core.models.Attachment.Attachment.is_shareable_to_paperless` if there is no file."""
@@ -1215,7 +1216,7 @@ def test_Attachment_is_shareable_to_paperless_with_file(
         ("application", "mp4"),
     ],
 )
-def test_Attachment_is_shareable_to_immich_no_file(
+def test_Attachment_is_shareable_to_immich__no_file(
     fake_attachment, content_maintype, content_subtype
 ):
     """Tests :func:`core.models.Attachment.Attachment.is_shareable_to_immich` if there is no file."""

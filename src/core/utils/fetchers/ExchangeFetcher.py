@@ -144,6 +144,8 @@ class ExchangeFetcher(BaseFetcher):
             self.account.mail_address, self.account.password
         )
         retry_policy = exchangelib.FaultTolerance(max_wait=self.account.timeout)
+        # manually set fallback timeout; https://github.com/ecederstrand/exchangelib/issues/1375
+        exchangelib.protocol.Protocol.TIMEOUT = self.account.timeout
         config = (
             exchangelib.Configuration(
                 service_endpoint=self.account.mail_host,
@@ -158,15 +160,22 @@ class ExchangeFetcher(BaseFetcher):
                 retry_policy=retry_policy,
             )
         )
-        exchange_account = exchangelib.Account(
-            primary_smtp_address=self.account.mail_address,
-            config=config,
-            access_type=exchangelib.DELEGATE,
-            autodiscover=False,
-            default_timezone=exchangelib.EWSTimeZone(
-                "UTC"
-            ),  # for consistency with celery and django settings
-        )
+        try:
+            exchange_account = exchangelib.Account(
+                primary_smtp_address=self.account.mail_address,
+                config=config,
+                access_type=exchangelib.DELEGATE,
+                autodiscover=False,
+                default_timezone=exchangelib.EWSTimeZone(
+                    "UTC"
+                ),  # for consistency with celery and django settings
+            )
+        except ValueError as error:
+            self.logger.exception(
+                "Error in configuration of %s!",
+                self.account,
+            )
+            raise MailAccountError(error, "connecting") from error
         try:
             self._mail_client = exchange_account.msg_folder_root
         except exchangelib.errors.EWSError as error:
@@ -265,7 +274,7 @@ class ExchangeFetcher(BaseFetcher):
         return mail_data_list
 
     @override
-    def fetch_mailboxes(self) -> list[str]:
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
         """Retrieves and returns the data of the mailboxes in the account.
 
         Todo:
@@ -284,8 +293,11 @@ class ExchangeFetcher(BaseFetcher):
         self.logger.debug("Fetching mailboxes in %s ...", self.account)
         try:
             mail_root_path = self._mail_client.absolute
-            mailbox_names = [
-                os.path.relpath(folder.absolute, mail_root_path)
+            mailboxes = [
+                (
+                    os.path.relpath(folder.absolute, mail_root_path),
+                    (str(folder.to_id().id) if folder.is_distinguished else ""),
+                )
                 for folder in self._mail_client.walk()
                 if isinstance(folder, exchangelib.Folder)
                 and folder.folder_class == "IPF.Note"
@@ -294,7 +306,7 @@ class ExchangeFetcher(BaseFetcher):
             self.logger.exception("Error during scan of message_root!")
             raise MailAccountError(error, _("scan for mailboxes")) from error
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
-        return mailbox_names
+        return mailboxes
 
     @override
     def restore(self, email: Email) -> None:

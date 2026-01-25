@@ -31,12 +31,14 @@ from __future__ import annotations
 import re
 import socket
 import sys
+import tomllib
 from pathlib import Path
 
-import tomli
 from django.utils.translation import get_language, get_language_bidi, get_language_info
 from django.utils.translation import gettext_lazy as _
 from environ import FileAwareEnv
+
+from core.constants import EmailFetchingCriterionChoices
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,7 +52,7 @@ env.read_env(BASE_DIR / ".env")
 
 # Version synced from pyproject config file
 with open(BASE_DIR / "pyproject.toml", "rb") as f:
-    config = tomli.load(f)
+    config = tomllib.load(f)
 VERSION = config["project"]["version"]
 
 
@@ -789,7 +791,10 @@ CONSTANCE_IGNORE_ADMIN_VERSION_CHECK = True
 CONSTANCE_ADDITIONAL_FIELDS = {
     list: ["django.forms.fields.JSONField", {"widget": "django.forms.Textarea"}],
     dict: ["django.forms.fields.JSONField", {"widget": "django.forms.Textarea"}],
-    "text": ["django.forms.fields.CharField", {"widget": "django.forms.Textarea"}],
+    "fetching_criteria": [
+        "django.forms.fields.ChoiceField",
+        {"choices": EmailFetchingCriterionChoices.choices},
+    ],
 }
 
 # Defaults
@@ -928,7 +933,7 @@ CONSTANCE_CONFIG = {
     ),
     "THROW_OUT_SPAM": (
         True,
-        _("Whether or not to ignore emails that have a spam flag"),
+        _("Whether or not to ignore emails and mailboxes that have a spam flag"),
         bool,
     ),
     "IGNORED_MAILBOXES_REGEX": (
@@ -955,14 +960,14 @@ CONSTANCE_CONFIG = {
         _(
             "Html template used to render emails to html. Uses the django template syntax and has access to all fields of the email database table. Removing template tag imports may result in 500 responses when requesting pages with email thumbnails, so be careful."
         ),
-        "text",
+        str,
     ),
     "EMAIL_CSS": (
         EMAIL_CSS_DEFAULT,
         _(
             "Css style used to render emails to html. Refer to HTML_TEMPLATE for context on the classes."
         ),
-        "text",
+        str,
     ),
     "DEFAULT_SAVE_TO_EML": (
         True,
@@ -973,6 +978,30 @@ CONSTANCE_CONFIG = {
         True,
         _("Default mailbox setting whether to store attachments."),
         bool,
+    ),
+    "DEFAULT_INBOX_INTERVAL_EVERY": (
+        30,
+        _(
+            "Default number of periods between two runs of a standard routine for a INBOX mailbox."
+        ),
+        int,
+    ),
+    "DEFAULT_INBOX_FETCHING_CRITERION": (
+        "UNSEEN",
+        _("Default fetching criterion for a standard routine for a INBOX mailbox."),
+        "fetching_criteria",
+    ),
+    "DEFAULT_SENTBOX_INTERVAL_EVERY": (
+        1,
+        _(
+            "Default number of periods between two runs of a standard routine for a SENT mailbox."
+        ),
+        int,
+    ),
+    "DEFAULT_SENTBOX_FETCHING_CRITERION": (
+        "DAILY",
+        _("Default fetching criterion for a standard routine for a SENT mailbox."),
+        "fetching_criteria",
     ),
     "REGISTRATION_ENABLED": (
         True,
@@ -990,6 +1019,10 @@ CONSTANCE_CONFIG_FIELDSETS = (
         (
             "DEFAULT_SAVE_TO_EML",
             "DEFAULT_SAVE_ATTACHMENTS",
+            "DEFAULT_INBOX_INTERVAL_EVERY",
+            "DEFAULT_INBOX_FETCHING_CRITERION",
+            "DEFAULT_SENTBOX_INTERVAL_EVERY",
+            "DEFAULT_SENTBOX_FETCHING_CRITERION",
         ),
     ),
     (

@@ -30,7 +30,7 @@ from web.views import EmailDetailWithDeleteView, EmailFilterView
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_email, client, detail_url, login_url):
+def test_get__noauth(fake_email, client, detail_url, login_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(EmailDetailWithDeleteView, fake_email))
 
@@ -44,7 +44,7 @@ def test_get_noauth(fake_email, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_email, other_client, detail_url):
+def test_get__auth_other(fake_email, other_client, detail_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(detail_url(EmailDetailWithDeleteView, fake_email))
 
@@ -54,7 +54,7 @@ def test_get_auth_other(fake_email, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_email, owner_client, detail_url):
+def test_get__auth_owner(fake_email, owner_client, detail_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(EmailDetailWithDeleteView, fake_email))
 
@@ -70,7 +70,7 @@ def test_get_auth_owner(fake_email, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_email, admin_client, detail_url):
+def test_get__auth_admin(fake_email, admin_client, detail_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(EmailDetailWithDeleteView, fake_email))
 
@@ -80,7 +80,7 @@ def test_get_auth_admin(fake_email, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_noauth(fake_email, client, detail_url, login_url):
+def test_post_delete__noauth(fake_email, client, detail_url, login_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(EmailDetailWithDeleteView, fake_email), {"delete": ""}
@@ -97,7 +97,7 @@ def test_post_delete_noauth(fake_email, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_other(fake_email, other_client, detail_url):
+def test_post_delete__auth_other(fake_email, other_client, detail_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email), {"delete": ""}
@@ -110,7 +110,7 @@ def test_post_delete_auth_other(fake_email, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_owner(fake_email, owner_client, detail_url):
+def test_post_delete__auth_owner(fake_email, owner_client, detail_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email), {"delete": ""}
@@ -124,7 +124,7 @@ def test_post_delete_auth_owner(fake_email, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_admin(fake_email, admin_client, detail_url):
+def test_post_delete__auth_admin(fake_email, admin_client, detail_url):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.post(
         detail_url(EmailDetailWithDeleteView, fake_email), {"delete": ""}
@@ -137,7 +137,7 @@ def test_post_delete_auth_admin(fake_email, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_restore_noauth(
+def test_post_restore__noauth(
     fake_email, client, detail_url, login_url, mock_Email_restore_to_mailbox
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with an unauthenticated user client."""
@@ -156,7 +156,7 @@ def test_post_restore_noauth(
 
 
 @pytest.mark.django_db
-def test_post_restore_auth_other(
+def test_post_restore__auth_other(
     fake_email, other_client, detail_url, mock_Email_restore_to_mailbox
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated other user client."""
@@ -171,7 +171,7 @@ def test_post_restore_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_restore_auth_owner_success(
+def test_post_restore__auth_owner__success(
     fake_email, owner_client, detail_url, mock_Email_restore_to_mailbox
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated owner user client
@@ -197,7 +197,7 @@ def test_post_restore_auth_owner_success(
 
 
 @pytest.mark.django_db
-def test_post_restore_auth_owner_pop(
+def test_post_restore__auth_owner__pop(
     fake_email,
     owner_client,
     detail_url,
@@ -228,7 +228,7 @@ def test_post_restore_auth_owner_pop(
 
 
 @pytest.mark.django_db
-def test_post_restore_auth_owner_no_file(
+def test_post_restore__auth_owner__no_file(
     fake_email,
     owner_client,
     detail_url,
@@ -260,7 +260,7 @@ def test_post_restore_auth_owner_no_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [MailAccountError, MailboxError])
-def test_post_restore_auth_owner_failure(
+def test_post_restore__auth_owner__failure(
     fake_error_message,
     fake_email,
     owner_client,
@@ -294,7 +294,7 @@ def test_post_restore_auth_owner_failure(
 
 
 @pytest.mark.django_db
-def test_post_restore_missing_action_auth_owner(
+def test_post_restore__missing_action__auth_owner(
     fake_email, owner_client, detail_url, mock_Email_restore_to_mailbox
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated owner user client
@@ -310,7 +310,7 @@ def test_post_restore_missing_action_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_restore_auth_admin(
+def test_post_restore__auth_admin(
     fake_email, admin_client, detail_url, mock_Email_restore_to_mailbox
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""
@@ -325,7 +325,7 @@ def test_post_restore_auth_admin(
 
 
 @pytest.mark.django_db
-def test_post_reprocess_noauth(
+def test_post_reprocess__noauth(
     fake_email, client, detail_url, login_url, mock_Email_reprocess
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with an unauthenticated user client."""
@@ -344,7 +344,7 @@ def test_post_reprocess_noauth(
 
 
 @pytest.mark.django_db
-def test_post_reprocess_auth_other(
+def test_post_reprocess__auth_other(
     fake_email, other_client, detail_url, mock_Email_reprocess
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated other user client."""
@@ -359,7 +359,7 @@ def test_post_reprocess_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_reprocess_auth_owner_success(
+def test_post_reprocess__auth_owner__success(
     fake_email, owner_client, detail_url, mock_Email_reprocess
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated owner user client
@@ -385,7 +385,7 @@ def test_post_reprocess_auth_owner_success(
 
 
 @pytest.mark.django_db
-def test_post_reprocess_auth_admin(
+def test_post_reprocess__auth_admin(
     fake_email, admin_client, detail_url, mock_Email_reprocess
 ):
     """Tests :class:`web.views.EmailDetailWithDeleteView` with the authenticated admin user client."""

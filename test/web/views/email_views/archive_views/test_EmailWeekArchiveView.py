@@ -22,11 +22,12 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
+from core.models import Email
 from web.views import EmailWeekArchiveView
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, fake_email, login_url, date_url):
+def test_get__noauth(client, fake_email, login_url, date_url):
     """Tests :class:`web.views.EmailWeekArchiveView` with an unauthenticated user client."""
     url = date_url(
         EmailWeekArchiveView,
@@ -45,7 +46,7 @@ def test_get_noauth(client, fake_email, login_url, date_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, fake_email, date_url):
+def test_get__auth_other(other_client, fake_email, date_url):
     """Tests :class:`web.views.EmailWeekArchiveView` with the authenticated other user client."""
     response = other_client.get(
         date_url(
@@ -64,13 +65,14 @@ def test_get_auth_other(other_client, fake_email, date_url):
     ]
     assert "week" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "previous_week" in response.context
     assert "next_week" in response.context
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, fake_email, date_url):
+def test_get__auth_owner(owner_client, fake_email, date_url):
     """Tests :class:`web.views.EmailWeekArchiveView` with the authenticated owner user client."""
     response = owner_client.get(
         date_url(
@@ -89,13 +91,15 @@ def test_get_auth_owner(owner_client, fake_email, date_url):
     ]
     assert "week" in response.context
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Email)
     assert "page_size" in response.context
     assert "previous_week" in response.context
     assert "next_week" in response.context
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, fake_email, date_url):
+def test_get__auth_admin(admin_client, fake_email, date_url):
     """Tests :class:`web.views.EmailWeekArchiveView` with the authenticated admin user client."""
     response = admin_client.get(
         date_url(
@@ -114,6 +118,7 @@ def test_get_auth_admin(admin_client, fake_email, date_url):
     ]
     assert "week" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "previous_week" in response.context
     assert "next_week" in response.context

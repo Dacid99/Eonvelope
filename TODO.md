@@ -8,22 +8,21 @@
 - mechanism to remove all correspondents without emails
 - download for main logfiles
 - fetching in bunches to handle large amounts of emails, fetch as generator
-- autofetch mailboxes on submission
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
-- tagging system (https://django-tagging.readthedocs.io/en or https://django-taggit.readthedocs.io/en/latest/)
+- tagging system with [taggit](https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
 - async parsing, sync saving
 - download for account and batchdownload for mailbox
 - show pwd button
 - structured json based logging messages
 - refine fetchererrors into errors for auth, connection, etc.
+- add gmail client support
 
 ## To refactor
 
 - safeimap and pop classes
 - rework test:
-  - disable all signals in tests
   - tests more implementation agnostic
   - use more of the unittest api
   - streamline serializer and form tests
@@ -36,13 +35,13 @@
 
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap, pop, jmap)
-- page_obj of list views for correct email content
 - add test email with references
 
 ## To implement
 
 - migration to django6.0
 - squashmigrations
+- further optimize queryset lookups
 
 ### Work in progress
 

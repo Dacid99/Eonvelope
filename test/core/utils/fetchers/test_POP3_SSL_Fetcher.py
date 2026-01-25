@@ -58,7 +58,7 @@ def mock_POP3_SSL(mocker, faker):
         None,
     ],
 )
-def test_POP3Fetcher_connect_to_host_success(
+def test_POP3Fetcher_connect_to_host__success(
     pop3_ssl_mailbox,
     mock_ssl_create_default_context,
     mock_logger,
@@ -86,7 +86,7 @@ def test_POP3Fetcher_connect_to_host_success(
 
 
 @pytest.mark.django_db
-def test_POP3Fetcher_connect_to_host_exception(
+def test_POP3Fetcher_connect_to_host__exception(
     fake_error_message,
     pop3_ssl_mailbox,
     mock_ssl_create_default_context,
@@ -98,9 +98,7 @@ def test_POP3Fetcher_connect_to_host_exception(
     """
     mock_POP3_SSL.side_effect = AssertionError(fake_error_message)
 
-    with pytest.raises(
-        MailAccountError, match=f"AssertionError.*?{fake_error_message}"
-    ):
+    with pytest.raises(MailAccountError, match=fake_error_message):
         POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
 
     kwargs = {

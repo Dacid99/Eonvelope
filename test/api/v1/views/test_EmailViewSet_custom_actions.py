@@ -53,7 +53,7 @@ def mock_Email_reprocess(mocker):
 
 
 @pytest.mark.django_db
-def test_download_noauth(
+def test_download__noauth(
     fake_email_with_file,
     noauth_api_client,
     custom_detail_action_url,
@@ -70,7 +70,7 @@ def test_download_noauth(
 
 
 @pytest.mark.django_db
-def test_download_auth_other(
+def test_download__auth_other(
     fake_email_with_file,
     other_api_client,
     custom_detail_action_url,
@@ -87,7 +87,7 @@ def test_download_auth_other(
 
 
 @pytest.mark.django_db
-def test_download_no_file_auth_owner(
+def test_download__no_file__auth_owner(
     fake_email,
     owner_api_client,
     custom_detail_action_url,
@@ -104,7 +104,7 @@ def test_download_no_file_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_auth_owner(
+def test_download__auth_owner(
     fake_email_with_file,
     owner_api_client,
     custom_detail_action_url,
@@ -133,7 +133,7 @@ def test_download_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_auth_admin(
+def test_download__auth_admin(
     fake_email_with_file,
     admin_api_client,
     custom_detail_action_url,
@@ -150,7 +150,7 @@ def test_download_auth_admin(
 
 
 @pytest.mark.django_db
-def test_batch_download_noauth(faker, noauth_api_client, custom_list_action_url):
+def test_batch_download__noauth(faker, noauth_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
     with an unauthenticated user client.
     """
@@ -164,7 +164,7 @@ def test_batch_download_noauth(faker, noauth_api_client, custom_list_action_url)
 
 
 @pytest.mark.django_db
-def test_batch_download_auth_other(faker, other_api_client, custom_list_action_url):
+def test_batch_download__auth_other(faker, other_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
     with the authenticated other user client.
     """
@@ -178,7 +178,7 @@ def test_batch_download_auth_other(faker, other_api_client, custom_list_action_u
 
 
 @pytest.mark.django_db
-def test_batch_download_no_ids_auth_owner(
+def test_batch_download__no_ids__auth_owner(
     faker, owner_api_client, custom_list_action_url
 ):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
@@ -195,7 +195,9 @@ def test_batch_download_no_ids_auth_owner(
 
 
 @pytest.mark.django_db
-def test_batch_download_no_format_auth_owner(owner_api_client, custom_list_action_url):
+def test_batch_download__no_format__auth_owner(
+    owner_api_client, custom_list_action_url
+):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
     with the authenticated owner user client.
     """
@@ -210,7 +212,9 @@ def test_batch_download_no_format_auth_owner(owner_api_client, custom_list_actio
 
 
 @pytest.mark.django_db
-def test_batch_download_bad_format_auth_owner(owner_api_client, custom_list_action_url):
+def test_batch_download__bad_format__auth_owner(
+    owner_api_client, custom_list_action_url
+):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
     with the authenticated owner user client.
     """
@@ -234,7 +238,7 @@ def test_batch_download_bad_format_auth_owner(owner_api_client, custom_list_acti
         ["4ur"],
     ],
 )
-def test_batch_download_bad_ids_auth_owner(
+def test_batch_download__bad_ids__auth_owner(
     owner_api_client, custom_list_action_url, mock_Email_queryset_as_file, bad_ids
 ):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
@@ -261,7 +265,7 @@ def test_batch_download_bad_ids_auth_owner(
         (["4,6, 8"], [4, 6, 8]),
     ],
 )
-def test_batch_download_auth_owner(
+def test_batch_download__auth_owner(
     faker,
     fake_file_bytes,
     owner_user,
@@ -297,7 +301,7 @@ def test_batch_download_auth_owner(
 
 
 @pytest.mark.django_db
-def test_batch_download_auth_admin(faker, admin_api_client, custom_list_action_url):
+def test_batch_download__auth_admin(faker, admin_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.EmailViewSet.EmailViewSet.download` action
     with the authenticated admin user client.
     """
@@ -311,7 +315,7 @@ def test_batch_download_auth_admin(faker, admin_api_client, custom_list_action_u
 
 
 @pytest.mark.django_db
-def test_thumbnail_noauth(
+def test_thumbnail__noauth(
     fake_email,
     noauth_api_client,
     custom_detail_action_url,
@@ -328,7 +332,7 @@ def test_thumbnail_noauth(
 
 
 @pytest.mark.django_db
-def test_thumbnail_auth_other(
+def test_thumbnail__auth_other(
     fake_email,
     other_api_client,
     custom_detail_action_url,
@@ -345,7 +349,7 @@ def test_thumbnail_auth_other(
 
 
 @pytest.mark.django_db
-def test_thumbnail_auth_owner(
+def test_thumbnail__auth_owner(
     fake_email,
     owner_api_client,
     custom_detail_action_url,
@@ -372,7 +376,7 @@ def test_thumbnail_auth_owner(
 
 
 @pytest.mark.django_db
-def test_thumbnail_auth_admin(
+def test_thumbnail__auth_admin(
     fake_email,
     admin_api_client,
     custom_detail_action_url,
@@ -389,7 +393,7 @@ def test_thumbnail_auth_admin(
 
 
 @pytest.mark.django_db
-def test_conversation_noauth(
+def test_conversation__noauth(
     fake_email,
     fake_email_conversation,
     noauth_api_client,
@@ -406,7 +410,7 @@ def test_conversation_noauth(
 
 
 @pytest.mark.django_db
-def test_conversation_auth_other(
+def test_conversation__auth_other(
     fake_email,
     fake_email_conversation,
     other_api_client,
@@ -423,7 +427,7 @@ def test_conversation_auth_other(
 
 
 @pytest.mark.django_db
-def test_conversation_auth_owner(
+def test_conversation__auth_owner(
     fake_email,
     fake_email_conversation,
     owner_api_client,
@@ -442,7 +446,7 @@ def test_conversation_auth_owner(
 
 
 @pytest.mark.django_db
-def test_conversation_auth_admin(
+def test_conversation__auth_admin(
     fake_email,
     fake_email_conversation,
     admin_api_client,
@@ -459,7 +463,7 @@ def test_conversation_auth_admin(
 
 
 @pytest.mark.django_db
-def test_restore_noauth(
+def test_restore__noauth(
     fake_email,
     noauth_api_client,
     custom_detail_action_url,
@@ -477,7 +481,7 @@ def test_restore_noauth(
 
 
 @pytest.mark.django_db
-def test_restore_auth_other(
+def test_restore__auth_other(
     fake_email,
     other_api_client,
     custom_detail_action_url,
@@ -495,7 +499,7 @@ def test_restore_auth_other(
 
 
 @pytest.mark.django_db
-def test_restore_auth_owner_success(
+def test_restore__auth_owner__success(
     fake_email,
     owner_api_client,
     custom_detail_action_url,
@@ -514,7 +518,7 @@ def test_restore_auth_owner_success(
 
 
 @pytest.mark.django_db
-def test_restore_auth_owner_pop(
+def test_restore__auth_owner__pop(
     fake_email,
     owner_api_client,
     custom_detail_action_url,
@@ -535,7 +539,7 @@ def test_restore_auth_owner_pop(
 
 
 @pytest.mark.django_db
-def test_restore_auth_owner_no_file(
+def test_restore__auth_owner__no_file(
     fake_error_message,
     fake_email,
     owner_api_client,
@@ -558,7 +562,7 @@ def test_restore_auth_owner_no_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("error", [MailAccountError, MailboxError])
-def test_restore_auth_owner_failure(
+def test_restore__auth_owner__failure(
     fake_error_message,
     fake_email,
     owner_api_client,
@@ -583,7 +587,7 @@ def test_restore_auth_owner_failure(
 
 
 @pytest.mark.django_db
-def test_restore_auth_admin(
+def test_restore__auth_admin(
     fake_email,
     admin_api_client,
     custom_detail_action_url,
@@ -601,7 +605,7 @@ def test_restore_auth_admin(
 
 
 @pytest.mark.django_db
-def test_reprocess_noauth(
+def test_reprocess__noauth(
     fake_email,
     noauth_api_client,
     custom_detail_action_url,
@@ -619,7 +623,7 @@ def test_reprocess_noauth(
 
 
 @pytest.mark.django_db
-def test_reprocess_auth_other(
+def test_reprocess__auth_other(
     fake_email,
     other_api_client,
     custom_detail_action_url,
@@ -637,7 +641,7 @@ def test_reprocess_auth_other(
 
 
 @pytest.mark.django_db
-def test_reprocess_auth_owner(
+def test_reprocess__auth_owner(
     fake_email,
     owner_api_client,
     custom_detail_action_url,
@@ -658,7 +662,7 @@ def test_reprocess_auth_owner(
 
 
 @pytest.mark.django_db
-def test_reprocess_auth_admin(
+def test_reprocess__auth_admin(
     fake_email,
     admin_api_client,
     custom_detail_action_url,
@@ -676,7 +680,7 @@ def test_reprocess_auth_admin(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(
+def test_toggle_favorite__noauth(
     faker, fake_email, noauth_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with an unauthenticated user client."""
@@ -696,7 +700,7 @@ def test_toggle_favorite_noauth(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(
+def test_toggle_favorite__auth_other(
     faker, fake_email, other_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with the authenticated other user client."""
@@ -717,7 +721,7 @@ def test_toggle_favorite_auth_other(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("previous_is_favorite", [True, False])
-def test_toggle_favorite_auth_owner(
+def test_toggle_favorite__auth_owner(
     fake_email, owner_api_client, custom_detail_action_url, previous_is_favorite
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with the authenticated owner user client."""
@@ -736,7 +740,7 @@ def test_toggle_favorite_auth_owner(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_admin(
+def test_toggle_favorite__auth_admin(
     faker, fake_email, admin_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.EmailViewSet.EmailViewSet.toggle_favorite` action with the authenticated admin user client."""

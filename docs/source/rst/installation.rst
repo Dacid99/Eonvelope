@@ -69,6 +69,17 @@ One is a minimal version with only the basic setup and configuration.
 The other is a full setup with all environment level configurations.
 Take one of them, adapt and launch it, for example via *minikube*.
 
+Agentic installation
+--------------------
+
+If you want to outsource installation to a LLM, point it to the install.md file which holds
+a prompt outlining the installation process for docker.
+
+.. code-block:: bash
+
+    curl -fsSL https://github.com/dacid99/eonvelope/blob/master/install.md | claude
+
+For more details, see [the page introducing the concept of a install.md file](https://www.mintlify.com/blog/install-md-standard-for-llm-executable-installation).
 
 Advanced
 --------

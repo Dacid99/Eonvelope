@@ -62,7 +62,7 @@ def test_post_update(fake_daemon, daemon_with_interval_payload):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_mailbox", [1000])
-def test_post_bad_mailbox(fake_daemon, daemon_payload, bad_mailbox):
+def test_post__bad_mailbox(fake_daemon, daemon_payload, bad_mailbox):
     """Tests post direction of :class:`web.forms.CreateMailboxDaemonForm`."""
     daemon_payload["mailbox"] = bad_mailbox
 
@@ -74,7 +74,7 @@ def test_post_bad_mailbox(fake_daemon, daemon_payload, bad_mailbox):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_fetching_criterion", ["OTHER"])
-def test_post_bad_fetching_criterion(
+def test_post__bad_fetching_criterion(
     fake_daemon, daemon_payload, bad_fetching_criterion
 ):
     """Tests post direction of :class:`web.forms.CreateMailboxDaemonForm`."""
@@ -88,7 +88,7 @@ def test_post_bad_fetching_criterion(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_interval_period", ["other"])
-def test_post_bad_interval_period(fake_daemon, daemon_payload, bad_interval_period):
+def test_post__bad_interval_period(fake_daemon, daemon_payload, bad_interval_period):
     """Tests post direction of :class:`web.forms.CreateMailboxDaemonForm`."""
     daemon_payload["interval_period"] = bad_interval_period
 
@@ -100,7 +100,7 @@ def test_post_bad_interval_period(fake_daemon, daemon_payload, bad_interval_peri
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("bad_interval_every", [0, -1])
-def test_post_bad_interval_every(fake_daemon, daemon_payload, bad_interval_every):
+def test_post__bad_interval_every(fake_daemon, daemon_payload, bad_interval_every):
     """Tests post direction of :class:`web.forms.CreateMailboxDaemonForm`."""
     daemon_payload["interval_every"] = bad_interval_every
 

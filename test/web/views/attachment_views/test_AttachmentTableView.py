@@ -22,11 +22,12 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
+from core.models import Attachment
 from web.views import AttachmentTableView
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, list_url, login_url):
+def test_get__noauth(client, list_url, login_url):
     """Tests :class:`web.views.AttachmentTableView` with an unauthenticated user client."""
     response = client.get(list_url(AttachmentTableView))
 
@@ -37,7 +38,7 @@ def test_get_noauth(client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, list_url):
+def test_get__auth_other(other_client, list_url):
     """Tests :class:`web.views.AttachmentTableView` with the authenticated other user client."""
     response = other_client.get(list_url(AttachmentTableView))
 
@@ -48,12 +49,13 @@ def test_get_auth_other(other_client, list_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "query" in response.context
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, list_url):
+def test_get__auth_owner(owner_client, list_url):
     """Tests :class:`web.views.AttachmentTableView` with the authenticated owner user client."""
     response = owner_client.get(list_url(AttachmentTableView))
 
@@ -64,13 +66,15 @@ def test_get_auth_owner(owner_client, list_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Attachment)
     assert "page_size" in response.context
     assert "query" in response.context
     assert 'srcdoc="' not in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, list_url):
+def test_get__auth_admin(admin_client, list_url):
     """Tests :class:`web.views.AttachmentTableView` with the authenticated admin user client."""
     response = admin_client.get(list_url(AttachmentTableView))
 
@@ -81,5 +85,6 @@ def test_get_auth_admin(admin_client, list_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert not response.context["page_obj"].object_list
     assert "page_size" in response.context
     assert "query" in response.context

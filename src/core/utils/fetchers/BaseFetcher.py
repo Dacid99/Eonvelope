@@ -109,19 +109,19 @@ class BaseFetcher(ABC):
         """
         if criterion not in self.AVAILABLE_FETCHING_CRITERIA:
             self.logger.error(
-                "Fetching by %s is not available via protocol %s!",
+                "Fetching by criterion %s is not available via protocol %s!",
                 criterion,
                 self.PROTOCOL,
             )
             raise ValueError(
-                f"Fetching by {criterion} is not available via protocol {self.PROTOCOL}!"
+                f"Fetching by criterion {criterion} is not available via protocol {self.PROTOCOL}!"
             )
         if mailbox.account != self.account:
             self.logger.error("%s is not a mailbox of %s!", mailbox, self.account)
             raise ValueError(f"{mailbox} is not in {self.account}!")
 
     @abstractmethod
-    def fetch_mailboxes(self) -> list[bytes] | list[str]:
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
         """Fetches all mailbox names from the server.
 
         Returns:

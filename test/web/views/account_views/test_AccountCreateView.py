@@ -34,7 +34,7 @@ def auto_mock_Account_test(mock_Account_test):
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, list_url, login_url):
+def test_get__noauth(client, list_url, login_url):
     """Tests :class:`web.views.AccountCreateView` with an unauthenticated user client."""
     response = client.get(list_url(AccountCreateView))
 
@@ -45,7 +45,7 @@ def test_get_noauth(client, list_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, list_url):
+def test_get__auth_other(other_client, list_url):
     """Tests :class:`web.views.AccountCreateView` with the authenticated other user client."""
     response = other_client.get(list_url(AccountCreateView))
 
@@ -58,7 +58,7 @@ def test_get_auth_other(other_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, list_url):
+def test_get__auth_owner(owner_client, list_url):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
     response = owner_client.get(list_url(AccountCreateView))
 
@@ -71,7 +71,7 @@ def test_get_auth_owner(owner_client, list_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, list_url):
+def test_get__auth_admin(admin_client, list_url):
     """Tests :class:`web.views.AccountCreateView` with the authenticated admin user client."""
     response = admin_client.get(list_url(AccountCreateView))
 
@@ -84,7 +84,9 @@ def test_get_auth_admin(admin_client, list_url):
 
 
 @pytest.mark.django_db
-def test_post_noauth(account_payload, client, list_url, login_url):
+def test_post__noauth(
+    account_payload, mock_Account_update_mailboxes, client, list_url, login_url
+):
     """Tests :class:`web.views.AccountCreateView` with an unauthenticated user client."""
     assert Account.objects.all().count() == 1
 
@@ -95,10 +97,13 @@ def test_post_noauth(account_payload, client, list_url, login_url):
     assert response.url.startswith(login_url)
     assert response.url.endswith(f"?next={list_url(AccountCreateView)}")
     assert Account.objects.all().count() == 1
+    mock_Account_update_mailboxes.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_post_auth_other(account_payload, other_user, other_client, list_url):
+def test_post__auth_other(
+    account_payload, other_user, mock_Account_update_mailboxes, other_client, list_url
+):
     """Tests :class:`web.views.AccountCreateView` with the authenticated other user client."""
     assert Account.objects.all().count() == 1
 
@@ -114,11 +119,12 @@ def test_post_auth_other(account_payload, other_user, other_client, list_url):
     assert added_account.password == account_payload["password"]
     assert added_account.mail_host == account_payload["mail_host"]
     assert added_account.mail_host_port == account_payload["mail_host_port"]
+    mock_Account_update_mailboxes.assert_called_once()
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_test_success(
-    account_payload, owner_user, owner_client, list_url
+def test_post__auth_owner__test_success(
+    account_payload, owner_user, mock_Account_update_mailboxes, owner_client, list_url
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client."""
     assert Account.objects.all().count() == 1
@@ -135,13 +141,14 @@ def test_post_auth_owner_test_success(
     assert added_account.password == account_payload["password"]
     assert added_account.mail_host == account_payload["mail_host"]
     assert added_account.mail_host_port == account_payload["mail_host_port"]
+    mock_Account_update_mailboxes.assert_called_once()
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_test_failure(
+def test_post__auth_owner_test__failure(
     fake_error_message,
     account_payload,
-    owner_user,
+    mock_Account_update_mailboxes,
     mock_Account_test,
     owner_client,
     list_url,
@@ -160,11 +167,12 @@ def test_post_auth_owner_test_failure(
     ]
     assert "form" in response.context
     assert Account.objects.all().count() == 1
+    mock_Account_update_mailboxes.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_post_duplicate_auth_owner(
-    fake_account, account_payload, owner_client, list_url
+def test_post__duplicate__auth_owner(
+    fake_account, account_payload, mock_Account_update_mailboxes, owner_client, list_url
 ):
     """Tests :class:`web.views.AccountCreateView` with the authenticated owner user client
     in case of data duplicating another account.
@@ -182,10 +190,13 @@ def test_post_duplicate_auth_owner(
     ]
     assert "form" in response.context
     assert Account.objects.all().count() == 1
+    mock_Account_update_mailboxes.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_post_auth_admin(account_payload, admin_user, admin_client, list_url):
+def test_post__auth_admin(
+    account_payload, admin_user, mock_Account_update_mailboxes, admin_client, list_url
+):
     """Tests :class:`web.views.AccountCreateView` with the authenticated admin user client."""
     assert Account.objects.all().count() == 1
 
@@ -201,3 +212,4 @@ def test_post_auth_admin(account_payload, admin_user, admin_client, list_url):
     assert added_account.password == account_payload["password"]
     assert added_account.mail_host == account_payload["mail_host"]
     assert added_account.mail_host_port == account_payload["mail_host_port"]
+    mock_Account_update_mailboxes.assert_called_once()

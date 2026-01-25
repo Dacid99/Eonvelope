@@ -42,15 +42,6 @@ def complete_database(
 
 
 @pytest.fixture
-def mock_Account_update_mailboxes(mocker):
-    """Patches :func:`core.models.Account.Account.update_mailboxes` for testing of the test action."""
-    return mocker.patch(
-        "core.models.Account.Account.update_mailboxes",
-        autospec=True,
-    )
-
-
-@pytest.fixture
 def mock_Mailbox_test(mocker):
     """Patches :func:`core.models.Mailbox.Mailbox.test` for testing of the test action."""
     return mocker.patch(

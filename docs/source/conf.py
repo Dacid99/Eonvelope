@@ -27,8 +27,7 @@ import os
 import sys
 
 import django
-import tomli
-
+import tomllib
 
 sys.path.insert(0, os.path.abspath("../../"))
 sys.path.insert(0, os.path.abspath("../../src/"))
@@ -47,7 +46,7 @@ author = "David Aderbauer"
 year = datetime.date.today().year
 
 with open("../../pyproject.toml", "rb") as pyproject_toml:
-    config = tomli.load(pyproject_toml)
+    config = tomllib.load(pyproject_toml)
 
 version = config["project"]["version"]
 release = config["project"]["version"]

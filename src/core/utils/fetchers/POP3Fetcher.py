@@ -171,7 +171,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         return mail_data_list
 
     @override
-    def fetch_mailboxes(self) -> list[str]:
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
         """Returns the data of the mailboxes. For POP3 there is only one mailbox named 'INBOX'.
 
         Note:
@@ -180,7 +180,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
         Returns:
             The name of the mailbox in the account in a list.
         """
-        return ["INBOX"]
+        return [("INBOX", "inbox")]
 
     @override
     def restore(self, email: Email) -> None:

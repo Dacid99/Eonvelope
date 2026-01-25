@@ -38,6 +38,8 @@ import vobject
 from django.utils import timezone
 from django.utils.timezone import get_current_timezone
 
+from core.constants import MailboxTypeChoices
+
 
 if TYPE_CHECKING:
     from email.header import Header
@@ -147,18 +149,20 @@ def get_bodytexts(email_message: EmailMessage) -> dict[str, str]:
     return bodytexts
 
 
-def parse_mailbox_name(mailbox_data: bytes | str) -> str:
-    """Parses the mailbox name as received by the `fetch_mailboxes` method in :mod:`core.utils.fetchers`.
+def parse_IMAP_mailbox_data(  # noqa: N802 # that's how IMAP is spelled
+    mailbox_data: bytes | str,
+) -> tuple[str, str]:
+    """Parses the mailbox name as received in :mod:`core.utils.fetchers.IMAP4Fetcher`.
 
     Note:
         Uses :func:`imap_tools.imap_utf7.utf7_decode` to decode IMAPs modified utf7 encoding.
         The result must not be changed afterwards, otherwise opening the mailbox via this name is not possible!
 
     Args:
-        mailbox_data: The mailbox name in bytes or as str as received from the mail server.
+        mailbox_data: The mailbox data in bytes or as str as received from the mail server.
 
     Returns:
-        The serverside name of the mailbox
+        The serverside name of the mailbox.
     """
     mailbox_str = (
         imap_tools.imap_utf7.utf7_decode(mailbox_data)
@@ -166,15 +170,40 @@ def parse_mailbox_name(mailbox_data: bytes | str) -> str:
         else mailbox_data
     )
     match = re.search(
-        r"\([\S ]*?\) [\S]+ (.+)", mailbox_str
-    )  # regex taken from imap_tools.folder.MailBoxFolderManager.list
+        r"\(([\S ]*?)\) [\S]+ (.+)", mailbox_str
+    )  # regex adapted from imap_tools.folder.MailBoxFolderManager.list
     if not match:
         return (
-            mailbox_str.rsplit('"/"', maxsplit=1)[-1]
+            mailbox_str.rsplit('"', maxsplit=1)[-1]
             .rsplit('"."', maxsplit=1)[-1]
-            .strip()
+            .strip(),
+            "",
         )
-    return match.group(1)
+    if match.group(2) == "INBOX":
+        return (
+            match.group(2),
+            match.group(1) + "\\inbox",
+        )  # INBOX is marked by name only
+    return match.group(2), match.group(1)
+
+
+def parse_mailbox_type(mailbox_type_name: str) -> str:
+    """Maps the mailbox type names from the various protocols to the choice enum."""
+    # Ordered: IMAP | Exchange | JMAP, shortened if there are identities
+    mailbox_type_name = mailbox_type_name.lower()
+    if "inbox" in mailbox_type_name:
+        return MailboxTypeChoices.INBOX
+    if "outbox" in mailbox_type_name:
+        return MailboxTypeChoices.OUTBOX
+    if "sent" in mailbox_type_name:
+        return MailboxTypeChoices.SENT
+    if "drafts" in mailbox_type_name:
+        return MailboxTypeChoices.DRAFTS
+    if "junk" in mailbox_type_name:
+        return MailboxTypeChoices.JUNK
+    if "trash" in mailbox_type_name or "deleted" in mailbox_type_name:
+        return MailboxTypeChoices.TRASH
+    return MailboxTypeChoices.CUSTOM
 
 
 def find_best_href_in_header(header: str) -> str:

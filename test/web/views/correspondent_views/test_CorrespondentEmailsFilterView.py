@@ -22,12 +22,12 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
-from core.models import Correspondent
+from core.models import Correspondent, EmailCorrespondent
 from web.views import CorrespondentEmailsFilterView
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_correspondent, client, detail_url, login_url):
+def test_get__noauth(fake_correspondent, client, detail_url, login_url):
     """Tests :class:`web.views.CorrespondentEmailsFilterView` with an unauthenticated user client."""
     response = client.get(detail_url(CorrespondentEmailsFilterView, fake_correspondent))
 
@@ -40,7 +40,7 @@ def test_get_noauth(fake_correspondent, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_correspondent, other_client, detail_url):
+def test_get__auth_other(fake_correspondent, other_client, detail_url):
     """Tests :class:`web.views.CorrespondentEmailsFilterView` with the authenticated other user client."""
     response = other_client.get(
         detail_url(CorrespondentEmailsFilterView, fake_correspondent)
@@ -52,7 +52,7 @@ def test_get_auth_other(fake_correspondent, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
+def test_get__auth_owner(fake_correspondent, owner_client, detail_url):
     """Tests :class:`web.views.CorrespondentEmailsFilterView` with the authenticated owner user client."""
     response = owner_client.get(
         detail_url(CorrespondentEmailsFilterView, fake_correspondent)
@@ -64,6 +64,8 @@ def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
         template.name for template in response.templates
     ]
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], EmailCorrespondent)
     assert "page_size" in response.context
     assert "query" in response.context
     assert "correspondent" in response.context
@@ -71,7 +73,7 @@ def test_get_auth_owner(fake_correspondent, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_correspondent, admin_client, detail_url):
+def test_get__auth_admin(fake_correspondent, admin_client, detail_url):
     """Tests :class:`web.views.CorrespondentEmailsFilterView` with the authenticated admin user client."""
     response = admin_client.get(
         detail_url(CorrespondentEmailsFilterView, fake_correspondent)

@@ -25,26 +25,30 @@
 {% endblock action_buttons %}
 
 {% block card_title %}
-    {{ object.uuid }}
+    <a href="{{ object.mailbox.get_absolute_url }}"
+       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+        {{ object.mailbox.name }}
+    </a>
+    <br />
+    <a href="{{ object.mailbox.account.get_absolute_url }}"
+       class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
+        {{ object.mailbox.account.complete_mail_address }}
+    </a>
 {% endblock card_title %}
 
 {% block card_subtitle %}
-    {% translate "Mailbox" %}: <a href="{{ object.mailbox.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.name }}</a>
+    {% translate "Criterion" %}: {{ object.get_fetching_criterion_display }}
     <br />
-    {% translate "Account" %}: <a href="{{ object.mailbox.account.get_absolute_url }}"
-    class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.complete_mail_address }}</a>
+    {% if object.fetching_criterion_arg %}
+        <li class="list-group-item">{% translate "With value" %}: {{ object.fetching_criterion_arg }}</li>
+        <br />
+    {% endif %}
+    {% translate "Interval" %}: {{ object.interval | title }}
 {% endblock card_subtitle %}
 
 {% block card_content %}
     <ul class="list-group list-group-flush">
-        <li class="list-group-item">
-            {% translate "Criterion" %}: {{ object.get_fetching_criterion_display }}
-        </li>
-        {% if object.fetching_criterion_arg %}
-            <li class="list-group-item">{% translate "With value" %}: {{ object.fetching_criterion_arg }}</li>
-        {% endif %}
-        <li class="list-group-item">{% translate "Interval" %}: {{ object.interval }}</li>
+        <li class="list-group-item">{% translate "UUID" %}: {{ object.uuid }}</li>
         <li class="list-group-item">{% translate "Last Run" %}: {{ object.celery_task.last_run_at }}</li>
         <li class="list-group-item">
             {% translate "Total Run Count" %}: {{ object.celery_task.total_run_count }}

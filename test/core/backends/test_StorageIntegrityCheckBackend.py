@@ -32,7 +32,7 @@ def mock_StorageShard_healthcheck(mocker):
     )
 
 
-def test_StorageIntegrityCheckBackend_check_status_success(
+def test_StorageIntegrityCheckBackend_check_status__success(
     mock_StorageShard_healthcheck,
 ):
     """Test the healthcheck for the storage if it is healthy."""
@@ -41,7 +41,7 @@ def test_StorageIntegrityCheckBackend_check_status_success(
     StorageIntegrityCheckBackend().check_status()
 
 
-def test_StorageIntegrityCheckBackend_check_status_failure(
+def test_StorageIntegrityCheckBackend_check_status__failure(
     mock_StorageShard_healthcheck,
 ):
     """Test the healthcheck for the storage if it is not healthy."""

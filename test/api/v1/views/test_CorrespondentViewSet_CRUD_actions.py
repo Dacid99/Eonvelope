@@ -31,7 +31,7 @@ from core.models import Correspondent
 
 
 @pytest.mark.django_db
-def test_list_noauth(fake_correspondent, fake_email, noauth_api_client, list_url):
+def test_list__noauth(fake_correspondent, fake_email, noauth_api_client, list_url):
     """Tests the list method on :class:`api.v1.views.CorrespondentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(list_url(CorrespondentViewSet))
 
@@ -40,7 +40,7 @@ def test_list_noauth(fake_correspondent, fake_email, noauth_api_client, list_url
 
 
 @pytest.mark.django_db
-def test_list_auth_other(fake_correspondent, fake_email, other_api_client, list_url):
+def test_list__auth_other(fake_correspondent, fake_email, other_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated other user client.
     """
@@ -52,7 +52,7 @@ def test_list_auth_other(fake_correspondent, fake_email, other_api_client, list_
 
 
 @pytest.mark.django_db
-def test_list_auth_owner(fake_correspondent, fake_email, owner_api_client, list_url):
+def test_list__auth_owner(fake_correspondent, fake_email, owner_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated owner user client.
     """
@@ -67,7 +67,7 @@ def test_list_auth_owner(fake_correspondent, fake_email, owner_api_client, list_
 
 
 @pytest.mark.django_db
-def test_list_auth_admin(fake_correspondent, fake_email, admin_api_client, list_url):
+def test_list__auth_admin(fake_correspondent, fake_email, admin_api_client, list_url):
     """Tests the `list` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated admin user client.
     """
@@ -79,7 +79,7 @@ def test_list_auth_admin(fake_correspondent, fake_email, admin_api_client, list_
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_correspondent, fake_email, noauth_api_client, detail_url):
+def test_get__noauth(fake_correspondent, fake_email, noauth_api_client, detail_url):
     """Tests the get method on :class:`api.v1.views.CorrespondentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.get(
         detail_url(CorrespondentViewSet, fake_correspondent)
@@ -90,7 +90,7 @@ def test_get_noauth(fake_correspondent, fake_email, noauth_api_client, detail_ur
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_correspondent, fake_email, other_api_client, detail_url):
+def test_get__auth_other(fake_correspondent, fake_email, other_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated other user client.
     """
@@ -103,7 +103,7 @@ def test_get_auth_other(fake_correspondent, fake_email, other_api_client, detail
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_correspondent, fake_email, owner_api_client, detail_url):
+def test_get__auth_owner(fake_correspondent, fake_email, owner_api_client, detail_url):
     """Tests the `list` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated owner user client.
     """
@@ -116,7 +116,7 @@ def test_get_auth_owner(fake_correspondent, fake_email, owner_api_client, detail
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_correspondent, fake_email, admin_api_client, detail_url):
+def test_get__auth_admin(fake_correspondent, fake_email, admin_api_client, detail_url):
     """Tests the `get` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated admin user client.
     """
@@ -129,7 +129,7 @@ def test_get_auth_admin(fake_correspondent, fake_email, admin_api_client, detail
 
 
 @pytest.mark.django_db
-def test_patch_noauth(
+def test_patch__noauth(
     fake_correspondent, fake_email, noauth_api_client, correspondent_payload, detail_url
 ):
     """Tests the patch method on :class:`api.v1.views.CorrespondentViewSet` with an unauthenticated user client."""
@@ -144,7 +144,7 @@ def test_patch_noauth(
 
 
 @pytest.mark.django_db
-def test_patch_auth_other(
+def test_patch__auth_other(
     fake_correspondent, fake_email, other_api_client, correspondent_payload, detail_url
 ):
     """Tests the `patch` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -161,7 +161,7 @@ def test_patch_auth_other(
 
 
 @pytest.mark.django_db
-def test_patch_auth_owner(
+def test_patch__auth_owner(
     fake_correspondent, fake_email, owner_api_client, correspondent_payload, detail_url
 ):
     """Tests the `patch` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -178,7 +178,7 @@ def test_patch_auth_owner(
 
 
 @pytest.mark.django_db
-def test_patch_auth_admin(
+def test_patch__auth_admin(
     fake_correspondent, fake_email, admin_api_client, correspondent_payload, detail_url
 ):
     """Tests the `patch` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -195,7 +195,7 @@ def test_patch_auth_admin(
 
 
 @pytest.mark.django_db
-def test_put_noauth(
+def test_put__noauth(
     fake_correspondent, fake_email, noauth_api_client, correspondent_payload, detail_url
 ):
     """Tests the put method on :class:`api.v1.views.CorrespondentViewSet` with an unauthenticated user client."""
@@ -210,7 +210,7 @@ def test_put_noauth(
 
 
 @pytest.mark.django_db
-def test_put_auth_other(
+def test_put__auth_other(
     fake_correspondent, fake_email, other_api_client, correspondent_payload, detail_url
 ):
     """Tests the `put` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -227,7 +227,7 @@ def test_put_auth_other(
 
 
 @pytest.mark.django_db
-def test_put_auth_owner(
+def test_put__auth_owner(
     fake_correspondent, fake_email, owner_api_client, correspondent_payload, detail_url
 ):
     """Tests the `put` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -244,7 +244,7 @@ def test_put_auth_owner(
 
 
 @pytest.mark.django_db
-def test_put_auth_admin(
+def test_put__auth_admin(
     fake_correspondent, fake_email, admin_api_client, correspondent_payload, detail_url
 ):
     """Tests the `put` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -261,7 +261,7 @@ def test_put_auth_admin(
 
 
 @pytest.mark.django_db
-def test_post_noauth(noauth_api_client, correspondent_payload, list_url):
+def test_post__noauth(noauth_api_client, correspondent_payload, list_url):
     """Tests the post method on :class:`api.v1.views.CorrespondentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.post(
         list_url(CorrespondentViewSet), data=correspondent_payload
@@ -274,7 +274,7 @@ def test_post_noauth(noauth_api_client, correspondent_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_other(other_api_client, correspondent_payload, list_url):
+def test_post__auth_other(other_api_client, correspondent_payload, list_url):
     """Tests the `post` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated other user client.
     """
@@ -289,7 +289,7 @@ def test_post_auth_other(other_api_client, correspondent_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(owner_api_client, correspondent_payload, list_url):
+def test_post__auth_owner(owner_api_client, correspondent_payload, list_url):
     """Tests the `post` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated owner user client.
     """
@@ -304,7 +304,7 @@ def test_post_auth_owner(owner_api_client, correspondent_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_post_auth_admin(admin_api_client, correspondent_payload, list_url):
+def test_post__auth_admin(admin_api_client, correspondent_payload, list_url):
     """Tests the `post` method on :class:`api.v1.views.CorrespondentViewSet`
     with the authenticated admin user client.
     """
@@ -319,7 +319,7 @@ def test_post_auth_admin(admin_api_client, correspondent_payload, list_url):
 
 
 @pytest.mark.django_db
-def test_delete_noauth(fake_correspondent, fake_email, noauth_api_client, detail_url):
+def test_delete__noauth(fake_correspondent, fake_email, noauth_api_client, detail_url):
     """Tests the delete method on :class:`api.v1.views.CorrespondentViewSet` with an unauthenticated user client."""
     response = noauth_api_client.delete(
         detail_url(CorrespondentViewSet, fake_correspondent)
@@ -331,7 +331,7 @@ def test_delete_noauth(fake_correspondent, fake_email, noauth_api_client, detail
 
 
 @pytest.mark.django_db
-def test_delete_auth_other(
+def test_delete__auth_other(
     fake_correspondent, fake_email, other_api_client, detail_url
 ):
     """Tests the `delete` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -347,7 +347,7 @@ def test_delete_auth_other(
 
 
 @pytest.mark.django_db
-def test_delete_auth_owner(
+def test_delete__auth_owner(
     fake_correspondent, fake_email, owner_api_client, detail_url
 ):
     """Tests the `delete` method on :class:`api.v1.views.CorrespondentViewSet`
@@ -363,7 +363,7 @@ def test_delete_auth_owner(
 
 
 @pytest.mark.django_db
-def test_delete_auth_admin(
+def test_delete__auth_admin(
     fake_correspondent, fake_email, admin_api_client, detail_url
 ):
     """Tests the `delete` method on :class:`api.v1.views.CorrespondentViewSet`

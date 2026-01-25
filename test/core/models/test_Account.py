@@ -21,14 +21,16 @@
 from __future__ import annotations
 
 import datetime
+import re
 
 import pytest
 from django.db import IntegrityError
 from django.urls import reverse
+from django_celery_beat.models import IntervalSchedule
 from model_bakery import baker
 
-from core.constants import EmailProtocolChoices
-from core.models import Account, Mailbox
+from core.constants import EmailProtocolChoices, MailboxTypeChoices
+from core.models import Account, Daemon, Mailbox
 from core.utils.fetchers import (
     BaseFetcher,
     ExchangeFetcher,
@@ -38,7 +40,8 @@ from core.utils.fetchers import (
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
-from core.utils.fetchers.exceptions import MailAccountError
+from core.utils.fetchers.exceptions import FetcherError, MailAccountError
+from src.core.constants import EmailFetchingCriterionChoices
 
 
 @pytest.fixture(autouse=True)
@@ -54,7 +57,12 @@ def mock_fetcher(mocker, faker):
     mock_fetcher.__enter__.return_value = mock_fetcher
     mock_fetcher.fetch_emails.return_value = [text.encode() for text in faker.texts()]
     mock_fetcher.fetch_mailboxes.return_value = [
-        word.encode() for word in faker.words()
+        (word, type_choice)
+        for word, type_choice in zip(
+            faker.words(),
+            faker.random_elements(MailboxTypeChoices.values),
+            strict=False,
+        )
     ]
     return mock_fetcher
 
@@ -121,20 +129,21 @@ def test_Account_foreign_key_deletion(fake_account):
 
 
 @pytest.mark.django_db
-def test_Account_unique_constraints(django_user_model):
+def test_Account_unique_constraints(mocker, django_user_model):
     """Tests the unique constraints of :class:`core.models.Account.Account`."""
+    mocker.patch("core.models.Account.Account.update_mailboxes")
     # ruff: disable[S106]
     account_1 = baker.make(
         Account,
         mail_address="abc123",
         password="passwordlol",
-        protocol=EmailProtocolChoices.IMAP,
+        protocol=EmailProtocolChoices.IMAP4,
     )
     account_2 = baker.make(
         Account,
         mail_address="abc123",
         password="passwordlol",
-        protocol=EmailProtocolChoices.IMAP,
+        protocol=EmailProtocolChoices.IMAP4,
     )
     assert account_1.mail_address == account_2.mail_address
     assert account_1.password == account_2.password
@@ -205,7 +214,7 @@ def test_Account_unique_constraints(django_user_model):
         user=user,
         mail_address="abc123",
         password="mypassword",
-        protocol=EmailProtocolChoices.IMAP,
+        protocol=EmailProtocolChoices.IMAP4,
     )
     with pytest.raises(IntegrityError):
         baker.make(
@@ -213,15 +222,70 @@ def test_Account_unique_constraints(django_user_model):
             user=user,
             mail_address="abc123",
             password="mypassword",
-            protocol=EmailProtocolChoices.IMAP,
+            protocol=EmailProtocolChoices.IMAP4,
         )
+
+
+@pytest.mark.django_db
+def test_Account_save__new(mocker, owner_user, mock_logger):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is not the db.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+    new_account = baker.prepare(Account, user=owner_user)
+
+    assert Account.objects.count() == 0
+
+    new_account.save()
+
+    assert Account.objects.count() == 1
+
+    mock_update_mailboxes.assert_called_once()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_Account_save__old(mocker, fake_account, mock_logger):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is already in the db.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+
+    assert Account.objects.count() == 1
+
+    fake_account.save()
+
+    assert Account.objects.count() == 1
+
+    mock_update_mailboxes.assert_not_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_Account_save__autoupdate_error(
+    mocker, fake_error_message, owner_user, mock_logger
+):
+    """Tests saving a :class:`core.models.Account.Account`
+    in case it is not in the db and updating mailboxes fails.
+    """
+    mock_update_mailboxes = mocker.patch("core.models.Account.Account.update_mailboxes")
+    mock_update_mailboxes.side_effect = FetcherError(fake_error_message)
+    new_account = baker.prepare(Account, user=owner_user)
+
+    new_account.save()
+
+    mock_update_mailboxes.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_called()
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
@@ -229,7 +293,7 @@ def test_Account_unique_constraints(django_user_model):
         (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
-def test_Account_get_fetcher_success(
+def test_Account_get_fetcher__success(
     mocker, mock_logger, fake_account, protocol, expected_fetcher_class
 ):
     """Tests :func:`core.models.Account.Account.get_fetcher`
@@ -248,7 +312,7 @@ def test_Account_get_fetcher_success(
 
 
 @pytest.mark.django_db
-def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
+def test_Account_get_fetcher__bad_protocol(mock_logger, fake_account):
     """Tests :func:`core.models.Account.Account.get_fetcher`
     in case the account has a bad :attr:`core.models.Account.Account.protocol` field.
     """
@@ -256,7 +320,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
     fake_account.save(update_fields=["is_healthy"])
     fake_account.protocol = "OTHER"
 
-    with pytest.raises(ValueError, match="OTHER"):
+    with pytest.raises(ValueError, match=re.compile("protocol", re.IGNORECASE)):
         fake_account.get_fetcher()
 
     fake_account.refresh_from_db()
@@ -268,7 +332,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
@@ -276,7 +340,7 @@ def test_Account_get_fetcher_bad_protocol(mock_logger, fake_account):
         (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
-def test_Account_get_fetcher_init_failure(
+def test_Account_get_fetcher_init__failure(
     mocker, mock_logger, fake_account, protocol, expected_fetcher_class
 ):
     """Tests :func:`core.models.Account.Account.get_fetcher`
@@ -302,7 +366,7 @@ def test_Account_get_fetcher_init_failure(
 @pytest.mark.parametrize(
     "protocol, expected_fetcher_class",
     [
-        (EmailProtocolChoices.IMAP, IMAP4Fetcher),
+        (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
         (EmailProtocolChoices.POP3, POP3Fetcher),
         (EmailProtocolChoices.POP3_SSL, POP3_SSL_Fetcher),
@@ -310,7 +374,7 @@ def test_Account_get_fetcher_init_failure(
         (EmailProtocolChoices.JMAP, JMAPFetcher),
     ],
 )
-def test_Account_get_fetcher_class_success(
+def test_Account_get_fetcher_class__success(
     fake_account, mock_logger, protocol, expected_fetcher_class
 ):
     """Tests :func:`core.models.Account.Account.get_fetcher_class`
@@ -325,7 +389,7 @@ def test_Account_get_fetcher_class_success(
 
 
 @pytest.mark.django_db
-def test_Account_get_fetcher_class_bad_protocol(fake_account, mock_logger):
+def test_Account_get_fetcher_class__bad_protocol(fake_account, mock_logger):
     """Tests :func:`core.models.Account.Account.get_fetcher_class`
     in case the account has a bad :attr:`core.models.Account.Account.protocol` field.
     """
@@ -333,7 +397,7 @@ def test_Account_get_fetcher_class_bad_protocol(fake_account, mock_logger):
     fake_account.protocol = "OTHER"
     fake_account.save(update_fields=["is_healthy"])
 
-    with pytest.raises(ValueError, match="OTHER"):
+    with pytest.raises(ValueError, match=re.compile("protocol", re.IGNORECASE)):
         fake_account.get_fetcher_class()
 
     fake_account.refresh_from_db()
@@ -362,7 +426,7 @@ def test_Account_test_success(
 
 
 @pytest.mark.django_db
-def test_Account_test_bad_protocol(
+def test_Account_test__bad_protocol(
     fake_error_message,
     fake_account,
     mock_logger,
@@ -383,7 +447,7 @@ def test_Account_test_bad_protocol(
 
 
 @pytest.mark.django_db
-def test_Account_test_failure(
+def test_Account_test__failure(
     fake_account, mock_logger, mock_fetcher, mock_Account_get_fetcher
 ):
     """Tests :func:`core.models.Account.Account.test`
@@ -404,7 +468,7 @@ def test_Account_test_failure(
 
 
 @pytest.mark.django_db
-def test_Account_test_get_fetcher_error(
+def test_Account_test__get_fetcher_error(
     fake_account, mock_logger, mock_Account_get_fetcher
 ):
     """Tests :func:`core.models.Account.Account.test`
@@ -426,7 +490,7 @@ def test_Account_test_get_fetcher_error(
 
 
 @pytest.mark.django_db
-def test_Account_update_mailboxes_success(
+def test_Account_update_mailboxes__success(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -455,7 +519,7 @@ def test_Account_update_mailboxes_success(
 
 
 @pytest.mark.django_db(transaction=True)
-def test_Account_update_mailboxes_duplicate(
+def test_Account_update_mailboxes__duplicate(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -466,7 +530,7 @@ def test_Account_update_mailboxes_duplicate(
     in case of a fetched mailbox already being in the db.
     """
     baker.make(Mailbox, account=fake_account, name="INBOX")
-    mock_fetcher.fetch_mailboxes.return_value[0] = b"INBOX"
+    mock_fetcher.fetch_mailboxes.return_value[0] = ("INBOX", "")
 
     assert fake_account.mailboxes.count() == 1
 
@@ -485,7 +549,7 @@ def test_Account_update_mailboxes_duplicate(
 
 
 @pytest.mark.django_db
-def test_Account_update_mailboxes_failure(
+def test_Account_update_mailboxes__failure(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -512,7 +576,7 @@ def test_Account_update_mailboxes_failure(
 
 
 @pytest.mark.django_db
-def test_Account_update_mailboxes_get_fetcher_error(
+def test_Account_update_mailboxes__get_fetcher_error(
     fake_account,
     mock_logger,
     mock_fetcher,
@@ -537,6 +601,186 @@ def test_Account_update_mailboxes_get_fetcher_error(
     mock_fetcher.fetch_mailboxes.assert_not_called()
     spy_Mailbox_create_from_data.assert_not_called()
     mock_logger.info.assert_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "protocol",
+    [
+        EmailProtocolChoices.IMAP4,
+        EmailProtocolChoices.IMAP4_SSL,
+        EmailProtocolChoices.JMAP,
+        EmailProtocolChoices.EXCHANGE,
+    ],
+)
+def test_Account_add_daemons__success(faker, override_config, fake_account, protocol):
+    """Tests :func:`core.models.Account.Account.add_daemons`
+    in case of success.
+    """
+    fake_inbox_every = faker.random.randint(1, 100)
+    fake_sentbox_every = faker.random.randint(1, 100)
+    fake_account.protocol = protocol
+    fake_inbox = fake_account.mailboxes.create(
+        name="INBOX", type=MailboxTypeChoices.INBOX
+    )
+    fake_sentbox = fake_account.mailboxes.create(
+        name="SENT", type=MailboxTypeChoices.SENT
+    )
+
+    assert Daemon.objects.count() == 0
+    assert fake_account.mailboxes.count() == 2
+    with override_config(
+        DEFAULT_INBOX_INTERVAL_EVERY=fake_inbox_every,
+        DEFAULT_SENTBOX_INTERVAL_EVERY=fake_sentbox_every,
+        DEFAULT_INBOX_FETCHING_CRITERION=EmailFetchingCriterionChoices.SEEN,
+        DEFAULT_SENTBOX_FETCHING_CRITERION=EmailFetchingCriterionChoices.ANNUALLY,
+    ):
+        fake_account.add_daemons()
+
+    assert Daemon.objects.count() == 2
+    assert fake_inbox.daemons.count() == 1
+    fake_inbox_daemon = fake_inbox.daemons.first()
+    assert fake_inbox_daemon.interval.period == IntervalSchedule.SECONDS
+    assert fake_inbox_daemon.interval.every == fake_inbox_every
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.SEEN
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+    assert fake_sentbox.daemons.count() == 1
+    fake_sentbox_daemon = fake_sentbox.daemons.first()
+    assert fake_sentbox_daemon.interval.period == IntervalSchedule.HOURS
+    assert fake_sentbox_daemon.interval.every == fake_sentbox_every
+    assert (
+        fake_sentbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.ANNUALLY
+    )
+    assert fake_sentbox_daemon.fetching_criterion_arg == ""
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "protocol", [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+)
+def test_Account_add_daemons__success__pop(
+    faker, override_config, fake_account, protocol
+):
+    """Tests :func:`core.models.Account.Account.add_daemons`
+    in case of success with a POP account.
+    """
+    fake_inbox_every = faker.random.randint(1, 100)
+    fake_sentbox_every = faker.random.randint(1, 100)
+    fake_account.protocol = protocol
+    fake_inbox = fake_account.mailboxes.create(
+        name="INBOX", type=MailboxTypeChoices.INBOX
+    )
+    fake_sentbox = fake_account.mailboxes.create(
+        name="SENT", type=MailboxTypeChoices.SENT
+    )
+
+    assert Daemon.objects.count() == 0
+    assert fake_account.mailboxes.count() == 2
+
+    with override_config(
+        DEFAULT_INBOX_INTERVAL_EVERY=fake_inbox_every,
+        DEFAULT_SENTBOX_INTERVAL_EVERY=fake_sentbox_every,
+    ):
+        fake_account.add_daemons()
+
+    assert Daemon.objects.count() == 2
+    assert fake_inbox.daemons.count() == 1
+    fake_inbox_daemon = fake_inbox.daemons.first()
+    assert fake_inbox_daemon.interval.period == IntervalSchedule.SECONDS
+    assert fake_inbox_daemon.interval.every == fake_inbox_every
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.ALL
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+    assert fake_sentbox.daemons.count() == 1
+    fake_sentbox_daemon = fake_sentbox.daemons.first()
+    assert fake_sentbox_daemon.interval.period == IntervalSchedule.HOURS
+    assert fake_sentbox_daemon.interval.every == fake_sentbox_every
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.ALL
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+
+
+@pytest.mark.django_db
+def test_Account_add_daemons__success__unavailable_criterion_config(
+    faker, override_config, fake_account
+):
+    """Tests :func:`core.models.Account.Account.add_daemons`
+    in case of an unavailable criterion configuration.
+    """
+    fake_inbox_every = faker.random.randint(1, 100)
+    fake_sentbox_every = faker.random.randint(1, 100)
+    fake_account.protocol = EmailProtocolChoices.EXCHANGE
+    fake_inbox = fake_account.mailboxes.create(
+        name="INBOX", type=MailboxTypeChoices.INBOX
+    )
+    fake_sentbox = fake_account.mailboxes.create(
+        name="SENT", type=MailboxTypeChoices.SENT
+    )
+
+    assert Daemon.objects.count() == 0
+    assert fake_account.mailboxes.count() == 2
+
+    with override_config(
+        DEFAULT_INBOX_INTERVAL_EVERY=fake_inbox_every,
+        DEFAULT_SENTBOX_INTERVAL_EVERY=fake_sentbox_every,
+        DEFAULT_INBOX_FETCHING_CRITERION=EmailFetchingCriterionChoices.KEYWORD,
+        DEFAULT_SENTBOX_FETCHING_CRITERION=EmailFetchingCriterionChoices.RECENT,
+    ):
+        fake_account.add_daemons()
+
+    assert Daemon.objects.count() == 2
+    assert fake_inbox.daemons.count() == 1
+    fake_inbox_daemon = fake_inbox.daemons.first()
+    assert fake_inbox_daemon.interval.period == IntervalSchedule.SECONDS
+    assert fake_inbox_daemon.interval.every == fake_inbox_every
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.UNSEEN
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+    assert fake_sentbox.daemons.count() == 1
+    fake_sentbox_daemon = fake_sentbox.daemons.first()
+    assert fake_sentbox_daemon.interval.period == IntervalSchedule.HOURS
+    assert fake_sentbox_daemon.interval.every == fake_sentbox_every
+    assert fake_sentbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.DAILY
+    assert fake_sentbox_daemon.fetching_criterion_arg == ""
+
+
+@pytest.mark.django_db
+def test_Account_add_daemons_twice(faker, override_config, fake_account):
+    """Tests :func:`core.models.Account.Account.add_daemons`
+    in case its called more than once.
+    """
+    fake_inbox_every = faker.random.randint(1, 100)
+    fake_sentbox_every = faker.random.randint(1, 100)
+    fake_inbox = fake_account.mailboxes.create(
+        name="INBOX", type=MailboxTypeChoices.INBOX
+    )
+    fake_sentbox = fake_account.mailboxes.create(
+        name="SENT", type=MailboxTypeChoices.SENT
+    )
+
+    assert Daemon.objects.count() == 0
+    assert fake_account.mailboxes.count() == 2
+    with override_config(
+        DEFAULT_INBOX_INTERVAL_EVERY=fake_inbox_every,
+        DEFAULT_SENTBOX_INTERVAL_EVERY=fake_sentbox_every,
+        DEFAULT_INBOX_FETCHING_CRITERION=EmailFetchingCriterionChoices.SEEN,
+        DEFAULT_SENTBOX_FETCHING_CRITERION=EmailFetchingCriterionChoices.ANNUALLY,
+    ):
+        fake_account.add_daemons()
+        fake_account.add_daemons()
+
+    assert Daemon.objects.count() == 2
+    assert fake_inbox.daemons.count() == 1
+    fake_inbox_daemon = fake_inbox.daemons.first()
+    assert fake_inbox_daemon.interval.period == IntervalSchedule.SECONDS
+    assert fake_inbox_daemon.interval.every == fake_inbox_every
+    assert fake_inbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.SEEN
+    assert fake_inbox_daemon.fetching_criterion_arg == ""
+    assert fake_sentbox.daemons.count() == 1
+    fake_sentbox_daemon = fake_sentbox.daemons.first()
+    assert fake_sentbox_daemon.interval.period == IntervalSchedule.HOURS
+    assert fake_sentbox_daemon.interval.every == fake_sentbox_every
+    assert (
+        fake_sentbox_daemon.fetching_criterion == EmailFetchingCriterionChoices.ANNUALLY
+    )
+    assert fake_sentbox_daemon.fetching_criterion_arg == ""
 
 
 @pytest.mark.django_db

@@ -19,7 +19,8 @@ and on redhat distros:
 ```bash
 sudo dnf -y update && dnf -y install gcc gettext mysql-devel pkgconf npx
 ```
-For some linters you need npm installed, follow the installation guide from [their documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm). 
+
+For some linters you need npm installed, follow the installation guide from [their documentation](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm).
 
 Then to install the python dependencies start a new virtual environment and activate it:
 
@@ -201,13 +202,24 @@ git config core.hooksPath tools/githooks/
 }
 ```
 
-- disable HTML autoformatting:
+- use djlint for HTML autoformatting:
 
 ```json
 "HTML": {
-  "format_on_save": "off"
-  "formatter": null
-}
+  "format_on_save": "on",
+  "formatter": {
+    "external": {
+      "command": "djlint",
+      "arguments": [
+        "-",
+        "--reformat",
+        "--configuration",
+        "tools/djlintrc",
+        "{buffer_path}",
+      ],
+    },
+  },
+},
 ```
 
 - find poetry venvs
@@ -241,4 +253,12 @@ git config core.hooksPath tools/githooks/
       },
     },
   }
+```
+
+- markdown formatting
+
+```json
+"Markdown": {
+  "remove_trailing_whitespace_on_save": true
+}
 ```

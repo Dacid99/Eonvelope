@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-31 20:21+0000\n"
+"POT-Creation-Date: 2026-01-24 13:44+0000\n"
 "PO-Revision-Date: 2025-12-31 20:15+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/eonvelope/web/"
@@ -117,9 +117,9 @@ msgid "Content type"
 msgstr ""
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:68
-#: src/web/tables/email_tables/BaseEmailTable.py:69
+#: src/web/tables/email_tables/BaseEmailTable.py:68
 #: src/web/templates/web/attachment/attachment_detail.html:38
-#: src/web/templates/web/attachment/partials/_attachment_card.html:22
+#: src/web/templates/web/attachment/partials/_attachment_card.html:21
 #: src/web/templates/web/email/email_detail.html:58
 msgid "bytes"
 msgstr ""
@@ -127,10 +127,8 @@ msgstr ""
 #: src/web/tables/daemon_tables/BaseDaemonTable.py:34
 #: src/web/tables/email_tables/BaseEmailTable.py:35
 #: src/web/tables/emailcorrespondent_tables/BaseCorrespondentEmailTable.py:37
-#: src/web/templates/web/daemon/daemon_detail.html:32
-#: src/web/templates/web/daemon/daemon_detail.html:69
+#: src/web/templates/web/daemon/daemon_detail.html:73
 #: src/web/templates/web/daemon/daemon_edit.html:17
-#: src/web/templates/web/daemon/partials/_daemon_card.html:19
 #: src/web/templates/web/email/email_detail.html:61
 #: src/web/templates/web/email/partials/_email_card.html:21
 msgid "Mailbox"
@@ -139,9 +137,7 @@ msgstr ""
 #: src/web/tables/email_tables/BaseEmailTable.py:40
 #: src/web/tables/emailcorrespondent_tables/BaseCorrespondentEmailTable.py:42
 #: src/web/tables/mailbox_tables/BaseMailboxTable.py:36
-#: src/web/templates/web/daemon/daemon_detail.html:35
 #: src/web/templates/web/daemon/daemon_edit.html:20
-#: src/web/templates/web/daemon/partials/_daemon_card.html:22
 #: src/web/templates/web/email/email_detail.html:65
 #: src/web/templates/web/email/partials/_email_card.html:24
 #: src/web/templates/web/mailbox/mailbox_detail.html:40
@@ -229,65 +225,74 @@ msgstr ""
 msgid "Account Details"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:37
+#: src/web/templates/web/account/account_detail.html:39
 msgid "Host"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:38
+#: src/web/templates/web/account/account_detail.html:40
 #: src/web/templates/web/account/partials/_account_card.html:24
 msgid "Protocol"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:40
+#: src/web/templates/web/account/account_detail.html:42
 msgid "Port"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:44
+#: src/web/templates/web/account/account_detail.html:46
 msgid "Default"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:48
+#: src/web/templates/web/account/account_detail.html:50
 msgid "Timeout"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:52
+#: src/web/templates/web/account/account_detail.html:54
 msgid "None"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:57
-#: src/web/templates/web/daemon/daemon_detail.html:54
+#: src/web/templates/web/account/account_detail.html:59
+#: src/web/templates/web/daemon/daemon_detail.html:58
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
 msgid "Latest Error"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:61
-#: src/web/templates/web/daemon/daemon_detail.html:58
+#: src/web/templates/web/account/account_detail.html:63
+#: src/web/templates/web/daemon/daemon_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:69
 msgid "Occurred At"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:62
+#: src/web/templates/web/account/account_detail.html:64
 msgid "Test the account to see if this error persists."
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:73
-#: src/web/templates/web/dashboard.html:76
+#: src/web/templates/web/account/account_detail.html:75
+#: src/web/templates/web/dashboard.html:84
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:11
 #: src/web/templates/web/partials/_header.html:126
 msgid "Mailboxes"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:96
+#: src/web/templates/web/account/account_detail.html:97
+#: src/web/templates/web/daemon/daemon_filter_list.html:6
+#: src/web/templates/web/daemon/daemon_filter_list.html:11
+#: src/web/templates/web/dashboard.html:91
+#: src/web/templates/web/mailbox/mailbox_detail.html:81
+#: src/web/templates/web/partials/_header.html:148
+msgid "Routines"
+msgstr ""
+
+#: src/web/templates/web/account/account_detail.html:119
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
-#: src/web/templates/web/dashboard.html:17
+#: src/web/templates/web/dashboard.html:25
 #: src/web/templates/web/mailbox/mailbox_detail.html:105
 msgid "Latest Emails"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:101
+#: src/web/templates/web/account/account_detail.html:124
 #: src/web/templates/web/correspondent/correspondent_detail.html:94
-#: src/web/templates/web/dashboard.html:22
+#: src/web/templates/web/dashboard.html:30
 #: src/web/templates/web/email/email_detail.html:176
 #: src/web/templates/web/mailbox/mailbox_detail.html:110
 msgid "View all"
@@ -304,13 +309,23 @@ msgstr ""
 
 #: src/web/templates/web/account/account_filter_list.html:6
 #: src/web/templates/web/account/account_filter_list.html:10
-#: src/web/templates/web/dashboard.html:69
+#: src/web/templates/web/dashboard.html:77
 #: src/web/templates/web/partials/_header.html:104
 msgid "Accounts"
 msgstr ""
 
 #: src/web/templates/web/account/partials/_add_button.html:6
 msgid "Add account"
+msgstr ""
+
+#: src/web/templates/web/account/partials/_add_routines-button.html:7
+msgid "Add routines"
+msgstr ""
+
+#: src/web/templates/web/account/partials/_daemons_list_alternative.html:7
+msgid ""
+"You can set up routines for this account's mailboxes to fetch its complete "
+"email traffic."
 msgstr ""
 
 #: src/web/templates/web/account/partials/_emails_list_alternative.html:6
@@ -359,25 +374,25 @@ msgid "Content Id"
 msgstr ""
 
 #: src/web/templates/web/attachment/attachment_detail.html:48
-#: src/web/templates/web/attachment/partials/_attachment_card.html:28
+#: src/web/templates/web/attachment/partials/_attachment_card.html:26
 #: src/web/templates/web/email/email_detail.html:43
 msgid "Date received"
 msgstr ""
 
 #: src/web/templates/web/attachment/attachment_filter_list.html:6
 #: src/web/templates/web/attachment/attachment_filter_list.html:10
-#: src/web/templates/web/dashboard.html:62
+#: src/web/templates/web/dashboard.html:70
 #: src/web/templates/web/email/email_detail.html:133
 #: src/web/templates/web/partials/_header.html:56
 msgid "Attachments"
 msgstr ""
 
-#: src/web/templates/web/attachment/partials/_attachment_card.html:22
+#: src/web/templates/web/attachment/partials/_attachment_card.html:21
 #: src/web/templates/web/email/email_detail.html:58
 msgid "Datasize"
 msgstr ""
 
-#: src/web/templates/web/attachment/partials/_attachment_card.html:25
+#: src/web/templates/web/attachment/partials/_attachment_card.html:23
 msgid "In email"
 msgstr ""
 
@@ -451,7 +466,7 @@ msgstr ""
 
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:6
 #: src/web/templates/web/correspondent/correspondent_filter_list.html:10
-#: src/web/templates/web/dashboard.html:55
+#: src/web/templates/web/dashboard.html:63
 #: src/web/templates/web/email/email_detail.html:122
 #: src/web/templates/web/partials/_header.html:79
 msgid "Correspondents"
@@ -480,43 +495,40 @@ msgstr ""
 msgid "Routine Details"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:42
-#: src/web/templates/web/daemon/partials/_daemon_card.html:29
+#: src/web/templates/web/daemon/daemon_detail.html:40
+#: src/web/templates/web/daemon/partials/_daemon_card.html:27
 msgid "Criterion"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:45
-#: src/web/templates/web/daemon/partials/_daemon_card.html:32
+#: src/web/templates/web/daemon/daemon_detail.html:43
+#: src/web/templates/web/daemon/partials/_daemon_card.html:31
 msgid "With value"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:47
-#: src/web/templates/web/daemon/partials/_daemon_card.html:34
+#: src/web/templates/web/daemon/daemon_detail.html:46
+#: src/web/templates/web/daemon/partials/_daemon_card.html:35
 msgid "Interval"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:48
+#: src/web/templates/web/daemon/daemon_detail.html:51
+#: src/web/templates/web/daemon/partials/_daemon_card.html:39
+msgid "UUID"
+msgstr ""
+
+#: src/web/templates/web/daemon/daemon_detail.html:52
 msgid "Last Run"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:50
+#: src/web/templates/web/daemon/daemon_detail.html:54
 msgid "Total Run Count"
 msgstr ""
 
-#: src/web/templates/web/daemon/daemon_detail.html:59
+#: src/web/templates/web/daemon/daemon_detail.html:63
 msgid "Test the routine to see if this error persists."
 msgstr ""
 
 #: src/web/templates/web/daemon/daemon_edit.html:8
 msgid "Edit Routine"
-msgstr ""
-
-#: src/web/templates/web/daemon/daemon_filter_list.html:6
-#: src/web/templates/web/daemon/daemon_filter_list.html:11
-#: src/web/templates/web/dashboard.html:83
-#: src/web/templates/web/mailbox/mailbox_detail.html:81
-#: src/web/templates/web/partials/_header.html:148
-msgid "Routines"
 msgstr ""
 
 #: src/web/templates/web/daemon/partials/_add_button.html:6
@@ -548,28 +560,33 @@ msgstr ""
 msgid "Stop"
 msgstr ""
 
-#: src/web/templates/web/dashboard.html:6
+#: src/web/templates/web/dashboard.html:8
 msgid "Dashboard"
 msgstr ""
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
-#: src/web/templates/web/dashboard.html:11
+#: src/web/templates/web/dashboard.html:13
 msgid "Welcome to E∘nvelope"
 msgstr ""
 
-#: src/web/templates/web/dashboard.html:35
+#: src/web/templates/web/dashboard.html:17
+#: src/web/templates/web/dashboard.html:18
+msgid "Search emails"
+msgstr ""
+
+#: src/web/templates/web/dashboard.html:43
 msgid "Statistics"
 msgstr ""
 
-#: src/web/templates/web/dashboard.html:41
+#: src/web/templates/web/dashboard.html:49
 msgid "Data"
 msgstr ""
 
-#: src/web/templates/web/dashboard.html:42
+#: src/web/templates/web/dashboard.html:50
 msgid "Count"
 msgstr ""
 
-#: src/web/templates/web/dashboard.html:48
+#: src/web/templates/web/dashboard.html:56
 #: src/web/templates/web/email/email_filter_list.html:6
 #: src/web/templates/web/email/email_filter_list.html:11
 #: src/web/templates/web/partials/_header.html:31
@@ -586,7 +603,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10
+#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
 msgid "Day"
 msgstr ""
 
@@ -605,6 +622,7 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
+#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -618,7 +636,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10
+#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
 msgid "Year"
 msgstr ""
 
@@ -660,7 +678,7 @@ msgid "Html bodytext"
 msgstr ""
 
 #: src/web/templates/web/email/email_detail.html:113
-#: src/web/templates/web/email/partials/_email_card.html:40
+#: src/web/templates/web/email/partials/_email_card.html:38
 msgid "Email content"
 msgstr ""
 
@@ -688,7 +706,7 @@ msgstr ""
 msgid "No emails found for this timeframe."
 msgstr ""
 
-#: src/web/templates/web/email/partials/_email_card.html:31
+#: src/web/templates/web/email/partials/_email_card.html:30
 msgid "Received"
 msgstr ""
 
@@ -890,6 +908,7 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
+#: src/web/utils/columns.py:90
 msgid "Favorite"
 msgstr ""
 
@@ -1028,13 +1047,17 @@ msgstr ""
 msgid " *"
 msgstr ""
 
-#: src/web/views/account_views/AccountDetailWithDeleteView.py:100
+#: src/web/views/account_views/AccountDetailWithDeleteView.py:103
 #, python-format
 msgid "Updating mailboxes failed: %(error)s"
 msgstr ""
 
-#: src/web/views/account_views/AccountDetailWithDeleteView.py:103
+#: src/web/views/account_views/AccountDetailWithDeleteView.py:106
 msgid "Updating mailboxes successful"
+msgstr ""
+
+#: src/web/views/account_views/AccountDetailWithDeleteView.py:123
+msgid "Adding routines successful"
 msgstr ""
 
 #: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:98

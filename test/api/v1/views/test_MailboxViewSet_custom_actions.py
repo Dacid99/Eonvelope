@@ -72,7 +72,7 @@ def mock_Email_queryset_as_file(mocker, fake_file):
 
 
 @pytest.mark.django_db
-def test_test_mailbox_noauth(
+def test_test_mailbox__noauth(
     fake_mailbox,
     noauth_api_client,
     custom_detail_action_url,
@@ -95,7 +95,7 @@ def test_test_mailbox_noauth(
 
 
 @pytest.mark.django_db
-def test_test_mailbox_auth_other(
+def test_test_mailbox__auth_other(
     fake_mailbox,
     other_api_client,
     custom_detail_action_url,
@@ -118,7 +118,7 @@ def test_test_mailbox_auth_other(
 
 
 @pytest.mark.django_db
-def test_test_mailbox_success_auth_owner(
+def test_test_mailbox__success__auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
@@ -141,7 +141,7 @@ def test_test_mailbox_success_auth_owner(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("test_side_effect", [MailboxError, MailAccountError])
-def test_test_mailbox_failure_auth_owner(
+def test_test_mailbox__failure__auth_owner(
     fake_error_message,
     fake_mailbox,
     owner_api_client,
@@ -168,7 +168,7 @@ def test_test_mailbox_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_mailbox_auth_admin(
+def test_test_mailbox__auth_admin(
     fake_mailbox,
     admin_api_client,
     custom_detail_action_url,
@@ -191,7 +191,7 @@ def test_test_mailbox_auth_admin(
 
 
 @pytest.mark.django_db
-def test_fetching_options_noauth(
+def test_fetching_options__noauth(
     noauth_api_client,
     custom_detail_action_url,
     fake_mailbox,
@@ -208,7 +208,7 @@ def test_fetching_options_noauth(
 
 
 @pytest.mark.django_db
-def test_fetching_options_auth_other(
+def test_fetching_options__auth_other(
     other_api_client,
     custom_detail_action_url,
     fake_mailbox,
@@ -225,7 +225,7 @@ def test_fetching_options_auth_other(
 
 
 @pytest.mark.django_db
-def test_fetching_options_auth_owner(
+def test_fetching_options__auth_owner(
     owner_api_client,
     custom_detail_action_url,
     fake_mailbox,
@@ -242,7 +242,7 @@ def test_fetching_options_auth_owner(
 
 
 @pytest.mark.django_db
-def test_fetching_options_auth_admin(
+def test_fetching_options__auth_admin(
     admin_api_client,
     custom_detail_action_url,
     fake_mailbox,
@@ -259,7 +259,7 @@ def test_fetching_options_auth_admin(
 
 
 @pytest.mark.django_db
-def test_fetch_noauth(
+def test_fetch__noauth(
     fake_mailbox,
     noauth_api_client,
     custom_detail_action_url,
@@ -285,7 +285,7 @@ def test_fetch_noauth(
 
 
 @pytest.mark.django_db
-def test_fetch_auth_other(
+def test_fetch__auth_other(
     fake_mailbox,
     other_api_client,
     custom_detail_action_url,
@@ -311,7 +311,7 @@ def test_fetch_auth_other(
 
 
 @pytest.mark.django_db
-def test_fetch_success_auth_owner(
+def test_fetch__success__auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
@@ -339,7 +339,7 @@ def test_fetch_success_auth_owner(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("fetch_side_effect", [MailboxError, MailAccountError])
-def test_fetch_failure_auth_owner(
+def test_fetch__failure__auth_owner(
     fake_error_message,
     fake_mailbox,
     owner_api_client,
@@ -371,7 +371,7 @@ def test_fetch_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_fetch_auth_owner_no_criterion(
+def test_fetch__auth_owner__no_criterion(
     fake_mailbox,
     owner_api_client,
     mock_Mailbox_fetch,
@@ -390,7 +390,7 @@ def test_fetch_auth_owner_no_criterion(
 
 
 @pytest.mark.django_db
-def test_fetch_auth_owner_bad_criterion(
+def test_fetch__auth_owner__bad_criterion(
     faker,
     fake_mailbox,
     owner_api_client,
@@ -411,7 +411,7 @@ def test_fetch_auth_owner_bad_criterion(
 
 
 @pytest.mark.django_db
-def test_fetch_auth_owner_missing_criterion_arg(
+def test_fetch__auth_owner__missing_criterion_arg(
     fake_mailbox,
     owner_api_client,
     mock_Mailbox_fetch,
@@ -431,7 +431,7 @@ def test_fetch_auth_owner_missing_criterion_arg(
 
 
 @pytest.mark.django_db
-def test_fetch_auth_owner_criterion_arg_not_required(
+def test_fetch__auth_owner_criterion_arg_not_required(
     fake_mailbox,
     owner_api_client,
     mock_Mailbox_fetch,
@@ -455,7 +455,7 @@ def test_fetch_auth_owner_criterion_arg_not_required(
 
 
 @pytest.mark.django_db
-def test_fetch_auth_admin(
+def test_fetch__auth_admin(
     fake_mailbox,
     admin_api_client,
     custom_detail_action_url,
@@ -481,7 +481,7 @@ def test_fetch_auth_admin(
 
 
 @pytest.mark.django_db
-def test_download_noauth(
+def test_download__noauth(
     faker,
     fake_mailbox,
     noauth_api_client,
@@ -502,7 +502,7 @@ def test_download_noauth(
 
 
 @pytest.mark.django_db
-def test_download_auth_other(
+def test_download__auth_other(
     faker,
     fake_mailbox,
     other_api_client,
@@ -523,7 +523,7 @@ def test_download_auth_other(
 
 
 @pytest.mark.django_db
-def test_download_no_format_auth_owner(
+def test_download__no_format__auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
@@ -543,7 +543,7 @@ def test_download_no_format_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_no_emails_auth_owner(
+def test_download__no_emails__auth_owner(
     faker,
     fake_mailbox,
     owner_api_client,
@@ -566,7 +566,7 @@ def test_download_no_emails_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_bad_format_auth_owner(
+def test_download__bad_format__auth_owner(
     faker,
     fake_mailbox,
     owner_api_client,
@@ -590,7 +590,7 @@ def test_download_bad_format_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_auth_owner(
+def test_download__auth_owner(
     faker,
     fake_file_bytes,
     fake_mailbox,
@@ -627,7 +627,7 @@ def test_download_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_auth_admin(
+def test_download__auth_admin(
     faker,
     fake_mailbox,
     admin_api_client,
@@ -648,7 +648,7 @@ def test_download_auth_admin(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_noauth(
+def test_upload_mailbox__noauth(
     faker,
     fake_mailbox,
     noauth_api_client,
@@ -676,7 +676,7 @@ def test_upload_mailbox_noauth(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_auth_other(
+def test_upload_mailbox__auth_other(
     faker,
     fake_mailbox,
     other_api_client,
@@ -704,7 +704,7 @@ def test_upload_mailbox_auth_other(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_auth_owner(
+def test_upload_mailbox__auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
@@ -734,7 +734,7 @@ def test_upload_mailbox_auth_owner(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_no_file_auth_owner(
+def test_upload_mailbox__no_file__auth_owner(
     faker,
     fake_mailbox,
     owner_api_client,
@@ -761,7 +761,7 @@ def test_upload_mailbox_no_file_auth_owner(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_no_format_auth_owner(
+def test_upload_mailbox__no_format__auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
@@ -787,7 +787,7 @@ def test_upload_mailbox_no_format_auth_owner(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_bad_format_auth_owner(
+def test_upload_mailbox__bad_format__auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
@@ -813,7 +813,7 @@ def test_upload_mailbox_bad_format_auth_owner(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_bad_file_auth_owner(
+def test_upload_mailbox__bad_file__auth_owner(
     faker,
     fake_mailbox,
     owner_api_client,
@@ -842,7 +842,7 @@ def test_upload_mailbox_bad_file_auth_owner(
 
 
 @pytest.mark.django_db
-def test_upload_mailbox_auth_admin(
+def test_upload_mailbox__auth_admin(
     faker,
     fake_mailbox,
     admin_api_client,
@@ -870,7 +870,7 @@ def test_upload_mailbox_auth_admin(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(
+def test_toggle_favorite__noauth(
     faker, fake_mailbox, noauth_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with an unauthenticated user client."""
@@ -890,7 +890,7 @@ def test_toggle_favorite_noauth(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(
+def test_toggle_favorite__auth_other(
     faker, fake_mailbox, other_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated other user client."""
@@ -911,7 +911,7 @@ def test_toggle_favorite_auth_other(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("previous_is_favorite", [True, False])
-def test_toggle_favorite_auth_owner(
+def test_toggle_favorite__auth_owner(
     fake_mailbox, owner_api_client, custom_detail_action_url, previous_is_favorite
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated owner user client."""
@@ -930,7 +930,7 @@ def test_toggle_favorite_auth_owner(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_admin(
+def test_toggle_favorite__auth_admin(
     faker, fake_mailbox, admin_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.toggle_favorite` action with the authenticated admin user client."""

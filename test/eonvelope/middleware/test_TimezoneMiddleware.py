@@ -44,7 +44,7 @@ def test_good_timezone(fake_timezone, client):
 
 
 @pytest.mark.django_db
-def test_bad_timezone(client):
+def test__bad_timezone(client):
     """Tests setting of the session timezone by :class:`eonvelope.middleware.TimezoneMiddleware`
     in case an invalid timezone is in the session.
     """
@@ -62,7 +62,7 @@ def test_bad_timezone(client):
 
 
 @pytest.mark.django_db
-def test_no_timezone(client):
+def test__no_timezone(client):
     """Tests setting of the session timezone by :class:`eonvelope.middleware.TimezoneMiddleware`
     in case no timezone is in the session.
     """

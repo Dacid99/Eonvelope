@@ -25,6 +25,7 @@ from typing import TYPE_CHECKING, override
 
 import jmapc
 import requests
+import urllib3.exceptions
 
 from core.constants import (
     INTERNAL_DATE_FORMAT,
@@ -81,9 +82,8 @@ class JMAPFetcher(BaseFetcher):
         """Returns the filter-condition for the JMAP Email/query request.
 
         Args:
-            criterion: The criterion for the JMAP request.
+            criterion_name: The criterion for the JMAP request.
             criterion_arg: The argument for the criterion.
-            base_query: The query to extend based on the criterion.
 
         Returns:
             The filter-condition to be used in JMAP request.
@@ -148,7 +148,7 @@ class JMAPFetcher(BaseFetcher):
                     host=self.account.mail_host_address,
                     api_token=self.account.password,
                 )
-        except requests.RequestException as error:
+        except (requests.RequestException, urllib3.exceptions.HTTPError) as error:
             self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error, "login") from error
         self.logger.info("Successfully connected to %s.", self.account)
@@ -292,8 +292,8 @@ class JMAPFetcher(BaseFetcher):
         return email_data
 
     @override
-    def fetch_mailboxes(self) -> list[str]:
-        method = jmapc.methods.MailboxGet(ids=None)
+    def fetch_mailboxes(self) -> list[tuple[str, str]]:
+        method = jmapc.methods.MailboxGet(ids=None, properties=["name", "role"])
         self.logger.debug("Fetching mailboxes in %s ...", self.account)
         try:
             result = self._mail_client.request(method)
@@ -313,7 +313,11 @@ class JMAPFetcher(BaseFetcher):
                 BadServerResponseError(result.to_json()), method.jmap_method_name
             )
         self.logger.debug("Successfully fetched mailboxes in %s.", self.account)
-        return [mailbox.name for mailbox in result.data if mailbox.name is not None]
+        return [
+            (mailbox.name, mailbox.role or "")
+            for mailbox in result.data
+            if mailbox.name is not None
+        ]
 
     @override
     def restore(self, email: Email) -> None:

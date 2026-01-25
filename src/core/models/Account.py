@@ -21,7 +21,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, ClassVar, override
+from typing import TYPE_CHECKING, Any, ClassVar, override
 
 from dirtyfields import DirtyFieldsMixin
 from django.conf import settings
@@ -29,9 +29,14 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_celery_beat.models import IntervalSchedule
 from django_prometheus.models import ExportModelOperationsMixin
 
-from core.constants import EmailProtocolChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.mixins import (
     FavoriteModelMixin,
     HealthModelMixin,
@@ -46,7 +51,8 @@ from core.utils.fetchers import (
     POP3_SSL_Fetcher,
     POP3Fetcher,
 )
-from core.utils.fetchers.exceptions import MailAccountError
+from core.utils.fetchers.exceptions import FetcherError, MailAccountError
+from eonvelope.utils.workarounds import get_config
 
 from .Mailbox import Mailbox
 
@@ -185,6 +191,18 @@ class Account(
         }
 
     @override
+    def save(self, *args: Any, **kwargs: Any) -> None:
+        """Extended to auto-update mailboxes when the account is saved for the first time."""
+        needs_mailbox_update = self.pk is None
+        super().save(*args, **kwargs)
+        if needs_mailbox_update:
+            logger.info("Autoupdate mailboxes for new %s.", self)
+            try:
+                self.update_mailboxes()
+            except FetcherError:
+                logger.exception("Autoupdating mailboxes for %s failed!", self)
+
+    @override
     def clean(self) -> None:
         """Validation for the unique together constraint on :attr:`mail_account`.
         Validate the account data by testing if one of the relevant fields is dirty.
@@ -316,10 +334,59 @@ class Account(
 
         logger.info("Parsing mailbox data ...")
 
-        for mailbox_data in mailbox_list:
-            Mailbox.create_from_data(mailbox_data, self)
+        for mailbox_name, mailbox_type in mailbox_list:
+            Mailbox.create_from_data(
+                mailbox_name=mailbox_name, mailbox_type=mailbox_type, account=self
+            )
 
         logger.info("Successfully updated mailboxes.")
+
+    def add_daemons(self) -> None:
+        """Adds a default set of daemons to the in- and sent mailboxes of this account."""
+        inbox_mailboxes = self.mailboxes.filter(
+            type=MailboxTypeChoices.INBOX
+        ).prefetch_related("daemons")
+        for inbox_mailbox in inbox_mailboxes:
+            fetching_criterion = (
+                get_config("DEFAULT_INBOX_FETCHING_CRITERION")
+                if self.protocol
+                not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+                else EmailFetchingCriterionChoices.ALL
+            )
+            if (
+                fetching_criterion
+                not in inbox_mailbox.available_no_arg_fetching_criteria
+            ):
+                fetching_criterion = EmailFetchingCriterionChoices.UNSEEN
+            inbox_mailbox.daemons.get_or_create(
+                fetching_criterion=fetching_criterion,
+                interval=IntervalSchedule.objects.get_or_create(
+                    every=get_config("DEFAULT_INBOX_INTERVAL_EVERY"),
+                    period=IntervalSchedule.SECONDS,
+                )[0],
+            )
+        sent_mailboxes = self.mailboxes.filter(
+            type=MailboxTypeChoices.SENT
+        ).prefetch_related("daemons")
+        for sent_mailbox in sent_mailboxes:
+            fetching_criterion = (
+                get_config("DEFAULT_SENTBOX_FETCHING_CRITERION")
+                if self.protocol
+                not in [EmailProtocolChoices.POP3, EmailProtocolChoices.POP3_SSL]
+                else EmailFetchingCriterionChoices.ALL
+            )
+            if (
+                fetching_criterion
+                not in sent_mailbox.available_no_arg_fetching_criteria
+            ):
+                fetching_criterion = EmailFetchingCriterionChoices.DAILY
+            sent_mailbox.daemons.get_or_create(
+                fetching_criterion=fetching_criterion,
+                interval=IntervalSchedule.objects.get_or_create(
+                    every=get_config("DEFAULT_SENTBOX_INTERVAL_EVERY"),
+                    period=IntervalSchedule.HOURS,
+                )[0],
+            )
 
     @property
     def complete_mail_address(self) -> str:

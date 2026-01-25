@@ -35,6 +35,7 @@ from django_prometheus.models import ExportModelOperationsMixin
 
 from core.constants import (
     EmailFetchingCriterionChoices,
+    MailboxTypeChoices,
     SupportedEmailDownloadFormats,
     SupportedEmailUploadFormats,
     file_format_parsers,
@@ -48,8 +49,8 @@ from core.mixins import (
     URLMixin,
 )
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from core.utils.mail_parsing import parse_mailbox_name
 from eonvelope.utils.workarounds import get_config
+from src.core.utils.mail_parsing import parse_mailbox_type
 
 from .Email import Email
 
@@ -93,6 +94,14 @@ class Mailbox(
         verbose_name=_("name"),
     )
     """The mailaccount internal name of the mailbox. Unique together with :attr:`account`."""
+
+    type = models.CharField(
+        default=MailboxTypeChoices.CUSTOM,
+        choices=MailboxTypeChoices,
+        max_length=32,
+        verbose_name=_("type"),
+    )
+    """The mailaccount internal role or distinguished id of the mailbox."""
 
     account: models.ForeignKey[Account] = models.ForeignKey(
         "Account",
@@ -299,27 +308,25 @@ class Mailbox(
         """
         file_format = file_format.lower()
         logger.info("Adding emails from %s file to %s ...", file_format, self)
-        if file_format == SupportedEmailUploadFormats.EML:
-            self._add_email_from_eml(file)
-        elif file_format == SupportedEmailUploadFormats.ZIP_EML:
-            self._add_emails_from_zip_eml(file)
-        elif file_format in [
-            SupportedEmailUploadFormats.MBOX,
-            SupportedEmailUploadFormats.MMDF,
-            SupportedEmailUploadFormats.BABYL,
-        ]:
-            self._add_emails_from_mailbox_file(file, file_format)
-        elif file_format in [
-            SupportedEmailUploadFormats.MAILDIR,
-            SupportedEmailUploadFormats.MH,
-        ]:
-            self._add_emails_from_mailbox_zip(file, file_format)
-        else:
-            logger.error("Unsupported fileformat for uploaded file.")
-            raise ValueError(
-                _("The file format %(file_format)s is not supported.")
-                % {"file_format": file_format}
-            )
+        match file_format:
+            case SupportedEmailUploadFormats.EML:
+                self._add_email_from_eml(file)
+            case SupportedEmailUploadFormats.ZIP_EML:
+                self._add_emails_from_zip_eml(file)
+            case (
+                SupportedEmailUploadFormats.MBOX
+                | SupportedEmailUploadFormats.MMDF
+                | SupportedEmailUploadFormats.BABYL
+            ):
+                self._add_emails_from_mailbox_file(file, file_format)
+            case SupportedEmailUploadFormats.MAILDIR | SupportedEmailUploadFormats.MH:
+                self._add_emails_from_mailbox_zip(file, file_format)
+            case _:
+                logger.error("Unsupported fileformat for uploaded file.")
+                raise ValueError(
+                    _("The file format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                )
         logger.info("Successfully added emails from file.")
 
     @property
@@ -400,24 +407,31 @@ class Mailbox(
 
     @classmethod
     def create_from_data(
-        cls, mailbox_data: bytes | str, account: Account
+        cls, mailbox_name: str, mailbox_type: str, account: Account
     ) -> Mailbox | None:
-        """Creates a :class:`core.models.Mailbox` from the mailboxname in bytes.
+        """Creates a :class:`core.models.Mailbox` from the mailboxdata.
 
         Note:
             Mailbox created from data is considered healthy by default.
 
         Args:
-            mailbox_data: The bytes with the mailboxname.
+            mailbox_name: The name of the mailbox.
+            mailbox_type: The type of the mailbox.
             account: The account the mailbox is in.
 
         Returns:
             The :class:`core.models.Mailbox` instance with data from the bytes.
-            `None` if the mailbox name is in the ignorelist.
+            `None` if the mailbox name is ignored.
+
+        Raises:
+            Account.DoesNotExist: If the given account is not in the db.
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")
-        mailbox_name = parse_mailbox_name(mailbox_data)
+        mailbox_type = parse_mailbox_type(mailbox_type)
+        if get_config("THROW_OUT_SPAM") and (mailbox_type == MailboxTypeChoices.JUNK):
+            logger.debug("%s is a spambox, it is skipped.", mailbox_name)
+            return None
         if re.compile(
             get_config("IGNORED_MAILBOXES_REGEX"), flags=re.IGNORECASE
         ).search(mailbox_name):
@@ -425,6 +439,8 @@ class Mailbox(
             return None
         try:
             mailbox = cls.objects.get(account=account, name=mailbox_name)
+            mailbox.type = mailbox_type  # for migration of old mailbox instances
+            mailbox.save(update_fields=["type"])
             mailbox.set_healthy()
             logger.debug(
                 "%s already exists in db, it has been set to healthy.", mailbox
@@ -433,10 +449,11 @@ class Mailbox(
             mailbox = cls(
                 account=account,
                 name=mailbox_name,
+                type=mailbox_type,
                 save_to_eml=get_config("DEFAULT_SAVE_TO_EML"),
                 save_attachments=get_config("DEFAULT_SAVE_ATTACHMENTS"),
                 is_healthy=True,
             )
             mailbox.save()
-            logger.debug("Successfully saved mailbox %s to db.", mailbox_name)
+            logger.debug("Successfully saved %s to db.", mailbox_name)
         return mailbox

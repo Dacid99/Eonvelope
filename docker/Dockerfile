@@ -79,12 +79,6 @@ FROM --platform=linux/amd64 python:${PYTHON_VERSION}-alpine${ALPINE_VERSION} AS 
 
 WORKDIR /app
 
-COPY ./manage.py ./pyproject.toml ./
-COPY ./src/ ./src/
-
-# install python deps, must be done twice for arm build to work
-COPY --from=poetry-prestage /requirements.txt ./
-
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH=src/ \
@@ -97,9 +91,15 @@ ARG BUILD_DJANGO_APK_DEPENDENCIES
 ARG STORAGE_PATH
 ARG LOG_PATH
 
+# install python deps, must be done twice for arm build to work
+COPY --from=poetry-prestage /requirements.txt ./
+
 RUN apk add --no-cache ${BUILD_DJANGO_APK_DEPENDENCIES} ${BUILD_PYTHON_APK_DEPENDENCIES} ${RUNTIME_APK_DEPENDENCIES} && \
     pip install --no-cache-dir --requirement requirements.txt && \
     mkdir -p ${STORAGE_PATH} ${LOG_PATH}
+
+COPY ./manage.py ./pyproject.toml ./
+COPY ./src/ ./src/
 
 RUN django-admin collectstatic --noinput && \
     django-admin compilemessages

@@ -29,7 +29,7 @@ from web.views import MailboxCreateDaemonView
 
 
 @pytest.mark.django_db
-def test_get_noauth(client, fake_mailbox, detail_url, login_url):
+def test_get__noauth(client, fake_mailbox, detail_url, login_url):
     """Tests :class:`web.views.MailboxCreateDaemonView` with an unauthenticated user client."""
     response = client.get(detail_url(MailboxCreateDaemonView, fake_mailbox))
 
@@ -42,7 +42,7 @@ def test_get_noauth(client, fake_mailbox, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(other_client, fake_mailbox, detail_url):
+def test_get__auth_other(other_client, fake_mailbox, detail_url):
     """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated other user client."""
     response = other_client.get(detail_url(MailboxCreateDaemonView, fake_mailbox))
 
@@ -52,7 +52,7 @@ def test_get_auth_other(other_client, fake_mailbox, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(owner_client, fake_mailbox, detail_url):
+def test_get__auth_owner(owner_client, fake_mailbox, detail_url):
     """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(MailboxCreateDaemonView, fake_mailbox))
 
@@ -69,7 +69,7 @@ def test_get_auth_owner(owner_client, fake_mailbox, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner_criterion_choices(owner_client, fake_mailbox, detail_url):
+def test_get__auth_owner__criterion_choices(owner_client, fake_mailbox, detail_url):
     """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated owner user client."""
     fake_mailbox.account.protocol = EmailProtocolChoices.POP3
     fake_mailbox.account.save(update_fields=["protocol"])
@@ -90,7 +90,7 @@ def test_get_auth_owner_criterion_choices(owner_client, fake_mailbox, detail_url
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(admin_client, fake_mailbox, detail_url):
+def test_get__auth_admin(admin_client, fake_mailbox, detail_url):
     """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(MailboxCreateDaemonView, fake_mailbox))
 
@@ -100,7 +100,7 @@ def test_get_auth_admin(admin_client, fake_mailbox, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_noauth(
+def test_post__noauth(
     daemon_with_interval_payload, client, fake_mailbox, detail_url, login_url
 ):
     """Tests :class:`web.views.MailboxCreateDaemonView` with an unauthenticated user client."""
@@ -121,7 +121,7 @@ def test_post_noauth(
 
 
 @pytest.mark.django_db
-def test_post_auth_other(
+def test_post__auth_other(
     daemon_with_interval_payload,
     fake_other_mailbox,
     other_client,
@@ -144,7 +144,7 @@ def test_post_auth_other(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner(
+def test_post__auth_owner(
     daemon_with_interval_payload, owner_client, fake_mailbox, detail_url
 ):
     """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated owner user client."""
@@ -168,7 +168,7 @@ def test_post_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_other_mailbox(
+def test_post__auth_owner__other_mailbox(
     owner_client,
     fake_mailbox,
     fake_other_mailbox,
@@ -199,7 +199,7 @@ def test_post_auth_owner_other_mailbox(
 
 
 @pytest.mark.django_db
-def test_post_auth_owner_unavailable_criterion(
+def test_post__auth_owner__unavailable_criterion(
     owner_client,
     fake_mailbox,
     daemon_with_interval_payload,
@@ -233,7 +233,7 @@ def test_post_auth_owner_unavailable_criterion(
 
 
 @pytest.mark.django_db
-def test_post_duplicate_auth_owner(
+def test_post__duplicate__auth_owner(
     fake_daemon, daemon_with_interval_payload, owner_client, fake_mailbox, detail_url
 ):
     """Tests :class:`web.views.MailboxCreateDaemonView` with the authenticated owner user client."""
@@ -261,7 +261,7 @@ def test_post_duplicate_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_auth_admin(
+def test_post__auth_admin(
     daemon_with_interval_payload,
     admin_client,
     fake_mailbox,

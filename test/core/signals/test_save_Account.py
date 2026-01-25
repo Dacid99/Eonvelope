@@ -31,7 +31,7 @@ def mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_Account_post_save_from_healthy(mock_logger, account_with_mailboxes):
+def test_Account_post_save__from_healthy(mock_logger, account_with_mailboxes):
     """Tests the post_save function of :class:`core.models.Account`."""
     account_with_mailboxes.is_healthy = True
     account_with_mailboxes.save(update_fields=["is_healthy"])
@@ -57,7 +57,7 @@ def test_Account_post_save_from_healthy(mock_logger, account_with_mailboxes):
 
 
 @pytest.mark.django_db
-def test_Account_post_save_from_unhealthy(account_with_mailboxes, mock_logger):
+def test_Account_post_save__from_unhealthy(account_with_mailboxes, mock_logger):
     """Tests the post_save function of :class:`core.models.Account`."""
     account_with_mailboxes.is_healthy = False
     account_with_mailboxes.save(update_fields=["is_healthy"])

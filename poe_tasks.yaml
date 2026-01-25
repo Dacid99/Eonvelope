@@ -134,6 +134,10 @@ tasks:
     help: "Updates the translation files."
     cmd: python3 manage.py makemessages --all --no-obsolete --ignore "test/*" --ignore "docs/*"
 
+  update:
+    help: "Update all dependencies."
+    shell: poetry update --with dev,docs && pre-commit autoupdate
+
   build-docs:
     help: "Builds the documentation."
     cwd: ${POE_PWD}/docs/

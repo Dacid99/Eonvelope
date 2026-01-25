@@ -22,12 +22,12 @@ import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
-from core.models import Account
+from core.models import Account, Email
 from web.views import AccountEmailsTableView
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_account, client, detail_url, login_url):
+def test_get__noauth(fake_account, client, detail_url, login_url):
     """Tests :class:`web.views.AccountEmailsTableView` with an unauthenticated user client."""
     response = client.get(detail_url(AccountEmailsTableView, fake_account))
 
@@ -40,7 +40,7 @@ def test_get_noauth(fake_account, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_account, other_client, detail_url):
+def test_get__auth_other(fake_account, other_client, detail_url):
     """Tests :class:`web.views.AccountEmailsTableView` with the authenticated other user client."""
     response = other_client.get(detail_url(AccountEmailsTableView, fake_account))
 
@@ -50,7 +50,7 @@ def test_get_auth_other(fake_account, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_account, owner_client, detail_url):
+def test_get__auth_owner(fake_account, owner_client, detail_url):
     """Tests :class:`web.views.AccountEmailsTableView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(AccountEmailsTableView, fake_account))
 
@@ -61,6 +61,8 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
     ]
     assert "table" in response.context
     assert "page_obj" in response.context
+    assert response.context["page_obj"].object_list
+    assert isinstance(response.context["page_obj"].object_list[0], Email)
     assert "page_size" in response.context
     assert "query" in response.context
     assert "account" in response.context
@@ -68,7 +70,7 @@ def test_get_auth_owner(fake_account, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_account, admin_client, detail_url):
+def test_get__auth_admin(fake_account, admin_client, detail_url):
     """Tests :class:`web.views.AccountEmailsTableView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(AccountEmailsTableView, fake_account))
 

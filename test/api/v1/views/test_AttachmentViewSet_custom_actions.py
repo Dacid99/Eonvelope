@@ -59,7 +59,7 @@ def mock_Attachment_share_to_immich(mocker, faker):
 
 
 @pytest.mark.django_db
-def test_download_noauth(
+def test_download__noauth(
     fake_attachment_with_file,
     noauth_api_client,
     custom_detail_action_url,
@@ -80,7 +80,7 @@ def test_download_noauth(
 
 
 @pytest.mark.django_db
-def test_download_auth_other(
+def test_download__auth_other(
     fake_attachment_with_file,
     other_api_client,
     custom_detail_action_url,
@@ -101,7 +101,7 @@ def test_download_auth_other(
 
 
 @pytest.mark.django_db
-def test_download_no_file_auth_owner(
+def test_download__no_file__auth_owner(
     fake_attachment,
     owner_api_client,
     custom_detail_action_url,
@@ -120,7 +120,7 @@ def test_download_no_file_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_auth_owner(
+def test_download__auth_owner(
     fake_attachment_with_file,
     owner_api_client,
     custom_detail_action_url,
@@ -155,7 +155,7 @@ def test_download_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_auth_admin(
+def test_download__auth_admin(
     fake_attachment_with_file,
     admin_api_client,
     custom_detail_action_url,
@@ -176,7 +176,7 @@ def test_download_auth_admin(
 
 
 @pytest.mark.django_db
-def test_batch_download_noauth(noauth_api_client, custom_list_action_url):
+def test_batch_download__noauth(noauth_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with an unauthenticated user client.
     """
@@ -192,7 +192,7 @@ def test_batch_download_noauth(noauth_api_client, custom_list_action_url):
 
 
 @pytest.mark.django_db
-def test_batch_download_auth_other(other_api_client, custom_list_action_url):
+def test_batch_download__auth_other(other_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated other user client.
     """
@@ -208,7 +208,7 @@ def test_batch_download_auth_other(other_api_client, custom_list_action_url):
 
 
 @pytest.mark.django_db
-def test_batch_download_no_ids_auth_owner(
+def test_batch_download__no_ids__auth_owner(
     owner_api_client, custom_list_action_url, mock_Attachment_queryset_as_file
 ):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
@@ -237,7 +237,7 @@ def test_batch_download_no_ids_auth_owner(
         ["4ur"],
     ],
 )
-def test_batch_download_bad_ids_auth_owner(
+def test_batch_download__bad_ids__auth_owner(
     owner_api_client, custom_list_action_url, mock_Attachment_queryset_as_file, bad_ids
 ):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
@@ -266,7 +266,7 @@ def test_batch_download_bad_ids_auth_owner(
         (["4,6, 8"], [4, 6, 8]),
     ],
 )
-def test_batch_download_auth_owner(
+def test_batch_download__auth_owner(
     fake_file_bytes,
     owner_user,
     owner_api_client,
@@ -300,7 +300,7 @@ def test_batch_download_auth_owner(
 
 
 @pytest.mark.django_db
-def test_batch_download_auth_admin(admin_api_client, custom_list_action_url):
+def test_batch_download__auth_admin(admin_api_client, custom_list_action_url):
     """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
     with the authenticated admin user client.
     """
@@ -316,7 +316,7 @@ def test_batch_download_auth_admin(admin_api_client, custom_list_action_url):
 
 
 @pytest.mark.django_db
-def test_download_thumbnail_noauth(
+def test_download_thumbnail__noauth(
     fake_attachment_with_file,
     noauth_api_client,
     custom_detail_action_url,
@@ -337,7 +337,7 @@ def test_download_thumbnail_noauth(
 
 
 @pytest.mark.django_db
-def test_download_thumbnail_auth_other(
+def test_download_thumbnail__auth_other(
     fake_attachment_with_file,
     other_api_client,
     custom_detail_action_url,
@@ -358,7 +358,7 @@ def test_download_thumbnail_auth_other(
 
 
 @pytest.mark.django_db
-def test_download_thumbnail_no_file_auth_owner(
+def test_download_thumbnail__no_file__auth_owner(
     fake_attachment,
     owner_api_client,
     custom_detail_action_url,
@@ -377,7 +377,7 @@ def test_download_thumbnail_no_file_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_thumbnail_auth_owner(
+def test_download_thumbnail__auth_owner(
     fake_attachment_with_file,
     owner_api_client,
     custom_detail_action_url,
@@ -416,7 +416,7 @@ def test_download_thumbnail_auth_owner(
 
 
 @pytest.mark.django_db
-def test_download_thumbnail_auth_admin(
+def test_download_thumbnail__auth_admin(
     fake_attachment_with_file,
     admin_api_client,
     custom_detail_action_url,
@@ -437,7 +437,7 @@ def test_download_thumbnail_auth_admin(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(
+def test_toggle_favorite__noauth(
     faker, fake_attachment, noauth_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
@@ -461,7 +461,7 @@ def test_toggle_favorite_noauth(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(
+def test_toggle_favorite__auth_other(
     faker, fake_attachment, other_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
@@ -486,7 +486,7 @@ def test_toggle_favorite_auth_other(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("previous_is_favorite", [True, False])
-def test_toggle_favorite_auth_owner(
+def test_toggle_favorite__auth_owner(
     fake_attachment, owner_api_client, custom_detail_action_url, previous_is_favorite
 ):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
@@ -509,7 +509,7 @@ def test_toggle_favorite_auth_owner(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_admin(
+def test_toggle_favorite__auth_admin(
     faker, fake_attachment, admin_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.toggle_favorite` action
@@ -533,7 +533,7 @@ def test_toggle_favorite_auth_admin(
 
 
 @pytest.mark.django_db
-def test_share_to_paperless_noauth(
+def test_share_to_paperless__noauth(
     fake_attachment,
     noauth_api_client,
     custom_detail_action_url,
@@ -555,7 +555,7 @@ def test_share_to_paperless_noauth(
 
 
 @pytest.mark.django_db
-def test_share_to_paperless_auth_other(
+def test_share_to_paperless__auth_other(
     fake_attachment,
     other_api_client,
     custom_detail_action_url,
@@ -577,7 +577,7 @@ def test_share_to_paperless_auth_other(
 
 
 @pytest.mark.django_db
-def test_share_to_paperless_auth_owner_success(
+def test_share_to_paperless__auth_owner__success(
     fake_attachment,
     owner_api_client,
     custom_detail_action_url,
@@ -611,7 +611,7 @@ def test_share_to_paperless_auth_owner_success(
         RuntimeError,
     ],
 )
-def test_share_to_paperless_auth_owner_failure(
+def test_share_to_paperless__auth_owner__failure(
     fake_error_message,
     fake_attachment,
     owner_api_client,
@@ -640,7 +640,7 @@ def test_share_to_paperless_auth_owner_failure(
 
 
 @pytest.mark.django_db
-def test_share_to_paperless_auth_owner_no_file(
+def test_share_to_paperless__auth_owner__no_file(
     fake_error_message,
     fake_attachment,
     owner_api_client,
@@ -666,7 +666,7 @@ def test_share_to_paperless_auth_owner_no_file(
 
 
 @pytest.mark.django_db
-def test_share_to_paperless_auth_admin(
+def test_share_to_paperless__auth_admin(
     fake_attachment,
     admin_api_client,
     custom_detail_action_url,
@@ -688,7 +688,7 @@ def test_share_to_paperless_auth_admin(
 
 
 @pytest.mark.django_db
-def test_share_to_immich_noauth(
+def test_share_to_immich__noauth(
     fake_attachment,
     noauth_api_client,
     custom_detail_action_url,
@@ -710,7 +710,7 @@ def test_share_to_immich_noauth(
 
 
 @pytest.mark.django_db
-def test_share_to_immich_auth_other(
+def test_share_to_immich__auth_other(
     fake_attachment,
     other_api_client,
     custom_detail_action_url,
@@ -732,7 +732,7 @@ def test_share_to_immich_auth_other(
 
 
 @pytest.mark.django_db
-def test_share_to_immich_auth_owner_success(
+def test_share_to_immich__auth_owner__success(
     fake_attachment,
     owner_api_client,
     custom_detail_action_url,
@@ -766,7 +766,7 @@ def test_share_to_immich_auth_owner_success(
         RuntimeError,
     ],
 )
-def test_share_to_immich_auth_owner_failure(
+def test_share_to_immich__auth_owner__failure(
     fake_error_message,
     fake_attachment,
     owner_api_client,
@@ -795,7 +795,7 @@ def test_share_to_immich_auth_owner_failure(
 
 
 @pytest.mark.django_db
-def test_share_to_immich_auth_owner_no_file(
+def test_share_to_immich__auth_owner__no_file(
     fake_error_message,
     fake_attachment,
     owner_api_client,
@@ -821,7 +821,7 @@ def test_share_to_immich_auth_owner_no_file(
 
 
 @pytest.mark.django_db
-def test_share_to_immich_auth_admin(
+def test_share_to_immich__auth_admin(
     fake_attachment,
     admin_api_client,
     custom_detail_action_url,

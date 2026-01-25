@@ -28,10 +28,10 @@ from core.utils.fetchers.exceptions import MailAccountError
 
 
 @pytest.fixture
-def mock_Account_update_mailboxes(mocker):
-    """Patches `core.models.Account.update_mailboxes`."""
+def mock_Account_add_daemons(mocker):
+    """Patches `core.models.Account_add_daemons`."""
     return mocker.patch(
-        "api.v1.views.AccountViewSet.Account.update_mailboxes", autospec=True
+        "api.v1.views.AccountViewSet.Account.add_daemons", autospec=True
     )
 
 
@@ -42,7 +42,7 @@ def mock_Account_test(mocker):
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_noauth(
+def test_update_mailboxes__noauth(
     fake_account,
     noauth_api_client,
     custom_detail_action_url,
@@ -63,7 +63,7 @@ def test_update_mailboxes_noauth(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_auth_other(
+def test_update_mailboxes__auth_other(
     fake_account,
     other_api_client,
     custom_detail_action_url,
@@ -84,7 +84,7 @@ def test_update_mailboxes_auth_other(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_success_auth_owner(
+def test_update_mailboxes__success__auth_owner(
     fake_account,
     owner_api_client,
     custom_detail_action_url,
@@ -108,7 +108,7 @@ def test_update_mailboxes_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_failure_auth_owner(
+def test_update_mailboxes__failure__auth_owner(
     fake_error_message,
     fake_account,
     owner_api_client,
@@ -138,7 +138,7 @@ def test_update_mailboxes_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_update_mailboxes_auth_admin(
+def test_update_mailboxes__auth_admin(
     fake_account,
     admin_api_client,
     custom_detail_action_url,
@@ -159,7 +159,89 @@ def test_update_mailboxes_auth_admin(
 
 
 @pytest.mark.django_db
-def test_test_noauth(
+def test_add_daemons__noauth(
+    fake_account,
+    noauth_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with an unauthenticated user client.
+    """
+    response = noauth_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_add_daemons__auth_other(
+    fake_account,
+    other_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with the authenticated other user client.
+    """
+    response = other_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_add_daemons__success__auth_owner(
+    fake_account,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with the authenticated owner user client
+    in case of success.
+    """
+    response = owner_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert "error" not in response.data
+    mock_Account_add_daemons.assert_called_once_with(fake_account)
+
+
+@pytest.mark.django_db
+def test_add_daemons__auth_admin(
+    fake_account,
+    admin_api_client,
+    custom_detail_action_url,
+    mock_Account_add_daemons,
+):
+    """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.update_mailboxes`
+    action with the authenticated admin user client.
+    """
+    response = admin_api_client.post(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_ADD_DAEMONS, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    mock_Account_add_daemons.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_test__noauth(
     fake_account,
     noauth_api_client,
     custom_detail_action_url,
@@ -184,7 +266,7 @@ def test_test_noauth(
 
 
 @pytest.mark.django_db
-def test_test_auth_other(
+def test_test__auth_other(
     fake_account,
     other_api_client,
     custom_detail_action_url,
@@ -210,7 +292,7 @@ def test_test_auth_other(
 
 
 @pytest.mark.django_db
-def test_test_success_auth_owner(
+def test_test__success__auth_owner(
     fake_account,
     owner_api_client,
     custom_detail_action_url,
@@ -236,7 +318,7 @@ def test_test_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_failure_auth_owner(
+def test_test__failure__auth_owner(
     fake_error_message,
     fake_account,
     owner_api_client,
@@ -265,7 +347,7 @@ def test_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_test_auth_admin(
+def test_test__auth_admin(
     fake_account,
     admin_api_client,
     custom_detail_action_url,
@@ -291,7 +373,7 @@ def test_test_auth_admin(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_noauth(
+def test_toggle_favorite__noauth(
     faker, fake_account, noauth_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with an unauthenticated user client."""
@@ -311,7 +393,7 @@ def test_toggle_favorite_noauth(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_other(
+def test_toggle_favorite__auth_other(
     faker, fake_account, other_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated other user client."""
@@ -332,7 +414,7 @@ def test_toggle_favorite_auth_other(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize("previous_is_favorite", [True, False])
-def test_toggle_favorite_auth_owner(
+def test_toggle_favorite__auth_owner(
     fake_account, owner_api_client, custom_detail_action_url, previous_is_favorite
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated owner user client."""
@@ -351,7 +433,7 @@ def test_toggle_favorite_auth_owner(
 
 
 @pytest.mark.django_db
-def test_toggle_favorite_auth_admin(
+def test_toggle_favorite__auth_admin(
     faker, fake_account, admin_api_client, custom_detail_action_url
 ):
     """Tests the post method :func:`api.v1.views.AccountViewSet.AccountViewSet.toggle_favorite` action with the authenticated admin user client."""

@@ -38,6 +38,8 @@ def test_output(fake_mailbox, request_context):
     assert serializer_data["id"] == fake_mailbox.id
     assert "name" in serializer_data
     assert serializer_data["name"] == fake_mailbox.name
+    assert "type" in serializer_data
+    assert serializer_data["type"] == fake_mailbox.type
     assert "account" in serializer_data
     assert serializer_data["account"] == fake_mailbox.account.id
     assert "save_attachments" in serializer_data
@@ -58,7 +60,7 @@ def test_output(fake_mailbox, request_context):
     assert datetime.fromisoformat(serializer_data["created"]) == fake_mailbox.created
     assert "updated" in serializer_data
     assert datetime.fromisoformat(serializer_data["updated"]) == fake_mailbox.updated
-    assert len(serializer_data) == 11
+    assert len(serializer_data) == 12
 
 
 @pytest.mark.django_db
@@ -70,6 +72,7 @@ def test_input(mailbox_payload, request_context):
 
     assert "id" not in serializer_data
     assert "name" not in serializer_data
+    assert "type" not in serializer_data
     assert "account" not in serializer_data
     assert "save_attachments" in serializer_data
     assert serializer_data["save_attachments"] == mailbox_payload["save_attachments"]

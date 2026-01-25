@@ -47,6 +47,7 @@ class MailboxFilterSet(filters.FilterSet):
 
         fields: ClassVar[dict[str, list[str]]] = {
             "name": FilterSetups.TEXT,
+            "type": FilterSetups.CHOICE,
             "save_to_eml": FilterSetups.BOOL,
             "save_attachments": FilterSetups.BOOL,
             "is_healthy": FilterSetups.BOOL,
@@ -76,6 +77,7 @@ class MailboxFilterSet(filters.FilterSet):
         """
         return queryset.filter(
             Q(name__icontains=value)
+            | Q(type__icontains=value)
             | Q(account__mail_address__icontains=value)
             | Q(account__mail_host__icontains=value)
             | Q(account__protocol__icontains=value)

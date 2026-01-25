@@ -28,7 +28,7 @@ def mock_logger(mocker):
 
 
 @pytest.mark.django_db
-def test_Daemon_post_save_from_healthy(fake_daemon, mock_logger):
+def test_Daemon_post_save__from_healthy(fake_daemon, mock_logger):
     """Tests :func:`core.signals.save_daemon.post_save_is_healthy`
     for an initially healthy daemon.
     """
@@ -53,7 +53,7 @@ def test_Daemon_post_save_from_healthy(fake_daemon, mock_logger):
 
 
 @pytest.mark.django_db
-def test_Daemon_post_save_from_unhealthy(fake_daemon, mock_logger):
+def test_Daemon_post_save__from_unhealthy(fake_daemon, mock_logger):
     """Tests :func:`core.signals.save_daemon.post_save_is_healthy`
     for an initially unhealthy daemon.
     """

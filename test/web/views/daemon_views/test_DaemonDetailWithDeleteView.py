@@ -29,7 +29,7 @@ from web.views import DaemonDetailWithDeleteView, DaemonFilterView
 
 
 @pytest.mark.django_db
-def test_get_noauth(fake_daemon, client, detail_url, login_url):
+def test_get__noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
@@ -43,7 +43,7 @@ def test_get_noauth(fake_daemon, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_other(fake_daemon, other_client, detail_url):
+def test_get__auth_other(fake_daemon, other_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
@@ -54,7 +54,7 @@ def test_get_auth_other(fake_daemon, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_owner(fake_daemon, owner_client, detail_url):
+def test_get__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
@@ -69,7 +69,7 @@ def test_get_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_get_auth_admin(fake_daemon, admin_client, detail_url):
+def test_get__auth_admin(fake_daemon, admin_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.get(detail_url(DaemonDetailWithDeleteView, fake_daemon))
 
@@ -80,7 +80,7 @@ def test_get_auth_admin(fake_daemon, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_noauth(fake_daemon, client, detail_url, login_url):
+def test_post_delete__noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -98,7 +98,7 @@ def test_post_delete_noauth(fake_daemon, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_other(fake_daemon, other_client, detail_url):
+def test_post_delete__auth_other(fake_daemon, other_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -113,7 +113,7 @@ def test_post_delete_auth_other(fake_daemon, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_owner(fake_daemon, owner_client, detail_url):
+def test_post_delete__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     response = owner_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -128,7 +128,7 @@ def test_post_delete_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_delete_auth_admin(fake_daemon, admin_client, detail_url):
+def test_post_delete__auth_admin(fake_daemon, admin_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -143,7 +143,9 @@ def test_post_delete_auth_admin(fake_daemon, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_test_noauth(fake_daemon, client, detail_url, login_url, mock_Daemon_test):
+def test_post_test__noauth(
+    fake_daemon, client, detail_url, login_url, mock_Daemon_test
+):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -160,7 +162,7 @@ def test_post_test_noauth(fake_daemon, client, detail_url, login_url, mock_Daemo
 
 
 @pytest.mark.django_db
-def test_post_test_auth_other(fake_daemon, other_client, detail_url, mock_Daemon_test):
+def test_post_test__auth_other(fake_daemon, other_client, detail_url, mock_Daemon_test):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -173,7 +175,7 @@ def test_post_test_auth_other(fake_daemon, other_client, detail_url, mock_Daemon
 
 
 @pytest.mark.django_db
-def test_post_test_success_auth_owner(
+def test_post_test__success__auth_owner(
     fake_daemon, owner_client, detail_url, mock_Daemon_test
 ):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
@@ -199,7 +201,7 @@ def test_post_test_success_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_test_failure_auth_owner(
+def test_post_test__failure__auth_owner(
     fake_error_message, fake_daemon, owner_client, detail_url, mock_Daemon_test
 ):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
@@ -228,7 +230,7 @@ def test_post_test_failure_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_test_missing_action_auth_owner(
+def test_post_test__missing_action__auth_owner(
     fake_daemon, owner_client, detail_url, mock_Daemon_test
 ):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
@@ -242,7 +244,7 @@ def test_post_test_missing_action_auth_owner(
 
 
 @pytest.mark.django_db
-def test_post_test_auth_admin(fake_daemon, admin_client, detail_url, mock_Daemon_test):
+def test_post_test__auth_admin(fake_daemon, admin_client, detail_url, mock_Daemon_test):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.post(
         detail_url(DaemonDetailWithDeleteView, fake_daemon),
@@ -255,7 +257,7 @@ def test_post_test_auth_admin(fake_daemon, admin_client, detail_url, mock_Daemon
 
 
 @pytest.mark.django_db
-def test_post_start_noauth(fake_daemon, client, detail_url, login_url):
+def test_post_start__noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     fake_daemon.celery_task.enabled = False
     fake_daemon.celery_task.save(update_fields=["enabled"])
@@ -278,7 +280,7 @@ def test_post_start_noauth(fake_daemon, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_post_start_auth_other(fake_daemon, other_client, detail_url):
+def test_post_start__auth_other(fake_daemon, other_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     fake_daemon.celery_task.enabled = False
     fake_daemon.celery_task.save(update_fields=["enabled"])
@@ -298,7 +300,7 @@ def test_post_start_auth_other(fake_daemon, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_start_success_auth_owner(fake_daemon, owner_client, detail_url):
+def test_post_start__success__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
     in case of success.
     """
@@ -328,7 +330,7 @@ def test_post_start_success_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_start_failure_auth_owner(fake_daemon, owner_client, detail_url):
+def test_post_start__failure__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client."""
     assert fake_daemon.celery_task.enabled is True
 
@@ -353,7 +355,7 @@ def test_post_start_failure_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_start_missing_action_auth_owner(fake_daemon, owner_client, detail_url):
+def test_post_start__missing_action__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
     in case of failure.
     """
@@ -371,7 +373,7 @@ def test_post_start_missing_action_auth_owner(fake_daemon, owner_client, detail_
 
 
 @pytest.mark.django_db
-def test_post_start_auth_admin(fake_daemon, admin_client, detail_url):
+def test_post_start__auth_admin(fake_daemon, admin_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
     fake_daemon.celery_task.enabled = False
     fake_daemon.celery_task.save(update_fields=["enabled"])
@@ -391,7 +393,7 @@ def test_post_start_auth_admin(fake_daemon, admin_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_stop_noauth(fake_daemon, client, detail_url, login_url):
+def test_post_stop__noauth(fake_daemon, client, detail_url, login_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with an unauthenticated user client."""
     assert fake_daemon.celery_task.enabled is True
 
@@ -411,7 +413,7 @@ def test_post_stop_noauth(fake_daemon, client, detail_url, login_url):
 
 
 @pytest.mark.django_db
-def test_post_stop_auth_other(fake_daemon, other_client, detail_url):
+def test_post_stop__auth_other(fake_daemon, other_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated other user client."""
     assert fake_daemon.celery_task.enabled is True
 
@@ -428,7 +430,7 @@ def test_post_stop_auth_other(fake_daemon, other_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_stop_success_auth_owner(fake_daemon, owner_client, detail_url):
+def test_post_stop__success__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
     in case of success.
     """
@@ -455,7 +457,7 @@ def test_post_stop_success_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_stop_failure_auth_owner(fake_daemon, owner_client, detail_url):
+def test_post_stop__failure__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
     in case of failure.
     """
@@ -485,7 +487,7 @@ def test_post_stop_failure_auth_owner(fake_daemon, owner_client, detail_url):
 
 
 @pytest.mark.django_db
-def test_post_stop_missing_action_auth_owner(fake_daemon, owner_client, detail_url):
+def test_post_stop__missing_action__auth_owner(fake_daemon, owner_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated owner user client
     in case the action is missing in the request.
     """
@@ -500,7 +502,7 @@ def test_post_stop_missing_action_auth_owner(fake_daemon, owner_client, detail_u
 
 
 @pytest.mark.django_db
-def test_post_stop_auth_admin(fake_daemon, admin_client, detail_url):
+def test_post_stop__auth_admin(fake_daemon, admin_client, detail_url):
     """Tests :class:`web.views.DaemonDetailWithDeleteView` with the authenticated admin user client."""
     assert fake_daemon.celery_task.enabled is True
 

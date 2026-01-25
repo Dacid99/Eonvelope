@@ -49,8 +49,8 @@ from core.mixins import (
     URLMixin,
 )
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from core.utils.mail_parsing import parse_mailbox_type
 from eonvelope.utils.workarounds import get_config
-from src.core.utils.mail_parsing import parse_mailbox_type
 
 from .Email import Email
 

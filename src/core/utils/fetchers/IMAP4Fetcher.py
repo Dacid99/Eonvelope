@@ -34,7 +34,7 @@ from core.constants import (
 )
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
 from core.utils.fetchers.SafeIMAPMixin import SafeIMAPMixin
-from src.core.utils.mail_parsing import parse_IMAP_mailbox_data
+from core.utils.mail_parsing import parse_IMAP_mailbox_data
 
 from .BaseFetcher import BaseFetcher
 

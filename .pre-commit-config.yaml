@@ -62,3 +62,11 @@ repos:
     rev: v8.30.0
     hooks:
       - id: gitleaks
+  - repo: local
+    hooks:
+      - id: validate_templates
+        name: Validate template files
+        entry: python3 manage.py validate_templates
+        pass_filenames: false
+        language: system
+        types: [html]

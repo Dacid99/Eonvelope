@@ -26,7 +26,7 @@ from pathlib import Path
 
 from environ import Env
 
-sys.path.append(str(Path(__file__).resolve().parent.parent / "src"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
 Env.read_env()
 environ["DEBUG"] = "True"

@@ -53,15 +53,15 @@ Searxng
 
 The `Searxng <https://docs.searxng.org/>`_ meta search engine can query data from the Eonvelope database.
 
-To get this to work you need to configure a ``json_engine``
-in the engines section of ``settings.yml``.
+To get this to work you need to configure a *json_engine*
+in the engines section of *settings.yml*.
 The API endpoint for the email search is:
 
 .. code-block:: text
 
     /api/v1/emails?search=
 
-The search results are listed under ``'results'``.
+The search results are listed under *"results"*.
 
 You can also integrate searches for all other data that Eonvelope holds.
 For instance, to search the attachments data, use:
@@ -74,12 +74,12 @@ Similar patterns apply for correspondents, accounts, mailboxes, etc.
 Check the API schema or the browsable API for more details.
 
 .. note::
-    Please check that the api urls do not have a / before the ? (or end in a slash).
-    Otherwise the request will fail with a 404 response.
+    Please check that the api urls do not have a / before the ? or end in a slash.
+    Otherwise the requests will fail with a 404 response.
     See :doc:`the api docs <api-instructions>` for details.
 
-To grant access, you can create a persistent ``accesstoken`` in the admin panel
-and provide it in the configuration of the ``JSONEngine``.
+To grant access, you can create a persistent *accesstoken* in the admin panel
+and provide it in the configuration of the engine.
 
 Here is an exemplary configuration:
 
@@ -108,15 +108,15 @@ Here is an exemplary configuration:
         require_api_key: true
         results: JSON
 
-Adapt this for your setup by exchanging all variables in <> brackets.
+Adapt this for your setup by exchanging all variables in *<>* brackets.
 In case you prefer the redoc over the swagger api docs, you can switch that too.
 If the connection to the eonvelope instance is not using its self-signed certificate (e.g. because you reverse-proxy),
-you can ditch the 'verify: false' line.
+you can drops the *'verify: false'* line.
 
 To search something other than emails,
-exchange 'emails' with the data name your interested in, e.g. 'attachments'.
+exchange *'emails'* with the data name your interested in, e.g. *'attachments'*.
 Then pick content_query parameters based on what info you'd like to be shown in the searxng interface.
-Dont forget to come up with a different shortcut name.
+Don't forget to come up with a different shortcut name.
 
 See the `Searxng docs on this subject <https://docs.searxng.org/dev/engines/json_engine.html>`_ for more details.
 
@@ -125,9 +125,10 @@ Prometheus
 ----------
 
 Eonvelope exports database, database-models, migrations, cache and other metrics for Prometheus.
-The metrics data can be scraped under `/metrics`, their names all start with ``eonvelope``.
+The metrics data can be scraped under */metrics*, their names all start with *eonvelope*.
 
-For reference on configuration refer to the [Prometheus](https://prometheus.io/docs/introduction/overview/) and [django-prometheus](https://github.com/django-commons/django-prometheus/blob/master/README.md) docs.
+For reference on configuration refer to the [Prometheus](https://prometheus.io/docs/introduction/overview/)
+and [django-prometheus](https://github.com/django-commons/django-prometheus/blob/master/README.md) docs.
 
 .. note::
     This integration is not available in slim mode.

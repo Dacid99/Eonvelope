@@ -7,11 +7,11 @@
 Webapp Instructions
 ===================
 
-Getting started
+Getting Started
 ---------------
 
 To log in, open the webapp by opening the IP address of your server
-with the port of the application, by default ``1122``.
+with the port of the application, by default *1122*.
 Eonvelope will force you to use HTTPS using its certificate, so the url must start with *https://*.
 
 You can install Eonvelope as a progressive-webapp on your device to use it like a regular app.
@@ -28,10 +28,10 @@ Alternatively you can also do so via the API.
 
 If not, please contact your admin so they can create an user account for you.
 
-Setting up a new mailaccount
+Setting Up A New Mailaccount
 ----------------------------
 
-Adding a new mailaccount
+Adding A New Mailaccount
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 You can add a new mailaccount at */accounts/create/*, which you can also reach via the button on the dashboard or the accounts page.
@@ -42,7 +42,7 @@ you need an app-password (can be created in the settings of your email account)
 in lieu of a your plain password.
 
 .. note::
-    JMAP allows authentication via a apitoken.
+    JMAP allows authentication via a API-token.
     To use this option, omit the username and put the token as password.
 
 You can find the information about mailserver-URL, protocol, port in the documentation
@@ -98,7 +98,7 @@ If the service is unknown, check the email server URL.
 In case of a failed authentication, check the credentials.
 
 
-Mailbox setup
+Mailbox Setup
 ^^^^^^^^^^^^^
 
 When the account is set up successfully, the mailboxes in the mailaccount are fetched and stored.
@@ -144,7 +144,7 @@ Depending on the number of mailboxes this may take a while.
     Doing so most certainly leads to a timeout and an error.
 
 
-Routine setup
+Routine Setup
 ^^^^^^^^^^^^^
 
 If you want to fetch all email traffic passing through your mailaccount,
@@ -301,7 +301,7 @@ check the last error message of the routine and attempt a test run.
 If the issue lies with the mailbox or account that the routine is fetching from, they will be marked as unhealthy as well.
 
 
-Archived data
+Archived Data
 -------------
 
 Once data from your emails has been collected and archived, you can view it using the web interface.
@@ -312,7 +312,7 @@ Each of these can be search and filtered by various criteria. Every single item 
 Items that are important to you can marked as favorites. Just click the star icon in the card of the item to toggle the favorite status.
 Favorite items are sorted to the top of lists so they are easily found.
 
-Tables and Lists
+Tables And Lists
 ^^^^^^^^^^^^^^^^
 
 You can get an overview of your data in two formats: listed or tabular.
@@ -320,7 +320,7 @@ You can get an overview of your data in two formats: listed or tabular.
 The listed format presents a series of cards representing the data
 while the tabular interface gives you a clean table with information with each object in its own row.
 
-The table interface can always be found by appending `table/` to the url of the corresponding list overview.
+The table interface can always be found by appending *table/* to the url of the corresponding list overview.
 
 Emails
 ^^^^^^
@@ -338,7 +338,7 @@ Nonetheless it may happen that a single fetch of many connected mails does not f
 The safest way to allow this feature to play out is to set up routines both for you INBOX and OUTBOX mailboxes,
 that fetch multiple times a day, as described above.
 
-Timeline overview
+Timeline Overview
 """""""""""""""""
 
 For emails there are additional special listing pages.
@@ -369,7 +369,7 @@ This file can be imported to other digital contacts and addressbooks.
 
 
 
-Import and Export
+Import And Export
 -----------------
 
 Import

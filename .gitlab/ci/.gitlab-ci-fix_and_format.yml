@@ -5,8 +5,8 @@ fix_and_format_codebase:
       when: manual
     - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG'
   script:
+    - poetry install --with lint
     - echo "Checking for fixes and formatting ..."
-    - poetry install --with=dev
     - mkdir -p $CHECK_REPORT_PATH
     - poetry run codespell -s --config=$CHECK_CONFIG_PATH'.codespellrc' src/ test/ docs/ .gitea/ .github/ .gitlab/ *.md | tee $CHECK_REPORT_PATH'codespell_check.ansi' || true
     - poetry run black . --config=$CHECK_CONFIG_PATH'black_config' --diff --color | tee $CHECKREPORT_PATH'black_format.ansi' || true

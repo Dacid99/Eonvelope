@@ -5,6 +5,7 @@ test_codebase:
       when: manual
     - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG'
   script:
+    - poetry install --with test
     - echo "Testing codebase ..."
     - mkdir -p $TEST_REPORT_PATH
     - poetry run pytest $TEST_PATH --config-file $TEST_CONFIG_PATH"pytest.ini" | tee $TEST_REPORT_PATH"pytest_test.ansi"

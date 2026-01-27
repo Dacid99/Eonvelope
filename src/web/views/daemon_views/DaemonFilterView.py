@@ -28,7 +28,6 @@ from core.models import Daemon
 from web.filters import DaemonFilterSet
 from web.views.base import FilterPageView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

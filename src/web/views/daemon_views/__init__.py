@@ -24,7 +24,6 @@ from .DaemonFilterView import DaemonFilterView
 from .DaemonTableView import DaemonTableView
 from .DaemonUpdateOrDeleteView import DaemonUpdateOrDeleteView
 
-
 __all__ = [
     "DaemonCreateView",
     "DaemonDetailWithDeleteView",

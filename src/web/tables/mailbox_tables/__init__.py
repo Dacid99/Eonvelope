@@ -20,5 +20,4 @@
 
 from .BaseMailboxTable import BaseMailboxTable
 
-
 __all__ = ["BaseMailboxTable"]

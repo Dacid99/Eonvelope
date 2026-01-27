@@ -72,7 +72,6 @@ from .views import (
     UploadEmailView,
 )
 
-
 app_name = "web"
 
 # be cautious when changing the view url names, template optics may depend on them!

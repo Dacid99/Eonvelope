@@ -24,7 +24,6 @@ from typing import TYPE_CHECKING
 
 from django.utils.translation import gettext_lazy as _
 
-
 if TYPE_CHECKING:
     from django_stubs_ext import StrOrPromise
 

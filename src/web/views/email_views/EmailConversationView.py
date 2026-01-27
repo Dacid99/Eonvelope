@@ -26,7 +26,6 @@ from django.views.generic.detail import SingleObjectMixin
 
 from .EmailFilterView import EmailFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

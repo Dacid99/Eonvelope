@@ -41,7 +41,6 @@ from core.mixins import (
 )
 from core.utils.mail_parsing import find_best_href_in_header
 
-
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
     from django.db.models import QuerySet

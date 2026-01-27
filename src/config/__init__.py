@@ -24,5 +24,4 @@ Contains the packages and modules for the Eonvelope configuration.
 
 from .celery import app as celery_app
 
-
 __all__ = ("celery_app",)

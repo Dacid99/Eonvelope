@@ -27,7 +27,6 @@ from django.utils.translation import gettext as _
 
 from core.utils.fetchers.exceptions import FetcherError
 
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
 

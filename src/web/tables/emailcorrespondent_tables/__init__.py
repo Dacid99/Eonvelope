@@ -20,5 +20,4 @@
 
 from .BaseCorrespondentEmailTable import BaseCorrespondentEmailTable
 
-
 __all__ = ["BaseCorrespondentEmailTable"]

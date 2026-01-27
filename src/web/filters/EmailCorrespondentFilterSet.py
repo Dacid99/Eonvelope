@@ -30,7 +30,6 @@ from django.utils.translation import gettext_lazy as _
 from core.constants import HeaderFields
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

@@ -92,7 +92,7 @@ Take that secret and supply it to the user so they can set up the authenticator 
 They should turn MFA off and back on again afterwards to change the now compromised secret.
 
 .. note::
-    If the admin users MFA is lost, you can perform the same recovery by creating a second admin account as described :ref:`Admin password forgotten <above>`.
+    If the admin users MFA is lost, you can perform the same recovery by creating a second admin account as described :ref:`above <Admin password forgotten>`.
 
 Delete user
 ^^^^^^^^^^^

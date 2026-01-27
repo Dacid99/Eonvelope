@@ -106,7 +106,7 @@ Optional
 | DISALLOWED_USER_AGENTS            |             | Regex patterns for user agents that must not visit any page of this Eonvelope instance, as a comma separated list.        |
 +-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
 | CSRF_TRUSTED_ORIGINS              |             | All URLs that are trusted with unsafe requests, as a comma separated list.                                                |
-|                                   |             | Must start with a scheme like http:// or https://                                                                         |
+|                                   |             | Must start with a scheme like `http://` or `https://`                                                                     |
 +-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
 | CSRF_COOKIE_AGE                   | `31449600`  | The validity lifetime of the csrf cookie in seconds.                                                                      |
 +-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+

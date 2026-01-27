@@ -28,7 +28,6 @@ from django_filters import rest_framework as filters
 from api.constants import FilterSetups
 from core.models import Attachment
 
-
 if TYPE_CHECKING:
     from django.db.models import Model, QuerySet
 

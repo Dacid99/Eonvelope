@@ -28,7 +28,6 @@ from core.models import Attachment
 from web.filters import AttachmentFilterSet
 from web.views.base import FilterPageView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

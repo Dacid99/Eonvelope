@@ -29,7 +29,6 @@ from django.views.generic import UpdateView
 from eonvelope.forms import UserProfileForm
 from eonvelope.models import UserProfile
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

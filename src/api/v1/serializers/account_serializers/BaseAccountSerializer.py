@@ -27,7 +27,6 @@ from rest_framework import serializers
 
 from core.models import Account
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

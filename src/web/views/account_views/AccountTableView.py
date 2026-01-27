@@ -28,7 +28,6 @@ from web.tables.account_tables.BaseAccountTable import BaseAccountTable
 
 from .AccountFilterView import AccountFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

@@ -31,7 +31,6 @@ from django.urls import path
 from eonvelope.views import UserProfileView
 from eonvelope.views.timezone import SET_TIMEZONE_URL_NAME, set_timezone
 
-
 urlpatterns = [
     path("settz/", set_timezone, name=SET_TIMEZONE_URL_NAME),
     path("users/profile/", UserProfileView.as_view(), name=UserProfileView.URL_NAME),

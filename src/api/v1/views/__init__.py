@@ -27,7 +27,6 @@ from .EmailViewSet import EmailViewSet
 from .MailboxViewSet import MailboxViewSet
 from .UserProfileView import UserProfileView
 
-
 __all__ = [
     "AccountViewSet",
     "AttachmentViewSet",

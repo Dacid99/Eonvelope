@@ -26,14 +26,12 @@ from pathlib import Path
 
 from environ import Env
 
-
 sys.path.append(str(Path(__file__).resolve().parent.parent / "src"))
 
 Env.read_env()
 environ["DEBUG"] = "True"
 
 from config.settings import *  # noqa: F403,E402 ; pylint: disable=wildcard-import, unused-wildcard-import, wrong-import-position ; all settings need to be imported and environment needs to be set beforehand
-
 
 DATABASES = {
     "default": {

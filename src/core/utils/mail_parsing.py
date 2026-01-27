@@ -40,7 +40,6 @@ from django.utils.timezone import get_current_timezone
 
 from core.constants import MailboxTypeChoices
 
-
 if TYPE_CHECKING:
     from email.header import Header
     from email.message import EmailMessage

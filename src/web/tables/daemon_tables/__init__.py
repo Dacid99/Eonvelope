@@ -20,5 +20,4 @@
 
 from .BaseDaemonTable import BaseDaemonTable
 
-
 __all__ = ["BaseDaemonTable"]

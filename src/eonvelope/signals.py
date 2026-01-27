@@ -29,7 +29,6 @@ from django.dispatch import receiver
 
 from eonvelope.models import UserProfile
 
-
 if TYPE_CHECKING:
     from django.contrib.auth.models import User
 

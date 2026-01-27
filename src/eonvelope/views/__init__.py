@@ -21,5 +21,4 @@
 
 from .UserProfileView import UserProfileView
 
-
 __all__ = ["UserProfileView"]

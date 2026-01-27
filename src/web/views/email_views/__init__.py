@@ -31,7 +31,6 @@ from .EmailDetailWithDeleteView import EmailDetailWithDeleteView
 from .EmailFilterView import EmailFilterView
 from .EmailTableView import EmailTableView
 
-
 __all__ = [
     "EmailArchiveIndexView",
     "EmailConversationTableView",

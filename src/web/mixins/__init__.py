@@ -22,5 +22,4 @@ from .CustomActionMixin import CustomActionMixin
 from .PageSizeMixin import PageSizeMixin
 from .TestActionMixin import TestActionMixin
 
-
 __all__ = ["CustomActionMixin", "PageSizeMixin", "TestActionMixin"]

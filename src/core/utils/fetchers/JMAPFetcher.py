@@ -36,7 +36,6 @@ from core.constants import (
 from .BaseFetcher import BaseFetcher
 from .exceptions import BadServerResponseError, MailAccountError, MailboxError
 
-
 if TYPE_CHECKING:
     from core.models.Account import Account
     from core.models.Email import Email

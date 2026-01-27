@@ -21,7 +21,6 @@
 from .ShardedFileSystemStorage import ShardedFileSystemStorage
 from .StorageIntegrityCheckBackend import StorageIntegrityCheckBackend
 
-
 __all__ = [
     "ShardedFileSystemStorage",
     "StorageIntegrityCheckBackend",

@@ -20,5 +20,4 @@
 
 from .BaseCorrespondentForm import BaseCorrespondentForm
 
-
 __all__ = ["BaseCorrespondentForm"]

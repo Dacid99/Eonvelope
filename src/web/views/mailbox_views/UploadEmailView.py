@@ -29,7 +29,6 @@ from django.views.generic.edit import FormView
 from core.models import Mailbox
 from web.forms.UploadEmailForm import UploadEmailForm
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from django.http import HttpResponse

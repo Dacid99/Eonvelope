@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING
 from core.models import Email
 from web.mixins import PageSizeMixin
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

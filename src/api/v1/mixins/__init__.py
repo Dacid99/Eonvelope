@@ -20,5 +20,4 @@
 
 from .ToggleFavoriteMixin import ToggleFavoriteMixin
 
-
 __all__ = ["ToggleFavoriteMixin"]

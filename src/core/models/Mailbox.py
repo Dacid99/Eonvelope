@@ -54,7 +54,6 @@ from eonvelope.utils.workarounds import get_config
 
 from .Email import Email
 
-
 if TYPE_CHECKING:
     from django_stubs_ext import StrOrPromise
 

@@ -20,5 +20,4 @@
 
 from .BaseMailboxForm import BaseMailboxForm
 
-
 __all__ = ["BaseMailboxForm"]

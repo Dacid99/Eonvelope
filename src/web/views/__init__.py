@@ -71,7 +71,6 @@ from .mailbox_views import (
     UploadEmailView,
 )
 
-
 __all__ = [
     "AccountCreateView",
     "AccountDetailWithDeleteView",

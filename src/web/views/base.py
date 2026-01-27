@@ -29,7 +29,6 @@ from django_filters.views import FilterView
 
 from web.mixins import PageSizeMixin
 
-
 if TYPE_CHECKING:
     from django.http import HttpRequest, HttpResponse
     from django_stubs_ext import StrOrPromise

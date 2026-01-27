@@ -29,7 +29,6 @@ from core.models import Correspondent, EmailCorrespondent
 from web.filters import CorrespondentEmailFilterSet
 from web.views.base import FilterPageView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

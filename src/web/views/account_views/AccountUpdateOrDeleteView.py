@@ -31,7 +31,6 @@ from web.views.base import UpdateOrDeleteView
 
 from .AccountFilterView import AccountFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

@@ -26,7 +26,6 @@ from typing import TYPE_CHECKING
 
 from django.utils import timezone
 
-
 if TYPE_CHECKING:
     from collections.abc import Callable
 
@@ -66,5 +65,5 @@ class TimezoneMiddleware:
             )
         except zoneinfo.ZoneInfoNotFoundError:
             timezone.activate(timezone.get_default_timezone())
-            logger.debug("Timezone %s not found, using default timezone.")
+            logger.warning("Timezone %s not found, using default timezone.", tzname)
         return self.get_response(request)

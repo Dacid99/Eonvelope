@@ -45,7 +45,6 @@ from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from api.v1.serializers import BaseAttachmentSerializer
 from core.models import Attachment
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request

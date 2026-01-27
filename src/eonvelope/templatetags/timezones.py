@@ -23,7 +23,6 @@ from typing import Literal, override
 
 from django import template
 
-
 register = template.Library()
 
 

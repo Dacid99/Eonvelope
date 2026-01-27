@@ -29,7 +29,6 @@ from django.views.generic.edit import BaseFormView
 from core.models import Mailbox
 from web.forms import CreateMailboxDaemonForm
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from django.http import HttpRequest, HttpResponse

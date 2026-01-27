@@ -29,7 +29,6 @@ from django_celery_beat.models import IntervalSchedule
 from core.models import Daemon
 from web.utils.forms import RequiredMarkerModelForm
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

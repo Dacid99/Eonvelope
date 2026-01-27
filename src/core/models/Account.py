@@ -56,7 +56,6 @@ from eonvelope.utils.workarounds import get_config
 
 from .Mailbox import Mailbox
 
-
 if TYPE_CHECKING:
     from core.utils.fetchers import BaseFetcher
 

@@ -24,7 +24,7 @@ as well as within your local network.
 It is not safe or intended for use on the open web.
 
 Therefore, do not expose this application to the web without a reverse proxy like `nginx <https://nginx.org>`_.
-Further details on this can be found in the :ref:`Reverse-proxy` section below.
+Further details on this can be found in the :ref:`reverse-proxy <Reverse-proxy>` section below.
 
 Recommended
 -----------

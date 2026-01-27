@@ -26,7 +26,6 @@ from typing import TYPE_CHECKING, Self, override
 
 from core.constants import EmailFetchingCriterionChoices
 
-
 if TYPE_CHECKING:
     from types import TracebackType
 

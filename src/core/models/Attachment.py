@@ -61,7 +61,6 @@ from core.mixins import (
 from core.utils.mail_parsing import make_icalendar_readout, make_vcard_readout
 from eonvelope.utils.workarounds import get_config
 
-
 if TYPE_CHECKING:
     from email.message import EmailMessage
     from tempfile import _TemporaryFileWrapper

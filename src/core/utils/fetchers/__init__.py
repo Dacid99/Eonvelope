@@ -26,7 +26,6 @@ from .JMAPFetcher import JMAPFetcher
 from .POP3_SSL_Fetcher import POP3_SSL_Fetcher
 from .POP3Fetcher import POP3Fetcher
 
-
 __all__ = [
     "BaseFetcher",
     "ExchangeFetcher",

@@ -36,7 +36,6 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
-
 SCHEMA_NAME = "schema"
 
 urlpatterns = [

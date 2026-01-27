@@ -29,7 +29,6 @@ from __future__ import annotations
 from django.urls import include, path
 from django.views.generic import RedirectView
 
-
 app_name = "api"
 
 urlpatterns = [

@@ -20,5 +20,4 @@
 
 from .BaseAccountForm import BaseAccountForm
 
-
 __all__ = ["BaseAccountForm"]

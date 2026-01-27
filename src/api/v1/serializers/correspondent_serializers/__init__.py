@@ -21,5 +21,4 @@
 from .BaseCorrespondentSerializer import BaseCorrespondentSerializer
 from .CorrespondentSerializer import CorrespondentSerializer
 
-
 __all__ = ["BaseCorrespondentSerializer", "CorrespondentSerializer"]

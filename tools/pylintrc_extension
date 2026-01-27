@@ -83,8 +83,7 @@ limit-inference-results=100
 # List of plugins (as comma separated values of python module names) to load,
 # usually to register additional checkers.
 load-plugins=pylint.extensions.docparams,
-             pylint.extensions.bad_builtin,
-             pylintfileheader
+             pylint.extensions.bad_builtin
 
 
 # Pickle collected data for later comparisons.
@@ -106,10 +105,6 @@ recursive=no
 # directory used to determine a package namespace for modules located under the
 # source root.
 source-roots=
-
-# When enabled, pylint would attempt to guess common misconfiguration and emit
-# user-friendly hints instead of false-positive error messages.
-suggestion-mode=yes
 
 # Allow loading of arbitrary C extensions. Extensions are imported into the
 # active Python interpreter and may run arbitrary code.
@@ -471,7 +466,6 @@ enable=missing-type-doc,
        redundant-returns-doc,
        redundant-yields-doc,
        imports,
-       invalid-file-header,
        redefined-outer-name
 
 
@@ -530,7 +524,7 @@ msg-template=
 output-format=colorized
 
 # Tells whether to display a full report or only the messages.
-reports=yes
+reports=no
 
 # Activate the evaluation score.
 score=yes
@@ -675,6 +669,3 @@ init-import=no
 # List of qualified module names which can have objects that can redefine
 # builtins.
 redefining-builtins-modules=six.moves,past.builtins,future.builtins,builtins,io
-
-
-file-header=# SPDX-License-Identifier: AGPL-3.0-or-later\n#\n# Eonvelope - a open-source self-hostable email archiving server\n# Copyright \(C\) 2024 David Aderbauer & The Eonvelope Contributors\n#\n# This program is free software: you can redistribute it and/or modify\n# it under the terms of the GNU Affero General Public License as\n# published by the Free Software Foundation, either version 3 of the\n# License, or \(at your option\) any later version.\n#\n# This program is distributed in the hope that it will be useful,\n# but WITHOUT ANY WARRANTY; without even the implied warranty of\n# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n# GNU Affero General Public License for more details.\n#\n# You should have received a copy of the GNU Affero General Public License\n# along with this program. If not, see <https://www.gnu.org/licenses/>.\n

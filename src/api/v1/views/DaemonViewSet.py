@@ -36,7 +36,6 @@ from api.v1.filters import DaemonFilterSet
 from api.v1.serializers import BaseDaemonSerializer
 from core.models import Daemon
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request

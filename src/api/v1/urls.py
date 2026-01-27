@@ -40,7 +40,6 @@ from api.v1.views import (
     UserProfileView,
 )
 
-
 app_name = "v1"
 
 router = DefaultRouter(

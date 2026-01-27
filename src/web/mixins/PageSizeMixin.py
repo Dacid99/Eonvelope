@@ -24,7 +24,6 @@ from typing import TYPE_CHECKING, Any
 
 from eonvelope.utils.workarounds import get_config
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

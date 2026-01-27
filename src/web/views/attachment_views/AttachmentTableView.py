@@ -28,7 +28,6 @@ from web.tables.attachment_tables.BaseAttachmentTable import BaseAttachmentTable
 
 from .AttachmentFilterView import AttachmentFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

@@ -28,7 +28,6 @@ from rest_framework.permissions import IsAuthenticated
 
 from api.v1.serializers import UserProfileSerializer
 
-
 if TYPE_CHECKING:
     from eonvelope.models import UserProfile
 

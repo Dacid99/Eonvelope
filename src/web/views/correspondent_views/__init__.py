@@ -25,7 +25,6 @@ from .CorrespondentFilterView import CorrespondentFilterView
 from .CorrespondentTableView import CorrespondentTableView
 from .CorrespondentUpdateOrDeleteView import CorrespondentUpdateOrDeleteView
 
-
 __all__ = [
     "CorrespondentDetailWithDeleteView",
     "CorrespondentEmailsFilterView",

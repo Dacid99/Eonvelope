@@ -33,7 +33,6 @@ from .models import (
     StorageShard,
 )
 
-
 admin.site.register([StorageShard])
 
 AccountResource = modelresource_factory(model=Account)

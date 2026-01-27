@@ -31,7 +31,6 @@ from django_celery_beat.models import IntervalSchedule
 from core.constants import EmailFetchingCriterionChoices
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

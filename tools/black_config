@@ -1,2 +1,2 @@
-target-version = ['py312']
+target-version = ['py314']
 force-exclude = '(.*migrations.*)|([^(py)]$)'

@@ -19,7 +19,7 @@ The raw user management API schema is available under */api/auth/openapi.yaml* o
 .. note::
     These interfaces are not available in slim mode.
 
-If you have no option to run Eonvelope, you can refer to :ref:`API Schema` for the same schema file.
+If you have no option to run Eonvelope, you can refer to :ref:`the API-schema section<API Schema>` for the same schema files.
 You can render it to any API overview using one of the existing webtools or the docker image provided by swagger
 
 .. code-block:: bash

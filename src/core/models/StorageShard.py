@@ -33,7 +33,6 @@ from django_prometheus.models import ExportModelOperationsMixin
 from core.mixins.TimestampModelMixin import TimestampModelMixin
 from eonvelope.utils.workarounds import get_config
 
-
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 

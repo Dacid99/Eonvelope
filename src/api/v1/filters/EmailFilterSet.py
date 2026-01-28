@@ -51,25 +51,17 @@ class EmailFilterSet(filters.FilterSet):
         field_name="emailcorrespondents__mention", lookup_expr="in"
     )
 
-    headers__contains = filters.CharFilter(field_name="headers", lookup_expr="contains")
-
-    headers__icontains = filters.CharFilter(
-        field_name="headers", lookup_expr="icontains"
-    )
-
-    headers__contained_by = filters.CharFilter(
-        field_name="headers", lookup_expr="contained_by"
-    )
-
     headers__regex = filters.CharFilter(field_name="headers", lookup_expr="regex")
 
     headers__iregex = filters.CharFilter(field_name="headers", lookup_expr="iregex")
 
     headers__has_key = filters.CharFilter(field_name="headers", lookup_expr="has_key")
 
-    headers__has_keys = filters.CharFilter(field_name="headers", lookup_expr="has_keys")
+    headers__has_keys = filters.BaseInFilter(
+        field_name="headers", lookup_expr="has_keys"
+    )
 
-    headers__has_any_keys = filters.CharFilter(
+    headers__has_any_keys = filters.BaseInFilter(
         field_name="headers", lookup_expr="has_any_keys"
     )
 
@@ -115,7 +107,7 @@ class EmailFilterSet(filters.FilterSet):
             | Q(subject__icontains=value)
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
-            | Q(headers__has_any_keys=value)
+            | Q(headers__iregex=value)
             | Q(correspondents__email_address=value)
             | Q(attachments__file_name=value)
         ).distinct()

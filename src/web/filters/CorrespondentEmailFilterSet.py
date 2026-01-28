@@ -102,7 +102,7 @@ class CorrespondentEmailFilterSet(django_filters.FilterSet):
             | Q(email__subject__icontains=value)
             | Q(email__plain_bodytext__icontains=value)
             | Q(email__html_bodytext__icontains=value)
-            | Q(email__headers__has_any_keys=value)
+            | Q(email__headers__iregex=value)
             | Q(email__correspondents__email_address__icontains=value)
             | Q(mention__icontains=value)
         ).distinct()

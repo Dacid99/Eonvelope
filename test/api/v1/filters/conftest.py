@@ -97,6 +97,15 @@ TEXT_TEST_PARAMETERS = [
     ("__in", TEXT_TEST_ITEMS[0:2], [0, 1]),
 ]
 
+JSON_TEST_PARAMETERS = [
+    ("__has_key", TEXT_TEST_ITEMS[1], [1]),
+    ("__has_any_keys", TEXT_TEST_ITEMS[0:2], [0, 1]),
+    ("__has_keys", TEXT_TEST_ITEMS[2], [2]),
+    ("__regex", TEXT_TEST_ITEMS[0][0:-2], [0]),
+    ("__iregex", TEXT_TEST_ITEMS[1][0:-2].lower(), [1]),
+]
+
+
 DATETIME_TEST_ITEMS = [
     datetime.datetime(2001, 3, 7, 10, 20, 20, tzinfo=datetime.UTC),
     datetime.datetime(2002, 6, 13, 11, 30, 30, tzinfo=datetime.UTC),
@@ -351,6 +360,7 @@ def email_queryset(
                 is_favorite=BOOL_TEST_ITEMS[number],
                 mailbox=mailbox_queryset.get(id=number + 1),
                 x_spam_flag=BOOL_TEST_ITEMS[number],
+                headers={text_test_item: number},
             )
             baker.make(
                 EmailCorrespondent,

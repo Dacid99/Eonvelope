@@ -101,4 +101,4 @@ class EmailCorrespondentFilterSet(django_filters.FilterSet):
             | Q(correspondent__list_archive__icontains=value)
             | Q(correspondent__list_unsubscribe_post__icontains=value)
             | Q(mention__icontains=value)
-        ).distinct()
+        )

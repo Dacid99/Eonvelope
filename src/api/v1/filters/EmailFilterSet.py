@@ -22,11 +22,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, ClassVar, Final
 
-from django.db.models import Q, QuerySet
+from django.db.models import Exists, OuterRef, Q, QuerySet
 from django_filters import rest_framework as filters
 
 from api.constants import FilterSetups
-from core.models import Email
+from core.models import Attachment, Email, EmailCorrespondent
 
 if TYPE_CHECKING:
     from django.db.models import Model
@@ -108,6 +108,19 @@ class EmailFilterSet(filters.FilterSet):
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
             | Q(headers__iregex=value)
-            | Q(correspondents__email_address=value)
-            | Q(attachments__file_name=value)
-        ).distinct()
+            | Q(
+                Exists(
+                    EmailCorrespondent.objects.filter(
+                        email=OuterRef("pk"),
+                        correspondent__email_address__icontains=value,
+                    )
+                )
+            )
+            | Q(
+                Exists(
+                    Attachment.objects.filter(
+                        email=OuterRef("pk"), file_name__icontains=value
+                    )
+                )
+            )
+        )

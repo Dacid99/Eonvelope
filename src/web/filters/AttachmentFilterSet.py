@@ -102,4 +102,4 @@ class AttachmentFilterSet(django_filters.FilterSet):
             | models.Q(content_id__icontains=value)
             | models.Q(email__subject__icontains=value)
             | models.Q(email__message_id__icontains=value)
-        ).distinct()
+        )

@@ -97,4 +97,4 @@ class AccountFilterSet(django_filters.FilterSet):
             models.Q(mail_address__icontains=value)
             | models.Q(mail_host__icontains=value)
             | models.Q(protocol__icontains=value)
-        ).distinct()
+        )

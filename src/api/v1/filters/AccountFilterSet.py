@@ -75,4 +75,4 @@ class AccountFilterSet(filters.FilterSet):
             Q(mail_address__icontains=value)
             | Q(mail_host__icontains=value)
             | Q(protocol__icontains=value)
-        ).distinct()
+        )

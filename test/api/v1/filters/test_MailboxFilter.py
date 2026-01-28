@@ -30,12 +30,14 @@ from .conftest import (
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("searched_field", ["name"])
-def test_search_filter(faker, mailbox_queryset, searched_field):
+@pytest.mark.parametrize("searched_fields", [["name"], ["type"], ["name", "type"]])
+def test_search_filter(faker, mailbox_queryset, searched_fields):
     """Tests :class:`api.v1.filters.MailboxFilterSet`'s search filtering."""
     target_text = faker.sentence()
     target_id = faker.random.randint(0, len(mailbox_queryset) - 1)
-    mailbox_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    mailbox_queryset.filter(id=target_id).update(
+        **dict.fromkeys(searched_fields, target_text)
+    )
     query = {"search": target_text[2:10]}
 
     filtered_data = MailboxFilterSet(query, queryset=mailbox_queryset).qs

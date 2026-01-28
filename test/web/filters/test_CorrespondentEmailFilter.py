@@ -34,17 +34,24 @@ from .conftest import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "searched_field", ["message_id", "subject", "plain_bodytext", "html_bodytext"]
+    "searched_fields",
+    [
+        ["message_id"],
+        ["subject"],
+        ["plain_bodytext"],
+        ["html_bodytext"],
+        ["message_id", "subject"],
+    ],
 )
 def test_search_filter(
-    faker, emailcorrespondents_queryset, email_queryset, searched_field
+    faker, emailcorrespondents_queryset, email_queryset, searched_fields
 ):
     """Tests :class:`web.filters.CorrespondentEmailFilterSet`'s search filtering."""
     target_text = faker.sentence()
     target_id = faker.random.randint(0, len(emailcorrespondents_queryset) - 1)
     email_queryset.filter(
         emailcorrespondents=emailcorrespondents_queryset.get(id=target_id)
-    ).update(**{searched_field: target_text})
+    ).update(**dict.fromkeys(searched_fields, target_text))
     query = {"search": target_text[2:10]}
 
     filtered_data = CorrespondentEmailFilterSet(

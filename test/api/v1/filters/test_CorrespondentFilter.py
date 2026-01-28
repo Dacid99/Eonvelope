@@ -31,26 +31,29 @@ from .conftest import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "searched_field",
+    "searched_fields",
     [
-        "email_address",
-        "email_name",
-        "real_name",
-        "list_id",
-        "list_owner",
-        "list_subscribe",
-        "list_unsubscribe",
-        "list_unsubscribe_post",
-        "list_post",
-        "list_help",
-        "list_archive",
+        ["email_address"],
+        ["email_name"],
+        ["real_name"],
+        ["list_id"],
+        ["list_owner"],
+        ["list_subscribe"],
+        ["list_unsubscribe"],
+        ["list_unsubscribe_post"],
+        ["list_post"],
+        ["list_help"],
+        ["list_archive"],
+        ["email_name", "list_post", "list_archive"],
     ],
 )
-def test_search_filter(faker, correspondent_queryset, searched_field):
+def test_search_filter(faker, correspondent_queryset, searched_fields):
     """Tests :class:`api.v1.filters.CorrespondentFilterSet`'s search filtering."""
     target_text = faker.sentence()
     target_id = faker.random.randint(0, len(correspondent_queryset) - 1)
-    correspondent_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    correspondent_queryset.filter(id=target_id).update(
+        **dict.fromkeys(searched_fields, target_text)
+    )
     query = {"search": target_text[2:10]}
 
     filtered_data = CorrespondentFilterSet(query, queryset=correspondent_queryset).qs

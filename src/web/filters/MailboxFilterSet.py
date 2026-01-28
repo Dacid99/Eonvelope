@@ -92,4 +92,4 @@ class MailboxFilterSet(django_filters.FilterSet):
             | models.Q(account__mail_address__icontains=value)
             | models.Q(account__mail_host__icontains=value)
             | models.Q(account__protocol__icontains=value)
-        ).distinct()
+        )

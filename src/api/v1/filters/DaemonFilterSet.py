@@ -167,4 +167,4 @@ class DaemonFilterSet(filters.FilterSet):
             | Q(mailbox__account__mail_address__icontains=value)
             | Q(mailbox__account__mail_host__icontains=value)
             | Q(mailbox__account__protocol__icontains=value)
-        ).distinct()
+        )

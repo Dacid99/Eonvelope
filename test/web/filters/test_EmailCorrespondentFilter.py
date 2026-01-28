@@ -30,30 +30,31 @@ from .conftest import (
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "searched_field",
+    "searched_fields",
     [
-        "email_address",
-        "email_name",
-        "real_name",
-        "list_id",
-        "list_owner",
-        "list_subscribe",
-        "list_unsubscribe",
-        "list_unsubscribe_post",
-        "list_post",
-        "list_help",
-        "list_archive",
+        ["email_address"],
+        ["email_name"],
+        ["real_name"],
+        ["list_id"],
+        ["list_owner"],
+        ["list_subscribe"],
+        ["list_unsubscribe"],
+        ["list_unsubscribe_post"],
+        ["list_post"],
+        ["list_help"],
+        ["list_archive"],
+        ["email_name", "list_post", "list_archive"],
     ],
 )
 def test_search_filter(
-    faker, emailcorrespondents_queryset, correspondent_queryset, searched_field
+    faker, emailcorrespondents_queryset, correspondent_queryset, searched_fields
 ):
     """Tests :class:`web.filters.EmailCorrespondentFilterSet`'s search filtering."""
     target_text = faker.sentence()
     target_id = faker.random.randint(0, len(emailcorrespondents_queryset) - 1)
     correspondent_queryset.filter(
         correspondentemails=emailcorrespondents_queryset.get(id=target_id)
-    ).update(**{searched_field: target_text})
+    ).update(**dict.fromkeys(searched_fields, target_text))
     query = {"search": target_text[2:10]}
 
     filtered_data = EmailCorrespondentFilterSet(

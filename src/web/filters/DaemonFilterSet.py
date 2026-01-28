@@ -115,4 +115,4 @@ class DaemonFilterSet(django_filters.FilterSet):
             | models.Q(mailbox__account__mail_address__icontains=value)
             | models.Q(mailbox__account__mail_host__icontains=value)
             | models.Q(mailbox__account__protocol__icontains=value)
-        ).distinct()
+        )

@@ -80,4 +80,4 @@ class MailboxFilterSet(filters.FilterSet):
             | Q(account__mail_address__icontains=value)
             | Q(account__mail_host__icontains=value)
             | Q(account__protocol__icontains=value)
-        ).distinct()
+        )

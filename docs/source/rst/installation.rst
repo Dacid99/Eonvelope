@@ -99,11 +99,22 @@ Other Database Type
 
 Depending on your setup, you may want to use a database that is not a mariadb.
 
-In that case you can set the type of database you want to use in the docker-compose.yml file.
+In that case you can set the type of database you want to use in the docker-compose.yml file
+using the `DATABASE_TYPE` environment variable.
 See :doc:`configuration` for more details on this.
 
-It is crucial that the name of the database service in the stack is *db*!
-Otherwise the connection from the Eonvelope container to the database will fail.
+.. important::
+    It is crucial that the name of the database service in the stack is *db*!
+    Otherwise the connection from the Eonvelope container to the database will fail.
+
+If you use docker, you can set Eonvelope up to use an external database by adding
+
+.. code-block:: yaml
+
+    extra_hosts:
+      - "db: <database_ip>"
+
+to the eonvelope-web service and omitting the db portion of the stack.
 
 .. note::
    Using a database other than the default mysql can lead to issues.

@@ -32,6 +32,7 @@ from core.constants import (
     EmailFetchingCriterionChoices,
     EmailProtocolChoices,
 )
+from eonvelope.utils.workarounds import get_config
 
 from .BaseFetcher import BaseFetcher
 from .exceptions import BadServerResponseError, MailAccountError, MailboxError
@@ -150,6 +151,11 @@ class JMAPFetcher(BaseFetcher):
         except (requests.RequestException, urllib3.exceptions.HTTPError) as error:
             self.logger.exception("Error connecting to %s!", self.account)
             raise MailAccountError(error, "login") from error
+        if (
+            get_config("ALLOW_INSECURE_CONNECTIONS")
+            and self.account.allow_insecure_connection
+        ):
+            self._mail_client.requests_session.verify = False
         self.logger.info("Successfully connected to %s.", self.account)
 
     @override

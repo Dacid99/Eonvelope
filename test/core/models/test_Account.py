@@ -29,7 +29,11 @@ from django.urls import reverse
 from django_celery_beat.models import IntervalSchedule
 from model_bakery import baker
 
-from core.constants import EmailProtocolChoices, MailboxTypeChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.models import Account, Daemon, Mailbox
 from core.utils.fetchers import (
     BaseFetcher,
@@ -41,7 +45,6 @@ from core.utils.fetchers import (
     POP3Fetcher,
 )
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
-from src.core.constants import EmailFetchingCriterionChoices
 
 
 @pytest.fixture(autouse=True)

@@ -31,11 +31,14 @@ import pytest
 from freezegun import freeze_time
 from model_bakery import baker
 
-from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.models import Mailbox
 from core.utils.fetchers import ExchangeFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from src.core.constants import MailboxTypeChoices
 
 
 @pytest.fixture

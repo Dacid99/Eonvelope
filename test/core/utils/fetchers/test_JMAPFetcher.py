@@ -28,10 +28,13 @@ import requests
 import urllib3.exceptions
 from freezegun import freeze_time
 
-from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.utils.fetchers import JMAPFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from src.core.constants import MailboxTypeChoices
 
 
 @pytest.fixture

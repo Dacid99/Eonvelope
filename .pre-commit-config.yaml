@@ -66,7 +66,7 @@ repos:
     hooks:
       - id: validate_templates
         name: Validate template files
-        entry: python3 manage.py validate_templates
+        entry: poetry run python3 manage.py validate_templates
         pass_filenames: false
         language: system
         types: [html]

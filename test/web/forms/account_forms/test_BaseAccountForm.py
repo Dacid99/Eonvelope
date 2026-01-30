@@ -51,6 +51,11 @@ def test_post_create__test_success(account_payload, other_user, mock_Account_tes
     assert form_data["mail_host_port"] == account_payload["mail_host_port"]
     assert "timeout" in form_data
     assert form_data["timeout"] == account_payload["timeout"]
+    assert "allow_insecure_connection" in form_data
+    assert (
+        form_data["allow_insecure_connection"]
+        == account_payload["allow_insecure_connection"]
+    )
     assert "is_favorite" not in form_data
     assert "is_healthy" not in form_data
     assert "created" not in form_data

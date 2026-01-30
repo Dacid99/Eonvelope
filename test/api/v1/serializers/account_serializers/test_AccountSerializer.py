@@ -57,6 +57,11 @@ def test_output(fake_account, request_context):
     assert serializer_data["protocol"] == fake_account.protocol
     assert "timeout" in serializer_data
     assert serializer_data["timeout"] == fake_account.timeout
+    assert "allow_insecure_connection" in serializer_data
+    assert (
+        serializer_data["allow_insecure_connection"]
+        == fake_account.allow_insecure_connection
+    )
     assert "is_healthy" in serializer_data
     assert serializer_data["is_healthy"] == fake_account.is_healthy
     assert "last_error" in serializer_data
@@ -98,6 +103,11 @@ def test_input(account_payload, request_context):
     assert serializer_data["protocol"] == account_payload["protocol"]
     assert "timeout" in serializer_data
     assert serializer_data["timeout"] == account_payload["timeout"]
+    assert "allow_insecure_connection" in serializer_data
+    assert (
+        serializer_data["allow_insecure_connection"]
+        == account_payload["allow_insecure_connection"]
+    )
     assert "is_healthy" not in serializer_data
     assert "last_error" not in serializer_data
     assert "last_error_occurred_at" not in serializer_data

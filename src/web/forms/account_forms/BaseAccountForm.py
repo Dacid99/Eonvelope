@@ -55,6 +55,7 @@ class BaseAccountForm(RequiredMarkerModelForm):
             "protocol",
             "mail_host_port",
             "timeout",
+            "allow_insecure_connection",
         ]
         """Exposes all fields that the user should be able to change."""
 

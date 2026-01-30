@@ -50,6 +50,7 @@ class AccountFilterSet(filters.FilterSet):
             "mail_host_port": FilterSetups.INT,
             "protocol": FilterSetups.CHOICE,
             "timeout": FilterSetups.FLOAT,
+            "allow_insecure_connection": FilterSetups.BOOL,
             "is_healthy": FilterSetups.BOOL,
             "last_error": FilterSetups.TEXT,
             "last_error_occurred_at": FilterSetups.DATETIME,

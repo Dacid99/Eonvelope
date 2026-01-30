@@ -250,6 +250,7 @@ def account_queryset(unblocked_db, pkg_monkeypatch):
                 mail_host=text_test_item,
                 mail_host_port=INT_TEST_ITEMS[number],
                 timeout=FLOAT_TEST_ITEMS[number],
+                allow_insecure_connection=BOOL_TEST_ITEMS[number],
                 is_favorite=BOOL_TEST_ITEMS[number],
                 is_healthy=BOOL_TEST_ITEMS[number],
                 last_error=text_test_item,

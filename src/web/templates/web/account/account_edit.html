@@ -25,5 +25,8 @@
         <li class="list-group-item">{% bootstrap_field form.protocol %}</li>
         <li class="list-group-item">{% bootstrap_field form.mail_host_port %}</li>
         <li class="list-group-item">{% bootstrap_field form.timeout %}</li>
+        {% if config.ALLOW_INSECURE_CONNECTIONS %}
+            <li class="list-group-item">{% bootstrap_field form.allow_insecure_connection %}</li>
+        {% endif %}
     </ul>
 {% endblock form %}

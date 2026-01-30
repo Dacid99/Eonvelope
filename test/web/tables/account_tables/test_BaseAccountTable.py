@@ -36,5 +36,6 @@ def test_output(fake_account):
     assert "mail_host_port" in fields
     assert "protocol" in fields
     assert "timeout" in fields
+    assert "allow_insecure_connection" in fields
     assert "is_healthy" in fields
     assert len(fields) == 8

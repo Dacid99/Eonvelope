@@ -612,6 +612,7 @@ def account_payload(faker, owner_user):
         protocol=faker.random.choice(EmailProtocolChoices.values),
         timeout=faker.random.randint(1, 1000),
         is_favorite=not Account.is_favorite.field.default,
+        allow_insecure_connection=True,
     )
     payload = model_to_dict(account_data)
     payload.pop("id")

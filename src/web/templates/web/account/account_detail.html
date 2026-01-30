@@ -54,6 +54,14 @@
                 {% translate "None" %}
             {% endif %}
         </li>
+        <li class="list-group-item">
+            {% translate "Allow Insecure Connection" %}
+            {% if object.allow_insecure_connection %}
+                <i class="fa-solid fa-check mx-1" aria-label={% translate "on" %}></i>
+            {% else %}
+                <i class="fa-solid fa-xmark mx-1" aria-label={% translate "off" %}></i>
+            {% endif %}
+        </li>
         {% if object.is_healthy == False %}
             <li class="list-group-item list-group-item-danger">
                 {% translate "Latest Error" %}:

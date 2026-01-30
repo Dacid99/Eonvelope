@@ -91,6 +91,13 @@ Don't use larger timeout values than 60 seconds, as this may significantly impac
 the runtime of individual fetch operations and may at worst delay the archiving schedule.
 The minimal accepted timeout value is 0.1.
 
+If the host of the account serves content over https with a self-signed certificate,
+you can enable *allow_insecure_connection*.
+
+.. note::
+    This setting is only available if the admin enables it.
+    It currently only has an effect for IMAP4 and POP3 accounts.
+
 When you submit the data to add the account, Eonvelope will test
 whether it can access this account with the given information.
 In case this is not possible, you will get feedback about the problem that occurred.

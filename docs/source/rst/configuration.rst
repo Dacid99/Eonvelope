@@ -187,6 +187,9 @@ They are sorted into categories:
 | REGISTRATION_ENABLED               | *True*                  | Set this to `True` to allow new users to sign up themselves.                                      |
 |                                    |                         | This setting only takes effect if the ``REGISTRATION_ENABLED`` environment setting is not `False`.|
 +------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| ALLOW_INSECURE_CONNECTION          | *False*                 | Set this to `True` to allow users to enable insecure connections for their accounts.              |
+|                                    |                         | This is relevant if they want to connect to https-only hosts with self-signed certificates.       |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
 | **Default Values**                 |                         |                                                                                                   |
 +------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
 | DEFAULT_SAVE_TO_EML                | *True*                  | The default mailbox setting whether to store mails as eml.                                        |
@@ -271,6 +274,8 @@ For a secure setup:
   to keep emails that have been flagged by spam-filters out of the system.
 - ``IGNORED_MAILBOXES_REGEX``: Add more mailbox names that typically hold the email identified as spam
   to reduce the likelihood of spam emails making it into the archive.
+- ``ALLOW_INSECURE_CONNECTION``: Only enable this if a user needs to connect to a server with a self-signed certificate.
+  Otherwise leave this disabled as it this can open you up to man-in-the-middle attacks.
 
 User Settings
 -------------

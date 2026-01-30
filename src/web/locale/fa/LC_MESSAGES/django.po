@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-24 13:44+0000\n"
+"POT-Creation-Date: 2026-01-30 21:12+0000\n"
 "PO-Revision-Date: 2025-12-31 20:16+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/eonvelope/web/fa/"
@@ -19,53 +19,53 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.15.1\n"
 
-#: src/web/filters/AccountFilterSet.py:55
-#: src/web/filters/AttachmentFilterSet.py:55
-#: src/web/filters/CorrespondentEmailFilterSet.py:56
-#: src/web/filters/CorrespondentFilterSet.py:55
-#: src/web/filters/DaemonFilterSet.py:58
-#: src/web/filters/EmailCorrespondentFilterSet.py:55
-#: src/web/filters/EmailFilterSet.py:53 src/web/filters/MailboxFilterSet.py:53
+#: src/web/filters/AccountFilterSet.py:54
+#: src/web/filters/AttachmentFilterSet.py:54
+#: src/web/filters/CorrespondentEmailFilterSet.py:55
+#: src/web/filters/CorrespondentFilterSet.py:54
+#: src/web/filters/DaemonFilterSet.py:57
+#: src/web/filters/EmailCorrespondentFilterSet.py:54
+#: src/web/filters/EmailFilterSet.py:53 src/web/filters/MailboxFilterSet.py:52
 msgid "Search"
 msgstr ""
 
-#: src/web/filters/AccountFilterSet.py:66
-#: src/web/filters/CorrespondentFilterSet.py:61
-#: src/web/filters/DaemonFilterSet.py:84
-#: src/web/filters/EmailCorrespondentFilterSet.py:65
-#: src/web/filters/MailboxFilterSet.py:67
+#: src/web/filters/AccountFilterSet.py:65
+#: src/web/filters/CorrespondentFilterSet.py:60
+#: src/web/filters/DaemonFilterSet.py:83
+#: src/web/filters/EmailCorrespondentFilterSet.py:64
+#: src/web/filters/MailboxFilterSet.py:66
 msgid "Created before"
 msgstr ""
 
-#: src/web/filters/AccountFilterSet.py:72
-#: src/web/filters/CorrespondentFilterSet.py:67
-#: src/web/filters/DaemonFilterSet.py:90
-#: src/web/filters/EmailCorrespondentFilterSet.py:71
-#: src/web/filters/MailboxFilterSet.py:73
+#: src/web/filters/AccountFilterSet.py:71
+#: src/web/filters/CorrespondentFilterSet.py:66
+#: src/web/filters/DaemonFilterSet.py:89
+#: src/web/filters/EmailCorrespondentFilterSet.py:70
+#: src/web/filters/MailboxFilterSet.py:72
 msgid "Created after"
 msgstr ""
 
-#: src/web/filters/AttachmentFilterSet.py:78
-#: src/web/filters/CorrespondentEmailFilterSet.py:74
+#: src/web/filters/AttachmentFilterSet.py:77
+#: src/web/filters/CorrespondentEmailFilterSet.py:73
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
 msgstr ""
 
-#: src/web/filters/AttachmentFilterSet.py:84
-#: src/web/filters/CorrespondentEmailFilterSet.py:80
+#: src/web/filters/AttachmentFilterSet.py:83
+#: src/web/filters/CorrespondentEmailFilterSet.py:79
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
 msgstr ""
 
-#: src/web/filters/DaemonFilterSet.py:68
+#: src/web/filters/DaemonFilterSet.py:67
 msgid "Number of intervals"
 msgstr ""
 
-#: src/web/filters/DaemonFilterSet.py:74
+#: src/web/filters/DaemonFilterSet.py:73
 msgid "Interval period"
 msgstr ""
 
-#: src/web/filters/DaemonFilterSet.py:79
+#: src/web/filters/DaemonFilterSet.py:78
 msgid "Enabled"
 msgstr ""
 
@@ -85,23 +85,23 @@ msgstr ""
 msgid "Pick a file for upload."
 msgstr ""
 
-#: src/web/mixins/TestActionMixin.py:54
+#: src/web/mixins/TestActionMixin.py:53
 #, python-format
 msgid ""
 "Test failed, there is something wrong with this objects setup: %(error)s"
 msgstr ""
 
-#: src/web/mixins/TestActionMixin.py:59
+#: src/web/mixins/TestActionMixin.py:58
 #, python-format
 msgid "Test failed: %(error)s"
 msgstr ""
 
-#: src/web/mixins/TestActionMixin.py:63
+#: src/web/mixins/TestActionMixin.py:62
 #, python-format
 msgid "Test failed due to an unexpected error: %(error)s"
 msgstr ""
 
-#: src/web/mixins/TestActionMixin.py:67
+#: src/web/mixins/TestActionMixin.py:66
 msgid "Test was successful"
 msgstr ""
 
@@ -210,7 +210,7 @@ msgstr ""
 msgid "New Account"
 msgstr ""
 
-#: src/web/templates/web/account/account_create.html:37
+#: src/web/templates/web/account/account_create.html:40
 #: src/web/templates/web/daemon/daemon_create.html:36
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:40
 #: src/web/templates/web/partials/_cancel_edit-button.html:5
@@ -248,23 +248,40 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:59
+#: src/web/templates/web/account/account_detail.html:58
+msgid "Allow Insecure Connection"
+msgstr ""
+
+#: src/web/templates/web/account/account_detail.html:60
+#: src/web/templates/web/mailbox/mailbox_detail.html:50
+#: src/web/templates/web/mailbox/mailbox_detail.html:58
+msgid "on"
+msgstr ""
+
+#: src/web/templates/web/account/account_detail.html:62
+#: src/web/templates/web/mailbox/mailbox_detail.html:52
+#: src/web/templates/web/mailbox/mailbox_detail.html:60
+msgid "off"
+msgstr ""
+
+#: src/web/templates/web/account/account_detail.html:67
 #: src/web/templates/web/daemon/daemon_detail.html:58
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
 msgid "Latest Error"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:63
+#: src/web/templates/web/account/account_detail.html:71
 #: src/web/templates/web/daemon/daemon_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:69
 msgid "Occurred At"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:64
+#: src/web/templates/web/account/account_detail.html:72
 msgid "Test the account to see if this error persists."
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:75
+#: src/web/templates/web/account/account_detail.html:83
+#: src/web/templates/web/account/partials/_update_mailboxes-button.html:7
 #: src/web/templates/web/dashboard.html:84
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:11
@@ -272,7 +289,7 @@ msgstr ""
 msgid "Mailboxes"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:97
+#: src/web/templates/web/account/account_detail.html:105
 #: src/web/templates/web/daemon/daemon_filter_list.html:6
 #: src/web/templates/web/daemon/daemon_filter_list.html:11
 #: src/web/templates/web/dashboard.html:91
@@ -281,14 +298,14 @@ msgstr ""
 msgid "Routines"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:119
+#: src/web/templates/web/account/account_detail.html:127
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
 #: src/web/templates/web/dashboard.html:25
 #: src/web/templates/web/mailbox/mailbox_detail.html:105
 msgid "Latest Emails"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:124
+#: src/web/templates/web/account/account_detail.html:132
 #: src/web/templates/web/correspondent/correspondent_detail.html:94
 #: src/web/templates/web/dashboard.html:30
 #: src/web/templates/web/email/email_detail.html:176
@@ -344,10 +361,6 @@ msgstr ""
 
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
 msgid "Test this account to make sure it can be accessed."
-msgstr ""
-
-#: src/web/templates/web/account/partials/_update_mailboxes-button.html:7
-msgid "Update Mailboxes"
 msgstr ""
 
 #: src/web/templates/web/attachment/attachment_detail.html:6
@@ -601,7 +614,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr ""
 
@@ -620,7 +633,6 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -634,7 +646,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr ""
 
@@ -784,16 +796,6 @@ msgstr ""
 msgid "Save attachments"
 msgstr ""
 
-#: src/web/templates/web/mailbox/mailbox_detail.html:50
-#: src/web/templates/web/mailbox/mailbox_detail.html:58
-msgid "on"
-msgstr ""
-
-#: src/web/templates/web/mailbox/mailbox_detail.html:52
-#: src/web/templates/web/mailbox/mailbox_detail.html:60
-msgid "off"
-msgstr ""
-
 #: src/web/templates/web/mailbox/mailbox_detail.html:56
 msgid "Save mails as .eml"
 msgstr ""
@@ -906,7 +908,6 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:90
 msgid "Favorite"
 msgstr ""
 
@@ -991,17 +992,17 @@ msgid "Table"
 msgstr ""
 
 #: src/web/templates/web/partials/_health_badge.html:5
-#: src/web/utils/columns.py:117
+#: src/web/utils/columns.py:116
 msgid "Healthy"
 msgstr ""
 
 #: src/web/templates/web/partials/_health_badge.html:10
-#: src/web/utils/columns.py:123
+#: src/web/utils/columns.py:122
 msgid "Unhealthy"
 msgstr ""
 
 #: src/web/templates/web/partials/_health_badge.html:15
-#: src/web/utils/columns.py:129
+#: src/web/utils/columns.py:128
 msgid "Health unknown"
 msgstr ""
 
@@ -1037,7 +1038,7 @@ msgstr ""
 msgid "Test"
 msgstr ""
 
-#: src/web/utils/columns.py:64
+#: src/web/utils/columns.py:63
 msgid "Select"
 msgstr ""
 
@@ -1045,76 +1046,76 @@ msgstr ""
 msgid " *"
 msgstr ""
 
-#: src/web/views/account_views/AccountDetailWithDeleteView.py:103
+#: src/web/views/account_views/AccountDetailWithDeleteView.py:102
 #, python-format
 msgid "Updating mailboxes failed: %(error)s"
 msgstr ""
 
-#: src/web/views/account_views/AccountDetailWithDeleteView.py:106
+#: src/web/views/account_views/AccountDetailWithDeleteView.py:105
 msgid "Updating mailboxes successful"
 msgstr ""
 
-#: src/web/views/account_views/AccountDetailWithDeleteView.py:123
+#: src/web/views/account_views/AccountDetailWithDeleteView.py:122
 msgid "Adding routines successful"
 msgstr ""
 
-#: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:98
-#: src/web/views/correspondent_views/CorrespondentDetailWithDeleteView.py:106
+#: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:97
+#: src/web/views/correspondent_views/CorrespondentDetailWithDeleteView.py:105
 msgid "Sharing successful"
 msgstr ""
 
-#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:85
+#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:84
 msgid "Daemon started successfully"
 msgstr ""
 
-#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:87
+#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:86
 msgid "Daemon was already running"
 msgstr ""
 
-#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:103
+#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:102
 msgid "Daemon stopped successfully"
 msgstr ""
 
-#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:105
+#: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:104
 msgid "Daemon was not running"
 msgstr ""
 
-#: src/web/views/email_views/EmailDetailWithDeleteView.py:90
+#: src/web/views/email_views/EmailDetailWithDeleteView.py:89
 msgid "Email successfully reprocessed."
 msgstr ""
 
-#: src/web/views/email_views/EmailDetailWithDeleteView.py:108
+#: src/web/views/email_views/EmailDetailWithDeleteView.py:107
 msgid "POP accounts do not support restoring of emails to mailbox."
 msgstr ""
 
-#: src/web/views/email_views/EmailDetailWithDeleteView.py:113
+#: src/web/views/email_views/EmailDetailWithDeleteView.py:112
 #, python-format
 msgid "Restoring of email failed: %(error)s"
 msgstr ""
 
-#: src/web/views/email_views/EmailDetailWithDeleteView.py:114
+#: src/web/views/email_views/EmailDetailWithDeleteView.py:113
 msgid "eml file not found."
 msgstr ""
 
-#: src/web/views/email_views/EmailDetailWithDeleteView.py:119
+#: src/web/views/email_views/EmailDetailWithDeleteView.py:118
 #, python-format
 msgid "Restoring of email to mailbox failed: %(error)s"
 msgstr ""
 
-#: src/web/views/email_views/EmailDetailWithDeleteView.py:123
+#: src/web/views/email_views/EmailDetailWithDeleteView.py:122
 msgid "Email successfully restored to mailbox."
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:102
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:101
 #, python-format
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:110
 #, python-format
 msgid "Fetching failed: %(error)s"
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:114
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
 msgid "Fetching successful"
 msgstr ""

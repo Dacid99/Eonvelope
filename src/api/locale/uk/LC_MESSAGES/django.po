@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-23 13:23+0000\n"
+"POT-Creation-Date: 2026-01-30 21:12+0000\n"
 "PO-Revision-Date: 2026-01-24 15:30+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/api/"
@@ -16,191 +16,191 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
-"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
-"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
-"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.16-dev\n"
 
-#: src/api/v1/mixins/ToggleFavoriteMixin.py:71
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:70
 #, python-format
 msgid "%(object)s marked as favorite."
 msgstr "%(object)s позначено як обране."
 
-#: src/api/v1/mixins/ToggleFavoriteMixin.py:73
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:72
 #, python-format
 msgid "%(object)s unmarked as favorite."
 msgstr "%(object)s знято з обраного."
 
-#: src/api/v1/views/AccountViewSet.py:150
+#: src/api/v1/views/AccountViewSet.py:149
 msgid "An error with the mailaccount occurred."
 msgstr "Сталася помилка з обліковим записом пошти."
 
-#: src/api/v1/views/AccountViewSet.py:156
+#: src/api/v1/views/AccountViewSet.py:155
 msgid "Updated mailboxes"
 msgstr "Оновлені поштові скриньки"
 
-#: src/api/v1/views/AccountViewSet.py:182
+#: src/api/v1/views/AccountViewSet.py:181
 msgid "Added routines to inbox and sentbox."
 msgstr "Додано підпрограми до папок \"Вхідні\" та \"Надіслані\"."
 
-#: src/api/v1/views/AccountViewSet.py:203
+#: src/api/v1/views/AccountViewSet.py:202
 msgid "Tested mailaccount"
 msgstr "Перевірений обліковий запис електронної пошти"
 
-#: src/api/v1/views/AttachmentViewSet.py:192
-#: src/api/v1/views/AttachmentViewSet.py:278
-#: src/api/v1/views/AttachmentViewSet.py:309
-#: src/api/v1/views/AttachmentViewSet.py:351
+#: src/api/v1/views/AttachmentViewSet.py:191
+#: src/api/v1/views/AttachmentViewSet.py:277
+#: src/api/v1/views/AttachmentViewSet.py:308
+#: src/api/v1/views/AttachmentViewSet.py:350
 msgid "Attachment file not found"
 msgstr "Вкладений файл не знайдено"
 
-#: src/api/v1/views/AttachmentViewSet.py:220
+#: src/api/v1/views/AttachmentViewSet.py:219
 msgid "Attachment ids are required."
 msgstr "Ідентифікатори вкладень обов'язкові."
 
-#: src/api/v1/views/AttachmentViewSet.py:228
+#: src/api/v1/views/AttachmentViewSet.py:227
 msgid "Attachment ids given in invalid format."
 msgstr "Ідентифікатори вкладень надано в недійсному форматі."
 
-#: src/api/v1/views/AttachmentViewSet.py:235
+#: src/api/v1/views/AttachmentViewSet.py:234
 msgid "No attachments found"
 msgstr "Вкладень не знайдено"
 
 #. Translators: Paperless is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:314
+#: src/api/v1/views/AttachmentViewSet.py:313
 msgid "Upload to Paperless failed."
 msgstr "Не вдалося завантажити на Paperless архів."
 
 #. Translators: Paperless is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:320
+#: src/api/v1/views/AttachmentViewSet.py:319
 msgid "Uploaded attachment document to Paperless."
 msgstr "Завантажено вкладений документ до Paperless."
 
 #. Translators: Immich is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:356
+#: src/api/v1/views/AttachmentViewSet.py:355
 msgid "Upload to Immich failed."
 msgstr "Завантаження до Immich не вдалося."
 
 #. Translators: Immich is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:362
+#: src/api/v1/views/AttachmentViewSet.py:361
 msgid "Uploaded attachment document to Immich."
 msgstr "Завантажено вкладений документ до Immich."
 
-#: src/api/v1/views/CorrespondentViewSet.py:215
+#: src/api/v1/views/CorrespondentViewSet.py:214
 msgid "Correspondent ids are required."
 msgstr "Потрібні ідентифікатори кореспондентів."
 
-#: src/api/v1/views/CorrespondentViewSet.py:222
+#: src/api/v1/views/CorrespondentViewSet.py:221
 msgid "Correspondent ids given in invalid format."
 msgstr "Ідентифікатори кореспондентів надано в недійсному форматі."
 
-#: src/api/v1/views/CorrespondentViewSet.py:229
+#: src/api/v1/views/CorrespondentViewSet.py:228
 msgid "No correspondents found"
 msgstr "Кореспондентів не знайдено"
 
 #. Translators: Nextcloud is a brand name.
-#: src/api/v1/views/CorrespondentViewSet.py:263
+#: src/api/v1/views/CorrespondentViewSet.py:262
 msgid "Upload to Nextcloud failed."
 msgstr "Не вдалося завантажити на Nextcloud."
 
 #. Translators: Nextcloud is a brand name.
-#: src/api/v1/views/CorrespondentViewSet.py:269
+#: src/api/v1/views/CorrespondentViewSet.py:268
 msgid "Uploaded correspondent to Nextcloud."
 msgstr "Завантажено кореспондента до Nextcloud."
 
-#: src/api/v1/views/DaemonViewSet.py:142
+#: src/api/v1/views/DaemonViewSet.py:141
 msgid "Tested routine"
 msgstr "Перевірена процедура"
 
-#: src/api/v1/views/DaemonViewSet.py:175
+#: src/api/v1/views/DaemonViewSet.py:174
 msgid "Routine started"
 msgstr "Рутину розпочато"
 
-#: src/api/v1/views/DaemonViewSet.py:178
+#: src/api/v1/views/DaemonViewSet.py:177
 msgid "Routine is already running"
 msgstr "Рутина вже виконується"
 
-#: src/api/v1/views/DaemonViewSet.py:205
+#: src/api/v1/views/DaemonViewSet.py:204
 msgid "Routine stopped"
 msgstr "Рутину зупинено"
 
-#: src/api/v1/views/DaemonViewSet.py:208
+#: src/api/v1/views/DaemonViewSet.py:207
 msgid "Routine not running"
 msgstr "Рутина не виконується"
 
-#: src/api/v1/views/EmailViewSet.py:236 src/api/v1/views/EmailViewSet.py:394
+#: src/api/v1/views/EmailViewSet.py:235 src/api/v1/views/EmailViewSet.py:393
 msgid "eml file not found."
 msgstr "eml-файл не знайдено."
 
-#: src/api/v1/views/EmailViewSet.py:267 src/api/v1/views/MailboxViewSet.py:323
+#: src/api/v1/views/EmailViewSet.py:266 src/api/v1/views/MailboxViewSet.py:322
 msgid "File format is required."
 msgstr "Потрібно вказати формат файлу."
 
-#: src/api/v1/views/EmailViewSet.py:272
+#: src/api/v1/views/EmailViewSet.py:271
 msgid "Email ids are required."
 msgstr "Ідентифікатори електронної пошти обов'язкові."
 
-#: src/api/v1/views/EmailViewSet.py:280
+#: src/api/v1/views/EmailViewSet.py:279
 msgid "Email ids given in invalid format."
 msgstr "Ідентифікатори електронної пошти надано в недійсному форматі."
 
-#: src/api/v1/views/EmailViewSet.py:289 src/api/v1/views/MailboxViewSet.py:331
+#: src/api/v1/views/EmailViewSet.py:288 src/api/v1/views/MailboxViewSet.py:330
 #, python-format
 msgid "File format %(file_format)s is not supported."
 msgstr "Формат файлу %(file_format)s не підтримується."
 
-#: src/api/v1/views/EmailViewSet.py:294
+#: src/api/v1/views/EmailViewSet.py:293
 msgid "No emails found"
 msgstr "Електронних листів не знайдено"
 
-#: src/api/v1/views/EmailViewSet.py:390
+#: src/api/v1/views/EmailViewSet.py:389
 msgid "POP accounts do not support restoring of emails."
 msgstr "Облікові записи POP не підтримують відновлення електронних листів."
 
-#: src/api/v1/views/EmailViewSet.py:398
+#: src/api/v1/views/EmailViewSet.py:397
 msgid "Restoring of email to mailbox failed."
 msgstr "Не вдалося відновити електронну пошту в поштовій скриньці."
 
-#: src/api/v1/views/EmailViewSet.py:403
+#: src/api/v1/views/EmailViewSet.py:402
 msgid "Email successfully restored to mailbox."
 msgstr "Електронну пошту успішно відновлено у поштовій скриньці."
 
-#: src/api/v1/views/EmailViewSet.py:428
+#: src/api/v1/views/EmailViewSet.py:427
 msgid "Email successfully reprocessed."
 msgstr "Електронний лист успішно оброблено повторно."
 
-#: src/api/v1/views/MailboxViewSet.py:197
+#: src/api/v1/views/MailboxViewSet.py:196
 msgid "Tested mailbox"
 msgstr "Перевірена поштова скринька"
 
-#: src/api/v1/views/MailboxViewSet.py:259
+#: src/api/v1/views/MailboxViewSet.py:258
 msgid "Fetching criterion is required."
 msgstr "Потрібно вказати критерій отримання."
 
-#: src/api/v1/views/MailboxViewSet.py:265
+#: src/api/v1/views/MailboxViewSet.py:264
 #, python-format
 msgid "The given criterion %(criterion)s is not available for this mailbox."
 msgstr "Заданий критерій %(criterion)s недоступний для цієї поштової скриньки."
 
-#: src/api/v1/views/MailboxViewSet.py:274
+#: src/api/v1/views/MailboxViewSet.py:273
 #, python-format
 msgid "The given criterion %(criterion)s requires an argument."
 msgstr "Для заданого критерію %(criterion)s потрібен аргумент."
 
-#: src/api/v1/views/MailboxViewSet.py:284
+#: src/api/v1/views/MailboxViewSet.py:283
 msgid "Error with mailaccount or mailbox occurred."
 msgstr ""
 "Сталася помилка з обліковим записом електронної пошти або поштовою скринькою."
 
-#: src/api/v1/views/MailboxViewSet.py:290
+#: src/api/v1/views/MailboxViewSet.py:289
 msgid "All emails fetched."
 msgstr "Усі електронні листи отримано."
 
-#: src/api/v1/views/MailboxViewSet.py:336
+#: src/api/v1/views/MailboxViewSet.py:335
 msgid "No emails found."
 msgstr "Електронна пошта не знайдено."
 
-#: src/api/v1/views/MailboxViewSet.py:379
+#: src/api/v1/views/MailboxViewSet.py:378
 msgid "Successfully uploaded mailbox file."
 msgstr "Файл поштової скриньки успішно завантажено."

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-23 13:23+0000\n"
+"POT-Creation-Date: 2026-01-30 21:12+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,184 +18,184 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/api/v1/mixins/ToggleFavoriteMixin.py:71
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:70
 #, python-format
 msgid "%(object)s marked as favorite."
 msgstr ""
 
-#: src/api/v1/mixins/ToggleFavoriteMixin.py:73
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:72
 #, python-format
 msgid "%(object)s unmarked as favorite."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:150
+#: src/api/v1/views/AccountViewSet.py:149
 msgid "An error with the mailaccount occurred."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:156
+#: src/api/v1/views/AccountViewSet.py:155
 msgid "Updated mailboxes"
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:182
+#: src/api/v1/views/AccountViewSet.py:181
 msgid "Added routines to inbox and sentbox."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:203
+#: src/api/v1/views/AccountViewSet.py:202
 msgid "Tested mailaccount"
 msgstr ""
 
-#: src/api/v1/views/AttachmentViewSet.py:192
-#: src/api/v1/views/AttachmentViewSet.py:278
-#: src/api/v1/views/AttachmentViewSet.py:309
-#: src/api/v1/views/AttachmentViewSet.py:351
+#: src/api/v1/views/AttachmentViewSet.py:191
+#: src/api/v1/views/AttachmentViewSet.py:277
+#: src/api/v1/views/AttachmentViewSet.py:308
+#: src/api/v1/views/AttachmentViewSet.py:350
 msgid "Attachment file not found"
 msgstr ""
 
-#: src/api/v1/views/AttachmentViewSet.py:220
+#: src/api/v1/views/AttachmentViewSet.py:219
 msgid "Attachment ids are required."
 msgstr ""
 
-#: src/api/v1/views/AttachmentViewSet.py:228
+#: src/api/v1/views/AttachmentViewSet.py:227
 msgid "Attachment ids given in invalid format."
 msgstr ""
 
-#: src/api/v1/views/AttachmentViewSet.py:235
+#: src/api/v1/views/AttachmentViewSet.py:234
 msgid "No attachments found"
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:314
+#: src/api/v1/views/AttachmentViewSet.py:313
 msgid "Upload to Paperless failed."
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:320
+#: src/api/v1/views/AttachmentViewSet.py:319
 msgid "Uploaded attachment document to Paperless."
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:356
+#: src/api/v1/views/AttachmentViewSet.py:355
 msgid "Upload to Immich failed."
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:362
+#: src/api/v1/views/AttachmentViewSet.py:361
 msgid "Uploaded attachment document to Immich."
 msgstr ""
 
-#: src/api/v1/views/CorrespondentViewSet.py:215
+#: src/api/v1/views/CorrespondentViewSet.py:214
 msgid "Correspondent ids are required."
 msgstr ""
 
-#: src/api/v1/views/CorrespondentViewSet.py:222
+#: src/api/v1/views/CorrespondentViewSet.py:221
 msgid "Correspondent ids given in invalid format."
 msgstr ""
 
-#: src/api/v1/views/CorrespondentViewSet.py:229
+#: src/api/v1/views/CorrespondentViewSet.py:228
 msgid "No correspondents found"
 msgstr ""
 
 #. Translators: Nextcloud is a brand name.
-#: src/api/v1/views/CorrespondentViewSet.py:263
+#: src/api/v1/views/CorrespondentViewSet.py:262
 msgid "Upload to Nextcloud failed."
 msgstr ""
 
 #. Translators: Nextcloud is a brand name.
-#: src/api/v1/views/CorrespondentViewSet.py:269
+#: src/api/v1/views/CorrespondentViewSet.py:268
 msgid "Uploaded correspondent to Nextcloud."
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:142
+#: src/api/v1/views/DaemonViewSet.py:141
 msgid "Tested routine"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:175
+#: src/api/v1/views/DaemonViewSet.py:174
 msgid "Routine started"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:178
+#: src/api/v1/views/DaemonViewSet.py:177
 msgid "Routine is already running"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:205
+#: src/api/v1/views/DaemonViewSet.py:204
 msgid "Routine stopped"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:208
+#: src/api/v1/views/DaemonViewSet.py:207
 msgid "Routine not running"
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:236 src/api/v1/views/EmailViewSet.py:394
+#: src/api/v1/views/EmailViewSet.py:235 src/api/v1/views/EmailViewSet.py:393
 msgid "eml file not found."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:267 src/api/v1/views/MailboxViewSet.py:323
+#: src/api/v1/views/EmailViewSet.py:266 src/api/v1/views/MailboxViewSet.py:322
 msgid "File format is required."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:272
+#: src/api/v1/views/EmailViewSet.py:271
 msgid "Email ids are required."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:280
+#: src/api/v1/views/EmailViewSet.py:279
 msgid "Email ids given in invalid format."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:289 src/api/v1/views/MailboxViewSet.py:331
+#: src/api/v1/views/EmailViewSet.py:288 src/api/v1/views/MailboxViewSet.py:330
 #, python-format
 msgid "File format %(file_format)s is not supported."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:294
+#: src/api/v1/views/EmailViewSet.py:293
 msgid "No emails found"
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:390
+#: src/api/v1/views/EmailViewSet.py:389
 msgid "POP accounts do not support restoring of emails."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:398
+#: src/api/v1/views/EmailViewSet.py:397
 msgid "Restoring of email to mailbox failed."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:403
+#: src/api/v1/views/EmailViewSet.py:402
 msgid "Email successfully restored to mailbox."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:428
+#: src/api/v1/views/EmailViewSet.py:427
 msgid "Email successfully reprocessed."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:197
+#: src/api/v1/views/MailboxViewSet.py:196
 msgid "Tested mailbox"
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:259
+#: src/api/v1/views/MailboxViewSet.py:258
 msgid "Fetching criterion is required."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:265
+#: src/api/v1/views/MailboxViewSet.py:264
 #, python-format
 msgid "The given criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:274
+#: src/api/v1/views/MailboxViewSet.py:273
 #, python-format
 msgid "The given criterion %(criterion)s requires an argument."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:284
+#: src/api/v1/views/MailboxViewSet.py:283
 msgid "Error with mailaccount or mailbox occurred."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:290
+#: src/api/v1/views/MailboxViewSet.py:289
 msgid "All emails fetched."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:336
+#: src/api/v1/views/MailboxViewSet.py:335
 msgid "No emails found."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:379
+#: src/api/v1/views/MailboxViewSet.py:378
 msgid "Successfully uploaded mailbox file."
 msgstr ""

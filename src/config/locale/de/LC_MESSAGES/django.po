@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 17:52+0000\n"
+"POT-Creation-Date: 2026-01-30 21:12+0000\n"
 "PO-Revision-Date: 2026-01-20 19:01+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/config/"
@@ -34,39 +34,39 @@ msgstr "Eonvelope Administration"
 msgid "E∘nvelope Settings"
 msgstr "E∘nvelope-Einstellungen"
 
-#: src/config/settings.py:574
+#: src/config/settings.py:575
 msgid "Your email archiving server"
 msgstr "Dein E-Mail Archivserver"
 
-#: src/config/settings.py:615
+#: src/config/settings.py:616
 msgid "Dashboard"
 msgstr "Dashboard"
 
-#: src/config/settings.py:617
+#: src/config/settings.py:618
 msgid "Shortcut to the dashboard"
 msgstr "Abkürzung zum Dashboard"
 
-#: src/config/settings.py:620
+#: src/config/settings.py:621
 msgid "Timeline"
 msgstr "Chronik"
 
-#: src/config/settings.py:622
+#: src/config/settings.py:623
 msgid "Shortcut to the email timeline"
 msgstr "Abkürzung zur E-Mail Chronik"
 
-#: src/config/settings.py:902
+#: src/config/settings.py:901
 msgid "Default page size for paginated API response data"
 msgstr "Standard-Seitengröße für API-Anwortdaten"
 
-#: src/config/settings.py:907
+#: src/config/settings.py:906
 msgid "Maximum page size for paginated API response data"
 msgstr "Maximale Seitengröße für API-Antwortdaten"
 
-#: src/config/settings.py:912
+#: src/config/settings.py:911
 msgid "Default page size for pagination in the webapp."
 msgstr "Standard-Seitengröße für die Webapp."
 
-#: src/config/settings.py:918
+#: src/config/settings.py:917
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
@@ -74,7 +74,7 @@ msgstr ""
 "Seitengrößen-Optionen in der Webapp. Sollte den Wert von "
 "WEB_DEFAULT_PAGE_SIZE enthalten."
 
-#: src/config/settings.py:925
+#: src/config/settings.py:924
 msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
@@ -82,15 +82,15 @@ msgstr ""
 "Maximal Dateigröße einer Vorschau in der Webapp. Dateien größer als dieser "
 "Wert werden nicht geladen."
 
-#: src/config/settings.py:931
+#: src/config/settings.py:930
 msgid "Maximum numbers of files in one storage unit."
 msgstr "Maximale Anzahl von Dateien in einer Speichereinheit."
 
-#: src/config/settings.py:936
+#: src/config/settings.py:935
 msgid "Whether or not to ignore emails and mailboxes that have a spam flag"
 msgstr "Ob als Spam markierte E-Mails und Postfächer ignoriert werden"
 
-#: src/config/settings.py:942
+#: src/config/settings.py:941
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
@@ -99,11 +99,11 @@ msgstr ""
 "Postfachnamen, die beim Suchen nach Postfächern in einem Konto ignoriert "
 "werden."
 
-#: src/config/settings.py:948
+#: src/config/settings.py:947
 msgid "List of content types prefixes to not parse as files."
 msgstr "Liste der Inhaltstypenpräfixe, um nicht als Dateien zu analysieren."
 
-#: src/config/settings.py:954
+#: src/config/settings.py:953
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
@@ -111,7 +111,7 @@ msgstr ""
 "Liste von Inhalt-Untertypen die nicht als Datei gespeichert werden. Plain- "
 "und HTML-Text werden immer ignoriert und als Haupttext behandelt."
 
-#: src/config/settings.py:961
+#: src/config/settings.py:960
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
@@ -124,7 +124,7 @@ msgstr ""
 "Fehlermeldungen führen wenn auf Seiten mit E-Mail-Vorschauen zugegriffen "
 "wird, also sei vorsichtig."
 
-#: src/config/settings.py:968
+#: src/config/settings.py:967
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
@@ -132,15 +132,15 @@ msgstr ""
 "Der CSS-Stil, mit dem E-Mails in HTML dargestellt werden. Kontext zu den "
 "einzelnen Klassen findet sich in HTML_TEMPLATE."
 
-#: src/config/settings.py:974
+#: src/config/settings.py:973
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr "Standard-Postfacheinstellung, ob E-Mails als .eml gespeichert werden."
 
-#: src/config/settings.py:979
+#: src/config/settings.py:978
 msgid "Default mailbox setting whether to store attachments."
 msgstr "Standard-Postfacheinstellung, ob Anhänge gespeichert werden."
 
-#: src/config/settings.py:985
+#: src/config/settings.py:984
 msgid ""
 "Default number of periods between two runs of a standard routine for a INBOX "
 "mailbox."
@@ -148,12 +148,12 @@ msgstr ""
 "Standardanzahl an Perioden zwischen zwei Ausführungen einer Standardroutine "
 "für einen Posteingang."
 
-#: src/config/settings.py:991
+#: src/config/settings.py:990
 msgid "Default fetching criterion for a standard routine for a INBOX mailbox."
 msgstr ""
 "Standard-Abrufkriterium für eine Standardroutine für einen Posteingang."
 
-#: src/config/settings.py:997
+#: src/config/settings.py:996
 msgid ""
 "Default number of periods between two runs of a standard routine for a SENT "
 "mailbox."
@@ -161,12 +161,12 @@ msgstr ""
 "Standardnummer an Perioden zwischen zwei Ausführungen einer Standardroutine "
 "für ein Gesendet Postfach."
 
-#: src/config/settings.py:1003
+#: src/config/settings.py:1002
 msgid "Default fetching criterion for a standard routine for a SENT mailbox."
 msgstr ""
 "Standard-Abrufkriterium für eine Standardroutine für ein Gesendet Postfach."
 
-#: src/config/settings.py:1009
+#: src/config/settings.py:1008
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
@@ -175,26 +175,32 @@ msgstr ""
 "Diese Einstellung ist nur relevant wenn die REGISTRATION_ENABLED "
 "Umgebungsvariable wahr ist."
 
-#: src/config/settings.py:1016
+#: src/config/settings.py:1015
+msgid ""
+"Set this to True to tolerate connections involving an unverified SSL "
+"certificate, e.g. a self-signed one."
+msgstr ""
+
+#: src/config/settings.py:1023
 msgid "Server Configurations"
 msgstr "Server-Konfiguration"
 
-#: src/config/settings.py:1018
+#: src/config/settings.py:1030
 msgid "Default Values"
 msgstr "Standardwerte"
 
-#: src/config/settings.py:1029
+#: src/config/settings.py:1041
 msgid "Processing Settings"
 msgstr "Verarbeitungseinstellungen"
 
-#: src/config/settings.py:1040
+#: src/config/settings.py:1052
 msgid "Storage Settings"
 msgstr "Speichereinstellungen"
 
-#: src/config/settings.py:1044
+#: src/config/settings.py:1056
 msgid "API Settings"
 msgstr "API Einstellungen"
 
-#: src/config/settings.py:1051
+#: src/config/settings.py:1063
 msgid "Web Settings"
 msgstr "Web-Einstellungen"

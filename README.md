@@ -117,6 +117,14 @@ The complete source code documentation is part of the docs on [ReadTheDocs](http
 Thank you to [everybody who helped with advancing this project](CONTRIBUTORS.md)
 and [who helped with translation](TRANSLATORS.rst)!
 
+## Support
+
+The most important support for this project are your contributions!
+
+If you want to help financially, you can donate via buy-me-a-coffee. Thank you very much!
+
+[![BuyMeACoffee](https://raw.githubusercontent.com/pachadotdev/buymeacoffee-badges/main/bmc-orange.svg)](https://www.buymeacoffee.com/Dacid99)
+
 ## License
 
 This software is proudly released under [the GNU Affero General Public License v3.0 or later (AGPLv3) open-source license](LICENSE).

@@ -1,6 +1,6 @@
 [project]
 name = "eonvelope"
-version = "0.5.1"
+version = "0.5.2"
 description = "Preserve your emails with this open-source self-hosted email archive."
 authors = [
     {name = "David Aderbauer & The Eonvelope Contributors", email = "eonvelope@mailo.com"}

@@ -143,6 +143,17 @@ class Account(
     )
     """The timeout parameter for the connection to the host, defaults to 10s."""
 
+    allow_insecure_connection = models.BooleanField(
+        default=False,
+        blank=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("allow insecure connection"),
+        help_text=_(
+            "Whether to allow insecure connection to the host, e.g. with a self-signed certificate."
+        ),
+    )
+    """Whether to allow insecure connections to the host, defaults to `False`."""
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         related_name="accounts",

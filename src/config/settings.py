@@ -40,7 +40,6 @@ from environ import FileAwareEnv
 
 from core.constants import EmailFetchingCriterionChoices
 
-
 # Get paths inside the project
 SOURCE_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SOURCE_DIR))
@@ -1010,10 +1009,23 @@ CONSTANCE_CONFIG = {
         ),
         bool,
     ),
+    "ALLOW_INSECURE_CONNECTIONS": (
+        False,
+        _(
+            "Set this to True to tolerate connections involving an unverified SSL certificate, e.g. a self-signed one."
+        ),
+        bool,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = (
-    (_("Server Configurations"), ("REGISTRATION_ENABLED",)),
+    (
+        _("Server Configurations"),
+        (
+            "REGISTRATION_ENABLED",
+            "ALLOW_INSECURE_CONNECTIONS",
+        ),
+    ),
     (
         _("Default Values"),
         (

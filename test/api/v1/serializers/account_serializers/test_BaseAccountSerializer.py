@@ -75,7 +75,7 @@ def test_output(fake_account, request_context):
     assert "updated" in serializer_data
     assert datetime.fromisoformat(serializer_data["updated"]) == fake_account.updated
     assert "user" not in serializer_data
-    assert len(serializer_data) == 12
+    assert len(serializer_data) == 13
 
 
 @pytest.mark.django_db
@@ -114,7 +114,7 @@ def test_input__test_success(account_payload, request_context, mock_Account_test
     assert "updated" not in serializer_data
     assert "user" in serializer_data
     assert serializer_data["user"] == request_context["request"].user
-    assert len(serializer_data) == 8
+    assert len(serializer_data) == 9
     mock_Account_test.assert_called_once()
 
 

@@ -38,4 +38,4 @@ def test_output(fake_account):
     assert "timeout" in fields
     assert "allow_insecure_connection" in fields
     assert "is_healthy" in fields
-    assert len(fields) == 8
+    assert len(fields) == 9

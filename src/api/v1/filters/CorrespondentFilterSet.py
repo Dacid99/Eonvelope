@@ -28,7 +28,6 @@ from django_filters import rest_framework as filters
 from api.constants import FilterSetups
 from core.models import Correspondent
 
-
 if TYPE_CHECKING:
     from django.db.models import Model, QuerySet
 
@@ -159,4 +158,4 @@ class CorrespondentFilterSet(filters.FilterSet):
             | Q(list_post__icontains=value)
             | Q(list_help__icontains=value)
             | Q(list_archive__icontains=value)
-        ).distinct()
+        )

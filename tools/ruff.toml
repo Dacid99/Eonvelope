@@ -6,6 +6,10 @@ line-length = 88  # consistent with blacks default
 extend-exclude = ["manage.py", "*migrations*", "docs", "tools", "docker", ".vscode", ".pytest_cache", "__pycache__"]
 output-format = "full"
 
+[format]
+
+exclude = ["*"]
+
 [lint]
 
 select = [
@@ -88,7 +92,7 @@ convention = "google"
 [lint.isort]
 known-first-party = ['core', 'api', 'web', 'eonvelope', 'config', 'test']
 known-local-folder = ['core', 'api', 'web', 'eonvelope', 'config', 'test']
-lines-after-imports = 2
+lines-after-imports = -1
 
 [lint.flake8-annotations]
 allow-star-arg-any = true

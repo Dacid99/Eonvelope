@@ -27,7 +27,6 @@ from .TimestampModelMixin import TimestampModelMixin
 from .UploadMixin import UploadMixin
 from .URLMixin import URLMixin
 
-
 __all__ = [
     "DownloadMixin",
     "FavoriteModelMixin",

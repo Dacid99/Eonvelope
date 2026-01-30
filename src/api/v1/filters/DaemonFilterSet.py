@@ -28,7 +28,6 @@ from django_filters import rest_framework as filters
 from api.constants import FilterSetups
 from core.models import Daemon
 
-
 if TYPE_CHECKING:
     from django.db.models import Model, QuerySet
 
@@ -168,4 +167,4 @@ class DaemonFilterSet(filters.FilterSet):
             | Q(mailbox__account__mail_address__icontains=value)
             | Q(mailbox__account__mail_host__icontains=value)
             | Q(mailbox__account__protocol__icontains=value)
-        ).distinct()
+        )

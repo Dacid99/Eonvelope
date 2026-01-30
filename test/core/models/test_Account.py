@@ -29,7 +29,11 @@ from django.urls import reverse
 from django_celery_beat.models import IntervalSchedule
 from model_bakery import baker
 
-from core.constants import EmailProtocolChoices, MailboxTypeChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.models import Account, Daemon, Mailbox
 from core.utils.fetchers import (
     BaseFetcher,
@@ -41,7 +45,6 @@ from core.utils.fetchers import (
     POP3Fetcher,
 )
 from core.utils.fetchers.exceptions import FetcherError, MailAccountError
-from src.core.constants import EmailFetchingCriterionChoices
 
 
 @pytest.fixture(autouse=True)
@@ -101,6 +104,7 @@ def test_Account_fields(django_user_model, fake_account):
     assert fake_account.timeout is not None
     assert isinstance(fake_account.timeout, int)
     assert fake_account.timeout == 10
+    assert fake_account.allow_insecure_connection is False
     assert fake_account.is_healthy is None
     assert fake_account.is_favorite is False
     assert fake_account.user is not None

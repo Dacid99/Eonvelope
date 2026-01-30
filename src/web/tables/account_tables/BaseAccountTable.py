@@ -43,6 +43,7 @@ class BaseAccountTable(Table):
             "mail_host_port",
             "protocol",
             "timeout",
+            "allow_insecure_connection",
             "is_healthy",
         )
         sequence = ("checkbox", *fields)

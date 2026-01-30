@@ -28,7 +28,6 @@ from django.dispatch import receiver
 
 from core.models import Email
 
-
 logger = logging.getLogger(__name__)
 
 

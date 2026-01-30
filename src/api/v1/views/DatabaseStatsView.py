@@ -29,7 +29,6 @@ from rest_framework.views import APIView
 
 from api.v1.serializers import DatabaseStatsSerializer
 
-
 if TYPE_CHECKING:
     from rest_framework.request import Request
 

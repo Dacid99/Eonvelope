@@ -19,23 +19,23 @@ This document focuses on management tasks after setup of the Eonvelope instance.
 Information for the setup can found in the pages about :doc:`installation <installation>`.
 
 
-Management tasks
+Management Tasks
 ----------------
 
-Add user
+Add User
 ^^^^^^^^
 
 If registration is disabled, the only way to add new users is via the admin panel.
 Go to the users section and use the add function.
 
-Generate API token for a user
+Generate API Token For A User
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Every user can have a persistent token for authentication to the Eonvelope API.
 These are generated in the token section of the admin panel.
 Tokens can also be deleted there.
 
-Forgotten username
+Forgotten Username
 ^^^^^^^^^^^^^^^^^^
 
 In case a user forgets their username for login, the admin user can just look it up via the admin panels user section.
@@ -44,20 +44,20 @@ In case a user forgets their username for login, the admin user can just look it
     It is not possible to forget the username of the admin, it is always ``admin``.
 
 
-Forgotten password
+Forgotten Password
 ^^^^^^^^^^^^^^^^^^
 
 If a user has forgotten their password, a new one can be set for them via the admin panels *user* interface.
 The user may change it himself once logged in.
 
-Admin password forgotten
+Admin Password Forgotten
 """"""""""""""""""""""""
 
 If the admin user password has been forgotten,
 there are a variety of options.
 
 If the admin password has not been changed,
-you can just look it up in the ``docker-compose.yml`` environmental variables.
+you can just look it up in the *docker-compose.yml* environmental variables.
 
 If you have access to the docker management,
 you can use ``docker exec`` to run
@@ -75,13 +75,13 @@ Alternatively, you can create another admin account by running
     docker exec -it eonvelope-web python3 manage.py createsuperuser --username=rescueadmin --email=  --noinput
 
 in the servers terminal.
-This ``rescueadmin`` account can be accessed with the password from the ``docker-compose.yml``.
+This *rescueadmin* account can then be accessed with the password from the *docker-compose.yml*.
 
 Using this account you can reset the password just like with a regular user.
 You may delete this additional admin afterwards. You can recreate it if required.
 
 
-MFA activated, device lost, no recovery codes
+MFA Activated, Device Lost, No Recovery Codes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If a user has MFA activated but lost their device and all recovery codes,
@@ -92,7 +92,7 @@ Take that secret and supply it to the user so they can set up the authenticator 
 They should turn MFA off and back on again afterwards to change the now compromised secret.
 
 .. note::
-    If the admin users MFA is lost, you can perform the same recovery by creating a second admin account as described :ref:`Admin password forgotten <above>`.
+    If the admin users MFA is lost, you can perform the same recovery by creating a second admin account as described :ref:`above <Admin password forgotten>`.
 
 Delete user
 ^^^^^^^^^^^
@@ -106,9 +106,7 @@ As admin user you can change instance-wide configurations via the admin panel.
 The settings can be found and changed under the 'constance' header.
 
 The server admin can configure the application via the docker environmental variables.
-
-See and :doc:`configuration <configuration>` for more details.
-
+See :doc:`configuration <configuration>` for more details.
 
 
 Robots.txt
@@ -122,7 +120,7 @@ The robots.txt file served by many web services (including your Eonvelope instan
 is intended to tell them which pages they may access (if they care).
 
 You can set up rules on what parts of Eonvelope crawlers are actively invited to access
-and which not in the admin panel under ``Robots - Rules``.
+and which not in the admin panel under *Robots - Rules*.
 
 By default all pages are allowed.
 To reverse this and disallow all pages, add a rule with

@@ -28,7 +28,6 @@ from core.models import Email
 from web.filters import EmailFilterSet
 from web.views.base import FilterPageView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

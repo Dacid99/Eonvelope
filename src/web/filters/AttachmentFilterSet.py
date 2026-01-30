@@ -29,7 +29,6 @@ from django.utils.translation import gettext_lazy as _
 
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
@@ -103,4 +102,4 @@ class AttachmentFilterSet(django_filters.FilterSet):
             | models.Q(content_id__icontains=value)
             | models.Q(email__subject__icontains=value)
             | models.Q(email__message_id__icontains=value)
-        ).distinct()
+        )

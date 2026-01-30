@@ -22,5 +22,4 @@ from .BaseEmailSerializer import BaseEmailSerializer
 from .EmailSerializer import EmailSerializer
 from .FullEmailSerializer import FullEmailSerializer
 
-
 __all__ = ["BaseEmailSerializer", "EmailSerializer", "FullEmailSerializer"]

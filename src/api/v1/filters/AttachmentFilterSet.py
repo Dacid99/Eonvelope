@@ -28,7 +28,6 @@ from django_filters import rest_framework as filters
 from api.constants import FilterSetups
 from core.models import Attachment
 
-
 if TYPE_CHECKING:
     from django.db.models import Model, QuerySet
 
@@ -76,4 +75,4 @@ class AttachmentFilterSet(filters.FilterSet):
             | models.Q(content_id__icontains=value)
             | models.Q(email__subject__icontains=value)
             | models.Q(email__message_id__icontains=value)
-        ).distinct()
+        )

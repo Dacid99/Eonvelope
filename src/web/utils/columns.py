@@ -26,7 +26,6 @@ from django.utils.html import format_html
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

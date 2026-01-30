@@ -29,7 +29,6 @@ from django.utils.translation import gettext_lazy as _
 
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
@@ -97,4 +96,4 @@ class CorrespondentFilterSet(django_filters.FilterSet):
             | Q(list_post__icontains=value)
             | Q(list_help__icontains=value)
             | Q(list_archive__icontains=value)
-        ).distinct()
+        )

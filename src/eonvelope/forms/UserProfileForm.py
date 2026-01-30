@@ -26,7 +26,6 @@ from django.forms import ModelForm, PasswordInput, Widget
 
 from eonvelope.models import UserProfile
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

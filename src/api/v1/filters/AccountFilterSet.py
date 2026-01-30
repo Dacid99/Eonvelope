@@ -28,7 +28,6 @@ from django_filters import rest_framework as filters
 from api.constants import FilterSetups
 from core.models import Account
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 
@@ -51,6 +50,7 @@ class AccountFilterSet(filters.FilterSet):
             "mail_host_port": FilterSetups.INT,
             "protocol": FilterSetups.CHOICE,
             "timeout": FilterSetups.FLOAT,
+            "allow_insecure_connection": FilterSetups.BOOL,
             "is_healthy": FilterSetups.BOOL,
             "last_error": FilterSetups.TEXT,
             "last_error_occurred_at": FilterSetups.DATETIME,
@@ -76,4 +76,4 @@ class AccountFilterSet(filters.FilterSet):
             Q(mail_address__icontains=value)
             | Q(mail_host__icontains=value)
             | Q(protocol__icontains=value)
-        ).distinct()
+        )

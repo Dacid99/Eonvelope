@@ -37,7 +37,6 @@ from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 from .BaseFetcher import BaseFetcher
 
-
 if TYPE_CHECKING:
     from exchangelib.queryset import QuerySet
 

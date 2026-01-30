@@ -20,5 +20,4 @@
 
 from .UserProfileForm import UserProfileForm
 
-
 __all__ = ["UserProfileForm"]

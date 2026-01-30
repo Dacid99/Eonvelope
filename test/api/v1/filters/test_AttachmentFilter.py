@@ -31,12 +31,16 @@ from .conftest import (
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("searched_field", ["file_name", "content_id"])
-def test_search_filter(faker, attachment_queryset, searched_field):
+@pytest.mark.parametrize(
+    "searched_fields", [["file_name"], ["content_id"], ["file_name", "content_id"]]
+)
+def test_search_filter(faker, attachment_queryset, searched_fields):
     """Tests :class:`api.v1.filters.AttachmentFilterSet`'s search filtering."""
     target_text = faker.sentence()
     target_id = faker.random.randint(0, len(attachment_queryset) - 1)
-    attachment_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    attachment_queryset.filter(id=target_id).update(
+        **dict.fromkeys(searched_fields, target_text)
+    )
     query = {"search": target_text[2:10]}
 
     filtered_data = AttachmentFilterSet(query, queryset=attachment_queryset).qs

@@ -26,7 +26,6 @@ from rest_framework import serializers
 
 from core.models import EmailCorrespondent
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

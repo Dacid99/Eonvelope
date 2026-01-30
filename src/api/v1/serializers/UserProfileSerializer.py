@@ -26,7 +26,6 @@ from rest_framework import serializers
 
 from eonvelope.models import UserProfile
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

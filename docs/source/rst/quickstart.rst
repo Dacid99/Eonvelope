@@ -15,7 +15,7 @@ Next take this docker-compose file and adapt the environment settings that need 
    :language: yaml
    :caption: docker-compose.yml
 
-For security reasons please change all passwords and the ``SECRET_KEY``.]
+For security reasons please change all passwords and the ``SECRET_KEY``.
 
 If your device is low on compute power and system resources, you may prefer to use the slim version of the docker-compose file instead.
 This will only run the core of the application in the docker container, excluding some additional components mostly aimed at development.
@@ -25,9 +25,9 @@ Or you use a container management platform like  `portainer <https://www.portain
 
 After the container is up you can access the webapp at *https://localhost:1122/*.
 
-The credentials for the default admin account are `admin` and the `DJANGO_SUPERUSER_PASSWORD` you set in the docker-compose file.
+The credentials for the default admin account are *admin* and the value of ``DJANGO_SUPERUSER_PASSWORD`` you set in the docker-compose file.
 Using this account you can then create the user accounts and configure the instance.
-If you want users to sign up themselves, set the docker environment variable `REGISTRATION_ENABLED` to `True`.
+If you want users to sign up themselves, set the docker environment variable ``REGISTRATION_ENABLED`` to *True*.
 
 For a full information about the administration of the instance and how to create user accounts
 check out the :doc:`admin instructions <admin-instructions>`.

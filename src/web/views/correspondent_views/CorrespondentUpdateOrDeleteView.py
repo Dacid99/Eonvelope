@@ -31,7 +31,6 @@ from web.views.base import UpdateOrDeleteView
 
 from .CorrespondentFilterView import CorrespondentFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

@@ -37,7 +37,7 @@ Graphical representation of the project code are shown on these pages
     import-graph
 
 
-Where to start
+Where To Start
 --------------
 
 If you are looking for a thing to help with please check out the ToDo list for ideas
@@ -57,12 +57,12 @@ If you are interested in such an endeavour, please get in touch.
 
 
 You can find an interactive graphical representation of the Eonvelope database layout
-under the `/db-schema/` url of your instance
+under the */db-schema/* url of your instance
 or :doc:`on this page <db-graph>`.
 We are always happy to help and give additional detailed information about the database layout.
 
 
-Frontend development
+Frontend Development
 ^^^^^^^^^^^^^^^^^^^^
 
 If you are interested in implementing a frontend option for Eonvelope, you are invited to do so.

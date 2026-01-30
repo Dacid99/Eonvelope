@@ -49,7 +49,6 @@ from core.constants import EmailFetchingCriterionChoices, SupportedEmailDownload
 from core.models import Email, Mailbox
 from core.utils.fetchers.exceptions import FetcherError
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request

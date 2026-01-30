@@ -38,7 +38,6 @@ from api.v1.serializers import AccountSerializer
 from core.models import Account
 from core.utils.fetchers.exceptions import MailAccountError
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request

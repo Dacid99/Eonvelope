@@ -3,12 +3,12 @@
 {% load translate from i18n %}
 
 {% block card_title %}
-    <a href="{{ card_object.mailbox.get_absolute_url }}"
+    <a href="{{ card_object.get_absolute_url }}"
        class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
         {{ card_object.mailbox.name }}
     </a>
     <br />
-    <a href="{{ card_object.mailbox.account.get_absolute_url }}"
+    <a href="{{ card_object.get_absolute_url }}"
        class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">
         {{ card_object.mailbox.account.complete_mail_address }}
     </a>

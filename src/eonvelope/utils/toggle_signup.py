@@ -28,7 +28,6 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 
 from eonvelope.utils.workarounds import get_config
 
-
 if TYPE_CHECKING:
     from rest_framework.request import Request
     from rest_framework.views import APIView

@@ -30,7 +30,6 @@ from django.utils.translation import gettext_lazy as _
 from core.constants import EmailProtocolChoices
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
@@ -98,4 +97,4 @@ class AccountFilterSet(django_filters.FilterSet):
             models.Q(mail_address__icontains=value)
             | models.Q(mail_host__icontains=value)
             | models.Q(protocol__icontains=value)
-        ).distinct()
+        )

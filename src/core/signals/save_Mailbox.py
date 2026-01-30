@@ -28,7 +28,6 @@ from django.dispatch import receiver
 
 from core.models import Mailbox
 
-
 logger = logging.getLogger(__name__)
 """The logger instance for this module."""
 

@@ -32,7 +32,6 @@ from core.mixins import TimestampModelMixin
 
 from .Correspondent import Correspondent
 
-
 if TYPE_CHECKING:
     from .Email import Email
 

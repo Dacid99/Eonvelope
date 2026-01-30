@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING, ClassVar, Final
 from core.models import Mailbox
 from web.utils.forms import RequiredMarkerModelForm
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

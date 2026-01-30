@@ -5,6 +5,7 @@ lint_codebase:
       when: manual
     - if: $CI_COMMIT_TAG
   script:
+    - poetry install --with lint,stubs
     - mkdir -p $CHECK_REPORT_PATH'/mypy'
     - echo "Checking codebase ..."
     - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' | tee $CHECK_REPORT_PATH'ruff_check.ansi' || true

@@ -27,6 +27,7 @@ from typing import override
 from django.utils.translation import gettext_lazy as _
 
 from core import constants
+from eonvelope.utils.workarounds import get_config
 
 from .exceptions import MailAccountError
 from .POP3Fetcher import POP3Fetcher
@@ -55,7 +56,14 @@ class POP3_SSL_Fetcher(  # noqa: N801  # naming consistent with POP3_SSL class
         mail_host = self.account.mail_host
         mail_host_port = self.account.mail_host_port
         timeout = self.account.timeout
-        ssl_context = ssl.create_default_context()
+        ssl_context = ssl.create_default_context(
+            purpose=(
+                ssl.Purpose.CLIENT_AUTH
+                if get_config("ALLOW_INSECURE_CONNECTIONS")
+                and self.account.allow_insecure_connection
+                else ssl.Purpose.SERVER_AUTH
+            )
+        )
         try:
             if mail_host_port:
                 self._mail_client = poplib.POP3_SSL(

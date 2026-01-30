@@ -20,5 +20,4 @@
 
 from .BaseAccountTable import BaseAccountTable
 
-
 __all__ = ["BaseAccountTable"]

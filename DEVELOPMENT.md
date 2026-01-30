@@ -41,7 +41,7 @@ poetry completions bash >> ~/.bash_completion
 Then install all the dependencies to a virtual environment:
 
 ```bash
-poetry install --with dev,docs
+poetry install --with dev
 ```
 
 Finally you can activate the venv with
@@ -149,7 +149,7 @@ git config core.hooksPath tools/githooks/
 - ruff, with config
 
 ```json
-    "ruff.configuration": "tools/ruff.toml")
+    "ruff.configuration": "tools/ruff.toml"
 ```
 
 - pylint, with config

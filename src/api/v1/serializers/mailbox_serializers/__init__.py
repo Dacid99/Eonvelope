@@ -21,5 +21,4 @@
 from .BaseMailboxSerializer import BaseMailboxSerializer
 from .MailboxWithDaemonSerializer import MailboxWithDaemonSerializer
 
-
 __all__ = ["BaseMailboxSerializer", "MailboxWithDaemonSerializer"]

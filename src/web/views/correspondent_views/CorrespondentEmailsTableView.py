@@ -28,7 +28,6 @@ from web.tables import BaseCorrespondentEmailTable
 
 from .CorrespondentEmailsFilterView import CorrespondentEmailsFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

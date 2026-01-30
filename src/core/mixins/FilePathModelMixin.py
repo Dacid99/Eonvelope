@@ -28,7 +28,6 @@ from django.core.files.storage import default_storage
 from django.db.models import CharField, Model
 from django.utils.translation import gettext_lazy as _
 
-
 if TYPE_CHECKING:
     from django.core.files import File
 

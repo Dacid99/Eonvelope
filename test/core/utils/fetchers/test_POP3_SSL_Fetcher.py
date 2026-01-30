@@ -18,6 +18,8 @@
 
 """Test file for the :class:`core.utils.fetchers.IMAP4_SSL_Fetcher`."""
 
+import ssl
+
 import pytest
 
 from core.constants import EmailProtocolChoices
@@ -58,19 +60,26 @@ def mock_POP3_SSL(mocker, faker):
         None,
     ],
 )
+@pytest.mark.parametrize("config_allow_insecure", [True, False])
+@pytest.mark.parametrize("account_allow_insecure", [True, False])
 def test_POP3Fetcher_connect_to_host__success(
+    override_config,
     pop3_ssl_mailbox,
     mock_ssl_create_default_context,
     mock_logger,
     mock_POP3_SSL,
+    account_allow_insecure,
+    config_allow_insecure,
     mail_host_port,
 ):
     """Tests :func:`core.utils.fetchers.POP3_SSL_Fetcher.connect_to_host`
     in case of success.
     """
     pop3_ssl_mailbox.account.mail_host_port = mail_host_port
+    pop3_ssl_mailbox.account.allow_insecure_connection = account_allow_insecure
 
-    POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
+    with override_config(ALLOW_INSECURE_CONNECTIONS=config_allow_insecure):
+        result = POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
 
     kwargs = {
         "host": pop3_ssl_mailbox.account.mail_host,
@@ -79,7 +88,15 @@ def test_POP3Fetcher_connect_to_host__success(
     }
     if mail_host_port:
         kwargs["port"] = mail_host_port
+    assert result._mail_client == mock_POP3_SSL.return_value
     mock_POP3_SSL.assert_called_with(**kwargs)
+    mock_ssl_create_default_context.assert_called_once_with(
+        purpose=(
+            ssl.Purpose.CLIENT_AUTH
+            if account_allow_insecure and config_allow_insecure
+            else ssl.Purpose.SERVER_AUTH
+        )
+    )
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()
     mock_logger.error.assert_not_called()

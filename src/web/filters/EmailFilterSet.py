@@ -23,12 +23,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import django_filters
-from django.db.models import Q
+from django.db.models import Exists, OuterRef, Q
 from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 
+from core.models import Attachment, EmailCorrespondent
 from web.utils.widgets import AdaptedSelectDateWidget
-
 
 if TYPE_CHECKING:
     from django.db.models import QuerySet
@@ -96,7 +96,20 @@ class EmailFilterSet(django_filters.FilterSet):
             | Q(subject__icontains=value)
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
-            | Q(headers__has_any_keys=value)
-            | Q(correspondents__email_address__icontains=value)
-            | Q(attachments__file_name__icontains=value)
-        ).distinct()
+            | Q(headers__iregex=value)
+            | Q(
+                Exists(
+                    EmailCorrespondent.objects.filter(
+                        email=OuterRef("pk"),
+                        correspondent__email_address__icontains=value,
+                    )
+                )
+            )
+            | Q(
+                Exists(
+                    Attachment.objects.filter(
+                        email=OuterRef("pk"), file_name__icontains=value
+                    )
+                )
+            )
+        )

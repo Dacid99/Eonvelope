@@ -27,7 +27,6 @@ from constance import config
 
 from config.settings import CONSTANCE_CONFIG
 
-
 logger = logging.getLogger(__name__)
 
 

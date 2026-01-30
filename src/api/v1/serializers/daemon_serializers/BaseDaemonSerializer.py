@@ -32,7 +32,6 @@ from api.v1.serializers.django_celery_beat_serializers import (
 )
 from core.models import Daemon, Mailbox
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

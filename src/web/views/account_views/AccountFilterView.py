@@ -28,7 +28,6 @@ from core.models import Account
 from web.filters import AccountFilterSet
 from web.views.base import FilterPageView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

@@ -31,7 +31,6 @@ from .BaseFetcher import BaseFetcher
 from .exceptions import FetcherError, MailAccountError
 from .SafePOPMixin import SafePOPMixin
 
-
 if TYPE_CHECKING:
     from core.models.Account import Account
     from core.models.Email import Email

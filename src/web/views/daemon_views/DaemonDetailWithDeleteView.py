@@ -35,7 +35,6 @@ from web.views.base import DetailWithDeleteView
 
 from .DaemonFilterView import DaemonFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from django.http import HttpRequest, HttpResponse

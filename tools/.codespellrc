@@ -1,3 +1,3 @@
 [codespell]
-skip = *.po,*.toml,*.ini,*.txt,*.eml,*py.html,*.ansi,*.css,*.yml,*.json,*.patch,*.lock,docker/,tools/,**/reports/**,**/htmlcov/**,.vscode/,**cache/**,**docs/build/**,.git/,*LICENSE*
+skip = *.po,*.toml,*.ini,*.txt,*.eml,*py.html,*.ansi,*.css,*.yml,*.yaml,*.json,*.patch,*.lock,tools/,**/reports/**,**/htmlcov/**,.vscode/,.zed/,**cache/**,**docs/build/**,.git/,*LICENSE*
 count = True

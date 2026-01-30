@@ -26,7 +26,6 @@ from .AccountFilterView import AccountFilterView
 from .AccountTableView import AccountTableView
 from .AccountUpdateOrDeleteView import AccountUpdateOrDeleteView
 
-
 __all__ = [
     "AccountCreateView",
     "AccountDetailWithDeleteView",

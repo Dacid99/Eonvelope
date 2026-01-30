@@ -28,10 +28,13 @@ import requests
 import urllib3.exceptions
 from freezegun import freeze_time
 
-from core.constants import EmailFetchingCriterionChoices, EmailProtocolChoices
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    EmailProtocolChoices,
+    MailboxTypeChoices,
+)
 from core.utils.fetchers import JMAPFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
-from src.core.constants import MailboxTypeChoices
 
 
 @pytest.fixture
@@ -264,14 +267,25 @@ def test_JMAPFetcher_make_fetching_filter_with_arg(
 
 @pytest.mark.parametrize("mail_host_port", [123, None])
 @pytest.mark.parametrize("mail_address", ["test@mail.org", None])
+@pytest.mark.parametrize("config_allow_insecure", [True, False])
+@pytest.mark.parametrize("account_allow_insecure", [True, False])
 def test_JMAPFetcher___init___success(
-    jmap_mailbox, mock_logger, mock_JMAP_client, mail_address, mail_host_port
+    override_config,
+    jmap_mailbox,
+    mock_logger,
+    mock_JMAP_client,
+    account_allow_insecure,
+    config_allow_insecure,
+    mail_address,
+    mail_host_port,
 ):
     """Test the constructor of JMAPFetcher in case of success."""
     jmap_mailbox.account.mail_address = mail_address
     jmap_mailbox.account.mail_host_port = mail_host_port
+    jmap_mailbox.account.allow_insecure_connection = account_allow_insecure
 
-    fetcher = JMAPFetcher(jmap_mailbox.account)
+    with override_config(ALLOW_INSECURE_CONNECTIONS=config_allow_insecure):
+        fetcher = JMAPFetcher(jmap_mailbox.account)
 
     assert fetcher._mail_client == mock_JMAP_client.return_value
     if mail_address:
@@ -295,6 +309,9 @@ def test_JMAPFetcher___init___success(
             api_token=jmap_mailbox.account.password,
         )
         mock_JMAP_client.create_with_password.assert_not_called()
+    assert mock_JMAP_client.return_value.requests_session.return_value.verify is not (
+        config_allow_insecure and account_allow_insecure
+    )
     mock_logger.info.assert_called()
     mock_logger.error.assert_not_called()
     mock_logger.exception.assert_not_called()

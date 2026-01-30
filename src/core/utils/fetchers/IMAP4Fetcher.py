@@ -38,7 +38,6 @@ from core.utils.mail_parsing import parse_IMAP_mailbox_data
 
 from .BaseFetcher import BaseFetcher
 
-
 if TYPE_CHECKING:
     from core.models.Account import Account
     from core.models.Email import Email

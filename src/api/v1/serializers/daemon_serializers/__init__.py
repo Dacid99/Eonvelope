@@ -20,5 +20,4 @@
 
 from .BaseDaemonSerializer import BaseDaemonSerializer
 
-
 __all__ = ["BaseDaemonSerializer"]

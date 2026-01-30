@@ -31,7 +31,6 @@ from django_celery_beat.models import IntervalSchedule
 from core.constants import EmailFetchingCriterionChoices
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
@@ -116,4 +115,4 @@ class DaemonFilterSet(django_filters.FilterSet):
             | models.Q(mailbox__account__mail_address__icontains=value)
             | models.Q(mailbox__account__mail_host__icontains=value)
             | models.Q(mailbox__account__protocol__icontains=value)
-        ).distinct()
+        )

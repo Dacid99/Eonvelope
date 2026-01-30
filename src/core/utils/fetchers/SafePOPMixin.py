@@ -28,7 +28,6 @@ from core.utils.fetchers.exceptions import (
     MailAccountError,
 )
 
-
 if TYPE_CHECKING:
     import logging
     import poplib

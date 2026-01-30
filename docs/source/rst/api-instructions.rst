@@ -19,7 +19,7 @@ The raw user management API schema is available under */api/auth/openapi.yaml* o
 .. note::
     These interfaces are not available in slim mode.
 
-If you have no option to run Eonvelope, you can refer to :ref:`API Schema` for the same schema file.
+If you have no option to run Eonvelope, you can refer to :ref:`the API-schema section <API Schema>` for the same schema files.
 You can render it to any API overview using one of the existing webtools or the docker image provided by swagger
 
 .. code-block:: bash
@@ -69,14 +69,14 @@ To authenticate via the API you have 4 options:
         curl -kX 'GET' -u user:password https://eonvelope.mydomain.tld/api/v1/emails/1
 
 - Token authentication: Authenticate via an API token.
-    You can get a persistent one from the admin panel.
+    You can get a persistent one from the admin panel. This method is recommended for use in scripts and manual use.
 
     .. code-block:: bash
 
         curl -kX 'GET' -H 'Authorization: Token your_key' https://eonvelope.mydomain.tld/api/v1/emails/1
 
 - Session authentication: Authenticate using a session cookie.
-    This always requires that you add a CSRF token to the request.
+    This always requires that you add a recent CSRF token to the request. You can find one in the cookies of the web-interface.
 
     .. code-block:: bash
 
@@ -90,7 +90,7 @@ To authenticate via the API you have 4 options:
         curl -kX 'POST' -d '{"username": "myname", "password": "mypwd"}' https://eonvelope.mydomain.tld/api/auth/app/v1/auth/login
 
     This will return a session token in the meta section of the json response.
-    Note that the missing / at the end of the login URL is not a typo.
+    Note the missing / at the end of the login URL.
 
     .. code-block:: bash
 

@@ -24,7 +24,7 @@ as well as within your local network.
 It is not safe or intended for use on the open web.
 
 Therefore, do not expose this application to the web without a reverse proxy like `nginx <https://nginx.org>`_.
-Further details on this can be found in the :ref:`Reverse-proxy` section below.
+Further details on this can be found in the :ref:`reverse-proxy <Reverse-Proxy>` section below.
 
 Recommended
 -----------
@@ -90,30 +90,41 @@ Alternatively, you can run the application bare metal.
 2. Install the dependencies for python and the system
    as described in :doc:`development <development>`.
 3. Spin up a mysql db server matching the configurations
-   in the django application settings ``config.settings.py`` on your machine.
+   in the django application settings *config.settings.py* on your machine.
 4. Finally the Eonvelope server is started via the docker entrypoint script
-   ``docker/docker-compose.yml``.
+   *docker/docker-compose.yml*.
 
-Other database type
+Other Database Type
 ^^^^^^^^^^^^^^^^^^^
 
 Depending on your setup, you may want to use a database that is not a mariadb.
 
-In that case you can set the type of database you want to use in the docker-compose.yml file.
+In that case you can set the type of database you want to use in the docker-compose.yml file
+using the `DATABASE_TYPE` environment variable.
 See :doc:`configuration` for more details on this.
 
-It is crucial that the name of the database service in the stack is `db`!
-Otherwise the connection from the Eonvelope container to the database will fail.
+.. important::
+    It is crucial that the name of the database service in the stack is *db*!
+    Otherwise the connection from the Eonvelope container to the database will fail.
+
+If you use docker, you can set Eonvelope up to use an external database by adding
+
+.. code-block:: yaml
+
+    extra_hosts:
+      - "db: <database_ip>"
+
+to the eonvelope-web service and omitting the db portion of the stack.
 
 .. note::
    Using a database other than the default mysql can lead to issues.
    If possible try to stick with the default, which is tested and guaranteed to work flawlessly.
 
-Reverse-proxy
+Reverse-Proxy
 -------------
 
 If you reverse-proxy or expose your Eonvelope instance another way,
-you must make sure that the prometheus endpoint ``/metrics`` is not exposed for the entire world to see!
+you must make sure that the prometheus endpoint */metrics* is not exposed for the entire world to see!
 
 Just add
 
@@ -133,7 +144,7 @@ Updating
 
 You can update your Eonvelope server by getting and deploying the latest version from `dockerhub <https://hub.docker.com/r/dacid99/eonvelope>`_.
 
-Database migrations
+Database Migrations
 -------------------
 
 If there are structural changes to the database of Eonvelope,
@@ -150,20 +161,20 @@ It can be run from the terminal of your server with
 
 Swap in the name of the specific script for the migration fix.
 Just the name is required, drop the .py suffix.
-If your containers have different names, you may have to exchange the `eonvelope-web` part.
+If your containers have different names, you may have to exchange the *eonvelope-web* part.
 
 For more details see `the django docs on this topic <https://django-extensions.readthedocs.io/en/latest/runscript.html>`_.
 
 .. note::
    If you are migrating from version 0.2.0 or lower to a version above 0.2.0,
-   you will have to add an adminer container (see the docker-compose.debug.yml for reference) to the stack
-   and change the ``app`` column of all rows in the migrations table that have emailkasten as value to eonvelope.
+   you will have to add an adminer container (see the *docker-compose.debug.yml* for reference) to the stack
+   and change the *app* column of all rows in the migrations table that have *emailkasten* as value to *eonvelope*.
 
 
 Migration
 =========
 
-To new server
+To New Server
 -------------
 
 If you already have a running Eonvelope instance and want to move it to a new server there are 4 steps you can go through to do so in a save manner.
@@ -174,7 +185,7 @@ If you already have a running Eonvelope instance and want to move it to a new se
 4. Start the stack. Done.
 
 
-From other service
+From Other Service
 ------------------
 
 In principle it is possible to migrate to Eonvelope from another service fetching emails.

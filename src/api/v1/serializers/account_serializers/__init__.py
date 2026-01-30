@@ -21,5 +21,4 @@
 from .AccountSerializer import AccountSerializer
 from .BaseAccountSerializer import BaseAccountSerializer
 
-
 __all__ = ["AccountSerializer", "BaseAccountSerializer"]

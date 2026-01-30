@@ -37,7 +37,6 @@ from web.views.base import DetailWithDeleteView
 
 from .MailboxFilterView import MailboxFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from django.http import HttpRequest, HttpResponse

@@ -32,12 +32,16 @@ from .conftest import (
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("searched_field", ["mail_address", "mail_host"])
-def test_search_filter(faker, account_queryset, searched_field):
+@pytest.mark.parametrize(
+    "searched_fields", [["mail_address"], ["mail_host"], ["mail_address", "mail_host"]]
+)
+def test_search_filter(faker, account_queryset, searched_fields):
     """Tests :class:`api.v1.filters.AccountFilterSet`'s search filtering."""
     target_text = faker.sentence()
     target_id = faker.random.randint(0, len(account_queryset) - 1)
-    account_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    account_queryset.filter(id=target_id).update(
+        **dict.fromkeys(searched_fields, target_text)
+    )
     query = {"search": target_text[2:10]}
 
     filtered_data = AccountFilterSet(query, queryset=account_queryset).qs
@@ -113,6 +117,26 @@ def test_timeout_filter(account_queryset, lookup_expr, filterquery, expected_ind
     for the :attr:`core.models.Account.Account.timeout` field.
     """
     query = {"timeout" + lookup_expr: filterquery}
+
+    filtered_data = AccountFilterSet(query, queryset=account_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+)
+def test_allow_insecure_connection_filter(
+    account_queryset, lookup_expr, filterquery, expected_indices
+):
+    """Tests :class:`api.v1.filters.AccountFilterSet`'s filtering
+    for the :attr:`core.models.Account.Account.allow_insecure_connection` field.
+    """
+    query = {"allow_insecure_connection" + lookup_expr: filterquery}
 
     filtered_data = AccountFilterSet(query, queryset=account_queryset).qs
 

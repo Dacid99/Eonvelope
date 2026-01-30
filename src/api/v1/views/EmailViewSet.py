@@ -50,7 +50,6 @@ from core.constants import SupportedEmailDownloadFormats
 from core.models import Email, EmailCorrespondent
 from core.utils.fetchers.exceptions import FetcherError
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
     from rest_framework.request import Request

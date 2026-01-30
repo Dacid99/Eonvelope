@@ -39,7 +39,6 @@ from core.models import (
     Mailbox,
 )
 
-
 INT_TEST_ITEMS = [0, 1, 2]
 LESSER_INT = -5
 GREATER_INT = 6

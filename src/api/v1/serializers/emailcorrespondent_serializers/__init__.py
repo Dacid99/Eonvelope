@@ -22,7 +22,6 @@ from .BaseEmailCorrespondentSerializer import BaseEmailCorrespondentSerializer
 from .CorrespondentEmailSerializer import CorrespondentEmailSerializer
 from .EmailCorrespondentSerializer import EmailCorrespondentSerializer
 
-
 __all__ = [
     "BaseEmailCorrespondentSerializer",
     "CorrespondentEmailSerializer",

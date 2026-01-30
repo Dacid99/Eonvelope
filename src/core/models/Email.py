@@ -65,7 +65,6 @@ from eonvelope.utils.workarounds import get_config
 from .Attachment import Attachment
 from .EmailCorrespondent import EmailCorrespondent
 
-
 if TYPE_CHECKING:
     from tempfile import _TemporaryFileWrapper
 

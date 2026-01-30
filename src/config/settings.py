@@ -40,10 +40,11 @@ from environ import FileAwareEnv
 
 from core.constants import EmailFetchingCriterionChoices
 
+# Get paths inside the project
+SOURCE_DIR = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(SOURCE_DIR))
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-sys.path.append(str(BASE_DIR / "src"))
+BASE_DIR = SOURCE_DIR.parent
 
 # Get environ either from environment and file defined via _FILE env-variable
 # See https://django-environ.readthedocs.io/en/latest/tips.html#docker-style-file-based-variables
@@ -363,11 +364,11 @@ LANGUAGES = [
 ]
 
 LOCALE_PATHS = [
-    BASE_DIR / "src" / "config" / "locale",
-    BASE_DIR / "src" / "eonvelope" / "locale",
-    BASE_DIR / "src" / "core" / "locale",
-    BASE_DIR / "src" / "api" / "locale",
-    BASE_DIR / "src" / "web" / "locale",
+    SOURCE_DIR / "config" / "locale",
+    SOURCE_DIR / "eonvelope" / "locale",
+    SOURCE_DIR / "core" / "locale",
+    SOURCE_DIR / "api" / "locale",
+    SOURCE_DIR / "web" / "locale",
 ]
 
 DEFAULT_COOKIE_AGE = 2419200  # 4 weeks
@@ -462,7 +463,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "src" / "eonvelope" / "templates"],
+        "DIRS": [SOURCE_DIR / "eonvelope" / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -623,9 +624,7 @@ PWA_APP_SHORTCUTS = [
     },
 ]
 PWA_APP_SCREENSHOTS = []
-PWA_SERVICE_WORKER_PATH = (
-    BASE_DIR / "src" / "eonvelope" / "templates" / "serviceworker.js"
-)
+PWA_SERVICE_WORKER_PATH = SOURCE_DIR / "eonvelope" / "templates" / "serviceworker.js"
 PWA_APP_DEBUG_MODE = DEBUG
 
 
@@ -1010,10 +1009,23 @@ CONSTANCE_CONFIG = {
         ),
         bool,
     ),
+    "ALLOW_INSECURE_CONNECTIONS": (
+        False,
+        _(
+            "Set this to True to tolerate connections involving an unverified SSL certificate, e.g. a self-signed one."
+        ),
+        bool,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = (
-    (_("Server Configurations"), ("REGISTRATION_ENABLED",)),
+    (
+        _("Server Configurations"),
+        (
+            "REGISTRATION_ENABLED",
+            "ALLOW_INSECURE_CONNECTIONS",
+        ),
+    ),
     (
         _("Default Values"),
         (

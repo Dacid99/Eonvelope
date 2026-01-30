@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 0.5.2
+
+- Features:
+  - setting to allow insecure connections for IMAP, POP and JMAP
+  - performance improvements for email search
+
+- Fixes:
+  - filtering and searching by header-name now works
+  - removed unsupported filter types
+  - routine detail page was not linked on routine list page
+
 ## Version 0.5.1
 
 - Hotfix: there was a bad import path

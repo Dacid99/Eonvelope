@@ -24,7 +24,6 @@ from .EmailMonthArchiveView import EmailMonthArchiveView
 from .EmailWeekArchiveView import EmailWeekArchiveView
 from .EmailYearArchiveView import EmailYearArchiveView
 
-
 __all__ = [
     "EmailArchiveIndexView",
     "EmailDayArchiveView",

@@ -20,5 +20,4 @@
 
 from .BaseAttachmentSerializer import BaseAttachmentSerializer
 
-
 __all__ = ["BaseAttachmentSerializer"]

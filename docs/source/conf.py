@@ -65,6 +65,7 @@ extensions = [
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.autodoc",
     "sphinx.ext.graphviz",
+    "sphinx.ext.coverage",
     "sphinx.ext.apidoc",  # sphinx-apidoc run automatically with sphinx-build
     "sphinx_autodoc_typehints",
     "myst_parser",
@@ -298,3 +299,10 @@ napoleon_use_rtype = True
 todo_include_todos = True
 todo_emit_warnings = False
 todo_link_only = False
+
+
+# -- Coverage configuration  ---------------------------------------------------
+# https://www.sphinx-doc.org/en/master/usage/extensions/coverage.html#configuration
+
+coverage_show_missing_items = True
+coverage_statistics_to_stdout = False

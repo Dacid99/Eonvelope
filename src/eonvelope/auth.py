@@ -26,7 +26,6 @@ from allauth.mfa.adapter import get_adapter
 from rest_framework import exceptions
 from rest_framework.authentication import BasicAuthentication
 
-
 if TYPE_CHECKING:
     from rest_framework.request import Request
 

@@ -27,7 +27,6 @@ from .MailboxTableView import MailboxTableView
 from .MailboxUpdateOrDeleteView import MailboxUpdateOrDeleteView
 from .UploadEmailView import UploadEmailView
 
-
 __all__ = [
     "MailboxCreateDaemonView",
     "MailboxDetailWithDeleteView",

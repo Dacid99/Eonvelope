@@ -26,19 +26,29 @@ from .conftest import (
     BOOL_TEST_PARAMETERS,
     DATETIME_TEST_PARAMETERS,
     INT_TEST_PARAMETERS,
+    JSON_TEST_PARAMETERS,
     TEXT_TEST_PARAMETERS,
 )
 
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "searched_field", ["message_id", "subject", "plain_bodytext", "html_bodytext"]
+    "searched_fields",
+    [
+        ["message_id"],
+        ["subject"],
+        ["plain_bodytext"],
+        ["html_bodytext"],
+        ["subject", "html_bodytext"],
+    ],
 )
-def test_search_filter(faker, email_queryset, searched_field):
+def test_search_filter(faker, email_queryset, searched_fields):
     """Tests :class:`api.v1.filters.EmailFilterSet`'s search filtering."""
     target_text = faker.sentence()
     target_id = faker.random.randint(0, len(email_queryset) - 1)
-    email_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    email_queryset.filter(id=target_id).update(
+        **dict.fromkeys(searched_fields, target_text)
+    )
     query = {"search": target_text[2:10]}
 
     filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
@@ -186,6 +196,24 @@ def test_x_spam_filter(email_queryset, lookup_expr, filterquery, expected_indice
     for the :attr:`core.models.Email.Email.x_spam_flag` field.
     """
     query = {"x_spam_flag" + lookup_expr: filterquery}
+
+    filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
+
+    assert filtered_data.distinct().count() == filtered_data.count()
+    assert filtered_data.count() == len(expected_indices)
+    for data in filtered_data:
+        assert data.id - 1 in expected_indices
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "lookup_expr, filterquery, expected_indices", JSON_TEST_PARAMETERS
+)
+def test_headers_filter(email_queryset, lookup_expr, filterquery, expected_indices):
+    """Tests :class:`api.v1.filters.EmailFilterSet`'s filtering
+    for the :attr:`core.models.Email.Email.headers` field.
+    """
+    query = {"headers" + lookup_expr: filterquery}
 
     filtered_data = EmailFilterSet(query, queryset=email_queryset).qs
 

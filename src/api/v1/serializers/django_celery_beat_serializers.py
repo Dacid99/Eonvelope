@@ -25,7 +25,6 @@ from typing import TYPE_CHECKING, ClassVar, Final
 from django_celery_beat.models import IntervalSchedule, PeriodicTask
 from rest_framework import serializers
 
-
 if TYPE_CHECKING:
     from django.db.models import Model
 

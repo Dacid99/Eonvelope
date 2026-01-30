@@ -20,5 +20,4 @@
 
 from .BaseAttachmentTable import BaseAttachmentTable
 
-
 __all__ = ["BaseAttachmentTable"]

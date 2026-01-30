@@ -22,7 +22,6 @@ from .AttachmentDetailWithDeleteView import AttachmentDetailWithDeleteView
 from .AttachmentFilterView import AttachmentFilterView
 from .AttachmentTableView import AttachmentTableView
 
-
 __all__ = [
     "AttachmentDetailWithDeleteView",
     "AttachmentFilterView",

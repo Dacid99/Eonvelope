@@ -30,7 +30,6 @@ from django.utils.translation import gettext_lazy as _
 from core.constants import HeaderFields
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
@@ -102,4 +101,4 @@ class EmailCorrespondentFilterSet(django_filters.FilterSet):
             | Q(correspondent__list_archive__icontains=value)
             | Q(correspondent__list_unsubscribe_post__icontains=value)
             | Q(mention__icontains=value)
-        ).distinct()
+        )

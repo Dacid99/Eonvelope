@@ -56,7 +56,6 @@ from eonvelope.utils.workarounds import get_config
 
 from .Mailbox import Mailbox
 
-
 if TYPE_CHECKING:
     from core.utils.fetchers import BaseFetcher
 
@@ -143,6 +142,17 @@ class Account(
         help_text=_("Timeout for the connection to the mailserver."),
     )
     """The timeout parameter for the connection to the host, defaults to 10s."""
+
+    allow_insecure_connection = models.BooleanField(
+        default=False,
+        blank=True,
+        # Translators: Do not capitalize the very first letter unless your language requires it.
+        verbose_name=_("allow insecure connection"),
+        help_text=_(
+            "Whether to allow insecure connections to the host, e.g. with a self-signed certificate. Currently only relevant for IMAP4, POP3 and JMAP."
+        ),
+    )
+    """Whether to allow insecure connections to the host, defaults to `False`."""
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,

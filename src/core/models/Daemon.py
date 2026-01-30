@@ -37,7 +37,6 @@ from django_prometheus.models import ExportModelOperationsMixin
 from core.constants import INTERNAL_DATE_FORMAT, EmailFetchingCriterionChoices
 from core.mixins import HealthModelMixin, TimestampModelMixin, URLMixin
 
-
 if TYPE_CHECKING:
     from .Mailbox import Mailbox
 

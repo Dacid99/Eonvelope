@@ -28,7 +28,6 @@ from web.tables.daemon_tables.BaseDaemonTable import BaseDaemonTable
 
 from .DaemonFilterView import DaemonFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

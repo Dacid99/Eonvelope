@@ -29,7 +29,6 @@ from core.utils.fetchers.exceptions import (
     MailboxError,
 )
 
-
 if TYPE_CHECKING:
     import imaplib
     import logging

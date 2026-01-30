@@ -28,7 +28,6 @@ from core.models import Mailbox
 from web.filters import MailboxFilterSet
 from web.views.base import FilterPageView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

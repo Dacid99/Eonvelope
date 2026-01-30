@@ -36,7 +36,6 @@ from .mailbox_serializers import BaseMailboxSerializer, MailboxWithDaemonSeriali
 from .UploadEmailSerializer import UploadEmailSerializer
 from .UserProfileSerializer import UserProfileSerializer
 
-
 __all__ = [
     "AccountSerializer",
     "BaseAccountSerializer",

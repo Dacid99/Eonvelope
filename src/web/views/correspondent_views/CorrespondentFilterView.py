@@ -28,7 +28,6 @@ from core.models import Correspondent
 from web.filters import CorrespondentFilterSet
 from web.views.base import FilterPageView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

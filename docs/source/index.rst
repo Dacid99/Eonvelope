@@ -4,11 +4,11 @@
    Copyright 2011-2025 David Aderbauer & The Eonvelope Contributors
    Licensed under the Creative Commons Attribution-ShareAlike 4.0 International License.
 
-Eonvelope documentation
+Eonvelope Documentation
 =========================
 
 
-Welcome to the documentation of Eonvelope!
+Welcome to the Documentation of Eonvelope!
 ------------------------------------------
 
 Eonvelope is an open-source self-hostable email archive built with the django framework.

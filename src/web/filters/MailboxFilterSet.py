@@ -29,7 +29,6 @@ from django.utils.translation import gettext_lazy as _
 
 from web.utils.widgets import AdaptedSelectDateWidget
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 
@@ -93,4 +92,4 @@ class MailboxFilterSet(django_filters.FilterSet):
             | models.Q(account__mail_address__icontains=value)
             | models.Q(account__mail_host__icontains=value)
             | models.Q(account__protocol__icontains=value)
-        ).distinct()
+        )

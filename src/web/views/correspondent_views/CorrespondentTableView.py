@@ -30,7 +30,6 @@ from web.tables.correspondent_tables.BaseCorrespondentTable import (
 
 from .CorrespondentFilterView import CorrespondentFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

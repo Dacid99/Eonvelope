@@ -33,12 +33,21 @@ from .conftest import (
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("searched_field", ["uuid"])
-def test_search_filter(faker, daemon_queryset, searched_field):
+@pytest.mark.parametrize(
+    "searched_fields",
+    [
+        ["uuid"],
+        ["fetching_criterion_arg"],
+        ["uuid", "fetching_criterion_arg"],
+    ],
+)
+def test_search_filter(faker, daemon_queryset, searched_fields):
     """Tests :class:`web.filters.DaemonFilterSet`'s search filtering."""
     target_text = faker.uuid4()
     target_id = faker.random.randint(0, len(daemon_queryset) - 1)
-    daemon_queryset.filter(id=target_id).update(**{searched_field: target_text})
+    daemon_queryset.filter(id=target_id).update(
+        **dict.fromkeys(searched_fields, target_text)
+    )
     query = {"search": target_text[2:10]}
 
     filtered_data = DaemonFilterSet(query, queryset=daemon_queryset).qs

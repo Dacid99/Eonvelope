@@ -28,7 +28,6 @@ from web.tables.mailbox_tables.BaseMailboxTable import BaseMailboxTable
 
 from .MailboxFilterView import MailboxFilterView
 
-
 if TYPE_CHECKING:
     from django.db.models import QuerySet
 

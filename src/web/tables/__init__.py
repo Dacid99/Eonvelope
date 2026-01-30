@@ -26,7 +26,6 @@ from .email_tables import BaseEmailTable
 from .emailcorrespondent_tables import BaseCorrespondentEmailTable
 from .mailbox_tables import BaseMailboxTable
 
-
 __all__ = [
     "BaseAccountTable",
     "BaseAttachmentTable",

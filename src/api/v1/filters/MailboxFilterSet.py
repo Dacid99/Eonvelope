@@ -28,7 +28,6 @@ from django_filters import rest_framework as filters
 from api.constants import FilterSetups
 from core.models import Mailbox
 
-
 if TYPE_CHECKING:
     from django.db.models import Model, QuerySet
 
@@ -81,4 +80,4 @@ class MailboxFilterSet(filters.FilterSet):
             | Q(account__mail_address__icontains=value)
             | Q(account__mail_host__icontains=value)
             | Q(account__protocol__icontains=value)
-        ).distinct()
+        )

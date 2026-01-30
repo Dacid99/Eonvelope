@@ -9,6 +9,6 @@ Database Structure
 
 A quick overview over the entire database structure.
 
-An interactive version can be found in your Eonvelope instances `/db-schema/` page.
+An interactive version can be found in your Eonvelope instances */db-schema/* page.
 
 .. image:: ../db_graph.svg

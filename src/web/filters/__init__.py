@@ -27,7 +27,6 @@ from .EmailCorrespondentFilterSet import EmailCorrespondentFilterSet
 from .EmailFilterSet import EmailFilterSet
 from .MailboxFilterSet import MailboxFilterSet
 
-
 __all__ = [
     "AccountFilterSet",
     "AttachmentFilterSet",

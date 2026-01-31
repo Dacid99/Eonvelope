@@ -149,7 +149,7 @@ class Account(
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("allow insecure connection"),
         help_text=_(
-            "Whether to allow insecure connections to the host, e.g. with a self-signed certificate. Currently only relevant for IMAP4, POP3 and JMAP."
+            "Whether to allow insecure connections to the host, e.g. with a self-signed certificate."
         ),
     )
     """Whether to allow insecure connections to the host, defaults to `False`."""

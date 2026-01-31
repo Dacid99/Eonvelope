@@ -30,6 +30,7 @@ import exchangelib.queryset
 import pytest
 from freezegun import freeze_time
 from model_bakery import baker
+from requests.adapters import HTTPAdapter
 
 from core.constants import (
     EmailFetchingCriterionChoices,
@@ -270,10 +271,15 @@ def test_ExchangeFetcher___init____bad_protocol(
         None,
     ],
 )
+@pytest.mark.parametrize("config_allow_insecure", [True, False])
+@pytest.mark.parametrize("account_allow_insecure", [True, False])
 def test_ExchangeFetcher_connect_to_host_hostURL__success(
+    override_config,
     exchange_mailbox,
     mock_logger,
     mock_ExchangeAccount,
+    account_allow_insecure,
+    config_allow_insecure,
     mail_host_port,
     http_protocol,
 ):
@@ -282,8 +288,10 @@ def test_ExchangeFetcher_connect_to_host_hostURL__success(
     """
     exchange_mailbox.account.mail_host = http_protocol + "path.MyDomain.tld"
     exchange_mailbox.account.mail_host_port = mail_host_port
+    exchange_mailbox.account.allow_insecure_connection = account_allow_insecure
 
-    ExchangeFetcher(exchange_mailbox.account)
+    with override_config(ALLOW_INSECURE_CONNECTIONS=config_allow_insecure):
+        ExchangeFetcher(exchange_mailbox.account)
 
     mock_ExchangeAccount.assert_called_once()
     assert (
@@ -318,7 +326,12 @@ def test_ExchangeFetcher_connect_to_host_hostURL__success(
             "config"
         ].retry_policy.max_wait == (exchange_mailbox.account.timeout)
     # ruff: noqa: SIM300 # check altered constant
-    assert exchangelib.protocol.Protocol.TIMEOUT == exchange_mailbox.account.timeout
+    assert exchangelib.BaseProtocol.TIMEOUT == exchange_mailbox.account.timeout
+    assert (
+        exchangelib.BaseProtocol.HTTP_ADAPTER_CLS == exchangelib.NoVerifyHTTPAdapter
+        if config_allow_insecure and account_allow_insecure
+        else HTTPAdapter
+    )
     assert mock_ExchangeAccount.call_args.kwargs["access_type"] == exchangelib.DELEGATE
     assert mock_ExchangeAccount.call_args.kwargs["autodiscover"] is False
     assert mock_ExchangeAccount.call_args.kwargs[
@@ -350,6 +363,7 @@ def test_ExchangeFetcher_connect_to_host_hostname__success(
         if exchange_mailbox.account.mail_host_port
         else exchange_mailbox.account.mail_host
     )
+
     ExchangeFetcher(exchange_mailbox.account)
 
     mock_ExchangeAccount.assert_called_once()
@@ -384,7 +398,8 @@ def test_ExchangeFetcher_connect_to_host_hostname__success(
             "config"
         ].retry_policy.max_wait == (exchange_mailbox.account.timeout)
     # ruff: noqa: SIM300 # check altered constant
-    assert exchangelib.protocol.Protocol.TIMEOUT == exchange_mailbox.account.timeout
+    assert exchangelib.BaseProtocol.TIMEOUT == exchange_mailbox.account.timeout
+    assert exchangelib.BaseProtocol.HTTP_ADAPTER_CLS == HTTPAdapter
     assert mock_ExchangeAccount.call_args.kwargs["access_type"] == exchangelib.DELEGATE
     assert mock_ExchangeAccount.call_args.kwargs["autodiscover"] is False
     assert mock_ExchangeAccount.call_args.kwargs[

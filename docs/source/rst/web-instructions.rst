@@ -96,7 +96,7 @@ you can enable *allow_insecure_connection*.
 
 .. note::
     This setting is only available if the admin enables it.
-    It currently only has an effect for IMAP4, POP3 and JMAP accounts.
+    It has no effect for unencrypted IMAP4 and POP3 accounts as they don't use TLS anyway.
 
 When you submit the data to add the account, Eonvelope will test
 whether it can access this account with the given information.

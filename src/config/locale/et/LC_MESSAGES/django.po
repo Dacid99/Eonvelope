@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 21:12+0000\n"
-"PO-Revision-Date: 2025-12-31 20:14+0000\n"
+"PO-Revision-Date: 2026-02-01 05:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/"
 "config/et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/admin.py:32
@@ -52,7 +52,7 @@ msgstr "Ajajoon"
 
 #: src/config/settings.py:623
 msgid "Shortcut to the email timeline"
-msgstr ""
+msgstr "Viide e-kirja ajajoonele"
 
 #: src/config/settings.py:901
 msgid "Default page size for paginated API response data"
@@ -158,24 +158,24 @@ msgstr ""
 
 #: src/config/settings.py:1023
 msgid "Server Configurations"
-msgstr ""
+msgstr "Serveri seadistused"
 
 #: src/config/settings.py:1030
 msgid "Default Values"
-msgstr ""
+msgstr "Vaikimisi väärtused"
 
 #: src/config/settings.py:1041
 msgid "Processing Settings"
-msgstr ""
+msgstr "Töötlen seadistusi"
 
 #: src/config/settings.py:1052
 msgid "Storage Settings"
-msgstr ""
+msgstr "Andmeruumi seadistused"
 
 #: src/config/settings.py:1056
 msgid "API Settings"
-msgstr ""
+msgstr "API seadistused"
 
 #: src/config/settings.py:1063
 msgid "Web Settings"
-msgstr ""
+msgstr "Veebiseadistused"

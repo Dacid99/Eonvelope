@@ -33,12 +33,3 @@ def mock_logger(mocker):
         autospec=True,
     )
     return mock_logger
-
-
-@pytest.fixture(autouse=True)
-def mock_ssl_create_default_context(mocker):
-    """Mocks :class:`ssl.create_default_context`."""
-    return mocker.patch(
-        "ssl.create_default_context",
-        return_value=mocker.sentinel,
-    )

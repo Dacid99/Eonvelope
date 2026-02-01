@@ -174,6 +174,7 @@ There is a broad variety of criteria, not all are available for every email prot
 Some criteria require an additional value to filter by.
 
 The following criteria without required value are available:
+
 +------------+----------------------------------------------------------------------------------------------------------+
 | Criterion  | Description                                                                                              |
 +============+==========================================================================================================+
@@ -254,6 +255,7 @@ The following criteria without required value are available:
     Just use the time-based filters instead.
 
 For more specific filtering, you can use the following criteria that take a custom value to filter by.
+
 +-----------+---------------------------------------------------------------------------------------------------------+
 | Criterion | Description                                                                                             |
 +===========+=========================================================================================================+

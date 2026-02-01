@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         'X-CSRFToken': Cookies.get('csrftoken')
                     },
                     credentials: 'include',
-                    mode: 'same-origin'
+                    mode: 'same-origin',
+                    redirect: 'error',
                 }
             );
             fetch(request).then(response => {

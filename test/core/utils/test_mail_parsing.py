@@ -229,8 +229,8 @@ def test_parse_datetime_header__no_header(mocker, faker, mock_logger):
             "\\Sent \\HasNoChildren",
         ),
         (
-            b'(\\Sent \\HasChildren) "." INBOX.Sent',
-            "INBOX.Sent",
+            b'(\\Sent \\HasChildren) "." Mails.Sent',
+            "Mails.Sent",
             "\\Sent \\HasChildren",
         ),
         (
@@ -249,14 +249,19 @@ def test_parse_datetime_header__no_header(mocker, faker, mock_logger):
             "",
         ),
         (
-            b'() ";" INBOX',
-            "INBOX",
+            b'() ";" "INBOX"',
+            '"INBOX"',
             "\\inbox",
         ),
         (
-            b'(\\HasChildren) ";" INBOX',
+            b'(\\HasChildren) "SEP" INBOX',
             "INBOX",
             "\\HasChildren\\inbox",
+        ),
+        (
+            b'(\\none) "/" my_inbox',
+            "my_inbox",
+            "\\none\\inbox",
         ),
     ],
 )

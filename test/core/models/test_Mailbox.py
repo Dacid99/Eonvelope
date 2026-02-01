@@ -729,6 +729,8 @@ def test_Mailbox_queryset_as_file_zip_eml(
     """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
     in case the requested format is zip of eml.
     """
+    expected_zipped_file_name = fake_mailbox.name + ".zip"
+
     assert Mailbox.objects.count() == 1
     assert fake_mailbox.emails.count() == 2
 
@@ -739,9 +741,9 @@ def test_Mailbox_queryset_as_file_zip_eml(
     assert Mailbox.objects.count() == 1
     assert hasattr(result, "read")
     with ZipFile(result) as zipfile:
-        assert fake_mailbox.name in zipfile.namelist()
+        assert expected_zipped_file_name in zipfile.namelist()
         with (
-            zipfile.open(fake_mailbox.name) as zipped_file,
+            zipfile.open(expected_zipped_file_name) as zipped_file,
             ZipFile(zipped_file) as inner_zipfile,
         ):
             assert inner_zipfile.namelist() == [
@@ -780,6 +782,10 @@ def test_Mailbox_queryset_as_file_mailbox_file(
     """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
     in case the given format is a mailbox single fileformat.
     """
+    expected_zipped_file_name = (
+        fake_mailbox.name + "." + file_format.split("[", maxsplit=1)[0].lower()
+    )
+
     assert Mailbox.objects.count() == 1
     assert fake_mailbox.emails.count() == 2
 
@@ -790,10 +796,10 @@ def test_Mailbox_queryset_as_file_mailbox_file(
     assert hasattr(result, "name")
     parser_class = file_format_parsers[file_format.lower()]
     with ZipFile(result.name) as zipfile:
-        assert fake_mailbox.name in zipfile.namelist()
+        assert expected_zipped_file_name in zipfile.namelist()
         with TemporaryDirectory() as tempdir:
-            zipfile.extract(fake_mailbox.name, path=tempdir)
-            parser = parser_class(os.path.join(tempdir, fake_mailbox.name))
+            zipfile.extract(expected_zipped_file_name, path=tempdir)
+            parser = parser_class(os.path.join(tempdir, expected_zipped_file_name))
             assert len(list(parser.iterkeys())) == 1
             for key in parser.iterkeys():
                 assert (
@@ -824,6 +830,10 @@ def test_Mailbox_queryset_as_file_mailbox_zip(
     """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
     in case the given format is a zip of a mailbox directory.
     """
+    expected_zipped_file_name = (
+        fake_mailbox.name + "." + file_format.split("[", maxsplit=1)[0].lower()
+    )
+
     assert Mailbox.objects.count() == 1
     assert fake_mailbox.emails.count() == 2
 
@@ -832,10 +842,10 @@ def test_Mailbox_queryset_as_file_mailbox_zip(
     assert Mailbox.objects.count() == 1
     assert hasattr(result, "read")
     with ZipFile(result) as zipfile:
-        assert fake_mailbox.name in zipfile.namelist()
+        assert expected_zipped_file_name in zipfile.namelist()
         with TemporaryDirectory() as tempdir:
             with (
-                zipfile.open(fake_mailbox.name) as zipped_file,
+                zipfile.open(expected_zipped_file_name) as zipped_file,
                 ZipFile(zipped_file) as inner_zipfile,
             ):
                 inner_zipfile.extractall(tempdir)

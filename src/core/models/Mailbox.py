@@ -491,6 +491,11 @@ class Mailbox(
                     )
                 except Email.DoesNotExist:
                     continue
-                with mailbox_file, zipfile.open(mailbox.name, "w") as zipped_file:
+                with (
+                    mailbox_file,
+                    zipfile.open(
+                        mailbox.name + "." + file_format.split("[", maxsplit=1)[0], "w"
+                    ) as zipped_file,
+                ):
                     zipped_file.write(mailbox_file.read())
         return tempfile

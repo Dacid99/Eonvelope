@@ -10,6 +10,11 @@
 
 {% block instruction_buttons %}
 
-    {% include "web/account/partials/_add_routines-button.html" with account=object %}
+    <form method="post">
+        {% csrf_token %}
+
+        {% include "web/account/partials/_add_routines-button.html" with account=object %}
+
+    </form>
 
 {% endblock instruction_buttons %}

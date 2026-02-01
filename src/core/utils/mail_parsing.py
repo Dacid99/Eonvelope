@@ -178,11 +178,11 @@ def parse_IMAP_mailbox_data(  # noqa: N802 # that's how IMAP is spelled
             .strip(),
             "",
         )
-    if match.group(2) == "INBOX":
+    if "inbox" in match.group(2).lower():
         return (
             match.group(2),
             match.group(1) + "\\inbox",
-        )  # INBOX is marked by name only
+        )  # IMAPs INBOX is marked by name only
     return match.group(2), match.group(1)
 
 

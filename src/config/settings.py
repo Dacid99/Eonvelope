@@ -726,6 +726,7 @@ MFA_TOTP_ISSUER = env("MFA_TOTP_ISSUER", cast=str, default="Eonvelope")
 MFA_TOTP_PERIOD = env("MFA_TOTP_PERIOD", cast=int, default=30)
 MFA_TOTP_DIGITS = env("MFA_TOTP_DIGITS", cast=int, default=6)
 MFA_TOTP_TOLERANCE = env("MFA_TOTP_TOLERANCE", cast=int, default=1)
+MFA_TOTP_INSECURE_BYPASS_CODE = "eonvelope-bypass-code" if DEBUG else None
 
 MFA_RECOVERY_CODE_COUNT = env("MFA_RECOVERY_CODE_COUNT", cast=int, default=10)
 MFA_RECOVERY_CODE_DIGITS = env("MFA_RECOVERY_CODE_DIGITS", cast=int, default=8)

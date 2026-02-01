@@ -97,6 +97,7 @@ class Daemon(
     fetching_criterion_arg = models.CharField(
         default="",
         max_length=255,
+        blank=True,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("filter value"),
         help_text=_("Additional value for the selection criterion."),

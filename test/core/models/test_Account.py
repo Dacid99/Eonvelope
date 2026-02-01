@@ -33,6 +33,7 @@ from core.constants import (
     EmailFetchingCriterionChoices,
     EmailProtocolChoices,
     MailboxTypeChoices,
+    SupportedEmailDownloadFormats,
 )
 from core.models import Account, Daemon, Mailbox
 from core.utils.fetchers import (
@@ -832,6 +833,34 @@ def test_Account_mail_host_address(
     result = fake_account.mail_host_address
 
     assert result == expected_address
+
+
+@pytest.mark.django_db
+def test_Mailbox_has_download__with_mailbox(fake_account, fake_mailbox):
+    """Tests :func:`core.models.Account.Account.has_download`."""
+    assert fake_account.mailboxes.exists()
+
+    result = fake_account.has_download
+
+    assert result
+
+
+@pytest.mark.django_db
+def test_Account_has_download__no_mailbox(fake_account):
+    """Tests :func:`core.models.Account.Account.has_download`."""
+    assert not fake_account.mailboxes.exists()
+
+    result = fake_account.has_download
+
+    assert not result
+
+
+@pytest.mark.django_db
+def test_Account_available_download_formats(fake_account):
+    """Tests :func:`core.models.Account.Account.available_download_formats`."""
+    result = fake_account.available_download_formats
+
+    assert result == SupportedEmailDownloadFormats.choices
 
 
 @pytest.mark.django_db

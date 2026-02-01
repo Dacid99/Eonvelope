@@ -55,6 +55,8 @@ from eonvelope.utils.workarounds import get_config
 from .Email import Email
 
 if TYPE_CHECKING:
+    from tempfile import _TemporaryFileWrapper
+
     from django_stubs_ext import StrOrPromise
 
     from .Account import Account
@@ -456,3 +458,39 @@ class Mailbox(
             mailbox.save()
             logger.debug("Successfully saved %s to db.", mailbox_name)
         return mailbox
+
+    @staticmethod
+    def queryset_as_file(
+        queryset: models.QuerySet[Mailbox], file_format: str
+    ) -> _TemporaryFileWrapper:
+        """Processes the files of the emails in the mailboxes in the queryset into a temporary file.
+
+        Args:
+            queryset: The mailbox queryset to compile into a file.
+            file_format: The desired format of the mailbox files. Must be one of :class:`core.constants.SupportedEmailDownloadFormats`. Case-insensitive.
+
+        Returns:
+            The temporary file wrapper.
+
+        Raises:
+            ValueError: If the given :attr:`file_format` is not supported.
+            Mailbox.DoesNotExist: If the :attr:`queryset` is empty.
+        """
+        if not queryset.exists():
+            raise Mailbox.DoesNotExist("The queryset is empty")
+
+        file_format = file_format.lower()
+        tempfile = (
+            NamedTemporaryFile()  # noqa: SIM115  # pylint: disable=consider-using-with
+        )  # the file must not be closed as it is returned later
+        with ZipFile(tempfile.name, "w") as zipfile:
+            for mailbox in queryset:
+                try:
+                    mailbox_file = Email.queryset_as_file(
+                        mailbox.emails.all(), file_format
+                    )
+                except Email.DoesNotExist:
+                    continue
+                with mailbox_file, zipfile.open(mailbox.name, "w") as zipped_file:
+                    zipped_file.write(mailbox_file.read())
+        return tempfile

@@ -13,7 +13,6 @@
 - tagging system with [taggit](https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
 - async parsing, sync saving
-- download for account and batchdownload for mailbox
 - show pwd button
 - structured json based logging messages
 - refine fetchererrors into errors for auth, connection, etc.

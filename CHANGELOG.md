@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.5.3
+
+- Features:
+  - download for account
+  - batch-download for mailboxes
+
 ## Version 0.5.2
 
 - Features:

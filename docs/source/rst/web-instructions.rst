@@ -448,10 +448,13 @@ if your instance is not in slim mode.
 Export
 ^^^^^^
 
-Exporting can be done either by downloading entire mailboxes via the download option on the mailbox item page
-or by handpicking and downloading these emails in a bunch.
-The second option is currently only available via the API.
-Please refer to the :doc:`API documentation for instructions <api-instructions>` on the usage of these endpoints.
+Exporting can be done in various ways:
+
+- download individual emails, mailboxes or accounts via the respective item's page
+- download emails or mailboxes in a bunch via the respective filter page
+
+The same downloads are available via the API. Please refer to the :doc:`API documentation for instructions <api-instructions>` on the usage of these endpoints.
+
 The same formats as above are accepted.
 
 You can also export data from the database in various tabular formats via the admin panel

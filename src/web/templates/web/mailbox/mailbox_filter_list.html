@@ -11,6 +11,12 @@
     {% translate "Mailboxes" %}
 {% endblock header_title %}
 
+{% block action_buttons %}
+
+    {% include "web/mailbox/partials/_multi_download_dropdown.html" %}
+
+{% endblock action_buttons %}
+
 {% block list %}
 
     {% include "web/mailbox/partials/_mailbox_list.html" with mailboxes=page_obj %}

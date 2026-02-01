@@ -1,0 +1,21 @@
+{% load translate from i18n %}
+
+<div class="dropdown btn-group">
+    <button class="btn btn-outline-primary dropdown-toggle"
+            type="button"
+            id="dropdownDownloadMenuButton"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            aria-label="{% translate 'Download' %}">
+        <i class="fa fa-download" aria-hidden="true"></i>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownDownloadMenuButton">
+        {% for format, format_name in page_obj.0.available_download_formats %}
+            <li>
+                <button class="dropdown-item"
+                        data-url="/api/v1/mailboxes/download?file_format={{ format }}"
+                        onclick="multiDownload(this)">{{ format_name }}</button>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

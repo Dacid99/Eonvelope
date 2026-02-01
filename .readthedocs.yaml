@@ -6,16 +6,16 @@ build:
     python: "3.14"
   apt_packages:
     - python3-dev
-    - libkrb5-dev
     - default-mysql-client
     - graphviz
   jobs:
-    post_install:  # https://docs.readthedocs.com/platform/stable/build-customization.html#install-dependencies-with-poetry
+    post_install: # https://docs.readthedocs.com/platform/stable/build-customization.html#install-dependencies-with-poetry
       - pip install poetry
-      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with docs,dev
+      - VIRTUAL_ENV=$READTHEDOCS_VIRTUALENV_PATH poetry install --with dev
     pre_build:
       - python3 manage.py graph_models -a -g -o docs/source/db_graph.svg
       - python3 manage.py spectacular --validate --file docs/source/api-schema.yml
+      - pydeps src/config --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/config_import_graph.svg
       - pydeps src/eonvelope --max-bacon 2 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/eonvelope_import_graph.svg
       - pydeps src/core --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/core_import_graph.svg
       - pydeps src/api --max-bacon 3 -T svg -L ERROR --rankdir LR --no-show --cluster -o docs/source/api_import_graph.svg
@@ -23,6 +23,3 @@ build:
 
 sphinx:
   configuration: docs/source/conf.py
-
-formats:
-  - epub

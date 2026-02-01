@@ -241,7 +241,7 @@ intersphinx_mapping = {
         None,
     ),
     "django_health_check": (
-        "https://django-health-check.readthedocs.io/en/stable/",
+        "https://codingjoe.dev/django-health-check/",
         None,
     ),
     "django_celery_beat": (

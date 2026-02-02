@@ -18,12 +18,12 @@
 
 """Module with the :class:`core.backends.StorageIntegrityCheckBackend.StorageIntegrityCheckBackend` class."""
 
-from health_check.backends import BaseHealthCheckBackend, HealthCheckException
+from health_check.backends import HealthCheck, HealthCheckException
 
 from core.models import StorageShard
 
 
-class StorageIntegrityCheckBackend(BaseHealthCheckBackend):
+class StorageIntegrityCheckBackend(HealthCheck):
     """Health check backend for :func:`core.models.StorageShard.StorageShard.healthcheck`."""
 
     critical_service = False

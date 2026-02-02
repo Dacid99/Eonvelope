@@ -118,6 +118,7 @@ parametrize-values-type = "list"
   "N803",  # class names must be allowed as part of fixture names
   "N806",  # class names must be allowed as part of mock names
   "TRY003",# error messages can be put directly
+  "ARG005",# lambdas may have unused args
 ]
 "/**/scripts/**" = [  # ignores for all script files
   "ANN", # private accessed

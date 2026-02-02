@@ -77,7 +77,14 @@ def mock_IMAP4(mocker, faker):
     mock_IMAP4.return_value.select.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.unselect.return_value = ("OK", [fake_response])
     mock_IMAP4.return_value.append.return_value = ("OK", [fake_response])
-    mock_IMAP4.return_value.uid.return_value = ("OK", [fake_response, b""])
+    mock_IMAP4.return_value.uid.side_effect = lambda cmd, *args: (
+        (
+            "OK",
+            [(b"(", fake_response, b")"), (b"(", fake_response, b")")],
+        )
+        if cmd == "FETCH"
+        else ("OK", [fake_response, b""])
+    )
     mock_IMAP4.return_value.logout.return_value = ("BYE", [fake_response])
     return mock_IMAP4
 
@@ -548,7 +555,7 @@ def test_IMAP4Fetcher_test_mailbox__exception__ignored(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails__success__sort(
+def test_IMAP4Fetcher_fetch_emails__success__sort__single_batch(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
@@ -556,15 +563,18 @@ def test_IMAP4Fetcher_fetch_emails__success__sort(
     """
     mock_IMAP4.return_value.capabilities = ["SORT"]
     expected_uid_fetch_calls = [
-        mocker.call("FETCH", uID, "(RFC822)")
-        for uID in mock_IMAP4.return_value.uid.return_value[1][0].split()
+        mocker.call(
+            "FETCH",
+            b",".join(mock_IMAP4.return_value.uid.side_effect("SORT")[1][0].split()),
+            "(RFC822)",
+        )
     ]
 
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
-    assert result == [mock_IMAP4.return_value.uid.return_value[1][0][1]] * len(
-        expected_uid_fetch_calls
-    )
+    assert result == [
+        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+    ]
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
     )
@@ -580,22 +590,98 @@ def test_IMAP4Fetcher_fetch_emails__success__sort(
 
 
 @pytest.mark.django_db
-def test_IMAP4Fetcher_fetch_emails__success__search(
+def test_IMAP4Fetcher_fetch_emails__success__sort__multi_batch(
+    mocker, monkeypatch, imap_mailbox, mock_logger, mock_IMAP4
+):
+    """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
+    in case of success using the SORT action.
+    """
+    mock_IMAP4.return_value.capabilities = ["SORT"]
+    monkeypatch.setattr(IMAP4Fetcher, "EMAIL_FETCH_BATCH_SIZE", 1)
+    expected_uid_fetch_calls = [
+        mocker.call(
+            "FETCH",
+            item,
+            "(RFC822)",
+        )
+        for item in mock_IMAP4.return_value.uid.side_effect("SORT")[1][0].split()
+    ]
+
+    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+
+    assert result == [
+        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+    ] * len(expected_uid_fetch_calls)
+    mock_IMAP4.return_value.select.assert_called_once_with(
+        utf7_encode(imap_mailbox.name), readonly=True
+    )
+    assert mock_IMAP4.return_value.uid.call_count == len(expected_uid_fetch_calls) + 1
+    mock_IMAP4.return_value.uid.assert_has_calls(
+        [mocker.call("SORT", "(DATE)", "UTF-8", "ALL"), *expected_uid_fetch_calls]
+    )
+    mock_IMAP4.return_value.unselect.assert_called_once_with()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_IMAP4Fetcher_fetch_emails__success__search__single_batch(
     mocker, imap_mailbox, mock_logger, mock_IMAP4
 ):
     """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
     in case of success using the SEARCH action.
     """
     expected_uid_fetch_calls = [
-        mocker.call("FETCH", uID, "(RFC822)")
-        for uID in mock_IMAP4.return_value.uid.return_value[1][0].split()
+        mocker.call(
+            "FETCH",
+            b",".join(mock_IMAP4.return_value.uid.side_effect("SEARCH")[1][0].split()),
+            "(RFC822)",
+        )
     ]
 
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
-    assert result == [mock_IMAP4.return_value.uid.return_value[1][0][1]] * len(
-        expected_uid_fetch_calls
+    assert result == [
+        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+    ]
+    mock_IMAP4.return_value.select.assert_called_once_with(
+        utf7_encode(imap_mailbox.name), readonly=True
     )
+    assert mock_IMAP4.return_value.uid.call_count == len(expected_uid_fetch_calls) + 1
+    mock_IMAP4.return_value.uid.assert_has_calls(
+        [mocker.call("SEARCH", "ALL"), *expected_uid_fetch_calls]
+    )
+    mock_IMAP4.return_value.unselect.assert_called_once_with()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_IMAP4Fetcher_fetch_emails__success__search__multi_batch(
+    mocker, monkeypatch, imap_mailbox, mock_logger, mock_IMAP4
+):
+    """Tests :func:`core.utils.fetchers.IMAP4Fetcher.fetch_emails`
+    in case of success using the SEARCH action.
+    """
+    monkeypatch.setattr(IMAP4Fetcher, "EMAIL_FETCH_BATCH_SIZE", 1)
+    expected_uid_fetch_calls = [
+        mocker.call(
+            "FETCH",
+            item,
+            "(RFC822)",
+        )
+        for item in mock_IMAP4.return_value.uid.side_effect("SEARCH")[1][0].split()
+    ]
+
+    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+
+    assert result == [
+        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+    ] * len(expected_uid_fetch_calls)
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
     )
@@ -655,6 +741,7 @@ def test_IMAP4Fetcher_fetch_emails__bad_response(
         "NO",
         [fake_error_message.encode()],
     )
+    getattr(mock_IMAP4.return_value, raising_function).side_effect = None
 
     with pytest.raises(MailboxError, match=fake_error_message):
         IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
@@ -717,16 +804,19 @@ def test_IMAP4Fetcher_fetch_emails__bad_response__ignored(
     in case of an ignored bad response.
     """
     expected_uid_fetch_calls = [
-        mocker.call("FETCH", uID, "(RFC822)")
-        for uID in mock_IMAP4.return_value.uid.return_value[1][0].split()
+        mocker.call(
+            "FETCH",
+            b",".join(mock_IMAP4.return_value.uid.side_effect("SEARCH")[1][0].split()),
+            "(RFC822)",
+        )
     ]
     mock_IMAP4.return_value.unselect.return_value = ("NO", [b""])
 
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
-    assert result == [mock_IMAP4.return_value.uid.return_value[1][0][1]] * len(
-        expected_uid_fetch_calls
-    )
+    assert result == [
+        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+    ]
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
     )
@@ -748,16 +838,19 @@ def test_IMAP4Fetcher_fetch_emails__exception__ignored(
     in case of an ignored error.
     """
     expected_uid_fetch_calls = [
-        mocker.call("FETCH", uID, "(RFC822)")
-        for uID in mock_IMAP4.return_value.uid.return_value[1][0].split()
+        mocker.call(
+            "FETCH",
+            b",".join(mock_IMAP4.return_value.uid.side_effect("SEARCH")[1][0].split()),
+            "(RFC822)",
+        )
     ]
     mock_IMAP4.return_value.unselect.side_effect = AssertionError
 
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
-    assert result == [mock_IMAP4.return_value.uid.return_value[1][0][1]] * len(
-        expected_uid_fetch_calls
-    )
+    assert result == [
+        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+    ]
     mock_IMAP4.return_value.select.assert_called_with(
         utf7_encode(imap_mailbox.name), readonly=True
     )

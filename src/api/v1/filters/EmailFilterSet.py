@@ -53,8 +53,6 @@ class EmailFilterSet(filters.FilterSet):
 
     headers__regex = filters.CharFilter(field_name="headers", lookup_expr="regex")
 
-    headers__iregex = filters.CharFilter(field_name="headers", lookup_expr="iregex")
-
     headers__has_key = filters.CharFilter(field_name="headers", lookup_expr="has_key")
 
     headers__has_keys = filters.BaseInFilter(
@@ -107,7 +105,7 @@ class EmailFilterSet(filters.FilterSet):
             | Q(subject__icontains=value)
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
-            | Q(headers__iregex=value)
+            | Q(headers__regex=value.lower())  # headers in db are all set to lowercase
             | Q(
                 Exists(
                     EmailCorrespondent.objects.filter(

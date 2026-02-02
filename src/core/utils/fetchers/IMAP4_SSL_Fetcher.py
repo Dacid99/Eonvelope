@@ -57,7 +57,7 @@ class IMAP4_SSL_Fetcher(  # noqa: N801  # naming consistent with IMAP4_SSL class
         mail_host_port = self.account.mail_host_port
         timeout = self.account.timeout
         ssl_context = (
-            ssl._create_unverified_context()  # noqa: SLF001 S323  # method is private due to its risk to security
+            ssl._create_unverified_context()  # noqa: SLF001 S323  # pylint: disable=protected-access  # method is private due to its risk to security
             if get_config("ALLOW_INSECURE_CONNECTIONS")
             and self.account.allow_insecure_connection
             else ssl.create_default_context()

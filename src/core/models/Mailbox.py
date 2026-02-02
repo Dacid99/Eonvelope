@@ -425,7 +425,7 @@ class Mailbox(
             `None` if the mailbox name is ignored.
 
         Raises:
-            Account.DoesNotExist: If the given account is not in the db.
+            ValueError: If the given account is not in the db.
         """
         if account.pk is None:
             raise ValueError("Account is not in the db!")

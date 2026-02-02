@@ -96,7 +96,7 @@ class EmailFilterSet(django_filters.FilterSet):
             | Q(subject__icontains=value)
             | Q(plain_bodytext__icontains=value)
             | Q(html_bodytext__icontains=value)
-            | Q(headers__iregex=value)
+            | Q(headers__regex=value.lower())  # headers in db are all set to lowercase
             | Q(
                 Exists(
                     EmailCorrespondent.objects.filter(

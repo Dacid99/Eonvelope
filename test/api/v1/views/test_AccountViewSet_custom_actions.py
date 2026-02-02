@@ -21,6 +21,7 @@
 from __future__ import annotations
 
 import pytest
+from django.http import FileResponse
 from rest_framework import status
 
 from api.v1.views.AccountViewSet import AccountViewSet
@@ -39,6 +40,15 @@ def mock_Account_add_daemons(mocker):
 def mock_Account_test(mocker):
     """Patches `core.models.Account.test`."""
     return mocker.patch("api.v1.views.AccountViewSet.Account.test", autospec=True)
+
+
+@pytest.fixture
+def mock_Mailbox_queryset_as_file(mocker, fake_file):
+    """Patches `core.models.Mailbox.queryset_as_file`."""
+    return mocker.patch(
+        "api.v1.views.AccountViewSet.Mailbox.queryset_as_file",
+        return_value=fake_file,
+    )
 
 
 @pytest.mark.django_db
@@ -370,6 +380,173 @@ def test_test__auth_admin(
     fake_account.refresh_from_db()
     assert fake_account.is_healthy is previous_is_healthy
     assert "mail_address" not in response.data
+
+
+@pytest.mark.django_db
+def test_download__noauth(
+    faker,
+    fake_account,
+    noauth_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.AccountViewSet.AccountViewSet.download` action
+    with an unauthenticated user client.
+    """
+    response = noauth_api_client.get(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_DOWNLOAD, fake_account
+        ),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_download__auth_other(
+    faker,
+    fake_account,
+    other_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.AccountViewSet.AccountViewSet.download` action
+    with the authenticated other user client.
+    """
+    response = other_api_client.get(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_DOWNLOAD, fake_account
+        ),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_download__no_format__auth_owner(
+    fake_account,
+    owner_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.AccountViewSet.AccountViewSet.download` action
+    with the authenticated owner user client.
+    """
+
+    response = owner_api_client.get(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_DOWNLOAD, fake_account
+        )
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_download__no_emails__auth_owner(
+    faker,
+    fake_account,
+    owner_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.AccountViewSet.AccountViewSet.download` action
+    with the authenticated owner user client.
+    """
+    fake_account.mailboxes.all().delete()
+
+    response = owner_api_client.get(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_DOWNLOAD, fake_account
+        ),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_download__bad_format__auth_owner(
+    faker,
+    fake_account,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Mailbox_queryset_as_file,
+):
+    """Tests the get method :func:`api.v1.views.AccountViewSet.AccountViewSet.download` action
+    with the authenticated owner user client.
+    """
+    mock_Mailbox_queryset_as_file.side_effect = ValueError
+
+    response = owner_api_client.get(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_DOWNLOAD, fake_account
+        ),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_download__auth_owner(
+    faker,
+    fake_file_bytes,
+    fake_account,
+    owner_api_client,
+    custom_detail_action_url,
+    mock_Mailbox_queryset_as_file,
+):
+    """Tests the get method :func:`api.v1.views.AccountViewSet.AccountViewSet.download` action
+    with the authenticated owner user client.
+    """
+    fake_format = faker.word()
+
+    response = owner_api_client.get(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_DOWNLOAD, fake_account
+        ),
+        {"file_format": fake_format},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, FileResponse)
+    assert "Content-Disposition" in response.headers
+    assert (
+        f'filename="{fake_account.complete_mail_address}.zip"'
+        in response["Content-Disposition"]
+    )
+    assert "attachment" in response["Content-Disposition"]
+    assert b"".join(response.streaming_content) == fake_file_bytes
+    mock_Mailbox_queryset_as_file.assert_called_once()
+    assert list(mock_Mailbox_queryset_as_file.call_args.args[0]) == list(
+        fake_account.mailboxes.all()
+    )
+    assert mock_Mailbox_queryset_as_file.call_args.args[1] == fake_format
+
+
+@pytest.mark.django_db
+def test_download__auth_admin(
+    faker,
+    fake_mailbox,
+    admin_api_client,
+    custom_detail_action_url,
+):
+    """Tests the get method :func:`api.v1.views.AccountViewSet.AccountViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_detail_action_url(
+            AccountViewSet, AccountViewSet.URL_NAME_DOWNLOAD, fake_mailbox
+        ),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
 
 
 @pytest.mark.django_db

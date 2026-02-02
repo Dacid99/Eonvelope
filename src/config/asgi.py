@@ -31,7 +31,6 @@ from pathlib import Path
 
 from django.core.asgi import get_asgi_application
 
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 

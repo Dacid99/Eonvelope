@@ -41,6 +41,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.serializers import CharField, ChoiceField
 
+from api.utils import query_param_list_to_typed_list
 from api.v1.filters import MailboxFilterSet
 from api.v1.mixins import ToggleFavoriteMixin
 from api.v1.serializers import MailboxWithDaemonSerializer
@@ -114,6 +115,33 @@ if TYPE_CHECKING:
             )
         },
         description="Downloads all emails of a mailbox instance.",
+    ),
+    download_batch=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "id",
+                OpenApiTypes.INT,
+                OpenApiParameter.QUERY,
+                required=True,
+                explode=True,
+                many=True,
+                description="Accepts both id=1,2,3 and id=1&id=2&id=3 notation",
+            ),
+            OpenApiParameter(
+                "file_format",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                required=True,
+                enum=SupportedEmailDownloadFormats,
+            ),
+        ],
+        responses={
+            200: OpenApiResponse(
+                response=OpenApiTypes.BINARY,
+                description="Headers: Content-Disposition=attachment",
+            )
+        },
+        description="Downloads multiple mailboxes.",
     ),
     upload_emails=extend_schema(
         request=UploadEmailSerializer,
@@ -337,6 +365,68 @@ class MailboxViewSet(
             file,
             as_attachment=True,
             filename=mailbox.name + "." + file_format.split("[", maxsplit=1)[0],
+        )
+
+    URL_PATH_DOWNLOAD_BATCH = "download"
+    URL_NAME_DOWNLOAD_BATCH = "download-batch"
+
+    @action(
+        detail=False,
+        methods=["get"],
+        url_path=URL_PATH_DOWNLOAD_BATCH,
+        url_name=URL_NAME_DOWNLOAD_BATCH,
+    )
+    def download_batch(self, request: Request) -> Response | FileResponse:
+        """Action method downloading a batch of mailboxes.
+
+        Todo:
+            Validation and parsing of queryparams can probably be done more concisely with a serializer.
+
+        Args:
+            request: The request triggering the action.
+
+        Raises:
+            Http404: If there are no emails in the mailbox.
+            ValidationError: If id or file_format param is missing or in invalid format or file_format is unsupported.
+
+        Returns:
+            A fileresponse containing the mailboxes emails in the requested format.
+        """
+        file_format = request.query_params.get("file_format", None)
+        if not file_format:
+            raise ValidationError(
+                {"file_format": _("File format is required.")},
+            )
+        requested_id_query_params = request.query_params.getlist("id", [])
+        if not requested_id_query_params:
+            raise ValidationError(
+                {"id": _("Mailbox ids are required.")},
+            )
+        try:
+            requested_ids = query_param_list_to_typed_list(
+                requested_id_query_params, int
+            )
+        except ValueError:
+            raise ValidationError(
+                {"id": _("Mailbox ids given in invalid format.")},
+            ) from None
+        try:
+            file = Mailbox.queryset_as_file(
+                self.get_queryset().filter(pk__in=requested_ids), file_format
+            )
+        except ValueError:
+            raise ValidationError(
+                {
+                    "file_format": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
+            ) from None
+        except Mailbox.DoesNotExist:
+            raise Http404(_("No mailboxes found")) from None
+        return FileResponse(
+            file,
+            as_attachment=True,
+            filename=f"mailboxes_{requested_ids}.zip",
         )
 
     URL_PATH_UPLOAD_MAILBOX = "upload"

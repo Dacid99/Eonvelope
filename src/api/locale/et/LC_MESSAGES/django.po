@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 21:12+0000\n"
-"PO-Revision-Date: 2025-12-31 20:13+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-02-01 05:01+0000\n"
+"Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/api/"
 "et/>\n"
 "Language: et\n"
@@ -17,48 +17,48 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:70
 #, python-format
 msgid "%(object)s marked as favorite."
-msgstr ""
+msgstr "%(object)s on märgitud lemmikuks."
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:72
 #, python-format
 msgid "%(object)s unmarked as favorite."
-msgstr ""
+msgstr "%(object)s on eemaldatud lemmikute seast."
 
 #: src/api/v1/views/AccountViewSet.py:149
 msgid "An error with the mailaccount occurred."
-msgstr ""
+msgstr "E-posti kontoga tekkis viga."
 
 #: src/api/v1/views/AccountViewSet.py:155
 msgid "Updated mailboxes"
-msgstr ""
+msgstr "Uuendatud postkastid"
 
 #: src/api/v1/views/AccountViewSet.py:181
 msgid "Added routines to inbox and sentbox."
-msgstr ""
+msgstr "Lisasin rutiinid saabuvate ja saadetud kirjade postkastidele."
 
 #: src/api/v1/views/AccountViewSet.py:202
 msgid "Tested mailaccount"
-msgstr ""
+msgstr "Testitud e-postikonto"
 
 #: src/api/v1/views/AttachmentViewSet.py:191
 #: src/api/v1/views/AttachmentViewSet.py:277
 #: src/api/v1/views/AttachmentViewSet.py:308
 #: src/api/v1/views/AttachmentViewSet.py:350
 msgid "Attachment file not found"
-msgstr ""
+msgstr "Manuse faili ei leidu"
 
 #: src/api/v1/views/AttachmentViewSet.py:219
 msgid "Attachment ids are required."
-msgstr ""
+msgstr "Manuste tunnused on vajalikud."
 
 #: src/api/v1/views/AttachmentViewSet.py:227
 msgid "Attachment ids given in invalid format."
-msgstr ""
+msgstr "Lisatud manuste tunnused on vigases vormingus."
 
 #: src/api/v1/views/AttachmentViewSet.py:234
 msgid "No attachments found"

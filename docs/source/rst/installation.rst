@@ -107,6 +107,10 @@ See :doc:`configuration` for more details on this.
     It is crucial that the name of the database service in the stack is *db*!
     Otherwise the connection from the Eonvelope container to the database will fail.
 
+
+External Database
+^^^^^^^^^^^^^^^^^
+
 If you use docker, you can set Eonvelope up to use an external database by adding
 
 .. code-block:: yaml
@@ -119,6 +123,23 @@ to the eonvelope-web service and omitting the db portion of the stack.
 .. note::
    Using a database other than the default mysql can lead to issues.
    If possible try to stick with the default, which is tested and guaranteed to work flawlessly.
+
+Known quirks
+""""""""""""
+
+If you use an external database for Eonvelope, that may cause some sideeffects as some tables may not be properly set up.
+This is a list of known issues that have been reported and their solution.
+
+*Timezone table of mariadb not installed, causing issues with datetime values in Eonvelope.*
+
+Open a shell to the container and run
+
+.. code-block:: bash
+
+    mariadb-tzinfo-to-sql /usr/share/zoneinfo | mariadb -u root mysql
+
+For more details see `the django docs on this subject <https://docs.djangoproject.com/en/6.0/ref/databases/#time-zone-definitions>`_.
+
 
 Reverse-Proxy
 -------------

@@ -14,7 +14,7 @@ var filesToCache = [
     '/static/eonvelope/icons/favicon.svg',
     '/static/eonvelope/icons/favicon.ico',
     // web
-    '/static/web/js/bs_theme_toggler.js',
+    '/static/web/js/bs_theme-toggler.js',
     '/static/web/js/form-utils.js',
     '/static/web/js/multiSelect.js',
     '/static/web/js/spinner-text.js',

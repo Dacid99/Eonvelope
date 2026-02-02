@@ -22,12 +22,20 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Final, override
 
+from django.http import FileResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import extend_schema, extend_schema_view, inline_serializer
+from drf_spectacular.utils import (
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+    extend_schema_view,
+    inline_serializer,
+)
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -35,7 +43,8 @@ from rest_framework.response import Response
 from api.v1.filters import AccountFilterSet
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
 from api.v1.serializers import AccountSerializer
-from core.models import Account
+from core.constants import SupportedEmailDownloadFormats
+from core.models import Account, Mailbox
 from core.utils.fetchers.exceptions import MailAccountError
 
 if TYPE_CHECKING:
@@ -80,6 +89,24 @@ if TYPE_CHECKING:
             )
         },
         description="Tests the account instance.",
+    ),
+    download=extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "file_format",
+                OpenApiTypes.STR,
+                OpenApiParameter.QUERY,
+                required=True,
+                enum=SupportedEmailDownloadFormats,
+            ),
+        ],
+        responses={
+            200: OpenApiResponse(
+                response=OpenApiTypes.BINARY,
+                description="Headers: Content-Disposition=attachment",
+            )
+        },
+        description="Downloads all emails of a mailbox instance.",
     ),
 )
 class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
@@ -212,3 +239,51 @@ class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):
         account.refresh_from_db()
         response.data["data"] = self.get_serializer(account).data
         return response
+
+    URL_PATH_DOWNLOAD = "download"
+    URL_NAME_DOWNLOAD = "download"
+
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path=URL_PATH_DOWNLOAD,
+        url_name=URL_NAME_DOWNLOAD,
+    )
+    def download(
+        self, request: Request, pk: int | None = None
+    ) -> Response | FileResponse:
+        """Action method downloading the eml files of all emails in the account in a single file.
+
+        Args:
+            request: The request triggering the action.
+            pk: The private key of the account to download. Defaults to None.
+
+        Raises:
+            Http404: If there are no mailboxes in the account.
+            ValidationError: If file_format is missing or unsupported.
+
+        Returns:
+            A fileresponse containing the mailboxes in the requested format.
+        """
+        file_format = request.query_params.get("file_format", None)
+        if not file_format:
+            raise ValidationError(
+                {"file_format": _("File format is required.")},
+            )
+        account = self.get_object()
+        try:
+            file = Mailbox.queryset_as_file(account.mailboxes.all(), file_format)
+        except ValueError:
+            raise ValidationError(
+                {
+                    "file_format": _("File format %(file_format)s is not supported.")
+                    % {"file_format": file_format}
+                },
+            ) from None
+        except Mailbox.DoesNotExist:
+            raise Http404(_("No mailboxes found.")) from None
+        return FileResponse(
+            file,
+            as_attachment=True,
+            filename=account.complete_mail_address + ".zip",
+        )

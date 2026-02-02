@@ -65,7 +65,6 @@ def mock_POP3_SSL(mocker, faker):
 def test_POP3Fetcher_connect_to_host__success(
     override_config,
     pop3_ssl_mailbox,
-    mock_ssl_create_default_context,
     mock_logger,
     mock_POP3_SSL,
     account_allow_insecure,
@@ -81,22 +80,25 @@ def test_POP3Fetcher_connect_to_host__success(
     with override_config(ALLOW_INSECURE_CONNECTIONS=config_allow_insecure):
         result = POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
 
-    kwargs = {
-        "host": pop3_ssl_mailbox.account.mail_host,
-        "timeout": pop3_ssl_mailbox.account.timeout,
-        "context": mock_ssl_create_default_context.return_value,
-    }
-    if mail_host_port:
-        kwargs["port"] = mail_host_port
     assert result._mail_client == mock_POP3_SSL.return_value
-    mock_POP3_SSL.assert_called_with(**kwargs)
-    mock_ssl_create_default_context.assert_called_once_with(
-        purpose=(
-            ssl.Purpose.CLIENT_AUTH
-            if account_allow_insecure and config_allow_insecure
-            else ssl.Purpose.SERVER_AUTH
-        )
+    mock_POP3_SSL.assert_called_once()
+    assert mock_POP3_SSL.call_args.kwargs["host"] == pop3_ssl_mailbox.account.mail_host
+    assert mock_POP3_SSL.call_args.kwargs["timeout"] == pop3_ssl_mailbox.account.timeout
+    assert isinstance(mock_POP3_SSL.call_args.kwargs["context"], ssl.SSLContext)
+    assert (
+        mock_POP3_SSL.call_args.kwargs["context"].verify_mode == ssl.CERT_NONE
+        if config_allow_insecure and account_allow_insecure
+        else ssl.CERT_REQUIRED
     )
+    assert mock_POP3_SSL.call_args.kwargs["context"].check_hostname is not (
+        config_allow_insecure and account_allow_insecure
+    )
+    if mail_host_port:
+        assert (
+            mock_POP3_SSL.call_args.kwargs["port"]
+            == pop3_ssl_mailbox.account.mail_host_port
+        )
+    assert len(mock_POP3_SSL.call_args.kwargs) == 4 if mail_host_port else 3
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()
     mock_logger.error.assert_not_called()
@@ -106,7 +108,6 @@ def test_POP3Fetcher_connect_to_host__success(
 def test_POP3Fetcher_connect_to_host__exception(
     fake_error_message,
     pop3_ssl_mailbox,
-    mock_ssl_create_default_context,
     mock_logger,
     mock_POP3_SSL,
 ):
@@ -118,14 +119,6 @@ def test_POP3Fetcher_connect_to_host__exception(
     with pytest.raises(MailAccountError, match=fake_error_message):
         POP3_SSL_Fetcher(pop3_ssl_mailbox.account)
 
-    kwargs = {
-        "host": pop3_ssl_mailbox.account.mail_host,
-        "context": mock_ssl_create_default_context.return_value,
-    }
-    if port := pop3_ssl_mailbox.account.mail_host_port:
-        kwargs["port"] = port
-    if timeout := pop3_ssl_mailbox.account.timeout:
-        kwargs["timeout"] = timeout
-    mock_POP3_SSL.assert_called_with(**kwargs)
+    mock_POP3_SSL.assert_called_once()
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_called()

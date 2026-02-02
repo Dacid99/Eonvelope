@@ -1,5 +1,18 @@
 # Changelog
 
+## Version 0.5.3
+
+- Features:
+  - download for accounts
+  - batch-download for mailboxes
+  - performance speedup for IMAP fetching
+  - insecure connection option added for exchange
+
+- Fixes:
+  - MFA setup was broken
+  - create-routines button in account page didn't work
+  - filter value was always mandatory, even for criteria that didn't use it
+
 ## Version 0.5.2
 
 - Features:

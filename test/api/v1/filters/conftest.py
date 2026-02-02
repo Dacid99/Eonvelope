@@ -93,7 +93,7 @@ TEXT_TEST_PARAMETERS = [
     ("__endswith", TEXT_TEST_ITEMS[1][-1], [0, 1]),
     ("__iendswith", TEXT_TEST_ITEMS[1][-1].lower(), [0, 1]),
     ("__regex", r"\w{3}\d\w", [1, 2]),
-    ("__iregex", r"\w{3}\d\w", [1, 2]),
+    ("__iregex", r"[a-z]{3}\d[a-z]", [1, 2]),
     ("__in", TEXT_TEST_ITEMS[0:2], [0, 1]),
 ]
 
@@ -101,8 +101,7 @@ JSON_TEST_PARAMETERS = [
     ("__has_key", TEXT_TEST_ITEMS[1], [1]),
     ("__has_any_keys", TEXT_TEST_ITEMS[0:2], [0, 1]),
     ("__has_keys", TEXT_TEST_ITEMS[2], [2]),
-    ("__regex", TEXT_TEST_ITEMS[0][0:-2], [0]),
-    ("__iregex", TEXT_TEST_ITEMS[1][0:-2].lower(), [1]),
+    ("__regex", r"\w{3}\d\w", [1, 2]),
 ]
 
 

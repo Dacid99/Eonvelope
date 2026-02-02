@@ -27,6 +27,7 @@ from typing import TYPE_CHECKING, override
 import exchangelib
 import exchangelib.errors
 from django.utils.translation import gettext as _
+from requests.adapters import HTTPAdapter
 
 from core.constants import (
     INTERNAL_DATE_FORMAT,
@@ -34,6 +35,7 @@ from core.constants import (
     EmailProtocolChoices,
 )
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from eonvelope.utils.workarounds import get_config
 
 from .BaseFetcher import BaseFetcher
 
@@ -137,14 +139,22 @@ class ExchangeFetcher(BaseFetcher):
         Raises:
             MailAccountError: If an error occurs accessing the msg_folder_root.
         """
-
         self.logger.debug("Setting up connection to %s ...", self.account)
         credentials = exchangelib.Credentials(
             self.account.mail_address, self.account.password
         )
         retry_policy = exchangelib.FaultTolerance(max_wait=self.account.timeout)
         # manually set fallback timeout; https://github.com/ecederstrand/exchangelib/issues/1375
-        exchangelib.protocol.Protocol.TIMEOUT = self.account.timeout
+        exchangelib.BaseProtocol.TIMEOUT = self.account.timeout
+        # manually set adapter for each fetcher instance; https://ecederstrand.github.io/exchangelib/#proxies-and-custom-tls-validation
+        exchangelib.BaseProtocol.HTTP_ADAPTER_CLS = (
+            exchangelib.NoVerifyHTTPAdapter
+            if (
+                get_config("ALLOW_INSECURE_CONNECTIONS")
+                and self.account.allow_insecure_connection
+            )
+            else HTTPAdapter
+        )
         config = (
             exchangelib.Configuration(
                 service_endpoint=self.account.mail_host,

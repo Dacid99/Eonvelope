@@ -25,7 +25,12 @@ from django.http import FileResponse
 from rest_framework import status
 
 from api.v1.views import MailboxViewSet
-from core.constants import EmailFetchingCriterionChoices, SupportedEmailUploadFormats
+from core.constants import (
+    EmailFetchingCriterionChoices,
+    SupportedEmailDownloadFormats,
+    SupportedEmailUploadFormats,
+)
+from core.models import Mailbox
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
@@ -64,9 +69,18 @@ def mock_Mailbox_add_emails_from_file(mocker):
 
 @pytest.fixture
 def mock_Email_queryset_as_file(mocker, fake_file):
-    """Patches `core.models.Email.fetch`."""
+    """Patches `core.models.Email.queryset_as_file`."""
     return mocker.patch(
         "api.v1.views.MailboxViewSet.Email.queryset_as_file",
+        return_value=fake_file,
+    )
+
+
+@pytest.fixture
+def mock_Mailbox_queryset_as_file(mocker, fake_file):
+    """Patches `core.models.Mailbox.queryset_as_file`."""
+    return mocker.patch(
+        "api.v1.views.MailboxViewSet.Mailbox.queryset_as_file",
         return_value=fake_file,
     )
 
@@ -641,6 +655,168 @@ def test_download__auth_admin(
             MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD, fake_mailbox
         ),
         {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_batch_download__noauth(faker, noauth_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with an unauthenticated user client.
+    """
+    response = noauth_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"id": [1, 2], "file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_batch_download__auth_other(faker, other_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated other user client.
+    """
+    response = other_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": faker.word(), "id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_batch_download__no_ids__auth_owner(
+    faker, owner_api_client, custom_list_action_url
+):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": faker.word()},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data["id"]
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_batch_download__no_format__auth_owner(
+    owner_api_client, custom_list_action_url
+):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data["file_format"]
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+def test_batch_download__bad_format__auth_owner(
+    owner_api_client, custom_list_action_url
+):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": "unimplemented", "id": [1, 2]},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data["file_format"]
+    assert not isinstance(response, FileResponse)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "bad_ids",
+    [
+        ["abc"],
+        ["1e2"],
+        ["5.3"],
+        ["4ur"],
+    ],
+)
+def test_batch_download__bad_ids__auth_owner(
+    owner_api_client, custom_list_action_url, mock_Mailbox_queryset_as_file, bad_ids
+):
+    """Tests the get method :func:`api.v1.views.AttachmentViewSet.AttachmentViewSet.download` action
+    with the authenticated owner user client.
+    """
+    response = owner_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": SupportedEmailDownloadFormats.MBOX, "id": bad_ids},
+    )
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data["id"]
+    assert not isinstance(response, FileResponse)
+    mock_Mailbox_queryset_as_file.assert_not_called()
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "ids, expected_ids",
+    [
+        (["1"], [1]),
+        (["1", " 2", "100"], [1, 2, 100]),
+        (["1,2", "10"], [1, 2, 10]),
+        (["4,6, 8"], [4, 6, 8]),
+    ],
+)
+def test_batch_download__auth_owner(
+    faker,
+    fake_file_bytes,
+    owner_user,
+    owner_api_client,
+    custom_list_action_url,
+    mock_Mailbox_queryset_as_file,
+    ids,
+    expected_ids,
+):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated owner user client.
+    """
+    fake_format = faker.word()
+
+    response = owner_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": fake_format, "id": ids},
+    )
+
+    assert response.status_code == status.HTTP_200_OK
+    assert isinstance(response, FileResponse)
+    assert "Content-Disposition" in response.headers
+    assert f'filename="mailboxes_{expected_ids}.zip"' in response["Content-Disposition"]
+    assert b"".join(response.streaming_content) == fake_file_bytes
+    mock_Mailbox_queryset_as_file.assert_called_once()
+    assert list(mock_Mailbox_queryset_as_file.call_args.args[0]) == list(
+        Mailbox.objects.filter(pk__in=expected_ids, account__user=owner_user)
+    )
+    assert mock_Mailbox_queryset_as_file.call_args.args[1] == fake_format
+
+
+@pytest.mark.django_db
+def test_batch_download__auth_admin(faker, admin_api_client, custom_list_action_url):
+    """Tests the get method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.download` action
+    with the authenticated admin user client.
+    """
+    response = admin_api_client.get(
+        custom_list_action_url(MailboxViewSet, MailboxViewSet.URL_NAME_DOWNLOAD_BATCH),
+        {"file_format": faker.word(), "id": [1, 2]},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND

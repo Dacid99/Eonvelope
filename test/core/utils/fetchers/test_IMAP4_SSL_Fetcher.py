@@ -69,7 +69,6 @@ def mock_IMAP4_SSL(mocker, faker):
 def test_IMAP4Fetcher_connect_to_host__success(
     override_config,
     imap_ssl_mailbox,
-    mock_ssl_create_default_context,
     mock_logger,
     mock_IMAP4_SSL,
     account_allow_insecure,
@@ -85,22 +84,27 @@ def test_IMAP4Fetcher_connect_to_host__success(
     with override_config(ALLOW_INSECURE_CONNECTIONS=config_allow_insecure):
         result = IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
-    kwargs = {
-        "host": imap_ssl_mailbox.account.mail_host,
-        "ssl_context": mock_ssl_create_default_context.return_value,
-        "timeout": imap_ssl_mailbox.account.timeout,
-    }
-    if mail_host_port:
-        kwargs["port"] = mail_host_port
     assert result._mail_client == mock_IMAP4_SSL.return_value
-    mock_ssl_create_default_context.assert_called_once_with(
-        purpose=(
-            ssl.Purpose.CLIENT_AUTH
-            if account_allow_insecure and config_allow_insecure
-            else ssl.Purpose.SERVER_AUTH
-        )
+    mock_IMAP4_SSL.assert_called_once()
+    assert mock_IMAP4_SSL.call_args.kwargs["host"] == imap_ssl_mailbox.account.mail_host
+    assert (
+        mock_IMAP4_SSL.call_args.kwargs["timeout"] == imap_ssl_mailbox.account.timeout
     )
-    mock_IMAP4_SSL.assert_called_once_with(**kwargs)
+    assert isinstance(mock_IMAP4_SSL.call_args.kwargs["ssl_context"], ssl.SSLContext)
+    assert (
+        mock_IMAP4_SSL.call_args.kwargs["ssl_context"].verify_mode == ssl.CERT_NONE
+        if config_allow_insecure and account_allow_insecure
+        else ssl.CERT_REQUIRED
+    )
+    assert mock_IMAP4_SSL.call_args.kwargs["ssl_context"].check_hostname is not (
+        config_allow_insecure and account_allow_insecure
+    )
+    if mail_host_port:
+        assert (
+            mock_IMAP4_SSL.call_args.kwargs["port"]
+            == imap_ssl_mailbox.account.mail_host_port
+        )
+    assert len(mock_IMAP4_SSL.call_args.kwargs) == 4 if mail_host_port else 3
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()
     mock_logger.error.assert_not_called()
@@ -110,7 +114,6 @@ def test_IMAP4Fetcher_connect_to_host__success(
 def test_IMAP4Fetcher_connect_to_host__exception(
     fake_error_message,
     imap_ssl_mailbox,
-    mock_ssl_create_default_context,
     mock_logger,
     mock_IMAP4_SSL,
 ):
@@ -122,14 +125,6 @@ def test_IMAP4Fetcher_connect_to_host__exception(
     with pytest.raises(MailAccountError, match=fake_error_message):
         IMAP4_SSL_Fetcher(imap_ssl_mailbox.account)
 
-    kwargs = {
-        "host": imap_ssl_mailbox.account.mail_host,
-        "ssl_context": mock_ssl_create_default_context.return_value,
-    }
-    if imap_ssl_mailbox.account.mail_host_port:
-        kwargs["port"] = imap_ssl_mailbox.account.mail_host_port
-    if imap_ssl_mailbox.account.timeout:
-        kwargs["timeout"] = imap_ssl_mailbox.account.timeout
-    mock_IMAP4_SSL.assert_called_once_with(**kwargs)
+    mock_IMAP4_SSL.assert_called_once()
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_called()

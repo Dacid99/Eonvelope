@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import imaplib
 from datetime import UTC, datetime, timedelta
+from itertools import batched
 from typing import TYPE_CHECKING, override
 
 from django.utils.translation import gettext_lazy as _
@@ -87,6 +88,8 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     IMAP4 does not accept time lookups, only date based.
     For a list of all existing IMAP criteria see https://datatracker.ietf.org/doc/html/rfc3501.html#section-6.4.4.
     """
+
+    EMAIL_FETCH_BATCH_SIZE = 100
 
     @staticmethod
     def make_fetching_criterion(criterion_name: str, criterion_arg: str) -> str | None:
@@ -239,18 +242,21 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
 
         self.logger.debug("Fetching %s messages in %s ...", search_criterion, mailbox)
         mail_data_list = []
-        for uid in message_uids[0].split():
+        message_uid_list = message_uids[0].split()
+        for uids in batched(
+            message_uid_list, self.EMAIL_FETCH_BATCH_SIZE, strict=False
+        ):
             try:
-                _, message_data = self.safe_uid("FETCH", uid, "(RFC822)")
+                _, message_data = self.safe_uid("FETCH", b",".join(uids), "(RFC822)")
             except FetcherError:
                 self.logger.warning(
-                    "Failed to fetch message %s from %s!",
-                    uid,
+                    "Failed to fetch messages %s from %s!",
+                    uids,
                     mailbox,
                     exc_info=True,
                 )
                 continue
-            mail_data_list.append(message_data[0][1])
+            mail_data_list.extend([message for _, message in message_data[::2]])
         self.logger.debug(
             "Successfully fetched %s messages from %s.",
             search_criterion,

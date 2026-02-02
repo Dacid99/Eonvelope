@@ -31,7 +31,6 @@ from pathlib import Path
 
 from django.core.wsgi import get_wsgi_application
 
-
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 

@@ -7,13 +7,11 @@
 - toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/) or [popovers](https://developer.chrome.com/blog/popover-hint?hl=de)
 - mechanism to remove all correspondents without emails
 - download for main logfiles
-- fetching in bunches to handle large amounts of emails, fetch as generator
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
 - notes field for models
 - tagging system with [taggit](https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
-- async parsing, sync saving
-- download for account and batchdownload for mailbox
+- fetch as generator, async parsing, sync saving
 - show pwd button
 - structured json based logging messages
 - refine fetchererrors into errors for auth, connection, etc.

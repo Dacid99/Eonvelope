@@ -25,11 +25,13 @@ import mailbox
 import os
 import re
 import shutil
+import tempfile
 from io import BytesIO
 from tempfile import NamedTemporaryFile, TemporaryDirectory, gettempdir
 from zipfile import ZipFile
 
 import pytest
+from django.core.files.storage import default_storage
 from django.db import IntegrityError
 from django.urls import reverse
 from model_bakery import baker
@@ -38,6 +40,7 @@ from pyfakefs.fake_filesystem_unittest import Pause
 from core.constants import (
     EmailFetchingCriterionChoices,
     MailboxTypeChoices,
+    SupportedEmailDownloadFormats,
     SupportedEmailUploadFormats,
     file_format_parsers,
 )
@@ -720,6 +723,177 @@ def test_Mailbox_add_emails_from_file__bad_format(
 
 
 @pytest.mark.django_db
+def test_Mailbox_queryset_as_file_zip_eml(
+    fake_file, fake_mailbox, fake_email, fake_email_with_file
+):
+    """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
+    in case the requested format is zip of eml.
+    """
+    expected_zipped_file_name = fake_mailbox.name + ".zip"
+
+    assert Mailbox.objects.count() == 1
+    assert fake_mailbox.emails.count() == 2
+
+    result = Mailbox.queryset_as_file(
+        Mailbox.objects.all(), SupportedEmailDownloadFormats.ZIP_EML
+    )
+
+    assert Mailbox.objects.count() == 1
+    assert hasattr(result, "read")
+    with ZipFile(result) as zipfile:
+        assert expected_zipped_file_name in zipfile.namelist()
+        with (
+            zipfile.open(expected_zipped_file_name) as zipped_file,
+            ZipFile(zipped_file) as inner_zipfile,
+        ):
+            assert inner_zipfile.namelist() == [
+                os.path.basename(fake_email_with_file.file_path)
+            ]
+            with inner_zipfile.open(
+                os.path.basename(fake_email_with_file.file_path)
+            ) as inner_zipped_file:
+                assert (
+                    inner_zipped_file.read().replace(b"\r", b"").strip()
+                    == default_storage.open(fake_email_with_file.file_path)
+                    .read()
+                    .replace(b"\r", b"")
+                    .strip()
+                )
+    assert hasattr(result, "close")
+    result.close()
+    assert os.listdir(gettempdir()) == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailDownloadFormats.MBOX,
+        SupportedEmailDownloadFormats.MMDF,
+        SupportedEmailDownloadFormats.BABYL,
+        SupportedEmailDownloadFormats.MBOX.title(),
+        SupportedEmailDownloadFormats.MMDF.title(),
+        SupportedEmailDownloadFormats.BABYL.title(),
+    ],
+)
+def test_Mailbox_queryset_as_file_mailbox_file(
+    fake_file, fake_mailbox, fake_email, fake_email_with_file, file_format
+):
+    """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
+    in case the given format is a mailbox single fileformat.
+    """
+    expected_zipped_file_name = (
+        fake_mailbox.name + "." + file_format.split("[", maxsplit=1)[0].lower()
+    )
+
+    assert Mailbox.objects.count() == 1
+    assert fake_mailbox.emails.count() == 2
+
+    result = Mailbox.queryset_as_file(Mailbox.objects.all(), file_format)
+
+    assert Mailbox.objects.count() == 1
+    assert hasattr(result, "read")
+    assert hasattr(result, "name")
+    parser_class = file_format_parsers[file_format.lower()]
+    with ZipFile(result.name) as zipfile:
+        assert expected_zipped_file_name in zipfile.namelist()
+        with TemporaryDirectory() as tempdir:
+            zipfile.extract(expected_zipped_file_name, path=tempdir)
+            parser = parser_class(os.path.join(tempdir, expected_zipped_file_name))
+            assert len(list(parser.iterkeys())) == 1
+            for key in parser.iterkeys():
+                assert (
+                    parser.get_bytes(key).replace(b"\r", b"").strip()
+                    == default_storage.open(fake_email_with_file.file_path)
+                    .read()
+                    .replace(b"\r", b"")
+                    .strip()
+                )
+    assert hasattr(result, "close")
+    result.close()
+    assert os.listdir(gettempdir()) == []
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "file_format",
+    [
+        SupportedEmailDownloadFormats.MAILDIR,
+        SupportedEmailDownloadFormats.MH,
+        SupportedEmailDownloadFormats.MAILDIR.title(),
+        SupportedEmailDownloadFormats.MH.title(),
+    ],
+)
+def test_Mailbox_queryset_as_file_mailbox_zip(
+    fake_file, fake_mailbox, fake_email, fake_email_with_file, file_format
+):
+    """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
+    in case the given format is a zip of a mailbox directory.
+    """
+    expected_zipped_file_name = (
+        fake_mailbox.name + "." + file_format.split("[", maxsplit=1)[0].lower()
+    )
+
+    assert Mailbox.objects.count() == 1
+    assert fake_mailbox.emails.count() == 2
+
+    result = Mailbox.queryset_as_file(Mailbox.objects.all(), file_format)
+
+    assert Mailbox.objects.count() == 1
+    assert hasattr(result, "read")
+    with ZipFile(result) as zipfile:
+        assert expected_zipped_file_name in zipfile.namelist()
+        with TemporaryDirectory() as tempdir:
+            with (
+                zipfile.open(expected_zipped_file_name) as zipped_file,
+                ZipFile(zipped_file) as inner_zipfile,
+            ):
+                inner_zipfile.extractall(tempdir)
+            parser_class = file_format_parsers[file_format.lower()]
+            parser = parser_class(os.path.join(tempdir, os.listdir(tempdir)[0]))
+            assert len(list(parser.iterkeys())) == 1
+            for key in parser.iterkeys():
+                assert (
+                    parser.get_bytes(key).replace(b"\r", b"").strip()
+                    == default_storage.open(fake_email_with_file.file_path)
+                    .read()
+                    .replace(b"\r", b"")
+                    .strip()
+                )
+    assert hasattr(result, "close")
+    result.close()
+    assert os.listdir(gettempdir()) == []
+
+
+@pytest.mark.django_db
+def test_Mailbox_queryset_as_file__bad_format(fake_mailbox, fake_email):
+    """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
+    in case the given format is unsupported .
+    """
+    assert Mailbox.objects.count() == 1
+
+    with pytest.raises(ValueError, match=re.compile("unsupported", re.IGNORECASE)):
+        Mailbox.queryset_as_file(Mailbox.objects.all(), "unSupPortEd")
+
+    assert Mailbox.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_Mailbox_queryset_as_file_empty_queryset():
+    """Tests :func:`core.models.Mailbox.Mailbox.queryset_as_file`
+    in case the queryset is empty.
+    """
+    assert Mailbox.objects.count() == 0
+
+    with pytest.raises(Mailbox.DoesNotExist):
+        Mailbox.queryset_as_file(
+            Mailbox.objects.none(), SupportedEmailDownloadFormats.ZIP_EML
+        )
+
+    assert Mailbox.objects.count() == 0
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize(
     "DEFAULT_SAVE_ATTACHMENTS, DEFAULT_SAVE_TO_EML",
     [(True, True), (False, False), (True, False), (False, True)],
@@ -837,7 +1011,7 @@ def test_Mailbox_create_from_data__unsaved_account(faker):
 
 
 @pytest.mark.django_db
-def test_Mailbox_has_download_with_email(fake_mailbox, fake_email):
+def test_Mailbox_has_download__with_email(fake_mailbox, fake_email):
     """Tests :func:`core.models.Mailbox.Mailbox.has_download`."""
     assert fake_mailbox.emails.exists()
 
@@ -854,6 +1028,14 @@ def test_Mailbox_has_download__no_email(fake_mailbox):
     result = fake_mailbox.has_download
 
     assert not result
+
+
+@pytest.mark.django_db
+def test_Mailbox_available_download_formats(fake_mailbox):
+    """Tests :func:`core.models.Mailbox.Mailbox.available_download_formats`."""
+    result = fake_mailbox.available_download_formats
+
+    assert result == SupportedEmailDownloadFormats.choices
 
 
 @pytest.mark.django_db

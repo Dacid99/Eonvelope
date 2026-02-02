@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 21:12+0000\n"
-"PO-Revision-Date: 2026-01-04 11:01+0000\n"
+"PO-Revision-Date: 2026-02-01 05:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/web/"
 "et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:54
 #: src/web/filters/AttachmentFilterSet.py:54
@@ -59,11 +59,11 @@ msgstr "Saabunud peale"
 
 #: src/web/filters/DaemonFilterSet.py:67
 msgid "Number of intervals"
-msgstr ""
+msgstr "Välpade arv"
 
 #: src/web/filters/DaemonFilterSet.py:73
 msgid "Interval period"
-msgstr ""
+msgstr "Välba kestus"
 
 #: src/web/filters/DaemonFilterSet.py:78
 msgid "Enabled"
@@ -334,10 +334,8 @@ msgid "Add account"
 msgstr ""
 
 #: src/web/templates/web/account/partials/_add_routines-button.html:7
-#, fuzzy
-#| msgid "Add Account"
 msgid "Add routines"
-msgstr "Lisa kasutajakonto"
+msgstr "Lisa rutiine"
 
 #: src/web/templates/web/account/partials/_daemons_list_alternative.html:7
 msgid ""
@@ -526,7 +524,7 @@ msgstr ""
 #: src/web/templates/web/daemon/daemon_detail.html:51
 #: src/web/templates/web/daemon/partials/_daemon_card.html:39
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: src/web/templates/web/daemon/daemon_detail.html:52
 msgid "Last Run"
@@ -584,10 +582,8 @@ msgstr ""
 
 #: src/web/templates/web/dashboard.html:17
 #: src/web/templates/web/dashboard.html:18
-#, fuzzy
-#| msgid "Search"
 msgid "Search emails"
-msgstr "Otsi"
+msgstr "Otsi e-kirju"
 
 #: src/web/templates/web/dashboard.html:43
 msgid "Statistics"

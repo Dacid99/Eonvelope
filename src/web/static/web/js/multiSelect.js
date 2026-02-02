@@ -22,7 +22,8 @@ function multiDelete(button) {
             'X-CSRFToken': Cookies.get('csrftoken')
           },
           credentials: 'include',
-          mode: 'same-origin'
+          mode: 'same-origin',
+          redirect: 'error',
         }
       );
       return fetch(request).catch(error => { console.log(error.message); });
@@ -65,7 +66,8 @@ function multiPost(button) {
             'X-CSRFToken': Cookies.get('csrftoken')
           },
           credentials: 'include',
-          mode: 'same-origin'
+          mode: 'same-origin',
+          redirect: 'error',
         }
       );
       return fetch(request).catch(error => { console.log(error.message); });

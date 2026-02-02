@@ -28,6 +28,7 @@
                 credentials: 'include',
                 mode: 'same-origin',
                 body: `timezone=${encodeURIComponent(timezone)}`,
+                redirect: 'manual',
             }
         );
         fetch(request).then(() => { console.info(`Timezone set to ${timezone}`); }).catch((err) => {

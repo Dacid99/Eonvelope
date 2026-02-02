@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-30 21:12+0000\n"
-"PO-Revision-Date: 2026-01-04 11:01+0000\n"
+"PO-Revision-Date: 2026-02-01 06:01+0000\n"
 "Last-Translator: Priit Jõerüüt <jrthwlate@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/eonvelope/core/"
 "et/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: src/core/constants.py:39
 msgid "All emails received the last DAY"
@@ -326,7 +326,7 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:104
 msgid "password"
-msgstr ""
+msgstr "salasõna"
 
 #: src/core/models/Account.py:105
 msgid "The password to the account."
@@ -382,7 +382,7 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:162 src/core/models/Correspondent.py:102
 msgid "user"
-msgstr ""
+msgstr "kasutaja"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:172 src/core/models/Mailbox.py:110
@@ -425,7 +425,7 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:101
 msgid "filename"
-msgstr ""
+msgstr "failinimi"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:110
@@ -450,13 +450,13 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:140 src/core/models/Email.py:161
 msgid "datasize"
-msgstr ""
+msgstr "andmemaht"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:149 src/core/models/Email.py:206
 #: src/core/models/EmailCorrespondent.py:49
 msgid "email"
-msgstr ""
+msgstr "e-kiri"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:159
@@ -658,13 +658,13 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:74
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:83 src/core/models/Email.py:181
 #: src/core/models/Mailbox.py:138
 msgid "mailbox"
-msgstr ""
+msgstr "postkast"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:92
@@ -692,7 +692,7 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:119
 msgid "interval"
-msgstr ""
+msgstr "välp"
 
 #: src/core/models/Daemon.py:120
 msgid "The time between two routine runs in seconds."
@@ -753,7 +753,7 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:106
 msgid "message-ID"
-msgstr ""
+msgstr "kirja tunnus"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:112
@@ -763,7 +763,7 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:120
 msgid "subject"
-msgstr ""
+msgstr "pealkiri"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:128

@@ -36,8 +36,10 @@ from core.constants import (
     EmailFetchingCriterionChoices,
     EmailProtocolChoices,
     MailboxTypeChoices,
+    SupportedEmailDownloadFormats,
 )
 from core.mixins import (
+    DownloadMixin,
     FavoriteModelMixin,
     HealthModelMixin,
     TimestampModelMixin,
@@ -57,6 +59,8 @@ from eonvelope.utils.workarounds import get_config
 from .Mailbox import Mailbox
 
 if TYPE_CHECKING:
+    from django_stubs_ext import StrOrPromise
+
     from core.utils.fetchers import BaseFetcher
 
 
@@ -68,6 +72,7 @@ class Account(
     ExportModelOperationsMixin("account"),
     DirtyFieldsMixin,
     URLMixin,
+    DownloadMixin,
     FavoriteModelMixin,
     TimestampModelMixin,
     HealthModelMixin,
@@ -149,7 +154,7 @@ class Account(
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("allow insecure connection"),
         help_text=_(
-            "Whether to allow insecure connections to the host, e.g. with a self-signed certificate. Currently only relevant for IMAP4, POP3 and JMAP."
+            "Whether to allow insecure connections to the host, e.g. with a self-signed certificate."
         ),
     )
     """Whether to allow insecure connections to the host, defaults to `False`."""
@@ -423,3 +428,17 @@ class Account(
             if self.mail_host_port
             else self.mail_host
         )
+
+    @property
+    def available_download_formats(self) -> list[tuple[str, StrOrPromise]]:
+        """Get all formats that emails in this account can be downloaded in.
+
+        Returns:
+            A list of download formats and format names.
+        """
+        return SupportedEmailDownloadFormats.choices
+
+    @property
+    @override
+    def has_download(self) -> bool:
+        return self.mailboxes.exists()

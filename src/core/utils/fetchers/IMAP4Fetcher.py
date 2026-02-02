@@ -256,7 +256,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
                     exc_info=True,
                 )
                 continue
-            mail_data_list.extend([message[1] for message in message_data])
+            mail_data_list.extend([message for _, message in message_data[::2]])
         self.logger.debug(
             "Successfully fetched %s messages from %s.",
             search_criterion,

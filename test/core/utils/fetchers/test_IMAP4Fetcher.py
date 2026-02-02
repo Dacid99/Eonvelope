@@ -80,7 +80,7 @@ def mock_IMAP4(mocker, faker):
     mock_IMAP4.return_value.uid.side_effect = lambda cmd, *args: (
         (
             "OK",
-            [(b"(", fake_response, b")"), (b"(", fake_response, b")")],
+            [(b"(", fake_response), b")", (b"(", fake_response), b")"],
         )
         if cmd == "FETCH"
         else ("OK", [fake_response, b""])
@@ -573,7 +573,8 @@ def test_IMAP4Fetcher_fetch_emails__success__sort__single_batch(
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
     assert result == [
-        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+        content[1]
+        for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1][::2]
     ]
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
@@ -610,7 +611,8 @@ def test_IMAP4Fetcher_fetch_emails__success__sort__multi_batch(
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
     assert result == [
-        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+        content[1]
+        for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1][::2]
     ] * len(expected_uid_fetch_calls)
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
@@ -644,7 +646,8 @@ def test_IMAP4Fetcher_fetch_emails__success__search__single_batch(
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
     assert result == [
-        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+        content[1]
+        for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1][::2]
     ]
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
@@ -680,7 +683,8 @@ def test_IMAP4Fetcher_fetch_emails__success__search__multi_batch(
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
     assert result == [
-        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+        content[1]
+        for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1][::2]
     ] * len(expected_uid_fetch_calls)
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
@@ -815,7 +819,8 @@ def test_IMAP4Fetcher_fetch_emails__bad_response__ignored(
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
     assert result == [
-        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+        content[1]
+        for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1][::2]
     ]
     mock_IMAP4.return_value.select.assert_called_once_with(
         utf7_encode(imap_mailbox.name), readonly=True
@@ -849,7 +854,8 @@ def test_IMAP4Fetcher_fetch_emails__exception__ignored(
     result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
 
     assert result == [
-        content[1] for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1]
+        content[1]
+        for content in mock_IMAP4.return_value.uid.side_effect("FETCH")[1][::2]
     ]
     mock_IMAP4.return_value.select.assert_called_with(
         utf7_encode(imap_mailbox.name), readonly=True

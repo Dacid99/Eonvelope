@@ -24,7 +24,7 @@ from api.utils import csv_query_param_to_typed_list, query_param_list_to_typed_l
 
 
 @pytest.mark.parametrize(
-    "query_param_list, expected_list",
+    ("query_param_list", "expected_list"),
     [
         (["1", "7", "3"], [1, 7, 3]),
         (["3", "4,9", "0"], [3, 4, 9, 0]),
@@ -59,7 +59,7 @@ def test_query_param_list_to_typed_list_invalid(invalid_query_param_list):
 
 
 @pytest.mark.parametrize(
-    "query_param, expected_list",
+    ("query_param", "expected_list"),
     [
         ("1,2", [1, 2]),
         ("2", [2]),

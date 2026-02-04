@@ -51,7 +51,7 @@ def test_search_filter(faker, account_queryset, searched_fields):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", CHOICES_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), CHOICES_TEST_PARAMETERS
 )
 def test_protocol_filter(account_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`web.filters.AccountFilterSet`'s filtering
@@ -74,7 +74,7 @@ def test_protocol_filter(account_queryset, lookup_expr, filterquery, expected_in
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_healthy_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -94,7 +94,7 @@ def test_is_healthy_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_favorite_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -114,7 +114,7 @@ def test_is_favorite_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_created_filter(account_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`web.filters.AccountFilterSet`'s filtering

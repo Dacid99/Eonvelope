@@ -180,7 +180,7 @@ def mock_JMAP_client(mocker, faker, mock_JMAP_request_handler):
 
 
 @pytest.mark.parametrize(
-    "criterion_name, expected_time_delta",
+    ("criterion_name", "expected_time_delta"),
     [
         (EmailFetchingCriterionChoices.DAILY, datetime.timedelta(days=1)),
         (EmailFetchingCriterionChoices.WEEKLY, datetime.timedelta(weeks=1)),
@@ -219,7 +219,7 @@ def test_IMAP4Fetcher_make_fetching_filter_sentsince():
 
 
 @pytest.mark.parametrize(
-    "criterion_name, expected_filter_kwarg",
+    ("criterion_name", "expected_filter_kwarg"),
     [
         (EmailFetchingCriterionChoices.ALL, {}),
         (EmailFetchingCriterionChoices.SEEN, {"has_keyword": "$seen"}),
@@ -242,7 +242,7 @@ def test_JMAPFetcher_make_fetching_filter__no_arg(
 
 
 @pytest.mark.parametrize(
-    "criterion_name, criterion_arg, expected_filter_kwarg",
+    ("criterion_name", "criterion_arg", "expected_filter_kwarg"),
     [
         (EmailFetchingCriterionChoices.LARGER, 140, {"min_size": 140}),
         (EmailFetchingCriterionChoices.SMALLER, 598, {"max_size": 598}),

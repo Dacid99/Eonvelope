@@ -90,7 +90,7 @@ def mock_IMAP4(mocker, faker):
 
 
 @pytest.mark.parametrize(
-    "criterion_name, expected_time_delta",
+    ("criterion_name", "expected_time_delta"),
     [
         (EmailFetchingCriterionChoices.DAILY, datetime.timedelta(days=1)),
         (EmailFetchingCriterionChoices.WEEKLY, datetime.timedelta(weeks=1)),
@@ -127,7 +127,7 @@ def test_IMAP4Fetcher_make_fetching_criterion_sentsince():
 
 
 @pytest.mark.parametrize(
-    "criterion_name, expected_result",
+    ("criterion_name", "expected_result"),
     [
         (EmailFetchingCriterionChoices.ALL, "ALL"),
         (EmailFetchingCriterionChoices.UNSEEN, "UNSEEN"),
@@ -157,7 +157,7 @@ def test_IMAP4Fetcher_make_fetching_criterion_criterion__no_arg(
 
 
 @pytest.mark.parametrize(
-    "criterion_name, expected_result_template",
+    ("criterion_name", "expected_result_template"),
     [
         (EmailFetchingCriterionChoices.SUBJECT, "SUBJECT {}"),
         (EmailFetchingCriterionChoices.KEYWORD, "KEYWORD {}"),
@@ -443,7 +443,7 @@ def test_IMAP4Fetcher_test_mailbox__wrong_mailbox(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "raising_function, expected_calls", [("select", (1, 0)), ("check", (1, 1))]
+    ("raising_function", "expected_calls"), [("select", (1, 0)), ("check", (1, 1))]
 )
 def test_IMAP4Fetcher_test_mailbox__bad_response(
     fake_error_message,
@@ -480,7 +480,7 @@ def test_IMAP4Fetcher_test_mailbox__bad_response(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "raising_function, expected_calls", [("select", (1, 0)), ("check", (1, 1))]
+    ("raising_function", "expected_calls"), [("select", (1, 0)), ("check", (1, 1))]
 )
 def test_IMAP4Fetcher_test_mailbox__exception(
     fake_error_message,
@@ -728,7 +728,7 @@ def test_IMAP4Fetcher_fetch_emails__bad_criterion(imap_mailbox, mock_logger):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "raising_function, expected_calls", [("select", (1, 0)), ("uid", (1, 1))]
+    ("raising_function", "expected_calls"), [("select", (1, 0)), ("uid", (1, 1))]
 )
 def test_IMAP4Fetcher_fetch_emails__bad_response(
     fake_error_message,
@@ -766,7 +766,7 @@ def test_IMAP4Fetcher_fetch_emails__bad_response(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "raising_function, expected_calls", [("select", (1, 0)), ("uid", (1, 1))]
+    ("raising_function", "expected_calls"), [("select", (1, 0)), ("uid", (1, 1))]
 )
 def test_IMAP4Fetcher_fetch_emails__exception(
     fake_error_message,

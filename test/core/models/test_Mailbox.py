@@ -132,7 +132,7 @@ def test_Mailbox_unique_constraints(mocker, fake_account):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -156,7 +156,7 @@ def test_Mailbox_available_fetching_criteria(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -184,7 +184,7 @@ def test_Mailbox_available__no_arg_fetching_criteria(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -212,7 +212,7 @@ def test_Mailbox_available_fetching_criterion_choices(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -895,7 +895,7 @@ def test_Mailbox_queryset_as_file_empty_queryset():
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "DEFAULT_SAVE_ATTACHMENTS, DEFAULT_SAVE_TO_EML",
+    ("DEFAULT_SAVE_ATTACHMENTS", "DEFAULT_SAVE_TO_EML"),
     [(True, True), (False, False), (True, False), (False, True)],
 )
 def test_Mailbox_create_from_data__success(

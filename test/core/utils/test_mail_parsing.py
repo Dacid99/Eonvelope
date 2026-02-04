@@ -84,7 +84,7 @@ def bad_email_message():
 
 
 @pytest.mark.parametrize(
-    "header, expected_result",
+    ("header", "expected_result"),
     [
         (
             "Some header text without special chars",
@@ -216,7 +216,7 @@ def test_parse_datetime_header__no_header(mocker, faker, mock_logger):
 
 
 @pytest.mark.parametrize(
-    "name_data, expected_name, expected_type",
+    ("name_data", "expected_name", "expected_type"),
     [
         (
             b'(test) "/" &Zg5,jg-',
@@ -275,7 +275,12 @@ def test_parse_IMAP_mailbox_data(name_data, expected_name, expected_type):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "test_email_path, expected_email_features, expected_correspondents_features,expected_attachments_features",
+    (
+        "test_email_path",
+        "expected_email_features",
+        "expected_correspondents_features",
+        "expected_attachments_features",
+    ),
     TEST_EMAIL_PARAMETERS,
 )
 def test_get_bodytexts(
@@ -299,7 +304,7 @@ def test_get_bodytexts(
 
 
 @pytest.mark.parametrize(
-    "header, expected_href",
+    ("header", "expected_href"),
     [
         ("", ""),
         ("https://test.list.com", "https://test.list.com"),
@@ -320,7 +325,7 @@ def test_find_best_href_in_header(header, expected_href):
 
 
 @pytest.mark.parametrize(
-    "x_spam_header, expected_result",
+    ("x_spam_header", "expected_result"),
     [
         (None, None),
         ("", None),
@@ -340,7 +345,7 @@ def test_is_x_spam(x_spam_header, expected_result):
 
 
 @pytest.mark.parametrize(
-    "icalendar_data, expected_readout",
+    ("icalendar_data", "expected_readout"),
     [
         ("Not icalendar content", []),
         (
@@ -408,7 +413,7 @@ def test_make_icalendar_readout(icalendar_data, expected_readout):
 
 
 @pytest.mark.parametrize(
-    "vcard_data, expected_readout",
+    ("vcard_data", "expected_readout"),
     [
         ("Not vcf content", []),
         (

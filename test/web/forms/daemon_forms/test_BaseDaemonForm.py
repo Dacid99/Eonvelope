@@ -97,7 +97,7 @@ def test_post__unavailable_fetching_criterion(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "int_arg_fetching_criterion, bad_int_arg",
+    ("int_arg_fetching_criterion", "bad_int_arg"),
     [
         (EmailFetchingCriterionChoices.LARGER, "no int"),
         (EmailFetchingCriterionChoices.SMALLER, "-11"),

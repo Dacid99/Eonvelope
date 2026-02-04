@@ -48,7 +48,7 @@ def test_search_filter(faker, mailbox_queryset, searched_fields):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_name_filter(mailbox_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.MailboxFilterSet`'s filtering
@@ -66,7 +66,7 @@ def test_name_filter(mailbox_queryset, lookup_expr, filterquery, expected_indice
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_save_to_eml_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -86,7 +86,7 @@ def test_save_to_eml_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_save_attachments_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -106,7 +106,7 @@ def test_save_attachments_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_healthy_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -126,7 +126,7 @@ def test_is_healthy_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_last_error_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -146,7 +146,7 @@ def test_last_error_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_last_error_occurred_at_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -166,7 +166,7 @@ def test_last_error_occurred_at_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_favorite_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -186,7 +186,7 @@ def test_is_favorite_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_created_filter(mailbox_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.MailboxFilterSet`'s filtering
@@ -204,7 +204,7 @@ def test_created_filter(mailbox_queryset, lookup_expr, filterquery, expected_ind
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_updated_filter(mailbox_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.MailboxFilterSet`'s filtering
@@ -222,7 +222,7 @@ def test_updated_filter(mailbox_queryset, lookup_expr, filterquery, expected_ind
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_account__mail_address_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -242,7 +242,7 @@ def test_account__mail_address_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_account__mail_host_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices
@@ -262,7 +262,7 @@ def test_account__mail_host_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_account__is_healthy_filter(
     mailbox_queryset, lookup_expr, filterquery, expected_indices

@@ -291,7 +291,7 @@ def test_Attachment_absolute_filepath__no_file(faker, fake_attachment):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "maintype, subtype, expected_mimetype",
+    ("maintype", "subtype", "expected_mimetype"),
     [
         ("abc", "xyz", "abc/xyz"),
         ("tyu", "", ""),
@@ -682,7 +682,12 @@ def test_Attachment_share_to_immich__status_error(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "test_email_path, expected_email_features, expected_correspondents_features, expected_attachments_features",
+    (
+        "test_email_path",
+        "expected_email_features",
+        "expected_correspondents_features",
+        "expected_attachments_features",
+    ),
     TEST_EMAIL_PARAMETERS,
 )
 def test_Attachment_create_from_email_message(
@@ -740,7 +745,7 @@ def test_Attachment_create_from_email_message__unsaved_email():
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "file_path, expected_has_download",
+    ("file_path", "expected_has_download"),
     [
         (None, False),
         ("some/file/path", True),
@@ -757,7 +762,7 @@ def test_Attachment_has_download(fake_attachment, file_path, expected_has_downlo
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype, expected_has_thumbnail",
+    ("content_maintype", "content_subtype", "expected_has_thumbnail"),
     [
         ("audio", "mpeg", True),
         ("audio", "ruyuals", False),
@@ -794,7 +799,7 @@ def test_Attachment_has_thumbnail_with_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("audio", "mpeg"),
         ("audio", "ruyuals"),
@@ -828,7 +833,7 @@ def test_Attachment_has_thumbnail__no_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("audio", "mpeg"),
         ("audio", "ruyuals"),
@@ -865,7 +870,7 @@ def test_Attachment_has_thumbnail_spam(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("audio", "mpeg"),
         ("image", "png"),
@@ -899,7 +904,7 @@ def test_Attachment_has_thumbnail_too_large(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("audio", "mpeg"),
         ("image", "png"),
@@ -927,7 +932,7 @@ def test_Attachment_thumbnail(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("example", "test"),
         ("adjtepot", "asdf"),
@@ -943,7 +948,7 @@ def test_Attachment_thumbnail_empty(fake_attachment, content_maintype, content_s
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("text", "vcard"),
         ("text", "x-icalendar"),
@@ -961,7 +966,7 @@ def test_Attachment_thumbnail__no_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype, expected_is_shareable_to_paperless",
+    ("content_maintype", "content_subtype", "expected_is_shareable_to_paperless"),
     [
         ("", "", False),
         ("oo4vuy0s9yn", "a4ueiofdsj", False),
@@ -1023,7 +1028,7 @@ def test_Attachment_is_shareable_to_paperless_with_file__no_tika(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype, expected_is_shareable_to_paperless",
+    ("content_maintype", "content_subtype", "expected_is_shareable_to_paperless"),
     [
         ("", "", False),
         ("oo4vuy0s9yn", "a4ueiofdsj", False),
@@ -1085,7 +1090,7 @@ def test_Attachment_is_shareable_to_paperless_with_file_with_tika(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("", ""),
         ("oo4vuy0s9yn", "a4ueiofdsj"),
@@ -1138,7 +1143,7 @@ def test_Attachment_is_shareable_to_paperless__no_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype, expected_is_shareable_to_immich",
+    ("content_maintype", "content_subtype", "expected_is_shareable_to_immich"),
     [
         ("", "", False),
         ("oo4vuy0s9yn", "a4ueiofdsj", False),
@@ -1186,7 +1191,7 @@ def test_Attachment_is_shareable_to_paperless_with_file(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "content_maintype, content_subtype",
+    ("content_maintype", "content_subtype"),
     [
         ("", ""),
         ("oo4vuy0s9yn", "a4ueiofdsj"),

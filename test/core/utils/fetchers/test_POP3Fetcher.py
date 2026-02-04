@@ -114,7 +114,7 @@ def test_POP3Fetcher___init____bad_protocol(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "raising_function, expected_calls", [("user", (1, 0)), ("pass_", (1, 1))]
+    ("raising_function", "expected_calls"), [("user", (1, 0)), ("pass_", (1, 1))]
 )
 def test_POP3Fetcher___init__login__exception(
     mocker,
@@ -150,7 +150,7 @@ def test_POP3Fetcher___init__login__exception(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "raising_function, expected_calls", [("user", (1, 0)), ("pass_", (1, 1))]
+    ("raising_function", "expected_calls"), [("user", (1, 0)), ("pass_", (1, 1))]
 )
 def test_POP3Fetcher___init__login__bad_response(
     mocker,

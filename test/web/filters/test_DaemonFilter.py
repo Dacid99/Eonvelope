@@ -58,7 +58,7 @@ def test_search_filter(faker, daemon_queryset, searched_fields):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", CHOICES_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), CHOICES_TEST_PARAMETERS
 )
 def test_fetching_criterion_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -83,7 +83,7 @@ def test_fetching_criterion_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), INT_TEST_PARAMETERS
 )
 def test_interval__every_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -106,7 +106,7 @@ def test_interval__every_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", CHOICES_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), CHOICES_TEST_PARAMETERS
 )
 def test_interval__period_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -131,7 +131,7 @@ def test_interval__period_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_celery_task__enabled_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -151,7 +151,7 @@ def test_celery_task__enabled_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_healthy_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`web.filters.DaemonFilterSet`'s filtering
@@ -169,7 +169,7 @@ def test_is_healthy_filter(daemon_queryset, lookup_expr, filterquery, expected_i
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_created_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`web.filters.DaemonFilterSet`'s filtering

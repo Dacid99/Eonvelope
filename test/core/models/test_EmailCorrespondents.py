@@ -96,7 +96,7 @@ def test_EmailCorrespondent_unique_constraints(fake_emailcorrespondent):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "header, expected_results",
+    ("header", "expected_results"),
     [
         ("test <test@test.org>", [("test", "test@test.org")]),
         ("someone@somedomain.us", [("", "someone@somedomain.us")]),

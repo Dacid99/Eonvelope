@@ -499,7 +499,7 @@ def test_Email_conversation__missing_connection_node(fake_email_conversation, st
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "x_spam_flag, expected_result",
+    ("x_spam_flag", "expected_result"),
     [
         (None, False),
         (False, False),
@@ -952,7 +952,12 @@ def test_Email_add_correspondents_multi(faker, fake_email):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "test_email_path, expected_email_features, expected_correspondents_features,expected_attachments_features",
+    (
+        "test_email_path",
+        "expected_email_features",
+        "expected_correspondents_features",
+        "expected_attachments_features",
+    ),
     TEST_EMAIL_PARAMETERS,
 )
 def test_Email_create_from_email_bytes__success(
@@ -1059,7 +1064,7 @@ def test_Email_create_from_email_bytes__duplicate(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "x_spam_flag, THROW_OUT_SPAM, expected_is_none",
+    ("x_spam_flag", "THROW_OUT_SPAM", "expected_is_none"),
     [
         ("YES", True, True),
         ("NO", True, False),
@@ -1137,7 +1142,7 @@ def test_Email_html_version(fake_email, fake_attachment, fake_correspondent):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "file_path, expected_has_download",
+    ("file_path", "expected_has_download"),
     [
         (None, False),
         ("some/file/path", True),
@@ -1154,7 +1159,7 @@ def test_Email_has_download(fake_email, file_path, expected_has_download):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "x_spam_flag, expected_has_download",
+    ("x_spam_flag", "expected_has_download"),
     [
         (False, True),
         (True, False),

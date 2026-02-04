@@ -288,7 +288,7 @@ def test_Account_save__autoupdate_error(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetcher_class",
+    ("protocol", "expected_fetcher_class"),
     [
         (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
@@ -335,7 +335,7 @@ def test_Account_get_fetcher__bad_protocol(mock_logger, fake_account):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetcher_class",
+    ("protocol", "expected_fetcher_class"),
     [
         (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
@@ -369,7 +369,7 @@ def test_Account_get_fetcher_init__failure(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetcher_class",
+    ("protocol", "expected_fetcher_class"),
     [
         (EmailProtocolChoices.IMAP4, IMAP4Fetcher),
         (EmailProtocolChoices.IMAP4_SSL, IMAP4_SSL_Fetcher),
@@ -790,7 +790,7 @@ def test_Account_add_daemons_twice(faker, override_config, fake_account):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "mail_address, user_username, mail_host , expected_address",
+    ("mail_address", "user_username", "mail_host", "expected_address"),
     [
         ("no_at", "someone", "stalwart.tld", "no_at@stalwart.tld"),
         ("", "admin", "iloveeonvelope.org", "admin@iloveeonvelope.org"),
@@ -815,7 +815,7 @@ def test_Account_complete_mail_address(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "mail_host, mail_host_port, expected_address",
+    ("mail_host", "mail_host_port", "expected_address"),
     [
         ("stalwart.tld", "433", "stalwart.tld:433"),
         ("iloveeonvelope.org", None, "iloveeonvelope.org"),

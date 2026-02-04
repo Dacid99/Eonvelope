@@ -256,7 +256,7 @@ def test_Correspondent_share_to_nextcloud__status_error(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "href_property, href_field",
+    ("href_property", "href_field"),
     [
         ("list_archive_href", "list_archive"),
         ("list_help_href", "list_help"),
@@ -266,7 +266,7 @@ def test_Correspondent_share_to_nextcloud__status_error(
     ],
 )
 @pytest.mark.parametrize(
-    "field_value, expected_href",
+    ("field_value", "expected_href"),
     [
         ("", ""),
         ("https://test.list.com", "https://test.list.com"),
@@ -288,7 +288,7 @@ def test_Correspondent_href_properties(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "list_unsubscribe_post, expected_name",
+    ("list_unsubscribe_post", "expected_name"),
     [("Method", "Method"), ("List-Unsubscribe=One-Click", "One-Click")],
 )
 def test_Correspondent_list_unsubscribe_post_name(
@@ -304,7 +304,7 @@ def test_Correspondent_list_unsubscribe_post_name(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "email_name, real_name, email_address, expected_name",
+    ("email_name", "real_name", "email_address", "expected_name"),
     [
         ("", "", "abc113@web.ca", "abc113"),
         ("john doe", "", "jd@mail.it", "john doe"),

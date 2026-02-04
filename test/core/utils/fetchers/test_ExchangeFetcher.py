@@ -125,7 +125,7 @@ def mock_ExchangeAccount(mocker, mock_msg_folder_root):
 
 
 @pytest.mark.parametrize(
-    "criterion_name, expected_time_delta",
+    ("criterion_name", "expected_time_delta"),
     [
         (EmailFetchingCriterionChoices.DAILY, datetime.timedelta(days=1)),
         (EmailFetchingCriterionChoices.WEEKLY, datetime.timedelta(weeks=1)),
@@ -166,7 +166,7 @@ def test_ExchangeFetcher_make_fetching_query_sentsince_criterion(mock_QuerySet):
 
 
 @pytest.mark.parametrize(
-    "criterion_name, criterion_arg, expected_kwarg",
+    ("criterion_name", "criterion_arg", "expected_kwarg"),
     [
         (EmailFetchingCriterionChoices.UNSEEN, "", {"is_read": False}),
         (EmailFetchingCriterionChoices.SEEN, "", {"is_read": True}),

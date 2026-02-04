@@ -41,7 +41,7 @@ def mock_logger(mocker):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "is_current, expected_status_str", [(True, "Current"), (False, "Archived")]
+    ("is_current", "expected_status_str"), [(True, "Current"), (False, "Archived")]
 )
 def test___str__(faker, is_current, expected_status_str):
     """Tests :class:`core.models.StorageShard.__str__`

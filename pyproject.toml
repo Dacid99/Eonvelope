@@ -82,6 +82,7 @@ pylint-django = "*"
 djlint = "*"
 codespell = "*"
 doc8 = "*"
+pylintfileheader = "*"
 
 [tool.poetry.group.test]
 optional=true

@@ -1,4 +1,5 @@
 [run]
+source=src/
 omit =
     */migrations/*
     */scripts/*
@@ -13,6 +14,7 @@ omit =
     */wsgi.py
     */test.py
 branch=True
+dynamic_context=test_function
 [report]
 format=total
 exclude_also =
@@ -27,3 +29,6 @@ sort=Cover
 directory = test/reports/cov
 show_contexts=True
 skip_empty=True
+title=Eonvelope Coverage Report
+[xml]
+output=test/reports/cov/coverage.xml

@@ -17,3 +17,6 @@ test_codebase:
     expire_in: 30 days
   retry: 1
   coverage: '/^\d+(?:\.\d+)?\s*$/'
+  coverage_report:
+    coverage_format: cobertura
+    path: test/reports/cov/coverage.xml

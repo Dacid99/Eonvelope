@@ -3,12 +3,12 @@ lint_codebase:
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
-    - if: '$CI_COMMIT_BRANCH == "master" && $CI_COMMIT_TAG'
+    - if: $CI_COMMIT_TAG
   script:
     - poetry install --with lint,stubs
     - mkdir -p $CHECK_REPORT_PATH'/mypy'
     - echo "Checking codebase ..."
-    - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' | tee $CHECK_REPORT_PATH'ruff_check.ansi' || true
+    - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' --output-format=gitlab | tee $CHECK_REPORT_PATH'ruff_check.ansi' || true
     - poetry run mypy src/ --config-file $CHECK_CONFIG_PATH'mypy.ini' | tee $CHECK_REPORT_PATH'mypy/mypy_check.ansi' || true
     - poetry run doc8 --config $CHECK_CONFIG_PATH'doc8.ini' docs/ | tee $CHECK_REPORT_PATH'doc8_check.ansi' || true
     - poetry run pylint src/ --rcfile=$CHECK_CONFIG_PATH'pylintrc_src' | tee $CHECK_REPORT_PATH'pylint_code_check.ansi'
@@ -22,5 +22,7 @@ lint_codebase:
   artifacts:
     paths:
       - "$CHECK_REPORT_PATH"
+    reports:
+      codequality: $CHECK_REPORT_PATH'ruff_check.ansi'
     when: always
     expire_in: 30 days

@@ -109,7 +109,9 @@
 
 
 {% block overlay_elements %}
+    {% if page_obj.paginator.count > 0 %}
 
-    {% include "web/partials/_multi_delete-modal.html" %}
+        {% include "web/partials/_multi_delete-modal.html" %}
 
+    {% endif %}
 {% endblock overlay_elements %}

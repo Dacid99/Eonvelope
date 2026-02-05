@@ -28,7 +28,7 @@ from django.utils.translation import gettext_lazy as _
 from django_prometheus.models import ExportModelOperationsMixin
 
 from core.constants import HeaderFields
-from core.mixins import TimestampModelMixin
+from core.mixins import TimestampModelMixin, URLMixin
 
 from .Correspondent import Correspondent
 
@@ -37,9 +37,23 @@ if TYPE_CHECKING:
 
 
 class EmailCorrespondent(
-    ExportModelOperationsMixin("email_correspondent"), TimestampModelMixin, models.Model
+    ExportModelOperationsMixin("email_correspondent"),
+    URLMixin,
+    TimestampModelMixin,
+    models.Model,
 ):
     """Database model for connecting emails and their correspondents."""
+
+    BASENAME = "email"
+    """Direct user to email endpoints."""
+
+    DELETE_NOTICE = _(
+        "This will delete the records of this email and all its attachments but not its correspondents."
+    )
+
+    DELETE_NOTICE_PLURAL = _(
+        "This will delete the records of these emails and all their attachments but not their correspondents."
+    )
 
     email = models.ForeignKey(
         "Email",

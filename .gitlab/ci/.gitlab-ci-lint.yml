@@ -6,18 +6,18 @@ lint_codebase:
     - if: $CI_COMMIT_TAG
   script:
     - poetry install --with lint,stubs
-    - mkdir -p $CHECK_REPORT_PATH'/mypy'
+    - mkdir -p "$CHECK_REPORT_PATH"/mypy
     - echo "Checking codebase ..."
-    - poetry run ruff check --config=$CHECK_CONFIG_PATH'ruff.toml' --output-format=gitlab | tee $CHECK_REPORT_PATH'ruff_check.ansi' || true
-    - poetry run mypy src/ --config-file $CHECK_CONFIG_PATH'mypy.ini' | tee $CHECK_REPORT_PATH'mypy/mypy_check.ansi' || true
-    - poetry run doc8 --config $CHECK_CONFIG_PATH'doc8.ini' docs/ | tee $CHECK_REPORT_PATH'doc8_check.ansi' || true
-    - poetry run pylint src/ --rcfile=$CHECK_CONFIG_PATH'pylintrc_src' | tee $CHECK_REPORT_PATH'pylint_code_check.ansi'
-    - poetry run pylint . --rcfile=$CHECK_CONFIG_PATH'pylintrc_docs' | tee $CHECK_REPORT_PATH'pylint_docs_check.ansi'
-    - poetry run pylint test/ --rcfile=$CHECK_CONFIG_PATH'pylintrc_test' | tee $CHECK_REPORT_PATH'pylint_test_check.ansi'
-    - poetry run djlint src/ --lint --configuration $CHECK_CONFIG_PATH'djlintrc' | tee $CHECK_REPORT_PATH'djlint_check.ansi'
-    - poetry run django-admin validate_templates | tee $CHECK_REPORT_PATH'validate_templates_check.ansi'
+    - poetry run ruff check --config="$CHECK_CONFIG_PATH"ruff.toml --output-format=gitlab | tee "$CHECK_REPORT_PATH"ruff_check.ansi || true
+    - poetry run mypy src/ --config-file $CHECK_CONFIG_PATH'mypy.ini' | tee "$CHECK_REPORT_PATH"mypy/mypy_check.ansi || true
+    - poetry run doc8 --config $CHECK_CONFIG_PATH'doc8.ini' docs/ | tee "$CHECK_REPORT_PATH"doc8_check.ansi || true
+    - poetry run pylint src/ --rcfile=$CHECK_CONFIG_PATH'pylintrc_src' | tee "$CHECK_REPORT_PATH"pylint_code_check.ansi
+    - poetry run pylint . --rcfile=$CHECK_CONFIG_PATH'pylintrc_docs' | tee "$CHECK_REPORT_PATH"pylint_docs_check.ansi
+    - poetry run pylint test/ --rcfile=$CHECK_CONFIG_PATH'pylintrc_test' | tee "$CHECK_REPORT_PATH"pylint_test_check.ansi
+    - poetry run djlint src/ --lint --configuration $CHECK_CONFIG_PATH'djlintrc' | tee "$CHECK_REPORT_PATH"djlint_check.ansi
+    - poetry run django-admin validate_templates | tee $"CHECK_REPORT_PATH"validate_templates_check.ansi
     - apk add npm
-    - npx --yes eslint@latest --no-config-lookup | tee $CHECK_REPORT_PATH'eslint_check.ansi'
+    - npx --yes eslint@latest --no-config-lookup | tee "$CHECK_REPORT_PATH"eslint_check.ansi
     - echo "Successfully checked codebase."
   artifacts:
     paths:

@@ -7,7 +7,7 @@ default:
     - export SECRET_KEY='HELPER_KEY'
     - export PYTHONPATH='src'
     - export DJANGO_SETTINGS_MODULE='config.settings'
-    - apk update && apk add --no-cache ${APK_DEPENDENCIES}
+    - apk update && apk add --no-cache "${APK_DEPENDENCIES}"
     - pip install poetry
 
 workflow: # when the pipeline should be triggered

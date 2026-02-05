@@ -2,21 +2,21 @@
 build_docker:
   stage: build
   rules:
-    - if: '$CI_COMMIT_TAG =~ /^[0-9]/'
+    - if: "$CI_COMMIT_TAG =~ /^[0-9]/"
   image: docker:29-cli
   services:
     - docker:29-dind
   before_script:
     - echo "Skip installing dependencies"
-    - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u $DOCKER_HUB_USER --password-stdin
+    - echo "$DOCKER_HUB_ACCESS_TOKEN" | docker login -u "$DOCKER_HUB_USER" --password-stdin
     - docker buildx create --use --driver docker-container --name multibuilder
     - docker buildx inspect --bootstrap
   script:
     - docker buildx build
-        -f docker/Dockerfile
-        --platform linux/amd64,linux/arm64
-        --tag dacid99/eonvelope:latest
-        --tag dacid99/eonvelope:$CI_COMMIT_TAG
-        --push .
+      -f docker/Dockerfile
+      --platform linux/amd64,linux/arm64
+      --tag dacid99/eonvelope:latest
+      --tag dacid99/eonvelope:"$CI_COMMIT_TAG"
+      --push .
   after_script:
     - docker buildx rm multibuilder

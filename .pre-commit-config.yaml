@@ -70,3 +70,8 @@ repos:
         pass_filenames: false
         language: system
         types: [html]
+  - repo: https://github.com/timo-reymann/gitlab-ci-verify
+    rev: v2.8.2
+    hooks:
+      - id: gitlab-ci-verify
+        args: [--gitlab-base-url, gitlab.com, --severity, warning]

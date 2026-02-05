@@ -65,6 +65,15 @@ The easiest way to run them is via the poe task runner.
 poe lint
 ```
 
+To enable the gitlab-ci validation, create a .netrc file with permissions 660 in your personal folder.
+Add the line
+
+```text
+gitlab.com password <yourapitoken>
+```
+
+Set the path to this file as NETRC env variable in your bashrc or profile.
+
 ### Unittests
 
 The projects tests are in the test/ directory. You can run them from the project root with

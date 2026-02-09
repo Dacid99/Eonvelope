@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-30 21:12+0000\n"
+"POT-Creation-Date: 2026-02-09 23:34+0000\n"
 "PO-Revision-Date: 2026-01-25 16:01+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/web/"
@@ -228,65 +228,65 @@ msgstr "Скасувати"
 msgid "Account Details"
 msgstr "Дані облікового запису"
 
-#: src/web/templates/web/account/account_detail.html:39
+#: src/web/templates/web/account/account_detail.html:41
 msgid "Host"
 msgstr "Хост"
 
-#: src/web/templates/web/account/account_detail.html:40
+#: src/web/templates/web/account/account_detail.html:42
 #: src/web/templates/web/account/partials/_account_card.html:24
 msgid "Protocol"
 msgstr "Протокол"
 
-#: src/web/templates/web/account/account_detail.html:42
+#: src/web/templates/web/account/account_detail.html:44
 msgid "Port"
 msgstr "Порт"
 
-#: src/web/templates/web/account/account_detail.html:46
+#: src/web/templates/web/account/account_detail.html:48
 msgid "Default"
 msgstr "За замовчуванням"
 
-#: src/web/templates/web/account/account_detail.html:50
+#: src/web/templates/web/account/account_detail.html:52
 msgid "Timeout"
 msgstr "Тайм-аут"
 
-#: src/web/templates/web/account/account_detail.html:54
+#: src/web/templates/web/account/account_detail.html:56
 msgid "None"
 msgstr "Жоден"
 
-#: src/web/templates/web/account/account_detail.html:58
+#: src/web/templates/web/account/account_detail.html:60
 msgid "Allow Insecure Connection"
 msgstr ""
 
-#: src/web/templates/web/account/account_detail.html:60
+#: src/web/templates/web/account/account_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:50
 #: src/web/templates/web/mailbox/mailbox_detail.html:58
 msgid "on"
 msgstr "умівк"
 
-#: src/web/templates/web/account/account_detail.html:62
+#: src/web/templates/web/account/account_detail.html:64
 #: src/web/templates/web/mailbox/mailbox_detail.html:52
 #: src/web/templates/web/mailbox/mailbox_detail.html:60
 msgid "off"
 msgstr "вимк"
 
-#: src/web/templates/web/account/account_detail.html:67
+#: src/web/templates/web/account/account_detail.html:69
 #: src/web/templates/web/daemon/daemon_detail.html:58
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
 msgid "Latest Error"
 msgstr "Остання помилка"
 
-#: src/web/templates/web/account/account_detail.html:71
+#: src/web/templates/web/account/account_detail.html:73
 #: src/web/templates/web/daemon/daemon_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:69
 msgid "Occurred At"
 msgstr "Сталося о"
 
-#: src/web/templates/web/account/account_detail.html:72
+#: src/web/templates/web/account/account_detail.html:74
 msgid "Test the account to see if this error persists."
 msgstr "Перевірте обліковий запис, щоб побачити, чи ця помилка не зникає."
 
-#: src/web/templates/web/account/account_detail.html:83
-#: src/web/templates/web/account/partials/_update_mailboxes-button.html:7
+#: src/web/templates/web/account/account_detail.html:85
+#: src/web/templates/web/account/partials/_update_mailboxes-button.html:10
 #: src/web/templates/web/dashboard.html:84
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:11
@@ -294,7 +294,7 @@ msgstr "Перевірте обліковий запис, щоб побачит�
 msgid "Mailboxes"
 msgstr "Поштові скриньки"
 
-#: src/web/templates/web/account/account_detail.html:105
+#: src/web/templates/web/account/account_detail.html:107
 #: src/web/templates/web/daemon/daemon_filter_list.html:6
 #: src/web/templates/web/daemon/daemon_filter_list.html:11
 #: src/web/templates/web/dashboard.html:91
@@ -303,14 +303,14 @@ msgstr "Поштові скриньки"
 msgid "Routines"
 msgstr "Рутини"
 
-#: src/web/templates/web/account/account_detail.html:127
+#: src/web/templates/web/account/account_detail.html:129
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
 #: src/web/templates/web/dashboard.html:25
 #: src/web/templates/web/mailbox/mailbox_detail.html:105
 msgid "Latest Emails"
 msgstr "Останні електронні листи"
 
-#: src/web/templates/web/account/account_detail.html:132
+#: src/web/templates/web/account/account_detail.html:134
 #: src/web/templates/web/correspondent/correspondent_detail.html:94
 #: src/web/templates/web/dashboard.html:30
 #: src/web/templates/web/email/email_detail.html:176
@@ -339,6 +339,12 @@ msgid "Add account"
 msgstr "Додати Обліковий запис"
 
 #: src/web/templates/web/account/partials/_add_routines-button.html:7
+msgid ""
+"Add a standard set of routines to archive all mails going in and out of this "
+"account."
+msgstr ""
+
+#: src/web/templates/web/account/partials/_add_routines-button.html:10
 msgid "Add routines"
 msgstr "Додати процедури"
 
@@ -375,6 +381,12 @@ msgid "Test this account to make sure it can be accessed."
 msgstr ""
 "Перевірте цей обліковий запис, щоб переконатися, що до нього можна отримати "
 "доступ."
+
+#: src/web/templates/web/account/partials/_update_mailboxes-button.html:8
+#, fuzzy
+#| msgid "Updating mailboxes successful"
+msgid "Update the mailboxes in this account."
+msgstr "Оновлення поштових скриньок успішно завершено"
 
 #: src/web/templates/web/attachment/attachment_detail.html:6
 msgid "Attachment Details"
@@ -440,10 +452,15 @@ msgstr "Перейти до поштових скриньок"
 #: src/web/templates/web/attachment/partials/_multi_download-button.html:4
 #: src/web/templates/web/correspondent/partials/_multi_download-button.html:4
 #: src/web/templates/web/email/partials/_multi_download_dropdown.html:9
-#: src/web/templates/web/mailbox/partials/_download_dropdown.html:9
+#: src/web/templates/web/mailbox/partials/_multi_download_dropdown.html:9
 #: src/web/templates/web/partials/_download-button.html:5
+#: src/web/templates/web/partials/_download_dropdown.html:9
 msgid "Download"
 msgstr "Завантажити"
+
+#: src/web/templates/web/attachment/partials/_send_to_third_party_dropdown.html:6
+msgid "Share this attachment with another service"
+msgstr ""
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
@@ -508,6 +525,10 @@ msgid ""
 msgstr ""
 "Ви можете додати деякі, отримуючи електронні листи з налаштованих вами "
 "поштових скриньок."
+
+#: src/web/templates/web/correspondent/partials/_send_to_third_party_dropdown.html:6
+msgid "Share this correspondent with another service"
+msgstr ""
 
 #: src/web/templates/web/daemon/daemon_create.html:8
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:8
@@ -580,13 +601,25 @@ msgstr "Запускає"
 msgid "Paused"
 msgstr "Призупинені"
 
-#: src/web/templates/web/daemon/partials/_start-button.html:6
+#: src/web/templates/web/daemon/partials/_start-button.html:8
+msgid "Start this routine"
+msgstr ""
+
+#: src/web/templates/web/daemon/partials/_start-button.html:9
 msgid "Start"
 msgstr "Старт"
 
-#: src/web/templates/web/daemon/partials/_stop-button.html:6
+#: src/web/templates/web/daemon/partials/_stop-button.html:8
+msgid "Stop this routine"
+msgstr ""
+
+#: src/web/templates/web/daemon/partials/_stop-button.html:9
 msgid "Stop"
 msgstr "Стій"
+
+#: src/web/templates/web/daemon/partials/_test_daemon-button.html:6
+msgid "Perform a test run of this routine"
+msgstr ""
 
 #: src/web/templates/web/dashboard.html:8
 msgid "Dashboard"
@@ -631,7 +664,7 @@ msgid "Email Timeline"
 msgstr "Хронологія електронної пошти"
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10
+#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
 msgid "Day"
 msgstr "День"
 
@@ -650,6 +683,7 @@ msgstr "Цього тижня"
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
+#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr "Місяць"
 
@@ -663,7 +697,7 @@ msgid "Week #"
 msgstr "Тиждень №"
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10
+#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
 msgid "Year"
 msgstr "Рік"
 
@@ -745,13 +779,33 @@ msgstr "Електронна пошта не знайдено."
 msgid "You can fetch some from the mailboxes you have set up."
 msgstr "Ви можете отримати деякі з поштових скриньок, які ви налаштували."
 
-#: src/web/templates/web/email/partials/_reprocess_email-button.html:5
+#: src/web/templates/web/email/partials/_reprocess_email-button.html:8
+msgid ""
+"Reprocess this archived email to find connections with emails that have been "
+"archived later"
+msgstr ""
+
+#: src/web/templates/web/email/partials/_reprocess_email-button.html:10
 msgid "Reprocess"
 msgstr "Повторна обробка"
 
-#: src/web/templates/web/email/partials/_restore_email-button.html:7
+#: src/web/templates/web/email/partials/_restore_email-button.html:8
+#, fuzzy
+#| msgid "Restoring of email to mailbox failed: %(error)s"
+msgid "Restore this email to its mailbox on the mailserver"
+msgstr "Не вдалося відновити електронну пошту в поштовій скриньці: %(error)s"
+
+#: src/web/templates/web/email/partials/_restore_email-button.html:11
 msgid "Restore"
 msgstr "Відновити"
+
+#: src/web/templates/web/email/partials/_test_account-button.html:6
+#, fuzzy
+#| msgid "Test this account to make sure it can be accessed."
+msgid "Test whether this account can be accessed"
+msgstr ""
+"Перевірте цей обліковий запис, щоб переконатися, що до нього можна отримати "
+"доступ."
 
 #: src/web/templates/web/layouts/base_create.html:15
 #: src/web/templates/web/layouts/base_detail.html:23
@@ -845,7 +899,15 @@ msgstr ""
 "Отримуйте електронні листи з цієї поштової скриньки, налаштувавши процедуру "
 "або отримавши вміст один раз."
 
-#: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:9
+#: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:6
+#, fuzzy
+#| msgid "You can fetch emails from one of this accounts mailboxes."
+msgid "Fetch and archive emails from this mailbox now"
+msgstr ""
+"Ви можете отримувати електронні листи з однієї з поштових скриньок цього "
+"облікового запису."
+
+#: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:12
 msgid "Fetch"
 msgstr "Отримати"
 
@@ -868,6 +930,10 @@ msgstr "Перейти до облікових записів"
 #: src/web/templates/web/mailbox/partials/_submit_upload-button.html:7
 msgid "Upload"
 msgstr "Вивантаження"
+
+#: src/web/templates/web/mailbox/partials/_test_mailbox-button.html:6
+msgid "Test whether this mailbox can be opened on the mailserver"
+msgstr ""
 
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:6
 msgid "Test this mailbox to make sure it can be accessed."
@@ -933,6 +999,7 @@ msgid "End edit"
 msgstr "Кінець редагування"
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
+#: src/web/utils/columns.py:89
 msgid "Favorite"
 msgstr "Улюблене"
 
@@ -1059,7 +1126,7 @@ msgstr "Розмір сторінки"
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/web/templates/web/partials/_test-button.html:4
+#: src/web/templates/web/partials/layouts/_test-button.html:6
 msgid "Test"
 msgstr "Тест"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-30 21:12+0000\n"
+"POT-Creation-Date: 2026-02-09 23:34+0000\n"
 "PO-Revision-Date: 2026-01-24 15:30+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/api/"
@@ -32,21 +32,40 @@ msgstr "%(object)s позначено як обране."
 msgid "%(object)s unmarked as favorite."
 msgstr "%(object)s знято з обраного."
 
-#: src/api/v1/views/AccountViewSet.py:149
+#: src/api/v1/views/AccountViewSet.py:176
 msgid "An error with the mailaccount occurred."
 msgstr "Сталася помилка з обліковим записом пошти."
 
-#: src/api/v1/views/AccountViewSet.py:155
+#: src/api/v1/views/AccountViewSet.py:182
 msgid "Updated mailboxes"
 msgstr "Оновлені поштові скриньки"
 
-#: src/api/v1/views/AccountViewSet.py:181
+#: src/api/v1/views/AccountViewSet.py:208
 msgid "Added routines to inbox and sentbox."
 msgstr "Додано підпрограми до папок \"Вхідні\" та \"Надіслані\"."
 
-#: src/api/v1/views/AccountViewSet.py:202
+#: src/api/v1/views/AccountViewSet.py:229
 msgid "Tested mailaccount"
 msgstr "Перевірений обліковий запис електронної пошти"
+
+#: src/api/v1/views/AccountViewSet.py:271 src/api/v1/views/EmailViewSet.py:266
+#: src/api/v1/views/MailboxViewSet.py:350
+#: src/api/v1/views/MailboxViewSet.py:398
+msgid "File format is required."
+msgstr "Потрібно вказати формат файлу."
+
+#: src/api/v1/views/AccountViewSet.py:279 src/api/v1/views/EmailViewSet.py:288
+#: src/api/v1/views/MailboxViewSet.py:358
+#: src/api/v1/views/MailboxViewSet.py:420
+#, python-format
+msgid "File format %(file_format)s is not supported."
+msgstr "Формат файлу %(file_format)s не підтримується."
+
+#: src/api/v1/views/AccountViewSet.py:284
+#, fuzzy
+#| msgid "No emails found."
+msgid "No mailboxes found."
+msgstr "Електронна пошта не знайдено."
 
 #: src/api/v1/views/AttachmentViewSet.py:191
 #: src/api/v1/views/AttachmentViewSet.py:277
@@ -133,10 +152,6 @@ msgstr "Рутина не виконується"
 msgid "eml file not found."
 msgstr "eml-файл не знайдено."
 
-#: src/api/v1/views/EmailViewSet.py:266 src/api/v1/views/MailboxViewSet.py:322
-msgid "File format is required."
-msgstr "Потрібно вказати формат файлу."
-
 #: src/api/v1/views/EmailViewSet.py:271
 msgid "Email ids are required."
 msgstr "Ідентифікатори електронної пошти обов'язкові."
@@ -144,11 +159,6 @@ msgstr "Ідентифікатори електронної пошти обов'
 #: src/api/v1/views/EmailViewSet.py:279
 msgid "Email ids given in invalid format."
 msgstr "Ідентифікатори електронної пошти надано в недійсному форматі."
-
-#: src/api/v1/views/EmailViewSet.py:288 src/api/v1/views/MailboxViewSet.py:330
-#, python-format
-msgid "File format %(file_format)s is not supported."
-msgstr "Формат файлу %(file_format)s не підтримується."
 
 #: src/api/v1/views/EmailViewSet.py:293
 msgid "No emails found"
@@ -170,37 +180,55 @@ msgstr "Електронну пошту успішно відновлено у �
 msgid "Email successfully reprocessed."
 msgstr "Електронний лист успішно оброблено повторно."
 
-#: src/api/v1/views/MailboxViewSet.py:196
+#: src/api/v1/views/MailboxViewSet.py:224
 msgid "Tested mailbox"
 msgstr "Перевірена поштова скринька"
 
-#: src/api/v1/views/MailboxViewSet.py:258
+#: src/api/v1/views/MailboxViewSet.py:286
 msgid "Fetching criterion is required."
 msgstr "Потрібно вказати критерій отримання."
 
-#: src/api/v1/views/MailboxViewSet.py:264
+#: src/api/v1/views/MailboxViewSet.py:292
 #, python-format
 msgid "The given criterion %(criterion)s is not available for this mailbox."
 msgstr "Заданий критерій %(criterion)s недоступний для цієї поштової скриньки."
 
-#: src/api/v1/views/MailboxViewSet.py:273
+#: src/api/v1/views/MailboxViewSet.py:301
 #, python-format
 msgid "The given criterion %(criterion)s requires an argument."
 msgstr "Для заданого критерію %(criterion)s потрібен аргумент."
 
-#: src/api/v1/views/MailboxViewSet.py:283
+#: src/api/v1/views/MailboxViewSet.py:311
 msgid "Error with mailaccount or mailbox occurred."
 msgstr ""
 "Сталася помилка з обліковим записом електронної пошти або поштовою скринькою."
 
-#: src/api/v1/views/MailboxViewSet.py:289
+#: src/api/v1/views/MailboxViewSet.py:317
 msgid "All emails fetched."
 msgstr "Усі електронні листи отримано."
 
-#: src/api/v1/views/MailboxViewSet.py:335
+#: src/api/v1/views/MailboxViewSet.py:363
 msgid "No emails found."
 msgstr "Електронна пошта не знайдено."
 
-#: src/api/v1/views/MailboxViewSet.py:378
+#: src/api/v1/views/MailboxViewSet.py:403
+#, fuzzy
+#| msgid "Email ids are required."
+msgid "Mailbox ids are required."
+msgstr "Ідентифікатори електронної пошти обов'язкові."
+
+#: src/api/v1/views/MailboxViewSet.py:411
+#, fuzzy
+#| msgid "Email ids given in invalid format."
+msgid "Mailbox ids given in invalid format."
+msgstr "Ідентифікатори електронної пошти надано в недійсному форматі."
+
+#: src/api/v1/views/MailboxViewSet.py:425
+#, fuzzy
+#| msgid "No emails found"
+msgid "No mailboxes found"
+msgstr "Електронних листів не знайдено"
+
+#: src/api/v1/views/MailboxViewSet.py:468
 msgid "Successfully uploaded mailbox file."
 msgstr "Файл поштової скриньки успішно завантажено."

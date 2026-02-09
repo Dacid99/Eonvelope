@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-30 21:12+0000\n"
+"POT-Creation-Date: 2026-02-09 23:34+0000\n"
 "PO-Revision-Date: 2025-12-31 20:13+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/eonvelope/api/"
@@ -29,20 +29,37 @@ msgstr ""
 msgid "%(object)s unmarked as favorite."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:149
+#: src/api/v1/views/AccountViewSet.py:176
 msgid "An error with the mailaccount occurred."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:155
+#: src/api/v1/views/AccountViewSet.py:182
 msgid "Updated mailboxes"
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:181
+#: src/api/v1/views/AccountViewSet.py:208
 msgid "Added routines to inbox and sentbox."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:202
+#: src/api/v1/views/AccountViewSet.py:229
 msgid "Tested mailaccount"
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:271 src/api/v1/views/EmailViewSet.py:266
+#: src/api/v1/views/MailboxViewSet.py:350
+#: src/api/v1/views/MailboxViewSet.py:398
+msgid "File format is required."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:279 src/api/v1/views/EmailViewSet.py:288
+#: src/api/v1/views/MailboxViewSet.py:358
+#: src/api/v1/views/MailboxViewSet.py:420
+#, python-format
+msgid "File format %(file_format)s is not supported."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:284
+msgid "No mailboxes found."
 msgstr ""
 
 #: src/api/v1/views/AttachmentViewSet.py:191
@@ -130,21 +147,12 @@ msgstr ""
 msgid "eml file not found."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:266 src/api/v1/views/MailboxViewSet.py:322
-msgid "File format is required."
-msgstr ""
-
 #: src/api/v1/views/EmailViewSet.py:271
 msgid "Email ids are required."
 msgstr ""
 
 #: src/api/v1/views/EmailViewSet.py:279
 msgid "Email ids given in invalid format."
-msgstr ""
-
-#: src/api/v1/views/EmailViewSet.py:288 src/api/v1/views/MailboxViewSet.py:330
-#, python-format
-msgid "File format %(file_format)s is not supported."
 msgstr ""
 
 #: src/api/v1/views/EmailViewSet.py:293
@@ -167,36 +175,48 @@ msgstr ""
 msgid "Email successfully reprocessed."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:196
+#: src/api/v1/views/MailboxViewSet.py:224
 msgid "Tested mailbox"
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:258
+#: src/api/v1/views/MailboxViewSet.py:286
 msgid "Fetching criterion is required."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:264
+#: src/api/v1/views/MailboxViewSet.py:292
 #, python-format
 msgid "The given criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:273
+#: src/api/v1/views/MailboxViewSet.py:301
 #, python-format
 msgid "The given criterion %(criterion)s requires an argument."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:283
+#: src/api/v1/views/MailboxViewSet.py:311
 msgid "Error with mailaccount or mailbox occurred."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:289
+#: src/api/v1/views/MailboxViewSet.py:317
 msgid "All emails fetched."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:335
+#: src/api/v1/views/MailboxViewSet.py:363
 msgid "No emails found."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:378
+#: src/api/v1/views/MailboxViewSet.py:403
+msgid "Mailbox ids are required."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:411
+msgid "Mailbox ids given in invalid format."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:425
+msgid "No mailboxes found"
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:468
 msgid "Successfully uploaded mailbox file."
 msgstr ""

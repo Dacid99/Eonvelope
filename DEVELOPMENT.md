@@ -271,3 +271,24 @@ git config core.hooksPath tools/githooks/
   "remove_trailing_whitespace_on_save": true
 }
 ```
+
+- js:
+
+```json
+"lsp": {
+    "biome": {
+      "settings": {
+            "config_path": "<path>/biome.json"
+          }
+    }
+  }
+}
+```
+
+and
+
+```json
+"languages":{
+  "JavaScript": { "formatter": { "language_server": { "name": "biome" } } },
+}
+```

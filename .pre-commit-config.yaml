@@ -44,6 +44,11 @@ repos:
     hooks:
       - id: hadolint-docker
         args: [--config, tools/.hadolint.yaml]
+  - repo: https://github.com/biomejs/pre-commit
+    rev: v2.3.14
+    hooks:
+      - id: biome-check
+        args: [--config-path, tools/biome.json]
   - repo: https://github.com/renovatebot/pre-commit-hooks
     rev: 42.84.0
     hooks:

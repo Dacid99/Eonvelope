@@ -17,7 +17,7 @@ lint_codebase:
     - poetry run djlint src/ --lint --configuration "$CHECK_CONFIG_PATH"djlintrc | tee "$CHECK_REPORT_PATH"djlint_check.ansi
     - poetry run django-admin validate_templates | tee "$CHECK_REPORT_PATH"validate_templates_check.ansi
     - apk add npm
-    - npx --yes eslint@latest --no-config-lookup | tee "$CHECK_REPORT_PATH"eslint_check.ansi
+    - npx --yes @biomejs/biome check --config-path tools/biome.json src | tee "$CHECK_REPORT_PATH"biomejs_check.ansi
     - echo "Successfully checked codebase."
   artifacts:
     paths:

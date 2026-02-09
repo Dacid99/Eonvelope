@@ -2,7 +2,6 @@
 
 ## Feature ideas
 
-- combined filter for correspondent with mention
 - extensive database statistics
 - toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/) or [popovers](https://developer.chrome.com/blog/popover-hint?hl=de)
 - mechanism to remove all correspondents without emails
@@ -16,6 +15,8 @@
 - structured json based logging messages
 - refine fetchererrors into errors for auth, connection, etc.
 - add gmail client support
+- create mailaccount from file import
+- manually adding mailboxes
 
 ## To refactor
 
@@ -28,6 +29,7 @@
 - split up long functions that are marked as too complex by ruff
 - make all filepaths pathlib.Paths, enable ruff PTH
 - compress fetchingcriterion logic into a class
+- use enums for typing and to reduce properties on mailbox
 
 ## To test
 

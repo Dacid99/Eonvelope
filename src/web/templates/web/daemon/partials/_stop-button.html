@@ -3,4 +3,7 @@
 <button type="submit"
         class="btn btn-outline-primary"
         name="stop_daemon"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="{% translate 'Stop this routine' %}"
         {% if not daemon.celery_task.enabled %}disabled{% endif %}>{% translate "Stop" %}</button>

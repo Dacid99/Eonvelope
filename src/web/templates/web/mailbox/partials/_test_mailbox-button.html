@@ -1,0 +1,7 @@
+{% extends "web/partials/layouts/test-button.html" %}
+
+{% load translate from i18n %}
+
+{% block tooltip %}
+    {% translate "Test whether this mailbox can be opened on the mailserver" %}
+{% endblock tooltip %}

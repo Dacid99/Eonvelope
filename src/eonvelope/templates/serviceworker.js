@@ -20,6 +20,7 @@ var filesToCache = [
 	"/static/web/js/spinner-text.js",
 	"/static/web/js/timezone.js",
 	"/static/web/js/urlTools.js",
+	"/static/web/js/tooltips.js",
 ];
 
 // Cache on install

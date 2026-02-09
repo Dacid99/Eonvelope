@@ -248,6 +248,8 @@ They are sorted into categories:
 | WEB_THUMBNAIL_MAX_DATASIZE         | *10 MB*                 | Maximum datasize in bytes for a thumbnail in the webapp.                                          |
 |                                    |                         | Thumbnails larger than this will not be loaded.                                                   |
 +------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
+| ENABLE_TOOLTIPS                    | *True*                  | Whether to show tooltips in the web interface.                                                    |
++------------------------------------+-------------------------+---------------------------------------------------------------------------------------------------+
 
 If the default for one of these settings changes, your already set up instance will not be affected by that change.
 To set the new default, go to the admin panel and use the reset to default option for that setting.

@@ -1,6 +1,9 @@
 {% load translate from i18n %}
 
-<div class="dropdown btn-group">
+<div class="dropdown btn-group"
+     data-bs-toggle="tooltip"
+     data-bs-placement="bottom"
+     data-bs-title="{% translate 'Fetch and archive emails from this mailbox now' %}">
     <button class="btn btn-outline-primary dropdown-toggle"
             type="button"
             {% if not mailbox.is_healthy %}disabled{% endif %}

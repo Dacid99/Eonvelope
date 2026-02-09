@@ -3,4 +3,7 @@
 <button type="submit"
         class="btn btn-outline-primary"
         name="start_daemon"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="{% translate 'Start this routine' %}"
         {% if daemon.celery_task.enabled %}disabled{% endif %}>{% translate "Start" %}</button>

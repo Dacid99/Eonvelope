@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.5.4
+
+- Features:
+  - toggleable tooltips for webapp
+
 ## Version 0.5.3
 
 - Features:

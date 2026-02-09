@@ -69,10 +69,8 @@ To enable the gitlab-ci validation, create a .netrc file with permissions 660 in
 Add the line
 
 ```text
-gitlab.com password <yourapitoken>
+machine gitlab.com password <yourapitoken>
 ```
-
-Set the path to this file as NETRC env variable in your bashrc or profile.
 
 ### Unittests
 

@@ -59,6 +59,7 @@ def test_get__auth_other(other_client, list_url):
     assert isinstance(response.context["mailboxes_count"], int)
     assert "daemons_count" in response.context
     assert isinstance(response.context["daemons_count"], int)
+    assert "config" in response.context
     assert "settings" in response.context
     assert "VERSION" in response.context["settings"]
     assert "DEBUG" in response.context["settings"]
@@ -88,6 +89,7 @@ def test_get__auth_owner(owner_client, list_url):
     assert isinstance(response.context["mailboxes_count"], int)
     assert "daemons_count" in response.context
     assert isinstance(response.context["daemons_count"], int)
+    assert "config" in response.context
     assert "settings" in response.context
     assert "VERSION" in response.context["settings"]
     assert "DEBUG" in response.context["settings"]
@@ -117,6 +119,7 @@ def test_get__auth_admin(admin_client, list_url):
     assert isinstance(response.context["mailboxes_count"], int)
     assert "daemons_count" in response.context
     assert isinstance(response.context["daemons_count"], int)
+    assert "config" in response.context
     assert "settings" in response.context
     assert "VERSION" in response.context["settings"]
     assert "DEBUG" in response.context["settings"]

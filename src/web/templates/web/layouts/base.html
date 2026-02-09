@@ -64,6 +64,10 @@
 
         {% bootstrap_javascript %}
 
+        {% if config.ENABLE_TOOLTIPS %}
+            <script src="{% static 'web/js/tooltips.js' %}"></script>
+        {% endif %}
+
         {% block scripts %}
         {% endblock scripts %}
 

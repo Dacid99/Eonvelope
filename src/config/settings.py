@@ -926,6 +926,11 @@ CONSTANCE_CONFIG = {
         ),
         int,
     ),
+    "ENABLE_TOOLTIPS": (
+        True,
+        _("Whether to show tooltips in the web interface."),
+        bool,
+    ),
     "STORAGE_MAX_FILES_PER_DIR": (
         10000,
         _("Maximum numbers of files in one storage unit."),
@@ -1066,6 +1071,7 @@ CONSTANCE_CONFIG_FIELDSETS = (
             "WEB_DEFAULT_PAGE_SIZE",
             "WEB_PAGE_SIZES_OPTIONS",
             "WEB_THUMBNAIL_MAX_DATASIZE",
+            "ENABLE_TOOLTIPS",
         ),
     ),
 )

@@ -6,8 +6,14 @@ repos:
     hooks:
       - id: end-of-file-fixer
       - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-symlinks
+      - id: check-case-conflict
       - id: check-merge-conflict
+      - id: check-added-large-files
       - id: debug-statements
+      - id: detect-private-key
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 26.1.0
     hooks:

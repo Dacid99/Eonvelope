@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-09 23:34+0000\n"
-"PO-Revision-Date: 2026-01-30 21:25+0000\n"
+"PO-Revision-Date: 2026-02-11 16:09+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/"
-">\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -343,6 +343,8 @@ msgid ""
 "Add a standard set of routines to archive all mails going in and out of this "
 "account."
 msgstr ""
+"Lege einen Standardsatz Routinen an, die alle E-Mails die an und von diesem "
+"Konto gesendet werden."
 
 #: src/web/templates/web/account/partials/_add_routines-button.html:10
 msgid "Add routines"
@@ -379,10 +381,8 @@ msgid "Test this account to make sure it can be accessed."
 msgstr "Teste dieses Konto um zu überprüfen dass der Zugriff funktioniert."
 
 #: src/web/templates/web/account/partials/_update_mailboxes-button.html:8
-#, fuzzy
-#| msgid "Updating mailboxes successful"
 msgid "Update the mailboxes in this account."
-msgstr "Postfächer erfolgreich aktualisiert"
+msgstr "Aktualisiere die Postfächer dieses Kontos."
 
 #: src/web/templates/web/attachment/attachment_detail.html:6
 msgid "Attachment Details"
@@ -403,7 +403,7 @@ msgstr "Inhaltsbestimmung"
 
 #: src/web/templates/web/attachment/attachment_detail.html:46
 msgid "Content Id"
-msgstr "Inhalt-ID"
+msgstr "Inhalts-ID"
 
 #: src/web/templates/web/attachment/attachment_detail.html:48
 #: src/web/templates/web/attachment/partials/_attachment_card.html:26
@@ -455,7 +455,7 @@ msgstr "Herunterladen"
 
 #: src/web/templates/web/attachment/partials/_send_to_third_party_dropdown.html:6
 msgid "Share this attachment with another service"
-msgstr ""
+msgstr "Teile diesen Anhang mit einem anderen Dienst"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
@@ -523,7 +523,7 @@ msgstr ""
 
 #: src/web/templates/web/correspondent/partials/_send_to_third_party_dropdown.html:6
 msgid "Share this correspondent with another service"
-msgstr ""
+msgstr "Teile diesen Korrespondenten mit einem anderen Dienst"
 
 #: src/web/templates/web/daemon/daemon_create.html:8
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:8
@@ -599,7 +599,7 @@ msgstr "Pausiert"
 
 #: src/web/templates/web/daemon/partials/_start-button.html:8
 msgid "Start this routine"
-msgstr ""
+msgstr "Starte diese Routine"
 
 #: src/web/templates/web/daemon/partials/_start-button.html:9
 msgid "Start"
@@ -607,7 +607,7 @@ msgstr "Starten"
 
 #: src/web/templates/web/daemon/partials/_stop-button.html:8
 msgid "Stop this routine"
-msgstr ""
+msgstr "Stoppe diese Routine"
 
 #: src/web/templates/web/daemon/partials/_stop-button.html:9
 msgid "Stop"
@@ -615,7 +615,7 @@ msgstr "Stoppen"
 
 #: src/web/templates/web/daemon/partials/_test_daemon-button.html:6
 msgid "Perform a test run of this routine"
-msgstr ""
+msgstr "Führe einen Testdurchlauf dieser Routine aus"
 
 #: src/web/templates/web/dashboard.html:8
 msgid "Dashboard"
@@ -780,26 +780,24 @@ msgid ""
 "Reprocess this archived email to find connections with emails that have been "
 "archived later"
 msgstr ""
+"Verarbeite diese archivierte E-Mail erneut um Verbindungen mit später "
+"archivierten E-Mails zu finden"
 
 #: src/web/templates/web/email/partials/_reprocess_email-button.html:10
 msgid "Reprocess"
 msgstr "Aktualisieren"
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:8
-#, fuzzy
-#| msgid "Restoring of email to mailbox failed: %(error)s"
 msgid "Restore this email to its mailbox on the mailserver"
-msgstr "Wiederherstellen der E-Mail im Postfach fehlgeschlagen: %(error)s"
+msgstr "Stelle diese E-Mail in ihrem Postfach auf dem Mailserver wiederher"
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:11
 msgid "Restore"
 msgstr "Wiederherstellen"
 
 #: src/web/templates/web/email/partials/_test_account-button.html:6
-#, fuzzy
-#| msgid "Test this account to make sure it can be accessed."
 msgid "Test whether this account can be accessed"
-msgstr "Teste dieses Konto um zu überprüfen dass der Zugriff funktioniert."
+msgstr "Teste ob auf dieses Konto zugegriffen werden kann"
 
 #: src/web/templates/web/layouts/base_create.html:15
 #: src/web/templates/web/layouts/base_detail.html:23
@@ -894,10 +892,8 @@ msgstr ""
 "seinen Inhalt einmalig abrufst."
 
 #: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:6
-#, fuzzy
-#| msgid "You can fetch emails from one of this accounts mailboxes."
 msgid "Fetch and archive emails from this mailbox now"
-msgstr "Du kannst E-Mails aus einem Postfach dieses Kontos abrufen."
+msgstr "E-Mails aus diesem Postfach jetzt abrufen und archivieren"
 
 #: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:12
 msgid "Fetch"
@@ -925,7 +921,7 @@ msgstr "Hochladen"
 
 #: src/web/templates/web/mailbox/partials/_test_mailbox-button.html:6
 msgid "Test whether this mailbox can be opened on the mailserver"
-msgstr ""
+msgstr "Teste ob dieses Postfach auf dem Mailserver geöffnet werden kann"
 
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:6
 msgid "Test this mailbox to make sure it can be accessed."

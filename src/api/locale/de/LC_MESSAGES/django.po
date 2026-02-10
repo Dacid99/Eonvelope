@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-09 23:34+0000\n"
-"PO-Revision-Date: 2026-01-24 14:01+0000\n"
+"PO-Revision-Date: 2026-02-11 15:09+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/"
-">\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -59,10 +59,8 @@ msgid "File format %(file_format)s is not supported."
 msgstr "Dateiformat %(file_format)s wird nicht unterstützt."
 
 #: src/api/v1/views/AccountViewSet.py:284
-#, fuzzy
-#| msgid "No emails found."
 msgid "No mailboxes found."
-msgstr "Keine E-Mails gefunden."
+msgstr "Keine Postfächer gefunden."
 
 #: src/api/v1/views/AttachmentViewSet.py:191
 #: src/api/v1/views/AttachmentViewSet.py:277
@@ -210,22 +208,16 @@ msgid "No emails found."
 msgstr "Keine E-Mails gefunden."
 
 #: src/api/v1/views/MailboxViewSet.py:403
-#, fuzzy
-#| msgid "Email ids are required."
 msgid "Mailbox ids are required."
-msgstr "E-Mail-IDs werden benötigt."
+msgstr "Postfach-IDs werden benötigt."
 
 #: src/api/v1/views/MailboxViewSet.py:411
-#, fuzzy
-#| msgid "Email ids given in invalid format."
 msgid "Mailbox ids given in invalid format."
-msgstr "E-Mail-IDs in ungültigem Format angegeben."
+msgstr "Postfach-IDs in ungültigem Format angegeben."
 
 #: src/api/v1/views/MailboxViewSet.py:425
-#, fuzzy
-#| msgid "No emails found"
 msgid "No mailboxes found"
-msgstr "Keine E-Mails gefunden"
+msgstr "Keine Postfächer gefunden"
 
 #: src/api/v1/views/MailboxViewSet.py:468
 msgid "Successfully uploaded mailbox file."

@@ -20,7 +20,7 @@ repos:
       - id: black
         args: [--config, tools/black_config]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.14
+    rev: v0.15.0
     hooks:
       - id: ruff-check
         args: [--config, tools/ruff.toml]
@@ -36,7 +36,7 @@ repos:
       - id: djlint-django
         args: [--configuration, tools/djlintrc]
   - repo: https://github.com/python-poetry/poetry
-    rev: 2.3.1
+    rev: 2.3.2
     hooks:
       - id: poetry-lock
       - id: poetry-check
@@ -56,7 +56,7 @@ repos:
       - id: biome-check
         args: [--config-path, tools/biome.json]
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 42.84.0
+    rev: 43.8.2
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/PyCQA/doc8
@@ -82,7 +82,7 @@ repos:
         language: system
         types: [html]
   - repo: https://github.com/timo-reymann/gitlab-ci-verify
-    rev: v2.8.2
+    rev: v2.9.2
     hooks:
       - id: gitlab-ci-verify
         args: [--gitlab-base-url, gitlab.com, --severity, warning]

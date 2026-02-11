@@ -83,7 +83,7 @@ djlint = "*"
 codespell = "*"
 doc8 = "*"
 pylintfileheader = "*"
-gitlab-ci-verify = "^2.8.3"
+gitlab-ci-verify = "*"
 
 [tool.poetry.group.test]
 optional=true

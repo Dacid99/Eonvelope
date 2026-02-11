@@ -130,7 +130,7 @@ class Account(
     """The port of the mail server. Can be null if the default port of the protocol is used."""
 
     protocol = models.CharField(
-        choices=EmailProtocolChoices.choices,
+        choices=EmailProtocolChoices,
         max_length=10,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("email protocol"),

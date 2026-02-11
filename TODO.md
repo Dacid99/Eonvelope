@@ -3,7 +3,6 @@
 ## Feature ideas
 
 - extensive database statistics
-- toggleable [tooltips](https://getbootstrap.com/docs/5.3/components/tooltips/) or [popovers](https://developer.chrome.com/blog/popover-hint?hl=de)
 - mechanism to remove all correspondents without emails
 - download for main logfiles
 - [progressbar](https://getbootstrap.com/docs/5.3/components/progress/) for actions
@@ -42,6 +41,7 @@
 - migration to django6.0
 - squashmigrations
 - further optimize queryset lookups
+- general share api endpoint
 
 ### Work in progress
 

@@ -74,7 +74,7 @@ class EmailCorrespondent(
     """The correspondent mentioned in :attr:`email`. Unique together with :attr:`email` and :attr:`mention`."""
 
     mention = models.CharField(
-        choices=HeaderFields.Correspondents.choices,
+        choices=HeaderFields.Correspondents,
         max_length=30,
         # Translators: Do not capitalize the very first letter unless your language requires it.
         verbose_name=_("mention"),

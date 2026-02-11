@@ -82,7 +82,7 @@ if TYPE_CHECKING:
         request=inline_serializer(
             name="fetch_criterion_data",
             fields={
-                "criterion": ChoiceField(choices=EmailFetchingCriterionChoices.choices),
+                "criterion": ChoiceField(choices=EmailFetchingCriterionChoices),
                 "criterion_arg": CharField(required=False),
             },
         ),

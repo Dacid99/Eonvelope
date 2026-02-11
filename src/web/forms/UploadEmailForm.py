@@ -29,7 +29,7 @@ class UploadEmailForm(RequiredMarkerForm):
     """Form for email file upload."""
 
     file_format = forms.ChoiceField(
-        choices=SupportedEmailUploadFormats.choices,
+        choices=SupportedEmailUploadFormats,
         required=True,
         label=_("File format"),
         help_text=_("Select the format of the email file you want to upload."),

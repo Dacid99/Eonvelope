@@ -27,7 +27,7 @@ class UploadEmailSerializer(serializers.Serializer):
     """Serializer for email file upload."""
 
     file_format = serializers.ChoiceField(
-        choices=SupportedEmailUploadFormats.choices,
+        choices=SupportedEmailUploadFormats,
         required=True,
     )
     file = serializers.FileField(required=True)

@@ -85,7 +85,7 @@ class Daemon(
     """The mailbox this daemon fetches. Unique. Deletion of that :attr:`mailbox` deletes this daemon."""
 
     fetching_criterion = models.CharField(
-        choices=EmailFetchingCriterionChoices.choices,
+        choices=EmailFetchingCriterionChoices,
         default=EmailFetchingCriterionChoices.ALL,
         max_length=127,
         # Translators: Do not capitalize the very first letter unless your language requires it.

@@ -56,7 +56,7 @@ class AccountFilterSet(django_filters.FilterSet):
     )
     protocol = django_filters.MultipleChoiceFilter(
         field_name="protocol",
-        choices=EmailProtocolChoices.choices,
+        choices=EmailProtocolChoices,
         widget=widgets.CheckboxSelectMultiple,
     )
     created__date__lte = django_filters.DateTimeFilter(

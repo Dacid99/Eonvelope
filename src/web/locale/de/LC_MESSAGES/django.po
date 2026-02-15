@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-09 23:34+0000\n"
-"PO-Revision-Date: 2026-02-11 16:09+0000\n"
+"PO-Revision-Date: 2026-02-16 11:09+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/>"
 "\n"
@@ -690,7 +690,7 @@ msgstr "Woche"
 
 #: src/web/templates/web/email/archive/week.html:15
 msgid "Week #"
-msgstr "Woche Nr."
+msgstr "Wochennr."
 
 #: src/web/templates/web/email/archive/year.html:6
 #: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35

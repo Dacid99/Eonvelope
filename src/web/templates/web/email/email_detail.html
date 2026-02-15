@@ -57,11 +57,11 @@
         <li class="list-group-item">
             {% translate "Datasize" %}: {{ object.datasize }} {% translate "bytes" %}
         </li>
-        <li class="list-group-item list-group-item-action">
+        <li class="list-group-item">
             {% translate "Mailbox" %}: <a href="{{ object.mailbox.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.name }}</a>
         </li>
-        <li class="list-group-item list-group-item-action">
+        <li class="list-group-item">
             {% translate "Account" %}: <a href="{{ object.mailbox.account.get_absolute_url }}"
     class="link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover">{{ object.mailbox.account.complete_mail_address }}</a>
         </li>

@@ -61,6 +61,9 @@ VERSION = config["project"]["version"]
 
 SLIM = env("SLIM", cast=bool, default=False)
 
+DEFAULT_COOKIE_AGE = 2419200  # 4 weeks
+
+
 ##### django core #####
 # https://docs.djangoproject.com/en/5.2/ref/settings/#core-settings
 
@@ -365,13 +368,7 @@ LANGUAGES = [
 
 LOCALE_PATHS = [
     SOURCE_DIR / "config" / "locale",
-    SOURCE_DIR / "eonvelope" / "locale",
-    SOURCE_DIR / "core" / "locale",
-    SOURCE_DIR / "api" / "locale",
-    SOURCE_DIR / "web" / "locale",
 ]
-
-DEFAULT_COOKIE_AGE = 2419200  # 4 weeks
 
 LANGUAGE_COOKIE_AGE = env("LANGUAGE_COOKIE_AGE", cast=int, default=DEFAULT_COOKIE_AGE)
 LANGUAGE_COOKIE_SECURE = not DEBUG
@@ -468,7 +465,6 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "constance.context_processors.config",
-                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",

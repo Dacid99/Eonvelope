@@ -124,11 +124,22 @@ See the `Searxng docs on this subject <https://docs.searxng.org/dev/engines/json
 Prometheus
 ----------
 
-Eonvelope exports database, database-models, migrations, cache and other metrics for Prometheus.
+Eonvelope exports database, database-models, migrations, cache, health and other metrics for Prometheus.
 The metrics data can be scraped under */metrics*, their names all start with *eonvelope*.
 
-For reference on configuration refer to the [Prometheus](https://prometheus.io/docs/introduction/overview/)
+For reference on configuration refer to the `Prometheus <https://prometheus.io/docs/introduction/overview/>`_
 and [django-prometheus](https://github.com/django-commons/django-prometheus/blob/master/README.md) docs.
 
 .. note::
     This integration is not available in slim mode.
+
+The healthstatus data is available under */health/?format=openmetrics*.
+
+
+Uptime- and Healthmonitoring
+----------------------------
+
+The */health/* endpoint exposes detailed data on Eonvelope's health in various formats.
+
+For details on the other formats like rss, json, etc. visit
+`the django healthcheck documentation <https://prometheus.io/docs/introduction/overview/>`_.

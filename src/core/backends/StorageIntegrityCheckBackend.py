@@ -18,23 +18,27 @@
 
 """Module with the :class:`core.backends.StorageIntegrityCheckBackend.StorageIntegrityCheckBackend` class."""
 
-from health_check.backends import HealthCheck, HealthCheckException
+from asyncio import to_thread
+from dataclasses import dataclass
+
+from health_check import HealthCheck
+from health_check.exceptions import ServiceWarning
 
 from core.models import StorageShard
 
 
+@dataclass
 class StorageIntegrityCheckBackend(HealthCheck):
     """Health check backend for :func:`core.models.StorageShard.StorageShard.healthcheck`."""
 
-    critical_service = False
-
-    def check_status(self) -> None:
+    async def run(self) -> None:
         """Implements the healthcheck.
 
         Raises:
-            HealthCheckException: If :func:`core.models.StorageShard.StorageShard.healthcheck` fails.
+            ServiceWarning: If :func:`core.models.StorageShard.StorageShard.healthcheck` fails.
         """
-        if not StorageShard.healthcheck():
-            raise HealthCheckException(
+        health = await to_thread(StorageShard.healthcheck)
+        if not health:
+            raise ServiceWarning(
                 "The storage integrity is compromised, check the logs for critical level errors!"
             )

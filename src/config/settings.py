@@ -94,17 +94,10 @@ INSTALLED_APPS = [
     "constance",
     "constance.backends.database",
     "health_check",
-    "health_check.db",
-    "health_check.storage",
-    "health_check.cache",
     "django_bootstrap5",
     "crispy_forms",
     "crispy_bootstrap5",
     "fontawesomefree",
-    "health_check.contrib.migrations",
-    "health_check.contrib.psutil",
-    "health_check.contrib.rabbitmq",
-    "health_check.contrib.celery_ping",
     "django_celery_results",
     "django_celery_beat",
     "eonvelope.apps.EonvelopeConfig",
@@ -564,6 +557,7 @@ STATIC_ROOT = (
     BASE_DIR / "staticfiles"
 )  # must be inside BASE_DIR to be copied correctly in the Dockerfile
 
+
 ##### django-pwa #####
 # https://pypi.org/project/django-pwa/
 
@@ -681,7 +675,22 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
-BROKER_URL = CELERY_BROKER_URL  # required for rabbitmq django-healthcheck
+
+
+##### django-health-check #####
+# https://codingjoe.dev/django-health-check
+
+HEALTH_CHECKS = [
+    "health_check.Cache",
+    "health_check.Database",
+    "health_check.Storage",
+    "health_check.contrib.psutil.Disk",
+    "health_check.contrib.psutil.Memory",
+    "health_check.contrib.celery.Ping",
+    "health_check.contrib.psutil.CPU",
+    ("health_check.contrib.rabbitmq.RabbitMQ", {"amqp_url": CELERY_BROKER_URL}),
+    "core.backends.StorageIntegrityCheckBackend",
+]
 
 
 ##### allauth #####

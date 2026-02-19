@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-09 23:34+0000\n"
-"PO-Revision-Date: 2025-12-31 20:15+0000\n"
-"Last-Translator: Manuela Silva <mmsrs@sky.com>\n"
+"PO-Revision-Date: 2026-02-20 19:09+0000\n"
+"Last-Translator: Joana RC Gomes <joanarcgomes@outlook.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
 "eonvelope/core/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -17,207 +17,207 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: src/core/constants.py:39
 msgid "All emails received the last DAY"
-msgstr ""
+msgstr "Todos os e-mails recebidos no último DIA"
 
 #: src/core/constants.py:42
 msgid "All emails received the last WEEK"
-msgstr ""
+msgstr "Todos os e-mails recebidos na última SEMANA"
 
 #: src/core/constants.py:45
 msgid "All emails received the last MONTH"
-msgstr ""
+msgstr "Todos os e-mails recebidos no último MÊS"
 
 #: src/core/constants.py:48
 msgid "All emails received the last YEAR"
-msgstr ""
+msgstr "Todos os e-mails recebidos no último ANO"
 
 #: src/core/constants.py:51
 msgid "All RECENT emails"
-msgstr "Todos as mensagens RECENTES"
+msgstr "Todos os e-mails RECENTES"
 
 #: src/core/constants.py:54
 msgid "All UNSEEN emails"
-msgstr ""
+msgstr "Todos os e-mails NÃO LIDOS"
 
 #: src/core/constants.py:57
 msgid "All SEEN emails"
-msgstr ""
+msgstr "Todos os e-mails LIDOS"
 
 #: src/core/constants.py:60
 msgid "All emails"
-msgstr ""
+msgstr "Todos os e-mails"
 
 #: src/core/constants.py:63
 msgid "All RECENT and UNSEEN emails"
-msgstr ""
+msgstr "Todos os e-mails RECENTES e NÃO LIDOS"
 
 #: src/core/constants.py:66
 msgid "All emails that are not RECENT"
-msgstr ""
+msgstr "Todos os e-mails não RECENTES"
 
 #: src/core/constants.py:69
 msgid "FLAGGED emails"
-msgstr ""
+msgstr "E-mails SINALIZADOS"
 
 #: src/core/constants.py:72
 msgid "All emails that are not FLAGGED"
-msgstr ""
+msgstr "Todos os e-mails não SINALIZADOS"
 
 #: src/core/constants.py:75
 msgid "All email DRAFTs"
-msgstr ""
+msgstr "Todos os RASCUNHOs"
 
 #: src/core/constants.py:78
 msgid "All emails that are not DRAFTs"
-msgstr ""
+msgstr "Todos os e-mails que não são RASCUNHOs"
 
 #: src/core/constants.py:81
 msgid "All ANSWERED emails"
-msgstr ""
+msgstr "Todos os e-mails COM RESPOSTA"
 
 #: src/core/constants.py:84
 msgid "All UNANSWERED emails"
-msgstr ""
+msgstr "Todos os e-mails SEM RESPOSTA"
 
 #: src/core/constants.py:87
 msgid "All DELETED emails"
-msgstr ""
+msgstr "Todos os e-mails ELIMINADOS"
 
 #: src/core/constants.py:90
 msgid "All UNDELETED emails"
-msgstr ""
+msgstr "Todos os e-mails RECUPERADOS"
 
 #: src/core/constants.py:94
 msgid "All emails with the given KEYWORD"
-msgstr ""
+msgstr "Todos os e-mails que contêm a PALAVRA-CHAVE"
 
 #: src/core/constants.py:97
 msgid "All emails without the given KEYWORD"
-msgstr ""
+msgstr "Todos os e-mails que não contêm a PALAVRA-CHAVE"
 
 #: src/core/constants.py:100
 msgid "All emails LARGER than the given size"
-msgstr ""
+msgstr "Todos os e-mails com tamanho SUPERIOR ao indicado"
 
 #: src/core/constants.py:103
 msgid "All emails SMALLER than the given size"
-msgstr ""
+msgstr "Todos os e-mails com tamanho INFERIOR ao indicado"
 
 #: src/core/constants.py:106
 msgid "All emails with SUBJECT containing the given text"
-msgstr ""
+msgstr "Todos os e-mails cujo ASSUNTO contém o texto fornecido"
 
 #: src/core/constants.py:109
 msgid "All emails with BODY containing the given text"
-msgstr ""
+msgstr "Todos os e-mails cujo CORPO contém o texto fornecido"
 
 #: src/core/constants.py:112
 msgid "All emails sent FROM the given address"
-msgstr ""
+msgstr "Todos os e-mails ENVIADOS do endereço fornecido"
 
 #: src/core/constants.py:115
 msgid "All emails SENT SINCE the given date"
-msgstr ""
+msgstr "Todos os e-mails ENVIADOS DESDE a data indicada"
 
 #: src/core/constants.py:122
 msgid "IMAP4"
-msgstr ""
+msgstr "IMAP4"
 
 #: src/core/constants.py:125
 msgid "IMAP4 (unencrypted)"
-msgstr ""
+msgstr "IMAP4 (não encriptado)"
 
 #: src/core/constants.py:128
 msgid "POP3"
-msgstr ""
+msgstr "POP3"
 
 #: src/core/constants.py:131
 msgid "POP3 (unencrypted)"
-msgstr ""
+msgstr "POP3 (não encriptado)"
 
 #: src/core/constants.py:134
 msgid "Microsoft Exchange"
-msgstr ""
+msgstr "Microsoft Exchange"
 
 #: src/core/constants.py:137
 msgid "JMAP"
-msgstr ""
+msgstr "JMAP"
 
 #: src/core/constants.py:144
 msgid "Inbox"
-msgstr ""
+msgstr "Caixa de entrada"
 
 #: src/core/constants.py:145
 msgid "Outbox"
-msgstr ""
+msgstr "Caixa de saída"
 
 #: src/core/constants.py:146
 msgid "Sent"
-msgstr ""
+msgstr "Enviado"
 
 #: src/core/constants.py:147
 msgid "Junk"
-msgstr ""
+msgstr "Spam"
 
 #: src/core/constants.py:148
 msgid "Drafts"
-msgstr ""
+msgstr "Rascunhos"
 
 #: src/core/constants.py:149
 msgid "Trash"
-msgstr ""
+msgstr "Lixo"
 
 #: src/core/constants.py:188
 msgid "From"
-msgstr ""
+msgstr "De"
 
 #: src/core/constants.py:189
 msgid "To"
-msgstr ""
+msgstr "Para"
 
 #: src/core/constants.py:190
 msgid "CC"
-msgstr ""
+msgstr "CC"
 
 #: src/core/constants.py:191
 msgid "BCC"
-msgstr ""
+msgstr "BCC"
 
 #: src/core/constants.py:192
 msgid "Sender"
-msgstr ""
+msgstr "Remetente"
 
 #: src/core/constants.py:193
 msgid "Reply-To"
-msgstr ""
+msgstr "Endereço para resposta"
 
 #: src/core/constants.py:194
 msgid "Resent-From"
-msgstr ""
+msgstr "Reenviado-Por"
 
 #: src/core/constants.py:195
 msgid "Resent-To"
-msgstr ""
+msgstr "Reenviado-Para"
 
 #: src/core/constants.py:196
 msgid "Resent-Cc"
-msgstr ""
+msgstr "Reenviado-Cc"
 
 #: src/core/constants.py:197
 msgid "Resent-Bcc"
-msgstr ""
+msgstr "Reenviado-Bcc"
 
 #: src/core/constants.py:198
 msgid "Resent-Sender"
-msgstr ""
+msgstr "Reenviado-Remetente"
 
 #: src/core/constants.py:199
 msgid "Resent-Reply-To"
-msgstr ""
+msgstr "Reenviado-Endereço para resposta"
 
 #: src/core/constants.py:202
 msgid "Envelope-To"
@@ -285,128 +285,136 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:45
 msgid "last error"
-msgstr ""
+msgstr "último erro"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:53
 msgid "time of last error occurrence"
-msgstr ""
+msgstr "hora do último erro ocorrido"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:31
 msgid "time of creation"
-msgstr ""
+msgstr "data de criação"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:38
 msgid "time of last update"
-msgstr ""
+msgstr "data da última atualização"
 
 #: src/core/models/Account.py:86
 msgid ""
 "This will delete the records of this account and all mailboxes, emails and "
 "attachments found in it!"
 msgstr ""
+"Esta ação irá eliminar os registos desta conta, bem como todas as caixas de "
+"correio, e-mails e anexos que nela se encontrem!"
 
 #: src/core/models/Account.py:89
 msgid ""
 "This will delete the records of these accounts and all mailboxes, emails and "
 "attachments found in them!"
 msgstr ""
+"Esta ação irá eliminar os registos destas contas, bem como todas as caixas "
+"de correio, e-mails e anexos que nelas se encontrem!"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:99
 msgid "username"
-msgstr ""
+msgstr "nome de utilizador"
 
 #: src/core/models/Account.py:100
 msgid "The username of the account. Typically the mail address."
 msgstr ""
+"O nome de utilizador da conta. Correspondente normalmente ao endereço de e-"
+"mail."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:109
 msgid "password"
-msgstr ""
+msgstr "palavra-passe"
 
 #: src/core/models/Account.py:110
 msgid "The password to the account."
-msgstr ""
+msgstr "A palavra-passa da conta."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:117
 msgid "mailserver URL"
-msgstr ""
+msgstr "URL do servidor de e-mail"
 
 #: src/core/models/Account.py:118
 msgid "The URL of the mailserver for the chosen protocol."
-msgstr ""
+msgstr "O URL do servidor de e-mail para o protocolo escolhido."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:127
 msgid "mailserver portnumber"
-msgstr ""
+msgstr "número de porto do servidor de e-mail"
 
 #: src/core/models/Account.py:128
 msgid "The port of the mailserver for the chosen protocol."
-msgstr ""
+msgstr "O número de porto do servidor de e-mail para o protocolo escolhido."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:136
 msgid "email protocol"
-msgstr ""
+msgstr "protocolo de e-mail"
 
 #: src/core/models/Account.py:137
 msgid "The email protocol implemented by the server."
-msgstr ""
+msgstr "O protocolo de e-mail implementado pelo servidor."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:146
 msgid "connection timeout"
-msgstr ""
+msgstr "tempo limite de conexão"
 
 #: src/core/models/Account.py:147
 msgid "Timeout for the connection to the mailserver."
-msgstr ""
+msgstr "Tempo limite de conexão ao servidor de e-mail."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:155
 msgid "allow insecure connection"
-msgstr ""
+msgstr "permitir conexão insegura"
 
 #: src/core/models/Account.py:157
 msgid ""
 "Whether to allow insecure connections to the host, e.g. with a self-signed "
 "certificate."
 msgstr ""
+"Indica se devem ser permitidas conexões inseguras ao servidor, por exemplo, "
+"através de um certificado autoassinado."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:167 src/core/models/Correspondent.py:102
 msgid "user"
-msgstr ""
+msgstr "utilizador"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:177 src/core/models/Mailbox.py:112
 msgid "account"
-msgstr ""
+msgstr "conta"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:179
 msgid "accounts"
-msgstr ""
+msgstr "contas"
 
 #: src/core/models/Account.py:203
 #, python-format
 msgid "Account %(mail_address)s with protocol %(protocol)s"
-msgstr ""
+msgstr "Conta %(mail_address)s com o protocolo %(protocol)s"
 
 #: src/core/models/Account.py:237
 msgid "This account already exists."
-msgstr ""
+msgstr "Esta conta já existe."
 
 #: src/core/models/Account.py:252
 #, python-format
 msgid "Testing this account data failed: %(error)s"
-msgstr ""
+msgstr "Não foi possível validar os dados desta conta: %(error)s"
 
 #: src/core/models/Account.py:283 src/core/models/Account.py:286
 #, python-format
@@ -416,26 +424,30 @@ msgstr ""
 #: src/core/models/Attachment.py:91
 msgid "This will only delete the record of this attachment, not of the email."
 msgstr ""
+"Esta ação irá eliminar apenas o registo deste anexo, não o do respetivo e-"
+"mail."
 
 #: src/core/models/Attachment.py:95
 msgid ""
 "This will only delete the records of these attachments, not of their emails."
 msgstr ""
+"Esta ação irá eliminar apenas o registo destes anexos, não o dos respetivos "
+"e-mails."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:101
 msgid "filename"
-msgstr ""
+msgstr "nome de ficheiro"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:110
 msgid "content disposition"
-msgstr ""
+msgstr "disposição do conteúdo"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:118
 msgid "content ID"
-msgstr ""
+msgstr "ID do conteúdo"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:126

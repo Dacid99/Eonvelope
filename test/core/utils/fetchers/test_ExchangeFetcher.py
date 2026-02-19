@@ -18,7 +18,6 @@
 
 """Test module for the :class:`ExchangeFetcher` class."""
 
-import datetime
 import os
 import re
 
@@ -28,7 +27,6 @@ import exchangelib.folders
 import exchangelib.folders.known_folders
 import exchangelib.queryset
 import pytest
-from freezegun import freeze_time
 from model_bakery import baker
 from requests.adapters import HTTPAdapter
 
@@ -38,6 +36,7 @@ from core.constants import (
     MailboxTypeChoices,
 )
 from core.models import Mailbox
+from core.utils import FetchingCriterion
 from core.utils.fetchers import ExchangeFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
@@ -122,91 +121,6 @@ def mock_ExchangeAccount(mocker, mock_msg_folder_root):
     )
 
     return mock_ExchangeAccount
-
-
-@pytest.mark.parametrize(
-    ("criterion_name", "expected_time_delta"),
-    [
-        (EmailFetchingCriterionChoices.DAILY, datetime.timedelta(days=1)),
-        (EmailFetchingCriterionChoices.WEEKLY, datetime.timedelta(weeks=1)),
-        (EmailFetchingCriterionChoices.MONTHLY, datetime.timedelta(weeks=4)),
-        (EmailFetchingCriterionChoices.ANNUALLY, datetime.timedelta(weeks=52)),
-    ],
-)
-def test_ExchangeFetcher_make_fetching_query_date_criterion(
-    faker, mock_QuerySet, criterion_name, expected_time_delta
-):
-    """Tests :func:`core.utils.fetchers.ExchangeFetcher.make_fetching_query`
-    in different cases of date criteria.
-    """
-    fake_datetime = faker.date_time_this_decade(tzinfo=datetime.UTC)
-
-    with freeze_time(fake_datetime):
-        result = ExchangeFetcher.make_fetching_query(criterion_name, "", mock_QuerySet)
-
-    assert result == mock_QuerySet.filter.return_value
-    mock_QuerySet.filter.assert_called_once_with(
-        datetime_received__gte=fake_datetime - expected_time_delta
-    )
-
-
-def test_ExchangeFetcher_make_fetching_query_sentsince_criterion(mock_QuerySet):
-    """Tests :func:`core.utils.fetchers.ExchangeFetcher.make_fetching_query`
-    in different cases of date criteria.
-    """
-
-    result = ExchangeFetcher.make_fetching_query(
-        EmailFetchingCriterionChoices.SENTSINCE, "2010-6-5", mock_QuerySet
-    )
-
-    assert result == mock_QuerySet.filter.return_value
-    mock_QuerySet.filter.assert_called_once_with(
-        datetime_received__gte=datetime.datetime(2010, 6, 5, tzinfo=datetime.UTC)
-    )
-
-
-@pytest.mark.parametrize(
-    ("criterion_name", "criterion_arg", "expected_kwarg"),
-    [
-        (EmailFetchingCriterionChoices.UNSEEN, "", {"is_read": False}),
-        (EmailFetchingCriterionChoices.SEEN, "", {"is_read": True}),
-        (EmailFetchingCriterionChoices.DRAFT, "", {"is_draft": True}),
-        (EmailFetchingCriterionChoices.UNDRAFT, "", {"is_draft": False}),
-        (
-            EmailFetchingCriterionChoices.SUBJECT,
-            "somestring",
-            {"subject__contains": "somestring"},
-        ),
-        (
-            EmailFetchingCriterionChoices.BODY,
-            "textPart",
-            {"body__contains": "textPart"},
-        ),
-    ],
-)
-def test_ExchangeFetcher_make_fetching_query__other_criterion(
-    mock_QuerySet, criterion_name, criterion_arg, expected_kwarg
-):
-    """Tests :func:`core.utils.fetchers.ExchangeFetcher.make_fetching_query`
-    in different cases of flag criteria.
-    """
-    result = ExchangeFetcher.make_fetching_query(
-        criterion_name, criterion_arg, mock_QuerySet
-    )
-
-    assert result == mock_QuerySet.filter.return_value
-    mock_QuerySet.filter.assert_called_once_with(**expected_kwarg)
-
-
-def test_ExchangeFetcher_make_fetching_query_all_criterion(mock_QuerySet):
-    """Tests :func:`core.utils.fetchers.ExchangeFetcher.make_fetching_query`
-    in case of the ALL criterion.
-    """
-    result = ExchangeFetcher.make_fetching_query(
-        EmailFetchingCriterionChoices.ALL, "", mock_QuerySet
-    )
-
-    assert result == mock_QuerySet
 
 
 @pytest.mark.django_db
@@ -640,7 +554,7 @@ def test_ExchangeFetcher_fetch_emails_filter__success(
     in case of success with a criterion other than ALL.
     """
     result = ExchangeFetcher(exchange_mailbox.account).fetch_emails(
-        exchange_mailbox, EmailFetchingCriterionChoices.DRAFT
+        exchange_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DRAFT)
     )
 
     assert result == [

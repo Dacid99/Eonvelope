@@ -18,3 +18,7 @@
 
 
 """eonvelope.utils package containing utility for Eonvelope project."""
+
+from .FetchingCriterion import FetchingCriterion
+
+__all__ = ["FetchingCriterion"]

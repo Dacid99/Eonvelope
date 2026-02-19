@@ -35,9 +35,10 @@ if TYPE_CHECKING:
     from core.models.Account import Account
     from core.models.Email import Email
     from core.models.Mailbox import Mailbox
+    from core.utils import FetchingCriterion
 
 
-class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
+class POP3Fetcher(BaseFetcher, SafePOPMixin):
     """Maintains a connection to the POP server and fetches data using :mod:`poplib`.
 
     Opens a connection to the POP server on construction and is preferably used in a 'with' environment.
@@ -117,8 +118,7 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
     def fetch_emails(
         self,
         mailbox: Mailbox,
-        criterion: str = EmailFetchingCriterionChoices.ALL,
-        criterion_arg: str = "",
+        criterion: FetchingCriterion = BaseFetcher.DEFAULT_FETCHING_CRITERION,
     ) -> list[bytes]:
         """Fetches and returns all maildata from the server.
 
@@ -127,8 +127,6 @@ class POP3Fetcher(BaseFetcher, poplib.POP3, SafePOPMixin):
             criterion: POP only supports ALL lookups.
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
                 This arg ensures compatibility with the other fetchers.
-            criterion_arg: The value to filter by.
-                Defaults to "" as :attr:`core.constants.EmailFetchingCriterionChoices.ALL` does not require a value.
 
         Returns:
             List of :class:`email.message.EmailMessage` mails in the mailbox.

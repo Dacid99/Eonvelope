@@ -21,7 +21,6 @@
 from __future__ import annotations
 
 import imaplib
-from datetime import UTC, datetime, timedelta
 from itertools import batched
 from typing import TYPE_CHECKING, override
 
@@ -29,7 +28,6 @@ from django.utils.translation import gettext_lazy as _
 from imap_tools.imap_utf7 import utf7_encode
 
 from core.constants import (
-    INTERNAL_DATE_FORMAT,
     EmailFetchingCriterionChoices,
     EmailProtocolChoices,
 )
@@ -43,6 +41,7 @@ if TYPE_CHECKING:
     from core.models.Account import Account
     from core.models.Email import Email
     from core.models.Mailbox import Mailbox
+    from core.utils import FetchingCriterion
 
 
 class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
@@ -90,39 +89,6 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     """
 
     EMAIL_FETCH_BATCH_SIZE = 100
-
-    @staticmethod
-    def make_fetching_criterion(criterion_name: str, criterion_arg: str) -> str | None:
-        """Returns the formatted criterion for the IMAP request, handles dates in particular.
-
-        Note:
-            There's no need to use timezone.now here as only the date part is used.
-
-        Args:
-            criterion_name: The criterion to prepare for the IMAP request.
-            criterion_arg: The argument for the criterion.
-
-        Returns:
-            Formatted criterion to be used in IMAP request.
-        """
-        match criterion_name:
-            case EmailFetchingCriterionChoices.DAILY:
-                start_time = datetime.now(tz=UTC) - timedelta(days=1)
-            case EmailFetchingCriterionChoices.WEEKLY:
-                start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
-            case EmailFetchingCriterionChoices.MONTHLY:
-                start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
-            case EmailFetchingCriterionChoices.ANNUALLY:
-                start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
-            case EmailFetchingCriterionChoices.SENTSINCE:
-                start_time = datetime.strptime(
-                    criterion_arg, INTERNAL_DATE_FORMAT
-                ).astimezone(UTC)
-            case _:
-                return criterion_name.format(criterion_arg)
-        return EmailFetchingCriterionChoices.SENTSINCE.format(
-            imaplib.Time2Internaldate(start_time).split(" ")[0].strip('" ')
-        )
 
     @override
     def __init__(self, account: Account) -> None:
@@ -191,8 +157,7 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
     def fetch_emails(
         self,
         mailbox: Mailbox,
-        criterion: str = EmailFetchingCriterionChoices.ALL,
-        criterion_arg: str = "",
+        criterion: FetchingCriterion = BaseFetcher.DEFAULT_FETCHING_CRITERION,
     ) -> list[bytes]:
         """Fetches and returns maildata from a mailbox based on a given criterion.
 
@@ -203,8 +168,6 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
             mailbox: Database model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails in the IMAP request.
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
-            criterion_arg: The value to filter by.
-                Defaults to "" as :attr:`core.constants.EmailFetchingCriterionChoices.ALL` does not require a value.
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.
@@ -215,9 +178,9 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
                 If :attr:`criterion` is not in :attr:`IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA`.
             MailboxError: If an error occurs or a bad response is returned during an action on the mailbox.
         """
-        super().fetch_emails(mailbox, criterion, criterion_arg)
+        super().fetch_emails(mailbox, criterion)
 
-        search_criterion = self.make_fetching_criterion(criterion, criterion_arg)
+        search_criterion = criterion.as_imap_criterion()
 
         self.logger.debug(
             "Searching and fetching %s messages in %s...",

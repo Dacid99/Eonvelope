@@ -48,6 +48,7 @@ from api.v1.serializers import MailboxWithDaemonSerializer
 from api.v1.serializers.UploadEmailSerializer import UploadEmailSerializer
 from core.constants import EmailFetchingCriterionChoices, SupportedEmailDownloadFormats
 from core.models import Email, Mailbox
+from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import FetcherError
 
 if TYPE_CHECKING:
@@ -294,17 +295,13 @@ class MailboxViewSet(
                     % {"criterion": criterion}
                 },
             )
-        if not criterion_arg and (criterion.format("arg") != criterion):
-            raise ValidationError(
-                {
-                    "criterion_arg": _(
-                        "The given criterion %(criterion)s requires an argument."
-                    )
-                    % {"criterion": criterion}
-                },
-            )
+        fetching_criterion = FetchingCriterion(criterion, criterion_arg)
         try:
-            mailbox.fetch(criterion, criterion_arg)
+            fetching_criterion.validate()
+        except ValueError as error:
+            raise ValidationError({"criterion_arg": str(error)}) from error
+        try:
+            mailbox.fetch(fetching_criterion)
         except FetcherError as error:
             response = Response(
                 {

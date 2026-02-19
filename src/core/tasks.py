@@ -22,6 +22,7 @@ from uuid import UUID
 
 from celery import shared_task
 
+from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 from .models.Daemon import Daemon
@@ -46,7 +47,9 @@ def fetch_emails(  # this must not be renamed or moved, otherwise existing daemo
     except Daemon.DoesNotExist:
         return
     try:
-        daemon.mailbox.fetch(daemon.fetching_criterion, daemon.fetching_criterion_arg)
+        daemon.mailbox.fetch(
+            FetchingCriterion(daemon.fetching_criterion, daemon.fetching_criterion_arg)
+        )
     except Exception as exc:
         daemon.set_unhealthy(exc)
         if isinstance(exc, MailAccountError):

@@ -18,7 +18,6 @@
 
 """Test module for the :class:`IMAP4Fetcher` class."""
 
-import datetime
 import re
 from collections.abc import Iterable, Sized
 
@@ -26,13 +25,12 @@ import jmapc
 import pytest
 import requests
 import urllib3.exceptions
-from freezegun import freeze_time
 
 from core.constants import (
-    EmailFetchingCriterionChoices,
     EmailProtocolChoices,
     MailboxTypeChoices,
 )
+from core.utils import FetchingCriterion
 from core.utils.fetchers import JMAPFetcher
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
@@ -177,92 +175,6 @@ def mock_JMAP_client(mocker, faker, mock_JMAP_request_handler):
     )
 
     return mock_JMAP_client
-
-
-@pytest.mark.parametrize(
-    ("criterion_name", "expected_time_delta"),
-    [
-        (EmailFetchingCriterionChoices.DAILY, datetime.timedelta(days=1)),
-        (EmailFetchingCriterionChoices.WEEKLY, datetime.timedelta(weeks=1)),
-        (EmailFetchingCriterionChoices.MONTHLY, datetime.timedelta(weeks=4)),
-        (EmailFetchingCriterionChoices.ANNUALLY, datetime.timedelta(weeks=52)),
-    ],
-)
-def test_JMAPFetcher_make_fetching_filter_date_criterion(
-    faker, criterion_name, expected_time_delta
-):
-    """Tests :func:`core.utils.fetchers.JMAPFetcher.make_fetching_query`
-    in different cases of date criteria.
-    """
-    fake_datetime = faker.date_time_this_decade(tzinfo=datetime.UTC)
-    expected_filter = jmapc.EmailQueryFilterCondition(
-        after=fake_datetime - expected_time_delta
-    )
-
-    with freeze_time(fake_datetime):
-        result = JMAPFetcher.make_fetching_filter(criterion_name, "value")
-
-    assert result == expected_filter
-
-
-def test_IMAP4Fetcher_make_fetching_filter_sentsince():
-    """Tests :func:`core.utils.fetchers.JMAPFetcher.make_fetching_query`
-    in case of the sentsince criterion.
-    """
-    result = JMAPFetcher.make_fetching_filter(
-        EmailFetchingCriterionChoices.SENTSINCE, "2013-05-29"
-    )
-
-    assert result == jmapc.EmailQueryFilterCondition(
-        after=datetime.datetime(2013, 5, 29, tzinfo=datetime.UTC)
-    )
-
-
-@pytest.mark.parametrize(
-    ("criterion_name", "expected_filter_kwarg"),
-    [
-        (EmailFetchingCriterionChoices.ALL, {}),
-        (EmailFetchingCriterionChoices.SEEN, {"has_keyword": "$seen"}),
-        (EmailFetchingCriterionChoices.DRAFT, {"has_keyword": "$draft"}),
-        (EmailFetchingCriterionChoices.ANSWERED, {"has_keyword": "$answered"}),
-        (EmailFetchingCriterionChoices.UNSEEN, {"not_keyword": "$seen"}),
-        (EmailFetchingCriterionChoices.UNDRAFT, {"not_keyword": "$draft"}),
-        (EmailFetchingCriterionChoices.UNANSWERED, {"not_keyword": "$answered"}),
-    ],
-)
-def test_JMAPFetcher_make_fetching_filter__no_arg(
-    criterion_name, expected_filter_kwarg
-):
-    """Tests :func:`core.utils.fetchers.JMAPFetcher.make_fetching_query`
-    in different cases of criteria without argument.
-    """
-    result = JMAPFetcher.make_fetching_filter(criterion_name, "")
-
-    assert result == jmapc.EmailQueryFilterCondition(**expected_filter_kwarg)
-
-
-@pytest.mark.parametrize(
-    ("criterion_name", "criterion_arg", "expected_filter_kwarg"),
-    [
-        (EmailFetchingCriterionChoices.LARGER, 140, {"min_size": 140}),
-        (EmailFetchingCriterionChoices.SMALLER, 598, {"max_size": 598}),
-        (EmailFetchingCriterionChoices.BODY, "testtext", {"body": "testtext"}),
-        (
-            EmailFetchingCriterionChoices.FROM,
-            "sender@server.com",
-            {"mail_from": "sender@server.com"},
-        ),
-    ],
-)
-def test_JMAPFetcher_make_fetching_filter_with_arg(
-    criterion_name, criterion_arg, expected_filter_kwarg
-):
-    """Tests :func:`core.utils.fetchers.JMAPFetcher.make_fetching_query`
-    in different cases of criteria with argument.
-    """
-    result = JMAPFetcher.make_fetching_filter(criterion_name, criterion_arg)
-
-    assert result == jmapc.EmailQueryFilterCondition(**expected_filter_kwarg)
 
 
 @pytest.mark.parametrize("mail_host_port", [123, None])
@@ -753,7 +665,9 @@ def test_JMAPFetcher_fetch_emails__bad_criterion(
 ):
     """Test the constructor of JMAPFetcher in case of an request error."""
     with pytest.raises(ValueError, match=re.compile("criterion", re.IGNORECASE)):
-        JMAPFetcher(jmap_mailbox.account).fetch_emails(jmap_mailbox, "NO_CRIT")
+        JMAPFetcher(jmap_mailbox.account).fetch_emails(
+            jmap_mailbox, FetchingCriterion("NO_CRIT")
+        )
 
     mock_JMAP_client.return_value.request.assert_not_called()
 

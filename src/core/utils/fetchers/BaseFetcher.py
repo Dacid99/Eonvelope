@@ -25,6 +25,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Self, override
 
 from core.constants import EmailFetchingCriterionChoices
+from core.utils import FetchingCriterion
 
 if TYPE_CHECKING:
     from types import TracebackType
@@ -45,6 +46,9 @@ class BaseFetcher(ABC):
 
     AVAILABLE_FETCHING_CRITERIA: tuple[str, ...] = ("",)
     """Tuple of all criteria available for fetching. Should refer to :class:`MailFetchingCriteria`. Must be immutable!"""
+
+    DEFAULT_FETCHING_CRITERION = FetchingCriterion(EmailFetchingCriterionChoices.ALL)
+    """Default criterion to use for fetching emails with the fetcher class."""
 
     @abstractmethod
     def __init__(self, account: Account) -> None:
@@ -87,8 +91,7 @@ class BaseFetcher(ABC):
     def fetch_emails(  # type: ignore[return]  # this abstractmethod just provides basic arg-checking
         self,
         mailbox: Mailbox,
-        criterion: str = EmailFetchingCriterionChoices.ALL,
-        criterion_arg: str = "",
+        criterion: FetchingCriterion = DEFAULT_FETCHING_CRITERION,
     ) -> list[bytes]:
         """Fetches emails based on a criterion from the server.
 
@@ -96,8 +99,6 @@ class BaseFetcher(ABC):
             mailbox: The model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails by.
                 Defaults to :attr:`core.constants.EmailFetchingCriterionChoices.ALL`.
-            criterion_arg: The value to filter by.
-                Defaults to "" as :attr:`core.constants.EmailFetchingCriterionChoices.ALL` does not require a value.
 
         Returns:
             List of mails in the mailbox matching the criterion as :class:`bytes`.

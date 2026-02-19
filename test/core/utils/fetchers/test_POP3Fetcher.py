@@ -23,8 +23,9 @@ import re
 import pytest
 from model_bakery import baker
 
-from core.constants import EmailProtocolChoices, MailboxTypeChoices
+from core.constants import EmailProtocolChoices
 from core.models import Mailbox
+from core.utils import FetchingCriterion
 from core.utils.fetchers import POP3Fetcher
 from core.utils.fetchers.exceptions import MailAccountError
 
@@ -395,7 +396,9 @@ def test_POP3Fetcher_fetch_emails__bad_criterion(pop3_mailbox, mock_logger):
     in case of an unavailable criterion.
     """
     with pytest.raises(ValueError, match=re.compile("criterion", re.IGNORECASE)):
-        POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox, "NONE")
+        POP3Fetcher(pop3_mailbox.account).fetch_emails(
+            pop3_mailbox, FetchingCriterion("NONE")
+        )
 
     mock_logger.error.assert_called()
 

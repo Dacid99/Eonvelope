@@ -64,7 +64,7 @@ def decode_header(header: Header | str) -> str:
     decoded_string = ""
     for fragment, charset in decoded_fragments:
         decoded_string += (
-            fragment.decode(charset if charset else "utf-8", errors="replace")
+            fragment.decode(charset or "utf-8", errors="replace")
             if isinstance(fragment, bytes)
             else fragment
         )

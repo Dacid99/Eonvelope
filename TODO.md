@@ -27,7 +27,6 @@
 - emailcorrespondent creation for better integration of mailinglist
 - split up long functions that are marked as too complex by ruff
 - make all filepaths pathlib.Paths, enable ruff PTH
-- compress fetchingcriterion logic into a class
 - use enums for typing and to reduce properties on mailbox
 
 ## To test

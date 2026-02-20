@@ -84,7 +84,7 @@ limit-inference-results=100
 # usually to register additional checkers.
 load-plugins=pylint.extensions.docparams,
              pylint.extensions.bad_builtin,
-             invalid-file-header
+             pylintfileheader
 
 
 # Pickle collected data for later comparisons.

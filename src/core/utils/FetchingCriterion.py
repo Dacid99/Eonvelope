@@ -83,7 +83,7 @@ class FetchingCriterion:
             - Existence of the criterion in general (covered by checking the above)
 
         Raises:
-            ValidationError: If this fetching criterion is invalid.
+            ValueError: If this fetching criterion is invalid.
         """
         if self.needs_argument and not self._argument:
             raise ValueError(_("This fetching criterion requires an argument."))

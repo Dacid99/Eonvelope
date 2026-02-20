@@ -389,8 +389,6 @@ def fake_account(monkeypatch, faker, owner_user):
         mail_address=faker.email(),
         protocol=EmailProtocolChoices.IMAP4.value,
     )
-    #
-    # with mocker.patch("core.models.Account.Account.update_mailboxes"):
     monkeypatch.setattr(fake_account, "update_mailboxes", lambda: None)
     fake_account.save()
     monkeypatch.undo()

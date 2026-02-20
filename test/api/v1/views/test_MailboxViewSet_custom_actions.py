@@ -31,6 +31,7 @@ from core.constants import (
     SupportedEmailUploadFormats,
 )
 from core.models import Mailbox
+from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 
@@ -287,7 +288,7 @@ def test_fetch__noauth(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
         data={
-            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion": EmailFetchingCriterionChoices.DAILY.value,
             "criterion_arg": "value",
         },
     )
@@ -313,7 +314,7 @@ def test_fetch__auth_other(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
         data={
-            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion": EmailFetchingCriterionChoices.DAILY.value,
             "criterion_arg": "value",
         },
     )
@@ -337,7 +338,7 @@ def test_fetch__success__auth_owner(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
         data={
-            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion": EmailFetchingCriterionChoices.DAILY.value,
             "criterion_arg": "value",
         },
     )
@@ -347,7 +348,8 @@ def test_fetch__success__auth_owner(
     assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
     assert "error" not in response.data
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL.value, "value"
+        fake_mailbox,
+        FetchingCriterion(EmailFetchingCriterionChoices.DAILY, "value"),
     )
 
 
@@ -369,7 +371,7 @@ def test_fetch__failure__auth_owner(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
         data={
-            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion": EmailFetchingCriterionChoices.DAILY.value,
             "criterion_arg": "value",
         },
     )
@@ -380,7 +382,7 @@ def test_fetch__failure__auth_owner(
     assert "error" in response.data
     assert fake_error_message in response.data["error"]
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL, "value"
+        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY, "value")
     )
 
 
@@ -436,7 +438,7 @@ def test_fetch__auth_owner__missing_criterion_arg(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": EmailFetchingCriterionChoices.SENTSINCE},
+        data={"criterion": EmailFetchingCriterionChoices.SENTSINCE.value},
     )
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -456,7 +458,7 @@ def test_fetch__auth_owner_criterion_arg_not_required(
         custom_detail_action_url(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
-        data={"criterion": EmailFetchingCriterionChoices.DAILY},
+        data={"criterion": EmailFetchingCriterionChoices.DAILY.value},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -464,7 +466,7 @@ def test_fetch__auth_owner_criterion_arg_not_required(
     assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
     assert "error" not in response.data
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.DAILY.value, ""
+        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY)
     )
 
 
@@ -483,7 +485,7 @@ def test_fetch__auth_admin(
             MailboxViewSet, MailboxViewSet.URL_NAME_FETCH, fake_mailbox
         ),
         data={
-            "criterion": EmailFetchingCriterionChoices.ALL.value,
+            "criterion": EmailFetchingCriterionChoices.DAILY.value,
             "criterion_arg": "value",
         },
     )

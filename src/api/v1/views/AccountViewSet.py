@@ -39,6 +39,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import BooleanField, CharField
 
 from api.v1.filters import AccountFilterSet
 from api.v1.mixins.ToggleFavoriteMixin import ToggleFavoriteMixin
@@ -53,28 +54,35 @@ if TYPE_CHECKING:
 
 
 @extend_schema_view(
-    list=extend_schema(description="Lists all instances matching the filter."),
-    retrieve=extend_schema(description="Retrieves a single instance."),
-    update=extend_schema(description="Updates a single instance."),
-    create=extend_schema(description="Creates a new instance."),
-    destroy=extend_schema(description="Deletes a single instance."),
+    list=extend_schema(description=_("Lists all instances matching the filter.")),
+    retrieve=extend_schema(description=_("Retrieves a single instance.")),
+    update=extend_schema(description=_("Updates a single instance.")),
+    create=extend_schema(description=_("Creates a new instance.")),
+    destroy=extend_schema(description=_("Deletes a single instance.")),
     update_mailboxes=extend_schema(
         request=None,
         responses={
             200: inline_serializer(
                 name="update_mailboxes_account_response",
-                fields={"detail": OpenApiTypes.STR, "data": AccountSerializer},
+                fields={
+                    "detail": CharField(),
+                    "data": AccountSerializer(),
+                },
             )
         },
-        description="Updates the mailboxes of the account instance.",
+        description=_("Updates the mailboxes of an account."),
     ),
     add_daemons=extend_schema(
         request=None,
         responses={
             200: inline_serializer(
-                name="add_daemons_response", fields={"detail": OpenApiTypes.STR}
+                name="add_daemons_response",
+                fields={"detail": CharField()},
             )
         },
+        description=_(
+            "Adds a standard set of routines for archiving all traffic to an account."
+        ),
     ),
     test=extend_schema(
         request=None,
@@ -82,31 +90,32 @@ if TYPE_CHECKING:
             200: inline_serializer(
                 name="test_account_response",
                 fields={
-                    "detail": OpenApiTypes.STR,
-                    "result": OpenApiTypes.BOOL,
-                    "data": AccountSerializer,
+                    "detail": CharField(),
+                    "result": BooleanField(),
+                    "data": AccountSerializer(),
                 },
             )
         },
-        description="Tests the account instance.",
+        description=_("Tests an account."),
     ),
     download=extend_schema(
         parameters=[
             OpenApiParameter(
-                "file_format",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
+                name="file_format",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
                 required=True,
-                enum=SupportedEmailDownloadFormats,
+                enum=SupportedEmailDownloadFormats.values,
             ),
         ],
+        request=None,
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=attachment",
+                description="content-disposition: attachment",
             )
         },
-        description="Downloads all emails of a mailbox instance.",
+        description=_("Downloads all emails of an account."),
     ),
 )
 class AccountViewSet(viewsets.ModelViewSet[Account], ToggleFavoriteMixin):

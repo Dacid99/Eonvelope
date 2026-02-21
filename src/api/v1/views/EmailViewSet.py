@@ -41,6 +41,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import CharField
 
 from api.utils import query_param_list_to_typed_list
 from api.v1.filters import EmailFilterSet
@@ -57,85 +58,98 @@ if TYPE_CHECKING:
 
 
 @extend_schema_view(
-    list=extend_schema(description="Lists all instances matching the filter."),
-    retrieve=extend_schema(description="Retrieves a single instance."),
-    destroy=extend_schema(description="Deletes a single instance."),
+    list=extend_schema(description=_("Lists all instances matching the filter.")),
+    retrieve=extend_schema(description=_("Retrieves a single instance.")),
+    destroy=extend_schema(description=_("Deletes a single instance.")),
     download=extend_schema(
+        request=None,
         responses={
-            200: OpenApiResponse(
+            (200, "message/rfc822"): OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="headers: Content-Disposition=attachment",
+                description="content-disposition: attachment",
             )
         },
-        description="Downloads the email instances eml file.",
+        description=_("Downloads an email's eml file."),
     ),
     download_batch=extend_schema(
+        operation_id="v1_emails_batch_download_retrieve",
         parameters=[
             OpenApiParameter(
-                "id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
+                name="id",
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
                 required=True,
                 explode=True,
                 many=True,
-                description="Accepts both id=1,2,3 and id=1&id=2&id=3 notation",
+                description=_("A list of integer values identifying the emails.")
+                + " "
+                + _(
+                    "Duplicates are ignored. Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
+                ),
             ),
             OpenApiParameter(
-                "file_format",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
+                name="file_format",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
                 required=True,
-                enum=SupportedEmailDownloadFormats,
+                enum=SupportedEmailDownloadFormats.values,
             ),
         ],
+        request=None,
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=attachment",
+                description="content-disposition: attachment",
             )
         },
-        description="Downloads multiple emails.",
+        description=_("Downloads multiple email's eml files."),
     ),
     download_thumbnail=extend_schema(
+        request=None,
         responses={
-            200: OpenApiResponse(
+            (200, "text/html"): OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=inline, X-Frame-Options = 'SAMEORIGIN', Content-Security-Policy = 'frame-ancestors 'self''",
+                description=_(
+                    "content-disposition: inline, x-frame-options: SAMEORIGIN, content-security-policy: frame-ancestors 'self'"
+                ),
             )
         },
-        description="Downloads a single emails thumbnail.",
+        description=_("Downloads a single emails thumbnail."),
     ),
     conversation=extend_schema(
+        request=None,
         responses={200: BaseEmailSerializer(many=True)},
-        description="Lists the conversation involving the email instance.",
+        description=_("Lists the conversation involving an email."),
     ),
     restore=extend_schema(
+        request=None,
         responses={
             200: OpenApiResponse(
-                response=OpenApiTypes.STR, description="Restoring was successful"
+                response=OpenApiTypes.STR, description=_("Restoring was successful")
             ),
             400: OpenApiResponse(
-                response=OpenApiTypes.STR, description="Restoring failed"
+                response=OpenApiTypes.STR, description=_("Restoring failed")
             ),
             404: OpenApiResponse(
-                response=OpenApiTypes.STR, description="The eml file was not found"
+                response=OpenApiTypes.STR, description=_("The eml file was not found")
             ),
         },
-        description="Restores the email to its mailbox.",
+        description=_("Restores an email to its mailbox on the server."),
     ),
     reprocess=extend_schema(
+        request=None,
         responses={
             200: OpenApiResponse(
                 response=inline_serializer(
-                    name="test_mailbox_response",
+                    name="reprocess_email_response",
                     fields={
-                        "detail": OpenApiTypes.STR,
-                        "data": FullEmailSerializer,
+                        "detail": CharField(),
+                        "data": FullEmailSerializer(),
                     },
                 )
             )
         },
-        description="Reprocesses the email using the stored data.",
+        description=_("Reprocesses an email using the stored data."),
     ),
 )
 class EmailViewSet(

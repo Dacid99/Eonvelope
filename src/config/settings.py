@@ -651,7 +651,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "allauth.headless.contrib.rest_framework.authentication.XSessionTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "eonvelope.auth.BasicNoMFAuthentication",
+        "api.auth.BasicNoMFAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
@@ -771,10 +771,25 @@ DJANGO_TABLES2_TABLE_ATTRS = {
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Eonvelope API",
-    "DESCRIPTION": "The API schema for the Eonvelope server.",
+    # Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
+    "TITLE": _("E∘nvelope API"),
+    # Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
+    "DESCRIPTION": _("API schema for the E∘nvelope server."),
+    "LICENSE": {
+        # Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
+        "name": _("Licensed under AGPL-3.0-or-later"),
+        "url": "https://gitlab.com/Dacid99/eonvelope/-/blob/master/LICENSE",
+    },
+    "EXTERNAL_DOCS": {
+        # Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218. ReadTheDocs is a brand name.
+        "description": _("Read the E∘nvelope Documentation on ReadTheDocs"),
+        "url": "https://eonvelope.readthedocs.io/stable/rst/api-instructions.html",
+    },
     "VERSION": VERSION,
     "SERVE_INCLUDE_SCHEMA": True,
+    "SCHEMA_PATH_PREFIX": "/api",
+    "SERVE_PUBLIC": True,
+    "SORT_OPERATION_PARAMETERS": False,
 }
 
 

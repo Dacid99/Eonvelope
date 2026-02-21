@@ -32,6 +32,7 @@ from drf_spectacular.utils import (
     OpenApiResponse,
     extend_schema,
     extend_schema_view,
+    inline_serializer,
 )
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -39,6 +40,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import CharField
 
 from api.utils import query_param_list_to_typed_list
 from api.v1.filters import CorrespondentFilterSet
@@ -53,49 +55,73 @@ if TYPE_CHECKING:
 
 
 @extend_schema_view(
-    list=extend_schema(description="Lists all instances matching the filter."),
-    retrieve=extend_schema(description="Retrieves a single instance."),
-    destroy=extend_schema(description="Deletes a single instance."),
+    list=extend_schema(description=_("Lists all instances matching the filter.")),
+    retrieve=extend_schema(description=_("Retrieves a single instance.")),
+    destroy=extend_schema(description=_("Deletes a single instance.")),
     download=extend_schema(
+        request=None,
         responses={
-            200: OpenApiResponse(
+            (200, "text/vcard"): OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=correspondent",
+                description="content-disposition: correspondent",
             )
         },
-        description="Downloads the correspondent instance as vcard.",
+        description=_("Downloads a correspondent as vcard."),
     ),
     download_batch=extend_schema(
+        operation_id="v1_correspondents_batch_download_retrieve",
         parameters=[
             OpenApiParameter(
-                "id",
+                name="id",
                 type=OpenApiTypes.INT,
                 location=OpenApiParameter.QUERY,
                 required=True,
                 explode=True,
                 many=True,
-                description="Accepts both id=1,2,3 and id=1&id=2&id=3 notation",
+                description=_(
+                    "A list of integer values identifying the correspondents."
+                )
+                + " "
+                + _(
+                    "Duplicates are ignored. Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
+                ),
             )
         ],
+        request=None,
         responses={
-            200: OpenApiResponse(
+            (200, "text/vcard"): OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=correspondent",
+                description="content-disposition: correspondent",
             )
         },
-        description="Downloads multiple correspondents as one vcard.",
+        description=_("Downloads multiple correspondents as one vcard."),
     ),
     share_to_nextcloud=extend_schema(
+        request=None,
         responses={
             200: OpenApiResponse(
-                response=OpenApiTypes.STR,
+                response=inline_serializer(
+                    name="share_to_nextcloud_serializer",
+                    fields={"detail": CharField(), "data": CharField()},
+                ),
+                # Translators: Nextcloud is a brand name.
+                description=_("If the request to the Nextcloud server succeeded."),
             ),
             400: OpenApiResponse(
-                response=OpenApiTypes.STR,
-                description="If the request to the Nextcloud server fails. The reason is given as the response data.",
+                response=inline_serializer(
+                    name="share_to_nextcloud_failed_serializer",
+                    fields={"detail": CharField(), "error": CharField()},
+                ),
+                # Translators: Nextcloud is a brand name.
+                description=_(
+                    "If the request to the Nextcloud server fails. The reason is given as the response data."
+                ),
             ),
         },
-        description="Sends the correspondents data to Nextclouds addressbook.",
+        # Translators: Nextcloud is a brand name.
+        description=_(
+            "Sends a correspondent's data to the user's Nextcloud addressbook."
+        ),
     ),
 )
 class CorrespondentViewSet(

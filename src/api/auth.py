@@ -16,17 +16,21 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module for authentication methods for Eonvelope."""
+"""Module with additional authentication methods for Eonvelope API."""
 
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, override
 
 from allauth.mfa.adapter import get_adapter
+from django.utils.translation import gettext_lazy as _
+from drf_spectacular.authentication import BasicScheme
 from rest_framework import exceptions
 from rest_framework.authentication import BasicAuthentication
 
 if TYPE_CHECKING:
+    from django_stubs_ext import StrOrPromise
+    from drf_spectacular.openapi import AutoSchema
     from rest_framework.request import Request
 
 
@@ -46,3 +50,19 @@ class BasicNoMFAuthentication(BasicAuthentication):
         if user and mfa_adapter.is_mfa_enabled(user):
             raise exceptions.AuthenticationFailed("MFA required")
         return user_tuple
+
+
+class BasicNoMFScheme(BasicScheme):
+    """Extended Basic auth scheme to account for MFA."""
+
+    target_class = "api.auth.BasicNoMFAuthentication"
+
+    @override
+    def get_security_definition(
+        self, auto_schema: AutoSchema
+    ) -> dict[str, StrOrPromise]:
+        security_definition = super().get_security_definition(auto_schema)
+        security_definition["description"] = _(
+            "Basic authentication is only allowed if you do not have MFA enabled."
+        )
+        return security_definition

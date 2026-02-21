@@ -24,13 +24,13 @@ from typing import TYPE_CHECKING, Final, override
 
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, extend_schema_view, inline_serializer
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import BooleanField, CharField
 
 from api.v1.filters import DaemonFilterSet
 from api.v1.serializers import BaseDaemonSerializer
@@ -42,36 +42,40 @@ if TYPE_CHECKING:
 
 
 @extend_schema_view(
-    list=extend_schema(description="Lists all instances matching the filter."),
-    retrieve=extend_schema(description="Retrieves a single instance."),
+    list=extend_schema(description=_("Lists all instances matching the filter.")),
+    retrieve=extend_schema(description=_("Retrieves a single instance.")),
     update=extend_schema(
-        description="Updates a single instance. You must specify format 'json'."
+        description=_("Updates a single %s.") % _("routine")
+        + " "
+        + _("You must set header 'Accept: application/json'.")
     ),
     create=extend_schema(
-        description="Creates a new instance. You must specify format 'json'."
+        description=_("Creates a new %s.") % _("routine")
+        + " "
+        + _("You must set header 'Accept: application/json'.")
     ),
-    destroy=extend_schema(description="Deletes a single instance."),
+    destroy=extend_schema(description=_("Deletes a single %s.") % _("routine")),
     test=extend_schema(
         request=None,
         responses={
             200: inline_serializer(
                 name="test_daemon_response",
                 fields={
-                    "detail": OpenApiTypes.STR,
-                    "result": OpenApiTypes.BOOL,
-                    "data": BaseDaemonSerializer,
+                    "detail": CharField(),
+                    "result": BooleanField(),
+                    "data": BaseDaemonSerializer(),
                 },
             )
         },
-        description="Tests the daemon instance.",
+        description=_("Tests a daemon."),
     ),
     start=extend_schema(
         request=None,
-        description="Starts the daemon instances periodic task.",
+        description=_("Starts a daemon's periodic task."),
     ),
     stop=extend_schema(
         request=None,
-        description="Stops the daemon instances periodic task.",
+        description=_("Stops a daemon's periodic task."),
     ),
 )
 class DaemonViewSet(viewsets.ModelViewSet[Daemon]):

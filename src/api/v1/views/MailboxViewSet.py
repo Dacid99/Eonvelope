@@ -39,7 +39,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.serializers import CharField, ChoiceField
+from rest_framework.serializers import BooleanField, CharField, ChoiceField
 
 from api.utils import query_param_list_to_typed_list
 from api.v1.filters import MailboxFilterSet
@@ -57,27 +57,28 @@ if TYPE_CHECKING:
 
 
 @extend_schema_view(
-    list=extend_schema(description="Lists all instances matching the filter."),
-    retrieve=extend_schema(description="Retrieves a single instance."),
-    update=extend_schema(description="Updates a single instance."),
-    destroy=extend_schema(description="Deletes a single instance."),
+    list=extend_schema(description=_("Lists all instances matching the filter.")),
+    retrieve=extend_schema(description=_("Retrieves a single instance.")),
+    update=extend_schema(description=_("Updates a single instance.")),
+    destroy=extend_schema(description=_("Deletes a single instance.")),
     test=extend_schema(
         request=None,
         responses={
             200: inline_serializer(
                 name="test_mailbox_response",
                 fields={
-                    "detail": OpenApiTypes.STR,
-                    "result": OpenApiTypes.BOOL,
-                    "data": MailboxWithDaemonSerializer,
+                    "detail": CharField(),
+                    "result": BooleanField(),
+                    "data": MailboxWithDaemonSerializer(),
                 },
             )
         },
-        description="Tests the mailbox instance.",
+        description=_("Tests a mailbox."),
     ),
     fetching_options=extend_schema(
+        request=None,
         responses={200: OpenApiTypes.JSON_PTR},
-        description="Lists all available fetching criteria for the mailbox instance.",
+        description=_("Lists all available fetching criteria for a mailbox."),
     ),
     fetch=extend_schema(
         request=inline_serializer(
@@ -89,60 +90,67 @@ if TYPE_CHECKING:
         ),
         responses={
             200: inline_serializer(
-                name="test_mailbox_response",
+                name="fetch_mailbox_response",
                 fields={
-                    "detail": OpenApiTypes.STR,
-                    "result": OpenApiTypes.BOOL,
-                    "data": MailboxWithDaemonSerializer,
+                    "detail": CharField(),
+                    "result": BooleanField(),
+                    "data": MailboxWithDaemonSerializer(),
                 },
             )
         },
-        description="Fetches the emails from the maiilbox instance based on the given criterion. Only criteria available for the instance are accepted.",
+        description=_(
+            "Fetches the emails from a mailbox based on the given criterion. Only criteria available for that mailbox are accepted."
+        ),
     ),
     download=extend_schema(
         parameters=[
             OpenApiParameter(
-                "file_format",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
+                name="file_format",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
                 required=True,
-                enum=SupportedEmailDownloadFormats,
+                enum=SupportedEmailDownloadFormats.values,
             ),
         ],
+        request=None,
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=attachment",
+                description="content-disposition: attachment",
             )
         },
-        description="Downloads all emails of a mailbox instance.",
+        description=_("Downloads all emails of a mailbox."),
     ),
     download_batch=extend_schema(
+        operation_id="v1_mailboxes_batch_download_retrieve",
         parameters=[
             OpenApiParameter(
-                "id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
+                name="id",
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
                 required=True,
                 explode=True,
                 many=True,
-                description="Accepts both id=1,2,3 and id=1&id=2&id=3 notation",
+                description=_(
+                    "A list of integer values identifying the mailboxes. Duplicates are ignored. Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
+                ),
             ),
             OpenApiParameter(
-                "file_format",
-                OpenApiTypes.STR,
-                OpenApiParameter.QUERY,
+                name="file_format",
+                type=OpenApiTypes.STR,
+                location=OpenApiParameter.QUERY,
                 required=True,
-                enum=SupportedEmailDownloadFormats,
+                enum=SupportedEmailDownloadFormats.values,
             ),
         ],
+        request=None,
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=attachment",
+                description="content-disposition: attachment",
             )
         },
-        description="Downloads multiple mailboxes.",
+        description=_("Downloads all emails of multiple mailbox instances."),
     ),
     upload_emails=extend_schema(
         request=UploadEmailSerializer,
@@ -150,12 +158,12 @@ if TYPE_CHECKING:
             200: inline_serializer(
                 name="upload_emails_mailbox_response",
                 fields={
-                    "detail": OpenApiTypes.STR,
-                    "data": MailboxWithDaemonSerializer,
+                    "detail": CharField(),
+                    "data": MailboxWithDaemonSerializer(),
                 },
             )
         },
-        description="Upload emails for a file to a mailbox instance.",
+        description=_("Upload emails in a file to a mailbox instance."),
     ),
 )
 class MailboxViewSet(

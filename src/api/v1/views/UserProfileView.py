@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, override
 
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -33,8 +34,8 @@ if TYPE_CHECKING:
 
 
 @extend_schema_view(
-    retrieve=extend_schema(description="Retrieves the user profile data."),
-    update=extend_schema(description="Updates the user profile data."),
+    retrieve=extend_schema(description=_("Retrieves the user's profile data.")),
+    update=extend_schema(description=_("Updates the user's profile data.")),
 )
 class UserProfileView(RetrieveUpdateAPIView):
     """View for retrieving and updating the users :class:`eonvelope.models.UserProfile`."""

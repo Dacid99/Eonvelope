@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 23:34+0000\n"
+"POT-Creation-Date: 2026-02-22 13:24+0000\n"
 "PO-Revision-Date: 2025-12-31 20:14+0000\n"
 "Last-Translator: anukadszep <m1csibor6552@proton.me>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/eonvelope/core/"
@@ -395,7 +395,7 @@ msgid "user"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Account.py:177 src/core/models/Mailbox.py:112
+#: src/core/models/Account.py:177 src/core/models/Mailbox.py:114
 msgid "account"
 msgstr ""
 
@@ -672,7 +672,7 @@ msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:83 src/core/models/Email.py:181
-#: src/core/models/Mailbox.py:140
+#: src/core/models/Mailbox.py:142
 msgid "mailbox"
 msgstr ""
 
@@ -729,23 +729,6 @@ msgstr ""
 
 #: src/core/models/Daemon.py:199
 msgid "No valid mailbox selected!"
-msgstr ""
-
-#: src/core/models/Daemon.py:206
-msgid "This fetching criterion requires an argument."
-msgstr ""
-
-#: src/core/models/Daemon.py:219
-#, python-format
-msgid "Date values must be given in format %(format)s."
-msgstr ""
-
-#: src/core/models/Daemon.py:232
-msgid "This value must be an integer."
-msgstr ""
-
-#: src/core/models/Daemon.py:238
-msgid "This value must be a positive number."
 msgstr ""
 
 #: src/core/models/Email.py:96 src/core/models/EmailCorrespondent.py:51
@@ -815,7 +798,7 @@ msgstr ""
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
 
-#: src/core/models/Email.py:681 src/core/models/Mailbox.py:328
+#: src/core/models/Email.py:681 src/core/models/Mailbox.py:329
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr ""
@@ -837,57 +820,57 @@ msgid ""
 "%(correspondent)s with mention %(mention)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:85
+#: src/core/models/Mailbox.py:87
 msgid ""
 "This will delete the record of this mailbox and all emails and attachments "
 "found in it!"
 msgstr ""
 
-#: src/core/models/Mailbox.py:89
+#: src/core/models/Mailbox.py:91
 msgid ""
 "This will delete the records of these mailboxes and all emails and "
 "attachments found in them!"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:95
+#: src/core/models/Mailbox.py:97
 msgid "name"
 msgstr ""
 
-#: src/core/models/Mailbox.py:103
+#: src/core/models/Mailbox.py:105
 msgid "type"
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:119
+#: src/core/models/Mailbox.py:121
 msgid "save attachments"
 msgstr ""
 
-#: src/core/models/Mailbox.py:121
+#: src/core/models/Mailbox.py:123
 msgid "Whether the attachments from the emails in this mailbox will be saved."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:129
+#: src/core/models/Mailbox.py:131
 msgid "save as .eml"
 msgstr ""
 
-#: src/core/models/Mailbox.py:130
+#: src/core/models/Mailbox.py:132
 msgid "Whether the emails in this mailbox will be stored in .eml files."
 msgstr ""
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
-#: src/core/models/Mailbox.py:142
+#: src/core/models/Mailbox.py:144
 msgid "mailboxes"
 msgstr ""
 
-#: src/core/models/Mailbox.py:159
+#: src/core/models/Mailbox.py:161
 #, python-format
 msgid "Mailbox %(name)s of %(account)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:240 src/core/models/Mailbox.py:277
-#: src/core/models/Mailbox.py:295
+#: src/core/models/Mailbox.py:241 src/core/models/Mailbox.py:278
+#: src/core/models/Mailbox.py:296
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr ""
@@ -930,26 +913,43 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:217
-#: src/core/utils/fetchers/ExchangeFetcher.py:229
+#: src/core/utils/FetchingCriterion.py:89
+msgid "This fetching criterion requires an argument."
+msgstr ""
+
+#: src/core/utils/FetchingCriterion.py:97
+#, python-format
+msgid "Date values must be given in format %(format)s."
+msgstr ""
+
+#: src/core/utils/FetchingCriterion.py:107
+msgid "This value must be an integer."
+msgstr ""
+
+#: src/core/utils/FetchingCriterion.py:109
+msgid "This value must be a positive number."
+msgstr ""
+
+#: src/core/utils/fetchers/ExchangeFetcher.py:168
+#: src/core/utils/fetchers/ExchangeFetcher.py:180
 msgid "refresh"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:276
+#: src/core/utils/fetchers/ExchangeFetcher.py:222
 msgid "fetching of mail contents"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:316
+#: src/core/utils/fetchers/ExchangeFetcher.py:262
 msgid "scan for mailboxes"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:342
+#: src/core/utils/fetchers/ExchangeFetcher.py:288
 msgid "restoring of email"
 msgstr ""
 
-#: src/core/utils/fetchers/IMAP4Fetcher.py:162
+#: src/core/utils/fetchers/IMAP4Fetcher.py:128
 #: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:81
-#: src/core/utils/fetchers/POP3Fetcher.py:91
+#: src/core/utils/fetchers/POP3Fetcher.py:92
 #: src/core/utils/fetchers/POP3_SSL_Fetcher.py:81
 msgid "connecting"
 msgstr ""

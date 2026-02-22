@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 23:34+0000\n"
+"POT-Creation-Date: 2026-02-22 13:24+0000\n"
 "PO-Revision-Date: 2025-12-31 20:15+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -46,13 +46,13 @@ msgid "Created after"
 msgstr ""
 
 #: src/web/filters/AttachmentFilterSet.py:77
-#: src/web/filters/CorrespondentEmailFilterSet.py:73
+#: src/web/filters/CorrespondentEmailFilterSet.py:72
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
 msgstr ""
 
 #: src/web/filters/AttachmentFilterSet.py:83
-#: src/web/filters/CorrespondentEmailFilterSet.py:79
+#: src/web/filters/CorrespondentEmailFilterSet.py:78
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
 msgstr ""
@@ -365,6 +365,10 @@ msgstr ""
 msgid "You can add mailboxes for this account by fetching them from the server"
 msgstr ""
 
+#: src/web/templates/web/account/partials/_test_account-button.html:6
+msgid "Test whether this account can be accessed"
+msgstr ""
+
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
 msgid "Test this account to make sure it can be accessed."
 msgstr ""
@@ -645,7 +649,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr ""
 
@@ -664,7 +668,6 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -678,7 +681,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr ""
 
@@ -776,10 +779,6 @@ msgstr ""
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:11
 msgid "Restore"
-msgstr ""
-
-#: src/web/templates/web/email/partials/_test_account-button.html:6
-msgid "Test whether this account can be accessed"
 msgstr ""
 
 #: src/web/templates/web/layouts/base_create.html:15
@@ -962,7 +961,6 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:89
 msgid "Favorite"
 msgstr ""
 
@@ -979,39 +977,40 @@ msgstr ""
 msgid "&amp; The Eonvelope Contributors."
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:10
-msgid "Licensed under the AGPLv3."
+#. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
+#: src/web/templates/web/partials/_footer.html:11
+msgid "Licensed under AGPL-3.0-or-later."
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:13
+#: src/web/templates/web/partials/_footer.html:14
 msgid "Version"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:15
+#: src/web/templates/web/partials/_footer.html:16
 msgid "DEBUG"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:22
+#: src/web/templates/web/partials/_footer.html:23
 msgid "Website"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:26
+#: src/web/templates/web/partials/_footer.html:27
 msgid "Gitlab"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:30
+#: src/web/templates/web/partials/_footer.html:31
 msgid "Github"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:34
+#: src/web/templates/web/partials/_footer.html:35
 msgid "Dockerhub"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:38
+#: src/web/templates/web/partials/_footer.html:39
 msgid "Documentation"
 msgstr ""
 
-#: src/web/templates/web/partials/_footer.html:42
+#: src/web/templates/web/partials/_footer.html:43
 msgid "Translating"
 msgstr ""
 
@@ -1161,16 +1160,16 @@ msgstr ""
 msgid "Email successfully restored to mailbox."
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:101
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:102
 #, python-format
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:110
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
 #, python-format
 msgid "Fetching failed: %(error)s"
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:114
 msgid "Fetching successful"
 msgstr ""

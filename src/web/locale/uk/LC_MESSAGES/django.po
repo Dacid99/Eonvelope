@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 23:34+0000\n"
+"POT-Creation-Date: 2026-02-22 13:24+0000\n"
 "PO-Revision-Date: 2026-01-25 16:01+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/web/"
@@ -49,13 +49,13 @@ msgid "Created after"
 msgstr "Створено після"
 
 #: src/web/filters/AttachmentFilterSet.py:77
-#: src/web/filters/CorrespondentEmailFilterSet.py:73
+#: src/web/filters/CorrespondentEmailFilterSet.py:72
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
 msgstr "Отримано раніше"
 
 #: src/web/filters/AttachmentFilterSet.py:83
-#: src/web/filters/CorrespondentEmailFilterSet.py:79
+#: src/web/filters/CorrespondentEmailFilterSet.py:78
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
 msgstr "Отримано після"
@@ -376,6 +376,14 @@ msgstr ""
 "Ви можете додати поштові скриньки для цього облікового запису, отримавши їх "
 "із сервера"
 
+#: src/web/templates/web/account/partials/_test_account-button.html:6
+#, fuzzy
+#| msgid "Test this account to make sure it can be accessed."
+msgid "Test whether this account can be accessed"
+msgstr ""
+"Перевірте цей обліковий запис, щоб переконатися, що до нього можна отримати "
+"доступ."
+
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
 msgid "Test this account to make sure it can be accessed."
 msgstr ""
@@ -664,7 +672,7 @@ msgid "Email Timeline"
 msgstr "Хронологія електронної пошти"
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr "День"
 
@@ -683,7 +691,6 @@ msgstr "Цього тижня"
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr "Місяць"
 
@@ -697,7 +704,7 @@ msgid "Week #"
 msgstr "Тиждень №"
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr "Рік"
 
@@ -798,14 +805,6 @@ msgstr "Не вдалося відновити електронну пошту �
 #: src/web/templates/web/email/partials/_restore_email-button.html:11
 msgid "Restore"
 msgstr "Відновити"
-
-#: src/web/templates/web/email/partials/_test_account-button.html:6
-#, fuzzy
-#| msgid "Test this account to make sure it can be accessed."
-msgid "Test whether this account can be accessed"
-msgstr ""
-"Перевірте цей обліковий запис, щоб переконатися, що до нього можна отримати "
-"доступ."
 
 #: src/web/templates/web/layouts/base_create.html:15
 #: src/web/templates/web/layouts/base_detail.html:23
@@ -999,7 +998,6 @@ msgid "End edit"
 msgstr "Кінець редагування"
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:89
 msgid "Favorite"
 msgstr "Улюблене"
 
@@ -1016,39 +1014,42 @@ msgstr "2025 Девід Адербауер"
 msgid "&amp; The Eonvelope Contributors."
 msgstr "&amp; Автори Eonvelope."
 
-#: src/web/templates/web/partials/_footer.html:10
-msgid "Licensed under the AGPLv3."
+#. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
+#: src/web/templates/web/partials/_footer.html:11
+#, fuzzy
+#| msgid "Licensed under the AGPLv3."
+msgid "Licensed under AGPL-3.0-or-later."
 msgstr "Ліцензовано за ліцензією AGPLv3."
 
-#: src/web/templates/web/partials/_footer.html:13
+#: src/web/templates/web/partials/_footer.html:14
 msgid "Version"
 msgstr "Версія"
 
-#: src/web/templates/web/partials/_footer.html:15
+#: src/web/templates/web/partials/_footer.html:16
 msgid "DEBUG"
 msgstr "НАЛАГОДЖЕННЯ"
 
-#: src/web/templates/web/partials/_footer.html:22
+#: src/web/templates/web/partials/_footer.html:23
 msgid "Website"
 msgstr "Вебсайт"
 
-#: src/web/templates/web/partials/_footer.html:26
+#: src/web/templates/web/partials/_footer.html:27
 msgid "Gitlab"
 msgstr "Gitlab"
 
-#: src/web/templates/web/partials/_footer.html:30
+#: src/web/templates/web/partials/_footer.html:31
 msgid "Github"
 msgstr "Github"
 
-#: src/web/templates/web/partials/_footer.html:34
+#: src/web/templates/web/partials/_footer.html:35
 msgid "Dockerhub"
 msgstr "Dockerhub'"
 
-#: src/web/templates/web/partials/_footer.html:38
+#: src/web/templates/web/partials/_footer.html:39
 msgid "Documentation"
 msgstr "Документація"
 
-#: src/web/templates/web/partials/_footer.html:42
+#: src/web/templates/web/partials/_footer.html:43
 msgid "Translating"
 msgstr "Переклад"
 
@@ -1200,17 +1201,17 @@ msgstr "Не вдалося відновити електронну пошту �
 msgid "Email successfully restored to mailbox."
 msgstr "Електронну пошту успішно відновлено у поштовій скриньці."
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:101
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:102
 #, python-format
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 "Вибраний критерій %(criterion)s недоступний для цієї поштової скриньки."
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:110
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
 #, python-format
 msgid "Fetching failed: %(error)s"
 msgstr "Не вдалося отримати дані: %(error)s"
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:114
 msgid "Fetching successful"
 msgstr "Отримання успішне"

@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 23:34+0000\n"
+"POT-Creation-Date: 2026-02-22 13:24+0000\n"
 "PO-Revision-Date: 2026-02-16 11:09+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/>"
-"\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -46,13 +46,13 @@ msgid "Created after"
 msgstr "Erstellt nach"
 
 #: src/web/filters/AttachmentFilterSet.py:77
-#: src/web/filters/CorrespondentEmailFilterSet.py:73
+#: src/web/filters/CorrespondentEmailFilterSet.py:72
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
 msgstr "Erhalten vor"
 
 #: src/web/filters/AttachmentFilterSet.py:83
-#: src/web/filters/CorrespondentEmailFilterSet.py:79
+#: src/web/filters/CorrespondentEmailFilterSet.py:78
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
 msgstr "Erhalten nach"
@@ -376,6 +376,10 @@ msgstr ""
 "Du kannst Postfächer für dieses Konto hinzufügen, indem du sie vom Server "
 "abfrufst"
 
+#: src/web/templates/web/account/partials/_test_account-button.html:6
+msgid "Test whether this account can be accessed"
+msgstr "Teste ob auf dieses Konto zugegriffen werden kann"
+
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
 msgid "Test this account to make sure it can be accessed."
 msgstr "Teste dieses Konto um zu überprüfen dass der Zugriff funktioniert."
@@ -660,7 +664,7 @@ msgid "Email Timeline"
 msgstr "E-Mail Chronik"
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
+#: src/web/templates/web/email/archive/day.html:10
 msgid "Day"
 msgstr "Tag"
 
@@ -679,7 +683,6 @@ msgstr "Diese Woche"
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
-#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr "Monat"
 
@@ -693,7 +696,7 @@ msgid "Week #"
 msgstr "Wochennr."
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
+#: src/web/templates/web/email/archive/year.html:10
 msgid "Year"
 msgstr "Jahr"
 
@@ -794,10 +797,6 @@ msgstr "Stelle diese E-Mail in ihrem Postfach auf dem Mailserver wiederher"
 #: src/web/templates/web/email/partials/_restore_email-button.html:11
 msgid "Restore"
 msgstr "Wiederherstellen"
-
-#: src/web/templates/web/email/partials/_test_account-button.html:6
-msgid "Test whether this account can be accessed"
-msgstr "Teste ob auf dieses Konto zugegriffen werden kann"
 
 #: src/web/templates/web/layouts/base_create.html:15
 #: src/web/templates/web/layouts/base_detail.html:23
@@ -987,7 +986,6 @@ msgid "End edit"
 msgstr "Bearbeiten beenden"
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
-#: src/web/utils/columns.py:89
 msgid "Favorite"
 msgstr "Favorit"
 
@@ -1004,39 +1002,42 @@ msgstr "2025 David Aderbauer"
 msgid "&amp; The Eonvelope Contributors."
 msgstr "&amp; die Beitragenden zu Eonvelope."
 
-#: src/web/templates/web/partials/_footer.html:10
-msgid "Licensed under the AGPLv3."
+#. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
+#: src/web/templates/web/partials/_footer.html:11
+#, fuzzy
+#| msgid "Licensed under the AGPLv3."
+msgid "Licensed under AGPL-3.0-or-later."
 msgstr "Lizensiert unter AGPLv3."
 
-#: src/web/templates/web/partials/_footer.html:13
+#: src/web/templates/web/partials/_footer.html:14
 msgid "Version"
 msgstr "Version"
 
-#: src/web/templates/web/partials/_footer.html:15
+#: src/web/templates/web/partials/_footer.html:16
 msgid "DEBUG"
 msgstr "DEBUG"
 
-#: src/web/templates/web/partials/_footer.html:22
+#: src/web/templates/web/partials/_footer.html:23
 msgid "Website"
 msgstr "Webseite"
 
-#: src/web/templates/web/partials/_footer.html:26
+#: src/web/templates/web/partials/_footer.html:27
 msgid "Gitlab"
 msgstr "Gitlab"
 
-#: src/web/templates/web/partials/_footer.html:30
+#: src/web/templates/web/partials/_footer.html:31
 msgid "Github"
 msgstr "GitHub"
 
-#: src/web/templates/web/partials/_footer.html:34
+#: src/web/templates/web/partials/_footer.html:35
 msgid "Dockerhub"
 msgstr "Docker-Hub"
 
-#: src/web/templates/web/partials/_footer.html:38
+#: src/web/templates/web/partials/_footer.html:39
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: src/web/templates/web/partials/_footer.html:42
+#: src/web/templates/web/partials/_footer.html:43
 msgid "Translating"
 msgstr "Übersetzung"
 
@@ -1186,18 +1187,18 @@ msgstr "Wiederherstellen der E-Mail im Postfach fehlgeschlagen: %(error)s"
 msgid "Email successfully restored to mailbox."
 msgstr "E-Mail wurde erfolgreich im Postfach wiederhergestellt."
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:101
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:102
 #, python-format
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 "Das ausgewählte Kriterium %(criterion)s ist für dieses Postfach nicht "
 "verfügbar."
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:110
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
 #, python-format
 msgid "Fetching failed: %(error)s"
 msgstr "Abrufen fehlgeschlagen: %(error)s"
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:114
 msgid "Fetching successful"
 msgstr "Abrufen erfolgreich"

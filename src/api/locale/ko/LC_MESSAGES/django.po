@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-09 23:34+0000\n"
+"POT-Creation-Date: 2026-02-22 13:24+0000\n"
 "PO-Revision-Date: 2025-12-31 20:13+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/eonvelope/api/ko/"
@@ -19,204 +19,467 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.15.1\n"
 
-#: src/api/v1/mixins/ToggleFavoriteMixin.py:70
+#: src/api/auth.py:66
+msgid "Basic authentication is only allowed if you do not have MFA enabled."
+msgstr ""
+
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:49
+msgid "Message indicating status change."
+msgstr ""
+
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:52
+msgid "Toggles the favorite status of an instance."
+msgstr ""
+
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:73
 #, python-format
 msgid "%(object)s marked as favorite."
 msgstr ""
 
-#: src/api/v1/mixins/ToggleFavoriteMixin.py:72
+#: src/api/v1/mixins/ToggleFavoriteMixin.py:75
 #, python-format
 msgid "%(object)s unmarked as favorite."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:176
+#: src/api/v1/views/AccountViewSet.py:57
+#: src/api/v1/views/AttachmentViewSet.py:56
+#: src/api/v1/views/CorrespondentViewSet.py:58
+#: src/api/v1/views/DaemonViewSet.py:45 src/api/v1/views/EmailViewSet.py:61
+#: src/api/v1/views/MailboxViewSet.py:60
+msgid "Lists all instances matching the filter."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:58
+#: src/api/v1/views/AttachmentViewSet.py:57
+#: src/api/v1/views/CorrespondentViewSet.py:59
+#: src/api/v1/views/DaemonViewSet.py:46 src/api/v1/views/EmailViewSet.py:62
+#: src/api/v1/views/MailboxViewSet.py:61
+msgid "Retrieves a single instance."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:59 src/api/v1/views/MailboxViewSet.py:62
+msgid "Updates a single instance."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:60
+msgid "Creates a new instance."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:61
+#: src/api/v1/views/AttachmentViewSet.py:58
+#: src/api/v1/views/CorrespondentViewSet.py:60
+#: src/api/v1/views/EmailViewSet.py:63 src/api/v1/views/MailboxViewSet.py:63
+msgid "Deletes a single instance."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:73
+msgid "Updates the mailboxes of an account."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:84
+msgid ""
+"Adds a standard set of routines for archiving all traffic to an account."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:99
+msgid "Tests an account."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:118
+msgid "Downloads all emails of an account."
+msgstr ""
+
+#: src/api/v1/views/AccountViewSet.py:185
 msgid "An error with the mailaccount occurred."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:182
+#: src/api/v1/views/AccountViewSet.py:191
 msgid "Updated mailboxes"
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:208
+#: src/api/v1/views/AccountViewSet.py:217
 msgid "Added routines to inbox and sentbox."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:229
+#: src/api/v1/views/AccountViewSet.py:238
 msgid "Tested mailaccount"
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:271 src/api/v1/views/EmailViewSet.py:266
-#: src/api/v1/views/MailboxViewSet.py:350
-#: src/api/v1/views/MailboxViewSet.py:398
+#: src/api/v1/views/AccountViewSet.py:280 src/api/v1/views/EmailViewSet.py:280
+#: src/api/v1/views/MailboxViewSet.py:355
+#: src/api/v1/views/MailboxViewSet.py:403
 msgid "File format is required."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:279 src/api/v1/views/EmailViewSet.py:288
-#: src/api/v1/views/MailboxViewSet.py:358
-#: src/api/v1/views/MailboxViewSet.py:420
+#: src/api/v1/views/AccountViewSet.py:288 src/api/v1/views/EmailViewSet.py:302
+#: src/api/v1/views/MailboxViewSet.py:363
+#: src/api/v1/views/MailboxViewSet.py:425
 #, python-format
 msgid "File format %(file_format)s is not supported."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:284
+#: src/api/v1/views/AccountViewSet.py:293
 msgid "No mailboxes found."
 msgstr ""
 
-#: src/api/v1/views/AttachmentViewSet.py:191
-#: src/api/v1/views/AttachmentViewSet.py:277
-#: src/api/v1/views/AttachmentViewSet.py:308
-#: src/api/v1/views/AttachmentViewSet.py:350
-msgid "Attachment file not found"
+#: src/api/v1/views/AttachmentViewSet.py:67
+msgid "Downloads an attachment's file."
 msgstr ""
 
-#: src/api/v1/views/AttachmentViewSet.py:219
-msgid "Attachment ids are required."
+#: src/api/v1/views/AttachmentViewSet.py:79
+msgid "A list of integer values identifying the accounts."
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:82
+#: src/api/v1/views/CorrespondentViewSet.py:86
+#: src/api/v1/views/EmailViewSet.py:87
+msgid ""
+"Duplicates are ignored. Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:93
+msgid "Downloads multiple zipped attachment files."
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:103
+msgid "Downloads a attachment's thumbnail."
+msgstr ""
+
+#. Translators: Paperless is a brand name.
+#: src/api/v1/views/AttachmentViewSet.py:114
+msgid "If the request to the Paperless server succeeded."
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:123
+msgid ""
+"If the request to the Paperless server fails. The reason is given as the "
+"response data."
+msgstr ""
+
+#. Translators: Paperless is a brand name.
+#: src/api/v1/views/AttachmentViewSet.py:128
+msgid "Sends a attachment's file to the user's Paperless server."
+msgstr ""
+
+#. Translators: Immich is a brand name.
+#: src/api/v1/views/AttachmentViewSet.py:139
+msgid "If the request to the Immich server succeeded."
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:148
+msgid ""
+"If the request to the Immich server fails. The reason is given as the "
+"response data."
+msgstr ""
+
+#. Translators: Immich is a brand name.
+#: src/api/v1/views/AttachmentViewSet.py:153
+msgid "Sends the attachment's file to the user's Immich server."
 msgstr ""
 
 #: src/api/v1/views/AttachmentViewSet.py:227
+#: src/api/v1/views/AttachmentViewSet.py:313
+#: src/api/v1/views/AttachmentViewSet.py:344
+#: src/api/v1/views/AttachmentViewSet.py:386
+msgid "Attachment file not found"
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:255
+msgid "Attachment ids are required."
+msgstr ""
+
+#: src/api/v1/views/AttachmentViewSet.py:263
 msgid "Attachment ids given in invalid format."
 msgstr ""
 
-#: src/api/v1/views/AttachmentViewSet.py:234
+#: src/api/v1/views/AttachmentViewSet.py:270
 msgid "No attachments found"
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:313
+#: src/api/v1/views/AttachmentViewSet.py:349
 msgid "Upload to Paperless failed."
 msgstr ""
 
 #. Translators: Paperless is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:319
+#: src/api/v1/views/AttachmentViewSet.py:355
 msgid "Uploaded attachment document to Paperless."
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:355
+#: src/api/v1/views/AttachmentViewSet.py:391
 msgid "Upload to Immich failed."
 msgstr ""
 
 #. Translators: Immich is a brand name.
-#: src/api/v1/views/AttachmentViewSet.py:361
+#: src/api/v1/views/AttachmentViewSet.py:397
 msgid "Uploaded attachment document to Immich."
 msgstr ""
 
-#: src/api/v1/views/CorrespondentViewSet.py:214
+#: src/api/v1/views/CorrespondentViewSet.py:69
+msgid "Downloads a correspondent as vcard."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:82
+msgid "A list of integer values identifying the correspondents."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:97
+msgid "Downloads multiple correspondents as one vcard."
+msgstr ""
+
+#. Translators: Nextcloud is a brand name.
+#: src/api/v1/views/CorrespondentViewSet.py:108
+msgid "If the request to the Nextcloud server succeeded."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:117
+msgid ""
+"If the request to the Nextcloud server fails. The reason is given as the "
+"response data."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:123
+msgid "Sends a correspondent's data to the user's Nextcloud addressbook."
+msgstr ""
+
+#: src/api/v1/views/CorrespondentViewSet.py:240
 msgid "Correspondent ids are required."
 msgstr ""
 
-#: src/api/v1/views/CorrespondentViewSet.py:221
+#: src/api/v1/views/CorrespondentViewSet.py:247
 msgid "Correspondent ids given in invalid format."
 msgstr ""
 
-#: src/api/v1/views/CorrespondentViewSet.py:228
+#: src/api/v1/views/CorrespondentViewSet.py:254
 msgid "No correspondents found"
 msgstr ""
 
 #. Translators: Nextcloud is a brand name.
-#: src/api/v1/views/CorrespondentViewSet.py:262
+#: src/api/v1/views/CorrespondentViewSet.py:288
 msgid "Upload to Nextcloud failed."
 msgstr ""
 
 #. Translators: Nextcloud is a brand name.
-#: src/api/v1/views/CorrespondentViewSet.py:268
+#: src/api/v1/views/CorrespondentViewSet.py:294
 msgid "Uploaded correspondent to Nextcloud."
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:141
+#: src/api/v1/views/DaemonViewSet.py:48
+#, python-format
+msgid "Updates a single %s."
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:48 src/api/v1/views/DaemonViewSet.py:53
+#: src/api/v1/views/DaemonViewSet.py:57
+msgid "routine"
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:50 src/api/v1/views/DaemonViewSet.py:55
+msgid "You must set header 'Accept: application/json'."
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:53
+#, python-format
+msgid "Creates a new %s."
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:57
+#, python-format
+msgid "Deletes a single %s."
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:70
+msgid "Tests a daemon."
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:74
+msgid "Starts a daemon's periodic task."
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:78
+msgid "Stops a daemon's periodic task."
+msgstr ""
+
+#: src/api/v1/views/DaemonViewSet.py:145
 msgid "Tested routine"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:174
+#: src/api/v1/views/DaemonViewSet.py:178
 msgid "Routine started"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:177
+#: src/api/v1/views/DaemonViewSet.py:181
 msgid "Routine is already running"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:204
+#: src/api/v1/views/DaemonViewSet.py:208
 msgid "Routine stopped"
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:207
+#: src/api/v1/views/DaemonViewSet.py:211
 msgid "Routine not running"
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:235 src/api/v1/views/EmailViewSet.py:393
+#: src/api/v1/views/DatabaseStatsView.py:39
+msgid "Gets all the entry counts in the tables of the database."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:72
+msgid "Downloads an email's eml file."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:84
+msgid "A list of integer values identifying the emails."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:105
+msgid "Downloads multiple email's eml files."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:113
+msgid ""
+"content-disposition: inline, x-frame-options: SAMEORIGIN, content-security-"
+"policy: frame-ancestors 'self'"
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:117
+msgid "Downloads a single emails thumbnail."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:122
+msgid "Lists the conversation involving an email."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:128
+msgid "Restoring was successful"
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:131
+msgid "Restoring failed"
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:134
+msgid "The eml file was not found"
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:137
+msgid "Restores an email to its mailbox on the server."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:152
+msgid "Reprocesses an email using the stored data."
+msgstr ""
+
+#: src/api/v1/views/EmailViewSet.py:249 src/api/v1/views/EmailViewSet.py:407
 msgid "eml file not found."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:271
+#: src/api/v1/views/EmailViewSet.py:285
 msgid "Email ids are required."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:279
+#: src/api/v1/views/EmailViewSet.py:293
 msgid "Email ids given in invalid format."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:293
+#: src/api/v1/views/EmailViewSet.py:307
 msgid "No emails found"
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:389
+#: src/api/v1/views/EmailViewSet.py:403
 msgid "POP accounts do not support restoring of emails."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:397
+#: src/api/v1/views/EmailViewSet.py:411
 msgid "Restoring of email to mailbox failed."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:402
+#: src/api/v1/views/EmailViewSet.py:416
 msgid "Email successfully restored to mailbox."
 msgstr ""
 
-#: src/api/v1/views/EmailViewSet.py:427
+#: src/api/v1/views/EmailViewSet.py:441
 msgid "Email successfully reprocessed."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:224
+#: src/api/v1/views/MailboxViewSet.py:76
+msgid "Tests a mailbox."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:81
+msgid "Lists all available fetching criteria for a mailbox."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:102
+msgid ""
+"Fetches the emails from a mailbox based on the given criterion. Only "
+"criteria available for that mailbox are accepted."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:122
+msgid "Downloads all emails of a mailbox."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:135
+msgid ""
+"A list of integer values identifying the mailboxes. Duplicates are ignored. "
+"Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:153
+msgid "Downloads all emails of multiple mailbox instances."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:166
+msgid "Upload emails in a file to a mailbox instance."
+msgstr ""
+
+#: src/api/v1/views/MailboxViewSet.py:233
 msgid "Tested mailbox"
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:286
+#: src/api/v1/views/MailboxViewSet.py:295
 msgid "Fetching criterion is required."
-msgstr ""
-
-#: src/api/v1/views/MailboxViewSet.py:292
-#, python-format
-msgid "The given criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
 #: src/api/v1/views/MailboxViewSet.py:301
 #, python-format
-msgid "The given criterion %(criterion)s requires an argument."
+msgid "The given criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:311
+#: src/api/v1/views/MailboxViewSet.py:316
 msgid "Error with mailaccount or mailbox occurred."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:317
+#: src/api/v1/views/MailboxViewSet.py:322
 msgid "All emails fetched."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:363
+#: src/api/v1/views/MailboxViewSet.py:368
 msgid "No emails found."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:403
+#: src/api/v1/views/MailboxViewSet.py:408
 msgid "Mailbox ids are required."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:411
+#: src/api/v1/views/MailboxViewSet.py:416
 msgid "Mailbox ids given in invalid format."
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:425
+#: src/api/v1/views/MailboxViewSet.py:430
 msgid "No mailboxes found"
 msgstr ""
 
-#: src/api/v1/views/MailboxViewSet.py:468
+#: src/api/v1/views/MailboxViewSet.py:473
 msgid "Successfully uploaded mailbox file."
+msgstr ""
+
+#: src/api/v1/views/UserProfileView.py:37
+msgid "Retrieves the user's profile data."
+msgstr ""
+
+#: src/api/v1/views/UserProfileView.py:38
+msgid "Updates the user's profile data."
 msgstr ""

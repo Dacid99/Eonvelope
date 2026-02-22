@@ -1,14 +1,39 @@
-// https://docs.renovatebot.com/configuration-options/
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:best-practices"],
-  "prHourlyLimit": 5,
+  "prHourlyLimit": 10,
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
-      "groupName": "all non-major dependencies",
-      "groupSlug": "all-minor-patch",
-      "matchPackageNames": ["*"]
+      "matchManagers": ["poetry"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "all poetry patch updates",
+      "groupSlug": "poetry-patch",
+      "automerge": true
+    },
+    {
+      "matchManagers": ["poetry"],
+      "matchUpdateTypes": ["minor"],
+      "groupName": "all poetry minor updates",
+      "groupSlug": "poetry-minor",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["gitlabci"],
+      "groupName": "all gitlab-ci updates",
+      "groupSlug": "gitlab-ci",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["dockerfile"],
+      "groupName": "all Dockerfile updates",
+      "groupSlug": "dockerfile",
+      "automerge": false
+    },
+    {
+      "matchManagers": ["docker-compose"],
+      "groupName": "all docker-compose updates",
+      "groupSlug": "docker-compose",
+      "automerge": false
     }
   ]
 }

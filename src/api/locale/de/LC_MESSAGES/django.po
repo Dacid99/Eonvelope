@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-22 14:08+0000\n"
-"PO-Revision-Date: 2026-02-22 14:06+0000\n"
+"PO-Revision-Date: 2026-02-22 14:45+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/"
-">\n"
+"Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -82,6 +82,8 @@ msgstr "Aktualisiert die Postfächer eines Kontos."
 msgid ""
 "Adds a standard set of routines for archiving all traffic to an account."
 msgstr ""
+"Erstellt ein Standardset von Routinen um den gesamten E-Mailverkehr des "
+"Kontos zu archivieren."
 
 #: src/api/v1/views/AccountViewSet.py:99
 msgid "Tests an account."
@@ -278,27 +280,23 @@ msgstr "Korrespondent zu Nextcloud hochgeladen."
 
 #: src/api/v1/views/DaemonViewSet.py:50 src/api/v1/views/DaemonViewSet.py:55
 msgid "You must set header 'Accept: application/json'."
-msgstr ""
+msgstr "Du musst Header 'Accept: application/json' setzen."
 
 #: src/api/v1/views/DaemonViewSet.py:53
-#, fuzzy
-#| msgid "Creates a new instance."
 msgid "Creates a new instance"
-msgstr "Erstellt ein neues Objekt."
+msgstr "Erstellt ein neues Objekt"
 
 #: src/api/v1/views/DaemonViewSet.py:70
-#, fuzzy
-#| msgid "Tested routine"
 msgid "Tests a routine."
-msgstr "Routine getestet"
+msgstr "Testet eine Routine."
 
 #: src/api/v1/views/DaemonViewSet.py:74
 msgid "Starts a routine's periodic task."
-msgstr ""
+msgstr "Startet den periodischen Routinenprozess."
 
 #: src/api/v1/views/DaemonViewSet.py:78
 msgid "Stops a routine's periodic task."
-msgstr ""
+msgstr "Stoppt den periodischen Routinenprozess."
 
 #: src/api/v1/views/DaemonViewSet.py:145
 msgid "Tested routine"
@@ -322,59 +320,55 @@ msgstr "Routine nicht aktiv"
 
 #: src/api/v1/views/DatabaseStatsView.py:39
 msgid "Gets all the entry counts in the tables of the database."
-msgstr ""
+msgstr "Ruft die Anzahl an Einträgen in den Tabellen der Datenbank ab."
 
 #: src/api/v1/views/EmailViewSet.py:72
 msgid "Downloads an email's eml file."
-msgstr ""
+msgstr "Lädt die eml-Datei einer E-Mail herunter."
 
 #: src/api/v1/views/EmailViewSet.py:84
 msgid "A list of integer values identifying the emails."
-msgstr ""
+msgstr "Eine Liste von Ganzzahl-Werten die E-Mails identifiziert."
 
 #: src/api/v1/views/EmailViewSet.py:105
 msgid "Downloads multiple email's eml files."
-msgstr ""
+msgstr "Lädt die eml-Dateien mehrerer E-Mails herunter."
 
 #: src/api/v1/views/EmailViewSet.py:113
 msgid ""
 "content-disposition: inline, x-frame-options: SAMEORIGIN, content-security-"
 "policy: frame-ancestors 'self'"
 msgstr ""
+"content-disposition: inline, x-frame-options: SAMEORIGIN, content-security-"
+"policy: frame-ancestors 'self'"
 
 #: src/api/v1/views/EmailViewSet.py:117
 msgid "Downloads a single emails thumbnail."
-msgstr ""
+msgstr "Lädt die Vorschau einer E-Mail herunter."
 
 #: src/api/v1/views/EmailViewSet.py:122
 msgid "Lists the conversation involving an email."
-msgstr ""
+msgstr "Listet die Konversation die eine bestimmte E-Mail enthält auf."
 
 #: src/api/v1/views/EmailViewSet.py:128
 msgid "Restoring was successful"
-msgstr ""
+msgstr "Wiederherstellen war erfolgreich"
 
 #: src/api/v1/views/EmailViewSet.py:131
-#, fuzzy
-#| msgid "Restoring of email to mailbox failed."
 msgid "Restoring failed"
-msgstr "Wiederherstellen der E-Mail im Postfach fehlgeschlagen."
+msgstr "Wiederherstellen fehlgeschlagen"
 
 #: src/api/v1/views/EmailViewSet.py:134
-#, fuzzy
-#| msgid "eml file not found."
 msgid "The eml file was not found"
-msgstr "eml-Datei nicht gefunden."
+msgstr "Die eml-Datei wurde nicht gefunden"
 
 #: src/api/v1/views/EmailViewSet.py:137
-#, fuzzy
-#| msgid "Restoring of email to mailbox failed."
 msgid "Restores an email to its mailbox on the server."
-msgstr "Wiederherstellen der E-Mail im Postfach fehlgeschlagen."
+msgstr "Stellt eine E-Mail im Postfach auf dem Server wieder her."
 
 #: src/api/v1/views/EmailViewSet.py:152
 msgid "Reprocesses an email using the stored data."
-msgstr ""
+msgstr "Verarbeitet eine E-Mail anhand der gespeicherten Datei neu."
 
 #: src/api/v1/views/EmailViewSet.py:249 src/api/v1/views/EmailViewSet.py:407
 msgid "eml file not found."
@@ -409,38 +403,41 @@ msgid "Email successfully reprocessed."
 msgstr "E-Mail erfolgreich neu verarbeitet."
 
 #: src/api/v1/views/MailboxViewSet.py:76
-#, fuzzy
-#| msgid "Tested mailbox"
 msgid "Tests a mailbox."
-msgstr "Postfach getestet"
+msgstr "Testet ein Postfach."
 
 #: src/api/v1/views/MailboxViewSet.py:81
 msgid "Lists all available fetching criteria for a mailbox."
-msgstr ""
+msgstr "Listet alle verfügbaren Abrufkriterien für ein Postfach auf."
 
 #: src/api/v1/views/MailboxViewSet.py:102
 msgid ""
 "Fetches the emails from a mailbox based on the given criterion. Only "
 "criteria available for that mailbox are accepted."
 msgstr ""
+"Ruft alle E-Mails von einem Postfach ab, basierend auf dem gegebenen "
+"Kriterium. Nur Kriterien die für das Postfach verfügbar sind werden "
+"akzeptiert."
 
 #: src/api/v1/views/MailboxViewSet.py:122
 msgid "Downloads all emails of a mailbox."
-msgstr ""
+msgstr "Lädt alle E-Mails eines Postfachs herunter."
 
 #: src/api/v1/views/MailboxViewSet.py:135
 msgid ""
 "A list of integer values identifying the mailboxes. Duplicates are ignored. "
 "Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
 msgstr ""
+"Eine Liste von Ganzzahl-Werten die Postfächer identifizieren. Duplikate "
+"werden ignoriert. Akzeptiert id=1,2,3 und id=1&id=2&id=3 Notation"
 
 #: src/api/v1/views/MailboxViewSet.py:153
 msgid "Downloads all emails of multiple mailbox instances."
-msgstr ""
+msgstr "Lädt alle E-Mails mehrerer Postfächer herunter."
 
 #: src/api/v1/views/MailboxViewSet.py:166
 msgid "Upload emails in a file to a mailbox instance."
-msgstr ""
+msgstr "Importiert E-Mails aus einer Datei in ein Postfach."
 
 #: src/api/v1/views/MailboxViewSet.py:233
 msgid "Tested mailbox"
@@ -487,8 +484,8 @@ msgstr "Mailbox-Datei erfolgreich hochgeladen."
 
 #: src/api/v1/views/UserProfileView.py:37
 msgid "Retrieves the user's profile data."
-msgstr ""
+msgstr "Ruft die Profildaten des Nutzers ab."
 
 #: src/api/v1/views/UserProfileView.py:38
 msgid "Updates the user's profile data."
-msgstr ""
+msgstr "Aktualisiert die Profildaten des Nutzers."

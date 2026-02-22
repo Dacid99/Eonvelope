@@ -1,39 +1,46 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices"],
-  "prHourlyLimit": 10,
+  "extends": [
+    "config:best-practices",
+    ":configMigration",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone",
+    ":mergeConfidence:all-badges",
+    ":semanticPrefixChore",
+    ":preserveSemverRanges",
+    ":disableDigestUpdates",
+    ":automergeDisabled",
+    ":rebaseStalePrs",
+    ":customManagers:gitlabPipelineVersions",
+    ":customManagers:dockerfileVersions",
+    ":customManagers:makefileVersions",
+    ":enablePreCommit",
+    ":assignee(@Dacid99)"
+  ],
   "packageRules": [
     {
       "matchManagers": ["poetry"],
-      "matchUpdateTypes": ["patch"],
-      "groupName": "all poetry patch updates",
-      "groupSlug": "poetry-patch",
-      "automerge": true
-    },
-    {
-      "matchManagers": ["poetry"],
-      "matchUpdateTypes": ["minor"],
-      "groupName": "all poetry minor updates",
-      "groupSlug": "poetry-minor",
-      "automerge": false
+      "extends": [":separateMultipleMajorReleases", ":separatePatchReleases"]
     },
     {
       "matchManagers": ["gitlabci"],
       "groupName": "all gitlab-ci updates",
-      "groupSlug": "gitlab-ci",
-      "automerge": false
+      "groupSlug": "gitlab-ci"
     },
     {
       "matchManagers": ["dockerfile"],
       "groupName": "all Dockerfile updates",
-      "groupSlug": "dockerfile",
-      "automerge": false
+      "groupSlug": "dockerfile"
     },
     {
       "matchManagers": ["docker-compose"],
       "groupName": "all docker-compose updates",
-      "groupSlug": "docker-compose",
-      "automerge": false
+      "groupSlug": "docker-compose"
+    },
+    {
+      "matchManagers": ["pre-commit"],
+      "groupName": "all pre-commit updates",
+      "groupSlug": "pre-commit"
     }
   ]
 }

@@ -45,16 +45,16 @@ if TYPE_CHECKING:
     list=extend_schema(description=_("Lists all instances matching the filter.")),
     retrieve=extend_schema(description=_("Retrieves a single instance.")),
     update=extend_schema(
-        description=_("Updates a single %s.") % _("routine")
+        description=_("Updates a single instance.")
         + " "
         + _("You must set header 'Accept: application/json'.")
     ),
     create=extend_schema(
-        description=_("Creates a new %s.") % _("routine")
+        description=_("Creates a new instance")
         + " "
         + _("You must set header 'Accept: application/json'.")
     ),
-    destroy=extend_schema(description=_("Deletes a single %s.") % _("routine")),
+    destroy=extend_schema(description=_("Deletes a single instance.")),
     test=extend_schema(
         request=None,
         responses={
@@ -67,15 +67,15 @@ if TYPE_CHECKING:
                 },
             )
         },
-        description=_("Tests a daemon."),
+        description=_("Tests a routine."),
     ),
     start=extend_schema(
         request=None,
-        description=_("Starts a daemon's periodic task."),
+        description=_("Starts a routine's periodic task."),
     ),
     stop=extend_schema(
         request=None,
-        description=_("Stops a daemon's periodic task."),
+        description=_("Stops a routine's periodic task."),
     ),
 )
 class DaemonViewSet(viewsets.ModelViewSet[Daemon]):

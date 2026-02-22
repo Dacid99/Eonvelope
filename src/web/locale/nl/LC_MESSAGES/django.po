@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-09 23:34+0000\n"
-"PO-Revision-Date: 2025-12-31 20:14+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/eonvelope/web/nl/"
-">\n"
+"PO-Revision-Date: 2026-02-22 13:20+0000\n"
+"Last-Translator: Tim Klingeleers <tim@klingeleers.be>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/eonvelope/web/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:54
 #: src/web/filters/AttachmentFilterSet.py:54
@@ -27,7 +27,7 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:54
 #: src/web/filters/EmailFilterSet.py:53 src/web/filters/MailboxFilterSet.py:52
 msgid "Search"
-msgstr ""
+msgstr "Zoeken"
 
 #: src/web/filters/AccountFilterSet.py:65
 #: src/web/filters/CorrespondentFilterSet.py:60
@@ -35,7 +35,7 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:64
 #: src/web/filters/MailboxFilterSet.py:66
 msgid "Created before"
-msgstr ""
+msgstr "Gemaakt voor"
 
 #: src/web/filters/AccountFilterSet.py:71
 #: src/web/filters/CorrespondentFilterSet.py:66
@@ -43,19 +43,19 @@ msgstr ""
 #: src/web/filters/EmailCorrespondentFilterSet.py:70
 #: src/web/filters/MailboxFilterSet.py:72
 msgid "Created after"
-msgstr ""
+msgstr "Gemaakt na"
 
 #: src/web/filters/AttachmentFilterSet.py:77
 #: src/web/filters/CorrespondentEmailFilterSet.py:73
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
-msgstr ""
+msgstr "Ontvangen voor"
 
 #: src/web/filters/AttachmentFilterSet.py:83
 #: src/web/filters/CorrespondentEmailFilterSet.py:79
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
-msgstr ""
+msgstr "Ontvangen na"
 
 #: src/web/filters/DaemonFilterSet.py:67
 msgid "Number of intervals"
@@ -604,7 +604,7 @@ msgstr ""
 
 #: src/web/templates/web/dashboard.html:8
 msgid "Dashboard"
-msgstr ""
+msgstr "Dashboard"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/web/templates/web/dashboard.html:13

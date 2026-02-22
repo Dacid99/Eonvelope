@@ -57,6 +57,7 @@ if TYPE_CHECKING:
 @extend_schema_view(
     list=extend_schema(description=_("Lists all instances matching the filter.")),
     retrieve=extend_schema(description=_("Retrieves a single instance.")),
+    update=extend_schema(description=_("Updates a single instance.")),
     destroy=extend_schema(description=_("Deletes a single instance.")),
     download=extend_schema(
         request=None,
@@ -126,6 +127,7 @@ if TYPE_CHECKING:
 )
 class CorrespondentViewSet(
     viewsets.ReadOnlyModelViewSet[Correspondent],
+    mixins.UpdateModelMixin,
     mixins.DestroyModelMixin,
     ToggleFavoriteMixin,
 ):
@@ -237,14 +239,14 @@ class CorrespondentViewSet(
         """
         requested_id_query_params = request.query_params.getlist("id", [])
         if not requested_id_query_params:
-            raise ValidationError({"id": _("Correspondent ids are required.")})
+            raise ValidationError({"id": _("Correspondent IDs are required.")})
         try:
             requested_ids = query_param_list_to_typed_list(
                 requested_id_query_params, int
             )
         except ValueError:
             raise ValidationError(
-                {"id": _("Correspondent ids given in invalid format.")}
+                {"id": _("Correspondent IDs given in invalid format.")}
             ) from None
         try:
             file = Correspondent.queryset_as_file(

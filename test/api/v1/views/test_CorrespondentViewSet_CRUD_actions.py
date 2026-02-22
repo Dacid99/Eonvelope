@@ -140,7 +140,7 @@ def test_patch__noauth(
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert "email_address" not in response.data
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name != correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db
@@ -154,10 +154,10 @@ def test_patch__auth_other(
         detail_url(CorrespondentViewSet, fake_correspondent), data=correspondent_payload
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "email_address" not in response.data
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name != correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db
@@ -171,10 +171,10 @@ def test_patch__auth_owner(
         detail_url(CorrespondentViewSet, fake_correspondent), data=correspondent_payload
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-    assert "email_address" not in response.data
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["real_name"] == correspondent_payload["real_name"]
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name == correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db
@@ -188,10 +188,10 @@ def test_patch__auth_admin(
         detail_url(CorrespondentViewSet, fake_correspondent), data=correspondent_payload
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "email_address" not in response.data
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name != correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db
@@ -206,7 +206,7 @@ def test_put__noauth(
     assert response.status_code == status.HTTP_403_FORBIDDEN
     assert "email_address" not in response.data
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name != correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db
@@ -220,10 +220,10 @@ def test_put__auth_other(
         detail_url(CorrespondentViewSet, fake_correspondent), data=correspondent_payload
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "email_address" not in response.data
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name != correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db
@@ -237,10 +237,10 @@ def test_put__auth_owner(
         detail_url(CorrespondentViewSet, fake_correspondent), data=correspondent_payload
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
-    assert "email_address" not in response.data
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["real_name"] == correspondent_payload["real_name"]
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name == correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db
@@ -254,10 +254,10 @@ def test_put__auth_admin(
         detail_url(CorrespondentViewSet, fake_correspondent), data=correspondent_payload
     )
 
-    assert response.status_code == status.HTTP_405_METHOD_NOT_ALLOWED
+    assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "email_address" not in response.data
     fake_correspondent.refresh_from_db()
-    assert fake_correspondent.email_address != correspondent_payload["email_address"]
+    assert fake_correspondent.real_name != correspondent_payload["real_name"]
 
 
 @pytest.mark.django_db

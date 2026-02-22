@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-22 13:24+0000\n"
-"PO-Revision-Date: 2026-02-11 15:09+0000\n"
+"PO-Revision-Date: 2026-02-22 14:06+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/config/"
 "de/>\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: logs.py:64
 msgid "This logfile does not exist."
-msgstr ""
+msgstr "Diese Logdatei existiert nicht."
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/admin.py:32
@@ -60,25 +60,23 @@ msgstr "Abkürzung zur E-Mail Chronik"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/settings.py:775
-#, fuzzy
-#| msgid "E∘nvelope Settings"
 msgid "E∘nvelope API"
-msgstr "E∘nvelope-Einstellungen"
+msgstr "E∘nvelope API"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/settings.py:777
 msgid "API schema for the E∘nvelope server."
-msgstr ""
+msgstr "API Schema des E∘nvelope Servers."
 
 #. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
 #: src/config/settings.py:780
 msgid "Licensed under AGPL-3.0-or-later"
-msgstr ""
+msgstr "Lizensiert unter AGPL-3.0-or-later"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218. ReadTheDocs is a brand name.
 #: src/config/settings.py:785
 msgid "Read the E∘nvelope Documentation on ReadTheDocs"
-msgstr ""
+msgstr "Lies die E∘nvelope Dokumentation auf ReadTheDocs"
 
 #: src/config/settings.py:922
 msgid "Default page size for paginated API response data"

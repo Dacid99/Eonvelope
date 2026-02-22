@@ -7,6 +7,7 @@
     ":prHourlyLimitNone",
     "mergeConfidence:all-badges",
     ":semanticPrefixChore",
+    ":pinDigestsDisabled",
     ":preserveSemverRanges",
     ":disableDigestUpdates",
     ":automergeDisabled",
@@ -20,26 +21,34 @@
   "packageRules": [
     {
       "matchManagers": ["poetry"],
-      "extends": [":separateMultipleMajorReleases", ":separatePatchReleases"]
+      "matchUpdateTypes": ["minor"],
+      "groupName": "all poetry minor releases",
+      "groupSlug": "poetry minor"
+    },
+    {
+      "matchManagers": ["poetry"],
+      "matchUpdateTypes": ["patch"],
+      "groupName": "all poetry patch releases",
+      "groupSlug": "poetry patch"
     },
     {
       "matchManagers": ["gitlabci"],
-      "groupName": "all gitlab-ci updates",
+      "groupName": "all gitlab-ci releases",
       "groupSlug": "gitlab-ci"
     },
     {
       "matchManagers": ["dockerfile"],
-      "groupName": "all Dockerfile updates",
+      "groupName": "all Dockerfile releases",
       "groupSlug": "dockerfile"
     },
     {
       "matchManagers": ["docker-compose"],
-      "groupName": "all docker-compose updates",
+      "groupName": "all docker-compose releases",
       "groupSlug": "docker-compose"
     },
     {
       "matchManagers": ["pre-commit"],
-      "groupName": "all pre-commit updates",
+      "groupName": "all pre-commit releases",
       "groupSlug": "pre-commit"
     }
   ]

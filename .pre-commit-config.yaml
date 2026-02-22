@@ -81,6 +81,14 @@ repos:
         pass_filenames: false
         language: system
         types: [html]
+  - repo: local
+    hooks:
+      - id: validate_openapi_schema
+        name: Validate openapi schema documentation
+        entry: poetry run python3 manage.py spectacular --validate --fail-on-warn > /dev/null
+        pass_filenames: false
+        language: system
+        files: (src/api/.*\.py|poetry.lock)
   - repo: https://github.com/timo-reymann/gitlab-ci-verify
     rev: v2.9.2
     hooks:

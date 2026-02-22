@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-27 17:03+0000\n"
-"PO-Revision-Date: 2025-12-31 20:14+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-02-22 13:20+0000\n"
+"Last-Translator: Tim Klingeleers <tim@klingeleers.be>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/eonvelope/"
 "eonvelope/nl/>\n"
 "Language: nl\n"
@@ -17,32 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:45
 msgid "Paperless server URL"
-msgstr ""
+msgstr "Paperless server URL"
 
 #. Translators: Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:47
 msgid "URL of your Paperless server."
-msgstr ""
+msgstr "URL van je Paperless server."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:54
 msgid "Paperless server API key"
-msgstr ""
+msgstr "Paperless server API key"
 
 #. Translators: Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:56
 msgid "API key for your Paperless server."
-msgstr ""
+msgstr "API key voor je Paperless server"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless and Tika are brand names.
 #: src/eonvelope/models/UserProfile.py:62
 msgid "Paperless Tika support enabled"
-msgstr ""
+msgstr "Paperless Tika ondersteuning ingeschakeld"
 
 #. Translators: Paperless and Tika are brand names.
 #: src/eonvelope/models/UserProfile.py:64

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 13:24+0000\n"
+"POT-Creation-Date: 2026-02-22 14:08+0000\n"
 "PO-Revision-Date: 2026-02-20 20:09+0000\n"
 "Last-Translator: Joana RC Gomes <joanarcgomes@outlook.com>\n"
 "Language-Team: Portuguese (Portugal) <https://hosted.weblate.org/projects/"
@@ -57,7 +57,8 @@ msgstr ""
 msgid "Retrieves a single instance."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:59 src/api/v1/views/MailboxViewSet.py:62
+#: src/api/v1/views/AccountViewSet.py:59 src/api/v1/views/DaemonViewSet.py:48
+#: src/api/v1/views/MailboxViewSet.py:62
 msgid "Updates a single instance."
 msgstr ""
 
@@ -68,7 +69,8 @@ msgstr ""
 #: src/api/v1/views/AccountViewSet.py:61
 #: src/api/v1/views/AttachmentViewSet.py:58
 #: src/api/v1/views/CorrespondentViewSet.py:60
-#: src/api/v1/views/EmailViewSet.py:63 src/api/v1/views/MailboxViewSet.py:63
+#: src/api/v1/views/DaemonViewSet.py:57 src/api/v1/views/EmailViewSet.py:63
+#: src/api/v1/views/MailboxViewSet.py:63
 msgid "Deletes a single instance."
 msgstr ""
 
@@ -269,43 +271,26 @@ msgstr ""
 msgid "Uploaded correspondent to Nextcloud."
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:48
-#, fuzzy, python-format
-#| msgid "Updated mailboxes"
-msgid "Updates a single %s."
-msgstr "Caixas de mensagens atualizadas"
-
-#: src/api/v1/views/DaemonViewSet.py:48 src/api/v1/views/DaemonViewSet.py:53
-#: src/api/v1/views/DaemonViewSet.py:57
-#, fuzzy
-#| msgid "Tested mailaccount"
-msgid "routine"
-msgstr "Conta de correio testada"
-
 #: src/api/v1/views/DaemonViewSet.py:50 src/api/v1/views/DaemonViewSet.py:55
 msgid "You must set header 'Accept: application/json'."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:53
-#, python-format
-msgid "Creates a new %s."
-msgstr ""
-
-#: src/api/v1/views/DaemonViewSet.py:57
-#, python-format
-msgid "Deletes a single %s."
+msgid "Creates a new instance"
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:70
-msgid "Tests a daemon."
-msgstr ""
+#, fuzzy
+#| msgid "Tested mailaccount"
+msgid "Tests a routine."
+msgstr "Conta de correio testada"
 
 #: src/api/v1/views/DaemonViewSet.py:74
-msgid "Starts a daemon's periodic task."
+msgid "Starts a routine's periodic task."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:78
-msgid "Stops a daemon's periodic task."
+msgid "Stops a routine's periodic task."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:145

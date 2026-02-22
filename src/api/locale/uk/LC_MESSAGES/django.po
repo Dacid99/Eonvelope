@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 13:24+0000\n"
+"POT-Creation-Date: 2026-02-22 14:08+0000\n"
 "PO-Revision-Date: 2026-01-24 15:30+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/eonvelope/api/"
@@ -60,7 +60,8 @@ msgstr ""
 msgid "Retrieves a single instance."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:59 src/api/v1/views/MailboxViewSet.py:62
+#: src/api/v1/views/AccountViewSet.py:59 src/api/v1/views/DaemonViewSet.py:48
+#: src/api/v1/views/MailboxViewSet.py:62
 msgid "Updates a single instance."
 msgstr ""
 
@@ -71,7 +72,8 @@ msgstr ""
 #: src/api/v1/views/AccountViewSet.py:61
 #: src/api/v1/views/AttachmentViewSet.py:58
 #: src/api/v1/views/CorrespondentViewSet.py:60
-#: src/api/v1/views/EmailViewSet.py:63 src/api/v1/views/MailboxViewSet.py:63
+#: src/api/v1/views/DaemonViewSet.py:57 src/api/v1/views/EmailViewSet.py:63
+#: src/api/v1/views/MailboxViewSet.py:63
 msgid "Deletes a single instance."
 msgstr ""
 
@@ -278,43 +280,26 @@ msgstr "Не вдалося завантажити на Nextcloud."
 msgid "Uploaded correspondent to Nextcloud."
 msgstr "Завантажено кореспондента до Nextcloud."
 
-#: src/api/v1/views/DaemonViewSet.py:48
-#, fuzzy, python-format
-#| msgid "Updated mailboxes"
-msgid "Updates a single %s."
-msgstr "Оновлені поштові скриньки"
-
-#: src/api/v1/views/DaemonViewSet.py:48 src/api/v1/views/DaemonViewSet.py:53
-#: src/api/v1/views/DaemonViewSet.py:57
-#, fuzzy
-#| msgid "Tested routine"
-msgid "routine"
-msgstr "Перевірена процедура"
-
 #: src/api/v1/views/DaemonViewSet.py:50 src/api/v1/views/DaemonViewSet.py:55
 msgid "You must set header 'Accept: application/json'."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:53
-#, python-format
-msgid "Creates a new %s."
-msgstr ""
-
-#: src/api/v1/views/DaemonViewSet.py:57
-#, python-format
-msgid "Deletes a single %s."
+msgid "Creates a new instance"
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:70
-msgid "Tests a daemon."
-msgstr ""
+#, fuzzy
+#| msgid "Tested routine"
+msgid "Tests a routine."
+msgstr "Перевірена процедура"
 
 #: src/api/v1/views/DaemonViewSet.py:74
-msgid "Starts a daemon's periodic task."
+msgid "Starts a routine's periodic task."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:78
-msgid "Stops a daemon's periodic task."
+msgid "Stops a routine's periodic task."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:145

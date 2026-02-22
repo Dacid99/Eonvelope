@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 13:24+0000\n"
+"POT-Creation-Date: 2026-02-22 14:08+0000\n"
 "PO-Revision-Date: 2025-12-31 20:13+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/eonvelope/api/pl/"
@@ -59,7 +59,8 @@ msgstr ""
 msgid "Retrieves a single instance."
 msgstr ""
 
-#: src/api/v1/views/AccountViewSet.py:59 src/api/v1/views/MailboxViewSet.py:62
+#: src/api/v1/views/AccountViewSet.py:59 src/api/v1/views/DaemonViewSet.py:48
+#: src/api/v1/views/MailboxViewSet.py:62
 msgid "Updates a single instance."
 msgstr ""
 
@@ -70,7 +71,8 @@ msgstr ""
 #: src/api/v1/views/AccountViewSet.py:61
 #: src/api/v1/views/AttachmentViewSet.py:58
 #: src/api/v1/views/CorrespondentViewSet.py:60
-#: src/api/v1/views/EmailViewSet.py:63 src/api/v1/views/MailboxViewSet.py:63
+#: src/api/v1/views/DaemonViewSet.py:57 src/api/v1/views/EmailViewSet.py:63
+#: src/api/v1/views/MailboxViewSet.py:63
 msgid "Deletes a single instance."
 msgstr ""
 
@@ -267,40 +269,24 @@ msgstr ""
 msgid "Uploaded correspondent to Nextcloud."
 msgstr ""
 
-#: src/api/v1/views/DaemonViewSet.py:48
-#, python-format
-msgid "Updates a single %s."
-msgstr ""
-
-#: src/api/v1/views/DaemonViewSet.py:48 src/api/v1/views/DaemonViewSet.py:53
-#: src/api/v1/views/DaemonViewSet.py:57
-msgid "routine"
-msgstr ""
-
 #: src/api/v1/views/DaemonViewSet.py:50 src/api/v1/views/DaemonViewSet.py:55
 msgid "You must set header 'Accept: application/json'."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:53
-#, python-format
-msgid "Creates a new %s."
-msgstr ""
-
-#: src/api/v1/views/DaemonViewSet.py:57
-#, python-format
-msgid "Deletes a single %s."
+msgid "Creates a new instance"
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:70
-msgid "Tests a daemon."
+msgid "Tests a routine."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:74
-msgid "Starts a daemon's periodic task."
+msgid "Starts a routine's periodic task."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:78
-msgid "Stops a daemon's periodic task."
+msgid "Stops a routine's periodic task."
 msgstr ""
 
 #: src/api/v1/views/DaemonViewSet.py:145

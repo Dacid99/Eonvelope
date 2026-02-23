@@ -2,31 +2,33 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:best-practices",
-    ":configMigration",
-    ":prConcurrentLimitNone",
-    ":prHourlyLimitNone",
-    "mergeConfidence:all-badges",
-    ":semanticPrefixChore",
-    ":pinDigestsDisabled",
-    ":disableDigestUpdates",
     ":automergeDisabled",
+    ":assignee(@Dacid99)",
+    ":configMigration",
+    ":disableDigestUpdates",
+    ":enablePreCommit",
+    ":pinDigestsDisabled",
+    ":prConcurrentLimitNone",
+    ":preserveSemverRanges",
+    ":prHourlyLimitNone",
     ":rebaseStalePrs",
+    ":semanticPrefixChore",
     "customManagers:gitlabPipelineVersions",
     "customManagers:dockerfileVersions",
     "customManagers:makefileVersions",
-    ":enablePreCommit",
-    ":assignee(@Dacid99)"
+    "mergeConfidence:all-badges"
   ],
   "ignorePresets": [
-    "docker:pinDigests",
+    ":maintainLockFilesWeekly",
+    ":pinDevDependencies",
     ":semanticPrefixFixDepsChoreOthers",
-    ":pinDevDependencies"
+    "docker:pinDigests"
   ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["at any time"]
+  },
   "packageRules": [
-    {
-      "matchPackageNames": ["*"],
-      "rangeStrategy": "update-lockfile"
-    },
     {
       "matchManagers": ["poetry"],
       "matchUpdateTypes": ["minor"],

@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-27 17:03+0000\n"
-"PO-Revision-Date: 2025-12-31 20:13+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2026-02-23 10:38+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/eonvelope/"
 "eonvelope/id/>\n"
 "Language: id\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:45
@@ -147,7 +147,7 @@ msgstr ""
 
 #: src/eonvelope/templates/account/profile.html:62
 msgid "Save"
-msgstr ""
+msgstr "Simpan"
 
 #: src/eonvelope/templates/allauth/elements/language_dropdown.html:8
 #: src/eonvelope/templates/allauth/elements/language_dropdown.html:12
@@ -168,7 +168,7 @@ msgstr ""
 
 #: src/eonvelope/templates/allauth/layouts/base.html:65
 msgid "Toggle navigation"
-msgstr ""
+msgstr "Alihkan navigasi"
 
 #: src/eonvelope/templates/allauth/layouts/base.html:83
 msgid "Sign Out"

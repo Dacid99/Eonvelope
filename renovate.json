@@ -8,7 +8,6 @@
     "mergeConfidence:all-badges",
     ":semanticPrefixChore",
     ":pinDigestsDisabled",
-    ":preserveSemverRanges",
     ":disableDigestUpdates",
     ":automergeDisabled",
     ":rebaseStalePrs",
@@ -20,6 +19,10 @@
   ],
   "ignorePresets": ["docker:pinDigests"],
   "packageRules": [
+    {
+      "matchPackageNames": ["*"],
+      "rangeStrategy": "update-lockfile"
+    },
     {
       "matchManagers": ["poetry"],
       "matchUpdateTypes": ["minor"],

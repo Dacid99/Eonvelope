@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-27 17:03+0000\n"
-"PO-Revision-Date: 2026-02-23 10:38+0000\n"
+"PO-Revision-Date: 2026-02-24 11:09+0000\n"
 "Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/eonvelope/"
 "eonvelope/id/>\n"
@@ -22,128 +22,128 @@ msgstr ""
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:45
 msgid "Paperless server URL"
-msgstr ""
+msgstr "URL server Paperless"
 
 #. Translators: Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:47
 msgid "URL of your Paperless server."
-msgstr ""
+msgstr "URL server Paperless Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:54
 msgid "Paperless server API key"
-msgstr ""
+msgstr "Kunci API server Paperless"
 
 #. Translators: Paperless is a brand name.
 #: src/eonvelope/models/UserProfile.py:56
 msgid "API key for your Paperless server."
-msgstr ""
+msgstr "Kunci API untuk server Paperless Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Paperless and Tika are brand names.
 #: src/eonvelope/models/UserProfile.py:62
 msgid "Paperless Tika support enabled"
-msgstr ""
+msgstr "Dukungan Paperless Tika diaktifkan"
 
 #. Translators: Paperless and Tika are brand names.
 #: src/eonvelope/models/UserProfile.py:64
 msgid "Whether Tika support is enabled on your Paperless server."
-msgstr ""
+msgstr "Apakah dukungan Tika diaktifkan pada server Paperless Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Immich is a brand name.
 #: src/eonvelope/models/UserProfile.py:72
 msgid "Immich server URL"
-msgstr ""
+msgstr "URL server Immich"
 
 #. Translators: Immich is a brand name.
 #: src/eonvelope/models/UserProfile.py:74
 msgid "URL of your Immich server."
-msgstr ""
+msgstr "URL server Immich Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Immich is a brand name.
 #: src/eonvelope/models/UserProfile.py:81
 msgid "Immich server API key"
-msgstr ""
+msgstr "Kunci API server Immich"
 
 #. Translators: Immich is a brand name.
 #: src/eonvelope/models/UserProfile.py:83
 msgid "API key for your Immich server."
-msgstr ""
+msgstr "Kunci API untuk server Immich Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:91
 msgid "Nextcloud server URL"
-msgstr ""
+msgstr "URL server Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:93
 msgid "URL of your Nextcloud server."
-msgstr ""
+msgstr "URL server Nextcloud Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:100
 msgid "Nextcloud server username"
-msgstr ""
+msgstr "Nama pengguna server Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:102
 msgid "Username for your Nextcloud account."
-msgstr ""
+msgstr "Nama pengguna untuk akun Nextcloud Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:109
 msgid "Nextcloud server password"
-msgstr ""
+msgstr "Kata sandi server Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:111
 msgid "Password for your Nextcloud account."
-msgstr ""
+msgstr "Kata sandi untuk akun Nextcloud Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it. Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:118
 msgid "Nextcloud server addressbook"
-msgstr ""
+msgstr "Buku alamat server Nextcloud"
 
 #. Translators: Nextcloud is a brand name.
 #: src/eonvelope/models/UserProfile.py:120
 msgid "Main addressbook of your Nextcloud account."
-msgstr ""
+msgstr "Buku alamat utama dari akun Nextcloud Anda."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/eonvelope/models/UserProfile.py:128
 msgid "user profile"
-msgstr ""
+msgstr "profil pengguna"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/eonvelope/models/UserProfile.py:130
 msgid "user profiles"
-msgstr ""
+msgstr "profil pengguna"
 
 #: src/eonvelope/models/UserProfile.py:139
 #, python-format
 msgid "Profile for user %(username)s "
-msgstr ""
+msgstr "Profil untuk pengguna %(username)s "
 
 #: src/eonvelope/templates/429.html:8 src/eonvelope/templates/429.html:13
 msgid "Too Many Requests"
-msgstr ""
+msgstr "Terlalu Banyak Permintaan"
 
 #: src/eonvelope/templates/429.html:15
 msgid "You are sending too many requests."
-msgstr ""
+msgstr "Anda mengirim terlalu banyak permintaan."
 
 #: src/eonvelope/templates/account/profile.html:14
 #: src/eonvelope/templates/allauth/layouts/manage.html:16
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: src/eonvelope/templates/account/profile.html:18
 msgid "Your Profile"
-msgstr ""
+msgstr "Profil Anda"
 
 #: src/eonvelope/templates/account/profile.html:19
 msgid "Third Party Integrations"
-msgstr ""
+msgstr "Integrasi Pihak Ketiga"
 
 #: src/eonvelope/templates/account/profile.html:62
 msgid "Save"
@@ -152,19 +152,19 @@ msgstr "Simpan"
 #: src/eonvelope/templates/allauth/elements/language_dropdown.html:8
 #: src/eonvelope/templates/allauth/elements/language_dropdown.html:12
 msgid "Select Language"
-msgstr ""
+msgstr "Pilih Bahasa"
 
 #: src/eonvelope/templates/allauth/elements/theme_dropdown.html:21
 msgid "Light"
-msgstr ""
+msgstr "Terang"
 
 #: src/eonvelope/templates/allauth/elements/theme_dropdown.html:30
 msgid "Dark"
-msgstr ""
+msgstr "Gelap"
 
 #: src/eonvelope/templates/allauth/elements/theme_dropdown.html:39
 msgid "Auto"
-msgstr ""
+msgstr "Otomatis"
 
 #: src/eonvelope/templates/allauth/layouts/base.html:65
 msgid "Toggle navigation"
@@ -172,28 +172,28 @@ msgstr "Alihkan navigasi"
 
 #: src/eonvelope/templates/allauth/layouts/base.html:83
 msgid "Sign Out"
-msgstr ""
+msgstr "Keluar"
 
 #: src/eonvelope/templates/allauth/layouts/base.html:87
 msgid "Sign In"
-msgstr ""
+msgstr "Masuk"
 
 #: src/eonvelope/templates/allauth/layouts/base.html:90
 msgid "Sign Up"
-msgstr ""
+msgstr "Daftar"
 
 #: src/eonvelope/templates/allauth/layouts/manage.html:24
 msgid "Change Password"
-msgstr ""
+msgstr "Ubah Kata Sandi"
 
 #: src/eonvelope/templates/allauth/layouts/manage.html:32
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Autentikasi Dua Faktor"
 
 #: src/eonvelope/templates/allauth/layouts/manage.html:40
 msgid "Sessions"
-msgstr ""
+msgstr "Sesi"
 
 #: src/eonvelope/templates/allauth/layouts/manage.html:47
 msgid "Admin panel"
-msgstr ""
+msgstr "Panel admin"

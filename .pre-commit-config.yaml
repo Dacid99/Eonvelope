@@ -20,7 +20,7 @@ repos:
       - id: black
         args: [--config, tools/black_config]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.0
+    rev: v0.15.2
     hooks:
       - id: ruff-check
         args: [--config, tools/ruff.toml]
@@ -51,12 +51,12 @@ repos:
       - id: hadolint-docker
         args: [--config, tools/.hadolint.yaml]
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.3.14
+    rev: v2.4.4
     hooks:
       - id: biome-check
         args: [--config-path, tools/biome.json]
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 43.8.2
+    rev: 43.31.2
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/PyCQA/doc8
@@ -65,7 +65,7 @@ repos:
       - id: doc8
         args: [--config, tools/doc8.ini]
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.20.0
+    rev: v0.21.0
     hooks:
       - id: markdownlint-cli2
         args: [--config, tools/.markdownlint.yml]
@@ -90,7 +90,7 @@ repos:
         language: system
         files: (src/api/.*\.py|poetry.lock)
   - repo: https://github.com/timo-reymann/gitlab-ci-verify
-    rev: v2.9.2
+    rev: v2.10.0
     hooks:
       - id: gitlab-ci-verify
         args: [--gitlab-base-url, gitlab.com, --severity, warning]

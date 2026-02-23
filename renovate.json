@@ -17,7 +17,11 @@
     ":enablePreCommit",
     ":assignee(@Dacid99)"
   ],
-  "ignorePresets": ["docker:pinDigests"],
+  "ignorePresets": [
+    "docker:pinDigests",
+    ":semanticPrefixFixDepsChoreOthers",
+    ":pinDevDependencies"
+  ],
   "packageRules": [
     {
       "matchPackageNames": ["*"],

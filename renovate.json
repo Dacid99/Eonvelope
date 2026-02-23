@@ -18,6 +18,7 @@
     ":enablePreCommit",
     ":assignee(@Dacid99)"
   ],
+  "ignorePresets": ["docker:pinDigests"],
   "packageRules": [
     {
       "matchManagers": ["poetry"],

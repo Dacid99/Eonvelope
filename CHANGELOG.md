@@ -5,6 +5,10 @@
 - Features:
   - toggleable tooltips for webapp
 
+- Fixes:
+  - add missing update methods to correspondents api endpoint
+  - polish api schema docs
+
 ## Version 0.5.3
 
 - Features:

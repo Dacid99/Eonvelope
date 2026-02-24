@@ -245,7 +245,7 @@ class SafeIMAPMixin:
     @safe(exception_class=MailboxError)
     def safe_append(
         self: IMAP4FetcherClass, *args: Any, **kwargs: Any
-    ) -> tuple[str, list[Any]]:
+    ) -> tuple[str, list[bytes]]:
         """The :func:`safe` wrapped version of :func:`imaplib.IMAP4.append`."""
         return self._mail_client.append(*args, **kwargs)
 

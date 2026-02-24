@@ -23,13 +23,12 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, override
 
 from allauth.mfa.adapter import get_adapter
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 from drf_spectacular.authentication import BasicScheme
 from rest_framework import exceptions
 from rest_framework.authentication import BasicAuthentication
 
 if TYPE_CHECKING:
-    from django_stubs_ext import StrOrPromise
     from drf_spectacular.openapi import AutoSchema
     from rest_framework.request import Request
 
@@ -58,9 +57,7 @@ class BasicNoMFScheme(BasicScheme):
     target_class = "api.auth.BasicNoMFAuthentication"
 
     @override
-    def get_security_definition(
-        self, auto_schema: AutoSchema
-    ) -> dict[str, StrOrPromise]:
+    def get_security_definition(self, auto_schema: AutoSchema) -> dict[str, str]:
         security_definition = super().get_security_definition(auto_schema)
         security_definition["description"] = _(
             "Basic authentication is only allowed if you do not have MFA enabled."

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-"""Module with the :class:`web.tables.BasDaemonTable` table class."""
+"""Module with the :class:`web.tables.BaseDaemonTable` table class."""
 
 from django.utils.translation import gettext_lazy as _
 from django_tables2 import Column, Table

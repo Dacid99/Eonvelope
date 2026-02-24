@@ -613,7 +613,7 @@ PWA_APP_SHORTCUTS = [
         "description": _("Shortcut to the email timeline"),
     },
 ]
-PWA_APP_SCREENSHOTS = []
+PWA_APP_SCREENSHOTS: list[str] = []
 PWA_SERVICE_WORKER_PATH = SOURCE_DIR / "eonvelope" / "templates" / "serviceworker.js"
 PWA_APP_DEBUG_MODE = DEBUG
 

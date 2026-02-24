@@ -20,7 +20,6 @@
 
 from __future__ import annotations
 
-from datetime import UTC, datetime, timedelta
 from typing import TYPE_CHECKING, override
 
 import jmapc
@@ -28,7 +27,6 @@ import requests
 import urllib3.exceptions
 
 from core.constants import (
-    INTERNAL_DATE_FORMAT,
     EmailFetchingCriterionChoices,
     EmailProtocolChoices,
 )
@@ -41,6 +39,7 @@ if TYPE_CHECKING:
     from core.models.Account import Account
     from core.models.Email import Email
     from core.models.Mailbox import Mailbox
+    from core.utils import FetchingCriterion
 
 
 class JMAPFetcher(BaseFetcher):
@@ -74,60 +73,6 @@ class JMAPFetcher(BaseFetcher):
     """Tuple of all criteria available for fetching. Refers to :class:`MailFetchingCriteria`.
     Must be immutable!
     """
-
-    @staticmethod
-    def make_fetching_filter(
-        criterion_name: str, criterion_arg: str
-    ) -> jmapc.EmailQueryFilterCondition:
-        """Returns the filter-condition for the JMAP Email/query request.
-
-        Args:
-            criterion_name: The criterion for the JMAP request.
-            criterion_arg: The argument for the criterion.
-
-        Returns:
-            The filter-condition to be used in JMAP request.
-        """
-        match criterion_name:
-            case EmailFetchingCriterionChoices.DAILY:
-                start_time = datetime.now(tz=UTC) - timedelta(days=1)
-            case EmailFetchingCriterionChoices.WEEKLY:
-                start_time = datetime.now(tz=UTC) - timedelta(weeks=1)
-            case EmailFetchingCriterionChoices.MONTHLY:
-                start_time = datetime.now(tz=UTC) - timedelta(weeks=4)
-            case EmailFetchingCriterionChoices.ANNUALLY:
-                start_time = datetime.now(tz=UTC) - timedelta(weeks=52)
-            case EmailFetchingCriterionChoices.SENTSINCE:
-                start_time = datetime.strptime(
-                    criterion_arg, INTERNAL_DATE_FORMAT
-                ).astimezone(UTC)
-            case (
-                EmailFetchingCriterionChoices.SEEN
-                | EmailFetchingCriterionChoices.ANSWERED
-                | EmailFetchingCriterionChoices.DRAFT
-            ):
-                return jmapc.EmailQueryFilterCondition(
-                    has_keyword="$" + criterion_name.lower(),
-                )
-            case (
-                EmailFetchingCriterionChoices.UNSEEN
-                | EmailFetchingCriterionChoices.UNANSWERED
-                | EmailFetchingCriterionChoices.UNDRAFT
-            ):
-                return jmapc.EmailQueryFilterCondition(
-                    not_keyword="$" + criterion_name.lower().removeprefix("un"),
-                )
-            case EmailFetchingCriterionChoices.LARGER:
-                return jmapc.EmailQueryFilterCondition(min_size=int(criterion_arg))
-            case EmailFetchingCriterionChoices.SMALLER:
-                return jmapc.EmailQueryFilterCondition(max_size=int(criterion_arg))
-            case EmailFetchingCriterionChoices.BODY:
-                return jmapc.EmailQueryFilterCondition(body=criterion_arg)
-            case EmailFetchingCriterionChoices.FROM:
-                return jmapc.EmailQueryFilterCondition(mail_from=criterion_arg)
-            case _:
-                return jmapc.EmailQueryFilterCondition()
-        return jmapc.EmailQueryFilterCondition(after=start_time)
 
     @override
     def __init__(self, account: Account) -> None:
@@ -208,8 +153,7 @@ class JMAPFetcher(BaseFetcher):
     def fetch_emails(
         self,
         mailbox: Mailbox,
-        criterion: str = EmailFetchingCriterionChoices.ALL,
-        criterion_arg: str = "",
+        criterion: FetchingCriterion = BaseFetcher.DEFAULT_FETCHING_CRITERION,
     ) -> list[bytes]:
         super().fetch_emails(mailbox, criterion)
 
@@ -242,7 +186,7 @@ class JMAPFetcher(BaseFetcher):
             raise MailboxError(IndexError("Mailbox not found"))
         self.logger.debug("Successfully queried mailbox.")
 
-        criterion_filter = self.make_fetching_filter(criterion, criterion_arg)
+        criterion_filter = criterion.as_jmap_filter()
         criterion_filter.in_mailbox = result.ids[0]
         methods = (
             jmapc.methods.EmailQuery(

@@ -1,6 +1,9 @@
 {% load translate from i18n %}
 
-<div class="dropdown btn-group">
+<div class="dropdown btn-group"
+     data-bs-toggle="tooltip"
+     data-bs-placement="bottom"
+     data-bs-title="{% translate 'Share this attachment with another service' %}">
     <button class="btn btn-outline-primary dropdown-toggle"
             type="button"
             id="dropdownSendMenuButton"

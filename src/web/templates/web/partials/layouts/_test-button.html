@@ -1,0 +1,10 @@
+{% load translate from i18n %}
+
+<button type="submit" class="btn btn-outline-primary" name="test" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-title=" 
+    {% block tooltip %}{% endblock tooltip %}
+     ">
+    {% translate "Test" as button_text %}
+
+    {% include "web/partials/_spinner-text.html" with text=button_text %}
+
+</button>

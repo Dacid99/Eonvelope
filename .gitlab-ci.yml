@@ -7,13 +7,14 @@ default:
     - export SECRET_KEY='HELPER_KEY'
     - export PYTHONPATH='src'
     - export DJANGO_SETTINGS_MODULE='config.settings'
-    - apk update && apk add --no-cache ${APK_DEPENDENCIES}
+    - apk update && apk add --no-cache "${APK_DEPENDENCIES}"
     - pip install poetry
 
 workflow: # when the pipeline should be triggered
   rules: # collect all rules from the jobs here
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_TAG
+    - if: $CI_PIPELINE_SOURCE == "schedule"
 
 variables:
   CI: "true"
@@ -36,6 +37,7 @@ variables:
   TEST_REPORT_PATH: "test/reports/"
 
 stages:
+  - test
   - check
   - build
 
@@ -48,3 +50,5 @@ include:
   - local: .gitlab/ci/.gitlab-ci-build.yml
   - local: .gitlab/ci/.gitlab-ci-debug-build.yml
   - local: .gitlab/ci/.gitlab-ci-release.yml
+  - template: Jobs/Secret-Detection.gitlab-ci.yml
+  - template: Jobs/SAST.gitlab-ci.yml

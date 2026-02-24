@@ -257,7 +257,7 @@ def test_batch_download__bad_ids__auth_owner(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "ids, expected_ids",
+    ("ids", "expected_ids"),
     [
         (["1"], [1]),
         (["1", " 2", "100"], [1, 2, 100]),

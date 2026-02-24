@@ -1,8 +1,0 @@
-{% load translate from i18n %}
-
-<button type="submit" class="btn btn-outline-primary" name="test">
-    {% translate "Test" as button_text %}
-
-    {% include "web/partials/_spinner-text.html" with text=button_text %}
-
-</button>

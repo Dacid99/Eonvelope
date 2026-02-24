@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-30 21:12+0000\n"
-"PO-Revision-Date: 2026-01-30 21:25+0000\n"
+"POT-Creation-Date: 2026-02-22 13:24+0000\n"
+"PO-Revision-Date: 2026-02-22 14:45+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/web/de/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:54
 #: src/web/filters/AttachmentFilterSet.py:54
@@ -46,13 +46,13 @@ msgid "Created after"
 msgstr "Erstellt nach"
 
 #: src/web/filters/AttachmentFilterSet.py:77
-#: src/web/filters/CorrespondentEmailFilterSet.py:73
+#: src/web/filters/CorrespondentEmailFilterSet.py:72
 #: src/web/filters/EmailFilterSet.py:67
 msgid "Received before"
 msgstr "Erhalten vor"
 
 #: src/web/filters/AttachmentFilterSet.py:83
-#: src/web/filters/CorrespondentEmailFilterSet.py:79
+#: src/web/filters/CorrespondentEmailFilterSet.py:78
 #: src/web/filters/EmailFilterSet.py:73
 msgid "Received after"
 msgstr "Erhalten nach"
@@ -228,65 +228,65 @@ msgstr "Abbrechen"
 msgid "Account Details"
 msgstr "Konto Details"
 
-#: src/web/templates/web/account/account_detail.html:39
+#: src/web/templates/web/account/account_detail.html:41
 msgid "Host"
 msgstr "Host"
 
-#: src/web/templates/web/account/account_detail.html:40
+#: src/web/templates/web/account/account_detail.html:42
 #: src/web/templates/web/account/partials/_account_card.html:24
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: src/web/templates/web/account/account_detail.html:42
+#: src/web/templates/web/account/account_detail.html:44
 msgid "Port"
 msgstr "Port"
 
-#: src/web/templates/web/account/account_detail.html:46
+#: src/web/templates/web/account/account_detail.html:48
 msgid "Default"
 msgstr "Standard"
 
-#: src/web/templates/web/account/account_detail.html:50
+#: src/web/templates/web/account/account_detail.html:52
 msgid "Timeout"
 msgstr "Zeitbegrenzung"
 
-#: src/web/templates/web/account/account_detail.html:54
+#: src/web/templates/web/account/account_detail.html:56
 msgid "None"
 msgstr "Keins"
 
-#: src/web/templates/web/account/account_detail.html:58
+#: src/web/templates/web/account/account_detail.html:60
 msgid "Allow Insecure Connection"
 msgstr "Unsichere Verbindung zulassen"
 
-#: src/web/templates/web/account/account_detail.html:60
+#: src/web/templates/web/account/account_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:50
 #: src/web/templates/web/mailbox/mailbox_detail.html:58
 msgid "on"
 msgstr "ein"
 
-#: src/web/templates/web/account/account_detail.html:62
+#: src/web/templates/web/account/account_detail.html:64
 #: src/web/templates/web/mailbox/mailbox_detail.html:52
 #: src/web/templates/web/mailbox/mailbox_detail.html:60
 msgid "off"
 msgstr "aus"
 
-#: src/web/templates/web/account/account_detail.html:67
+#: src/web/templates/web/account/account_detail.html:69
 #: src/web/templates/web/daemon/daemon_detail.html:58
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
 msgid "Latest Error"
 msgstr "Letzter Fehler"
 
-#: src/web/templates/web/account/account_detail.html:71
+#: src/web/templates/web/account/account_detail.html:73
 #: src/web/templates/web/daemon/daemon_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:69
 msgid "Occurred At"
 msgstr "Aufgetreten um"
 
-#: src/web/templates/web/account/account_detail.html:72
+#: src/web/templates/web/account/account_detail.html:74
 msgid "Test the account to see if this error persists."
 msgstr "Teste dieses Konto um zu überprüfen ob der Fehler weiter auftritt."
 
-#: src/web/templates/web/account/account_detail.html:83
-#: src/web/templates/web/account/partials/_update_mailboxes-button.html:7
+#: src/web/templates/web/account/account_detail.html:85
+#: src/web/templates/web/account/partials/_update_mailboxes-button.html:10
 #: src/web/templates/web/dashboard.html:84
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:6
 #: src/web/templates/web/mailbox/mailbox_filter_list.html:11
@@ -294,7 +294,7 @@ msgstr "Teste dieses Konto um zu überprüfen ob der Fehler weiter auftritt."
 msgid "Mailboxes"
 msgstr "Postfächer"
 
-#: src/web/templates/web/account/account_detail.html:105
+#: src/web/templates/web/account/account_detail.html:107
 #: src/web/templates/web/daemon/daemon_filter_list.html:6
 #: src/web/templates/web/daemon/daemon_filter_list.html:11
 #: src/web/templates/web/dashboard.html:91
@@ -303,14 +303,14 @@ msgstr "Postfächer"
 msgid "Routines"
 msgstr "Routinen"
 
-#: src/web/templates/web/account/account_detail.html:127
+#: src/web/templates/web/account/account_detail.html:129
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
 #: src/web/templates/web/dashboard.html:25
 #: src/web/templates/web/mailbox/mailbox_detail.html:105
 msgid "Latest Emails"
 msgstr "Neueste E-Mails"
 
-#: src/web/templates/web/account/account_detail.html:132
+#: src/web/templates/web/account/account_detail.html:134
 #: src/web/templates/web/correspondent/correspondent_detail.html:94
 #: src/web/templates/web/dashboard.html:30
 #: src/web/templates/web/email/email_detail.html:176
@@ -339,6 +339,14 @@ msgid "Add account"
 msgstr "Konto hinzufügen"
 
 #: src/web/templates/web/account/partials/_add_routines-button.html:7
+msgid ""
+"Add a standard set of routines to archive all mails going in and out of this "
+"account."
+msgstr ""
+"Lege einen Standardsatz Routinen an, die alle E-Mails die an und von diesem "
+"Konto gesendet werden."
+
+#: src/web/templates/web/account/partials/_add_routines-button.html:10
 msgid "Add routines"
 msgstr "Routinen anlegen"
 
@@ -368,9 +376,17 @@ msgstr ""
 "Du kannst Postfächer für dieses Konto hinzufügen, indem du sie vom Server "
 "abfrufst"
 
+#: src/web/templates/web/account/partials/_test_account-button.html:6
+msgid "Test whether this account can be accessed"
+msgstr "Teste ob auf dieses Konto zugegriffen werden kann"
+
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
 msgid "Test this account to make sure it can be accessed."
 msgstr "Teste dieses Konto um zu überprüfen dass der Zugriff funktioniert."
+
+#: src/web/templates/web/account/partials/_update_mailboxes-button.html:8
+msgid "Update the mailboxes in this account."
+msgstr "Aktualisiere die Postfächer dieses Kontos."
 
 #: src/web/templates/web/attachment/attachment_detail.html:6
 msgid "Attachment Details"
@@ -391,7 +407,7 @@ msgstr "Inhaltsbestimmung"
 
 #: src/web/templates/web/attachment/attachment_detail.html:46
 msgid "Content Id"
-msgstr "Inhalt-ID"
+msgstr "Inhalts-ID"
 
 #: src/web/templates/web/attachment/attachment_detail.html:48
 #: src/web/templates/web/attachment/partials/_attachment_card.html:26
@@ -435,10 +451,15 @@ msgstr "Zu den Postfächern"
 #: src/web/templates/web/attachment/partials/_multi_download-button.html:4
 #: src/web/templates/web/correspondent/partials/_multi_download-button.html:4
 #: src/web/templates/web/email/partials/_multi_download_dropdown.html:9
-#: src/web/templates/web/mailbox/partials/_download_dropdown.html:9
+#: src/web/templates/web/mailbox/partials/_multi_download_dropdown.html:9
 #: src/web/templates/web/partials/_download-button.html:5
+#: src/web/templates/web/partials/_download_dropdown.html:9
 msgid "Download"
 msgstr "Herunterladen"
+
+#: src/web/templates/web/attachment/partials/_send_to_third_party_dropdown.html:6
+msgid "Share this attachment with another service"
+msgstr "Teile diesen Anhang mit einem anderen Dienst"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
@@ -503,6 +524,10 @@ msgid ""
 msgstr ""
 "Du kannst einige hinzufügen, indem du sie zusammen mit E-Mails aus deinen "
 "Postfächern abrufst."
+
+#: src/web/templates/web/correspondent/partials/_send_to_third_party_dropdown.html:6
+msgid "Share this correspondent with another service"
+msgstr "Teile diesen Korrespondenten mit einem anderen Dienst"
 
 #: src/web/templates/web/daemon/daemon_create.html:8
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:8
@@ -576,13 +601,25 @@ msgstr "Aktiv"
 msgid "Paused"
 msgstr "Pausiert"
 
-#: src/web/templates/web/daemon/partials/_start-button.html:6
+#: src/web/templates/web/daemon/partials/_start-button.html:8
+msgid "Start this routine"
+msgstr "Starte diese Routine"
+
+#: src/web/templates/web/daemon/partials/_start-button.html:9
 msgid "Start"
 msgstr "Starten"
 
-#: src/web/templates/web/daemon/partials/_stop-button.html:6
+#: src/web/templates/web/daemon/partials/_stop-button.html:8
+msgid "Stop this routine"
+msgstr "Stoppe diese Routine"
+
+#: src/web/templates/web/daemon/partials/_stop-button.html:9
 msgid "Stop"
 msgstr "Stoppen"
+
+#: src/web/templates/web/daemon/partials/_test_daemon-button.html:6
+msgid "Perform a test run of this routine"
+msgstr "Führe einen Testdurchlauf dieser Routine aus"
 
 #: src/web/templates/web/dashboard.html:8
 msgid "Dashboard"
@@ -656,7 +693,7 @@ msgstr "Woche"
 
 #: src/web/templates/web/email/archive/week.html:15
 msgid "Week #"
-msgstr "Woche Nr."
+msgstr "Wochennr."
 
 #: src/web/templates/web/email/archive/year.html:6
 #: src/web/templates/web/email/archive/year.html:10
@@ -741,11 +778,23 @@ msgstr "Keine E-Mails gefunden."
 msgid "You can fetch some from the mailboxes you have set up."
 msgstr "Du kannst einige aus Postfächern, die du eingerichtet hast, abrufen."
 
-#: src/web/templates/web/email/partials/_reprocess_email-button.html:5
+#: src/web/templates/web/email/partials/_reprocess_email-button.html:8
+msgid ""
+"Reprocess this archived email to find connections with emails that have been "
+"archived later"
+msgstr ""
+"Verarbeite diese archivierte E-Mail erneut um Verbindungen mit später "
+"archivierten E-Mails zu finden"
+
+#: src/web/templates/web/email/partials/_reprocess_email-button.html:10
 msgid "Reprocess"
 msgstr "Aktualisieren"
 
-#: src/web/templates/web/email/partials/_restore_email-button.html:7
+#: src/web/templates/web/email/partials/_restore_email-button.html:8
+msgid "Restore this email to its mailbox on the mailserver"
+msgstr "Stelle diese E-Mail in ihrem Postfach auf dem Mailserver wiederher"
+
+#: src/web/templates/web/email/partials/_restore_email-button.html:11
 msgid "Restore"
 msgstr "Wiederherstellen"
 
@@ -841,7 +890,11 @@ msgstr ""
 "Rufe E-Mails aus diesem Postfach ab, indem du eine Routine einrichtest oder "
 "seinen Inhalt einmalig abrufst."
 
-#: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:9
+#: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:6
+msgid "Fetch and archive emails from this mailbox now"
+msgstr "E-Mails aus diesem Postfach jetzt abrufen und archivieren"
+
+#: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:12
 msgid "Fetch"
 msgstr "Abrufen"
 
@@ -864,6 +917,10 @@ msgstr "Zu den Konten"
 #: src/web/templates/web/mailbox/partials/_submit_upload-button.html:7
 msgid "Upload"
 msgstr "Hochladen"
+
+#: src/web/templates/web/mailbox/partials/_test_mailbox-button.html:6
+msgid "Test whether this mailbox can be opened on the mailserver"
+msgstr "Teste ob dieses Postfach auf dem Mailserver geöffnet werden kann"
 
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:6
 msgid "Test this mailbox to make sure it can be accessed."
@@ -945,39 +1002,40 @@ msgstr "2025 David Aderbauer"
 msgid "&amp; The Eonvelope Contributors."
 msgstr "&amp; die Beitragenden zu Eonvelope."
 
-#: src/web/templates/web/partials/_footer.html:10
-msgid "Licensed under the AGPLv3."
-msgstr "Lizensiert unter AGPLv3."
+#. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
+#: src/web/templates/web/partials/_footer.html:11
+msgid "Licensed under AGPL-3.0-or-later."
+msgstr "Lizensiert unter AGPL-3.0-or-later."
 
-#: src/web/templates/web/partials/_footer.html:13
+#: src/web/templates/web/partials/_footer.html:14
 msgid "Version"
 msgstr "Version"
 
-#: src/web/templates/web/partials/_footer.html:15
+#: src/web/templates/web/partials/_footer.html:16
 msgid "DEBUG"
 msgstr "DEBUG"
 
-#: src/web/templates/web/partials/_footer.html:22
+#: src/web/templates/web/partials/_footer.html:23
 msgid "Website"
 msgstr "Webseite"
 
-#: src/web/templates/web/partials/_footer.html:26
+#: src/web/templates/web/partials/_footer.html:27
 msgid "Gitlab"
 msgstr "Gitlab"
 
-#: src/web/templates/web/partials/_footer.html:30
+#: src/web/templates/web/partials/_footer.html:31
 msgid "Github"
 msgstr "GitHub"
 
-#: src/web/templates/web/partials/_footer.html:34
+#: src/web/templates/web/partials/_footer.html:35
 msgid "Dockerhub"
 msgstr "Docker-Hub"
 
-#: src/web/templates/web/partials/_footer.html:38
+#: src/web/templates/web/partials/_footer.html:39
 msgid "Documentation"
 msgstr "Dokumentation"
 
-#: src/web/templates/web/partials/_footer.html:42
+#: src/web/templates/web/partials/_footer.html:43
 msgid "Translating"
 msgstr "Übersetzung"
 
@@ -1055,7 +1113,7 @@ msgstr "Seitengröße"
 msgid "Save"
 msgstr "Speichern"
 
-#: src/web/templates/web/partials/_test-button.html:4
+#: src/web/templates/web/partials/layouts/_test-button.html:6
 msgid "Test"
 msgstr "Test"
 
@@ -1127,18 +1185,18 @@ msgstr "Wiederherstellen der E-Mail im Postfach fehlgeschlagen: %(error)s"
 msgid "Email successfully restored to mailbox."
 msgstr "E-Mail wurde erfolgreich im Postfach wiederhergestellt."
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:101
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:102
 #, python-format
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 "Das ausgewählte Kriterium %(criterion)s ist für dieses Postfach nicht "
 "verfügbar."
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:110
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
 #, python-format
 msgid "Fetching failed: %(error)s"
 msgstr "Abrufen fehlgeschlagen: %(error)s"
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:114
 msgid "Fetching successful"
 msgstr "Abrufen erfolgreich"

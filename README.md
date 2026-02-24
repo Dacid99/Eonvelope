@@ -91,7 +91,7 @@ Translation is done via [weblate][weblate-engage].
 If you want to add a language that is missing, go check it out!
 
 If the language is missing on [weblate][weblate] too,
-please file an [issue][[github-issues]] using the missing-language template.
+please file an [issue][github-issues] using the missing-language template.
 
 ## Accessibility
 

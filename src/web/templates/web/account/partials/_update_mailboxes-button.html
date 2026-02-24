@@ -3,6 +3,9 @@
 <button type="submit"
         class="btn btn-outline-primary"
         name="update_mailboxes"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="{% translate 'Update the mailboxes in this account.' %}"
         {% if not account.is_healthy %}disabled{% endif %}>
     {% translate "Mailboxes" as button_text %}
 

@@ -23,7 +23,7 @@ import pytest
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "account_is_healthy, mailbox_is_healthy, daemons_is_healthy",
+    ("account_is_healthy", "mailbox_is_healthy", "daemons_is_healthy"),
     [
         (True, False, True),
         (False, True, True),
@@ -57,7 +57,14 @@ def test_illegal_states(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "account_is_healthy_start, mailbox_is_healthy_start, daemons_is_healthy_start, account_is_healthy_end, mailbox_is_healthy_end, daemons_is_healthy_end",
+    (
+        "account_is_healthy_start",
+        "mailbox_is_healthy_start",
+        "daemons_is_healthy_start",
+        "account_is_healthy_end",
+        "mailbox_is_healthy_end",
+        "daemons_is_healthy_end",
+    ),
     [
         (True, True, True, False, False, False),
         (True, True, False, False, False, False),
@@ -106,7 +113,14 @@ def test_toggle_Account_is_healthy(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "account_is_healthy_start, mailbox_is_healthy_start, daemons_is_healthy_start, account_is_healthy_end, mailbox_is_healthy_end, daemons_is_healthy_end",
+    (
+        "account_is_healthy_start",
+        "mailbox_is_healthy_start",
+        "daemons_is_healthy_start",
+        "account_is_healthy_end",
+        "mailbox_is_healthy_end",
+        "daemons_is_healthy_end",
+    ),
     [
         (True, True, True, True, False, False),
         (True, True, False, True, False, False),
@@ -153,7 +167,14 @@ def test_toggle_Mailbox_is_healthy(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "account_is_healthy_start, mailbox_is_healthy_start, daemons_is_healthy_start, account_is_healthy_end, mailbox_is_healthy_end, daemons_is_healthy_end",
+    (
+        "account_is_healthy_start",
+        "mailbox_is_healthy_start",
+        "daemons_is_healthy_start",
+        "account_is_healthy_end",
+        "mailbox_is_healthy_end",
+        "daemons_is_healthy_end",
+    ),
     [
         (True, True, True, True, True, False),
         (True, True, False, True, True, True),

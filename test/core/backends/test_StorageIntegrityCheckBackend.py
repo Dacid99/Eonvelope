@@ -18,18 +18,18 @@
 
 """Test module for the :class:`core.backends.StorageIntegrityCheckBackend.StorageIntegrityCheckBackend` class."""
 
+import asyncio
+
 import pytest
-from health_check.backends import HealthCheckException
+from health_check.exceptions import ServiceWarning
 
 from core.backends import StorageIntegrityCheckBackend
 
 
 @pytest.fixture
 def mock_StorageShard_healthcheck(mocker):
-    """Patches `core.backends.StorageShard.healthcheck`."""
-    return mocker.patch(
-        "core.backends.StorageIntegrityCheckBackend.StorageShard.healthcheck"
-    )
+    """Patches `core.models.StorageShard.healthcheck`."""
+    return mocker.patch("core.models.StorageShard.StorageShard.healthcheck")
 
 
 def test_StorageIntegrityCheckBackend_check_status__success(
@@ -38,7 +38,13 @@ def test_StorageIntegrityCheckBackend_check_status__success(
     """Test the healthcheck for the storage if it is healthy."""
     mock_StorageShard_healthcheck.return_value = True
 
-    StorageIntegrityCheckBackend().check_status()
+    loop = asyncio.new_event_loop()
+    try:
+        loop.run_until_complete(StorageIntegrityCheckBackend().run())
+    finally:
+        loop.close()
+
+    mock_StorageShard_healthcheck.assert_called_once()
 
 
 def test_StorageIntegrityCheckBackend_check_status__failure(
@@ -47,5 +53,11 @@ def test_StorageIntegrityCheckBackend_check_status__failure(
     """Test the healthcheck for the storage if it is not healthy."""
     mock_StorageShard_healthcheck.return_value = False
 
-    with pytest.raises(HealthCheckException):
-        StorageIntegrityCheckBackend().check_status()
+    loop = asyncio.new_event_loop()
+    try:
+        with pytest.raises(ServiceWarning):
+            loop.run_until_complete(StorageIntegrityCheckBackend().run())
+    finally:
+        loop.close()
+
+    mock_StorageShard_healthcheck.assert_called_once()

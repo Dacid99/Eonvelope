@@ -64,7 +64,7 @@ def test_search_filter(faker, correspondent_queryset, searched_fields):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_real_name_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -84,7 +84,7 @@ def test_real_name_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_email_name_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -104,7 +104,7 @@ def test_email_name_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_email_address_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -124,7 +124,7 @@ def test_email_address_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_id_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -144,7 +144,7 @@ def test_list_id_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_owner_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -164,7 +164,7 @@ def test_list_owner_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_subscribe_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -184,7 +184,7 @@ def test_list_subscribe_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_unsubscribe_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -204,7 +204,7 @@ def test_list_unsubscribe_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_unsubscribe_post_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -224,7 +224,7 @@ def test_list_unsubscribe_post_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_post_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -244,7 +244,7 @@ def test_list_post_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_help_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -264,7 +264,7 @@ def test_list_help_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_list_archive_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -284,7 +284,7 @@ def test_list_archive_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_favorite_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -304,7 +304,7 @@ def test_is_favorite_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_created_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices
@@ -324,7 +324,7 @@ def test_created_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_updated_filter(
     correspondent_queryset, lookup_expr, filterquery, expected_indices

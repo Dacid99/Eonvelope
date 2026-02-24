@@ -3,7 +3,11 @@
 <button type="submit"
         class="btn btn-outline-primary"
         name="restore"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="{% translate 'Restore this email to its mailbox on the mailserver' %}"
         {% if not email.can_be_restored %}disabled{% endif %}>
+
     {% translate "Restore" as button_text %}
 
     {% include "web/partials/_spinner-text.html" with text=button_text %}

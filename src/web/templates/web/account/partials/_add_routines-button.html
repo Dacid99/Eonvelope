@@ -2,6 +2,9 @@
 
 <button type="submit"
         class="btn btn-outline-primary"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="{% translate 'Add a standard set of routines to archive all mails going in and out of this account.' %}"
         name="add_daemons"
         {% if not account.is_healthy or not account.mailboxes.exists %}disabled{% endif %}>
     {% translate "Add routines" as button_text %}

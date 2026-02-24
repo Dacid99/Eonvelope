@@ -61,6 +61,9 @@ VERSION = config["project"]["version"]
 
 SLIM = env("SLIM", cast=bool, default=False)
 
+DEFAULT_COOKIE_AGE = 2419200  # 4 weeks
+
+
 ##### django core #####
 # https://docs.djangoproject.com/en/5.2/ref/settings/#core-settings
 
@@ -91,17 +94,10 @@ INSTALLED_APPS = [
     "constance",
     "constance.backends.database",
     "health_check",
-    "health_check.db",
-    "health_check.storage",
-    "health_check.cache",
     "django_bootstrap5",
     "crispy_forms",
     "crispy_bootstrap5",
     "fontawesomefree",
-    "health_check.contrib.migrations",
-    "health_check.contrib.psutil",
-    "health_check.contrib.rabbitmq",
-    "health_check.contrib.celery_ping",
     "django_celery_results",
     "django_celery_beat",
     "eonvelope.apps.EonvelopeConfig",
@@ -365,13 +361,7 @@ LANGUAGES = [
 
 LOCALE_PATHS = [
     SOURCE_DIR / "config" / "locale",
-    SOURCE_DIR / "eonvelope" / "locale",
-    SOURCE_DIR / "core" / "locale",
-    SOURCE_DIR / "api" / "locale",
-    SOURCE_DIR / "web" / "locale",
 ]
-
-DEFAULT_COOKIE_AGE = 2419200  # 4 weeks
 
 LANGUAGE_COOKIE_AGE = env("LANGUAGE_COOKIE_AGE", cast=int, default=DEFAULT_COOKIE_AGE)
 LANGUAGE_COOKIE_SECURE = not DEBUG
@@ -468,7 +458,6 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "constance.context_processors.config",
-                "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
@@ -568,6 +557,7 @@ STATIC_ROOT = (
     BASE_DIR / "staticfiles"
 )  # must be inside BASE_DIR to be copied correctly in the Dockerfile
 
+
 ##### django-pwa #####
 # https://pypi.org/project/django-pwa/
 
@@ -661,7 +651,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "allauth.headless.contrib.rest_framework.authentication.XSessionTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "eonvelope.auth.BasicNoMFAuthentication",
+        "api.auth.BasicNoMFAuthentication",
         "rest_framework.authentication.TokenAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
@@ -685,7 +675,22 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
-BROKER_URL = CELERY_BROKER_URL  # required for rabbitmq django-healthcheck
+
+
+##### django-health-check #####
+# https://codingjoe.dev/django-health-check
+
+HEALTH_CHECKS = [
+    "health_check.Cache",
+    "health_check.Database",
+    "health_check.Storage",
+    "health_check.contrib.psutil.Disk",
+    "health_check.contrib.psutil.Memory",
+    "health_check.contrib.celery.Ping",
+    "health_check.contrib.psutil.CPU",
+    ("health_check.contrib.rabbitmq.RabbitMQ", {"amqp_url": CELERY_BROKER_URL}),
+    "core.backends.StorageIntegrityCheckBackend",
+]
 
 
 ##### allauth #####
@@ -766,10 +771,25 @@ DJANGO_TABLES2_TABLE_ATTRS = {
 # https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 
 SPECTACULAR_SETTINGS = {
-    "TITLE": "Eonvelope API",
-    "DESCRIPTION": "The API schema for the Eonvelope server.",
+    # Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
+    "TITLE": _("E∘nvelope API"),
+    # Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
+    "DESCRIPTION": _("API schema for the E∘nvelope server."),
+    "LICENSE": {
+        # Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
+        "name": _("Licensed under AGPL-3.0-or-later"),
+        "url": "https://gitlab.com/Dacid99/eonvelope/-/blob/master/LICENSE",
+    },
+    "EXTERNAL_DOCS": {
+        # Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218. ReadTheDocs is a brand name.
+        "description": _("Read the E∘nvelope Documentation on ReadTheDocs"),
+        "url": "https://eonvelope.readthedocs.io/stable/rst/api-instructions.html",
+    },
     "VERSION": VERSION,
     "SERVE_INCLUDE_SCHEMA": True,
+    "SCHEMA_PATH_PREFIX": "/api",
+    "SERVE_PUBLIC": True,
+    "SORT_OPERATION_PARAMETERS": False,
 }
 
 
@@ -926,6 +946,11 @@ CONSTANCE_CONFIG = {
         ),
         int,
     ),
+    "ENABLE_TOOLTIPS": (
+        True,
+        _("Whether to show tooltips in the web interface."),
+        bool,
+    ),
     "STORAGE_MAX_FILES_PER_DIR": (
         10000,
         _("Maximum numbers of files in one storage unit."),
@@ -1066,6 +1091,7 @@ CONSTANCE_CONFIG_FIELDSETS = (
             "WEB_DEFAULT_PAGE_SIZE",
             "WEB_PAGE_SIZES_OPTIONS",
             "WEB_THUMBNAIL_MAX_DATASIZE",
+            "ENABLE_TOOLTIPS",
         ),
     ),
 )

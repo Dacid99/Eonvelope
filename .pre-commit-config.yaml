@@ -6,15 +6,21 @@ repos:
     hooks:
       - id: end-of-file-fixer
       - id: check-yaml
+      - id: check-toml
+      - id: check-json
+      - id: check-symlinks
+      - id: check-case-conflict
       - id: check-merge-conflict
+      - id: check-added-large-files
       - id: debug-statements
+      - id: detect-private-key
   - repo: https://github.com/psf/black-pre-commit-mirror
     rev: 26.1.0
     hooks:
       - id: black
         args: [--config, tools/black_config]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.14
+    rev: v0.15.2
     hooks:
       - id: ruff-check
         args: [--config, tools/ruff.toml]
@@ -30,7 +36,7 @@ repos:
       - id: djlint-django
         args: [--configuration, tools/djlintrc]
   - repo: https://github.com/python-poetry/poetry
-    rev: 2.3.1
+    rev: 2.3.2
     hooks:
       - id: poetry-lock
       - id: poetry-check
@@ -44,8 +50,13 @@ repos:
     hooks:
       - id: hadolint-docker
         args: [--config, tools/.hadolint.yaml]
+  - repo: https://github.com/biomejs/pre-commit
+    rev: v2.4.4
+    hooks:
+      - id: biome-check
+        args: [--config-path, tools/biome.json]
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 42.84.0
+    rev: 43.31.2
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/PyCQA/doc8
@@ -54,7 +65,7 @@ repos:
       - id: doc8
         args: [--config, tools/doc8.ini]
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.20.0
+    rev: v0.21.0
     hooks:
       - id: markdownlint-cli2
         args: [--config, tools/.markdownlint.yml]
@@ -70,3 +81,16 @@ repos:
         pass_filenames: false
         language: system
         types: [html]
+  - repo: local
+    hooks:
+      - id: validate_openapi_schema
+        name: Validate openapi schema documentation
+        entry: poetry run python3 manage.py spectacular --validate --fail-on-warn > /dev/null
+        pass_filenames: false
+        language: system
+        files: (src/api/.*\.py|poetry.lock)
+  - repo: https://github.com/timo-reymann/gitlab-ci-verify
+    rev: v2.10.0
+    hooks:
+      - id: gitlab-ci-verify
+        args: [--gitlab-base-url, gitlab.com, --severity, warning]

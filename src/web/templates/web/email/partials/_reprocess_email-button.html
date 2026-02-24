@@ -1,6 +1,11 @@
 {% load translate from i18n %}
 
-<button type="submit" class="btn btn-outline-primary" name="reprocess">
+<button type="submit"
+        class="btn btn-outline-primary"
+        name="reprocess"
+        data-bs-toggle="tooltip"
+        data-bs-placement="bottom"
+        data-bs-title="{% translate 'Reprocess this archived email to find connections with emails that have been archived later' %}">
 
     {% translate "Reprocess" as button_text %}
 

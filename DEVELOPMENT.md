@@ -65,6 +65,13 @@ The easiest way to run them is via the poe task runner.
 poe lint
 ```
 
+To enable the gitlab-ci validation, create a .netrc file with permissions 660 in your personal folder.
+Add the line
+
+```text
+machine gitlab.com password <yourapitoken>
+```
+
 ### Unittests
 
 The projects tests are in the test/ directory. You can run them from the project root with
@@ -260,5 +267,26 @@ git config core.hooksPath tools/githooks/
 ```json
 "Markdown": {
   "remove_trailing_whitespace_on_save": true
+}
+```
+
+- js:
+
+```json
+"lsp": {
+    "biome": {
+      "settings": {
+            "config_path": "<path>/biome.json"
+          }
+    }
+  }
+}
+```
+
+and
+
+```json
+"languages":{
+  "JavaScript": { "formatter": { "language_server": { "name": "biome" } } },
 }
 ```

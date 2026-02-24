@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from django.utils.translation import gettext_lazy as _
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -35,7 +36,7 @@ if TYPE_CHECKING:
 
 @extend_schema_view(
     get=extend_schema(
-        description="Gets all the number of entries in the tables of the database."
+        description=_("Gets all the entry counts in the tables of the database.")
     )
 )
 class DatabaseStatsView(APIView):

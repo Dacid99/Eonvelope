@@ -18,6 +18,8 @@
 
 """Test module for the Eonvelope urls in :mod:`eonvelope.urls`."""
 
+import os
+
 import pytest
 from django.http import HttpResponse
 from django.urls import reverse
@@ -26,6 +28,7 @@ from rest_framework import status
 from test.web.conftest import owner_client
 
 
+@pytest.mark.ignore_template_errors
 @pytest.mark.django_db
 def test_login(client):
     """Tests allauths login."""
@@ -35,6 +38,7 @@ def test_login(client):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.ignore_template_errors
 @pytest.mark.django_db
 def test_logout(owner_client):
     """Tests allauths logout."""
@@ -44,6 +48,7 @@ def test_logout(owner_client):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.ignore_template_errors
 @pytest.mark.django_db
 def test_signup(client):
     """Tests allauths signup."""
@@ -53,6 +58,7 @@ def test_signup(client):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.ignore_template_errors
 @pytest.mark.django_db
 def test_change_password(owner_client):
     """Tests allauths change password."""
@@ -62,6 +68,7 @@ def test_change_password(owner_client):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.ignore_template_errors
 @pytest.mark.django_db
 def test_email(owner_client):
     """Tests allauths email view."""
@@ -71,6 +78,7 @@ def test_email(owner_client):
     assert response.status_code == status.HTTP_200_OK
 
 
+@pytest.mark.ignore_template_errors
 @pytest.mark.django_db
 def test_sessions(owner_client):
     """Tests allauths sessions view."""

@@ -45,6 +45,7 @@ from core.constants import (
     file_format_parsers,
 )
 from core.models import Account, Mailbox
+from core.utils import FetchingCriterion
 from core.utils.fetchers import (
     ExchangeFetcher,
     IMAP4_SSL_Fetcher,
@@ -132,7 +133,7 @@ def test_Mailbox_unique_constraints(mocker, fake_account):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -156,7 +157,7 @@ def test_Mailbox_available_fetching_criteria(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -184,7 +185,7 @@ def test_Mailbox_available__no_arg_fetching_criteria(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -212,7 +213,7 @@ def test_Mailbox_available_fetching_criterion_choices(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "protocol, expected_fetching_criteria",
+    ("protocol", "expected_fetching_criteria"),
     [
         (ExchangeFetcher.PROTOCOL, ExchangeFetcher.AVAILABLE_FETCHING_CRITERIA),
         (IMAP4Fetcher.PROTOCOL, IMAP4Fetcher.AVAILABLE_FETCHING_CRITERIA),
@@ -346,13 +347,13 @@ def test_Mailbox_fetch__success(
     fake_mailbox.is_healthy = False
     fake_mailbox.save(update_fields=["is_healthy"])
 
-    fake_mailbox.fetch(fake_criterion, fake_criterion_arg)
+    fake_mailbox.fetch(FetchingCriterion(fake_criterion, fake_criterion_arg))
 
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy is True
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.fetch_emails.assert_called_once_with(
-        fake_mailbox, fake_criterion, fake_criterion_arg
+        fake_mailbox, FetchingCriterion(fake_criterion, fake_criterion_arg)
     )
     assert mock_Email_create_from_email_bytes.call_count == len(
         mock_fetcher.fetch_emails.return_value
@@ -380,13 +381,13 @@ def test_Mailbox_fetch__failure(
     fake_mailbox.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailboxError):
-        fake_mailbox.fetch(fake_criterion, fake_criterion_arg)
+        fake_mailbox.fetch(FetchingCriterion(fake_criterion, fake_criterion_arg))
 
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy is False
     mock_Account_get_fetcher.assert_called_once_with(fake_mailbox.account)
     mock_fetcher.fetch_emails.assert_called_once_with(
-        fake_mailbox, fake_criterion, fake_criterion_arg
+        fake_mailbox, FetchingCriterion(fake_criterion, fake_criterion_arg)
     )
     mock_Email_create_from_email_bytes.assert_not_called()
     mock_logger.info.assert_called()
@@ -410,7 +411,7 @@ def test_Mailbox_fetch__get_fetcher_error(
     fake_mailbox.save(update_fields=["is_healthy"])
 
     with pytest.raises(MailAccountError):
-        fake_mailbox.fetch("criterion", "value")
+        fake_mailbox.fetch(FetchingCriterion("criterion", "value"))
 
     fake_mailbox.refresh_from_db()
     assert fake_mailbox.is_healthy is True
@@ -475,6 +476,7 @@ def test_Mailbox_add_emails_from_file_zip_eml__success(
         ).exists()
 
     assert os.listdir(gettempdir()) == []
+    mock_logger.exception.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -895,7 +897,7 @@ def test_Mailbox_queryset_as_file_empty_queryset():
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "DEFAULT_SAVE_ATTACHMENTS, DEFAULT_SAVE_TO_EML",
+    ("DEFAULT_SAVE_ATTACHMENTS", "DEFAULT_SAVE_TO_EML"),
     [(True, True), (False, False), (True, False), (False, True)],
 )
 def test_Mailbox_create_from_data__success(

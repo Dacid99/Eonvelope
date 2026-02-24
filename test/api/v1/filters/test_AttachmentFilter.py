@@ -51,7 +51,7 @@ def test_search_filter(faker, attachment_queryset, searched_fields):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_file_name_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -71,7 +71,7 @@ def test_file_name_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_content_disposition_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -91,7 +91,7 @@ def test_content_disposition_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_content_maintype_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -111,7 +111,7 @@ def test_content_maintype_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_content_subtype_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -131,7 +131,7 @@ def test_content_subtype_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_content_id_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -151,7 +151,7 @@ def test_content_id_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), INT_TEST_PARAMETERS
 )
 def test_datasize_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -171,7 +171,7 @@ def test_datasize_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_favorite_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -191,7 +191,7 @@ def test_is_favorite_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_created_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -211,7 +211,7 @@ def test_created_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_updated_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices
@@ -231,7 +231,7 @@ def test_updated_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_email__datetime_filter(
     attachment_queryset, lookup_expr, filterquery, expected_indices

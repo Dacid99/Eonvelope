@@ -56,7 +56,7 @@ def test_search_filter(faker, daemon_queryset, searched_fields):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_fetching_criterion_arg_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -76,7 +76,7 @@ def test_fetching_criterion_arg_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), INT_TEST_PARAMETERS
 )
 def test_interval__every_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -96,7 +96,7 @@ def test_interval__every_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_enabled_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`web.filters.DaemonFilterSet`'s filtering
@@ -114,7 +114,7 @@ def test_enabled_filter(daemon_queryset, lookup_expr, filterquery, expected_indi
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), INT_TEST_PARAMETERS
 )
 def test_celery_task__total_run_count_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -134,7 +134,7 @@ def test_celery_task__total_run_count_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_healthy_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
@@ -152,7 +152,7 @@ def test_is_healthy_filter(daemon_queryset, lookup_expr, filterquery, expected_i
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_last_error_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
@@ -170,7 +170,7 @@ def test_last_error_filter(daemon_queryset, lookup_expr, filterquery, expected_i
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_last_error_occurred_at_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -190,7 +190,7 @@ def test_last_error_occurred_at_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_created_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
@@ -208,7 +208,7 @@ def test_created_filter(daemon_queryset, lookup_expr, filterquery, expected_indi
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_updated_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
@@ -226,7 +226,7 @@ def test_updated_filter(daemon_queryset, lookup_expr, filterquery, expected_indi
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_mailbox__is_healthy_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -246,7 +246,7 @@ def test_mailbox__is_healthy_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_mail_address_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices
@@ -266,7 +266,7 @@ def test_mail_address_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_mail_host_filter(daemon_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.DaemonFilterSet`'s filtering
@@ -284,7 +284,7 @@ def test_mail_host_filter(daemon_queryset, lookup_expr, filterquery, expected_in
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_account__is_healthy_filter(
     daemon_queryset, lookup_expr, filterquery, expected_indices

@@ -35,6 +35,7 @@ from drf_spectacular.views import (
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
+from health_check.views import HealthCheckView
 
 SCHEMA_NAME = "schema"
 
@@ -43,7 +44,11 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("django.conf.urls.i18n")),
     path("", include("pwa.urls")),
-    path("health/", include("health_check.urls")),
+    path(
+        "health/",
+        HealthCheckView.as_view(checks=settings.HEALTH_CHECKS),
+        name="health_check",
+    ),
     path("users/", include("allauth.urls")),
     # api
     path("api/", include("api.urls")),

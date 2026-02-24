@@ -59,8 +59,8 @@ tasks:
     cmd: codespell src/ test/ docs/ .git*/ *.md --config=${CONFIG_PATH}.codespellrc
     capture_stdout: ${REPORT_PATH}codespell.ansi
 
-  eslint:
-    shell: npx --yes eslint --no-config-lookup --fix
+  biomejs:
+    shell: npx --yes @biomejs/biome check --write --config-path tools/biome.json
 
   validate-templates:
     cmd: python3 manage.py validate_templates
@@ -88,7 +88,7 @@ tasks:
         "pylint-test",
         "pylint-docs",
         "codespell",
-        "eslint",
+        "biomejs",
         "hadolint",
         "autotyping",
         "djlint",

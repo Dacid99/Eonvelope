@@ -23,10 +23,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from django.utils.translation import gettext_lazy as _
-from drf_spectacular.openapi import OpenApiResponse
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.serializers import CharField
 
 if TYPE_CHECKING:
     from rest_framework.request import Request
@@ -42,11 +42,14 @@ class ToggleFavoriteMixin:
         request=None,
         responses={
             200: OpenApiResponse(
-                response=str,
-                description="Success message indicating status change.",
+                response=inline_serializer(
+                    name="toggle_favorite_serializer",
+                    fields={"detail": CharField()},
+                ),
+                description=_("Message indicating status change."),
             ),
         },
-        description="Toggles the favorite status of an instance.",
+        description=_("Toggles the favorite status of an instance."),
     )
     @action(
         detail=True,

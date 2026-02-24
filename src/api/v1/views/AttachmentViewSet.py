@@ -31,6 +31,7 @@ from drf_spectacular.utils import (
     OpenApiResponse,
     extend_schema,
     extend_schema_view,
+    inline_serializer,
 )
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
@@ -38,6 +39,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.serializers import CharField
 
 from api.utils import query_param_list_to_typed_list
 from api.v1.filters import AttachmentFilterSet
@@ -51,70 +53,104 @@ if TYPE_CHECKING:
 
 
 @extend_schema_view(
-    list=extend_schema(description="Lists all instances matching the filter."),
-    retrieve=extend_schema(description="Retrieves a single instance."),
-    destroy=extend_schema(description="Deletes a single instance."),
+    list=extend_schema(description=_("Lists all instances matching the filter.")),
+    retrieve=extend_schema(description=_("Retrieves a single instance.")),
+    destroy=extend_schema(description=_("Deletes a single instance.")),
     download=extend_schema(
+        request=None,
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="headers: Content-Disposition=attachment",
+                description="content-disposition: attachment",
             )
         },
-        description="Downloads an attachment instances file.",
+        description=_("Downloads an attachment's file."),
     ),
     download_batch=extend_schema(
+        operation_id="v1_attachments_batch_download_retrieve",
         parameters=[
             OpenApiParameter(
-                "id",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
+                name="id",
+                type=OpenApiTypes.INT,
+                location=OpenApiParameter.QUERY,
                 required=True,
                 explode=True,
                 many=True,
-                description="Accepts both id=1,2,3 and id=1&id=2&id=3 notation",
+                description=_("A list of integer values identifying the accounts.")
+                + " "
+                + _(
+                    "Duplicates are ignored. Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
+                ),
             )
         ],
+        request=None,
         responses={
-            200: OpenApiResponse(
+            (200, "application/zip"): OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=attachment",
+                description="content-disposition: attachment",
             )
         },
-        description="Downloads multiple zipped attachment files.",
+        description=_("Downloads multiple zipped attachment files."),
     ),
     download_thumbnail=extend_schema(
+        request=None,
         responses={
             200: OpenApiResponse(
                 response=OpenApiTypes.BINARY,
-                description="Headers: Content-Disposition=inline, X-Frame-Options = 'SAMEORIGIN', Content-Security-Policy = 'frame-ancestors 'self''",
+                description="content-disposition: inline, x-frame-option: SAMEORIGIN, content-security-policy: frame-ancestors 'self'",
             )
         },
-        description="Downloads a single attachments thumbnail.",
+        description=_("Downloads a attachment's thumbnail."),
     ),
     share_to_paperless=extend_schema(
+        request=None,
         responses={
             200: OpenApiResponse(
-                response=OpenApiTypes.STR,
+                response=inline_serializer(
+                    name="share_to_paperless_serializer",
+                    fields={"detail": CharField(), "data": CharField()},
+                ),
+                # Translators: Paperless is a brand name.
+                description=_("If the request to the Paperless server succeeded."),
             ),
             400: OpenApiResponse(
-                response=OpenApiTypes.STR,
-                description="If the request to the Paperless server fails. The reason is given as the response data.",
+                response=inline_serializer(
+                    name="share_to_paperless_failed_serializer",
+                    fields={"detail": CharField(), "error": CharField()},
+                ),
+                # Translators: Paperless is a brand name.
+                description=_(
+                    "If the request to the Paperless server fails. The reason is given as the response data."
+                ),
             ),
         },
-        description="Sends the attachment file to Paperless.",
+        # Translators: Paperless is a brand name.
+        description=_("Sends a attachment's file to the user's Paperless server."),
     ),
     share_to_immich=extend_schema(
+        request=None,
         responses={
             200: OpenApiResponse(
-                response=OpenApiTypes.JSON_PTR,
+                response=inline_serializer(
+                    name="share_to_immich_serializer",
+                    fields={"detail": CharField(), "data": CharField()},
+                ),
+                # Translators: Immich is a brand name.
+                description=_("If the request to the Immich server succeeded."),
             ),
             400: OpenApiResponse(
-                response=OpenApiTypes.STR,
-                description="If the request to the Paperless server fails. The reason is given as the response data.",
+                response=inline_serializer(
+                    name="share_to_immich_failed_serializer",
+                    fields={"detail": CharField(), "error": CharField()},
+                ),
+                # Translators: Immich is a brand name.
+                description=_(
+                    "If the request to the Immich server fails. The reason is given as the response data."
+                ),
             ),
         },
-        description="Sends the attachment file to Immich.",
+        # Translators: Immich is a brand name.
+        description=_("Sends the attachment's file to the user's Immich server."),
     ),
 )
 class AttachmentViewSet(

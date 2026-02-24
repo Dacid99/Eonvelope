@@ -58,7 +58,7 @@ class DaemonFilterSet(django_filters.FilterSet):
         widget=widgets.SearchInput,
     )
     fetching_criterion = django_filters.MultipleChoiceFilter(
-        choices=EmailFetchingCriterionChoices.choices,
+        choices=EmailFetchingCriterionChoices,
         widget=widgets.CheckboxSelectMultiple,
     )
     interval__every = django_filters.RangeFilter(

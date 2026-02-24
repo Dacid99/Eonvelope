@@ -56,7 +56,7 @@ class EmailCorrespondentFilterSet(django_filters.FilterSet):
     )
     mention = django_filters.MultipleChoiceFilter(
         field_name="mention",
-        choices=HeaderFields.Correspondents.choices,
+        choices=HeaderFields.Correspondents,
     )
     created__date__lte = django_filters.DateTimeFilter(
         field_name="correspondent__created",

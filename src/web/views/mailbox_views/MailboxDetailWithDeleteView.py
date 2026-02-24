@@ -30,6 +30,7 @@ from django.views.generic.edit import DeletionMixin
 
 from core.constants import EmailFetchingCriterionChoices
 from core.models import Email, Mailbox
+from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import FetcherError
 from web.mixins.CustomActionMixin import CustomActionMixin
 from web.mixins.TestActionMixin import TestActionMixin
@@ -93,7 +94,7 @@ class MailboxDetailWithDeleteView(
             A template response with the updated view after the action.
         """
         self.object = self.get_object()
-        criterion = request.POST.get("fetch") or EmailFetchingCriterionChoices.ALL.value
+        criterion = request.POST.get("fetch") or EmailFetchingCriterionChoices.ALL
         if criterion not in self.object.available_no_arg_fetching_criteria:
             messages.warning(
                 request,
@@ -104,7 +105,7 @@ class MailboxDetailWithDeleteView(
             )
             return self.get(request)
         try:
-            self.object.fetch(criterion, "")
+            self.object.fetch(FetchingCriterion(criterion))
         except FetcherError as error:
             messages.error(
                 request, _("Fetching failed: %(error)s") % {"error": str(error)}

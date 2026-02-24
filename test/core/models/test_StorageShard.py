@@ -20,10 +20,11 @@
 
 from __future__ import annotations
 
+import asyncio
 import os
 
 import pytest
-from health_check.storage.backends import DefaultFileStorageHealthCheck
+from health_check import Storage
 
 from core.models import StorageShard
 
@@ -41,7 +42,7 @@ def mock_logger(mocker):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "is_current, expected_status_str", [(True, "Current"), (False, "Archived")]
+    ("is_current", "expected_status_str"), [(True, "Current"), (False, "Archived")]
 )
 def test___str__(faker, is_current, expected_status_str):
     """Tests :class:`core.models.StorageShard.__str__`
@@ -122,12 +123,11 @@ def test_Storage_health_check__missing_dir(settings, mock_logger):
 
 @pytest.mark.django_db
 def test_DefaultStorageStorageHealthCheck():
-    """Tests django-healthchecks DefaultFileStorageHealthCheck
+    """Tests django-healthchecks Storage health-check
     impact on the StorageShard table.
     """
     assert StorageShard.get_current_storage().file_count == 0
 
-    result = DefaultFileStorageHealthCheck().check_status()
+    Storage().run()
 
-    assert result is True
     assert StorageShard.get_current_storage().file_count == 0

@@ -27,6 +27,7 @@ from rest_framework import status
 
 from core.constants import EmailFetchingCriterionChoices
 from core.models import Mailbox
+from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import FetcherError
 from web.views import MailboxFilterView
 from web.views.mailbox_views.MailboxDetailWithDeleteView import (
@@ -273,7 +274,7 @@ def test_post_fetch__noauth(
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
-        {"fetch": EmailFetchingCriterionChoices.ALL.value},
+        {"fetch": EmailFetchingCriterionChoices.DAILY.value},
     )
 
     assert response.status_code == status.HTTP_302_FOUND
@@ -292,7 +293,7 @@ def test_post_fetch__auth_other(
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
-        {"fetch": EmailFetchingCriterionChoices.ALL.value},
+        {"fetch": EmailFetchingCriterionChoices.DAILY.value},
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
@@ -309,7 +310,7 @@ def test_post_fetch__success__auth_owner(
     """
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
-        {"fetch": EmailFetchingCriterionChoices.ALL.value},
+        {"fetch": EmailFetchingCriterionChoices.DAILY.value},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -325,7 +326,7 @@ def test_post_fetch__success__auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL, ""
+        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY)
     )
 
 
@@ -354,7 +355,7 @@ def test_post_fetch__no_criterion__auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL, ""
+        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.ALL)
     )
 
 
@@ -396,7 +397,7 @@ def test_post_fetch__failure__auth_owner(
 
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
-        {"fetch": EmailFetchingCriterionChoices.ALL.value},
+        {"fetch": EmailFetchingCriterionChoices.DAILY.value},
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -412,7 +413,7 @@ def test_post_fetch__failure__auth_owner(
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
     mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, EmailFetchingCriterionChoices.ALL, ""
+        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY)
     )
     assert fake_error_message in response.content.decode("utf-8")
 

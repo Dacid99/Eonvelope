@@ -52,7 +52,7 @@ def test_search_filter(faker, account_queryset, searched_fields):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_mail_address_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -72,7 +72,7 @@ def test_mail_address_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_mail_host_filter(account_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.AccountFilterSet`'s filtering
@@ -90,7 +90,7 @@ def test_mail_host_filter(account_queryset, lookup_expr, filterquery, expected_i
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", INT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), INT_TEST_PARAMETERS
 )
 def test_mail_host_port_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -110,7 +110,7 @@ def test_mail_host_port_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", FLOAT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), FLOAT_TEST_PARAMETERS
 )
 def test_timeout_filter(account_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.AccountFilterSet`'s filtering
@@ -128,7 +128,7 @@ def test_timeout_filter(account_queryset, lookup_expr, filterquery, expected_ind
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_allow_insecure_connection_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -148,7 +148,7 @@ def test_allow_insecure_connection_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_healthy_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -168,7 +168,7 @@ def test_is_healthy_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", TEXT_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), TEXT_TEST_PARAMETERS
 )
 def test_last_error_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -188,7 +188,7 @@ def test_last_error_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_last_error_occurred_at_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -208,7 +208,7 @@ def test_last_error_occurred_at_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", BOOL_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), BOOL_TEST_PARAMETERS
 )
 def test_is_favorite_filter(
     account_queryset, lookup_expr, filterquery, expected_indices
@@ -228,7 +228,7 @@ def test_is_favorite_filter(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_created_filter(account_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.AccountFilterSet`'s filtering
@@ -246,7 +246,7 @@ def test_created_filter(account_queryset, lookup_expr, filterquery, expected_ind
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "lookup_expr, filterquery, expected_indices", DATETIME_TEST_PARAMETERS
+    ("lookup_expr", "filterquery", "expected_indices"), DATETIME_TEST_PARAMETERS
 )
 def test_updated_filter(account_queryset, lookup_expr, filterquery, expected_indices):
     """Tests :class:`api.v1.filters.AccountFilterSet`'s filtering

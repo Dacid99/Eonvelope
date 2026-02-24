@@ -35,6 +35,8 @@ def fake_message(faker):
 def production_logging(fake_fs):
     """Enables the production logging over the test logging configuration."""
     logging.config.dictConfig(LOGGING)
+    yield
+    logging.shutdown()
 
 
 def test_eonvelope_logging(capsys, fake_message, production_logging):

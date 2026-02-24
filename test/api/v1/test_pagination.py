@@ -34,7 +34,7 @@ def email_bunch(fake_mailbox):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize("page_query, page_size_query", [(1, 10), (2, 5), (3, 10)])
+@pytest.mark.parametrize(("page_query", "page_size_query"), [(1, 10), (2, 5), (3, 10)])
 def test_Pagination(
     list_url, owner_api_client, email_bunch, page_query, page_size_query
 ):

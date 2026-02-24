@@ -59,6 +59,8 @@ if TYPE_CHECKING:
 
     from django_stubs_ext import StrOrPromise
 
+    from core.utils import FetchingCriterion
+
     from .Account import Account
 
 
@@ -188,14 +190,13 @@ class Mailbox(
         self.set_healthy()
         logger.info("Successfully tested mailbox")
 
-    def fetch(self, criterion: str, criterion_arg: str) -> None:
+    def fetch(self, criterion: FetchingCriterion) -> None:
         """Fetches emails from this mailbox based on :attr:`criterion` and adds them to the db.
 
         If successful, marks this mailbox as healthy, otherwise unhealthy.
 
         Args:
             criterion: The criterion used to fetch emails from the mailbox.
-            criterion_arg: The argument for the criterion.
 
         Raises:
             MailboxError: Reraised if fetching failed due to a MailboxError.
@@ -204,7 +205,7 @@ class Mailbox(
         logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
         with self.account.get_fetcher() as fetcher:
             try:
-                fetched_mails = fetcher.fetch_emails(self, criterion, criterion_arg)
+                fetched_mails = fetcher.fetch_emails(self, criterion)
             except MailboxError as error:
                 logger.info("Failed fetching %s with error: %s.", self, error)
                 self.set_unhealthy(error)

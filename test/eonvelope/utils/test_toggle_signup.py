@@ -35,7 +35,12 @@ def mock_request(mocker):
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "ENV_REGISTRATION_ENABLED, REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "ENV_REGISTRATION_ENABLED",
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True, True),
         (True, False, True, True),
@@ -68,7 +73,11 @@ def test_ToggleSignUpAdapter_is_open_for_signup(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True),
         (True, False, False),
@@ -95,7 +104,12 @@ def test_ToggleSignUpAdapter_is_open_for_signup_fallback(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "ENV_REGISTRATION_ENABLED, REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "ENV_REGISTRATION_ENABLED",
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True, True),
         (True, False, True, True),
@@ -131,7 +145,12 @@ def test_ToggleSignUpPermissionClass_has_permission__noauth(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "ENV_REGISTRATION_ENABLED, REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "ENV_REGISTRATION_ENABLED",
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True, True),
         (True, False, True, True),
@@ -165,7 +184,12 @@ def test_ToggleSignUpPermissionClass_has_permission__auth_user(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "ENV_REGISTRATION_ENABLED, REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "ENV_REGISTRATION_ENABLED",
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True, True),
         (True, False, True, True),
@@ -200,7 +224,11 @@ def test_ToggleSignUpPermissionClass_has_permission__auth_admin(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True),
         (False, True, False),
@@ -229,7 +257,11 @@ def test_ToggleSignUpPermissionClass_has_permission_fallback__noauth(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True),
         (False, True, False),
@@ -257,7 +289,11 @@ def test_ToggleSignUpPermissionClass_has_permission_fallback__auth_user(
 
 @pytest.mark.django_db
 @pytest.mark.parametrize(
-    "REGISTRATION_ENABLED_DEFAULT, CONSTANCE_REGISTRATION_ENABLED, expected_result",
+    (
+        "REGISTRATION_ENABLED_DEFAULT",
+        "CONSTANCE_REGISTRATION_ENABLED",
+        "expected_result",
+    ),
     [
         (True, True, True),
         (False, True, True),

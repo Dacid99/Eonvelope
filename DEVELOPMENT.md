@@ -11,7 +11,7 @@ Make sure to also install the **python-dev** version!
 First install the packages required for the build environment, on debian based distros:
 
 ```bash
-sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client libmysqlclient-dev pkg-config
+sudo apt-get -y update && apt-get -y install build-essential gettext default-mysql-client libmariadb-dev pkg-config
 ```
 
 and on redhat distros:

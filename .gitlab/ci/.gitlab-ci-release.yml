@@ -5,7 +5,7 @@ release:
   allow_failure: true
   before_script:
     - echo "Skip installing python dependencies"
-    - apk add git curl jq
+    - apt-get install --yes git curl jq
   script:
     - PREVIOUS_BUILD_TAG=$(git tag --list "[0-9]*" --sort=-creatordate | sed -n '2p')
     - CHANGELOG=$(git diff "$PREVIOUS_BUILD_TAG":CHANGELOG.md "$CI_COMMIT_TAG":CHANGELOG.md | grep '^+[^+]' | sed 's/^+//')

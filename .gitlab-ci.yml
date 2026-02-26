@@ -1,14 +1,15 @@
-image: python:3.14-alpine
+image: python:3.14-slim
 
 default:
   interruptible: true
   before_script:
     - set -o pipefail
+    - export DEBIAN_FRONTEND=noninteractive
     - export SECRET_KEY='HELPER_KEY'
     - export PYTHONPATH='src'
     - export DJANGO_SETTINGS_MODULE='config.settings'
-    - apk update && apk add --no-cache "${APK_DEPENDENCIES}"
-    - pip install poetry
+    - apt-get update --yes && apt-get install --yes ${APT_DEPENDENCIES} # gitlab-ci-verify: ignore:SC-2086
+    - pip install --no-cache poetry
 
 workflow: # when the pipeline should be triggered
   rules: # collect all rules from the jobs here
@@ -17,18 +18,12 @@ workflow: # when the pipeline should be triggered
     - if: $CI_PIPELINE_SOURCE == "schedule"
 
 variables:
-  CI: "true"
   GITLAB_API_URL: "https://gitlab.com/-/project/$CI_PROJECT_ID"
   GITHUB_API_URL: "https://github.com/-/project/$CI_PROJECT_ID"
-  APK_DEPENDENCIES: "gettext \
-    python3-dev \
-    linux-headers \
-    musl-dev \
-    build-base \
-    krb5-dev \
-    mariadb-connector-c-dev \
-    mariadb-dev \
-    mariadb-client"
+  APT_DEPENDENCIES: "build-essential\
+    default-mysql-client\
+    libmariadb-dev\
+    pkg-config"
   CHECK_PATH: "tools/"
   CHECK_CONFIG_PATH: "tools/"
   CHECK_REPORT_PATH: "tools/reports/"

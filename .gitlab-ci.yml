@@ -20,9 +20,9 @@ workflow: # when the pipeline should be triggered
 variables:
   GITLAB_API_URL: "https://gitlab.com/-/project/$CI_PROJECT_ID"
   GITHUB_API_URL: "https://github.com/-/project/$CI_PROJECT_ID"
-  APT_DEPENDENCIES: "build-essential\
-    default-mysql-client\
-    libmariadb-dev\
+  APT_DEPENDENCIES: "build-essential \
+    default-mysql-client \
+    libmariadb-dev \
     pkg-config"
   CHECK_PATH: "tools/"
   CHECK_CONFIG_PATH: "tools/"

@@ -183,13 +183,14 @@ LOGFILE_BACKUP_NUMBER = env("LOGFILE_BACKUP_NUMBER", cast=int, default=5)
 
 LOGLEVEL_DEFAULT = "INFO"
 
-LOGFORMAT = "{asctime} {levelname} - {name}.{funcName}: {message}"
+LOGFORMAT = "{asctime}{levelname}{name}{module}{funcName}{lineno}{message}"
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
+            "()": "pythonjsonlogger.json.JsonFormatter",
             "format": LOGFORMAT,
             "style": "{",
         },

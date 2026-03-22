@@ -33,6 +33,7 @@
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap, pop, jmap)
 - add test email with references
+- js stuff
 
 ## To implement
 

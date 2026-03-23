@@ -8,40 +8,40 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-22 13:24+0000\n"
-"PO-Revision-Date: 2025-12-31 20:16+0000\n"
-"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/core/fr/"
-">\n"
+"PO-Revision-Date: 2026-03-18 14:09+0000\n"
+"Last-Translator: John Molkavitch <jblum66@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/core/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: src/core/constants.py:39
 msgid "All emails received the last DAY"
-msgstr ""
+msgstr "Tous les courriels reçus le dernier JOUR"
 
 #: src/core/constants.py:42
 msgid "All emails received the last WEEK"
-msgstr ""
+msgstr "Tous les courriels reçus la SEMAINE dernière"
 
 #: src/core/constants.py:45
 msgid "All emails received the last MONTH"
-msgstr ""
+msgstr "Tous les courriels reçus le MOIS dernier"
 
 #: src/core/constants.py:48
 msgid "All emails received the last YEAR"
-msgstr ""
+msgstr "Tous les courriels reçus l'ANNÉE dernière"
 
 #: src/core/constants.py:51
 msgid "All RECENT emails"
-msgstr ""
+msgstr "Tous les courriels RÉCENTS"
 
 #: src/core/constants.py:54
 msgid "All UNSEEN emails"
-msgstr ""
+msgstr "Tous les courriels NON LUS"
 
 #: src/core/constants.py:57
 msgid "All SEEN emails"
@@ -53,43 +53,43 @@ msgstr "Tous les courriels"
 
 #: src/core/constants.py:63
 msgid "All RECENT and UNSEEN emails"
-msgstr ""
+msgstr "Tous les courriels RÉCENTS NON LUS"
 
 #: src/core/constants.py:66
 msgid "All emails that are not RECENT"
-msgstr ""
+msgstr "Tous les courriels qui ne sont pas RÉCENTS"
 
 #: src/core/constants.py:69
 msgid "FLAGGED emails"
-msgstr ""
+msgstr "Courriels MARQUÉS"
 
 #: src/core/constants.py:72
 msgid "All emails that are not FLAGGED"
-msgstr ""
+msgstr "Tous les courriels NON MARQUÉS"
 
 #: src/core/constants.py:75
 msgid "All email DRAFTs"
-msgstr ""
+msgstr "Tous les courriels BROUILLONS"
 
 #: src/core/constants.py:78
 msgid "All emails that are not DRAFTs"
-msgstr ""
+msgstr "Tous les courriels NON BROUILLONS"
 
 #: src/core/constants.py:81
 msgid "All ANSWERED emails"
-msgstr ""
+msgstr "Tous les courriels RÉPONDUS"
 
 #: src/core/constants.py:84
 msgid "All UNANSWERED emails"
-msgstr ""
+msgstr "Tous les courriels NON RÉPONDUS"
 
 #: src/core/constants.py:87
 msgid "All DELETED emails"
-msgstr ""
+msgstr "Tous les courriels SUPPRIMÉS"
 
 #: src/core/constants.py:90
 msgid "All UNDELETED emails"
-msgstr ""
+msgstr "Tous les courriels NON SUPPRIMÉS"
 
 #: src/core/constants.py:94
 msgid "All emails with the given KEYWORD"
@@ -129,7 +129,7 @@ msgstr ""
 
 #: src/core/constants.py:125
 msgid "IMAP4 (unencrypted)"
-msgstr ""
+msgstr "IMAP4 (non chiffré)"
 
 #: src/core/constants.py:128
 msgid "POP3"
@@ -137,7 +137,7 @@ msgstr ""
 
 #: src/core/constants.py:131
 msgid "POP3 (unencrypted)"
-msgstr ""
+msgstr "POP3 (non chiffré)"
 
 #: src/core/constants.py:134
 msgid "Microsoft Exchange"
@@ -149,15 +149,15 @@ msgstr ""
 
 #: src/core/constants.py:144
 msgid "Inbox"
-msgstr ""
+msgstr "Boîte de réception"
 
 #: src/core/constants.py:145
 msgid "Outbox"
-msgstr ""
+msgstr "Boîte dʼenvoi"
 
 #: src/core/constants.py:146
 msgid "Sent"
-msgstr ""
+msgstr "Envoyés"
 
 #: src/core/constants.py:147
 msgid "Junk"
@@ -165,11 +165,11 @@ msgstr ""
 
 #: src/core/constants.py:148
 msgid "Drafts"
-msgstr ""
+msgstr "Brouillons"
 
 #: src/core/constants.py:149
 msgid "Trash"
-msgstr ""
+msgstr "Corbeille"
 
 #: src/core/constants.py:188
 msgid "From"
@@ -241,7 +241,7 @@ msgstr ""
 
 #: src/core/constants.py:219 src/core/constants.py:231
 msgid ".zip with .eml files inside"
-msgstr ""
+msgstr ".zip avec des fichiers .eml à lʼintérieur"
 
 #: src/core/constants.py:220 src/core/constants.py:232
 msgid ".mbox"
@@ -281,32 +281,28 @@ msgstr "chemin du fichier"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:37
-#, fuzzy
-#| msgid "healthy"
 msgid "health status"
-msgstr "sain"
+msgstr "santé"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:45
 msgid "last error"
-msgstr ""
+msgstr "dernière erreur"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/HealthModelMixin.py:53
 msgid "time of last error occurrence"
-msgstr ""
+msgstr "heure de la dernière erreur"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:31
 msgid "time of creation"
-msgstr ""
+msgstr "heure de création"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/TimestampModelMixin.py:38
-#, fuzzy
-#| msgid "last updated"
 msgid "time of last update"
-msgstr "dernière mise à jour"
+msgstr "heure de dernière mise à jour"
 
 #: src/core/models/Account.py:86
 #, fuzzy
@@ -341,7 +337,7 @@ msgstr "utilisateur"
 
 #: src/core/models/Account.py:100
 msgid "The username of the account. Typically the mail address."
-msgstr ""
+msgstr "Lʼidentifiant du compte. Typiquement lʼadresse de courriel."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:109

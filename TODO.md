@@ -11,7 +11,6 @@
 - autotagging
 - fetch as generator, async parsing, sync saving
 - show pwd button
-- structured json based logging messages
 - refine fetchererrors into errors for auth, connection, etc.
 - add gmail client support
 - create mailaccount from file import
@@ -34,6 +33,7 @@
 - storagebackend for colliding file/dir
 - test failing single message fetch (imap, pop, jmap)
 - add test email with references
+- js stuff
 
 ## To implement
 

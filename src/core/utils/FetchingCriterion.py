@@ -20,7 +20,7 @@
 
 import imaplib
 from datetime import UTC, datetime, timedelta
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, override
 
 import jmapc
 from django.utils.translation import gettext_lazy as _
@@ -46,6 +46,7 @@ class FetchingCriterion:
         self._criterion = criterion
         self._argument = argument
 
+    @override
     def __str__(self) -> str:
         """The formatted criterion as a string.
 
@@ -54,6 +55,7 @@ class FetchingCriterion:
         """
         return self._criterion.format(self._argument)
 
+    @override
     def __eq__(self, value: object) -> bool:
         """Checks for equality.
 
@@ -70,6 +72,7 @@ class FetchingCriterion:
             return self._criterion == value
         return False
 
+    @override
     def __hash__(self) -> int:
         """Creates a hash for this object."""
         return hash(str(self))

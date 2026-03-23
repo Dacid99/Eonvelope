@@ -337,7 +337,7 @@ class Mailbox(
         return self.emails.exists()
 
     @property
-    def available_fetching_criteria(self) -> tuple[StrOrPromise]:
+    def available_fetching_criteria(self) -> tuple[str, ...]:
         """Gets the available fetching criteria based on the mail protocol of this mailbox.
 
         Returns:
@@ -349,7 +349,7 @@ class Mailbox(
         return self.account.get_fetcher_class().AVAILABLE_FETCHING_CRITERIA  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
 
     @property
-    def available_no_arg_fetching_criteria(self) -> tuple[StrOrPromise]:
+    def available_no_arg_fetching_criteria(self) -> tuple[str, ...]:
         """Gets the available fetching criteria that do not require an argument based on the mail protocol of this mailbox.
 
         Returns:
@@ -362,7 +362,7 @@ class Mailbox(
             criterion
             for criterion in self.available_fetching_criteria
             if criterion.format("arg") == criterion
-        )  # type: ignore[no-any-return]  # for some reason mypy doesn't get this
+        )
 
     @property
     def available_fetching_criterion_choices(self) -> list[tuple[str, StrOrPromise]]:

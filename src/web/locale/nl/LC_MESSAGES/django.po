@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-22 13:24+0000\n"
-"PO-Revision-Date: 2026-02-22 13:20+0000\n"
-"Last-Translator: Tim Klingeleers <tim@klingeleers.be>\n"
-"Language-Team: Dutch <https://hosted.weblate.org/projects/eonvelope/web/nl/"
-">\n"
+"PO-Revision-Date: 2026-03-10 12:09+0000\n"
+"Last-Translator: \"Mark L.\" <lijftogt@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/eonvelope/web/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: src/web/filters/AccountFilterSet.py:54
 #: src/web/filters/AttachmentFilterSet.py:54
@@ -642,7 +642,7 @@ msgstr ""
 #: src/web/templates/web/email/archive/base_archive.html:6
 #: src/web/templates/web/partials/_header.html:42
 msgid "Timeline"
-msgstr ""
+msgstr "Tijdlijn"
 
 #: src/web/templates/web/email/archive/base_archive.html:15
 msgid "Email Timeline"

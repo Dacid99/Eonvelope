@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-22 14:08+0000\n"
-"PO-Revision-Date: 2026-02-22 13:20+0000\n"
-"Last-Translator: Tim Klingeleers <tim@klingeleers.be>\n"
+"PO-Revision-Date: 2026-03-10 12:09+0000\n"
+"Last-Translator: \"Mark L.\" <lijftogt@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/eonvelope/config/"
 "nl/>\n"
 "Language: nl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/admin.py:32
@@ -36,7 +36,7 @@ msgstr "E∘nvelope Instellingen"
 
 #: src/config/settings.py:565
 msgid "Your email archiving server"
-msgstr "Je email archivering server"
+msgstr "Jou email archivering server"
 
 #: src/config/settings.py:606
 msgid "Dashboard"
@@ -44,79 +44,86 @@ msgstr "Dashboard"
 
 #: src/config/settings.py:608
 msgid "Shortcut to the dashboard"
-msgstr ""
+msgstr "Snelkoppeling dashboard"
 
 #: src/config/settings.py:611
 msgid "Timeline"
-msgstr ""
+msgstr "Tijdlijn"
 
 #: src/config/settings.py:613
 msgid "Shortcut to the email timeline"
-msgstr ""
+msgstr "Snelkoppeling naar de email tijdlijn"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/settings.py:775
-#, fuzzy
-#| msgid "E∘nvelope Settings"
 msgid "E∘nvelope API"
-msgstr "E∘nvelope Instellingen"
+msgstr "E∘nvelope API"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/config/settings.py:777
 msgid "API schema for the E∘nvelope server."
-msgstr ""
+msgstr "API schema voor de E∘nvelope server."
 
 #. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
 #: src/config/settings.py:780
 msgid "Licensed under AGPL-3.0-or-later"
-msgstr ""
+msgstr "Gelicentieerd onder AGPL-3.0-or-later"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218. ReadTheDocs is a brand name.
 #: src/config/settings.py:785
 msgid "Read the E∘nvelope Documentation on ReadTheDocs"
-msgstr ""
+msgstr "De E∘nvelope documentatie staat op ReadTheDocs"
 
 #: src/config/settings.py:922
 msgid "Default page size for paginated API response data"
-msgstr ""
+msgstr "Standaard paginagroote voor API pagina verzoeken"
 
 #: src/config/settings.py:927
 msgid "Maximum page size for paginated API response data"
-msgstr ""
+msgstr "Maximum paginagroote voor API pagina verzoeken"
 
 #: src/config/settings.py:932
 msgid "Default page size for pagination in the webapp."
-msgstr ""
+msgstr "Standaard paginagroote voor pagina verzoeken in de webapp."
 
 #: src/config/settings.py:938
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
+"Paginagroote instellingen voor pagina verzoeken in de webapp. Moet "
+"WEB_DEFAULT_PAGE_SIZE bevatten."
 
 #: src/config/settings.py:945
 msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
 msgstr ""
+"Maximum groote voor thumbnails in de webapp. Thumbnails die groter zijn dan "
+"dit zullen niet worden gebruikt."
 
 #: src/config/settings.py:951
 msgid "Whether to show tooltips in the web interface."
-msgstr ""
+msgstr "Het wel of niet weergeven van tooltips in de web interface."
 
 #: src/config/settings.py:956
+#, fuzzy
 msgid "Maximum numbers of files in one storage unit."
-msgstr ""
+msgstr "Maximum aantal betstanden in een storage unit."
 
 #: src/config/settings.py:961
 msgid "Whether or not to ignore emails and mailboxes that have a spam flag"
 msgstr ""
+"Het wel of niet negeren van emails en mailboxen die als spam gemarkeerd zijn"
 
 #: src/config/settings.py:967
+#, fuzzy
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
 msgstr ""
+"Een (case-insensitive) regex patroon voor de namen van mailboxen die "
+"genegeerd moeten worden in zoekopdrachten."
 
 #: src/config/settings.py:973
 msgid "List of content types prefixes to not parse as files."
@@ -141,67 +148,78 @@ msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
 msgstr ""
+"CSS style sheets voor de weergave van email in HTML. Raadpleeg de "
+"HTML_TEMPLATE voor meer informatie over de classes."
 
 #: src/config/settings.py:999
 msgid "Default mailbox setting whether to store mails as eml."
-msgstr ""
+msgstr "Standaard mailbox instelling om de mail op te slaan als eml."
 
 #: src/config/settings.py:1004
 msgid "Default mailbox setting whether to store attachments."
-msgstr ""
+msgstr "Standaard mailbox instelling voor het opslaan van attachments."
 
 #: src/config/settings.py:1010
 msgid ""
 "Default number of periods between two runs of a standard routine for a INBOX "
 "mailbox."
 msgstr ""
+"Het aantal periodes tussen twee routine activiteiten op een INBOX mailbox."
 
 #: src/config/settings.py:1016
 msgid "Default fetching criterion for a standard routine for a INBOX mailbox."
 msgstr ""
+"Het standaard ophaal criterea voor de standaard routine op een INBOX mailbox."
 
 #: src/config/settings.py:1022
 msgid ""
 "Default number of periods between two runs of a standard routine for a SENT "
 "mailbox."
 msgstr ""
+"Het standaard aantal periodes tussen twee keer het uitvoeren van de "
+"standaard route op een SENT mailbox."
 
 #: src/config/settings.py:1028
 msgid "Default fetching criterion for a standard routine for a SENT mailbox."
 msgstr ""
+"Standaard ophaal criterea voor de standaard routine op een SENT mailbox."
 
 #: src/config/settings.py:1034
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
 msgstr ""
+"Verander dit in een True om zelf-registratie mogelijk te maken. Deze setting "
+"werkt alleen als REGISTRATION_ENABLED niet 0 is."
 
 #: src/config/settings.py:1041
 msgid ""
 "Set this to True to tolerate connections involving an unverified SSL "
 "certificate, e.g. a self-signed one."
 msgstr ""
+"Gebruik True om verbindingen zonder geverifieerd SSL certificaat toe te "
+"laten, e.g. een self-signed certitificaat."
 
 #: src/config/settings.py:1049
 msgid "Server Configurations"
-msgstr ""
+msgstr "Server Configuratie"
 
 #: src/config/settings.py:1056
 msgid "Default Values"
-msgstr ""
+msgstr "Standaard Waarden"
 
 #: src/config/settings.py:1067
 msgid "Processing Settings"
-msgstr ""
+msgstr "Verwerkings Instellingen"
 
 #: src/config/settings.py:1078
 msgid "Storage Settings"
-msgstr ""
+msgstr "Opslag Instellingen"
 
 #: src/config/settings.py:1082
 msgid "API Settings"
-msgstr ""
+msgstr "API Instellingen"
 
 #: src/config/settings.py:1089
 msgid "Web Settings"
-msgstr ""
+msgstr "Web Instellingen"

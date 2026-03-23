@@ -183,13 +183,14 @@ LOGFILE_BACKUP_NUMBER = env("LOGFILE_BACKUP_NUMBER", cast=int, default=5)
 
 LOGLEVEL_DEFAULT = "INFO"
 
-LOGFORMAT = "{asctime} {levelname} - {name}.{funcName}: {message}"
+LOGFORMAT = "{asctime}{levelname}{name}{module}{funcName}{lineno}{message}"
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
+            "()": "pythonjsonlogger.json.JsonFormatter",
             "format": LOGFORMAT,
             "style": "{",
         },
@@ -613,7 +614,7 @@ PWA_APP_SHORTCUTS = [
         "description": _("Shortcut to the email timeline"),
     },
 ]
-PWA_APP_SCREENSHOTS = []
+PWA_APP_SCREENSHOTS: list[str] = []
 PWA_SERVICE_WORKER_PATH = SOURCE_DIR / "eonvelope" / "templates" / "serviceworker.js"
 PWA_APP_DEBUG_MODE = DEBUG
 

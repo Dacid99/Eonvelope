@@ -44,6 +44,8 @@ if TYPE_CHECKING:
     from email.header import Header
     from email.message import EmailMessage
 
+    from django.core.files import File
+
 
 logger = logging.getLogger(__name__)
 
@@ -238,7 +240,7 @@ def is_x_spam(x_spam_header: str | None) -> bool | None:
 
 
 def make_icalendar_readout(
-    icalendar_file: TextIO,
+    icalendar_file: File | TextIO,
 ) -> list[tuple[datetime, datetime, str, str]]:
     """Parses the main features of a icalendar file into a list.
 
@@ -301,8 +303,8 @@ def make_icalendar_readout(
 
 
 def make_vcard_readout(
-    vcard_file: TextIO,
-) -> list[tuple[datetime, datetime, str, str]]:
+    vcard_file: File | TextIO,
+) -> list[tuple[str, str, str, str, str]]:
     """Parses the main features of a vcard file into a list.
 
     References:

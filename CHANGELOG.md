@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.5.5
+
+- Features:
+  - logging in json format
+
 ## Version 0.5.4
 
 - Features:

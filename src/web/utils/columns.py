@@ -94,7 +94,7 @@ class IsHealthyColumn(Column):
     """Column for the is_healthy field with the badge."""
 
     @override
-    def __init__(self, *args: list[Any], **kwargs: dict[str, Any]) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         kwargs.update({"empty_values": ()})
         super().__init__(*args, **kwargs)
 

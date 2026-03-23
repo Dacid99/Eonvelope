@@ -11,7 +11,11 @@ services:
       - MARIADB_ROOT_PASSWORD=example
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'" ]
+      test:
+        [
+          "CMD-SHELL",
+          "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'",
+        ]
       interval: 10s
       timeout: 5s
       retries: 12
@@ -36,12 +40,13 @@ services:
       - ALLOWED_HOSTS=localhost,eonvelope.mydomain.tld # all allowed host URLs separated by ,
       # optional
       - DATABASE_TYPE=mysql # possible values: mysql, postgresql, sqlite3; must match the database type of the db container
+      - DATABASE_PORT= # use this if your database container does not use the default port
       - REGISTRATION_ENABLED=False
       - STRICT_PASSWORDS=True
       - ACCOUNT_LOGIN_TIMEOUT=900
       - ACCOUNT_USERNAME_BLACKLIST=[]
       - ACCOUNT_USERNAME_MIN_LENGTH=1
-      - ACCOUNT_SESSION_REMEMBER=  # set this to True if you want users to always be remembered and to False to never remember them. Leave empty to ask on login.
+      - ACCOUNT_SESSION_REMEMBER= # set this to True if you want users to always be remembered and to False to never remember them. Leave empty to ask on login.
       - ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE=False
       - ACCOUNT_REAUTHENTICATION_TIMEOUT=300
       - ACCOUNT_REAUTHENTICATION_REQUIRED=False
@@ -68,10 +73,10 @@ services:
       - CSRF_COOKIE_AGE=31449600
       - CSRF_COOKIE_SAMESITE=Lax # the samesite value on the csrf-cookie. See https://docs.djangoproject.com/en/5.1/ref/settings/#session-cookie-samesite for more info.
       - LANGUAGE_COOKIE_AGE=2419200
-      - LANGUAGE_COOKIE_SAMESITE=None  # the samesite value on the language-cookie. See https://docs.djangoproject.com/en/5.1/ref/settings/#session-cookie-samesite for more info.
+      - LANGUAGE_COOKIE_SAMESITE=None # the samesite value on the language-cookie. See https://docs.djangoproject.com/en/5.1/ref/settings/#session-cookie-samesite for more info.
       - SESSION_COOKIE_AGE=2419200
       - SESSION_EXPIRE_AT_BROWSER_CLOSE=False
-      - SESSION_COOKIE_SAMESITE=Lax  # the samesite value on the session-cookie. See https://docs.djangoproject.com/en/5.1/ref/settings/#session-cookie-samesite for more info.
+      - SESSION_COOKIE_SAMESITE=Lax # the samesite value on the session-cookie. See https://docs.djangoproject.com/en/5.1/ref/settings/#session-cookie-samesite for more info.
       - GUNICORN_WORKER_NUMBER=2
       - ENABLE_FLOWER=False
       - DEBUG=False

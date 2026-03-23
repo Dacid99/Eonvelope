@@ -5,6 +5,9 @@
 - Features:
   - logging in json format
 
+- Fixes:
+  - deletion in list and table pages didn't work
+
 ## Version 0.5.4
 
 - Features:

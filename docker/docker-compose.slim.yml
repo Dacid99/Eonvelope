@@ -29,6 +29,8 @@ services:
       - DATABASE=email_archive_django # must match db:MARIADB_DATABASE
       - DATABASE_USER=user # must match db:MARIADB_USER
       - DATABASE_PASSWORD=passwd # must match db:MARIADB_PASSWORD
+      - DATABASE_HOST=db # set this to your postgres host when DATABASE_TYPE=postgresql
+      - DATABASE_PORT=3306 # set to 5432 for postgres
       - DJANGO_SUPERUSER_PASSWORD=rootqwertz123
       - SECRET_KEY='PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'
       - ALLOWED_HOSTS=localhost,eonvelope.mydomain.tld # all allowed host URLs separated by ,

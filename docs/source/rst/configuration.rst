@@ -65,6 +65,12 @@ Optional
 |                                   |             | Possible values are mysql, postgresql and sqlite3.                                                                        |
 |                                   |             | Must match the database type of the db container.                                                                         |
 +-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+| DATABASE_HOST                     | *db*        | The hostname of the database server.                                                                                      |
+|                                   |             | Use this to connect to an external database host.                                                                         |
++-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+| DATABASE_PORT                     | *3306/5432* | The port of the database server.                                                                                          |
+|                                   |             | Defaults to 3306 for mysql and 5432 for postgresql.                                                                       |
++-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
 | APP_LOG_LEVEL                     | *INFO*      | The log level of the Eonvelope logger.                                                                                    |
 |                                   |             | It logs to Eonvelope.log in the logs docker volume                                                                        |
 |                                   |             | and contains information about events in the Eonvelope application components.                                            |

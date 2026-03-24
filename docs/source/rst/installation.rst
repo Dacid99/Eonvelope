@@ -104,8 +104,9 @@ using the `DATABASE_TYPE` environment variable.
 See :doc:`configuration` for more details on this.
 
 .. important::
-    It is crucial that the name of the database service in the stack is *db*!
-    Otherwise the connection from the Eonvelope container to the database will fail.
+   If you keep the default configuration, the database service in the stack should be named *db*.
+   If you use a different service name or an external database, set ``DATABASE_HOST`` and optionally
+   ``DATABASE_PORT`` in the web service environment.
 
 
 External Database

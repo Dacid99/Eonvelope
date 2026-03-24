@@ -32,6 +32,10 @@ spec:
               value: INFO
             - name: DATABASE
               value: email_archive_django
+            - name: DATABASE_HOST
+              value: db
+            - name: DATABASE_PORT
+              value: "3306"
             - name: DATABASE_PASSWORD
               value: passwd
             - name: DATABASE_USER
@@ -55,7 +59,7 @@ spec:
             - name: REGISTRATION_ENABLED
               value: "False"
             - name: SECRET_KEY
-              value: '''PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'''
+              value: "'PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'"
             - name: STRICT_PASSWORDS
               value: "True"
           image: eonvelope

@@ -118,20 +118,26 @@ if not SLIM:
 ### Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+DATABASE_TYPE = env("DATABASE_TYPE", default="mysql")
+DATABASE_PORT_DEFAULT = ""
+if DATABASE_TYPE == "mysql":
+    DATABASE_PORT_DEFAULT = "3306"
+elif DATABASE_TYPE == "postgresql":
+    DATABASE_PORT_DEFAULT = "5432"
+
 DATABASES = {
     "default": {
-        "ENGINE": (
-            "django_prometheus.db.backends." + env("DATABASE_TYPE", default="mysql")
-        ),
+        "ENGINE": ("django_prometheus.db.backends." + DATABASE_TYPE),
         "NAME": env("DATABASE", default="email_archive_django"),
         "USER": env("DATABASE_USER", default="user"),
         "PASSWORD": env("DATABASE_PASSWORD", default="passwd"),
-        "HOST": "db",
+        "HOST": env("DATABASE_HOST", default="db"),
+        "PORT": env("DATABASE_PORT", default=DATABASE_PORT_DEFAULT),
         "OPTIONS": (
             {
                 "charset": "utf8mb4",
             }
-            if env("DATABASE_TYPE", default="mysql") == "mysql"
+            if DATABASE_TYPE == "mysql"
             else {}
         ),
     }

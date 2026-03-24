@@ -1,5 +1,5 @@
 services:
-  db: # this service name must not be changed!!
+  db: # this service name must not be changed!
     image: mariadb:latest
     container_name: eonvelope-db
     volumes:
@@ -11,7 +11,11 @@ services:
       - MARIADB_ROOT_PASSWORD=example
     restart: unless-stopped
     healthcheck:
-      test: [ "CMD-SHELL", "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'" ]
+      test:
+        [
+          "CMD-SHELL",
+          "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'",
+        ]
       interval: 30s
       timeout: 10s
       retries: 12
@@ -36,7 +40,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "curl -kf https://localhost:443/health/ || exit 1"]
-      interval: 300s  # you can make the test even more rare if needed
+      interval: 300s # you can make the test even more rare if needed
       timeout: 60s
       retries: 3
       start_period: 5s

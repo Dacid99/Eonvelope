@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 0.5.6
+
+- Features:
+  - docker env settings for database host and port
+
 ## Version 0.5.5
 
 - Features:

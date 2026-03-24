@@ -65,6 +65,9 @@ Optional
 |                                   |             | Possible values are mysql, postgresql and sqlite3.                                                                        |
 |                                   |             | Must match the database type of the db container.                                                                         |
 +-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
+| DATABASE_HOST                     | *db*        | The hostname of the database that is used.                                                                                |
+|                                   |             | Use this if your database container uses a name different from *db*.                                                      |
++-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
 | DATABASE_PORT                     |             | The port of the database installation that is used.                                                                       |
 |                                   |             | Use this if your database container does not use the default port.                                                        |
 +-----------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------+

@@ -124,6 +124,10 @@ to the eonvelope-web service and omitting the db portion of the stack.
    Using a database other than the default mysql can lead to issues.
    If possible try to stick with the default, which is tested and guaranteed to work flawlessly.
 
+In case your centralized database and eonvelope-web share a docker-network,
+you can simply set the *DATABASE_HOST* environment variable to match that database containers hostname.
+You can find more details on this in :doc:`the configuration page <configuration>`
+
 Known quirks
 """"""""""""
 

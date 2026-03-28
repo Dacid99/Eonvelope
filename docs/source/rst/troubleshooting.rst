@@ -51,3 +51,12 @@ I am using the API and some name(s) and(/or) behavior(s) don't make sense to me.
 This may be because that field have been renamed or may have no analogue in the web interface.
 
 There is a list with these known oddities in the :doc:`the api instructions <api-instructions>`.
+
+
+I want to deploy Eonvelope on my Synology NAS but the webinterface doesn't load correctly.
+------------------------------------------------------------------------------------------
+
+There have been reports about this behavior.
+The solution is to disable the healthcheck which is apparently broken in that environment.
+
+The :doc:`installation guide <installation>` has a section on this, with more details.

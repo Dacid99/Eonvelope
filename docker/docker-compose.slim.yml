@@ -39,7 +39,7 @@ services:
       - SLIM=True
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "curl -kf https://localhost:443/health/ || exit 1"]
+      test: ["CMD-SHELL", "django-admin health_check health_check --no-http"]
       interval: 300s # you can make the test even more rare if needed
       timeout: 60s
       retries: 3

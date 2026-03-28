@@ -195,4 +195,4 @@ HEALTHCHECK\
     --timeout=10s \
     --start-period=5s \
     --retries=3 \
-    CMD curl -kf https://localhost:443/health/ || exit 1
+    CMD django-admin health_check health_check --no-http

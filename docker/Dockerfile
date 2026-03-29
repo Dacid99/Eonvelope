@@ -6,8 +6,7 @@ ARG PYTHON_VERSION=3.14
 ARG ALPINE_VERSION=3.23
 ARG S6_OVERLAY_VERSION=3.2.1.0
 
-ARG RUNTIME_APK_DEPENDENCIES="curl \
-    rabbitmq-server \
+ARG RUNTIME_APK_DEPENDENCIES="rabbitmq-server \
     mariadb-client \
     mariadb-connector-c"
 

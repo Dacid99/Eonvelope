@@ -42,6 +42,14 @@ one for the logfiles of Eonvelope and one for the files that Eonvelope archives.
 It is recommended to use the minimal version of the docker-compose for the first time you deploy Eonvelope
 and to skim the docker settings section of the :doc:`configuration reference <configuration>` beforehand.
 
+In all container management systems you need to change at least the following variables:
+
+- Change the passwords on both the ``db`` and ``web`` container and make sure they match each other
+- Set a random sequence of characters for the ``SECRET_KEY``
+- Add your servers address to the ``ALLOWED_HOSTS`` list.
+
+Then you can spin Eonvelope up.
+
 Docker
 ^^^^^^
 

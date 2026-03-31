@@ -16,6 +16,7 @@ Next take this docker-compose file and adapt the environment settings that need 
    :caption: docker-compose.yml
 
 For security reasons please change all passwords and the ``SECRET_KEY``.
+Don't forget to add your server address (internal-ip and/or domain-based) to the ``ALLOWED_HOSTS`` list.
 
 If your device is low on compute power and system resources, you may prefer to use the slim version of the docker-compose file instead.
 This will only run the core of the application in the docker container, excluding some additional components mostly aimed at development.

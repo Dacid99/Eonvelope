@@ -69,19 +69,7 @@ One is a minimal version with only the basic setup and configuration.
 The other is a full setup with all environment level configurations.
 Take one of them, adapt and launch it, for example via *minikube*.
 
-Synology Container
-^^^^^^^^^^^^^^^^^^
-
-To deploy on Synology using the container manager, you can use any of the docker-compose files in the *docker* directory of the repository.
-In these files you need to remove the healthcheck which is reportedly broken in that environment.
-Add the following section to the Eonvelope container configuration
-
-.. code-block:: yaml
-
-    healthcheck:
-      test: ["NONE"]
-
-Agentic Installation
+Agentic installation
 --------------------
 
 If you want to outsource installation to a LLM, point it to the install.md file which holds

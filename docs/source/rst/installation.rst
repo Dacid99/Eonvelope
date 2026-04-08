@@ -35,7 +35,7 @@ provided at `dockerhub <https://hub.docker.com/r/dacid99/eonvelope>`_.
 The Eonvelope service mounts 2 volumes,
 one for the logfiles of Eonvelope and one for the files that Eonvelope archives.
 
-.. Note::
+.. note::
     You can also mount all logfiles of the container by changing the path in the docker-compose.yml to /var/log.
     In that case you will have to give the directory 777 permissions, otherwise services will fail to start and log properly.
 
@@ -49,6 +49,10 @@ In all container management systems you need to change at least the following va
 - Add your servers address to the ``ALLOWED_HOSTS`` list.
 
 Then you can spin Eonvelope up.
+
+.. important::
+    Also keep in mind that **Eonvelope is only accessible via https**,
+    you will get a cryptic browser error if you try to access via bare http.
 
 Docker
 ^^^^^^

@@ -38,6 +38,8 @@ from eonvelope.utils.workarounds import get_config
 from .BaseFetcher import BaseFetcher
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from core.models.Account import Account
     from core.models.Email import Email
     from core.models.Mailbox import Mailbox
@@ -185,7 +187,7 @@ class ExchangeFetcher(BaseFetcher):
         self,
         mailbox: Mailbox,
         criterion: FetchingCriterion = BaseFetcher.DEFAULT_FETCHING_CRITERION,
-    ) -> list[bytes]:
+    ) -> Generator[bytes]:
         """Fetches and returns maildata from a mailbox based on a given criterion.
 
         Todo:
@@ -196,9 +198,8 @@ class ExchangeFetcher(BaseFetcher):
             criterion: Formatted criterion to filter mails in the Exchange server.
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
 
-        Returns:
-            List of mails in the mailbox matching the criterion as :class:`bytes`.
-            Empty if no such messages are found.
+        Yields:
+            Mails in the mailbox matching the criterion as :class:`bytes`.
 
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
@@ -216,17 +217,16 @@ class ExchangeFetcher(BaseFetcher):
             mail_query = criterion.as_exchange_queryset(
                 mailbox_folder.all().order_by("datetime_received")
             )
-            mail_data_list = [mail.mime_content for mail in mail_query]
+            for mail in mail_query:
+                yield mail.mime_content
         except exchangelib.errors.EWSError as error:
             self.logger.exception("Error during fetching of mail contents!")
             raise MailboxError(error, _("fetching of mail contents")) from error
         self.logger.info(
-            "Successfully searched and fetched %s %s messages in %s.",
-            len(mail_data_list),
+            "Successfully searched and fetched %s messages in %s.",
             criterion,
             mailbox,
         )
-        return mail_data_list
 
     @override
     def fetch_mailboxes(self) -> list[tuple[str, str]]:

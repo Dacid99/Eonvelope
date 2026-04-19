@@ -509,7 +509,9 @@ def test_ExchangeFetcher_fetch_emails_all__success(
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
     in case of success.
     """
-    result = ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
+    result = list(
+        ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
+    )
 
     assert result == [item.mime_content for item in mock_QuerySet.__iter__.return_value]
     mock_QuerySet.order_by.assert_called_once_with("datetime_received")
@@ -532,7 +534,9 @@ def test_ExchangeFetcher_fetch_emails_subfolder_all__success(
     fake_subfolder_name = faker.name()
     exchange_mailbox.name = fake_folder_name + "/" + fake_subfolder_name
 
-    result = ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
+    result = list(
+        ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
+    )
 
     assert result == [item.mime_content for item in mock_QuerySet.__iter__.return_value]
     mock_QuerySet.order_by.assert_called_once_with("datetime_received")
@@ -553,8 +557,10 @@ def test_ExchangeFetcher_fetch_emails_filter__success(
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
     in case of success with a criterion other than ALL.
     """
-    result = ExchangeFetcher(exchange_mailbox.account).fetch_emails(
-        exchange_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DRAFT)
+    result = list(
+        ExchangeFetcher(exchange_mailbox.account).fetch_emails(
+            exchange_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DRAFT)
+        )
     )
 
     assert result == [
@@ -578,7 +584,7 @@ def test_ExchangeFetcher_fetch_emails__wrong_mailbox(
     wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
-        ExchangeFetcher(exchange_mailbox.account).fetch_emails(wrong_mailbox)
+        list(ExchangeFetcher(exchange_mailbox.account).fetch_emails(wrong_mailbox))
 
     mock_logger.error.assert_called()
 
@@ -593,7 +599,7 @@ def test_ExchangeFetcher_fetch_emails__ewserror__query(
     mock_Folder.all.side_effect = exchangelib.errors.EWSError(fake_error_message)
 
     with pytest.raises(MailboxError, match=fake_error_message):
-        ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
+        list(ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox))
 
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_called()
@@ -609,7 +615,7 @@ def test_ExchangeFetcher_fetch_emails__other_exception_query(
     mock_Folder.all.side_effect = AssertionError(fake_error_message)
 
     with pytest.raises(AssertionError, match=fake_error_message):
-        ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
+        list(ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox))
 
     mock_logger.debug.assert_called()
     mock_logger.exception.assert_not_called()

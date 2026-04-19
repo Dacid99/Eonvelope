@@ -202,10 +202,13 @@ class Mailbox(
             MailboxError: Reraised if fetching failed due to a MailboxError.
             MailAccountError: Reraised if fetching failed due to a MailAccountError.
         """
-        logger.info("Fetching emails with criterion %s from %s ...", criterion, self)
+        logger.info(
+            "Fetching and saving emails with criterion %s from %s ...", criterion, self
+        )
         with self.account.get_fetcher() as fetcher:
             try:
-                fetched_mails = fetcher.fetch_emails(self, criterion)
+                for fetched_mail in fetcher.fetch_emails(self, criterion):
+                    Email.create_from_email_bytes(fetched_mail, self)
             except MailboxError as error:
                 logger.info("Failed fetching %s with error: %s.", self, error)
                 self.set_unhealthy(error)
@@ -215,13 +218,7 @@ class Mailbox(
                 self.account.set_unhealthy(error)
                 raise
         self.set_healthy()
-        logger.info("Successfully fetched emails.")
-
-        logger.info("Saving fetched emails ...")
-        for fetched_mail in fetched_mails:
-            Email.create_from_email_bytes(fetched_mail, self)
-
-        logger.info("Successfully saved fetched emails.")
+        logger.info("Successfully fetched and saved emails.")
 
     def _add_email_from_eml(self, file: BinaryIO) -> None:
         """Reads emails from a zipped mailbox dir."""

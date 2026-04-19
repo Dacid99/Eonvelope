@@ -361,7 +361,7 @@ def test_POP3Fetcher_fetch_emails__success(
         for number in range(len(mock_POP3.return_value.list.return_value[1]))
     ]
 
-    result = POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox)
+    result = list(POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox))
 
     assert result == [b"\n".join(mock_POP3.return_value.retr.return_value[1])] * len(
         expected_retr_calls
@@ -385,7 +385,7 @@ def test_POP3Fetcher_fetch_emails__wrong_mailbox(
     wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
-        POP3Fetcher(pop3_mailbox.account).fetch_emails(wrong_mailbox)
+        list(POP3Fetcher(pop3_mailbox.account).fetch_emails(wrong_mailbox))
 
     mock_logger.error.assert_called()
 
@@ -396,8 +396,10 @@ def test_POP3Fetcher_fetch_emails__bad_criterion(pop3_mailbox, mock_logger):
     in case of an unavailable criterion.
     """
     with pytest.raises(ValueError, match=re.compile("criterion", re.IGNORECASE)):
-        POP3Fetcher(pop3_mailbox.account).fetch_emails(
-            pop3_mailbox, FetchingCriterion("NONE")
+        list(
+            POP3Fetcher(pop3_mailbox.account).fetch_emails(
+                pop3_mailbox, FetchingCriterion("NONE")
+            )
         )
 
     mock_logger.error.assert_called()
@@ -413,7 +415,7 @@ def test_POP3Fetcher_fetch_emails__bad_response(
     mock_POP3.return_value.list.return_value = b"+NO " + fake_error_message.encode()
 
     with pytest.raises(MailAccountError, match=fake_error_message):
-        POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox)
+        list(POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox))
 
     mock_POP3.return_value.list.assert_called_once_with()
     mock_POP3.return_value.retr.assert_not_called()
@@ -431,7 +433,7 @@ def test_POP3Fetcher_fetch_emails__exception(
     mock_POP3.return_value.list.side_effect = AssertionError(fake_error_message)
 
     with pytest.raises(MailAccountError, match=fake_error_message):
-        POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox)
+        list(POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox))
 
     mock_POP3.return_value.list.assert_called_once_with()
     mock_POP3.return_value.retr.assert_not_called()
@@ -452,7 +454,7 @@ def test_POP3Fetcher_fetch_emails__bad_response__ignored(
     ]
     mock_POP3.return_value.retr.return_value = b"+NO"
 
-    result = POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox)
+    result = list(POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox))
 
     assert result == []
     mock_POP3.return_value.list.assert_called_once_with()
@@ -477,7 +479,7 @@ def test_POP3Fetcher_fetch_emails__exception__ignored(
     ]
     mock_POP3.return_value.retr.side_effect = AssertionError
 
-    result = POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox)
+    result = list(POP3Fetcher(pop3_mailbox.account).fetch_emails(pop3_mailbox))
 
     assert result == []
     mock_POP3.return_value.list.assert_called_once_with()

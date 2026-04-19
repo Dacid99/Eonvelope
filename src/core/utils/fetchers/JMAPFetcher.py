@@ -36,6 +36,8 @@ from .BaseFetcher import BaseFetcher
 from .exceptions import BadServerResponseError, MailAccountError, MailboxError
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from core.models.Account import Account
     from core.models.Email import Email
     from core.models.Mailbox import Mailbox
@@ -154,7 +156,7 @@ class JMAPFetcher(BaseFetcher):
         self,
         mailbox: Mailbox,
         criterion: FetchingCriterion = BaseFetcher.DEFAULT_FETCHING_CRITERION,
-    ) -> list[bytes]:
+    ) -> Generator[bytes]:
         super().fetch_emails(mailbox, criterion)
 
         self.logger.debug(
@@ -219,7 +221,6 @@ class JMAPFetcher(BaseFetcher):
             mailbox,
         )
 
-        email_data = []
         self.logger.debug("Downloading matching message blobs from %s ...", mailbox)
         for email in results[1].response.data:
             blob_url = self._mail_client.jmap_session.download_url.format(
@@ -236,9 +237,8 @@ class JMAPFetcher(BaseFetcher):
             except requests.RequestException as error:
                 self.logger.exception("Error connecting to %s!", self.account)
                 raise MailAccountError(error) from error
-            email_data.append(response.raw.data)
-            self.logger.debug("Successfully downloaded message blobs.")
-        return email_data
+            yield response.raw.data
+        self.logger.debug("Successfully downloaded message blobs.")
 
     @override
     def fetch_mailboxes(self) -> list[tuple[str, str]]:

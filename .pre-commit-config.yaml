@@ -20,7 +20,7 @@ repos:
       - id: black
         args: [--config, tools/black_config]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.9
+    rev: v0.15.10
     hooks:
       - id: ruff-check
         args: [--config, tools/ruff.toml]
@@ -36,7 +36,7 @@ repos:
       - id: djlint-django
         args: [--configuration, tools/djlintrc]
   - repo: https://github.com/python-poetry/poetry
-    rev: 2.3.3
+    rev: 2.3.4
     hooks:
       - id: poetry-lock
       - id: poetry-check
@@ -51,12 +51,12 @@ repos:
       - id: hadolint-docker
         args: [--config, tools/.hadolint.yaml]
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.4.10
+    rev: v2.4.11
     hooks:
       - id: biome-check
         args: [--config-path, tools/biome.json]
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 43.104.6
+    rev: 43.111.1
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/PyCQA/doc8

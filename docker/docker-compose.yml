@@ -1,5 +1,5 @@
 services:
-  db:
+  db: # this service name must match web:DATABASE_HOST if set
     image: mariadb:latest
     container_name: eonvelope-db
     volumes:
@@ -40,6 +40,7 @@ services:
       - ALLOWED_HOSTS=localhost,eonvelope.mydomain.tld # all allowed host URLs separated by ,
       # optional
       - DATABASE_TYPE=mysql # possible values: mysql, postgresql, sqlite3; must match the database type of the db container
+      - DATABASE_HOST=db # use this if your database container uses host name different from db
       - DATABASE_PORT= # use this if your database container does not use the default port
       - REGISTRATION_ENABLED=False
       - STRICT_PASSWORDS=True

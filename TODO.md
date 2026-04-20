@@ -9,7 +9,6 @@
 - notes field for models
 - tagging system with [taggit](https://django-taggit.readthedocs.io/en/latest/)
 - autotagging
-- fetch as generator, async parsing, sync saving
 - show pwd button
 - refine fetchererrors into errors for auth, connection, etc.
 - add gmail client support

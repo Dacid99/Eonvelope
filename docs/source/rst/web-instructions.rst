@@ -145,11 +145,6 @@ A list of these criteria can be found in the following section about routines.
 
 Depending on the number of mailboxes this may take a while.
 
-.. note::
-    The Exchange protocol is especially sluggish in accessing emails.
-    Please do not try to fetch more than 25 messages at once.
-    Doing so most certainly leads to a timeout and an error.
-
 
 Routine Setup
 ^^^^^^^^^^^^^

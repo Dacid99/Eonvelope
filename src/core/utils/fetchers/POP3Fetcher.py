@@ -32,6 +32,8 @@ from .exceptions import FetcherError, MailAccountError
 from .SafePOPMixin import SafePOPMixin
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from core.models.Account import Account
     from core.models.Email import Email
     from core.models.Mailbox import Mailbox
@@ -119,7 +121,7 @@ class POP3Fetcher(BaseFetcher, SafePOPMixin):
         self,
         mailbox: Mailbox,
         criterion: FetchingCriterion = BaseFetcher.DEFAULT_FETCHING_CRITERION,
-    ) -> list[bytes]:
+    ) -> Generator[bytes]:
         """Fetches and returns all maildata from the server.
 
         Args:
@@ -128,8 +130,8 @@ class POP3Fetcher(BaseFetcher, SafePOPMixin):
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
                 This arg ensures compatibility with the other fetchers.
 
-        Returns:
-            List of :class:`email.message.EmailMessage` mails in the mailbox.
+        Yields:
+            Mails in the mailbox.
 
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
@@ -148,7 +150,6 @@ class POP3Fetcher(BaseFetcher, SafePOPMixin):
         self.logger.info("Found %s messages in %s.", message_count, mailbox)
 
         self.logger.debug("Retrieving all messages in %s ...", mailbox)
-        mail_data_list = []
         for number in range(message_count):
             try:
                 _, message_data, _ = self.safe_retr(number + 1)
@@ -160,12 +161,9 @@ class POP3Fetcher(BaseFetcher, SafePOPMixin):
                     exc_info=True,
                 )
                 continue
-
             full_message = b"\n".join(message_data)
-            mail_data_list.append(full_message)
+            yield full_message
         self.logger.debug("Successfully fetched all messages in %s.", mailbox)
-
-        return mail_data_list
 
     @override
     def fetch_mailboxes(self) -> list[tuple[str, str]]:

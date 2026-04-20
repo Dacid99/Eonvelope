@@ -35,12 +35,24 @@ provided at `dockerhub <https://hub.docker.com/r/dacid99/eonvelope>`_.
 The Eonvelope service mounts 2 volumes,
 one for the logfiles of Eonvelope and one for the files that Eonvelope archives.
 
-.. Note::
+.. note::
     You can also mount all logfiles of the container by changing the path in the docker-compose.yml to /var/log.
     In that case you will have to give the directory 777 permissions, otherwise services will fail to start and log properly.
 
 It is recommended to use the minimal version of the docker-compose for the first time you deploy Eonvelope
 and to skim the docker settings section of the :doc:`configuration reference <configuration>` beforehand.
+
+In all container management systems you need to change at least the following variables:
+
+- Change the passwords on both the ``db`` and ``web`` container and make sure they match each other
+- Set a random sequence of characters for the ``SECRET_KEY``
+- Add your servers address to the ``ALLOWED_HOSTS`` list.
+
+Then you can spin Eonvelope up.
+
+.. important::
+    Also keep in mind that **Eonvelope is only accessible via https**,
+    you will get a cryptic browser error if you try to access via bare http.
 
 Docker
 ^^^^^^
@@ -104,7 +116,8 @@ using the `DATABASE_TYPE` environment variable.
 See :doc:`configuration` for more details on this.
 
 .. important::
-    It is crucial that the name of the database service in the stack is *db*!
+    It is crucial that the name of the database service in the stack is matches the DATABASE_HOST env setting!
+    The default is *db*.
     Otherwise the connection from the Eonvelope container to the database will fail.
 
 
@@ -123,6 +136,10 @@ to the eonvelope-web service and omitting the db portion of the stack.
 .. note::
    Using a database other than the default mysql can lead to issues.
    If possible try to stick with the default, which is tested and guaranteed to work flawlessly.
+
+In case your centralized database and eonvelope-web share a docker-network,
+you can simply set the *DATABASE_HOST* environment variable to match that database containers hostname.
+You can find more details on this in :doc:`the configuration page <configuration>`
 
 Known quirks
 """"""""""""

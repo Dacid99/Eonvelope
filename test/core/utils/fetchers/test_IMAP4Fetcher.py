@@ -476,7 +476,7 @@ def test_IMAP4Fetcher_fetch_emails__success__sort__single_batch(
         )
     ]
 
-    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+    result = list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert result == [
         content[1]
@@ -514,7 +514,7 @@ def test_IMAP4Fetcher_fetch_emails__success__sort__multi_batch(
         for item in mock_IMAP4.return_value.uid.side_effect("SORT")[1][0].split()
     ]
 
-    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+    result = list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert result == [
         content[1]
@@ -549,7 +549,7 @@ def test_IMAP4Fetcher_fetch_emails__success__search__single_batch(
         )
     ]
 
-    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+    result = list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert result == [
         content[1]
@@ -586,7 +586,7 @@ def test_IMAP4Fetcher_fetch_emails__success__search__multi_batch(
         for item in mock_IMAP4.return_value.uid.side_effect("SEARCH")[1][0].split()
     ]
 
-    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+    result = list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert result == [
         content[1]
@@ -616,7 +616,7 @@ def test_IMAP4Fetcher_fetch_emails__wrong_mailbox(
     wrong_mailbox = baker.make(Mailbox, account=fake_other_account)
 
     with pytest.raises(ValueError, match=re.compile("mailbox", re.IGNORECASE)):
-        IMAP4Fetcher(imap_mailbox.account).fetch_emails(wrong_mailbox)
+        list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(wrong_mailbox))
 
     mock_logger.error.assert_called()
 
@@ -627,8 +627,10 @@ def test_IMAP4Fetcher_fetch_emails__bad_criterion(imap_mailbox, mock_logger):
     in case of an unavailable criterion.
     """
     with pytest.raises(ValueError, match=re.compile("criterion", re.IGNORECASE)):
-        IMAP4Fetcher(imap_mailbox.account).fetch_emails(
-            imap_mailbox, FetchingCriterion("NONE")
+        list(
+            IMAP4Fetcher(imap_mailbox.account).fetch_emails(
+                imap_mailbox, FetchingCriterion("NONE")
+            )
         )
 
     mock_logger.error.assert_called()
@@ -656,7 +658,7 @@ def test_IMAP4Fetcher_fetch_emails__bad_response(
     getattr(mock_IMAP4.return_value, raising_function).side_effect = None
 
     with pytest.raises(MailboxError, match=fake_error_message):
-        IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+        list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert mock_IMAP4.return_value.select.call_count == expected_calls[0]
     if expected_calls[0]:
@@ -692,7 +694,7 @@ def test_IMAP4Fetcher_fetch_emails__exception(
     )
 
     with pytest.raises(MailboxError, match=fake_error_message):
-        IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+        list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert mock_IMAP4.return_value.select.call_count == expected_calls[0]
     if expected_calls[0]:
@@ -724,7 +726,7 @@ def test_IMAP4Fetcher_fetch_emails__bad_response__ignored(
     ]
     mock_IMAP4.return_value.unselect.return_value = ("NO", [b""])
 
-    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+    result = list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert result == [
         content[1]
@@ -759,7 +761,7 @@ def test_IMAP4Fetcher_fetch_emails__exception__ignored(
     ]
     mock_IMAP4.return_value.unselect.side_effect = AssertionError
 
-    result = IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox)
+    result = list(IMAP4Fetcher(imap_mailbox.account).fetch_emails(imap_mailbox))
 
     assert result == [
         content[1]

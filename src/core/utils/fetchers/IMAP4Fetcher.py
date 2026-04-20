@@ -38,6 +38,8 @@ from core.utils.mail_parsing import parse_IMAP_mailbox_data
 from .BaseFetcher import BaseFetcher
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from core.models.Account import Account
     from core.models.Email import Email
     from core.models.Mailbox import Mailbox
@@ -158,20 +160,16 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         self,
         mailbox: Mailbox,
         criterion: FetchingCriterion = BaseFetcher.DEFAULT_FETCHING_CRITERION,
-    ) -> list[bytes]:
+    ) -> Generator[bytes]:
         """Fetches and returns maildata from a mailbox based on a given criterion.
-
-        Todo:
-            Rewrite this into a generator.
 
         Args:
             mailbox: Database model of the mailbox to fetch data from.
             criterion: Formatted criterion to filter mails in the IMAP request.
                 Defaults to :attr:`eonvelope.MailFetchingCriteria.ALL`.
 
-        Returns:
-            List of mails in the mailbox matching the criterion as :class:`bytes`.
-            Empty if no such messages are found.
+        Yields:
+            Mails in the mailbox matching the criterion as :class:`bytes`.
 
         Raises:
             ValueError: If the :attr:`mailbox` does not belong to :attr:`self.account`.
@@ -204,7 +202,6 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
         )
 
         self.logger.debug("Fetching %s messages in %s ...", search_criterion, mailbox)
-        mail_data_list = []
         message_uid_list = message_uids[0].split()
         for uids in batched(
             message_uid_list, self.EMAIL_FETCH_BATCH_SIZE, strict=False
@@ -219,7 +216,8 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
                     exc_info=True,
                 )
                 continue
-            mail_data_list.extend([message for _, message in message_data[::2]])
+            for _, message in message_data[::2]:
+                yield message
         self.logger.debug(
             "Successfully fetched %s messages from %s.",
             search_criterion,
@@ -235,8 +233,6 @@ class IMAP4Fetcher(BaseFetcher, SafeIMAPMixin):
             search_criterion,
             mailbox,
         )
-
-        return mail_data_list
 
     @override
     def fetch_mailboxes(self) -> list[tuple[str, str]]:

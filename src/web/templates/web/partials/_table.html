@@ -10,7 +10,7 @@
                     <th {{ column.attrs.th.as_html }} scope="col">
                         {% if column.orderable %}
                             <a class="link-body-emphasis link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                               href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">
+                               href="{% querystring_replace table.prefixed_order_by_field=column.order_by_alias.next %}">
                                 {{ column.header }}
                             </a>
                         {% else %}
@@ -31,7 +31,7 @@
                     <th {{ column.attrs.th.as_html }} scope="col">
                         {% if column.orderable %}
                             <a class="link-body-emphasis link-offset-2 link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
-                               href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}">
+                               href="{% querystring_replace table.prefixed_order_by_field=column.order_by_alias.next %}">
                                 {{ column.header }}
                             </a>
                         {% else %}

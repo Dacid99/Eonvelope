@@ -28,6 +28,7 @@ from core.constants import EmailFetchingCriterionChoices
 from core.utils import FetchingCriterion
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
     from types import TracebackType
 
     from core.models.Account import Account
@@ -92,7 +93,7 @@ class BaseFetcher(ABC):
         self,
         mailbox: Mailbox,
         criterion: FetchingCriterion = DEFAULT_FETCHING_CRITERION,
-    ) -> list[bytes]:
+    ) -> Generator[bytes]:
         """Fetches emails based on a criterion from the server.
 
         Args:
@@ -100,9 +101,8 @@ class BaseFetcher(ABC):
             criterion: Formatted criterion to filter mails by.
                 Defaults to :attr:`core.constants.EmailFetchingCriterionChoices.ALL`.
 
-        Returns:
-            List of mails in the mailbox matching the criterion as :class:`bytes`.
-            Empty if no such messages are found.
+        Yields:
+            Mails in the mailbox matching the criterion as :class:`bytes`.
 
         Raises:
             ValueError: If the :attr:`fetching_criterion` is not available for this fetcher.

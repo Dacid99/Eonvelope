@@ -55,6 +55,9 @@ Your emails are serious business, so this projects codebase has > 95% test-cover
 
 The project is intended to be run with the container image provided at [dockerhub][dockerhub].
 
+To access your new instance please make sure to use *https*,
+as Eonvelope comes with a default certificate.
+
 ### Docker
 
 Use *docker compose* using [the compose file](docker/docker-compose.minimal.yml) or an equivalent *docker run* command.

@@ -16,20 +16,31 @@ Next take this docker-compose file and adapt the environment settings that need 
    :caption: docker-compose.yml
 
 For security reasons please change all passwords and the ``SECRET_KEY``.
+Don't forget to add your server address (internal-ip and/or domain-based) to the ``ALLOWED_HOSTS`` list.
+
+You also must add the IP or domain that Eonvelope will be available at to the ``ALLOWES_HOSTS`` list.
 
 If your device is low on compute power and system resources, you may prefer to use the slim version of the docker-compose file instead.
 This will only run the core of the application in the docker container, excluding some additional components mostly aimed at development.
 
 Now you can start the docker stack with ``docker compose up -d``.
-Or you use a container management platform like  `portainer <https://www.portainer.io/>`_, `dockge <https://dockge.kuma.pet/>`_ or many others.
+Or you use a container management platform like
+`portainer <https://www.portainer.io/>`_, `dockge <https://dockge.kuma.pet/>`_ or many others.
 
-After the container is up you can access the webapp at *https://localhost:1122/*.
+After the container is up you can access the webapp at *https://<your_server_ip>:1122*,
+or *https://localhost:1122/* if you host on your local machine.
+
+.. important::
+    Make sure that the url starts with *https://*, as Eonvelope comes with a default SSL certificate.
 
 The credentials for the default admin account are *admin* and the value of ``DJANGO_SUPERUSER_PASSWORD`` you set in the docker-compose file.
 Using this account you can then create the user accounts and configure the instance.
 If you want users to sign up themselves, set the docker environment variable ``REGISTRATION_ENABLED`` to *True*.
 
-For a full information about the administration of the instance and how to create user accounts
+Further Reading
+---------------
+
+For full information about the administration of the instance and how to create user accounts
 check out the :doc:`admin instructions <admin-instructions>`.
 
 For a detailed overview of the available settings
@@ -38,7 +49,7 @@ see the :doc:`configurations documentation <configuration>`.
 If you need help with how to use the application refer
 to the :doc:`user manual <instructions>`.
 
-There are other ways you can run Eonvelope,
+There are other ways you can run Eonvelope besides docker,
 please see :doc:`the installation guide <installation>` for details.
 
 In case you encounter a problem or have further questions, check the :doc:`FAQ <faq>`.

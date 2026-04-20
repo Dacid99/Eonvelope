@@ -24,40 +24,102 @@ spec:
     spec:
       containers:
         - env:
-            - name: ALLOWED_HOSTS
-              value: localhost,eonvelope.mydomain.tld
-            - name: APP_LOG_LEVEL
-              value: DEBUG
-            - name: CELERY_LOG_LEVEL
-              value: INFO
             - name: DATABASE
               value: email_archive_django
-            - name: DATABASE_PASSWORD
-              value: passwd
             - name: DATABASE_USER
               value: user
-            - name: DEBUG
-              value: "False"
-            - name: DJANGO_LOG_LEVEL
-              value: INFO
+            - name: DATABASE_PASSWORD
+              value: passwd
             - name: DJANGO_SUPERUSER_PASSWORD
               value: rootqwertz123
-            - name: GUNICORN_WORKER_NUMBER
-              value: "2"
-            - name: LOGFILE_BACKUP_NUMBER
-              value: "5"
-            - name: LOGFILE_MAXSIZE
-              value: "10485760"
-            - name: RECONNECT_DELAY
-              value: "10"
-            - name: RECONNECT_RETRIES
-              value: "10"
-            - name: REGISTRATION_ENABLED
-              value: "False"
             - name: SECRET_KEY
-              value: '''PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!'''
+              value: "PLEASE_REPLACE_ME_WITH_THE_OUTPUT_OF_A_STRONG_RANDOM_GENERATOR!"
+            - name: ALLOWED_HOSTS
+              value: localhost,eonvelope.mydomain.tld
+            - name: DATABASE_TYPE
+              value: mysql
+            - name: DATABASE_HOST
+              value: db
+            - name: DATABASE_PORT
+              value:
+            - name: REGISTRATION_ENABLED
+              value: False
             - name: STRICT_PASSWORDS
-              value: "True"
+              value: True
+            - name: ACCOUNT_LOGIN_TIMEOUT
+              value: 900
+            - name: ACCOUNT_USERNAME_BLACKLIST
+              value: []
+            - name: ACCOUNT_USERNAME_MIN_LENGTH
+              value: 1
+            - name: ACCOUNT_SESSION_REMEMBER
+              value:
+            - name: ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE
+              value: False
+            - name: ACCOUNT_REAUTHENTICATION_TIMEOUT
+              value: 300
+            - name: ACCOUNT_REAUTHENTICATION_REQUIRED
+              value: False
+            - name: USERSESSIONS_KEEP_UPDATED
+              value: True
+            - name: MFA_TOTP_ISSUER
+              value: Eonvelope
+            - name: MFA_TOTP_TOLERANCE
+              value: 1
+            - name: MFA_TOTP_PERIOD
+              value: 30
+            - name: MFA_TOTP_DIGITS
+              value: 6
+            - name: MFA_RECOVERY_CODE_COUNT
+              value: 10
+            - name: MFA_RECOVERY_CODE_DIGITS
+              value: 8
+            - name: MFA_TRUST_ENABLED
+              value: True
+            - name: MFA_TRUST_COOKIE_AGE
+              value: 2419200
+            - name: MFA_TRUST_COOKIE_SAMESITE
+              value: Lax
+            - name: APP_LOG_LEVEL
+              value: INFO
+            - name: DJANGO_LOG_LEVEL
+              value: INFO
+            - name: CELERY_LOG_LEVEL
+              value: INFO
+            - name: AMQP_LOG_LEVEL
+              value: INFO
+            - name: LOGFILE_MAXSIZE
+              value: 10485760
+            - name: LOGFILE_BACKUP_NUMBER
+              value: 5
+            - name: CACHE_MIDDLEWARE_SECONDS
+              value: 600
+            - name: SECURE_HSTS_SECONDS
+              value: 31536000
+            - name: DISALLOWED_USER_AGENTS
+              value: .*Trident/.*
+            - name: CSRF_TRUSTED_ORIGINS
+              value: https://subdomain.mydomain.tld
+            - name: CSRF_COOKIE_AGE
+              value: 31449600
+            - name: CSRF_COOKIE_SAMESITE
+              value: Lax
+            - name: LANGUAGE_COOKIE_AGE
+              value: 2419200
+            - name: LANGUAGE_COOKIE_SAMESITE
+              value: None
+            - name: SESSION_COOKIE_AGE
+              value: 2419200
+            - name: SESSION_EXPIRE_AT_BROWSER_CLOSE
+              value: False
+            - name: SESSION_COOKIE_SAMESITE
+              value: Lax
+            - name: GUNICORN_WORKER_NUMBER
+              value: 2
+            - name: ENABLE_FLOWER
+              value: False
+            - name: DEBUG
+              value: False
           image: eonvelope
           name: eonvelope-web
           ports:

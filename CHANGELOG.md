@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 0.6.0
+
+- Features:
+  - optimize memory usage during email fetching task
+  - fetch from Exchange in batches to circumvent timeouts
+
+## Version 0.5.6
+
+- Features:
+  - docker env settings for database host and port
+
 ## Version 0.5.5
 
 - Features:

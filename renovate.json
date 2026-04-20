@@ -2,7 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:best-practices",
-    ":automergeDisabled",
     ":assignee(@Dacid99)",
     ":configMigration",
     ":disableDigestUpdates",
@@ -26,7 +25,9 @@
   ],
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["at any time"]
+    "schedule": ["at any time"],
+    "autoApprove": true,
+    "automerge": true
   },
   "packageRules": [
     {
@@ -59,7 +60,9 @@
     {
       "matchManagers": ["pre-commit"],
       "groupName": "all pre-commit releases",
-      "groupSlug": "pre-commit"
+      "groupSlug": "pre-commit",
+      "autoApprove": true,
+      "automerge": true
     }
   ]
 }

@@ -26,7 +26,6 @@
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["at any time"],
-    "autoApprove": true,
     "automerge": true
   },
   "packageRules": [
@@ -61,7 +60,6 @@
       "matchManagers": ["pre-commit"],
       "groupName": "all pre-commit releases",
       "groupSlug": "pre-commit",
-      "autoApprove": true,
       "automerge": true
     }
   ]

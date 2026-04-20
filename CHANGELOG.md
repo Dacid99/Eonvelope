@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 0.6.0
+
+- Features:
+  - optimize memory usage during email fetching task
+  - fetch from Exchange in batches to circumvent timeouts
+
 ## Version 0.5.6
 
 - Features:

@@ -27,7 +27,10 @@ from jmapc import EmailQueryFilterCondition
 
 from core.constants import EmailFetchingCriterionChoices
 from core.utils import FetchingCriterion
-from test.core.utils.fetchers.test_ExchangeFetcher import mock_QuerySet
+from test.core.utils.fetchers.test_ExchangeFetcher import (
+    mock_filtered_QuerySet,
+    mock_QuerySet,
+)
 
 
 def test_FetchingCriterion__init__(faker):

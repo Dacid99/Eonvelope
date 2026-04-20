@@ -64,15 +64,29 @@ def mock_Message(mocker, mock_message):
 
 
 @pytest.fixture
-def mock_QuerySet(mocker, mock_message):
+def mock_QuerySet(mocker, mock_message, mock_filtered_QuerySet):
     """Mocks an :class:`exchangelib.queryset.QuerySet` with mocked :class:`exchangelib.Message`s."""
     mock_QuerySet = mocker.MagicMock(spec=exchangelib.queryset.QuerySet)
-    queryset_content = [mock_message, mock_message]
+    queryset_content = [mock_message] * 5
     mock_QuerySet.__iter__.return_value = queryset_content
+    mock_QuerySet.__getitem__ = lambda _, s: queryset_content[s]
     mock_QuerySet.order_by.return_value = mock_QuerySet
-    mock_QuerySet.all.return_value.__iter__.return_value = queryset_content
-    mock_QuerySet.filter.return_value.__iter__.return_value = queryset_content[:1]
+    mock_QuerySet.all.return_value = mock_QuerySet
+    mock_QuerySet.filter.return_value = mock_filtered_QuerySet
     return mock_QuerySet
+
+
+@pytest.fixture
+def mock_filtered_QuerySet(mocker, mock_message):
+    """Mocks a filtered :class:`exchangelib.queryset.QuerySet` with mocked :class:`exchangelib.Message`s."""
+    mock_filtered_QuerySet = mocker.MagicMock(spec=exchangelib.queryset.QuerySet)
+    filtered_queryset_content = [mock_message] * 3
+    mock_filtered_QuerySet.__iter__.return_value = filtered_queryset_content
+    mock_filtered_QuerySet.__getitem__ = lambda _, s: filtered_queryset_content[s]
+    mock_filtered_QuerySet.order_by.return_value = mock_filtered_QuerySet
+    mock_filtered_QuerySet.all.return_value = mock_filtered_QuerySet
+    mock_filtered_QuerySet.filter.return_value = mock_filtered_QuerySet
+    return mock_filtered_QuerySet
 
 
 @pytest.fixture
@@ -503,8 +517,8 @@ def test_ExchangeFetcher_test_mailbox__other_exception(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_all__success(
-    exchange_mailbox, mock_logger, mock_QuerySet, mock_msg_folder_root
+def test_ExchangeFetcher_fetch_emails_all__success__single_batch(
+    exchange_mailbox, mock_logger, mock_QuerySet, mock_msg_folder_root, mock_Folder
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
     in case of success.
@@ -515,7 +529,38 @@ def test_ExchangeFetcher_fetch_emails_all__success(
 
     assert result == [item.mime_content for item in mock_QuerySet.__iter__.return_value]
     mock_QuerySet.order_by.assert_called_once_with("datetime_received")
+    mock_Folder.all.assert_called_once_with()
     mock_msg_folder_root.__truediv__.assert_called_once_with(exchange_mailbox.name)
+    mock_msg_folder_root.__truediv__.return_value.__truediv__.assert_not_called()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_fetch_emails_all__success__multi_batch(
+    monkeypatch,
+    exchange_mailbox,
+    mock_logger,
+    mock_QuerySet,
+    mock_msg_folder_root,
+    mock_Folder,
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
+    in case of success.
+    """
+    monkeypatch.setattr(ExchangeFetcher, "EMAIL_FETCH_BATCH_SIZE", 2)
+
+    result = list(
+        ExchangeFetcher(exchange_mailbox.account).fetch_emails(exchange_mailbox)
+    )
+
+    assert result == [item.mime_content for item in mock_QuerySet.__iter__.return_value]
+    mock_QuerySet.order_by.assert_called_with("datetime_received")
+    assert mock_QuerySet.order_by.call_count == 3
+    assert mock_Folder.all.call_count == 3
+    mock_msg_folder_root.__truediv__.assert_called_with(exchange_mailbox.name)
     mock_msg_folder_root.__truediv__.return_value.__truediv__.assert_not_called()
     mock_logger.debug.assert_called()
     mock_logger.info.assert_called()
@@ -551,8 +596,8 @@ def test_ExchangeFetcher_fetch_emails_subfolder_all__success(
 
 
 @pytest.mark.django_db
-def test_ExchangeFetcher_fetch_emails_filter__success(
-    exchange_mailbox, mock_logger, mock_QuerySet
+def test_ExchangeFetcher_fetch_emails_filter__success__single_batch(
+    exchange_mailbox, mock_logger, mock_QuerySet, mock_Folder
 ):
     """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
     in case of success with a criterion other than ALL.
@@ -568,6 +613,34 @@ def test_ExchangeFetcher_fetch_emails_filter__success(
         for item in mock_QuerySet.filter.return_value.__iter__.return_value
     ]
     mock_QuerySet.filter.assert_called_once_with(is_draft=True)
+    mock_Folder.all.assert_called_once_with()
+    mock_logger.debug.assert_called()
+    mock_logger.info.assert_called()
+    mock_logger.exception.assert_not_called()
+    mock_logger.error.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_ExchangeFetcher_fetch_emails_filter__success__multi_batch(
+    monkeypatch, exchange_mailbox, mock_logger, mock_QuerySet, mock_Folder
+):
+    """Tests :func:`core.utils.fetchers.ExchangeFetcher.fetch_emails`
+    in case of success with a criterion other than ALL.
+    """
+    monkeypatch.setattr(ExchangeFetcher, "EMAIL_FETCH_BATCH_SIZE", 2)
+    result = list(
+        ExchangeFetcher(exchange_mailbox.account).fetch_emails(
+            exchange_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DRAFT)
+        )
+    )
+
+    assert result == [
+        item.mime_content
+        for item in mock_QuerySet.filter.return_value.__iter__.return_value
+    ]
+    mock_QuerySet.filter.assert_called_with(is_draft=True)
+    assert mock_QuerySet.order_by.call_count == 2
+    assert mock_Folder.all.call_count == 2
     mock_logger.debug.assert_called()
     mock_logger.info.assert_called()
     mock_logger.exception.assert_not_called()

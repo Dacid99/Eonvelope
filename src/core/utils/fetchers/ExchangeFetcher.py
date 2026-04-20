@@ -33,6 +33,7 @@ from core.constants import (
     EmailProtocolChoices,
 )
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from core.utils.iterations import slices
 from eonvelope.utils.workarounds import get_config
 
 from .BaseFetcher import BaseFetcher
@@ -73,6 +74,8 @@ class ExchangeFetcher(BaseFetcher):
     Constructed analogous to the IMAP4 criteria.
     Must be immutable!
     """
+
+    EMAIL_FETCH_BATCH_SIZE = 20
 
     @override
     def __init__(self, account: Account) -> None:
@@ -214,11 +217,16 @@ class ExchangeFetcher(BaseFetcher):
         )
         try:
             mailbox_folder = self.open_mailbox(mailbox)
-            mail_query = criterion.as_exchange_queryset(
-                mailbox_folder.all().order_by("datetime_received")
-            )
-            for mail in mail_query:
-                yield mail.mime_content
+            for query_slice in slices(0, self.EMAIL_FETCH_BATCH_SIZE):
+                mail_query_result = list(
+                    criterion.as_exchange_queryset(
+                        mailbox_folder.all().order_by("datetime_received")
+                    )[query_slice]
+                )
+                for mail in mail_query_result:
+                    yield mail.mime_content
+                if len(mail_query_result) < self.EMAIL_FETCH_BATCH_SIZE:
+                    break
         except exchangelib.errors.EWSError as error:
             self.logger.exception("Error during fetching of mail contents!")
             raise MailboxError(error, _("fetching of mail contents")) from error

@@ -45,8 +45,9 @@ class ShardedFileSystemStorage(FileSystemStorage):
     @override
     def delete(self, name: str) -> None:
         """Extended method for deleting files in a storage directory."""
-        storage_shard = StorageShard.objects.get(
-            shard_directory_name=os.path.dirname(name)
-        )
-        super().delete(name)
-        storage_shard.decrement_file_count()
+        if self.exists(name):
+            storage_shard = StorageShard.objects.get(
+                shard_directory_name=os.path.dirname(name)
+            )
+            super().delete(name)
+            storage_shard.decrement_file_count()

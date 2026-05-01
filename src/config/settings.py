@@ -158,13 +158,13 @@ CACHE_MIDDLEWARE_SECONDS = env("CACHE_MIDDLEWARE_SECONDS", cast=int, default=600
 ### Storage
 # https://docs.djangoproject.com/en/5.2/ref/settings/#storages
 
-STORAGE_PATH = "/mnt/archive"
+STORAGE_PATH = Path("/mnt/archive")
 
 STORAGES = {
     "default": {
         "BACKEND": "core.backends.ShardedFileSystemStorage.ShardedFileSystemStorage",
         "OPTIONS": {
-            "location": STORAGE_PATH,
+            "location": str(STORAGE_PATH),
         },
     },
     "staticfiles": {

@@ -26,6 +26,7 @@ from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 
 from .models.Daemon import Daemon
+from .models.Mailbox import Mailbox
 
 
 @shared_task
@@ -58,3 +59,23 @@ def fetch_emails(  # this must not be renamed or moved, otherwise existing daemo
             daemon.mailbox.set_unhealthy(exc)
         raise
     daemon.set_healthy()
+
+
+@shared_task
+def process_emails_file(file_path: str, file_format: str, mailbox_id: int) -> None:
+    """Celery task to process uploaded emails.
+
+    Args:
+        file_path: The path to the file to process.
+        file_format: The format of the file.
+        mailbox_id: The id of the mailbox to add the emails to.
+
+    Raises:
+        Exception: Any exception that is raised during fetching.
+    """
+    try:
+        mailbox = Mailbox.objects.get(id=mailbox_id)
+    except Mailbox.DoesNotExist:
+        return
+    with open(file_path, "br") as file:
+        mailbox.add_emails_from_file(file, file_format)

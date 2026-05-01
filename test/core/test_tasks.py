@@ -18,9 +18,14 @@
 
 """Test file for :mod:`core.tasks`."""
 
-import pytest
+import re
+from tempfile import NamedTemporaryFile
 
-from core.tasks import fetch_emails
+import pytest
+from pyfakefs.fake_filesystem_unittest import Pause
+
+from core.constants import SupportedEmailUploadFormats
+from core.tasks import fetch_emails, process_emails_file
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from test.conftest import TEST_EMAIL_PARAMETERS
 
@@ -162,3 +167,45 @@ def test_fetch_emails_task_ValueError(
     assert fake_daemon.mailbox.emails.count() == 0
     assert fake_daemon.is_healthy is False
     assert fake_error_message in fake_daemon.last_error
+
+
+def test_process_emails_file__success(fake_fs, fake_mailbox):
+    """Tests :func:`core.tasks.process_emails_file`
+    in case of success.
+    """
+    with Pause(fake_fs), open(TEST_EMAIL_PARAMETERS[0][0], "rb") as test_email:
+        eml_data = test_email.read()
+
+    assert fake_mailbox.emails.count() == 0
+
+    with NamedTemporaryFile() as tempfile:
+        tempfile.write(eml_data)
+        tempfile.seek(0)
+
+        process_emails_file(
+            file_path=tempfile.name,
+            file_format=SupportedEmailUploadFormats.EML.value,
+            mailbox_id=fake_mailbox.pk,
+        )
+
+    assert fake_mailbox.emails.count() == 1
+
+
+def test_process_emails_file__bad_format(fake_fs, fake_file_bytes, fake_mailbox):
+    """Tests :func:`core.tasks.process_emails_file`
+    in case of a bad fileformat.
+    """
+    assert fake_mailbox.emails.count() == 0
+
+    with NamedTemporaryFile() as tempfile:
+        tempfile.write(fake_file_bytes)
+        tempfile.seek(0)
+
+        with pytest.raises(ValueError, match=re.compile("format", re.IGNORECASE)):
+            process_emails_file(
+                file_path=tempfile.name,
+                file_format="not implemented",
+                mailbox_id=fake_mailbox.pk,
+            )
+
+    assert fake_mailbox.emails.count() == 0

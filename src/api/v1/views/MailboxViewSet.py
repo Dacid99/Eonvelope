@@ -20,8 +20,10 @@
 
 from __future__ import annotations
 
+from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, Final, override
 
+from celery import current_app
 from django.http import FileResponse, Http404
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
@@ -458,15 +460,22 @@ class MailboxViewSet(
         )  # this must be called first to return 404 for missing authentication even if the data is invalid
         upload_serializer = UploadEmailSerializer(data=request.data)
         upload_serializer.is_valid(raise_exception=True)
-        try:
-            mailbox.add_emails_from_file(
-                upload_serializer.validated_data["file"],
-                upload_serializer.validated_data["file_format"],
-            )
-        except ValueError as error:
-            raise ValidationError(
-                {"file": str(error)},
-            ) from None
+        with NamedTemporaryFile() as tempfile:
+            tempfile.write(upload_serializer.validated_data["file"].read())
+            tempfile.seek(0)
+            try:
+                current_app.send_task(
+                    "core.tasks.process_emails_file",
+                    args=[
+                        tempfile.name,
+                        upload_serializer.validated_data["file_format"],
+                        mailbox.pk,
+                    ],
+                ).get()
+            except ValueError as error:
+                raise ValidationError(
+                    {"file": str(error)},
+                ) from None
         mailbox_serializer = self.get_serializer(mailbox)
         return Response(
             {

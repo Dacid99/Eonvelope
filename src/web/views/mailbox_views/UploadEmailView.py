@@ -20,8 +20,10 @@
 
 from __future__ import annotations
 
+from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, override
 
+from celery import current_app
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DetailView
 from django.views.generic.edit import FormView
@@ -70,13 +72,22 @@ class UploadEmailView(LoginRequiredMixin, DetailView, FormView):
         file = form.cleaned_data["file"]
         file_format = form.cleaned_data["file_format"]
         self.object = self.get_object()  # required to reconcile FormView and DetailView
-        try:
-            self.object.add_emails_from_file(file, file_format)
-        except ValueError as error:
-            form.add_error("file", str(error))
-            return self.form_invalid(form)
-        else:
-            return super().form_valid(form)
+        with NamedTemporaryFile() as tempfile:
+            tempfile.write(file.read())
+            tempfile.seek(0)
+            try:
+                current_app.send_task(
+                    "core.tasks.process_emails_file",
+                    args=[
+                        tempfile.name,
+                        file_format,
+                        self.object.pk,
+                    ],
+                ).get()
+            except ValueError as error:
+                form.add_error("file", str(error))
+                return self.form_invalid(form)
+        return super().form_valid(form)
 
     @override
     def form_invalid(self, form: UploadEmailForm) -> HttpResponse:

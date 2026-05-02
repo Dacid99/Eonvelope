@@ -24,8 +24,10 @@ import asyncio
 import os
 
 import pytest
+from django.core.files.storage import default_storage
 from health_check import Storage
 
+from config.settings import STORAGE_PATH
 from core.models import StorageShard
 
 
@@ -71,12 +73,9 @@ def test_Storage_healthcheck_filled_storage(settings):
     """Tests the correct initial allocation of storage by :class:`core.models.Storage.Storage`."""
     for index in range(2 * 3 + 2):
         storage = StorageShard.get_current_storage()
-        with open(
-            os.path.join(
-                settings.STORAGE_PATH, str(storage.shard_directory_name), str(index)
-            ),
-            "w",
-        ) as dummy_file:
+        with (
+            settings.STORAGE_PATH / str(storage.shard_directory_name) / str(index)
+        ).open("w") as dummy_file:
             dummy_file.write("Some content")
         storage.increment_file_count()
 
@@ -100,7 +99,7 @@ def test_Storage_health_check__duplicate_current(mock_logger):
 @pytest.mark.django_db
 def test_Storage_health_check_file_in_storage_root(settings, mock_logger):
     """Tests the storage healthcheck in case of dirty storage."""
-    with open(os.path.join(settings.STORAGE_PATH, "file"), "w") as dummy_file:
+    with (settings.STORAGE_PATH / "file").open("w") as dummy_file:
         dummy_file.write("Some content")
 
     health = StorageShard.healthcheck()
@@ -113,7 +112,7 @@ def test_Storage_health_check_file_in_storage_root(settings, mock_logger):
 def test_Storage_health_check__missing_dir(settings, mock_logger):
     """Tests the storage healthcheck in case of a directory missing in the storage."""
     storage = StorageShard.get_current_storage()
-    os.rmdir(os.path.join(settings.STORAGE_PATH, str(storage.shard_directory_name)))
+    (settings.STORAGE_PATH / str(storage.shard_directory_name)).rmdir()
 
     health = StorageShard.healthcheck()
 
@@ -122,12 +121,38 @@ def test_Storage_health_check__missing_dir(settings, mock_logger):
 
 
 @pytest.mark.django_db
-def test_DefaultStorageStorageHealthCheck():
+def test_DefaultStorageStorageHealthCheck_empty_storage(fake_fs):
     """Tests django-healthchecks Storage health-check
     impact on the StorageShard table.
     """
+    current_storage_path = STORAGE_PATH / str(
+        StorageShard.get_current_storage().shard_directory_name
+    )
+
+    assert len(list(current_storage_path.iterdir())) == 0
     assert StorageShard.get_current_storage().file_count == 0
 
     Storage().run()
 
+    assert len(list(current_storage_path.iterdir())) == 0
     assert StorageShard.get_current_storage().file_count == 0
+
+
+@pytest.mark.django_db
+def test_DefaultStorageStorageHealthCheck_filled_storage(faker, fake_fs, fake_file):
+    """Tests django-healthchecks Storage health-check
+    impact on the StorageShard table.
+    """
+    default_storage.save(faker.file_name(), fake_file)
+    default_storage.save(faker.file_name(), fake_file)
+    current_storage_path = STORAGE_PATH / str(
+        StorageShard.get_current_storage().shard_directory_name
+    )
+
+    assert len(list(current_storage_path.iterdir())) == 2
+    assert StorageShard.get_current_storage().file_count == 2
+
+    Storage().run()
+
+    assert len(list(current_storage_path.iterdir())) == 2
+    assert StorageShard.get_current_storage().file_count == 2

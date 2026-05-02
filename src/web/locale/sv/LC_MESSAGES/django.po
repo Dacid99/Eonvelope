@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 13:24+0000\n"
+"POT-Creation-Date: 2026-05-02 12:09+0000\n"
 "PO-Revision-Date: 2025-12-31 20:15+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/eonvelope/web/sv/"
@@ -649,7 +649,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10
+#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
 msgid "Day"
 msgstr ""
 
@@ -668,6 +668,7 @@ msgstr ""
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
+#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr ""
 
@@ -681,7 +682,7 @@ msgid "Week #"
 msgstr ""
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10
+#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
 msgid "Year"
 msgstr ""
 
@@ -961,6 +962,7 @@ msgid "End edit"
 msgstr ""
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
+#: src/web/utils/columns.py:89
 msgid "Favorite"
 msgstr ""
 
@@ -1165,11 +1167,11 @@ msgstr ""
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
 #, python-format
 msgid "Fetching failed: %(error)s"
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:114
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:116
 msgid "Fetching successful"
 msgstr ""

@@ -18,14 +18,13 @@
 
 """Test module for the :class:`UploadEmailView` view class."""
 
+import os
+
 import pytest
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework import status
 
 from core.constants import SupportedEmailUploadFormats
-from test.api.v1.views.test_MailboxViewSet_custom_actions import (
-    mock_Mailbox_add_emails_from_file,
-)
 from web.views import UploadEmailView
 
 
@@ -33,6 +32,14 @@ from web.views import UploadEmailView
 def email_upload_payload(fake_file):
     """Random email file upload payload."""
     return {"file_format": "eml", "file": fake_file}
+
+
+@pytest.fixture
+def mock_celery_app(mocker):
+    """Patches the celery current app."""
+    return mocker.patch(
+        "web.views.mailbox_views.UploadEmailView.current_app", autospec=True
+    )
 
 
 @pytest.mark.django_db
@@ -84,7 +91,7 @@ def test_post_upload__noauth(
     client,
     detail_url,
     login_url,
-    mock_Mailbox_add_emails_from_file,
+    mock_celery_app,
     email_upload_payload,
 ):
     """Tests :class:`web.views.UploadEmailView` with an unauthenticated user client."""
@@ -96,7 +103,7 @@ def test_post_upload__noauth(
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(login_url)
     assert response.url.endswith(f"?next={detail_url(UploadEmailView, fake_mailbox)}")
-    mock_Mailbox_add_emails_from_file.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -104,7 +111,7 @@ def test_post_upload__auth_other(
     fake_mailbox,
     other_client,
     detail_url,
-    mock_Mailbox_add_emails_from_file,
+    mock_celery_app,
     email_upload_payload,
 ):
     """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
@@ -114,7 +121,7 @@ def test_post_upload__auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    mock_Mailbox_add_emails_from_file.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -123,11 +130,21 @@ def test_post_upload_mailbox__auth_owner(
     fake_mailbox,
     owner_client,
     detail_url,
-    mock_Mailbox_add_emails_from_file,
+    mock_celery_app,
     email_upload_payload,
     file_format,
 ):
     """Tests :class:`web.views.UploadEmailView` with the authenticated owner user client."""
+
+    def check_file_arg(*args, **kwargs):
+        filepath_argument = kwargs["args"][0]
+        assert os.path.exists(filepath_argument)
+        with open(filepath_argument, "rb") as file:
+            email_upload_payload["file"].seek(0)
+            assert file.read() == email_upload_payload["file"].read()
+        return mock_celery_app.send_task.return_value
+
+    mock_celery_app.send_task.side_effect = check_file_arg
     email_upload_payload["file_format"] = file_format
 
     response = owner_client.post(
@@ -137,17 +154,15 @@ def test_post_upload_mailbox__auth_owner(
     assert response.status_code == status.HTTP_302_FOUND
     assert isinstance(response, HttpResponseRedirect)
     assert response.url.startswith(fake_mailbox.get_absolute_url())
-    mock_Mailbox_add_emails_from_file.assert_called_once()
-    assert mock_Mailbox_add_emails_from_file.call_args.args[0] == fake_mailbox
-    assert len(mock_Mailbox_add_emails_from_file.captured_streams) == 1
+    mock_celery_app.send_task.assert_called_once()
     assert (
-        mock_Mailbox_add_emails_from_file.captured_streams[0]
-        == email_upload_payload["file"].getvalue()
+        mock_celery_app.send_task.call_args.args[0] == "core.tasks.process_emails_file"
     )
     assert (
-        mock_Mailbox_add_emails_from_file.call_args.args[2]
+        mock_celery_app.send_task.call_args.kwargs["args"][1]
         == email_upload_payload["file_format"]
     )
+    assert mock_celery_app.send_task.call_args.kwargs["args"][2] == fake_mailbox.pk
 
 
 @pytest.mark.django_db
@@ -155,7 +170,7 @@ def test_post_upload__auth_owner__bad_format(
     fake_mailbox,
     owner_client,
     detail_url,
-    mock_Mailbox_add_emails_from_file,
+    mock_celery_app,
     email_upload_payload,
 ):
     """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
@@ -172,7 +187,7 @@ def test_post_upload__auth_owner__bad_format(
     assert "form" in response.context
     assert response.context["form"].errors
     assert "mailbox" in response.context
-    mock_Mailbox_add_emails_from_file.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -180,11 +195,11 @@ def test_post_upload__auth_owner__bad_file(
     fake_mailbox,
     owner_client,
     detail_url,
-    mock_Mailbox_add_emails_from_file,
+    mock_celery_app,
     email_upload_payload,
 ):
     """Tests :class:`web.views.UploadEmailView` with the authenticated other user client."""
-    mock_Mailbox_add_emails_from_file.side_effect = ValueError
+    mock_celery_app.send_task.return_value.get.side_effect = ValueError
 
     response = owner_client.post(
         detail_url(UploadEmailView, fake_mailbox), email_upload_payload
@@ -197,7 +212,7 @@ def test_post_upload__auth_owner__bad_file(
     assert "form" in response.context
     assert response.context["form"].errors
     assert "mailbox" in response.context
-    mock_Mailbox_add_emails_from_file.assert_called_once()
+    mock_celery_app.send_task.assert_called_once()
 
 
 @pytest.mark.django_db
@@ -205,7 +220,7 @@ def test_post_upload__auth_admin(
     fake_mailbox,
     admin_client,
     detail_url,
-    mock_Mailbox_add_emails_from_file,
+    mock_celery_app,
     email_upload_payload,
 ):
     """Tests :class:`web.views.UploadEmailView` with the authenticated admin user client."""
@@ -215,4 +230,4 @@ def test_post_upload__auth_admin(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    mock_Mailbox_add_emails_from_file.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()

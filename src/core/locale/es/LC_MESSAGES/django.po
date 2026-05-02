@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 13:24+0000\n"
+"POT-Creation-Date: 2026-05-02 12:09+0000\n"
 "PO-Revision-Date: 2025-12-31 20:15+0000\n"
 "Last-Translator: Adrián Gelmotto Ruiz <adriangelmotto@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/eonvelope/core/"
@@ -797,7 +797,7 @@ msgstr ""
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
 
-#: src/core/models/Email.py:681 src/core/models/Mailbox.py:329
+#: src/core/models/Email.py:681 src/core/models/Mailbox.py:326
 #, python-format
 msgid "The file format %(file_format)s is not supported."
 msgstr ""
@@ -868,8 +868,8 @@ msgstr ""
 msgid "Mailbox %(name)s of %(account)s"
 msgstr ""
 
-#: src/core/models/Mailbox.py:241 src/core/models/Mailbox.py:278
-#: src/core/models/Mailbox.py:296
+#: src/core/models/Mailbox.py:238 src/core/models/Mailbox.py:275
+#: src/core/models/Mailbox.py:293
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
 msgstr ""
@@ -912,43 +912,43 @@ msgstr ""
 msgid "%(state)s storage directory %(name)s"
 msgstr ""
 
-#: src/core/utils/FetchingCriterion.py:89
+#: src/core/utils/FetchingCriterion.py:92
 msgid "This fetching criterion requires an argument."
 msgstr ""
 
-#: src/core/utils/FetchingCriterion.py:97
+#: src/core/utils/FetchingCriterion.py:100
 #, python-format
 msgid "Date values must be given in format %(format)s."
 msgstr ""
 
-#: src/core/utils/FetchingCriterion.py:107
+#: src/core/utils/FetchingCriterion.py:110
 msgid "This value must be an integer."
 msgstr ""
 
-#: src/core/utils/FetchingCriterion.py:109
+#: src/core/utils/FetchingCriterion.py:112
 msgid "This value must be a positive number."
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:168
-#: src/core/utils/fetchers/ExchangeFetcher.py:180
+#: src/core/utils/fetchers/ExchangeFetcher.py:173
+#: src/core/utils/fetchers/ExchangeFetcher.py:185
 msgid "refresh"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:222
+#: src/core/utils/fetchers/ExchangeFetcher.py:232
 msgid "fetching of mail contents"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:262
+#: src/core/utils/fetchers/ExchangeFetcher.py:270
 msgid "scan for mailboxes"
 msgstr ""
 
-#: src/core/utils/fetchers/ExchangeFetcher.py:288
+#: src/core/utils/fetchers/ExchangeFetcher.py:296
 msgid "restoring of email"
 msgstr ""
 
-#: src/core/utils/fetchers/IMAP4Fetcher.py:128
+#: src/core/utils/fetchers/IMAP4Fetcher.py:130
 #: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:81
-#: src/core/utils/fetchers/POP3Fetcher.py:92
+#: src/core/utils/fetchers/POP3Fetcher.py:94
 #: src/core/utils/fetchers/POP3_SSL_Fetcher.py:81
 msgid "connecting"
 msgstr ""

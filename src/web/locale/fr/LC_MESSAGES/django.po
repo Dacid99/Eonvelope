@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 13:24+0000\n"
+"POT-Creation-Date: 2026-05-02 12:09+0000\n"
 "PO-Revision-Date: 2025-12-31 20:16+0000\n"
 "Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/eonvelope/web/fr/"
@@ -716,7 +716,7 @@ msgid "Email Timeline"
 msgstr ""
 
 #: src/web/templates/web/email/archive/day.html:6
-#: src/web/templates/web/email/archive/day.html:10
+#: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
 msgid "Day"
 msgstr "Jour"
 
@@ -735,6 +735,7 @@ msgstr "Cette semaine"
 
 #: src/web/templates/web/email/archive/month.html:6
 #: src/web/templates/web/email/archive/month.html:10
+#: src/web/utils/widgets.py:36
 msgid "Month"
 msgstr "Mois"
 
@@ -748,7 +749,7 @@ msgid "Week #"
 msgstr "Semaine nᵒ"
 
 #: src/web/templates/web/email/archive/year.html:6
-#: src/web/templates/web/email/archive/year.html:10
+#: src/web/templates/web/email/archive/year.html:10 src/web/utils/widgets.py:35
 msgid "Year"
 msgstr "Année"
 
@@ -1068,6 +1069,7 @@ msgid "End edit"
 msgstr "Finir la modification"
 
 #: src/web/templates/web/partials/_favorite_badge.html:5
+#: src/web/utils/columns.py:89
 msgid "Favorite"
 msgstr "Favori"
 
@@ -1297,7 +1299,7 @@ msgstr "Courriel restauré avec succès dans la boîte de réception."
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:111
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
 #, fuzzy, python-format
 #| msgid ""
 #| "Fetching failed\n"
@@ -1307,6 +1309,6 @@ msgstr ""
 "Récupération échouée\n"
 "%(error)s"
 
-#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:114
+#: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:116
 msgid "Fetching successful"
 msgstr "La récupération est un succès"

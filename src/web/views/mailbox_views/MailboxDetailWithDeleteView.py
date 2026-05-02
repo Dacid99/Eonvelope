@@ -22,6 +22,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, override
 
+from celery import current_app
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -30,7 +31,6 @@ from django.views.generic.edit import DeletionMixin
 
 from core.constants import EmailFetchingCriterionChoices
 from core.models import Email, Mailbox
-from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import FetcherError
 from web.mixins.CustomActionMixin import CustomActionMixin
 from web.mixins.TestActionMixin import TestActionMixin
@@ -105,7 +105,9 @@ class MailboxDetailWithDeleteView(
             )
             return self.get(request)
         try:
-            self.object.fetch(FetchingCriterion(criterion))
+            current_app.send_task(
+                "core.tasks.fetch_mailbox_emails", args=[self.object.id, criterion]
+            ).get()
         except FetcherError as error:
             messages.error(
                 request, _("Fetching failed: %(error)s") % {"error": str(error)}

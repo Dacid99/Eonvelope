@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 0.7.0
+
+- Features:
+  - increase stability by offloading big user-triggered tasks to background worker
+
+- Fix:
+  - bug in healthcheck was decrementing the count of stored files in db
+
 ## Version 0.6.0
 
 - Features:

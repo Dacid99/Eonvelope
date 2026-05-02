@@ -311,7 +311,10 @@ class MailboxViewSet(
         except ValueError as error:
             raise ValidationError({"criterion_arg": str(error)}) from error
         try:
-            mailbox.fetch(fetching_criterion)
+            current_app.send_task(
+                "core.tasks.fetch_mailbox_emails",
+                args=[mailbox.id, criterion, criterion_arg],
+            ).get()
         except FetcherError as error:
             response = Response(
                 {

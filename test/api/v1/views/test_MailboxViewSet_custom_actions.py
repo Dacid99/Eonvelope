@@ -44,12 +44,6 @@ def mock_Mailbox_test(mocker):
 
 
 @pytest.fixture
-def mock_Mailbox_fetch(mocker):
-    """Patches `core.models.Mailbox.fetch`."""
-    return mocker.patch("api.v1.views.MailboxViewSet.Mailbox.fetch", autospec=True)
-
-
-@pytest.fixture
 def mock_celery_app(mocker):
     """Patches the celery current app."""
     return mocker.patch("api.v1.views.MailboxViewSet.current_app", autospec=True)
@@ -265,7 +259,7 @@ def test_fetch__noauth(
     fake_mailbox,
     noauth_api_client,
     custom_detail_action_url,
-    mock_Mailbox_fetch,
+    mock_celery_app,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with an unauthenticated user client."""
     assert fake_mailbox.daemons.all().count() == 1
@@ -281,7 +275,7 @@ def test_fetch__noauth(
     )
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 
@@ -291,7 +285,7 @@ def test_fetch__auth_other(
     fake_mailbox,
     other_api_client,
     custom_detail_action_url,
-    mock_Mailbox_fetch,
+    mock_celery_app,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated other user client."""
     assert fake_mailbox.daemons.all().count() == 1
@@ -307,7 +301,7 @@ def test_fetch__auth_other(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 
@@ -317,7 +311,7 @@ def test_fetch__success__auth_owner(
     fake_mailbox,
     owner_api_client,
     custom_detail_action_url,
-    mock_Mailbox_fetch,
+    mock_celery_app,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
     response = owner_api_client.post(
@@ -334,9 +328,9 @@ def test_fetch__success__auth_owner(
     fake_mailbox.refresh_from_db()
     assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
     assert "error" not in response.data
-    mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox,
-        FetchingCriterion(EmailFetchingCriterionChoices.DAILY, "value"),
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_mailbox_emails",
+        args=[fake_mailbox.id, EmailFetchingCriterionChoices.DAILY.value, "value"],
     )
 
 
@@ -346,12 +340,14 @@ def test_fetch__failure__auth_owner(
     fake_error_message,
     fake_mailbox,
     owner_api_client,
-    mock_Mailbox_fetch,
+    mock_celery_app,
     custom_detail_action_url,
     fetch_side_effect,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
-    mock_Mailbox_fetch.side_effect = fetch_side_effect(fake_error_message)
+    mock_celery_app.send_task.return_value.get.side_effect = fetch_side_effect(
+        fake_error_message
+    )
 
     response = owner_api_client.post(
         custom_detail_action_url(
@@ -368,8 +364,9 @@ def test_fetch__failure__auth_owner(
     assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
     assert "error" in response.data
     assert fake_error_message in response.data["error"]
-    mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY, "value")
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_mailbox_emails",
+        args=[fake_mailbox.id, EmailFetchingCriterionChoices.DAILY.value, "value"],
     )
 
 
@@ -377,7 +374,7 @@ def test_fetch__failure__auth_owner(
 def test_fetch__auth_owner__no_criterion(
     fake_mailbox,
     owner_api_client,
-    mock_Mailbox_fetch,
+    mock_celery_app,
     custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
@@ -389,7 +386,7 @@ def test_fetch__auth_owner__no_criterion(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion"]
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -397,7 +394,7 @@ def test_fetch__auth_owner__bad_criterion(
     faker,
     fake_mailbox,
     owner_api_client,
-    mock_Mailbox_fetch,
+    mock_celery_app,
     custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
@@ -410,14 +407,14 @@ def test_fetch__auth_owner__bad_criterion(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion"]
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_fetch__auth_owner__missing_criterion_arg(
     fake_mailbox,
     owner_api_client,
-    mock_Mailbox_fetch,
+    mock_celery_app,
     custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
@@ -430,14 +427,14 @@ def test_fetch__auth_owner__missing_criterion_arg(
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.data["criterion_arg"]
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_fetch__auth_owner_criterion_arg_not_required(
     fake_mailbox,
     owner_api_client,
-    mock_Mailbox_fetch,
+    mock_celery_app,
     custom_detail_action_url,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated owner user client."""
@@ -452,8 +449,9 @@ def test_fetch__auth_owner_criterion_arg_not_required(
     fake_mailbox.refresh_from_db()
     assert response.data["data"] == MailboxViewSet.serializer_class(fake_mailbox).data
     assert "error" not in response.data
-    mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY)
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_mailbox_emails",
+        args=[fake_mailbox.id, EmailFetchingCriterionChoices.DAILY.value, ""],
     )
 
 
@@ -462,7 +460,7 @@ def test_fetch__auth_admin(
     fake_mailbox,
     admin_api_client,
     custom_detail_action_url,
-    mock_Mailbox_fetch,
+    mock_celery_app,
 ):
     """Tests the post method :func:`api.v1.views.MailboxViewSet.MailboxViewSet.fetch` action with the authenticated admin user client."""
     assert fake_mailbox.daemons.all().count() == 1
@@ -478,7 +476,7 @@ def test_fetch__auth_admin(
     )
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
     assert fake_mailbox.emails.all().count() == 1
     assert "name" not in response.data
 

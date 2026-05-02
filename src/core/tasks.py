@@ -62,6 +62,33 @@ def fetch_emails(  # this must not be renamed or moved, otherwise existing daemo
 
 
 @shared_task
+def fetch_mailbox_emails(
+    mailbox_id: int, fetching_criterion: str, fetching_criterion_arg: str = ""
+) -> None:
+    """Celery task to fetch and store emails.
+
+    Args:
+        mailbox_id: The id of the mailbox instance to fetch.
+        fetching_criterion: The criterion to fetch on.
+        fetching_criterion_arg: The argument for the criterion.
+    """
+    try:
+        mailbox = Mailbox.objects.get(id=mailbox_id)
+    except Mailbox.DoesNotExist:
+        return
+    try:
+        mailbox.fetch(FetchingCriterion(fetching_criterion, fetching_criterion_arg))
+    except Exception as exc:
+        mailbox.set_unhealthy(exc)
+        if isinstance(exc, MailAccountError):
+            mailbox.account.set_unhealthy(exc)
+        elif isinstance(exc, MailboxError):
+            mailbox.set_unhealthy(exc)
+        raise
+    mailbox.set_healthy()
+
+
+@shared_task
 def process_emails_file(file_path: str, file_format: str, mailbox_id: int) -> None:
     """Celery task to process uploaded emails.
 

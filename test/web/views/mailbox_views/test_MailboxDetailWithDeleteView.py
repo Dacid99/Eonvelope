@@ -35,6 +35,14 @@ from web.views.mailbox_views.MailboxDetailWithDeleteView import (
 )
 
 
+@pytest.fixture
+def mock_celery_app(mocker):
+    """Patches the celery current app."""
+    return mocker.patch(
+        "web.views.mailbox_views.MailboxDetailWithDeleteView.current_app", autospec=True
+    )
+
+
 @pytest.mark.django_db
 def test_get__noauth(fake_mailbox, client, detail_url, login_url):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
@@ -269,7 +277,7 @@ def test_post_test__auth_admin(
 
 @pytest.mark.django_db
 def test_post_fetch__noauth(
-    fake_mailbox, client, detail_url, login_url, mock_Mailbox_fetch
+    fake_mailbox, client, detail_url, login_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with an unauthenticated user client."""
     response = client.post(
@@ -283,12 +291,12 @@ def test_post_fetch__noauth(
     assert response.url.endswith(
         f"?next={detail_url(MailboxDetailWithDeleteView, fake_mailbox)}"
     )
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_post_fetch__auth_other(
-    fake_mailbox, other_client, detail_url, mock_Mailbox_fetch
+    fake_mailbox, other_client, detail_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated other user client."""
     response = other_client.post(
@@ -298,12 +306,12 @@ def test_post_fetch__auth_other(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_post_fetch__success__auth_owner(
-    fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
+    fake_mailbox, owner_client, detail_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
     in case of success.
@@ -325,14 +333,15 @@ def test_post_fetch__success__auth_owner(
     assert len(response.context["messages"]) == 1
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
-    mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY)
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_mailbox_emails",
+        args=[fake_mailbox.id, EmailFetchingCriterionChoices.DAILY.value],
     )
 
 
 @pytest.mark.django_db
 def test_post_fetch__no_criterion__auth_owner(
-    fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
+    fake_mailbox, owner_client, detail_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
     in case no criterion is given.
@@ -354,14 +363,15 @@ def test_post_fetch__no_criterion__auth_owner(
     assert len(response.context["messages"]) == 1
     for mess in response.context["messages"]:
         assert mess.level == messages.SUCCESS
-    mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.ALL)
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_mailbox_emails",
+        args=[fake_mailbox.id, EmailFetchingCriterionChoices.ALL.value],
     )
 
 
 @pytest.mark.django_db
 def test_post_fetch__bad_criterion__auth_owner(
-    fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
+    fake_mailbox, owner_client, detail_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
     in case an unavailable criterion is given.
@@ -383,17 +393,19 @@ def test_post_fetch__bad_criterion__auth_owner(
     assert len(response.context["messages"]) == 1
     for mess in response.context["messages"]:
         assert mess.level == messages.WARNING
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_post_fetch__failure__auth_owner(
-    fake_error_message, fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
+    fake_error_message, fake_mailbox, owner_client, detail_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
     in case of failure.
     """
-    mock_Mailbox_fetch.side_effect = FetcherError(fake_error_message)
+    mock_celery_app.send_task.return_value.get.side_effect = FetcherError(
+        fake_error_message
+    )
 
     response = owner_client.post(
         detail_url(MailboxDetailWithDeleteView, fake_mailbox),
@@ -412,15 +424,16 @@ def test_post_fetch__failure__auth_owner(
     assert len(response.context["messages"]) == 1
     for mess in response.context["messages"]:
         assert mess.level == messages.ERROR
-    mock_Mailbox_fetch.assert_called_once_with(
-        fake_mailbox, FetchingCriterion(EmailFetchingCriterionChoices.DAILY)
+    mock_celery_app.send_task.assert_called_once_with(
+        "core.tasks.fetch_mailbox_emails",
+        args=[fake_mailbox.id, EmailFetchingCriterionChoices.DAILY.value],
     )
     assert fake_error_message in response.content.decode("utf-8")
 
 
 @pytest.mark.django_db
 def test_post_fetch__missing_action__auth_owner(
-    fake_mailbox, owner_client, detail_url, mock_Mailbox_fetch
+    fake_mailbox, owner_client, detail_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated owner user client
     in case the action is missing in the request.
@@ -429,12 +442,12 @@ def test_post_fetch__missing_action__auth_owner(
 
     assert response.status_code == status.HTTP_204_NO_CONTENT
     assert isinstance(response, HttpResponse)
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()
 
 
 @pytest.mark.django_db
 def test_post_fetch__auth_admin(
-    fake_mailbox, admin_client, detail_url, mock_Mailbox_fetch
+    fake_mailbox, admin_client, detail_url, mock_celery_app
 ):
     """Tests :class:`web.views.MailboxDetailWithDeleteView` with the authenticated admin user client."""
     response = admin_client.post(
@@ -444,4 +457,4 @@ def test_post_fetch__auth_admin(
 
     assert response.status_code == status.HTTP_404_NOT_FOUND
     assert "404.html" in [template.name for template in response.templates]
-    mock_Mailbox_fetch.assert_not_called()
+    mock_celery_app.send_task.assert_not_called()

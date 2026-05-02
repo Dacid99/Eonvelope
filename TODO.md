@@ -50,6 +50,5 @@
 ## To fix
 
 - filteroptions for existing db entries leak other user data
-- fetching too many emails leads to browser timeout
 - ci:
   - djlint has no files to lint

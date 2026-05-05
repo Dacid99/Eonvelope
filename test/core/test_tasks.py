@@ -19,13 +19,21 @@
 """Test file for :mod:`core.tasks`."""
 
 import re
+from datetime import UTC, datetime, timedelta
 from tempfile import NamedTemporaryFile
 
 import pytest
+from model_bakery import baker
 from pyfakefs.fake_filesystem_unittest import Pause
 
 from core.constants import SupportedEmailUploadFormats
-from core.tasks import fetch_emails, fetch_mailbox_emails, process_emails_file
+from core.models import Email
+from core.tasks import (
+    autodelete_expired_emails,
+    fetch_emails,
+    fetch_mailbox_emails,
+    process_emails_file,
+)
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
 from test.conftest import TEST_EMAIL_PARAMETERS
 
@@ -336,3 +344,57 @@ def test_process_emails_file__bad_format(fake_fs, fake_file_bytes, fake_mailbox)
             )
 
     assert fake_mailbox.emails.count() == 0
+
+
+@pytest.mark.django_db
+def test_autodelete_expired_emails__default():
+    """Tests :func:`core.tasks.autodelete_expired_emails`
+    in case of a default setting.
+    """
+    now = datetime.now(tz=UTC)
+    baker.make(Email, datetime=now - timedelta(days=10))
+    baker.make(Email, datetime=now - timedelta(days=100))
+    baker.make(Email, datetime=now - timedelta(days=1000))
+
+    assert Email.objects.count() == 3
+
+    autodelete_expired_emails()
+
+    assert Email.objects.count() == 3
+
+
+@pytest.mark.django_db
+@pytest.mark.override_config(EMAIL_EXPIRATION_DAYS=0)
+def test_autodelete_expired_emails__off():
+    """Tests :func:`core.tasks.autodelete_expired_emails`
+    in case of disabled autodeletion.
+    """
+
+    now = datetime.now(tz=UTC)
+    baker.make(Email, datetime=now - timedelta(days=10))
+    baker.make(Email, datetime=now - timedelta(days=100))
+    baker.make(Email, datetime=now - timedelta(days=1000))
+
+    assert Email.objects.count() == 3
+
+    autodelete_expired_emails()
+
+    assert Email.objects.count() == 3
+
+
+@pytest.mark.django_db
+@pytest.mark.override_config(EMAIL_EXPIRATION_DAYS=50)
+def test_autodelete_expired_emails__success():
+    """Tests :func:`core.tasks.autodelete_expired_emails`
+    in case of expired emails and deletion enabled.
+    """
+    now = datetime.now(tz=UTC)
+    baker.make(Email, datetime=now - timedelta(days=10))
+    baker.make(Email, datetime=now - timedelta(days=100))
+    baker.make(Email, datetime=now - timedelta(days=1000))
+
+    assert Email.objects.count() == 3
+
+    autodelete_expired_emails()
+
+    assert Email.objects.count() == 1

@@ -18,14 +18,17 @@
 
 """Module with the tasks for celery."""
 
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 from celery import shared_task
 
 from core.utils import FetchingCriterion
 from core.utils.fetchers.exceptions import MailAccountError, MailboxError
+from eonvelope.utils.workarounds import get_config
 
 from .models.Daemon import Daemon
+from .models.Email import Email
 from .models.Mailbox import Mailbox
 
 
@@ -106,3 +109,14 @@ def process_emails_file(file_path: str, file_format: str, mailbox_id: int) -> No
         return
     with open(file_path, "br") as file:
         mailbox.add_emails_from_file(file, file_format)
+
+
+@shared_task
+def autodelete_expired_emails() -> None:
+    """Celery task that removes emails older than their expiration date."""
+    expiration_days = get_config("EMAIL_EXPIRATION_DAYS")
+    if expiration_days <= 0:
+        return
+    deadline = datetime.now(tz=UTC) - timedelta(days=expiration_days)
+    for email in Email.objects.filter(datetime__lt=deadline):
+        email.delete()

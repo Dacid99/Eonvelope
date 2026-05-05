@@ -34,6 +34,7 @@ import sys
 import tomllib
 from pathlib import Path
 
+from celery.schedules import crontab
 from django.utils.translation import get_language, get_language_bidi, get_language_info
 from django.utils.translation import gettext_lazy as _
 from environ import FileAwareEnv
@@ -677,6 +678,12 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 CELERY_BROKER_URL = "amqp://guest:guest@localhost:5672//"
+CELERY_BEAT_SCHEDULE = {
+    "autodelete-emails": {
+        "task": "core.tasks.autodelete_expired_emails",
+        "schedule": crontab(hour=1, minute=0),
+    },
+}
 
 
 ##### django-health-check #####
@@ -1044,6 +1051,13 @@ CONSTANCE_CONFIG = {
         ),
         bool,
     ),
+    "EMAIL_EXPIRATION_DAYS": (
+        -1,
+        _(
+            "Emails are auto-deleted this number of days past their 'Received' timestamp. A non-positive number disables auto-deletion."
+        ),
+        int,
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = (
@@ -1078,7 +1092,10 @@ CONSTANCE_CONFIG_FIELDSETS = (
     ),
     (
         _("Storage Settings"),
-        ("STORAGE_MAX_FILES_PER_DIR",),
+        (
+            "STORAGE_MAX_FILES_PER_DIR",
+            "EMAIL_EXPIRATION_DAYS",
+        ),
     ),
     (
         _("API Settings"),

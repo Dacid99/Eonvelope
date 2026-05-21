@@ -11,15 +11,12 @@ services:
       - MARIADB_ROOT_PASSWORD=example
     restart: unless-stopped
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e 'SELECT 1'",
-        ]
-      interval: 10s
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 20s
+      start_interval: 5s
+      interval: 1m
       timeout: 5s
-      retries: 12
-      start_period: 10s
+      retries: 3
 
   web:
     image: dacid99/eonvelope

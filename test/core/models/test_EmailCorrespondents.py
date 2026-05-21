@@ -122,7 +122,7 @@ def test_EmailCorrespondent_create_from_header__success(
 
     assert EmailCorrespondent.objects.count() == len(expected_results)
     assert Correspondent.objects.count() == len(expected_results)
-    assert isinstance(result, list)
+    assert isinstance(result, set)
     assert len(result) == len(expected_results)
     for item, expected_result in zip(result, expected_results, strict=True):
         assert isinstance(item, EmailCorrespondent)
@@ -131,6 +131,34 @@ def test_EmailCorrespondent_create_from_header__success(
         assert item.correspondent.email_address == expected_result[1]
         assert item.email == fake_email
         assert item.mention == fake_header_name
+
+
+@pytest.mark.django_db
+def test_EmailCorrespondent_create_from_header__duplicate_header(
+    fake_email, fake_header_name
+):
+    """Tests :func:`core.models.EmailCorrespondent.EmailCorrespondent.create_from_header`
+    in case of a duplicate header.
+    """
+    assert EmailCorrespondent.objects.count() == 0
+    assert Correspondent.objects.count() == 0
+
+    result = EmailCorrespondent.create_from_header(
+        "<dupl@test.org>, dupl <dupl@test.org>", fake_header_name, fake_email
+    )
+
+    assert EmailCorrespondent.objects.count() == 1
+    assert Correspondent.objects.count() == 1
+    assert isinstance(result, set)
+    assert len(result) == 1
+    item = result.pop()
+    assert isinstance(item, EmailCorrespondent)
+    item.refresh_from_db()
+    assert item.pk is not None
+    assert item.correspondent.email_name == "dupl"
+    assert item.correspondent.email_address == "dupl@test.org"
+    assert item.email == fake_email
+    assert item.mention == fake_header_name
 
 
 @pytest.mark.django_db
@@ -145,7 +173,7 @@ def test_EmailCorrespondent_create_from_header__no_correspondent(
 
     result = EmailCorrespondent.create_from_header("", fake_header_name, fake_email)
 
-    assert result == []
+    assert len(result) == 0
     assert EmailCorrespondent.objects.count() == 0
     assert Correspondent.objects.count() == 0
 
@@ -162,7 +190,7 @@ def test_EmailCorrespondent_create_from_header__no_address(
 
     result = EmailCorrespondent.create_from_header("<>", fake_header_name, fake_email)
 
-    assert result == []
+    assert len(result) == 0
     assert EmailCorrespondent.objects.count() == 0
     assert Correspondent.objects.count() == 0
 

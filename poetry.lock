@@ -2146,14 +2146,14 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "jmapc"
-version = "0.2.23"
-description = "JMAP client library for Python"
+version = "0.3.0"
+description = "A JMAP client library for Python"
 optional = false
-python-versions = "<4.0,>=3.9"
+python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "jmapc-0.2.23-py3-none-any.whl", hash = "sha256:7bc429764b7edc4b377d3c05c2e9aeabaf725c4ad3a529463aa962473e6dfd7d"},
-    {file = "jmapc-0.2.23.tar.gz", hash = "sha256:c1e8a54f922dca1dbb9aca2fb541fd0c3acc7a582c773aa3a440177f48d67542"},
+    {file = "jmapc-0.3.0-py3-none-any.whl", hash = "sha256:8380fff64c9f0ccf5da167a9cfdf47675678571a88bd0c194e64659c847dd1c8"},
+    {file = "jmapc-0.3.0.tar.gz", hash = "sha256:66b22e0217ab914d2a0ff788f17db2985630110f4b43be71db407ab91488aac0"},
 ]
 
 [package.dependencies]
@@ -5542,4 +5542,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<3.15"
-content-hash = "eb8fe716e615e4abb8f2313ddd29dc27b88c8014a354344f60471600311bd141"
+content-hash = "804649ca7cb5dd9307925f2c894704d48343b80ca2707ae7e8b2d26849f882c1"

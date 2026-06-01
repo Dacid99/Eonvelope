@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 12:09+0000\n"
+"POT-Creation-Date: 2026-06-01 16:41+0000\n"
 "PO-Revision-Date: 2025-12-31 20:16+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/eonvelope/core/he/"
@@ -807,8 +807,8 @@ msgstr ""
 #: src/core/models/EmailCorrespondent.py:115
 #, python-format
 msgid ""
-"Email-Correspondent connection from email %(email)s to correspondent "
-"%(correspondent)s with mention %(mention)s"
+"Email-Correspondent connection from %(email)s to %(correspondent)s with "
+"mention %(mention)s"
 msgstr ""
 
 #: src/core/models/Mailbox.py:87

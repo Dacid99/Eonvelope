@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-02 12:09+0000\n"
+"POT-Creation-Date: 2026-06-01 16:41+0000\n"
 "PO-Revision-Date: 2025-12-31 20:13+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Thai <https://hosted.weblate.org/projects/eonvelope/config/th/"
@@ -34,99 +34,99 @@ msgstr ""
 msgid "E∘nvelope Settings"
 msgstr ""
 
-#: src/config/settings.py:567
+#: src/config/settings.py:568
 msgid "Your email archiving server"
 msgstr ""
 
-#: src/config/settings.py:608
+#: src/config/settings.py:609
 msgid "Dashboard"
 msgstr ""
 
-#: src/config/settings.py:610
+#: src/config/settings.py:611
 msgid "Shortcut to the dashboard"
 msgstr ""
 
-#: src/config/settings.py:613
+#: src/config/settings.py:614
 msgid "Timeline"
 msgstr ""
 
-#: src/config/settings.py:615
+#: src/config/settings.py:616
 msgid "Shortcut to the email timeline"
 msgstr ""
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
-#: src/config/settings.py:777
+#: src/config/settings.py:784
 msgid "E∘nvelope API"
 msgstr ""
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
-#: src/config/settings.py:779
+#: src/config/settings.py:786
 msgid "API schema for the E∘nvelope server."
 msgstr ""
 
 #. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
-#: src/config/settings.py:782
+#: src/config/settings.py:789
 msgid "Licensed under AGPL-3.0-or-later"
 msgstr ""
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218. ReadTheDocs is a brand name.
-#: src/config/settings.py:787
+#: src/config/settings.py:794
 msgid "Read the E∘nvelope Documentation on ReadTheDocs"
 msgstr ""
 
-#: src/config/settings.py:924
+#: src/config/settings.py:931
 msgid "Default page size for paginated API response data"
 msgstr ""
 
-#: src/config/settings.py:929
+#: src/config/settings.py:936
 msgid "Maximum page size for paginated API response data"
 msgstr ""
 
-#: src/config/settings.py:934
+#: src/config/settings.py:941
 msgid "Default page size for pagination in the webapp."
 msgstr ""
 
-#: src/config/settings.py:940
+#: src/config/settings.py:947
 msgid ""
 "Page size options for pagination in the webapp. Should contain the "
 "WEB_DEFAULT_PAGE_SIZE value."
 msgstr ""
 
-#: src/config/settings.py:947
+#: src/config/settings.py:954
 msgid ""
 "Maximum datasize for a thumbnail in the webapp. Thumbnails larger than this "
 "will not be loaded."
 msgstr ""
 
-#: src/config/settings.py:953
+#: src/config/settings.py:960
 msgid "Whether to show tooltips in the web interface."
 msgstr ""
 
-#: src/config/settings.py:958
+#: src/config/settings.py:965
 msgid "Maximum numbers of files in one storage unit."
 msgstr ""
 
-#: src/config/settings.py:963
+#: src/config/settings.py:970
 msgid "Whether or not to ignore emails and mailboxes that have a spam flag"
 msgstr ""
 
-#: src/config/settings.py:969
+#: src/config/settings.py:976
 msgid ""
 "Regex pattern (case-insensitive) for mailbox names that are ignored when "
 "looking up mailboxes in an account."
 msgstr ""
 
-#: src/config/settings.py:975
+#: src/config/settings.py:982
 msgid "List of content types prefixes to not parse as files."
 msgstr ""
 
-#: src/config/settings.py:981
+#: src/config/settings.py:988
 msgid ""
 "List of content types prefixes to not parse as files. Plain and HTML text is "
 "always ignored as its the bodytext."
 msgstr ""
 
-#: src/config/settings.py:988
+#: src/config/settings.py:995
 msgid ""
 "Html template used to render emails to html. Uses the django template syntax "
 "and has access to all fields of the email database table. Removing template "
@@ -134,72 +134,78 @@ msgid ""
 "thumbnails, so be careful."
 msgstr ""
 
-#: src/config/settings.py:995
+#: src/config/settings.py:1002
 msgid ""
 "Css style used to render emails to html. Refer to HTML_TEMPLATE for context "
 "on the classes."
 msgstr ""
 
-#: src/config/settings.py:1001
+#: src/config/settings.py:1008
 msgid "Default mailbox setting whether to store mails as eml."
 msgstr ""
 
-#: src/config/settings.py:1006
+#: src/config/settings.py:1013
 msgid "Default mailbox setting whether to store attachments."
 msgstr ""
 
-#: src/config/settings.py:1012
+#: src/config/settings.py:1019
 msgid ""
 "Default number of periods between two runs of a standard routine for a INBOX "
 "mailbox."
 msgstr ""
 
-#: src/config/settings.py:1018
+#: src/config/settings.py:1025
 msgid "Default fetching criterion for a standard routine for a INBOX mailbox."
 msgstr ""
 
-#: src/config/settings.py:1024
+#: src/config/settings.py:1031
 msgid ""
 "Default number of periods between two runs of a standard routine for a SENT "
 "mailbox."
 msgstr ""
 
-#: src/config/settings.py:1030
+#: src/config/settings.py:1037
 msgid "Default fetching criterion for a standard routine for a SENT mailbox."
 msgstr ""
 
-#: src/config/settings.py:1036
+#: src/config/settings.py:1043
 msgid ""
 "Set this to True to allow new users to sign up themselves. This setting only "
 "takes effect if the REGISTRATION_ENABLED environment setting is not 0."
 msgstr ""
 
-#: src/config/settings.py:1043
+#: src/config/settings.py:1050
 msgid ""
 "Set this to True to tolerate connections involving an unverified SSL "
 "certificate, e.g. a self-signed one."
 msgstr ""
 
-#: src/config/settings.py:1051
+#: src/config/settings.py:1057
+msgid ""
+"Emails are auto-deleted this number of days past their 'Received' timestamp. "
+"A non-positive number disables auto-deletion."
+msgstr ""
+
+#: src/config/settings.py:1065
 msgid "Server Configurations"
 msgstr ""
 
-#: src/config/settings.py:1058
+#: src/config/settings.py:1072
 msgid "Default Values"
 msgstr ""
 
-#: src/config/settings.py:1069
+#: src/config/settings.py:1083
 msgid "Processing Settings"
 msgstr ""
 
-#: src/config/settings.py:1080
+#: src/config/settings.py:1094
 msgid "Storage Settings"
 msgstr ""
 
-#: src/config/settings.py:1084
+#: src/config/settings.py:1101
 msgid "API Settings"
 msgstr ""
 
-#: src/config/settings.py:1091
+#: src/config/settings.py:1108
 msgid "Web Settings"
 msgstr ""

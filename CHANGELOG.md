@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 0.7.1
+
+- Features:
+  - option to autodelete old emails (off by default)
+
+- Fixes:
+  - Emails with duplicate headers lead to errors in the parsing stage
+
 ## Version 0.7.0
 
 - Features:

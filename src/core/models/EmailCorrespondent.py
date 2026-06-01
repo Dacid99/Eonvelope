@@ -112,7 +112,7 @@ class EmailCorrespondent(
             The string representation of the emailcorrespondent, using :attr:`email`, :attr:`correspondent` and :attr:`mention`.
         """
         return _(
-            "Email-Correspondent connection from email %(email)s to correspondent %(correspondent)s with mention %(mention)s"
+            "Email-Correspondent connection from %(email)s to %(correspondent)s with mention %(mention)s"
         ) % {
             "email": self.email,
             "correspondent": self.correspondent,
@@ -122,7 +122,7 @@ class EmailCorrespondent(
     @classmethod
     def create_from_header(
         cls, header: str, header_name: str, email: Email
-    ) -> list[EmailCorrespondent] | None:
+    ) -> set[EmailCorrespondent] | None:
         """Prepares a list :class:`core.models.EmailCorrespondent` from an email header.
 
         Args:
@@ -140,16 +140,15 @@ class EmailCorrespondent(
         """
         if email.pk is None:
             raise ValueError("Email is not in the db!")
-        new_email_correspondent_models = []
-        for correspondent_tuple in getaddresses([header]):
+        new_email_correspondent_models = set()
+        for correspondent_tuple in set(getaddresses([header])):
             correspondent = Correspondent.create_from_correspondent_tuple(
                 correspondent_tuple, email.mailbox.account.user
             )
             if correspondent is None:
                 continue
-            new_email_correspondent = cls(
+            new_email_correspondent, _ = cls.objects.get_or_create(
                 correspondent=correspondent, email=email, mention=header_name
             )
-            new_email_correspondent.save()
-            new_email_correspondent_models.append(new_email_correspondent)
+            new_email_correspondent_models.add(new_email_correspondent)
         return new_email_correspondent_models

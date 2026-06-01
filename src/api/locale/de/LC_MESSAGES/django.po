@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 12:09+0000\n"
-"PO-Revision-Date: 2026-02-22 14:45+0000\n"
+"PO-Revision-Date: 2026-05-03 13:13+0000\n"
 "Last-Translator: Dacid99 <dacid99@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/eonvelope/api/de/"
 ">\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17.1\n"
 
 #: src/api/auth.py:63
 msgid "Basic authentication is only allowed if you do not have MFA enabled."
@@ -258,14 +258,10 @@ msgstr ""
 "Server des Nutzers."
 
 #: src/api/v1/views/CorrespondentViewSet.py:242
-#, fuzzy
-#| msgid "Correspondent ids are required."
 msgid "Correspondent IDs are required."
 msgstr "Korrespondenten-IDs werden benötigt."
 
 #: src/api/v1/views/CorrespondentViewSet.py:249
-#, fuzzy
-#| msgid "Correspondent ids given in invalid format."
 msgid "Correspondent IDs given in invalid format."
 msgstr "Die angegebenen Korrespondenten-IDs haben ein ungültiges Format."
 

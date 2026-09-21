@@ -20,23 +20,23 @@ repos:
       - id: black
         args: [--config, tools/black_config]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.3
+    rev: v0.16.8
     hooks:
       - id: ruff-check
         args: [--config, tools/ruff.toml]
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.31.1
+    rev: 1.32.0
     hooks:
       - id: django-upgrade
   - repo: https://github.com/djlint/djLint
-    rev: v1.44.2
+    rev: v1.46.2
     hooks:
       - id: djlint-reformat-django
         args: [--configuration, tools/djlintrc]
       - id: djlint-django
         args: [--configuration, tools/djlintrc]
   - repo: https://github.com/python-poetry/poetry
-    rev: 2.4.1
+    rev: 2.5.1
     hooks:
       - id: poetry-lock
       - id: poetry-check
@@ -51,12 +51,12 @@ repos:
       - id: hadolint-docker
         args: [--config, tools/.hadolint.yaml]
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.5.8
+    rev: v2.5.14
     hooks:
       - id: biome-check
         args: [--config-path, tools/biome.json]
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 44.32.0
+    rev: 44.105.2
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/PyCQA/doc8
@@ -65,7 +65,7 @@ repos:
       - id: doc8
         args: [--config, tools/doc8.ini]
   - repo: https://github.com/DavidAnson/markdownlint-cli2
-    rev: v0.23.2
+    rev: v0.23.3
     hooks:
       - id: markdownlint-cli2
         args: [--config, tools/.markdownlint.yml]
@@ -90,7 +90,7 @@ repos:
         language: system
         files: (src/api/.*\.py|poetry.lock)
   - repo: https://github.com/timo-reymann/gitlab-ci-verify
-    rev: v2.11.2
+    rev: v2.11.7
     hooks:
       - id: gitlab-ci-verify
         args: [--gitlab-base-url, gitlab.com, --severity, warning]

@@ -1419,14 +1419,14 @@ django = ">=4.2"
 
 [[package]]
 name = "django-filter"
-version = "26.1"
+version = "26.2"
 description = "Django-filter is a reusable Django application for allowing users to filter querysets dynamically."
 optional = false
-python-versions = ">=3.10"
+python-versions = ">=3.11"
 groups = ["main"]
 files = [
-    {file = "django_filter-26.1-py3-none-any.whl", hash = "sha256:7d98ef2899218e6242619b532cb1b95af14e09dfcf74844aecb550ad27b59ff2"},
-    {file = "django_filter-26.1.tar.gz", hash = "sha256:66ea04031b068c77c86e1ac26ced7a3f8f13ce797f5795751707e3deefc58054"},
+    {file = "django_filter-26.2-py3-none-any.whl", hash = "sha256:df8f737841d6359df00b84dda9b5ab59067fe60292091f1bdae1e3e6281cedb0"},
+    {file = "django_filter-26.2.tar.gz", hash = "sha256:fd5cc83995fbe9f5f07fb5dcda16fde0f04de1ecf8ef82628b6c0ec921b751af"},
 ]
 
 [package.dependencies]
@@ -2325,14 +2325,14 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "jmapc"
-version = "0.3.0"
+version = "0.4.0"
 description = "A JMAP client library for Python"
 optional = false
-python-versions = ">=3.10"
+python-versions = "<3.15,>=3.10"
 groups = ["main"]
 files = [
-    {file = "jmapc-0.3.0-py3-none-any.whl", hash = "sha256:8380fff64c9f0ccf5da167a9cfdf47675678571a88bd0c194e64659c847dd1c8"},
-    {file = "jmapc-0.3.0.tar.gz", hash = "sha256:66b22e0217ab914d2a0ff788f17db2985630110f4b43be71db407ab91488aac0"},
+    {file = "jmapc-0.4.0-py3-none-any.whl", hash = "sha256:6083509f8bec6a25faeb17b60358c00d5f96d39d8cddcba0d1cb4c3344272c1c"},
+    {file = "jmapc-0.4.0.tar.gz", hash = "sha256:823892b467ee53c2c6a0907058f5da7583a6a9dfa0fb4b9ba8302524c576fe66"},
 ]
 
 [package.dependencies]
@@ -5894,4 +5894,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.14,<3.15"
-content-hash = "cf6f851d2f96f8c0360a4207702ac6417d7b8b0a05d16dc10915b691f9d62417"
+content-hash = "1721a6e9233e3a3b57377bd4821b8b06d7cbeeacf57497a302b3b9ad6ea6aa8a"

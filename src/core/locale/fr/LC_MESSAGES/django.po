@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-06-01 16:41+0000\n"
-"PO-Revision-Date: 2026-03-18 14:09+0000\n"
-"Last-Translator: John Molkavitch <jblum66@gmail.com>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/core/fr/"
-">\n"
+"PO-Revision-Date: 2026-08-21 11:52+0000\n"
+"Last-Translator: Ciel <outlook75012@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/core/"
+"fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.17-dev\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: src/core/constants.py:39
 msgid "All emails received the last DAY"
@@ -93,39 +93,39 @@ msgstr "Tous les courriels NON SUPPRIMÉS"
 
 #: src/core/constants.py:94
 msgid "All emails with the given KEYWORD"
-msgstr ""
+msgstr "Tous les courriels contenant le MOT-CLÉ"
 
 #: src/core/constants.py:97
 msgid "All emails without the given KEYWORD"
-msgstr ""
+msgstr "Tous les courriels ne contenant pas le MOT-CLÉ"
 
 #: src/core/constants.py:100
 msgid "All emails LARGER than the given size"
-msgstr ""
+msgstr "Tous les courriels PLUS GRANDS que la taille donnée"
 
 #: src/core/constants.py:103
 msgid "All emails SMALLER than the given size"
-msgstr ""
+msgstr "Tous les courriels PLUS PETITS que la taille donnée"
 
 #: src/core/constants.py:106
 msgid "All emails with SUBJECT containing the given text"
-msgstr ""
+msgstr "Tous les courriels avec le SUJET contenant le texte donné"
 
 #: src/core/constants.py:109
 msgid "All emails with BODY containing the given text"
-msgstr ""
+msgstr "Tous les courriels avec le CORPS contenant le texte donné"
 
 #: src/core/constants.py:112
 msgid "All emails sent FROM the given address"
-msgstr ""
+msgstr "Tous les courriels envoyés DEPUIS l'adresse donnée"
 
 #: src/core/constants.py:115
 msgid "All emails SENT SINCE the given date"
-msgstr ""
+msgstr "Tous les courriels ENVOYÉS DEPUIS la date donnée"
 
 #: src/core/constants.py:122
 msgid "IMAP4"
-msgstr ""
+msgstr "IMAP4"
 
 #: src/core/constants.py:125
 msgid "IMAP4 (unencrypted)"
@@ -133,7 +133,7 @@ msgstr "IMAP4 (non chiffré)"
 
 #: src/core/constants.py:128
 msgid "POP3"
-msgstr ""
+msgstr "POP3"
 
 #: src/core/constants.py:131
 msgid "POP3 (unencrypted)"
@@ -141,11 +141,11 @@ msgstr "POP3 (non chiffré)"
 
 #: src/core/constants.py:134
 msgid "Microsoft Exchange"
-msgstr ""
+msgstr "Microsoft Exchange"
 
 #: src/core/constants.py:137
 msgid "JMAP"
-msgstr ""
+msgstr "JMAP"
 
 #: src/core/constants.py:144
 msgid "Inbox"
@@ -161,7 +161,7 @@ msgstr "Envoyés"
 
 #: src/core/constants.py:147
 msgid "Junk"
-msgstr ""
+msgstr "Indésirable"
 
 #: src/core/constants.py:148
 msgid "Drafts"
@@ -193,51 +193,51 @@ msgstr "Expéditeur"
 
 #: src/core/constants.py:193
 msgid "Reply-To"
-msgstr ""
+msgstr "Répondre-À"
 
 #: src/core/constants.py:194
 msgid "Resent-From"
-msgstr ""
+msgstr "Renvoyé-Depuis"
 
 #: src/core/constants.py:195
 msgid "Resent-To"
-msgstr ""
+msgstr "Renvoyé-À"
 
 #: src/core/constants.py:196
 msgid "Resent-Cc"
-msgstr ""
+msgstr "Renvoyé-Cc"
 
 #: src/core/constants.py:197
 msgid "Resent-Bcc"
-msgstr ""
+msgstr "Renvoyé-Cci"
 
 #: src/core/constants.py:198
 msgid "Resent-Sender"
-msgstr ""
+msgstr "Renvoyé-Envoyeur"
 
 #: src/core/constants.py:199
 msgid "Resent-Reply-To"
-msgstr ""
+msgstr "Renvoyé-Répondre-À"
 
 #: src/core/constants.py:202
 msgid "Envelope-To"
-msgstr ""
+msgstr "Enveloppe-À"
 
 #: src/core/constants.py:204
 msgid "Delivered-To"
-msgstr ""
+msgstr "Délivré-À"
 
 #: src/core/constants.py:205
 msgid "Return-Path"
-msgstr ""
+msgstr "Retour-Chemin"
 
 #: src/core/constants.py:206
 msgid "Return-Receipt-To"
-msgstr ""
+msgstr "Retour-Reçu-À"
 
 #: src/core/constants.py:209
 msgid "Disposition-Notification-To"
-msgstr ""
+msgstr "Disposition-Notification-À"
 
 #: src/core/constants.py:219 src/core/constants.py:231
 msgid ".zip with .eml files inside"
@@ -245,34 +245,32 @@ msgstr ".zip avec des fichiers .eml à lʼintérieur"
 
 #: src/core/constants.py:220 src/core/constants.py:232
 msgid ".mbox"
-msgstr ""
+msgstr ".mbox"
 
 #: src/core/constants.py:221 src/core/constants.py:233
 msgid ".babyl"
-msgstr ""
+msgstr ".babyl"
 
 #: src/core/constants.py:222 src/core/constants.py:234
 msgid ".mmdf"
-msgstr ""
+msgstr ".mmdf"
 
 #: src/core/constants.py:223 src/core/constants.py:235
 msgid ".zip with mh mailbox inside"
-msgstr ""
+msgstr ".zip avec boîte aux lettres mh à l'intérieur"
 
 #: src/core/constants.py:224 src/core/constants.py:236
 msgid ".zip with maildir mailbox inside"
-msgstr ""
+msgstr ".zip avec boîte aux lettres maildir à l'intérieur"
 
 #: src/core/constants.py:230
 msgid ".eml"
-msgstr ""
+msgstr ".eml"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/FavoriteModelMixin.py:33
-#, fuzzy
-#| msgid "favorite"
 msgid "favorite status"
-msgstr "favori"
+msgstr "statut favori"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/mixins/FilePathModelMixin.py:47
@@ -305,35 +303,25 @@ msgid "time of last update"
 msgstr "heure de dernière mise à jour"
 
 #: src/core/models/Account.py:86
-#, fuzzy
-#| msgid ""
-#| "This will delete this account and all mailboxes, emails and attachments "
-#| "found in it!"
 msgid ""
 "This will delete the records of this account and all mailboxes, emails and "
 "attachments found in it!"
 msgstr ""
-"Ceci supprimera ce compte et toutes les boîtes de réception, courriels et "
-"pièces jointes qu'il contient !"
+"Ceci supprimera les informations de ce compte et de toutes les boîtes de "
+"réception, courriels et pièces jointes qu'il contient !"
 
 #: src/core/models/Account.py:89
-#, fuzzy
-#| msgid ""
-#| "This will delete this account and all mailboxes, emails and attachments "
-#| "found in it!"
 msgid ""
 "This will delete the records of these accounts and all mailboxes, emails and "
 "attachments found in them!"
 msgstr ""
-"Ceci supprimera ce compte et toutes les boîtes de réception, courriels et "
-"pièces jointes qu'il contient !"
+"Ceci supprimera les informations de ces comptes et toutes les boîtes de "
+"réception, courriels et pièces jointes qu'ils contiennent !"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:99
-#, fuzzy
-#| msgid "user"
 msgid "username"
-msgstr "utilisateur"
+msgstr "nom d'utilisateur"
 
 #: src/core/models/Account.py:100
 msgid "The username of the account. Typically the mail address."
@@ -387,13 +375,15 @@ msgstr "Délai d'attente pour la connexion au serveur de messagerie."
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:155
 msgid "allow insecure connection"
-msgstr ""
+msgstr "autoriser les connexions non sécurisées"
 
 #: src/core/models/Account.py:157
 msgid ""
 "Whether to allow insecure connections to the host, e.g. with a self-signed "
 "certificate."
 msgstr ""
+"Autoriser les connexions non sécurisées à l'hôte, par exemple avec un "
+"certificat auto-signé."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:167 src/core/models/Correspondent.py:102
@@ -407,10 +397,8 @@ msgstr "compte"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Account.py:179
-#, fuzzy
-#| msgid "account"
 msgid "accounts"
-msgstr "compte"
+msgstr "comptes"
 
 #: src/core/models/Account.py:203
 #, python-format
@@ -424,26 +412,25 @@ msgstr "Ce compte existe déjà."
 #: src/core/models/Account.py:252
 #, python-format
 msgid "Testing this account data failed: %(error)s"
-msgstr ""
+msgstr "Échec du test des données de ce compte : %(error)s"
 
 #: src/core/models/Account.py:283 src/core/models/Account.py:286
-#, fuzzy, python-format
-#| msgid "The email protocol implemented by the server."
+#, python-format
 msgid "The protocol %s is not implemented in a fetcher class!"
-msgstr "Le protocole de courriel implémenté par le serveur."
+msgstr "Le protocole %s n'est pas dans une classe de récupérateur !"
 
 #: src/core/models/Attachment.py:91
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid "This will only delete the record of this attachment, not of the email."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr ""
+"Ceci supprimera seulement les informations de cette pièce jointe, pas celles "
+"du courriel."
 
 #: src/core/models/Attachment.py:95
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid ""
 "This will only delete the records of these attachments, not of their emails."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr ""
+"Ceci supprimera seulement les informations de ces pièces jointes, pas celles "
+"des courriels."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:101
@@ -484,12 +471,12 @@ msgstr "courriel"
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:159
 msgid "attachment"
-msgstr ""
+msgstr "pièce jointe"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Attachment.py:161
 msgid "attachments"
-msgstr ""
+msgstr "pièces jointes"
 
 #: src/core/models/Attachment.py:171
 #, python-format
@@ -500,77 +487,76 @@ msgstr "Pièce jointe %(file_name)s de %(email)s"
 #: src/core/models/Attachment.py:235
 #, python-format
 msgid "Paperless URL is malformed: %(error)s"
-msgstr ""
+msgstr "L'adresse Paperless est malformée : %(error)s"
 
 #. Translators: Paperless is a brand name.
 #: src/core/models/Attachment.py:242
 #, python-format
 msgid "Error connecting to the Paperless server: %(error)s"
-msgstr ""
+msgstr "Erreur de connexion au serveur Paperless : %(error)s"
 
 #. Translators: Paperless is a brand name.
 #: src/core/models/Attachment.py:255
 #, python-format
 msgid "Authentication to Paperless failed: %(response)s"
-msgstr ""
+msgstr "Authentification à Paperless échouée : %(response)s"
 
 #. Translators: Paperless is a brand name.
 #: src/core/models/Attachment.py:260
 #, python-format
 msgid "Uploading to Paperless failed: %(response)s"
-msgstr ""
+msgstr "Envoi à Paperless échoué : %(response)s"
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:314
 #, python-format
 msgid "Immich URL is malformed: %(error)s"
-msgstr ""
+msgstr "L'adresse Immich est malformée : %(error)s"
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:321
-#, fuzzy, python-format
-#| msgid "Timeout for the connection to the mailserver."
+#, python-format
 msgid "Error connecting to the Immich server: %(error)s"
-msgstr "Délai d'attente pour la connexion au serveur de messagerie."
+msgstr "Erreur lors de la connexion au serveur Immich : %(error)s"
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:334
 #, python-format
 msgid "Authentication to Immich failed: %(response)s"
-msgstr ""
+msgstr "Authentification à Immich échouée : %(response)s"
 
 #. Translators: Immich is a brand name.
 #: src/core/models/Attachment.py:339
 #, python-format
 msgid "Uploading to Immich failed: %(response)s"
-msgstr ""
+msgstr "Envoi à Immich échoué : %(response)s"
 
 #: src/core/models/Attachment.py:410
 msgid "Attachment image"
-msgstr ""
+msgstr "Image de la pièce jointe"
 
 #: src/core/models/Attachment.py:444
 msgid "Attachment text"
-msgstr ""
+msgstr "Texte de la pièce jointe"
 
 #: src/core/models/Attachment.py:453
 msgid "Attachment file content"
-msgstr ""
+msgstr "Contenu du fichier joint"
 
 #: src/core/models/Correspondent.py:66
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid ""
 "This will only delete the record of this correspondent, not of its emails."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr ""
+"Ceci supprimera seulement les informations de ce correspondant, pas celles "
+"de ses courriels."
 
 #: src/core/models/Correspondent.py:70
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid ""
 "This will only delete the records of these correspondents, not of their "
 "emails."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr ""
+"Ceci supprimera seulement les informations de ces correspondants, pas les "
+"informations de leurs courriels."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:76
@@ -608,32 +594,32 @@ msgstr "propriétaire de la liste"
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:126
 msgid "list-subscribe"
-msgstr ""
+msgstr "liste-suivre"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:134
 msgid "list-unsubscribe"
-msgstr ""
+msgstr "liste-neplussuivre"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:143
 msgid "list-unsubscribe method"
-msgstr ""
+msgstr "méthode liste-neplussuivre"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:151
 msgid "list post"
-msgstr ""
+msgstr "lister le post"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:159
 msgid "list help"
-msgstr ""
+msgstr "lister l'aide"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:167
 msgid "list archive"
-msgstr ""
+msgstr "lister l'archive"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Correspondent.py:177
@@ -649,125 +635,125 @@ msgstr "correspondants"
 #: src/core/models/Correspondent.py:197
 #, python-format
 msgid "Correspondent with address %(email_address)s"
-msgstr ""
+msgstr "Correspondant avec l'adresse : %(email_address)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:251
 #, python-format
 msgid "Nextcloud URL is malformed: %(error)s"
-msgstr ""
+msgstr "L'adresse Nextcloud est malformée : %(error)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:258
 #, python-format
 msgid "Error connecting to the Nextcloud server: %(error)s"
-msgstr ""
+msgstr "Erreur de connexion au serveur Nextcloud : %(error)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:271
 #, python-format
 msgid "Authentication to Nextcloud failed: %(response)s"
-msgstr ""
+msgstr "Authentificaiton à Nextcloud échouée : %(response)s"
 
 #. Translators: Nextcloud is a brand name.
 #: src/core/models/Correspondent.py:276
 #, python-format
 msgid "Uploading to Nextcloud failed: %(response)s"
-msgstr ""
+msgstr "Envoi à Nextcloud échoué : %(response)s"
 
 #: src/core/models/Daemon.py:64
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid "This will only delete this routine, not its mailbox."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr "Ceci supprimera seulement cette routine, pas sa boîte aux lettres."
 
 #: src/core/models/Daemon.py:67
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid "This will only delete these routine, not their mailboxes."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr "Ceci supprimera seulement ces routines, pas leurs boîtes aux lettres."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:74
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:83 src/core/models/Email.py:181
 #: src/core/models/Mailbox.py:142
 msgid "mailbox"
-msgstr ""
+msgstr "boîte aux lettres"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:92
 msgid "fetching criterion"
-msgstr ""
+msgstr "critère de récupération"
 
 #: src/core/models/Daemon.py:93
 msgid "The selection criterion for emails to archive."
-msgstr ""
+msgstr "Critère de sélection des courriels à archiver."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:102
 msgid "filter value"
-msgstr ""
+msgstr "filtrer la valeur"
 
 #: src/core/models/Daemon.py:103
 msgid "Additional value for the selection criterion."
-msgstr ""
+msgstr "Valeur en plus pour le critère de sélection."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:112
 msgid "celery task"
-msgstr ""
+msgstr "tâche céleri"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:120
 msgid "interval"
-msgstr ""
+msgstr "intervalle"
 
 #: src/core/models/Daemon.py:121
 msgid "The time between two routine runs in seconds."
-msgstr ""
+msgstr "La durée entre deux exécutions de routine en secondes."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:131
 msgid "routine"
-msgstr ""
+msgstr "routine"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Daemon.py:133
 msgid "routines"
-msgstr ""
+msgstr "routines"
 
 #: src/core/models/Daemon.py:159
 #, python-format
 msgid "Emailfetching routine %(uuid)s for mailbox %(mailbox)s"
 msgstr ""
+"Routine de récupération des courriels %(uuid)s pour la boîte aux lettres %"
+"(mailbox)s"
 
 #: src/core/models/Daemon.py:193
 msgid "This fetching criterion is not available for this mailbox!"
 msgstr ""
+"Ce critère de récupération n'est pas disponible pour cette boîte aux "
+"lettres !"
 
 #: src/core/models/Daemon.py:199
 msgid "No valid mailbox selected!"
-msgstr ""
+msgstr "Pas de boîte aux lettres valide sélectionnée !"
 
 #: src/core/models/Email.py:96 src/core/models/EmailCorrespondent.py:51
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid ""
 "This will delete the records of this email and all its attachments but not "
 "its correspondents."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr ""
+"Ceci supprimera les informations de ce courriel et de ses pièces jointes "
+"mais pas ses correspondants."
 
 #: src/core/models/Email.py:100 src/core/models/EmailCorrespondent.py:55
-#, fuzzy
-#| msgid "This will only delete this attachment, not the email."
 msgid ""
 "This will delete the records of these emails and all their attachments but "
 "not their correspondents."
-msgstr "Ceci supprimera seulement cette pièce jointe, pas le courriel."
+msgstr ""
+"Ceci supprimera les informations de ces courriels et leurs pièces jointes "
+"mais pas leurs correspondants."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:106
@@ -776,10 +762,8 @@ msgstr "identifiant du message"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:112
-#, fuzzy
-#| msgid "received"
 msgid "time received"
-msgstr "reçu"
+msgstr "moment de la réception"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:120
@@ -798,15 +782,13 @@ msgstr "texte HTML"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:145
-#, fuzzy
-#| msgid "in reply to"
 msgid "in reply to email"
-msgstr "en réponse à"
+msgstr "en réponse au courriel"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:155
 msgid "referencing emails"
-msgstr ""
+msgstr "référencement des courriels"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:188
@@ -815,27 +797,24 @@ msgstr "en-têtes"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:196
-#, fuzzy
-#| msgid "X-Spam"
 msgid "X-Spam Flag"
-msgstr "X-Spam"
+msgstr "indicateur X-Spam"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Email.py:208
-#, fuzzy
-#| msgid "email"
 msgid "emails"
-msgstr "courriel"
+msgstr "courriels"
 
 #: src/core/models/Email.py:227
 #, python-format
 msgid "Email with ID %(message_id)s, received on %(datetime)s from %(mailbox)s"
 msgstr ""
+"Courriel avec ID %(message_id)s, reçu le %(datetime)s depuis %(mailbox)s"
 
 #: src/core/models/Email.py:681 src/core/models/Mailbox.py:326
 #, python-format
 msgid "The file format %(file_format)s is not supported."
-msgstr ""
+msgstr "Le format de fichier %(file_format)s n'est pas supporté."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/EmailCorrespondent.py:80
@@ -844,10 +823,8 @@ msgstr "mention"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/EmailCorrespondent.py:90
-#, fuzzy
-#| msgid "correspondents"
 msgid "email-correspondents"
-msgstr "correspondants"
+msgstr "correspondants-du-courriel"
 
 #: src/core/models/EmailCorrespondent.py:115
 #, python-format
@@ -855,30 +832,24 @@ msgid ""
 "Email-Correspondent connection from %(email)s to %(correspondent)s with "
 "mention %(mention)s"
 msgstr ""
+"Connexion Courriel-Correspondant depuis %(email)s vers %(correspondent)s "
+"avec la mention %(mention)s"
 
 #: src/core/models/Mailbox.py:87
-#, fuzzy
-#| msgid ""
-#| "This will delete this account and all mailboxes, emails and attachments "
-#| "found in it!"
 msgid ""
 "This will delete the record of this mailbox and all emails and attachments "
 "found in it!"
 msgstr ""
-"Ceci supprimera ce compte et toutes les boîtes de réception, courriels et "
-"pièces jointes qu'il contient !"
+"Ceci supprimera les informations de cette boîte aux lettres et tous les "
+"courriels et pièces jointes qu'elle contient !"
 
 #: src/core/models/Mailbox.py:91
-#, fuzzy
-#| msgid ""
-#| "This will delete this account and all mailboxes, emails and attachments "
-#| "found in it!"
 msgid ""
 "This will delete the records of these mailboxes and all emails and "
 "attachments found in them!"
 msgstr ""
-"Ceci supprimera ce compte et toutes les boîtes de réception, courriels et "
-"pièces jointes qu'il contient !"
+"Ceci supprimera les informations de ces boîtes aux lettres et tous les "
+"courriels et pièces jointes qu'ils contiennent !"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Mailbox.py:97
@@ -887,142 +858,144 @@ msgstr "nom"
 
 #: src/core/models/Mailbox.py:105
 msgid "type"
-msgstr ""
+msgstr "type"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Mailbox.py:121
 msgid "save attachments"
-msgstr ""
+msgstr "enregistrer les pièces jointes"
 
 #: src/core/models/Mailbox.py:123
 msgid "Whether the attachments from the emails in this mailbox will be saved."
 msgstr ""
+"Si les pièces jointes des courriels de cette boîte aux lettres seront "
+"sauvegardées."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Mailbox.py:131
 msgid "save as .eml"
-msgstr ""
+msgstr "enregistrer en .eml"
 
 #: src/core/models/Mailbox.py:132
 msgid "Whether the emails in this mailbox will be stored in .eml files."
 msgstr ""
+"Si les courriels de cette boîte aux lettres seront enregistrés dans des "
+"fichiers .eml."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/Mailbox.py:144
 msgid "mailboxes"
-msgstr ""
+msgstr "boîtes aux lettres"
 
 #: src/core/models/Mailbox.py:161
 #, python-format
 msgid "Mailbox %(name)s of %(account)s"
-msgstr ""
+msgstr "Boîte aux lettres %(name)s de %(account)s"
 
 #: src/core/models/Mailbox.py:238 src/core/models/Mailbox.py:275
 #: src/core/models/Mailbox.py:293
 #, python-format
 msgid "The given file is not a valid %(file_format)s."
-msgstr ""
+msgstr "Le fichier donné n'est pas un %(file_format)s valide."
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:54
 msgid "shard directory name"
-msgstr ""
+msgstr "nom de dossier partagé"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:61
 msgid "file count"
-msgstr ""
+msgstr "compte des fichiers"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:69
 msgid "status"
-msgstr ""
+msgstr "statut"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:80
 msgid "storage shard"
-msgstr ""
+msgstr "fragment de stockage"
 
 #. Translators: Do not capitalize the very first letter unless your language requires it.
 #: src/core/models/StorageShard.py:82
 msgid "storage shards"
-msgstr ""
+msgstr "fragments de stockage"
 
 #: src/core/models/StorageShard.py:91
 msgid "Current"
-msgstr ""
+msgstr "Courant"
 
 #: src/core/models/StorageShard.py:91
 msgid "Archived"
-msgstr ""
+msgstr "Archivé"
 
 #: src/core/models/StorageShard.py:92
 #, python-format
 msgid "%(state)s storage directory %(name)s"
-msgstr ""
+msgstr "%(state)s répertoire de stockage %(name)s"
 
 #: src/core/utils/FetchingCriterion.py:92
 msgid "This fetching criterion requires an argument."
-msgstr ""
+msgstr "Ce critère de récupération nécessite un argument."
 
 #: src/core/utils/FetchingCriterion.py:100
 #, python-format
 msgid "Date values must be given in format %(format)s."
-msgstr ""
+msgstr "Les valeurs des dates doivent être données au format %(format)s."
 
 #: src/core/utils/FetchingCriterion.py:110
 msgid "This value must be an integer."
-msgstr ""
+msgstr "Cette valeur doit être un entier."
 
 #: src/core/utils/FetchingCriterion.py:112
 msgid "This value must be a positive number."
-msgstr ""
+msgstr "Cette valeur doit être un nombre positif."
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:173
 #: src/core/utils/fetchers/ExchangeFetcher.py:185
 msgid "refresh"
-msgstr ""
+msgstr "rafraîchir"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:232
 msgid "fetching of mail contents"
-msgstr ""
+msgstr "récupération du contenu du courriel"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:270
 msgid "scan for mailboxes"
-msgstr ""
+msgstr "rechercher des boîtes aux lettres"
 
 #: src/core/utils/fetchers/ExchangeFetcher.py:296
 msgid "restoring of email"
-msgstr ""
+msgstr "restauration du courriel"
 
 #: src/core/utils/fetchers/IMAP4Fetcher.py:130
 #: src/core/utils/fetchers/IMAP4_SSL_Fetcher.py:81
 #: src/core/utils/fetchers/POP3Fetcher.py:94
 #: src/core/utils/fetchers/POP3_SSL_Fetcher.py:81
-#, fuzzy
-#| msgid "connection timeout"
 msgid "connecting"
-msgstr "délai d'attente de connexion"
+msgstr "connexion"
 
 #: src/core/utils/fetchers/exceptions.py:44
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "A %(error_class_name)s: %(error)s occurred during %(command_name)s on "
 "account!"
 msgstr ""
-"Une %(error_class_name)s: %(error)s s'est produite pendant %(action_name)s !"
+"Une %(error_class_name)s : %(error)s s'est produite pendant %(command_name)s "
+"sur le compte !"
 
 #: src/core/utils/fetchers/exceptions.py:61
-#, fuzzy, python-format
-#| msgid "An %(error_class_name)s: %(error)s occurred during %(action_name)s!"
+#, python-format
 msgid ""
 "A %(error_class_name)s: %(error)s occurred during %(command_name)s on "
 "mailbox!"
 msgstr ""
-"Une %(error_class_name)s: %(error)s s'est produite pendant %(action_name)s !"
+"Une %(error_class_name)s : %(error)s s'est produite pendant %(command_name)s "
+"sur la boîte aux lettres !"
 
 #: src/core/utils/fetchers/exceptions.py:76
 #, python-format
 msgid "Server responded %(response)s!"
-msgstr ""
+msgstr "Le serveur a répondu %(response)s !"

@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 12:09+0000\n"
-"PO-Revision-Date: 2025-12-31 20:16+0000\n"
-"Last-Translator: \"J. Lavoie\" <j.lavoie@net-c.ca>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/web/fr/"
-">\n"
+"PO-Revision-Date: 2026-08-21 11:52+0000\n"
+"Last-Translator: Ciel <outlook75012@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/web/fr/>"
+"\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: src/web/filters/AccountFilterSet.py:54
 #: src/web/filters/AttachmentFilterSet.py:54
@@ -88,36 +88,22 @@ msgid "Pick a file for upload."
 msgstr "Choisissez un fichier à téléverser."
 
 #: src/web/mixins/TestActionMixin.py:53
-#, fuzzy, python-format
-#| msgid ""
-#| "Test failed, there is something wrong with this objects setup\n"
-#| "%(error)s"
+#, python-format
 msgid ""
 "Test failed, there is something wrong with this objects setup: %(error)s"
 msgstr ""
-"Test échoué, il y a quelque chose de mal avec cette configuration des "
-"objets\n"
-"%(error)s"
+"Test échoué, il y a quelque chose d'incorrect avec cette configuration des "
+"objets : %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:58
-#, fuzzy, python-format
-#| msgid ""
-#| "Test failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Test failed: %(error)s"
-msgstr ""
-"Test échoué\n"
-"%(error)s"
+msgstr "Test échoué : %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:62
-#, fuzzy, python-format
-#| msgid ""
-#| "Test failed due to an unexpected error\n"
-#| "%(error)s"
+#, python-format
 msgid "Test failed due to an unexpected error: %(error)s"
-msgstr ""
-"Le test a échoué en raison d'une erreur inattendue\n"
-"%(error)s"
+msgstr "Le test a échoué en raison d'une erreur inattendue : %(error)s"
 
 #: src/web/mixins/TestActionMixin.py:66
 msgid "Test was successful"
@@ -129,10 +115,8 @@ msgid "Email"
 msgstr "Courriel"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:40
-#, fuzzy
-#| msgid "Content Id"
 msgid "Content type"
-msgstr "Identifiant du contenu"
+msgstr "Type du contenu"
 
 #: src/web/tables/attachment_tables/BaseAttachmentTable.py:68
 #: src/web/tables/email_tables/BaseEmailTable.py:68
@@ -269,11 +253,11 @@ msgstr "Délai d'attente"
 
 #: src/web/templates/web/account/account_detail.html:56
 msgid "None"
-msgstr ""
+msgstr "Nul"
 
 #: src/web/templates/web/account/account_detail.html:60
 msgid "Allow Insecure Connection"
-msgstr ""
+msgstr "Autoriser les connexions non sécurisées"
 
 #: src/web/templates/web/account/account_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:50
@@ -290,22 +274,18 @@ msgstr "désactivé"
 #: src/web/templates/web/account/account_detail.html:69
 #: src/web/templates/web/daemon/daemon_detail.html:58
 #: src/web/templates/web/mailbox/mailbox_detail.html:65
-#, fuzzy
-#| msgid "Request Error"
 msgid "Latest Error"
-msgstr "Erreur sur la requête"
+msgstr "Dernière erreur"
 
 #: src/web/templates/web/account/account_detail.html:73
 #: src/web/templates/web/daemon/daemon_detail.html:62
 #: src/web/templates/web/mailbox/mailbox_detail.html:69
 msgid "Occurred At"
-msgstr ""
+msgstr "Est arrivé à"
 
 #: src/web/templates/web/account/account_detail.html:74
-#, fuzzy
-#| msgid "Test this account to make sure it can be accessed."
 msgid "Test the account to see if this error persists."
-msgstr "Testez ce compte pour être sûr qu'il est accessible."
+msgstr "Testez ce compte pour voir si cette erreur persiste."
 
 #: src/web/templates/web/account/account_detail.html:85
 #: src/web/templates/web/account/partials/_update_mailboxes-button.html:10
@@ -323,7 +303,7 @@ msgstr "Boîtes de réception"
 #: src/web/templates/web/mailbox/mailbox_detail.html:81
 #: src/web/templates/web/partials/_header.html:148
 msgid "Routines"
-msgstr ""
+msgstr "Routines"
 
 #: src/web/templates/web/account/account_detail.html:129
 #: src/web/templates/web/correspondent/correspondent_detail.html:90
@@ -365,24 +345,20 @@ msgid ""
 "Add a standard set of routines to archive all mails going in and out of this "
 "account."
 msgstr ""
+"Ajouter un ensemble standard de routines pour archiver tous les courriels "
+"entrant et sortant de ce compte."
 
 #: src/web/templates/web/account/partials/_add_routines-button.html:10
-#, fuzzy
-#| msgid "Add Account"
 msgid "Add routines"
-msgstr "Ajouter un compte"
+msgstr "Ajouter des routines"
 
 #: src/web/templates/web/account/partials/_daemons_list_alternative.html:7
-#, fuzzy
-#| msgid ""
-#| "You can set up daemons for this mailbox to fetch its contents on a "
-#| "regular schedule."
 msgid ""
 "You can set up routines for this account's mailboxes to fetch its complete "
 "email traffic."
 msgstr ""
-"Vous pouvez configurer des démons pour cette boîte de réception pour "
-"récupérer son contenu régulièrement."
+"Vous pouvez configurer des routines pour les boîtes aux lettres de ce compte "
+"pour récupérer tout son traffic de courriels."
 
 #: src/web/templates/web/account/partials/_emails_list_alternative.html:6
 msgid "You can fetch emails from one of this accounts mailboxes."
@@ -403,20 +379,16 @@ msgstr ""
 "depuis le serveur"
 
 #: src/web/templates/web/account/partials/_test_account-button.html:6
-#, fuzzy
-#| msgid "Test this account to make sure it can be accessed."
 msgid "Test whether this account can be accessed"
-msgstr "Testez ce compte pour être sûr qu'il est accessible."
+msgstr "Testez si ce compte est accessible"
 
 #: src/web/templates/web/account/partials/_unhealthy_list_alternative.html:6
 msgid "Test this account to make sure it can be accessed."
 msgstr "Testez ce compte pour être sûr qu'il est accessible."
 
 #: src/web/templates/web/account/partials/_update_mailboxes-button.html:8
-#, fuzzy
-#| msgid "Updating mailboxes successful"
 msgid "Update the mailboxes in this account."
-msgstr "Boîtes de réception actualisées avec succès"
+msgstr "Mise à jour des boîtes aux lettres de ce compte."
 
 #: src/web/templates/web/attachment/attachment_detail.html:6
 msgid "Attachment Details"
@@ -467,14 +439,10 @@ msgid "No attachments found."
 msgstr "Aucune pièce jointe trouvée."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:11
-#, fuzzy
-#| msgid ""
-#| "You can fetching some along with emails from the mailboxes you have set "
-#| "up."
 msgid ""
 "You can fetch some along with emails from the mailboxes you have set up."
 msgstr ""
-"Vous pouvez en récupérer, avec les courriels, depuis les boîtes de réception "
+"Vous pouvez en récupérer avec les courriels depuis les boîtes aux lettres "
 "que vous avez configurées."
 
 #: src/web/templates/web/attachment/partials/_filter_list_alternative.html:17
@@ -494,7 +462,7 @@ msgstr "Télécharger"
 
 #: src/web/templates/web/attachment/partials/_send_to_third_party_dropdown.html:6
 msgid "Share this attachment with another service"
-msgstr ""
+msgstr "Partager cette pièce jointe avec un autre service"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:6
 msgid "Correspondent Details"
@@ -510,7 +478,7 @@ msgstr "Liste de diffusion"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:44
 msgid "List Id"
-msgstr ""
+msgstr "Identifiant de la liste"
 
 #: src/web/templates/web/correspondent/correspondent_detail.html:49
 msgid "Subscribe"
@@ -562,27 +530,21 @@ msgstr ""
 
 #: src/web/templates/web/correspondent/partials/_send_to_third_party_dropdown.html:6
 msgid "Share this correspondent with another service"
-msgstr ""
+msgstr "Partager ce correspondant avec un autre service"
 
 #: src/web/templates/web/daemon/daemon_create.html:8
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:8
-#, fuzzy
-#| msgid "Add Account"
 msgid "Add Routine"
-msgstr "Ajouter un compte"
+msgstr "Ajouter une routine"
 
 #: src/web/templates/web/daemon/daemon_create.html:18
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:17
-#, fuzzy
-#| msgid "Add Account"
 msgid "New Routine"
-msgstr "Ajouter un compte"
+msgstr "Nouvelle routine"
 
 #: src/web/templates/web/daemon/daemon_detail.html:6
-#, fuzzy
-#| msgid "Account Details"
 msgid "Routine Details"
-msgstr "Détails du compte"
+msgstr "Détails de la routine"
 
 #: src/web/templates/web/daemon/daemon_detail.html:40
 #: src/web/templates/web/daemon/partials/_daemon_card.html:27
@@ -592,7 +554,7 @@ msgstr "Critère"
 #: src/web/templates/web/daemon/daemon_detail.html:43
 #: src/web/templates/web/daemon/partials/_daemon_card.html:31
 msgid "With value"
-msgstr ""
+msgstr "Avec valeur"
 
 #: src/web/templates/web/daemon/daemon_detail.html:46
 #: src/web/templates/web/daemon/partials/_daemon_card.html:35
@@ -602,7 +564,7 @@ msgstr "Intervalle"
 #: src/web/templates/web/daemon/daemon_detail.html:51
 #: src/web/templates/web/daemon/partials/_daemon_card.html:39
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: src/web/templates/web/daemon/daemon_detail.html:52
 msgid "Last Run"
@@ -614,26 +576,20 @@ msgstr "Nombre total des exécutions"
 
 #: src/web/templates/web/daemon/daemon_detail.html:63
 msgid "Test the routine to see if this error persists."
-msgstr ""
+msgstr "Testez la routine pour voir si l'erreur persiste."
 
 #: src/web/templates/web/daemon/daemon_edit.html:8
-#, fuzzy
-#| msgid "Edit Account"
 msgid "Edit Routine"
-msgstr "Modifier le compte"
+msgstr "Modifier la routine"
 
 #: src/web/templates/web/daemon/partials/_add_button.html:6
 #: src/web/templates/web/mailbox/partials/_add_daemon_button.html:7
-#, fuzzy
-#| msgid "Add Account"
 msgid "Add routine"
-msgstr "Ajouter un compte"
+msgstr "Ajouter une routine"
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:7
-#, fuzzy
-#| msgid "No daemons found."
 msgid "No routines found."
-msgstr "Aucun démon trouvé."
+msgstr "Aucune routine trouvé."
 
 #: src/web/templates/web/daemon/partials/_filter_list_alternative.html:11
 msgid "Add one to a mailbox to fetch its contents on a regular basis."
@@ -651,7 +607,7 @@ msgstr "En pause"
 
 #: src/web/templates/web/daemon/partials/_start-button.html:8
 msgid "Start this routine"
-msgstr ""
+msgstr "Démarrer cette routine"
 
 #: src/web/templates/web/daemon/partials/_start-button.html:9
 msgid "Start"
@@ -659,7 +615,7 @@ msgstr "Démarrer"
 
 #: src/web/templates/web/daemon/partials/_stop-button.html:8
 msgid "Stop this routine"
-msgstr ""
+msgstr "Arrêter cette routine"
 
 #: src/web/templates/web/daemon/partials/_stop-button.html:9
 msgid "Stop"
@@ -667,7 +623,7 @@ msgstr "Arrêter"
 
 #: src/web/templates/web/daemon/partials/_test_daemon-button.html:6
 msgid "Perform a test run of this routine"
-msgstr ""
+msgstr "Lancer une séquence d'essai de cette routine"
 
 #: src/web/templates/web/dashboard.html:8
 msgid "Dashboard"
@@ -675,17 +631,13 @@ msgstr "Tableau de bord"
 
 #. Translators: E∘nvelope is the brand name. The ∘ is the ring operator U+2218.
 #: src/web/templates/web/dashboard.html:13
-#, fuzzy
-#| msgid "Welcome to Eonvelope"
 msgid "Welcome to E∘nvelope"
-msgstr "Bienvenue dans Eonvelope"
+msgstr "Bienvenue dans E∘nvelope"
 
 #: src/web/templates/web/dashboard.html:17
 #: src/web/templates/web/dashboard.html:18
-#, fuzzy
-#| msgid "Search"
 msgid "Search emails"
-msgstr "Recherche"
+msgstr "Rechercher des courriels"
 
 #: src/web/templates/web/dashboard.html:43
 msgid "Statistics"
@@ -709,11 +661,11 @@ msgstr "Courriels"
 #: src/web/templates/web/email/archive/base_archive.html:6
 #: src/web/templates/web/partials/_header.html:42
 msgid "Timeline"
-msgstr ""
+msgstr "Chronologie"
 
 #: src/web/templates/web/email/archive/base_archive.html:15
 msgid "Email Timeline"
-msgstr ""
+msgstr "Chronologie des courriels"
 
 #: src/web/templates/web/email/archive/day.html:6
 #: src/web/templates/web/email/archive/day.html:10 src/web/utils/widgets.py:37
@@ -771,20 +723,16 @@ msgid "Message Id"
 msgstr "Identifiant du message"
 
 #: src/web/templates/web/email/email_detail.html:50
-#, fuzzy
-#| msgid "X-Spam"
 msgid "Spam"
-msgstr "X-Spam"
+msgstr "Spam"
 
 #: src/web/templates/web/email/email_detail.html:52
-#, fuzzy
-#| msgid "bytes"
 msgid "yes"
-msgstr "octets"
+msgstr "oui"
 
 #: src/web/templates/web/email/email_detail.html:54
 msgid "no"
-msgstr ""
+msgstr "non"
 
 #: src/web/templates/web/email/email_detail.html:76
 msgid "Plain bodytext"
@@ -842,24 +790,21 @@ msgid ""
 "Reprocess this archived email to find connections with emails that have been "
 "archived later"
 msgstr ""
+"Retraiter ce courriel archivé pour trouver des connexions avec des courriels "
+"qui ont été archivés plus tard"
 
 #: src/web/templates/web/email/partials/_reprocess_email-button.html:10
 msgid "Reprocess"
-msgstr ""
+msgstr "Retraiter"
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:8
-#, fuzzy
-#| msgid ""
-#| "Updating mailboxes failed\n"
-#| "%(error)s"
 msgid "Restore this email to its mailbox on the mailserver"
 msgstr ""
-"Actualisation des boîtes de réception échouées\n"
-"%(error)s"
+"Restaurer ce courriel dans sa boîte aux lettres sur le serveur de courrier"
 
 #: src/web/templates/web/email/partials/_restore_email-button.html:11
 msgid "Restore"
-msgstr ""
+msgstr "Restaurer"
 
 #: src/web/templates/web/layouts/base_create.html:15
 #: src/web/templates/web/layouts/base_detail.html:23
@@ -871,29 +816,21 @@ msgstr "Barre d'outils avec groupes de boutons"
 #: src/web/templates/web/layouts/base_create.html:18
 #: src/web/templates/web/layouts/base_detail.html:44
 #: src/web/templates/web/layouts/base_detail_with_thumbnail.html:44
-#, fuzzy
-#| msgid "Close button group"
 msgid "Close-buttons group"
-msgstr "Fermer le groupe de boutons"
+msgstr "Groupe des boutons de fermeture"
 
 #: src/web/templates/web/layouts/base_detail.html:26
-#, fuzzy
-#| msgid "Action button group"
 msgid "Action-buttons groups"
-msgstr "Groupe de boutons d'action"
+msgstr "Groupe des boutons d'action"
 
 #: src/web/templates/web/layouts/base_detail.html:34
 #: src/web/templates/web/layouts/base_detail_with_thumbnail.html:34
-#, fuzzy
-#| msgid "Edit button group"
 msgid "Edit-buttons group"
-msgstr "Modifier le groupe de boutons"
+msgstr "Groupe des boutons de modification"
 
 #: src/web/templates/web/layouts/base_detail_with_thumbnail.html:26
-#, fuzzy
-#| msgid "Action button group"
 msgid "Action-buttons group"
-msgstr "Groupe de boutons d'action"
+msgstr "Groupe des boutons d'action"
 
 #: src/web/templates/web/layouts/base_filter_list.html:13
 msgid "Show filter options"
@@ -911,13 +848,11 @@ msgstr "Fermer"
 
 #: src/web/templates/web/layouts/base_list.html:38
 msgid "Select All"
-msgstr ""
+msgstr "Tout sélectionner"
 
 #: src/web/templates/web/layouts/base_list.html:55
-#, fuzzy
-#| msgid "Action button group"
 msgid "Multi-actions-buttons groups"
-msgstr "Groupe de boutons d'action"
+msgstr "Groupe des boutons multi-actions"
 
 #: src/web/templates/web/mailbox/mailbox_daemon_create.html:21
 msgid "for"
@@ -936,10 +871,8 @@ msgid "Save mails as .eml"
 msgstr "Enregistrer les courriels en tant que .eml"
 
 #: src/web/templates/web/mailbox/mailbox_detail.html:70
-#, fuzzy
-#| msgid "Test this mailbox to make sure it can be accessed."
 msgid "Test the mailbox to see if this error persists."
-msgstr "Testez cette boîte de réception pour être sûr qu'elle est accessible."
+msgstr "Testez cette boîte aux lettres pour voir si cette erreur persiste."
 
 #: src/web/templates/web/mailbox/mailbox_edit.html:8
 msgid "Edit Mailbox"
@@ -950,42 +883,33 @@ msgid "of"
 msgstr "de"
 
 #: src/web/templates/web/mailbox/partials/_daemons_list_alternative.html:8
-#, fuzzy
-#| msgid ""
-#| "You can set up daemons for this mailbox to fetch its contents on a "
-#| "regular schedule."
 msgid ""
 "You can set up routines for this mailbox to fetch its contents on a regular "
 "schedule."
 msgstr ""
-"Vous pouvez configurer des démons pour cette boîte de réception pour "
+"Vous pouvez configurer des routines pour cette boîte aux lettres pour "
 "récupérer son contenu régulièrement."
 
 #: src/web/templates/web/mailbox/partials/_emails_list_alternative.html:7
-#, fuzzy
-#| msgid ""
-#| "Fetch emails from this mailbox by setting up a daemon or fetching the "
-#| "content once."
 msgid ""
 "Fetch emails from this mailbox by setting up a routine or fetching the "
 "content once."
 msgstr ""
-"Récupérez des courriels depuis cette boîte de réception en configurant un "
-"démon ou en récupérant le contenu une première fois."
+"Récupérez des courriels depuis cette boîte de réception en configurant une "
+"routine ou en récupérant le contenu une première fois."
 
 #: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:6
-#, fuzzy
-#| msgid "You can fetch emails from one of this accounts mailboxes."
 msgid "Fetch and archive emails from this mailbox now"
-msgstr "Vous pouvez récupérer les courriels d'une de ces boîtes de réception."
+msgstr ""
+"Récupérer et archiver les courriels de cette boîte aux lettres maintenant"
 
 #: src/web/templates/web/mailbox/partials/_fetch_dropdown.html:12
 msgid "Fetch"
-msgstr ""
+msgstr "Récupérer"
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:7
 msgid "No mailboxes found."
-msgstr "Aucune boîte de réception trouvée."
+msgstr "Aucune boîte aux lettres trouvée."
 
 #: src/web/templates/web/mailbox/partials/_filter_list_alternative.html:11
 msgid ""
@@ -1006,6 +930,8 @@ msgstr "Téléverser"
 #: src/web/templates/web/mailbox/partials/_test_mailbox-button.html:6
 msgid "Test whether this mailbox can be opened on the mailserver"
 msgstr ""
+"Tester si cette boîte aux lettres peut être ouverte sur le serveur de "
+"courrier"
 
 #: src/web/templates/web/mailbox/partials/_unhealthy_list_alternative.html:6
 msgid "Test this mailbox to make sure it can be accessed."
@@ -1080,28 +1006,28 @@ msgstr "Filtrer"
 
 #: src/web/templates/web/partials/_footer.html:7
 msgid "2025 David Aderbauer"
-msgstr ""
+msgstr "2025 David Aderbauer"
 
 #: src/web/templates/web/partials/_footer.html:9
 msgid "&amp; The Eonvelope Contributors."
-msgstr ""
+msgstr "&amp; Les contributeurs d'Eonvelope."
 
 #. Translators: AGPL-3.0-or-later is the official license shorthand, it must not be changed.
 #: src/web/templates/web/partials/_footer.html:11
 msgid "Licensed under AGPL-3.0-or-later."
-msgstr ""
+msgstr "Sous licence AGPL-3.0-or-later."
 
 #: src/web/templates/web/partials/_footer.html:14
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #: src/web/templates/web/partials/_footer.html:16
 msgid "DEBUG"
-msgstr ""
+msgstr "DEBUG"
 
 #: src/web/templates/web/partials/_footer.html:23
 msgid "Website"
-msgstr ""
+msgstr "Site web"
 
 #: src/web/templates/web/partials/_footer.html:27
 msgid "Gitlab"
@@ -1113,7 +1039,7 @@ msgstr "GitHub"
 
 #: src/web/templates/web/partials/_footer.html:35
 msgid "Dockerhub"
-msgstr ""
+msgstr "Dockerhub"
 
 #: src/web/templates/web/partials/_footer.html:39
 msgid "Documentation"
@@ -1134,7 +1060,7 @@ msgstr "Basculer la navigation"
 #: src/web/templates/web/partials/_header.html:127
 #: src/web/templates/web/partials/_header.html:149
 msgid "Toggle Dropdown"
-msgstr ""
+msgstr "Activer le menu déroulant"
 
 #: src/web/templates/web/partials/_header.html:36
 #: src/web/templates/web/partials/_header.html:62
@@ -1143,7 +1069,7 @@ msgstr ""
 #: src/web/templates/web/partials/_header.html:131
 #: src/web/templates/web/partials/_header.html:153
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
 #: src/web/templates/web/partials/_header.html:39
 #: src/web/templates/web/partials/_header.html:65
@@ -1151,10 +1077,8 @@ msgstr ""
 #: src/web/templates/web/partials/_header.html:112
 #: src/web/templates/web/partials/_header.html:134
 #: src/web/templates/web/partials/_header.html:156
-#, fuzzy
-#| msgid "Enabled"
 msgid "Table"
-msgstr "Activé"
+msgstr "Tableau"
 
 #: src/web/templates/web/partials/_health_badge.html:5
 #: src/web/utils/columns.py:116
@@ -1172,10 +1096,8 @@ msgid "Health unknown"
 msgstr "Statut inconnu"
 
 #: src/web/templates/web/partials/_multi_delete-modal.html:19
-#, fuzzy
-#| msgid "Are you sure you want to delete %(object)s?"
 msgid "Are you sure you want to delete the selected items?"
-msgstr "Voulez-vous vraiment supprimer %(object)s ?"
+msgstr "Voulez-vous vraiment supprimer les objets sélectionnés ?"
 
 #: src/web/templates/web/partials/_pagination.html:4
 msgid "Results"
@@ -1207,38 +1129,29 @@ msgstr "Test"
 
 #: src/web/utils/columns.py:63
 msgid "Select"
-msgstr ""
+msgstr "Sélectionner"
 
 #: src/web/utils/forms.py:30 src/web/utils/forms.py:46
 msgid " *"
 msgstr " *"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:102
-#, fuzzy, python-format
-#| msgid ""
-#| "Updating mailboxes failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Updating mailboxes failed: %(error)s"
-msgstr ""
-"Actualisation des boîtes de réception échouées\n"
-"%(error)s"
+msgstr "Actualisation des boîtes de réception échouée : %(error)s"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:105
 msgid "Updating mailboxes successful"
 msgstr "Boîtes de réception actualisées avec succès"
 
 #: src/web/views/account_views/AccountDetailWithDeleteView.py:122
-#, fuzzy
-#| msgid "Updating mailboxes successful"
 msgid "Adding routines successful"
-msgstr "Boîtes de réception actualisées avec succès"
+msgstr "Routines ajoutées avec succès"
 
 #: src/web/views/attachment_views/AttachmentDetailWithDeleteView.py:97
 #: src/web/views/correspondent_views/CorrespondentDetailWithDeleteView.py:105
-#, fuzzy
-#| msgid "Fetching successful"
 msgid "Sharing successful"
-msgstr "La récupération est un succès"
+msgstr "Partagé avec succés"
 
 #: src/web/views/daemon_views/DaemonDetailWithDeleteView.py:84
 msgid "Daemon started successfully"
@@ -1257,38 +1170,28 @@ msgid "Daemon was not running"
 msgstr "Le démon n'était pas en fonctionnement"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:89
-#, fuzzy
-#| msgid "Email successfully restored to mailbox."
 msgid "Email successfully reprocessed."
-msgstr "Courriel restauré avec succès dans la boîte de réception."
+msgstr "Courriel retraité avec succès."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:107
 msgid "POP accounts do not support restoring of emails to mailbox."
 msgstr ""
+"Les comptes POP ne prennent pas en charge la restauration des courriels vers "
+"une boîte aux lettres."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:112
-#, fuzzy, python-format
-#| msgid ""
-#| "Updating mailboxes failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Restoring of email failed: %(error)s"
-msgstr ""
-"Actualisation des boîtes de réception échouées\n"
-"%(error)s"
+msgstr "Restauration du courriel échouée : %(error)s"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:113
 msgid "eml file not found."
 msgstr "Fichier eml introuvable."
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:118
-#, fuzzy, python-format
-#| msgid ""
-#| "Updating mailboxes failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Restoring of email to mailbox failed: %(error)s"
-msgstr ""
-"Actualisation des boîtes de réception échouées\n"
-"%(error)s"
+msgstr "Restauration du courriel dans la boîte aux lettres échouée : %(error)s"
 
 #: src/web/views/email_views/EmailDetailWithDeleteView.py:122
 msgid "Email successfully restored to mailbox."
@@ -1298,16 +1201,13 @@ msgstr "Courriel restauré avec succès dans la boîte de réception."
 #, python-format
 msgid "The chosen criterion %(criterion)s is not available for this mailbox."
 msgstr ""
+"Le critère sélectionné %(criterion)s n'est pas disponible pour cette boîte "
+"aux lettres."
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:113
-#, fuzzy, python-format
-#| msgid ""
-#| "Fetching failed\n"
-#| "%(error)s"
+#, python-format
 msgid "Fetching failed: %(error)s"
-msgstr ""
-"Récupération échouée\n"
-"%(error)s"
+msgstr "Récupération échouée : %(error)s"
 
 #: src/web/views/mailbox_views/MailboxDetailWithDeleteView.py:116
 msgid "Fetching successful"

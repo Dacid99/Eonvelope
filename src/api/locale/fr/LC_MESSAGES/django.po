@@ -8,30 +8,30 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-05-02 12:09+0000\n"
-"PO-Revision-Date: 2026-07-19 15:01+0000\n"
-"Last-Translator: antocpu <antonin.sedogbo@proton.me>\n"
-"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/api/fr/"
-">\n"
+"PO-Revision-Date: 2026-08-21 11:52+0000\n"
+"Last-Translator: Ciel <outlook75012@gmail.com>\n"
+"Language-Team: French <https://hosted.weblate.org/projects/eonvelope/api/fr/>"
+"\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.8.dev0\n"
+"X-Generator: Weblate 2026.9.dev0\n"
 
 #: src/api/auth.py:63
 msgid "Basic authentication is only allowed if you do not have MFA enabled."
 msgstr ""
-"L'authentification de base n'est autorisée que si vous n'avez pas activé "
-"l'authentification à plusieurs facteurs (MFA)."
+"L'authentification simple est uniquement autorisée si vous n'avez pas activé "
+"l'authentification multifacteur (MFA)."
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:49
 msgid "Message indicating status change."
-msgstr "Message indiquant un changement d'état."
+msgstr "Message indiquant le changement de statut."
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:52
 msgid "Toggles the favorite status of an instance."
-msgstr "Active ou désactive le statut « favori » d'une instance."
+msgstr "Bascule le statut favori d'une instance."
 
 #: src/api/v1/mixins/ToggleFavoriteMixin.py:73
 #, python-format
@@ -63,7 +63,7 @@ msgstr "Récupère une seule instance."
 #: src/api/v1/views/CorrespondentViewSet.py:60
 #: src/api/v1/views/DaemonViewSet.py:48 src/api/v1/views/MailboxViewSet.py:64
 msgid "Updates a single instance."
-msgstr ""
+msgstr "Met à jour une seule instance."
 
 #: src/api/v1/views/AccountViewSet.py:60
 msgid "Creates a new instance."
@@ -75,7 +75,7 @@ msgstr "Crée une nouvelle instance."
 #: src/api/v1/views/DaemonViewSet.py:57 src/api/v1/views/EmailViewSet.py:63
 #: src/api/v1/views/MailboxViewSet.py:65
 msgid "Deletes a single instance."
-msgstr ""
+msgstr "Supprime une seule instance."
 
 #: src/api/v1/views/AccountViewSet.py:73
 msgid "Updates the mailboxes of an account."
@@ -85,16 +85,16 @@ msgstr "Met à jour les boîtes aux lettres d'un compte."
 msgid ""
 "Adds a standard set of routines for archiving all traffic to an account."
 msgstr ""
+"Ajoute un ensemble standard de routines pour archiver tout le trafic vers un "
+"compte."
 
 #: src/api/v1/views/AccountViewSet.py:99
-#, fuzzy
-#| msgid "Tested mailaccount"
 msgid "Tests an account."
-msgstr "Compte de messagerie testé"
+msgstr "Teste un compte."
 
 #: src/api/v1/views/AccountViewSet.py:118
 msgid "Downloads all emails of an account."
-msgstr ""
+msgstr "Télécharge tous les emails d'un compte."
 
 #: src/api/v1/views/AccountViewSet.py:185
 msgid "An error with the mailaccount occurred."
@@ -102,11 +102,11 @@ msgstr "Une erreur concernant le compte s'est produite."
 
 #: src/api/v1/views/AccountViewSet.py:191
 msgid "Updated mailboxes"
-msgstr "Boîtes de réception actualisées"
+msgstr "Boîtes aux lettres actualisées"
 
 #: src/api/v1/views/AccountViewSet.py:217
 msgid "Added routines to inbox and sentbox."
-msgstr ""
+msgstr "Routines ajoutées à la boîte de réception et la boîte d'envoi."
 
 #: src/api/v1/views/AccountViewSet.py:238
 msgid "Tested mailaccount"
@@ -126,10 +126,8 @@ msgid "File format %(file_format)s is not supported."
 msgstr "Le format de fichier %(file_format)s n'est pas pris en charge."
 
 #: src/api/v1/views/AccountViewSet.py:293
-#, fuzzy
-#| msgid "No emails found."
 msgid "No mailboxes found."
-msgstr "Aucun courriel trouvé."
+msgstr "Aucune boîte aux lettres trouvée."
 
 #: src/api/v1/views/AttachmentViewSet.py:67
 msgid "Downloads an attachment's file."
@@ -145,46 +143,49 @@ msgstr "Une liste de valeurs entières identifiant les comptes."
 msgid ""
 "Duplicates are ignored. Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
 msgstr ""
+"Les duplicatas sont ignorés. Les notations id=1,2,3 et id=1&id=2&id=3 sont "
+"toutes les deux acceptées"
 
 #: src/api/v1/views/AttachmentViewSet.py:93
 msgid "Downloads multiple zipped attachment files."
-msgstr ""
+msgstr "Télécharge plusieurs fichiers joints zippés."
 
 #: src/api/v1/views/AttachmentViewSet.py:103
 msgid "Downloads a attachment's thumbnail."
-msgstr ""
+msgstr "Télécharge la miniature d'une pièce jointe."
 
 #. Translators: Paperless is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:114
 msgid "If the request to the Paperless server succeeded."
-msgstr ""
+msgstr "Si la requête au serveur Paperless a abouti."
 
 #: src/api/v1/views/AttachmentViewSet.py:123
 msgid ""
 "If the request to the Paperless server fails. The reason is given as the "
 "response data."
 msgstr ""
+"Si la requête au serveur Paperless échoue. La raison est donnée en retour."
 
 #. Translators: Paperless is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:128
 msgid "Sends a attachment's file to the user's Paperless server."
-msgstr ""
+msgstr "Envoie un fichier joint au serveur Paperless de l'utilisateur."
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:139
 msgid "If the request to the Immich server succeeded."
-msgstr ""
+msgstr "Si la requête au serveur Immich a abouti."
 
 #: src/api/v1/views/AttachmentViewSet.py:148
 msgid ""
 "If the request to the Immich server fails. The reason is given as the "
 "response data."
-msgstr ""
+msgstr "Si la requête au serveur Immich échoue. La raison est donnée en retour."
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:153
 msgid "Sends the attachment's file to the user's Immich server."
-msgstr ""
+msgstr "Envoie le fichier joint au serveur Immich de l'utilisateur."
 
 #: src/api/v1/views/AttachmentViewSet.py:227
 #: src/api/v1/views/AttachmentViewSet.py:313
@@ -208,65 +209,61 @@ msgstr "Aucune pièce jointe trouvée"
 #. Translators: Paperless is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:349
 msgid "Upload to Paperless failed."
-msgstr ""
+msgstr "Envoi à Paperless échoué."
 
 #. Translators: Paperless is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:355
 msgid "Uploaded attachment document to Paperless."
-msgstr ""
+msgstr "Envoyé le document joint à Paperless."
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:391
 msgid "Upload to Immich failed."
-msgstr ""
+msgstr "Envoi à Immich échoué."
 
 #. Translators: Immich is a brand name.
 #: src/api/v1/views/AttachmentViewSet.py:397
 msgid "Uploaded attachment document to Immich."
-msgstr ""
+msgstr "Envoyé le document joint à Immich."
 
 #: src/api/v1/views/CorrespondentViewSet.py:70
-#, fuzzy
-#| msgid "No correspondents found"
 msgid "Downloads a correspondent as vcard."
-msgstr "Aucun correspondant trouvé"
+msgstr "Télécharge les données d'un correspondant comme vcard."
 
 #: src/api/v1/views/CorrespondentViewSet.py:83
 msgid "A list of integer values identifying the correspondents."
-msgstr ""
+msgstr "Une liste d'entier identifiant les correspondants."
 
 #: src/api/v1/views/CorrespondentViewSet.py:98
-#, fuzzy
-#| msgid "No correspondents found"
 msgid "Downloads multiple correspondents as one vcard."
-msgstr "Aucun correspondant trouvé"
+msgstr ""
+"Télécharge les données de plusieurs correspondants dans une seule vcard."
 
 #. Translators: Nextcloud is a brand name.
 #: src/api/v1/views/CorrespondentViewSet.py:109
 msgid "If the request to the Nextcloud server succeeded."
-msgstr ""
+msgstr "Si la requête au serveur Nextcloud a abouti."
 
 #: src/api/v1/views/CorrespondentViewSet.py:118
 msgid ""
 "If the request to the Nextcloud server fails. The reason is given as the "
 "response data."
 msgstr ""
+"Si la requête au serveur Nextcloud échoue. La raison est donnée en retour."
 
 #: src/api/v1/views/CorrespondentViewSet.py:124
 msgid "Sends a correspondent's data to the user's Nextcloud addressbook."
 msgstr ""
+"Envoie les données d'un correspondant vers le carnet d'adresse Nextcloud de "
+"l'utilisateur."
 
 #: src/api/v1/views/CorrespondentViewSet.py:242
-#, fuzzy
-#| msgid "Correspondent ids are required."
 msgid "Correspondent IDs are required."
-msgstr "Les identifiants des correspondants sont nécessaires."
+msgstr "Les ID des correspondants sont nécessaires."
 
 #: src/api/v1/views/CorrespondentViewSet.py:249
-#, fuzzy
-#| msgid "Attachment ids given in invalid format."
 msgid "Correspondent IDs given in invalid format."
-msgstr "Identifiants des pièces jointes donnés dans un format invalide."
+msgstr "ID des correspondants donnés dans un format invalide."
 
 #: src/api/v1/views/CorrespondentViewSet.py:256
 msgid "No correspondents found"
@@ -275,36 +272,32 @@ msgstr "Aucun correspondant trouvé"
 #. Translators: Nextcloud is a brand name.
 #: src/api/v1/views/CorrespondentViewSet.py:290
 msgid "Upload to Nextcloud failed."
-msgstr ""
+msgstr "Envoi à Nextcloud échoué."
 
 #. Translators: Nextcloud is a brand name.
 #: src/api/v1/views/CorrespondentViewSet.py:296
-#, fuzzy
-#| msgid "No correspondents found"
 msgid "Uploaded correspondent to Nextcloud."
-msgstr "Aucun correspondant trouvé"
+msgstr "Envoyer le correspondant à NextCloud."
 
 #: src/api/v1/views/DaemonViewSet.py:50 src/api/v1/views/DaemonViewSet.py:55
 msgid "You must set header 'Accept: application/json'."
-msgstr ""
+msgstr "Vous devez configurer l'en-tête 'Accept : application/json'."
 
 #: src/api/v1/views/DaemonViewSet.py:53
 msgid "Creates a new instance"
-msgstr ""
+msgstr "Crée une nouvelle instance"
 
 #: src/api/v1/views/DaemonViewSet.py:70
-#, fuzzy
-#| msgid "Tested routine"
 msgid "Tests a routine."
-msgstr "Routine testée"
+msgstr "Teste une routine."
 
 #: src/api/v1/views/DaemonViewSet.py:74
 msgid "Starts a routine's periodic task."
-msgstr ""
+msgstr "Lance la tâche périodique d'une routine."
 
 #: src/api/v1/views/DaemonViewSet.py:78
 msgid "Stops a routine's periodic task."
-msgstr ""
+msgstr "Interrompt la tâche périodique d'une routine."
 
 #: src/api/v1/views/DaemonViewSet.py:145
 msgid "Tested routine"
@@ -329,54 +322,56 @@ msgstr "La routine est active"
 #: src/api/v1/views/DatabaseStatsView.py:39
 msgid "Gets all the entry counts in the tables of the database."
 msgstr ""
+"Récupère toutes les quantités d'entrées dans les tables de la base de "
+"données."
 
 #: src/api/v1/views/EmailViewSet.py:72
 msgid "Downloads an email's eml file."
-msgstr ""
+msgstr "Télécharge le fichier eml d'un e-mail."
 
 #: src/api/v1/views/EmailViewSet.py:84
 msgid "A list of integer values identifying the emails."
-msgstr ""
+msgstr "Une liste d'entier identifiant les e-mails."
 
 #: src/api/v1/views/EmailViewSet.py:105
 msgid "Downloads multiple email's eml files."
-msgstr ""
+msgstr "Télécharge les fichiers eml de plusieurs e-mails."
 
 #: src/api/v1/views/EmailViewSet.py:113
 msgid ""
 "content-disposition: inline, x-frame-options: SAMEORIGIN, content-security-"
 "policy: frame-ancestors 'self'"
 msgstr ""
+"content-disposition : inline, x-frame-options : SAMEORIGIN, content-security-"
+"policy : frame-ancestors 'self'"
 
 #: src/api/v1/views/EmailViewSet.py:117
 msgid "Downloads a single emails thumbnail."
-msgstr ""
+msgstr "Télécharge la miniature d'un seul e-mail."
 
 #: src/api/v1/views/EmailViewSet.py:122
 msgid "Lists the conversation involving an email."
-msgstr ""
+msgstr "Liste la conversation incluant un e-mail."
 
 #: src/api/v1/views/EmailViewSet.py:128
 msgid "Restoring was successful"
-msgstr ""
+msgstr "Restauration réussie"
 
 #: src/api/v1/views/EmailViewSet.py:131
 msgid "Restoring failed"
-msgstr ""
+msgstr "Restauration échouée"
 
 #: src/api/v1/views/EmailViewSet.py:134
-#, fuzzy
-#| msgid "eml file not found."
 msgid "The eml file was not found"
-msgstr "Fichier eml introuvable."
+msgstr "Le fichier eml est introuvable"
 
 #: src/api/v1/views/EmailViewSet.py:137
 msgid "Restores an email to its mailbox on the server."
-msgstr ""
+msgstr "Restaure un e-mail dans sa boîte mail sur le serveur."
 
 #: src/api/v1/views/EmailViewSet.py:152
 msgid "Reprocesses an email using the stored data."
-msgstr ""
+msgstr "Repasse sur un e-mail en utilisant les données enregistrées."
 
 #: src/api/v1/views/EmailViewSet.py:249 src/api/v1/views/EmailViewSet.py:407
 msgid "eml file not found."
@@ -396,55 +391,56 @@ msgstr "Aucun courriel trouvé"
 
 #: src/api/v1/views/EmailViewSet.py:403
 msgid "POP accounts do not support restoring of emails."
-msgstr ""
+msgstr "Les comptes POP ne prennent pas en charge la restauration d'e-mails."
 
 #: src/api/v1/views/EmailViewSet.py:411
 msgid "Restoring of email to mailbox failed."
-msgstr ""
+msgstr "Échec de restauration des e-mails dans la boîte mail."
 
 #: src/api/v1/views/EmailViewSet.py:416
 msgid "Email successfully restored to mailbox."
 msgstr "Courriel restauré avec succès dans la boîte de réception."
 
 #: src/api/v1/views/EmailViewSet.py:441
-#, fuzzy
-#| msgid "Email successfully restored to mailbox."
 msgid "Email successfully reprocessed."
-msgstr "Courriel restauré avec succès dans la boîte de réception."
+msgstr "Courriel retraité avec succès."
 
 #: src/api/v1/views/MailboxViewSet.py:78
-#, fuzzy
-#| msgid "Tested mailbox"
 msgid "Tests a mailbox."
-msgstr "Boîte de réception testée"
+msgstr "Teste une boîte de courriel."
 
 #: src/api/v1/views/MailboxViewSet.py:83
 msgid "Lists all available fetching criteria for a mailbox."
-msgstr ""
+msgstr "Liste tous les critères disponibles pour une boîte mail."
 
 #: src/api/v1/views/MailboxViewSet.py:104
 msgid ""
 "Fetches the emails from a mailbox based on the given criterion. Only "
 "criteria available for that mailbox are accepted."
 msgstr ""
+"Liste les e-mails depuis une boîte mail selon les critères indiqués. Seuls "
+"les critères disponibles pour cette boîte mail sont acceptés."
 
 #: src/api/v1/views/MailboxViewSet.py:124
 msgid "Downloads all emails of a mailbox."
-msgstr ""
+msgstr "Télécharge tous les e-mails de la boîte mail."
 
 #: src/api/v1/views/MailboxViewSet.py:137
 msgid ""
 "A list of integer values identifying the mailboxes. Duplicates are ignored. "
 "Accepts both id=1,2,3 and id=1&id=2&id=3 notation"
 msgstr ""
+"Une liste d'entiers identifiants les boîtes mail. Les duplicatas sont "
+"ignorés. Notations id=1,2,3 et id=1&id=2&id=3 acceptées"
 
 #: src/api/v1/views/MailboxViewSet.py:155
 msgid "Downloads all emails of multiple mailbox instances."
 msgstr ""
+"Télécharge tous les courriels de plusieurs instances de boîtes aux lettres."
 
 #: src/api/v1/views/MailboxViewSet.py:168
 msgid "Upload emails in a file to a mailbox instance."
-msgstr ""
+msgstr "Envoie les e-mails dans un fichier vers une instance de boîte mail."
 
 #: src/api/v1/views/MailboxViewSet.py:235
 msgid "Tested mailbox"
@@ -458,6 +454,7 @@ msgstr "Le critère de récupération est nécessaire."
 #, python-format
 msgid "The given criterion %(criterion)s is not available for this mailbox."
 msgstr ""
+"Le critère donné %(criterion)s n'est pas disponible pour cette boîte mail."
 
 #: src/api/v1/views/MailboxViewSet.py:321
 msgid "Error with mailaccount or mailbox occurred."
@@ -473,22 +470,16 @@ msgid "No emails found."
 msgstr "Aucun courriel trouvé."
 
 #: src/api/v1/views/MailboxViewSet.py:413
-#, fuzzy
-#| msgid "Email ids are required."
 msgid "Mailbox ids are required."
-msgstr "Les identifiants des courriels sont nécessaires."
+msgstr "Les id des boîtes de courriel sont nécessaires."
 
 #: src/api/v1/views/MailboxViewSet.py:421
-#, fuzzy
-#| msgid "Email ids given in invalid format."
 msgid "Mailbox ids given in invalid format."
-msgstr "Identifiants des courriels donnés dans un format invalide."
+msgstr "Identifiants des boîtes de courriels donnés dans un format invalide."
 
 #: src/api/v1/views/MailboxViewSet.py:435
-#, fuzzy
-#| msgid "No emails found"
 msgid "No mailboxes found"
-msgstr "Aucun courriel trouvé"
+msgstr "Aucune boîte de courriel trouvée"
 
 #: src/api/v1/views/MailboxViewSet.py:485
 msgid "Successfully uploaded mailbox file."
@@ -496,8 +487,8 @@ msgstr "Fichier de la boîte de réception téléversé avec succès."
 
 #: src/api/v1/views/UserProfileView.py:37
 msgid "Retrieves the user's profile data."
-msgstr ""
+msgstr "Récupère les données du profil de l'utilisateur."
 
 #: src/api/v1/views/UserProfileView.py:38
 msgid "Updates the user's profile data."
-msgstr ""
+msgstr "Met à jour les données du profil de l'utilisateur."

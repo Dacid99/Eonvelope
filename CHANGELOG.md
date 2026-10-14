@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 0.8.1
+
+- updated dependencies
+
 ## Version 0.8.0
 
 - Features:

@@ -15,21 +15,21 @@ repos:
       - id: debug-statements
       - id: detect-private-key
   - repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 26.5.1
+    rev: 26.10.1
     hooks:
       - id: black
         args: [--config, tools/black_config]
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.8
+    rev: v0.17.0
     hooks:
       - id: ruff-check
         args: [--config, tools/ruff.toml]
   - repo: https://github.com/adamchainz/django-upgrade
-    rev: 1.32.0
+    rev: 1.33.0
     hooks:
       - id: django-upgrade
   - repo: https://github.com/djlint/djLint
-    rev: v1.46.2
+    rev: v1.46.4
     hooks:
       - id: djlint-reformat-django
         args: [--configuration, tools/djlintrc]
@@ -51,12 +51,12 @@ repos:
       - id: hadolint-docker
         args: [--config, tools/.hadolint.yaml]
   - repo: https://github.com/biomejs/pre-commit
-    rev: v2.5.14
+    rev: v2.5.15
     hooks:
       - id: biome-check
         args: [--config-path, tools/biome.json]
   - repo: https://github.com/renovatebot/pre-commit-hooks
-    rev: 44.105.2
+    rev: 44.151.3
     hooks:
       - id: renovate-config-validator
   - repo: https://github.com/PyCQA/doc8
@@ -90,7 +90,7 @@ repos:
         language: system
         files: (src/api/.*\.py|poetry.lock)
   - repo: https://github.com/timo-reymann/gitlab-ci-verify
-    rev: v2.11.7
+    rev: v2.11.11
     hooks:
       - id: gitlab-ci-verify
         args: [--gitlab-base-url, gitlab.com, --severity, warning]
